@@ -1,56 +1,35 @@
-# From field sample to living critter
+# Your first discovery
 
-**Public review walkthrough — proposed details, not implemented behavior.** Critter Lab connects exploration, research, creation and an ongoing relationship with an individual. This small example follows one player, Mara, from an ordinary sample to a saved critter. Working labels, experiment responses, ingredients and the illustrated genetic subset are **PROPOSED**; they are not canonical creature designs or a limit on future diversity.
+*A player walkthrough concept for newcomers.*
 
-The governing directions are in [gameplay](../specs/gameplay.md) and [genetics](../specs/genetics.md): research supported possibilities, fully unlock the genome, choose a complete configuration before creation, and deliberately open the saved individual.
+![Six moments in Critter Lab: exploring with the Probe, bringing a sample home, studying a clue, finding supplies, opening a newly created critter, and taking that same critter along on the Companion.](walkthrough/first-discovery.png)
 
-## Bring something home
+**1. Take the Probe outside**
 
-Mara takes a shared Probe on an expedition assigned to her profile. Environmental observations contribute to a fictional sample and collection progress. The Probe measures conditions, not real genes; resource awards are separate game rules. Her sample, supplies and knowledge remain hers when somebody else uses the same Probe or Lab. A console-only investigation can provide equivalent opportunities with laboratory provenance.
+Mara clips the **Probe**, a small portable explorer, to her bag. As she walks, it observes the conditions around her. In Critter Lab, those observations help form a mysterious sample. She wonders what it could become.
 
-At the Lab, Mara selects **Sample: Ripple**. Its recognizable bitmap stays stable as knowledge grows. The example below is a conceptual region map, not a production encoding, nucleotide sequence or rule that each pixel equals a gene.
+**2. Bring the mystery home**
 
-| Bitmap region | On arrival | After the relevant study |
-| --- | --- | --- |
-| ▧ A ▧ | Required information unresolved | Supported crown variants |
-| ▧ B ▧ | Required information unresolved | Eye-ring variants |
-| ▧ C ▧ | Required information unresolved | Pale-marking variants |
+Back home, she brings her sample to the **Lab**, the tabletop machine where she investigates and creates critters. Opening the sample reveals a curious pattern. There is something to discover here, but she cannot make a critter yet.
 
-Annotations explain the regions; research does not repaint the sample into a new identity. A known carried variant has a readable label, never the same symbol as unknown information. These region labels explain this example; they do not establish navigation groups or replace the five genetic information layers.
+**3. Follow a clue**
 
-## Choose an investigation
+Mara chooses a study about head shape. The Lab presents a clue she can compare with references. Further investigation reveals that this sample supports more than one shape. She starts imagining the critter she might choose to create.
 
-**PROPOSED:** Ripple offers **Material study: examine the outline** and **Variation study: examine the markings**. Mara can choose either first. Each card identifies its question, displayed reagent cost and unresolved region; there are no sliders or correct-answer quizzes.
+**4. Find what the next study needs**
 
-Material study reveals the supported crown and smooth-head alternatives in region A. Variation study explains regions B/C: eye rings express; a pale-marking variant is carried without expressing in this example. Different sample profiles would have different clues, responses and requirements under the same research rules. These fictional tests do not claim that physical materials prove particular alleles.
+Another study needs a supply she does not have. Her finding stays saved while she goes gathering or prepares supplies through crafting at the Lab. Returning does not mean starting her research again.
 
-Mara lacks the reagent for Variation study. **PROPOSED shortage behavior:** that experiment waits; the completed outline finding, other eligible work and encyclopedia remain available. The Lab suggests finding suitable supplies or preparing them through console crafting. A clue describes ingredient properties and relevant conditions. Mara can experiment without first unlocking recipe permission. She records the useful preparation in her personal encyclopedia; exact quantities and crafting-failure recovery are outside this walkthrough.
+**5. Understand, choose, then meet**
 
-Running a study commits its displayed resources once. Its saved result remains inspectable; revisiting does not charge again, reroll the finding or award duplicate supplies. No automatic critter appears.
+Mara finishes all the research required to understand the sample's complete genetic possibilities. The Lab explains her creation options, including what the critter will show and what it can carry unseen. Before she commits, she can review her choice and what creation will use.
 
-## Know the genome, then commit
+When her critter is ready, the Lab waits. Mara presses **OPEN** herself. Now she meets an individual of her own, with a life beyond this first discovery.
 
-Every required region is now readable. **PROPOSED complete configurations for this declared miniature model**, under pinned expression rules and no pale activation:
+**6. Take that critter with you**
 
-| Choice | Full modeled genotype | Expressed appearance | Carried but unexpressed |
-| --- | --- | --- | --- |
-| Crowned | `Cc / Rr / Pp` | Crown, eye rings | Pale-marking variant |
-| Smooth | `cc / Rr / Pp` | Smooth head, eye rings | Pale-marking variant |
+The **Companion** is the handheld home for spending time with her critter away from the Lab. Mara takes the same individual along, gets to know it, and returns to continue their story. It is not a fresh copy each time she changes devices.
 
-Mara chooses Crowned. Preview shows the complete genotype, expressed/carried distinction, body-plan reference, expression context and creation costs. It does not secretly generate unmodeled abilities or behavioral genes. This is a narrow complete fixture, not a claim that the full product genome consists of cosmetic switches.
+*Concept walkthrough: study activities, supplies, crafting, creation requirements and life together are still being designed. The illustration sets the scene; it does not fix screen layouts or creature designs.*
 
-**PROPOSED:** explicit Create commits the chosen configuration, sample and displayed creation supplies together. The result is a new individual with its own identity and parentless laboratory origin. A sample is provenance, not a parent. Social research references cannot substitute as donor material.
-
-## Meet—and keep meeting—the same individual
-
-Phenotype describes expressed appearance and capabilities. Artwork depicts that phenotype. Behavior uses supported capabilities, inherited tendencies and changing lifetime state; an animation is a presentation of behavior, not a new genetic fact. This cosmetic fixture establishes no hidden temperament or practical power.
-
-READY waits for Mara to choose OPEN. The saved portrait and a proposed greeting presentation bring the known features together. Surprise comes from meeting the character, not undisclosed genetic changes. Its silhouette, markings and identity remain recognizable in inspection, on paper and on the Companion. Companion training and bonding belong to Mara’s individual; sharing the device does not transfer ownership or merge another player’s progress. Learned history does not automatically become inherited genetics.
-
-## If the connection drops
-
-Keep the selected sample and last verified state visible. Before submission, an unavailable connection leaves the action uncommitted. After an uncertain submission, check that same operation before retrying; do not spend again or create another individual. Report pending versus confirmed honestly. Cloud-unconfirmed activity is not promised recoverable from another device. A missing portrait preserves the saved individual and allows fetching its existing art again.
-
-## Review the system boundary
-
-The paired [system contract](../specs/sample-to-critter-contract.md) owns the proposed transaction and failure rules, and the consolidated open decisions. Review that boundary before extending the fixture with functional genetics, a larger economy or living behavior.
+For the design details, see the [sample-to-critter system contract](../specs/sample-to-critter-contract.md).

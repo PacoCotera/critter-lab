@@ -15,7 +15,7 @@ These documents describe Critter Lab's product rules and engineering boundaries.
 
 ## Reading status correctly
 
-For a worked cross-system proposal, read [from sample to critter](../design/sample-to-critter-walkthrough.md) alongside its [system contract](sample-to-critter-contract.md). These connect accepted requirements; their new defaults remain proposed until reviewed.
+The proposed [sample-to-critter system contract](sample-to-critter-contract.md) defines record and acceptance boundaries. The separate [player walkthrough concept](../design/sample-to-critter-walkthrough.md) introduces the experience; it is not a source of technical requirements.
 
 **Accepted** identifies settled direction. **Proposed** identifies a candidate rule or contract. **Open** identifies a missing decision. Separately, implementation may be a host experiment, integrated software or physically validated hardware. Approved direction does not mean implemented behavior. Numeric examples and placeholders are not balance or canonical art unless explicitly identified as such.
 

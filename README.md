@@ -67,6 +67,13 @@ The local server provides a breeding/share experiment, `/lab/` for the pixel fou
 
 ## Follow the design
 
-Start with the [specification map](specs/README.md). The [visual tour](design/README.md) separates concept art from rendered prototype frames. [Build coverage](BUILD.md) identifies implemented components and missing production deliverables. [Versioning](releases/README.md) distinguishes specification status, source versions and saved-content compatibility.
+Choose the material for your purpose:
+
+- **Players:** [Your first discovery](design/sample-to-critter-walkthrough.md) introduces the game through an illustrated story; currently a concept, not a released-game manual.
+- **Design reviewers:** the [visual tour](design/README.md) presents experience concepts and separates them from prototype evidence. Proposals describe intended experiences and open choices.
+- **Technical contributors:** the [specification map](specs/README.md) leads to rules, contracts and system boundaries.
+- **Builders:** [build coverage](BUILD.md) identifies what can be run today and what is missing. It is not yet a complete kit assembly guide.
+
+[Versioning](releases/README.md) distinguishes specification status, source versions and saved-content compatibility.
 
 This repository is in active design. Proposals are labeled; open choices are not presented as finalized mechanics. Publication does not establish hardware validation. Software uses AGPL-3.0-only, hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0. Commercial use is welcome under these reciprocal terms. See [licensing and attribution](LICENSING.md) and [contributing](CONTRIBUTING.md).
