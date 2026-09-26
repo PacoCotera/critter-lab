@@ -2,6 +2,12 @@
 
 Status: proposed evidence contract. One fixed sensor set should support extensible genomic content through both measured and simulated experiences. Fictional events are explicitly permitted; sensor selection, timing and mappings remain open.
 
+## Straightforward sampling — accepted direction
+
+Sampling must stay easy to operate with a limited sensor set. Fictional events can add variety without requiring another sensor for every phenomenon or genetic possibility. Do not turn sampling into manual sensor management, a complicated sequence of physical maneuvers or a requirement for constant attention. Preserve meaningful play in ordinary settings and standalone operation. Exact collection actions, event cadence, distribution and eligibility remain design choices.
+
+The [sampling design proposal](../design/probe-sampling.md) explores how broad sensed context and generated variation can produce distinct research leads. Its defaults are not approved algorithms or final UI.
+
 ## Durable boundary
 
 **Sensed conditions + optional phone context + generated world events + player decisions → sample → research → genetic possibilities.**
@@ -82,7 +88,7 @@ Hardware implication: compare optional phone positioning before considering onbo
 
 ### Worked probe-to-lab event sketch
 
-This is a proposed experience, not a final UX layout or approved loss rule. While a sample forms, a fictional water surge approaches. **Escape** could preserve the current sample and conclude the encounter; **stay** could add a water-event signature with a bounded chance of sample instability. Escape/stay is an in-game decision, not an instruction to move physically or expose the device to water. The outcome records the event and choice once. The lab later studies that signature and may reveal relevant affinity, structure or regulatory possibilities within a valid founder genome. Neither choice needs a physical water sensor.
+This is a deferred optional encounter example, not the basic sampling loop, final UX or an approved loss rule. It must not complicate ordinary collection. While a sample forms, a fictional water surge approaches. **Escape** could preserve the current sample and conclude the encounter; **stay** could add a water-event signature with a bounded chance of sample instability. Escape/stay is an in-game decision, not an instruction to move physically or expose the device to water. The outcome records the event and choice once. The lab later studies that signature and may reveal relevant affinity, structure or regulatory possibilities within a valid founder genome. Neither choice needs a physical water sensor.
 
 For a ghost fluctuation, an investigate/leave choice could change the evidence collected; for a radiation storm, shielding versus exposure could influence candidate mutation research. No automatic death, destruction, positive mutation or real hazardous activity follows from those examples. Define stakes at sample/expedition level first; this collection phase need not contain a live critter to damage.
 

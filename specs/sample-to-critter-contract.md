@@ -65,7 +65,7 @@ The Companion uses saved individuals and records temporary activity without tran
 ## Three decisions still required
 
 1. **Research content mapping:** the V1 investigation/completeness structure is accepted in [gameplay](gameplay.md#research-and-creation); exact evidence-to-candidate mappings, resource requirements and equivalent console-only acquisition still need definition.
-2. **Creation terms:** sample/resource consumption or reuse, conflict handling and any compensation after accepted creation; none follows automatically from asset success.
+2. **Creation implementation:** [gameplay](gameplay.md#creation-inputs-and-retained-discoveries) now defines accepted one-use material, retained knowledge and spending/retry semantics. Reservations, competing-request conflicts and remedies for permanent service/content failure still need design.
 3. **Temporary activity:** supported offline research/care actions, handover retention and reconciliation rules, including when local offload data may safely be discarded.
 
-Next review: creation terms, followed by offline allowances that depend on them. The accepted V1 research structure does not approve technical transaction defaults, content mappings or a cap on genetic diversity.
+Creation terms are accepted; current experience review addresses straightforward Probe sampling and variability before returning to offline allowances. The accepted V1 research structure does not approve technical transaction defaults, content mappings or a cap on genetic diversity.

@@ -34,6 +34,14 @@ The Lab handles procedure; the player chooses a question, sees the resource cost
 
 The V1 design direction requires complete supported configurations and selection before creation. The [proposed system contract](sample-to-critter-contract.md) describes this boundary; it neither limits production to a few cosmetic configurations nor establishes an implemented generation system. The meaningful bitmap and growing genome complexity are specified in [genetics](genetics.md#genome-imagery-and-progression).
 
+## Creation inputs and retained discoveries
+
+Accepted V1: one qualifying sample supports one founder creation. Findings, supported alternatives, the sample pattern and creation history remain in the player's research records, with their conditions and versions. Prior knowledge guides new investigations but does not automatically complete a new sample or supply its material.
+
+Accepted explicit creation spends the chosen sample and displayed creation supplies together and saves one parentless individual. Before submission, the player may revise or leave without spending creation inputs; already-used research reagents remain spent. A confirmed rejection spends no creation inputs. Uncertain delivery checks the same request. After acceptance, leaving does not cancel, refund or reroll it. Revealing, inspecting or retrying its visuals charges nothing further.
+
+Another founder requires another qualifying sample, available through field or console investigation. Breeding is a separate route with separate permissions and costs. The [creation design](../design/creation-terms.md) explains the experience. Permanent service/content-failure remedies remain open; no technical error is an in-world crafting failure.
+
 ## Resources and crafting
 
 Accepted: combine tangible laboratory materials with fantastical resources. Culture is a desired ingredient concept, not a universal requirement for plants, bacteria, ghosts and all other body plans. Requirements may attach to supported characteristics rather than entire categories. Resource names, currencies, nutrition compatibility, capacities and exact effects remain open.

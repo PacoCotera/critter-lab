@@ -17,7 +17,8 @@ The [ecosystem reference](references/ecosystem.png) shows the portables with the
 | Question | Material and boundary |
 | --- | --- |
 | Where does the player make meaningful research choices? | [Research and creation](research-and-creation.md) explains the accepted V1 investigation structure; the worked content, costs and timing remain illustrative or open. |
-| What is spent when a critter is created? | [Creation terms](creation-terms.md) proposes sample use, retained knowledge, repeat creation and interruption handling. |
+| What is spent when a critter is created? | [Creation terms](creation-terms.md) explains accepted sample use, retained knowledge, repeat creation and interruption handling. |
+| Can simple sampling stay varied? | [Probe sampling](probe-sampling.md) proposes broad sensed context, stable per-sample variation and optional fictional events. |
 | Can a newcomer understand the journey? | [Your first discovery](sample-to-critter-walkthrough.md) follows exploration, research, a supply shortage, creation and companionship. It is a concept story, not an implemented sequence. |
 | Does the interaction explain what changes? | [Experience specification](../specs/experience.md) covers navigation and feedback. Review the player action, its consequence and the return path together, rather than approving an isolated attractive screen. |
 | What can the hardware actually support? | [Device specification](../specs/devices.md) and [build coverage](../BUILD.md) distinguish exploration from available engineering work. A render cannot demonstrate physical readability, refresh, fit or power. |
