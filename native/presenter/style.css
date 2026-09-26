@@ -55,8 +55,10 @@ button:disabled { opacity: .45; cursor: wait; }
 .controls:empty { display: none; }
 #status { min-height: 24px; font-size: .95rem; }
 #refresh { font-size: 13px; background: transparent; }
-details { margin-top: 26px; border-top: 1px solid #c8c0aa; padding-top: 18px; }
-summary { cursor: pointer; }
+.simulation-panel { margin-top: 24px; padding: 16px 20px; border: 1px solid #a7ad9c; border-radius: 10px; background: #e9ede2; }
+.simulation-panel h2 { margin: 0; font-size: 17px; }
+.simulation-panel p { margin: 8px 0 14px; }
+.simulation-panel .controls { justify-content: flex-start; }
 footer { font-size: 12px; line-height: 1.7; color: #60675a; margin-top: 28px; }
 @media (max-width: 600px) {
   main { padding: 20px 12px 30px; }

@@ -87,6 +87,7 @@ static void sketches(LabRow *row) {
   rectangle(row, 602, 342, 390, 1, 7);
 }
 static void rail(LabRow *row, const Demo *demo) {
+  label(row, 32, 510, "Controls below", 18, 3);
   rectangle(row, 32, 537, 960, 1, 7);
   DemoAction actions[12];
   size_t count = demo_actions(demo, actions, 12);
@@ -95,8 +96,6 @@ static void rail(LabRow *row, const Demo *demo) {
     if (strcmp(actions[i].device, "lab")) continue;
     int x = !strcmp(actions[i].name, "back") ? left : primary;
     if (!strcmp(actions[i].name, "inspect")) x = 300;
-    int width = native_text_width(font(19), actions[i].label) + 32;
-    outline(row, x, 551, width, 38, 6);
     label(row, x + 16, 556, actions[i].label, 19, 2);
   }
 }

@@ -6,22 +6,58 @@ const statusLine = document.querySelector('#status');
 const retryButton = document.querySelector('#retry');
 const confirmation = document.querySelector('#reset-confirmation');
 const deviceNames = ['lab', 'probe', 'companion'];
-const savedDevice = localStorage.getItem('critterDevice');
+// Preferences and retry persistence are best-effort; memory remains authoritative
+// for a pending operation during this page's lifetime if storage is unavailable.
+function readStorage(kind, key) {
+  try { return window[kind].getItem(key); } catch { return null; }
+}
+function writeStorage(kind, key, value) {
+  try { window[kind].setItem(key, value); return true; }
+  catch { return false; /* Keep the in-memory value. */ }
+}
+function removeStorage(kind, key) {
+  try { window[kind].removeItem(key); } catch { /* Exact retries remain idempotent. */ }
+}
+const savedDevice = readStorage('localStorage', 'critterDevice');
 let device = deviceNames.includes(savedDevice) ? savedDevice : 'lab';
 let snapshot = null;
 let ready = false;
 let busy = false;
 let generation = 0;
 let pending = null;
+let pendingPersistenceUnavailable = false;
 let presented = null;
 let pointerGesture = null;
 let keyboardGesture = null;
 let blockedKeyboardRelease = false;
 let focusAfterUpdate = null;
 const heldKeys = new Set();
+const requestDeadlineMs = 15000;
+
+async function withDeadline(task, onTimeout = () => {}) {
+  let timer;
+  const timeout = new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      onTimeout();
+      reject(new Error('Request timed out.'));
+    }, requestDeadlineMs);
+  });
+  try { return await Promise.race([task(), timeout]); }
+  finally { clearTimeout(timer); }
+}
+async function request(url, options = {}, bodyType = 'json') {
+  const controller = new AbortController();
+  return withDeadline(async () => {
+    const response = await fetch(url, {...options, signal: controller.signal});
+    const body = await response[bodyType]();
+    return {response, body};
+  }, () => controller.abort());
+}
 
 function setStatus(text) {
-  statusLine.textContent = text;
+  const persistenceWarning = pending && pendingPersistenceUnavailable
+    ? ' Retry is saved only in this page. Keep it open until the action is resolved.' : '';
+  statusLine.textContent = text + persistenceWarning;
 }
 function cancelGestures() {
   pointerGesture = null;
@@ -82,16 +118,20 @@ function bindAction(action, identity) {
     keyboardGesture = null;
   });
   button.addEventListener('pointerup', event => {
+    const bounds = button.getBoundingClientRect();
+    const inside = event.clientX >= bounds.left && event.clientX <= bounds.right
+      && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
     if (!pointerGesture || pointerGesture.button !== button
-        || pointerGesture.pointerId !== event.pointerId || !bindingAvailable(binding)) {
+        || pointerGesture.pointerId !== event.pointerId || !inside || !bindingAvailable(binding)) {
       pointerGesture = null;
       return;
     }
     pointerGesture.released = true;
   });
-  for (const type of ['pointerleave', 'pointercancel']) {
-    button.addEventListener(type, () => { pointerGesture = null; });
-  }
+  button.addEventListener('pointerleave', () => {
+    if (pointerGesture && !pointerGesture.released) pointerGesture = null;
+  });
+  button.addEventListener('pointercancel', () => { pointerGesture = null; });
   button.addEventListener('lostpointercapture', () => {
     if (pointerGesture && !pointerGesture.released) pointerGesture = null;
   });
@@ -127,13 +167,13 @@ function bindAction(action, identity) {
 async function show(state) {
   const identity = {generation: ++generation, device, revision: state.revision};
   invalidatePresentation();
-  const response = await fetch(`/api/frame?device=${identity.device}&revision=${identity.revision}`, {cache: 'no-store'});
+  const {response, body} = await request(`/api/frame?device=${identity.device}&revision=${identity.revision}`, {cache: 'no-store'}, 'blob');
   if (!response.ok) throw new Error('Saved state changed. Refresh to load its screen.');
-  const url = URL.createObjectURL(await response.blob());
+  const url = URL.createObjectURL(body);
   const image = new Image();
   image.src = url;
   try {
-    await image.decode();
+    await withDeadline(() => image.decode());
     if (identity.generation !== generation) return false;
     const old = screen.src;
     screen.src = url;
@@ -147,6 +187,7 @@ async function show(state) {
     deck.replaceChildren(...state.actions.filter(action => action.device === identity.device).map(action => bindAction(action, identity)));
     document.querySelector('#engineering').replaceChildren(...state.actions.filter(action =>
       action.device === 'engineering' && identity.device !== 'companion').map(action => bindAction(action, identity)));
+    document.querySelector('#simulation-panel').hidden = !document.querySelector('#engineering').childElementCount;
     deck.setAttribute('aria-label', `${identity.device === 'lab' ? 'Lab' : identity.device === 'probe' ? 'Probe' : 'Companion'} controls`);
     document.querySelector('#mapping-note').hidden = !deck.childElementCount;
     document.querySelector('#complete').hidden = !state.finding;
@@ -164,8 +205,7 @@ async function refresh() {
   invalidatePresentation();
   setStatus('Updating the device…');
   try {
-    const response = await fetch('/api/status', {cache: 'no-store'});
-    const value = await response.json();
+    const {response, body: value} = await request('/api/status', {cache: 'no-store'});
     if (!response.ok) throw new Error(value.error);
     if (await show(value)) setStatus('Device updated.');
   } catch (error) {
@@ -183,25 +223,24 @@ async function sendPending() {
   retryButton.hidden = true;
   setStatus('Updating the device…');
   try {
-    const response = await fetch('/api/command', {
+    const {response, body: value} = await request('/api/command', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab'},
       body: JSON.stringify(pending)
     });
-    const value = await response.json();
     if (!response.ok) {
       if (response.status < 500) {
         pending = null;
-        sessionStorage.removeItem('critterPending');
+        removeStorage('sessionStorage', 'critterPending');
       }
       throw new Error(value.error);
     }
     const resetCompleted = pending.name === 'reset';
     pending = null;
-    sessionStorage.removeItem('critterPending');
+    removeStorage('sessionStorage', 'critterPending');
     if (resetCompleted) {
       device = 'lab';
-      localStorage.setItem('critterDevice', device);
+      writeStorage('localStorage', 'critterDevice', device);
       confirmation.hidden = true;
       focusAfterUpdate = {name: null};
     }
@@ -225,7 +264,7 @@ function activate(name, binding = null) {
     revision: snapshot.revision,
     operation_id: Array.from(random, value => value.toString(16).padStart(8, '0')).join('')
   };
-  sessionStorage.setItem('critterPending', JSON.stringify(pending));
+  pendingPersistenceUnavailable = !writeStorage('sessionStorage', 'critterPending', JSON.stringify(pending));
   sendPending();
 }
 for (const id of deviceNames) {
@@ -233,7 +272,7 @@ for (const id of deviceNames) {
     if (!ready || busy || pending || !confirmation.hidden || id === device) return;
     busy = true;
     device = id;
-    localStorage.setItem('critterDevice', device);
+    writeStorage('localStorage', 'critterDevice', device);
     focusAfterUpdate = null;
     invalidatePresentation();
     setStatus('Updating the device…');
@@ -294,9 +333,9 @@ document.querySelector('#cancel-reset').addEventListener('click', () => {
 document.querySelector('#confirm-reset').addEventListener('click', () => activate('reset'));
 retryButton.addEventListener('click', sendPending);
 try {
-  pending = JSON.parse(sessionStorage.getItem('critterPending'));
+  pending = JSON.parse(readStorage('sessionStorage', 'critterPending'));
 } catch {
-  sessionStorage.removeItem('critterPending');
+  removeStorage('sessionStorage', 'critterPending');
 }
 lockControls();
 if (pending) {
@@ -309,9 +348,8 @@ if (pending) {
 async function showRelease() {
   const label = document.querySelector('#release');
   try {
-    const response = await fetch('/api/release', {cache: 'no-store'});
+    const {response, body: release} = await request('/api/release', {cache: 'no-store'});
     if (!response.ok) return;
-    const release = await response.json();
     if (!/^[0-9a-f]{40}$/.test(release.commit || '') || !release.deployed_at) return;
     const timestamp = new Date(release.deployed_at);
     if (!Number.isFinite(timestamp.getTime())) return;

@@ -103,10 +103,10 @@ static void probe_scene(Row *r, const Demo *d) {
   DemoAction actions[12];
   size_t count = demo_actions(d, actions, 12);
   int slot_y = 204;
+  if (d->phase != 0 && d->phase != 4)
+    text(r, 8, 188, "Controls below", 9);
   for (size_t i = 0; i < count; ++i) {
     if (strcmp(actions[i].device, "probe")) continue;
-    box(r, 8, slot_y, 106, 1, 1);
-    box(r, 8, slot_y + 12, 106, 1, 1);
     text(r, 12, slot_y + 1, actions[i].label, 9);
     slot_y += 13;
   }
