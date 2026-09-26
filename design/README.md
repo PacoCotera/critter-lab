@@ -12,6 +12,12 @@ The family uses cream enclosures, charcoal frames, restrained orange controls an
 
 The [ecosystem reference](references/ecosystem.png) shows the portables with their Caddy and an optional app view. The [Companion close-up](references/companion.png) provides a clearer view of its silhouette, controls and creature display. Use these references to understand the physical relationships; they do not establish charging measurements, data transfer or completed app behavior.
 
+## Screen design in progress
+
+Compare the [visual-language explorations](visual-language/README.md) before choosing a screen direction. Neither style is approved.
+
+The [screen design standard](screen-design-standard.md) defines the current exploration and review sequence. Previous prototype layouts are rejected as the target experience. Visual concepts must be reviewed before their implementation.
+
 ## What to review
 
 | Question | Material and boundary |
@@ -33,4 +39,4 @@ The [asset manifest](asset-manifest.json) records original-image hashes and desi
 
 Use the project name and restrained Dirty Pawz Press attribution consistently with the [branding policy](../BRANDING.md). That policy addresses attribution and official status; it does not supply a company-wide visual identity standard.
 
-[All documentation](../docs/README.md) · [Player introduction](../docs/players/README.md) · [Current product status](../STATUS.md)
+[All documentation](../docs/README.md) Â· [Player introduction](../docs/players/README.md) Â· [Current product status](../STATUS.md)

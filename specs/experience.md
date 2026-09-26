@@ -1,6 +1,6 @@
 # Interaction and visual experience
 
-Accepted direction: retro pixel-based device screens, recognizable critters and tactile operation. Responsive specimen presence is required as an experience goal; exact display, art, palette, resolution and motion remain unselected. Desktop composition studies are not firmware or hardware evidence.
+Accepted direction: retro pixel-based device screens, recognizable critters and tactile operation. Responsive specimen presence is required as an experience goal; screen art, palette and motion remain under owner review; selected simulator display profiles are listed below. Desktop composition studies are not firmware or hardware evidence.
 
 ## Physical experience is the product
 
@@ -17,7 +17,7 @@ The complete game may first be designed and prototyped in software or an app. A 
 
 Lab extensibility is not a fixed page count or a commitment to unlimited hardware capacity. Physical display count, display modules, controls and performance budgets remain separate decisions. Current kit play still supports operation without a required phone. Final layouts, creature behavior and physical designs retain their own review gates.
 
-Expedition selection reinforces these roles: compare duration, difficulty, expected rewards and event character at the Lab, then carry the chosen outing on the simple Probe. Exact comparison layout and on-device event interactions remain to be designed.
+Expedition selection reinforces these roles: compare duration, difficulty, expected rewards and event character at the Lab, then carry the chosen expedition on the simple Probe. Exact comparison layout and on-device event interactions remain to be designed.
 
 ## Operate the object
 
@@ -73,21 +73,23 @@ Empty, loading, unavailable, unsupported, disabled and historical/cached are dis
 
 The expedition-to-finding slice uses distinct native compositions: a 1024 × 600 color Lab, a 122 × 250 portrait monochrome Probe candidate, and a 368 × 448 color Companion. The browser presents the complete frame by default; the playable view never requires panning inside the screen. The enclosure palette does not restrict the color displays. Use the Lab's resolution for a clear focal object, fine readable type and visual findings rather than enlarged low-resolution labels.
 
-Lab prototype pages prioritize large native text in a wide lower explanation band, with the trail, cargo or sample above it. Study review keeps the supply cost, current stock and post-study stock visible before Start study. Pending encounters, inspected clues and left encounters remain distinct; only an inspected clue suggests a research direction. The finding names both possibilities, states that neither is chosen, and preserves the unknown remainder, origin and current supplies. This is a provisional Lab readability correction, not acceptance of the complete device experience. Complete-frame phone reduction still limits secondary text; fitting the raster is not proof of comfortable reading.
+The previous Lab layouts are rejected, including the large explanation band and placeholder form artwork. Do not carry them forward as layout requirements. The next design round follows the [screen design standard](../design/screen-design-standard.md): consistent typography, reference-led instrument compositions, meaningful artwork and complete physical interaction sequences. Study review must still expose actual cost and stock, and results must distinguish known possibilities from unknown regions. Probe events never disclose sample contents or imply a research finding.
 
 Player language explains actions without requiring chemistry knowledge. The prototype calls its existing research resource **Lab supplies**; reviewing a study is separate from **Start study**, whose cost must be visible before activation. A finding shows what became known and what remains unknown. Revisiting preserves the result without spending or rerolling. Internal field names do not prescribe player vocabulary.
 
 Hardware-shaped presenter housings follow the original references but remain provisional appearance studies. Actual screen profiles are enforced; housing dimensions, controls, sensor behavior and physical refresh are not validated by a browser. Engineering time controls and release information stay outside the device face. Release identity uses the first seven commit SHA characters as plain text and fixed deployment timestamp displayed in Mexico City time.
 
-The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab outing; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action.
+The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab expedition; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action.
 
 
-### Prototype control deck
+### Physical navigation design
 
-Each simulated device has one working, labelled button deck inside its provisional housing. Buttons come directly from the displayed native action descriptors. There is no duplicate detached action row, invented Back/Details command or decorative key pretending to operate the game. An empty Companion has no play controls. Screen pixels remain native C output; housing buttons are a prototype input mapping, not finalized physical hardware.
+The earlier per-command browser button deck is rejected as the target interaction. Fixed simulated hardware actuators send logical input; native C owns focus, activation and screen feedback. The provisional map is Lab rotation/Confirm/Back, Probe Next/Confirm, and Companion previous/Confirm/next. Additional keys and touch functions remain unassigned until designed. Read-only art and status panels must not look like touch targets.
 
-Tab follows normal page order. Arrow keys move focus only within the device deck; Enter and Space activate the focused button. Focus alone never spends resources. Keep input unavailable until the matching frame is decoded. A pointer/key gesture must belong to the same device, revision and frame from start through activation; cancelled or held gestures cannot carry into new content. Reset, retry, device selection and engineering controls remain separate from the device action deck.
+Preserve fresh-gesture, frame-readiness and cancellation rules above. Engineering controls, Reset and device selection remain outside the device face. Current implementation coverage is recorded in build documentation; a proposed map is not proof of hardware behavior.
 
 ## Current prototype acceptance gate
 
 Before expanding into additional game phases, the existing slice must establish a coherent experience accepted by the owner: layout, color, interaction, pixel art and concise player-facing copy. Review these together through a representative playable sequence. Successful command execution, readable text or static screen approval alone does not establish experience acceptance. Design refinements and implementation needed to meet this gate remain in scope.
+
+The current phase is design iteration. Compare and review visual directions, then connected physical-control sequences, before resuming screen implementation. Rejected proposals are not a basis for incremental styling patches.
