@@ -1,6 +1,17 @@
-# Visual-language explorations
+# Visual language
 
-Proposals for discussion, 26 September 2026. These styleboards explore original graphic vocabularies before screen composition. Paco selected B as the foundation for refinement; the final visual language is not approved. See [refinement 02](refinement-02/README.md) for the current proposal. They are generated concept artwork, not exact font specimens, production components, canonical materials, rendered genomes or implemented interfaces.
+## Current review — refinement 02
+
+The owner selected Playful Pixel Lab as the foundation for refinement; the final visual language and UI are not approved. The current review packet is [Playful precision — refinement 02](refinement-02/README.md), including its two review images:
+
+- [Refined visual vocabulary](refinement-02/styleboard.png)
+- [Measured type and interaction study](refinement-02/component-study.png)
+
+The styleboard is generated concept artwork with illustrative lettering; the component-study sheet is a measured specimen. Neither establishes a production font or represents a native implementation; neither defines canonical materials or rendered genomes.
+
+## Historical explorations
+
+The original A/B styleboards explored graphic vocabularies before screen composition. They record earlier exploration rather than a pending foundation choice.
 
 ## A — Color instruments
 
@@ -16,11 +27,10 @@ Stepped forms, stronger silhouettes and chunkier material studies. The proposed 
 
 Both propose cyan identity, violet research context, mint saved results, amber focus and coral/red errors, reinforced by shapes and words. This compares shape and drawing vocabulary rather than merely recoloring one screen. A decorative art color does not establish an attribute, resource or gameplay state.
 
-## Discussion and limits
+## Review limits
 
-The question is which vocabulary conveys curious, purposeful discovery and can remain clear across the device family. Internal inspection corrected mouse cursor imagery, differentiated retained selection from saved results, and reduced effects and ambiguous color captions. This is visual critique, not human usability evidence.
+Internal inspection corrected mouse cursor imagery, differentiated retained selection from saved results, and reduced effects and ambiguous color captions. This is visual critique, not human usability evidence.
 
 Generated lettering, example branding and token values are illustrative. They do not select a font or logo. Motion is represented by still diagrams, not validated animation. Probe monochrome translation and native-size screen application remain to be explored after direction. No staging or device implementation uses these boards.
 
-Next apply the chosen vocabulary to representative states, test physical-control focus and refine the vocabulary where it fails. See the [screen standard](../screen-design-standard.md).
-
+Next apply the selected foundation to representative states, test physical-control focus and refine the vocabulary where it fails. See the [screen standard](../screen-design-standard.md).
