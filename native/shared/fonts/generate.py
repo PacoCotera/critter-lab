@@ -5,7 +5,7 @@ from ReportLab's font distribution; exact redistribution license in LICENSE.txt.
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 root = Path(__file__).resolve().parent
-for name, sizes in [('portable', [9, 11, 20, 24]), ('lab', [18, 19, 21, 22, 26, 34])]:
+for name, sizes in [('portable', [9, 11, 20, 24]), ('lab', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48])]:
     data=[]; glyphs=[]; records=[]
     for size in sizes:
         font=ImageFont.truetype(str(root/'Vera.ttf'),size)
