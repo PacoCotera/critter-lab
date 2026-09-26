@@ -87,3 +87,7 @@ The shared prototype exposes Reset sandbox outside the device controls. Confirma
 Each simulated device has one working, labelled button deck inside its provisional housing. Buttons come directly from the displayed native action descriptors. There is no duplicate detached action row, invented Back/Details command or decorative key pretending to operate the game. An empty Companion has no play controls. Screen pixels remain native C output; housing buttons are a prototype input mapping, not finalized physical hardware.
 
 Tab follows normal page order. Arrow keys move focus only within the device deck; Enter and Space activate the focused button. Focus alone never spends resources. Keep input unavailable until the matching frame is decoded. A pointer/key gesture must belong to the same device, revision and frame from start through activation; cancelled or held gestures cannot carry into new content. Reset, retry, device selection and engineering controls remain separate from the device action deck.
+
+## Current prototype acceptance gate
+
+Before expanding into additional game phases, the existing slice must establish a coherent experience accepted by the owner: layout, color, interaction, pixel art and concise player-facing copy. Review these together through a representative playable sequence. Successful command execution, readable text or static screen approval alone does not establish experience acceptance. Design refinements and implementation needed to meet this gate remain in scope.

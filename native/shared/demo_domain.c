@@ -27,7 +27,7 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
   } while (0)
   if (d->phase == 0) {
     if (d->lab_page == 0) {
-      ACTION("review", "Outing details", "lab");
+      ACTION("review", "Expedition details", "lab");
     } else {
       ACTION("back", "Back", "lab");
       ACTION("load", "Load probe", "lab");
@@ -42,8 +42,8 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
     }
     ACTION("advance", "Advance simulated time", "engineering");
   } else if (d->phase == 3) {
-    ACTION("haul", "View haul", "probe");
-    ACTION("receive", "Receive haul", "lab");
+    ACTION("haul", "Review results", "probe");
+    ACTION("receive", "Bring to lab", "lab");
     if (d->event == 1) {
       ACTION("inspect", "Inspect note", "lab");
     }

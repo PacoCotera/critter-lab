@@ -74,44 +74,68 @@ static void wrapped(Row *r, int x, int y, const char *value, int width) {
   line[length] = 0;
   text(r, x, y, line, 9);
 }
-static void sample(Row *r, int x, int y) {
-  box(r, x + 12, y, 24, 4, 1);
-  box(r, x + 15, y + 4, 18, 8, 1);
-  box(r, x + 6, y + 12, 36, 40, 1);
-  box(r, x + 9, y + 15, 30, 34, 0);
-  for (int i = 0; i < 3; ++i)
-    box(r, x + 14, y + 22 + i * 7, 20, 3, 1);
+static void fragment(Row *r) {
+  for (int band = 0; band < 3; ++band) {
+    box(r, 8 + band * 2, 159 + band * 8, 24, 3, 1);
+    box(r, 8 + band * 2, 162 + band * 8, 3, 4, 1);
+  }
 }
 static void probe_scene(Row *r, const Demo *d) {
-  const char *title = d->phase == 0 || d->phase == 4 ? "Probe empty"
-    : d->phase == 1 ? "Ready" : d->phase == 2 ? (d->event == 1 ? "Fragment found" : "Gathering")
-    : d->probe_page == 2 ? "Haul" : "Outing complete";
-  text(r, 8, 10, title, 11);
-  box(r, 8, 30, 106, 1, 1);
-  if (d->phase == 0 || d->phase == 4) {
-    wrapped(r, 8, 133, d->phase == 0 ? "Load an outing at the lab." : "Haul moved to the lab.", 106);
+  int empty = d->phase == 0 || d->phase == 4;
+  const char *title = empty ? "Probe empty" : d->phase == 1 ? "Ready"
+      : d->phase == 3 ? (d->probe_page == 2 ? "Results" : "Return to lab")
+      : d->event == 1 ? "Fragment found"
+      : d->event == 2 ? "Clue saved" : "Gathering";
+  text(r, 8, 8, title, 11);
+  if (empty) {
+    wrapped(r, 8, 49, d->phase == 0 ? "Load an expedition at the lab."
+                                          : "Sample and supplies are at the lab.", 106);
+    return;
+  }
+  text(r, 8, 27, "Material trail", 9);
+  text(r, 8, 49, "Collection stages", 9);
+  for (unsigned stage = 0; stage < 2; ++stage) {
+    int x = 8 + (int)stage * 56;
+    box(r, x, 66, 50, 1, 1);
+    box(r, x, 79, 50, 1, 1);
+    box(r, x, 66, 1, 14, 1);
+    box(r, x + 49, 66, 1, 14, 1);
+    if (stage < d->elapsed) box(r, x + 2, 68, 46, 10, 1);
+  }
+  char quantity[48];
+  snprintf(quantity, sizeof(quantity), "%u of 2", d->elapsed);
+  text(r, 8, 87, quantity, 11);
+  text(r, 8, 110, d->phase == 1 ? "Not started"
+                             : d->phase == 3 ? "1 sealed sample" : "Sample forming", 9);
+  snprintf(quantity, sizeof(quantity), "Lab supplies %u", d->reagent);
+  text(r, 8, 129, quantity, 11);
+  if (d->phase == 1) {
+    wrapped(r, 8, 158, "Expedition loaded. Start when ready.", 106);
+  } else if (d->phase == 3) {
+    text(r, 8, 158, "Sample 01", 9);
+    if (d->probe_page == 2 && d->event == 2)
+      wrapped(r, 8, 174, "Clue: repeated bands.", 106);
+    else if (d->probe_page == 2 && d->event == 1)
+      wrapped(r, 8, 174, "Fragment awaiting inspection at lab.", 106);
+  } else if (d->event == 1) {
+    fragment(r);
+    wrapped(r, 40, 158, "Inspect or leave it.", 74);
+  } else if (d->event == 2) {
+    wrapped(r, 8, 158, "Repeated bands may hint at structure.", 106);
+  } else if (d->event == 3) {
+    wrapped(r, 8, 158, "Fragment left behind.", 106);
   } else {
-    text(r, 8, 40, d->phase < 3 ? "Material trail" : "Sample 01 sealed", 9);
-    sample(r, 37, 76);
-    const char *message = d->phase == 1 ? "The outing is loaded."
-      : d->phase == 3 ? (d->probe_page == 2 ? "Lab supplies: 2 units. Receive it at the lab." : "Bring the haul to the lab.")
-      : d->event == 1 ? "Repeated bands mark the fragment."
-      : d->event == 2 ? "Clue saved: repeated bands. Suggests structure."
-      : d->event == 3 ? "Fragment left behind." : "The probe is gathering.";
-    wrapped(r, 8, 133, message, 106);
+    wrapped(r, 8, 158, "Expedition underway.", 106);
   }
   DemoAction actions[12];
   size_t count = demo_actions(d, actions, 12);
-  int slot_y = 204;
-  if (d->phase != 0 && d->phase != 4)
-    text(r, 8, 188, "Controls below", 9);
+  int slot_y = 211;
   for (size_t i = 0; i < count; ++i) {
     if (strcmp(actions[i].device, "probe")) continue;
-    text(r, 12, slot_y + 1, actions[i].label, 9);
-    slot_y += 13;
+    text(r, 8, slot_y, actions[i].label, 9);
+    slot_y += 12;
   }
-}
-static void companion_scene(Row *r) {
+}static void companion_scene(Row *r) {
   text(r, 24, 32, "Companion", 24);
   box(r, 64, 112, 240, 2, 1);
   box(r, 64, 270, 240, 2, 1);

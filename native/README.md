@@ -51,7 +51,7 @@ export CRITTER_DEMO_SAVE="$HOME/critter-demo-state.txt"
 python3 native/presenter/server.py
 ```
 
-Open the presenter: Outing details, Load probe, switch to Probe and Start. Simulation controls supply two progress steps, with an optional encounter between them. Return to Lab, Receive haul, Review study and Start study. The saved finding uses one unit of lab supplies and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
+Open the presenter: Expedition details, Load probe, switch to Probe and Start. Simulated expedition supply two progress steps, with an optional encounter between them. Return to Lab, Bring to lab, Review study and Start study. The saved finding uses one unit of lab supplies and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
 
 Reset sandbox is a simulator control outside the device. Its inline confirmation explains that resetting clears the shared playground for everyone. Confirmation returns to the initial outing and selects Lab. Reset uses the same locked, atomic saved-state command path and retry identity as other commands, while keeping revisions increasing; it is not an MCU/domain action or a physical device capability.
 
@@ -136,5 +136,4 @@ Color Lab scenes use separately rasterized Bitstream Vera glyphs and a Lab-only 
 
 The presenter accepts an optional deployment-injected `release.json` beside `server.py`: `commit` (full lowercase SHA), `subject` (optional single-line commit title), and `deployed_at` (ISO 8601 with timezone). It snapshots validated metadata at startup and exposes only those fields through `/api/release`. The footer shows the first seven SHA characters and release time in `America/Mexico_City` as plain text. Missing metadata is shown as a development build. Never put credentials or private deployment details in this file.
 
-The outing's simulated-time action is always visible when available, below the device housing. Native screen action labels refer to the housing controls; they are not touchscreen hit regions. Transport requests time out after 15 seconds and retain the same pending operation for explicit retry. If browser storage is denied, retries remain available in memory while the page stays open; a warning explains that limitation. Full-frame fit preserves all pixels but does not establish comfortable phone-size readability.
-
+The expedition's simulated-time action is always visible when available, below the device housing. Native screen action labels refer to the housing controls; they are not touchscreen hit regions. Transport requests time out after 15 seconds and retain the same pending operation for explicit retry. If browser storage is denied, retries remain available in memory while the page stays open; a warning explains that limitation. Full-frame fit preserves all pixels but does not establish comfortable phone-size readability.

@@ -90,7 +90,7 @@ footer { font-size: 12px; line-height: 1.7; color: #60675a; margin-top: 28px; }
   border-bottom: 4px solid #19211b;
   border-radius: 8px;
 }
-.control-deck button:last-child { background: #b94f21; border-color: #8b3b19; }
+.control-deck button:last-child:not([data-command="leave"]), .probe .control-deck button[data-command="inspect"] { background: #b94f21; border-color: #8b3b19; }
 .control-deck button:active,
 .control-deck button.acknowledged { transform: translateY(2px); border-bottom-width: 2px; }
 .control-deck button:disabled { opacity: .6; cursor: wait; }
