@@ -69,4 +69,4 @@ The local server provides a breeding/share experiment, `/lab/` for the pixel fou
 
 Start with the [specification map](specs/README.md). The [visual tour](design/README.md) separates concept art from rendered prototype frames. [Build coverage](BUILD.md) identifies implemented components and missing production deliverables. [Versioning](releases/README.md) distinguishes specification status, source versions and saved-content compatibility.
 
-This repository is in active design. Proposals are labeled; open choices are not presented as finalized mechanics. Publication does not establish hardware validation. See [licensing status](LICENSING.md) before reusing material.
+This repository is in active design. Proposals are labeled; open choices are not presented as finalized mechanics. Publication does not establish hardware validation. Software uses AGPL-3.0-only, hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0. Commercial use is welcome under these reciprocal terms. See [licensing and attribution](LICENSING.md) and [contributing](CONTRIBUTING.md).
