@@ -1,4 +1,5 @@
 """Authenticated presentation transport. All game decisions and pixels come from C."""
+from datetime import datetime
 import base64
 import binascii
 import hmac
@@ -14,6 +15,24 @@ from urllib.parse import parse_qs, urlsplit
 ROOT = Path(__file__).resolve().parent
 LOCK = threading.Lock()
 TOKEN = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
+
+
+def load_release(path):
+    """Read deployment metadata once; no runtime environment or game state."""
+    try:
+        metadata = json.loads(path.read_text(encoding="utf-8"))
+        commit = metadata["commit"]
+        deployed_at = metadata["deployed_at"]
+        if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+            raise ValueError()
+        if not isinstance(deployed_at, str):
+            raise ValueError()
+        timestamp = datetime.fromisoformat(deployed_at.replace("Z", "+00:00"))
+        if timestamp.tzinfo is None:
+            raise ValueError()
+        return {"commit": commit, "deployed_at": timestamp.isoformat()}
+    except (OSError, ValueError, KeyError, TypeError, UnicodeError):
+        return {"commit": None, "deployed_at": None}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -74,6 +93,8 @@ class Handler(BaseHTTPRequestHandler):
                 name = "index.html" if url.path == "/" else url.path[1:]
                 mime = {"index.html": "text/html; charset=utf-8", "style.css": "text/css", "app.js": "text/javascript"}[name]
                 self.reply(200, (ROOT / name).read_bytes(), mime)
+            elif url.path == "/api/release" and not url.query:
+                self.reply(200, self.server.release)
             elif url.path == "/api/status" and not url.query:
                 self.native(["status"])
             elif url.path == "/api/frame":
@@ -132,6 +153,7 @@ def main():
         raise SystemExit("CRITTER_DEMO_PASSWORD is required")
     server = ThreadingHTTPServer((os.environ.get("CRITTER_DEMO_BIND", "127.0.0.1"),
                                   int(os.environ.get("CRITTER_DEMO_PORT", "4180"))), Handler)
+    server.release = load_release(ROOT / "release.json")
     server.password = password
     server.binary = str(Path(os.environ["CRITTER_DEMO_BINARY"]).resolve(strict=True))
     server.save = str(Path(os.environ["CRITTER_DEMO_SAVE"]).resolve())

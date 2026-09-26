@@ -3,8 +3,9 @@
 <body><main><header><p class="eyebrow">CRITTER LAB / PLAYABLE STUDY</p><h1>A material trail</h1><p>Choose an outing at the Lab, take the Probe, then bring your sample home.</p></header>
 <nav aria-label="Device"><button id="probe" aria-pressed="false">Probe</button><button id="companion" aria-pressed="false">Companion</button><button id="lab" aria-pressed="true">Lab</button></nav>
 <section class="instrument lab" id="instrument" aria-label="Simulated device"><div class="screen"><img id="frame" alt="Native device screen" width="1024" height="600"></div><div id="controls" class="controls" aria-label="Device controls"></div></section>
-<p class="viewport-note">Native pixel size: swipe or scroll sideways to see the full screen on smaller displays.</p>
+<div class="viewport-controls"><button id="native-size" aria-pressed="false" aria-describedby="viewport-note">1:1 native pixels</button></div>
+<p class="viewport-note" id="viewport-note">The complete screen fits this view. Use 1:1 to inspect native pixels.</p>
 <p id="complete" hidden>Demo complete: further research and creation are outside this slice.</p>
 <p id="status" role="status" aria-live="polite">Loading device...</p><button id="retry" hidden>Retry same action</button><button id="refresh">Refresh saved state</button>
 <details><summary>Simulation controls</summary><p>These controls deliver authored progress. They do not represent sensing or measured elapsed time.</p><div id="engineering" class="controls"></div></details>
-<footer>Playable concept  /  simulated expedition and transfer.<br>One shared playground. Progress is saved for everyone with access.<br>Native C pixels and rules; selected Lab and Companion profiles, Probe display candidate. No physical panel is connected.</footer></main></body></html>
+<footer><p id="release">Development build: release metadata unavailable.</p>Playable concept  /  simulated expedition and transfer.<br>One shared playground. Progress is saved for everyone with access.<br>Native C pixels and rules; selected Lab and Companion profiles, Probe display candidate. No physical panel is connected.</footer></main></body></html>

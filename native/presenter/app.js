@@ -1,6 +1,20 @@
 // Presentation transport only. Native descriptors supply every playable action.
 const screen = document.querySelector('#frame');
 const statusLine = document.querySelector('#status');
+const sizeButton = document.querySelector('#native-size');
+let nativeSize = false;
+function updateDisplaySize() {
+  document.querySelector('#instrument').classList.toggle('native-size', nativeSize);
+  sizeButton.setAttribute('aria-pressed', String(nativeSize));
+  sizeButton.textContent = nativeSize ? 'Fit complete screen' : '1:1 native pixels';
+  document.querySelector('#viewport-note').textContent = nativeSize
+    ? 'Native pixels shown at 1:1. Scroll inside the screen if needed.'
+    : 'The complete screen fits this view. Use 1:1 to inspect native pixels.';
+}
+sizeButton.addEventListener('click', () => {
+  nativeSize = !nativeSize;
+  updateDisplaySize();
+});
 const retryButton = document.querySelector('#retry');
 let device = ['lab', 'probe', 'companion'].includes(localStorage.getItem('critterDevice')) ? localStorage.getItem('critterDevice') : 'lab', snapshot = null, ready = false, busy = false, generation = 0, pending = null;
 let held = false;
@@ -22,6 +36,7 @@ async function show(state) {
   if (old.startsWith('blob:')) URL.revokeObjectURL(old);
   if (request !== generation) return;
   document.querySelector('#instrument').className = 'instrument ' + device;
+  updateDisplaySize();
   screen.width = device === 'probe' ? 122 : device === 'companion' ? 368 : 1024;
   screen.height = device === 'probe' ? 250 : device === 'companion' ? 448 : 600;
   for (const id of ['lab', 'probe', 'companion']) document.querySelector(`#${id}`).setAttribute('aria-pressed', String(id === device));
@@ -44,7 +59,7 @@ async function refresh() {
 }
 async function sendPending() {
   if (busy || !pending) return;
-  busy = true; ready = false; retryButton.hidden = true; lockControls(); setStatus('Saving action…');
+  busy = true; ready = false; retryButton.hidden = true; lockControls(); setStatus('Saving action...');
   try {
     const response = await fetch('/api/command', {method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'CritterLab'},body:JSON.stringify(pending)});
     const value = await response.json();
@@ -81,3 +96,23 @@ document.addEventListener('keydown',event=>{
 document.addEventListener('keyup',()=>{held=false;}); window.addEventListener('blur',()=>{held=false;});
 try {pending=JSON.parse(sessionStorage.getItem('critterPending'));} catch {sessionStorage.removeItem('critterPending');}
 if(pending) {retryButton.hidden=false;setStatus('An action may still need confirmation. Retry it safely.');} else refresh();
+
+async function showRelease() {
+  const label = document.querySelector('#release');
+  try {
+    const response = await fetch('/api/release', {cache: 'no-store'});
+    if (!response.ok) return;
+    const release = await response.json();
+    if (!/^[0-9a-f]{40}$/.test(release.commit || '') || !release.deployed_at) return;
+    const timestamp = new Date(release.deployed_at);
+    if (!Number.isFinite(timestamp.getTime())) return;
+    const formatted = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'America/Mexico_City', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+    }).format(timestamp);
+    label.textContent = `Release ${release.commit.slice(0, 7)} | ${formatted} Mexico City`;
+  } catch {
+    // Missing metadata leaves the honest development label intact.
+  }
+}
+showRelease();

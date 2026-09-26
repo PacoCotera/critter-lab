@@ -23,6 +23,7 @@ class Presenter(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.server = PRESENTER.ThreadingHTTPServer(("127.0.0.1", 0), PRESENTER.Handler)
+        self.server.release = PRESENTER.load_release(Path(self.directory.name) / "release.json")
         self.server.password = "test-only-password"
         self.server.binary = BINARY
         self.server.save = str(Path(self.directory.name) / "state.txt")
@@ -45,10 +46,23 @@ class Presenter(unittest.TestCase):
             return response.status, response.read(), response.headers
 
     def test_all_routes_require_authentication(self):
-        for route in ("/", "/app.js", "/style.css", "/api/status", "/api/frame?device=lab&revision=0"):
+        for route in ("/", "/app.js", "/style.css", "/api/status", "/api/release", "/api/frame?device=lab&revision=0"):
             self.assertEqual(self.request(route, authenticated=False)[0], 401)
         self.assertEqual(self.request("/api/command", b"{}", authenticated=False)[0], 401)
         self.assertEqual(self.request("/", authenticated=True)[0], 200)
+
+    def test_release_is_validated_and_immutable_for_running_server(self):
+        path = Path(self.directory.name) / "release.json"
+        metadata = {"commit": "a" * 40, "deployed_at": "2026-09-26T12:34:56Z"}
+        path.write_text(json.dumps(metadata))
+        self.server.release = PRESENTER.load_release(path)
+        path.write_text("invalid metadata")
+        code, output, _ = self.request("/api/release")
+        self.assertEqual(code, 200)
+        self.assertEqual(json.loads(output), {
+            "commit": "a" * 40, "deployed_at": "2026-09-26T12:34:56+00:00"})
+        self.assertEqual(PRESENTER.load_release(path), {"commit": None, "deployed_at": None})
+        self.assertEqual(self.request("/release.json")[0], 404)
 
     def test_origin_body_and_native_revision_guards(self):
         body = json.dumps({"name": "review", "revision": 0, "operation_id": "first"}).encode()
