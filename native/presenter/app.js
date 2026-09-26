@@ -7,6 +7,9 @@ let held = false;
 const setStatus = text => { statusLine.textContent = text; };
 function lockControls() {
   document.querySelectorAll('[data-command]').forEach(button => { button.disabled = !ready || busy || Boolean(pending); });
+  for (const id of ['reset-sandbox', 'confirm-reset', 'cancel-reset']) {
+    document.querySelector(`#${id}`).disabled = !ready || busy || Boolean(pending);
+  }
 }
 async function show(state) {
   const request = ++generation;
@@ -53,7 +56,13 @@ async function sendPending() {
       if(response.status < 500) {pending = null; sessionStorage.removeItem('critterPending');}
       throw new Error(value.error);
     }
-    pending = null; sessionStorage.removeItem('critterPending'); await show(value);
+    const resetCompleted = pending.name === 'reset';
+    pending = null; sessionStorage.removeItem('critterPending');
+    if (resetCompleted) {
+      device = 'lab'; localStorage.setItem('critterDevice', device);
+      document.querySelector('#reset-confirmation').hidden = true;
+    }
+    await show(value);
   } catch(error) {setStatus(error.message + (pending ? ' Retry keeps the same action.' : ' Refresh to continue.'));}
   finally {busy = false;retryButton.hidden = !pending;lockControls();if(ready) setStatus('Screen ready. Changes are saved after each action.');}
 }
@@ -67,6 +76,15 @@ for (const id of ['lab','probe','companion']) document.querySelector(`#${id}`).a
   if(busy || pending) return; device=id; localStorage.setItem('critterDevice', device); if(snapshot) {try{await show(snapshot);}catch(error){setStatus(error.message);}}
 });
 document.querySelector('#refresh').addEventListener('click',refresh);
+document.querySelector('#reset-sandbox').addEventListener('click', () => {
+  document.querySelector('#reset-confirmation').hidden = false;
+  document.querySelector('#confirm-reset').focus();
+});
+document.querySelector('#cancel-reset').addEventListener('click', () => {
+  document.querySelector('#reset-confirmation').hidden = true;
+  document.querySelector('#reset-sandbox').focus();
+});
+document.querySelector('#confirm-reset').addEventListener('click', () => activate('reset'));
 retryButton.addEventListener('click',sendPending);
 document.addEventListener('keydown',event=>{
   if(!['ArrowLeft','ArrowRight','Enter'].includes(event.key)) return;
@@ -81,6 +99,7 @@ document.addEventListener('keydown',event=>{
 });
 document.addEventListener('keyup',()=>{held=false;}); window.addEventListener('blur',()=>{held=false;});
 try {pending=JSON.parse(sessionStorage.getItem('critterPending'));} catch {sessionStorage.removeItem('critterPending');}
+lockControls();
 if(pending) {retryButton.hidden=false;setStatus('An action may still need confirmation. Retry it safely.');} else refresh();
 
 async function showRelease() {
@@ -96,14 +115,7 @@ async function showRelease() {
       timeZone: 'America/Mexico_City', day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
     }).format(timestamp);
-    const subject = typeof release.subject === 'string' && release.subject.length <= 200
-      && release.subject.trim() && !/[\u0000-\u001f\u007f\u0085\u2028\u2029]/.test(release.subject)
-      ? release.subject : release.commit.slice(0, 7);
-    const commitLink = document.createElement('a');
-    commitLink.textContent = subject;
-    commitLink.href = `https://github.com/PacoCotera/critter-lab/commit/${release.commit}`;
-    label.replaceChildren(document.createTextNode('Commit head: '), commitLink,
-      document.createTextNode(` | ${formatted} Mexico City`));
+    label.textContent = `Release ${release.commit.slice(0, 7)} | ${formatted} Mexico City`;
   } catch {
     // Missing metadata leaves the honest development label intact.
   }

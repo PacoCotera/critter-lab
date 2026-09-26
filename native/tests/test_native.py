@@ -68,6 +68,38 @@ class NativeLoop(unittest.TestCase):
         self.invoke("command", "review", 0, "same-id", success=False)
         self.assertEqual(self.state()["revision"], 2)
 
+    def test_reset_is_monotonic_idempotent_and_clears_finding(self):
+        fresh = self.command("reset")
+        self.assertEqual((fresh["revision"], fresh["phase"], fresh["reagent"], fresh["finding"]), (1, 0, 0, False))
+        self.complete()
+        previous = self.state()
+        self.assertTrue(previous["finding"])
+        arguments = ("command", "reset", previous["revision"], "reset-finding")
+        result = self.invoke(*arguments)
+        reset = json.loads(result)
+        self.assertEqual(reset["revision"], previous["revision"] + 1)
+        self.assertEqual((reset["phase"], reset["reagent"], reset["finding"], reset["event"]), (0, 0, False, 0))
+        self.assertEqual(result, self.invoke(*arguments))
+        self.invoke("command", "finding", previous["revision"], "old-finding", success=False)
+        self.assertEqual(reset, self.state())
+        self.command("review")
+        self.invoke(*arguments, success=False)
+
+    def test_reset_uncertain_save_retries_same_identity(self):
+        self.complete()
+        previous = self.state()
+        temporary = Path(str(self.save) + ".tmp")
+        temporary.mkdir()
+        arguments = [BINARY, "--save", str(self.save), "command", "reset", str(previous["revision"]), "retry-reset"]
+        result = subprocess.run(arguments, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 3, result.stdout)
+        self.assertEqual(previous, self.state())
+        temporary.rmdir()
+        result = subprocess.run(arguments, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(json.loads(result.stdout)["revision"], previous["revision"] + 1)
+        self.assertEqual(result.stdout, self.invoke("command", "reset", previous["revision"], "retry-reset"))
+
     def test_leave_is_optional_and_corruption_fails_closed(self):
         self.complete(inspect=False)
         self.assertEqual(self.state()["event"], 3)

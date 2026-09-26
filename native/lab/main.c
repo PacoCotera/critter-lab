@@ -123,7 +123,15 @@ int main(int argc, char **argv) {
       } else if (revision != d.revision || d.revision == UINT_MAX)
         result = error("Stale revision; refresh before acting");
       else {
-        const char *failure = demo_apply(&d, argv[4]);
+        const char *failure = NULL;
+        if (!strcmp(argv[4], "reset")) {
+          /* Host-only sandbox control: retain revision ordering across resets. */
+          unsigned previous_revision = d.revision;
+          demo_init(&d);
+          d.revision = previous_revision;
+        } else {
+          failure = demo_apply(&d, argv[4]);
+        }
         if (failure)
           result = error(failure);
         else {

@@ -32,6 +32,12 @@
   <p id="status" role="status" aria-live="polite">Loading device...</p>
   <button id="retry" hidden>Retry same action</button>
   <button id="refresh">Refresh saved state</button>
+  <button id="reset-sandbox">Reset sandbox</button>
+  <div id="reset-confirmation" hidden>
+    <p>Reset clears the shared sandbox for everyone and returns to the first outing.</p>
+    <button id="confirm-reset">Reset for everyone</button>
+    <button id="cancel-reset">Cancel</button>
+  </div>
   <details>
     <summary>Simulation controls</summary>
     <p>Simulator controls advance the outing; Check only reads its status. These controls deliver authored progress, not sensing or measured elapsed time.</p>
