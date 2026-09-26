@@ -30,7 +30,15 @@ def load_release(path):
         timestamp = datetime.fromisoformat(deployed_at.replace("Z", "+00:00"))
         if timestamp.tzinfo is None:
             raise ValueError()
-        return {"commit": commit, "deployed_at": timestamp.isoformat()}
+        result = {"commit": commit, "deployed_at": timestamp.isoformat()}
+        if "subject" in metadata:
+            subject = metadata["subject"]
+            if (not isinstance(subject, str) or not 1 <= len(subject) <= 200
+                    or not subject.strip() or any(ord(character) < 32 or ord(character) == 127
+                                                 or character in "\u0085\u2028\u2029" for character in subject)):
+                raise ValueError()
+            result["subject"] = subject
+        return result
     except (OSError, ValueError, KeyError, TypeError, UnicodeError):
         return {"commit": None, "deployed_at": None}
 

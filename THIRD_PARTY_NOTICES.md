@@ -10,3 +10,6 @@ Dependencies retain their original licenses; the project's licenses do not repla
 The current lockfile also includes transitive packages under MIT and ISC. Consult the license files distributed with each installed package for full terms and authorship. This repository does not vendor those package implementations.
 
 Optional browser-validation installations, including Playwright and Chromium, retain their own upstream terms and notices; they are not relicensed by Critter Lab. Any future imported fonts, sprites, models or other assets must carry source and license information before inclusion.
+
+
+The native UI vendors the unmodified Bitstream Vera Sans font and derived glyph masks. Its original copyright and redistribution terms are preserved in [the font license](native/shared/fonts/LICENSE.txt); [provenance and regeneration](native/shared/fonts/README.md) records the exact source hash and tool version. These font assets retain those terms rather than being relicensed as original game art.

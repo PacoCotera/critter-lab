@@ -64,6 +64,19 @@ class Presenter(unittest.TestCase):
         self.assertEqual(PRESENTER.load_release(path), {"commit": None, "deployed_at": None})
         self.assertEqual(self.request("/release.json")[0], 404)
 
+    def test_release_subject_validation_and_legacy_fallback(self):
+        path = Path(self.directory.name) / "release.json"
+        metadata = {"commit": "b" * 40, "deployed_at": "2026-09-26T12:34:56Z"}
+        path.write_text(json.dumps(metadata))
+        self.assertNotIn("subject", PRESENTER.load_release(path))
+        metadata["subject"] = "Keep specimen identity <intact>"
+        path.write_text(json.dumps(metadata))
+        self.assertEqual(PRESENTER.load_release(path)["subject"], metadata["subject"])
+        for invalid in (None, 42, "", "   ", "a" * 201, "two\nlines", "two\r lines", "tab\ttext", "line\u2028break"):
+            metadata["subject"] = invalid
+            path.write_text(json.dumps(metadata))
+            self.assertEqual(PRESENTER.load_release(path), {"commit": None, "deployed_at": None})
+
     def test_origin_body_and_native_revision_guards(self):
         body = json.dumps({"name": "review", "revision": 0, "operation_id": "first"}).encode()
         headers = {"Content-Type": "application/json", "X-Requested-With": "CritterLab", "Origin": self.origin}

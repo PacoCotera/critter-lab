@@ -96,7 +96,14 @@ async function showRelease() {
       timeZone: 'America/Mexico_City', day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
     }).format(timestamp);
-    label.textContent = `Release ${release.commit.slice(0, 7)} | ${formatted} Mexico City`;
+    const subject = typeof release.subject === 'string' && release.subject.length <= 200
+      && release.subject.trim() && !/[\u0000-\u001f\u007f\u0085\u2028\u2029]/.test(release.subject)
+      ? release.subject : release.commit.slice(0, 7);
+    const commitLink = document.createElement('a');
+    commitLink.textContent = subject;
+    commitLink.href = `https://github.com/PacoCotera/critter-lab/commit/${release.commit}`;
+    label.replaceChildren(document.createTextNode('Commit head: '), commitLink,
+      document.createTextNode(` | ${formatted} Mexico City`));
   } catch {
     // Missing metadata leaves the honest development label intact.
   }

@@ -27,22 +27,22 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
   } while (0)
   if (d->phase == 0) {
     if (d->lab_page == 0) {
-      ACTION("review", "Review outing", "lab");
+      ACTION("review", "Outing details", "lab");
     } else {
       ACTION("back", "Back", "lab");
-      ACTION("load", "Load Probe", "lab");
+      ACTION("load", "Load probe", "lab");
     }
   } else if (d->phase == 1) {
     ACTION("start", "Start", "probe");
   } else if (d->phase == 2) {
     ACTION("check", "Check", "probe");
     if (d->event == 1) {
-      ACTION("inspect", "Inspect fragment", "probe");
+      ACTION("inspect", "Inspect", "probe");
       ACTION("leave", "Leave", "probe");
     }
     ACTION("advance", "Advance simulated time", "engineering");
   } else if (d->phase == 3) {
-    ACTION("haul", "Haul", "probe");
+    ACTION("haul", "View haul", "probe");
     ACTION("receive", "Receive haul", "lab");
     if (d->event == 1) {
       ACTION("inspect", "Inspect note", "lab");
@@ -52,18 +52,18 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
       if (d->finding)
         ACTION("finding", "View finding", "lab");
       else
-        ACTION("study_review", "Review Material study", "lab");
+        ACTION("study_review", "Review study", "lab");
     } else if (d->lab_page == 3 || d->lab_page == 4) {
       ACTION("back", "Back", "lab");
       if (!d->finding && d->reagent >= 1)
-        ACTION("run", "Run study", "lab");
+        ACTION("run", "Start study", "lab");
       if (d->finding)
         ACTION("finding", "View finding", "lab");
     } else {
-      ACTION("back", "Sample", "lab");
+      ACTION("back", "Back to sample", "lab");
     }
     if (d->event == 1) {
-      ACTION("inspect", "Inspect encounter note", "lab");
+      ACTION("inspect", "Inspect note", "lab");
     }
   }
 #undef ACTION

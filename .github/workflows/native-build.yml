@@ -28,7 +28,7 @@ jobs:
           cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build native/build/lab
           native/build/lab/critter_lab --save "$RUNNER_TEMP/critter-demo-state" status | tee native/build/lab/run.log
-          cc -std=c17 -Wall -Wextra -Wpedantic -Werror -I native/shared native/tests/test_pixels.c native/shared/demo_domain.c native/shared/demo_pixels.c -o native/build/lab/test_pixels
+          cc -std=c17 -Wall -Wextra -Wpedantic -Werror -I native/shared native/tests/test_pixels.c native/shared/demo_domain.c native/shared/demo_pixels.c native/shared/native_font.c native/shared/portable_font_data.c -o native/build/lab/test_pixels
           native/build/lab/test_pixels
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"

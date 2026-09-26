@@ -52,7 +52,7 @@ export CRITTER_DEMO_PASSWORD
 python3 native/presenter/server.py
 ```
 
-Open the presenter: Review outing, Load Probe, switch to Probe and Start. Simulation controls supply two progress steps, with an optional encounter between them. Return to Lab, Receive haul, Review Material study and Run study. The saved finding spends one reagent and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
+Open the presenter: Outing details, Load probe, switch to Probe and Start. Simulation controls supply two progress steps, with an optional encounter between them. Return to Lab, Receive haul, Review study and Start study. The saved finding uses one unit of lab supplies and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
 
 The browser displays native pixel images and action descriptors; it implements no collection, research or pixel rules. Frames must load before controls activate. Pending requests retain their operation ID for exact retry after uncertainty, including page reload. This is one shared, single-owner playground and one snapshot, not distributed transfer or cloud authority. Receiving atomically moves the fixture haul into the Lab snapshot; there is no radio acknowledgement to infer.
 
@@ -120,12 +120,17 @@ See the [hardware-native development requirement](../docs/builders/foundation-de
 
 ## Verified prototype
 
-On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 built all three targets. Five native checks and three HTTP checks passed. A browser completed the expedition, received the haul, ran Material study and reloaded the retained finding through an authenticated HTTPS reverse proxy.
+On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 built all three targets. Five native checks and five HTTP checks passed. A browser completed the expedition, received the haul, ran Structure study and reloaded the retained finding through an authenticated HTTPS reverse proxy.
 
-Probe linked with 50,008 bytes flash and 13,496 bytes RAM reported; Companion produced a 181,040-byte ESP32-S3 image. Both entry points execute a domain selection transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
+Probe linked with 105,228 bytes flash and 13,496 bytes RAM reported; Companion produced a 222,736-byte ESP32-S3 image. Both entry points execute a domain review transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
 
 ## Native display contract
 
 Profiles declare native dimensions, encoding and row size: Lab RGB888 3,072 bytes; Probe packed 1-bpp 16 bytes; Companion RGB888 1,104 bytes. The Linux BMP adapter expands monochrome only for presentation. MCU entry points use their own profiles. Row bounds, capacity and padding are checked by `native/tests/test_pixels.c`, compiled and run in CI.
 
-The revised sample/finding views use conceptual research regions, not a production genome bitmap. Older saved page values remain usable. Browser presentation preserves native pixel size and scrolls on smaller displays. Selected device is remembered; Companion shows an honest empty state. Physical drivers/readiness and final interaction acceptance remain separate.
+The revised sample/finding views use conceptual research regions, not a production genome bitmap. Older saved page values remain usable. The browser fits each complete native raster to the available view without changing its aspect ratio. It does not require panning inside a device screen. Selected device is remembered; Companion shows an honest empty state. Physical drivers/readiness and final interaction acceptance remain separate.
+
+
+Color Lab scenes use separately rasterized Bitstream Vera glyphs and a Lab-only scene/font module. Portable builds retain their own smaller atlas and profile-specific scenes. [Font provenance and regeneration](shared/fonts/README.md) records the license and source hash. These UI assets add read-only flash; row RAM remains bounded by the display profiles.
+
+The authenticated presenter accepts an optional deployment-injected `release.json` beside `server.py`: `commit` (full lowercase SHA), `subject` (optional single-line commit title), and `deployed_at` (ISO 8601 with timezone). It snapshots validated metadata at startup and exposes only those fields through `/api/release`. The footer links the title to the exact public commit and shows release time in `America/Mexico_City`. Missing metadata is shown as a development build. Never put credentials or private deployment details in this file.

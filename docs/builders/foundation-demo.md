@@ -4,7 +4,7 @@ The owner has authorized a small playable scaffold on the preliminary native tar
 
 ## What this increment implements
 
-Review and load Material trail at the Lab, start the Probe, advance demonstration time, optionally inspect a clue, complete the outing, receive its haul once, and spend one reagent on Material study. Reopening retains the finding and remaining inventory. Required genomic regions remain unknown; creation is unavailable. Names, quantities and timing are fixtures, not approved game balance.
+Review and load Material trail at the Lab, start the Probe, advance demonstration time, optionally inspect a clue, complete the outing, receive its haul once, and spend one unit of lab supplies on Structure study. Reopening retains the finding and remaining inventory. Required genomic regions remain unknown; creation is unavailable. Names, quantities and timing are fixtures, not approved game balance.
 
 Player controls perform explicit actions. Separate engineering controls advance simulated time. The browser cannot award resources, advance research, choose game states or draw device pixels.
 
@@ -35,7 +35,7 @@ The presenter protects pages, status, images and commands with authentication. S
 
 A completed increment requires:
 
-- Linux build and complete prepare â†’ collect â†’ receive â†’ study â†’ reopen walkthrough.
+- Linux build and complete prepare → collect → receive → study → reopen walkthrough.
 - MCU cross-builds invoking the shared core and renderer.
 - Meaningful retry, stale request, save corruption and persistence checks.
 - Inspection of actual native images and usable browser controls.
