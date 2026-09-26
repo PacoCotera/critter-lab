@@ -51,7 +51,7 @@ class Presenter(unittest.TestCase):
         self.assertEqual(self.request("/", authenticated=True)[0], 200)
 
     def test_origin_body_and_native_revision_guards(self):
-        body = json.dumps({"name": "select", "revision": 0, "operation_id": "first"}).encode()
+        body = json.dumps({"name": "review", "revision": 0, "operation_id": "first"}).encode()
         headers = {"Content-Type": "application/json", "X-Requested-With": "CritterLab", "Origin": self.origin}
         self.assertEqual(self.request("/api/command", body)[0], 403)
         wrong = dict(headers, Origin="https://another.example")
@@ -67,7 +67,7 @@ class Presenter(unittest.TestCase):
         self.assertEqual(self.request("/../../etc/passwd")[0], 404)
 
     def test_uncertain_native_exit_remains_retryable(self):
-        body = json.dumps({"name": "select", "revision": 0, "operation_id": "uncertain"}).encode()
+        body = json.dumps({"name": "review", "revision": 0, "operation_id": "uncertain"}).encode()
         headers = {"Content-Type": "application/json", "X-Requested-With": "CritterLab", "Origin": self.origin}
         for native_exit, http_status in ((2, 409), (3, 503), (-9, 503)):
             failure = subprocess.CompletedProcess([], native_exit, b'{"error":"test failure"}', b"")

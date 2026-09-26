@@ -4,8 +4,8 @@ Status: intended functions and engineering constraints. No selected production p
 
 | Device | Required role | Open physical/firmware choices |
 | --- | --- | --- |
-| Lab / Console | Connected research workbench, local configuration, cached archive, pixel display, thermal print and QR reading; play without a Probe | Display/controller/driver, controls, storage, power and print/scan interfaces; OLED, monochrome/six-color e-ink and LCD exploration do not select a module |
-| Field Probe | Standalone evidence and resource gathering, player-attributed expeditions, retained cargo and recoverable offload | Sensor suite, cadence, capacity, battery, screen and transport; no required phone |
+| Lab / Console | Connected research workbench, local configuration, cached archive, color pixel display, thermal print and QR reading; play without a Probe | Selected development display: Waveshare 7inch HDMI LCD (H), 1024×600 landscape color; Linux host, driver integration, controls, storage, power and print/scan remain open |
+| Field Probe | Standalone evidence and resource gathering, player-attributed expeditions, retained cargo and recoverable offload | Sensor suite, cadence, capacity, battery, exact portrait e-ink panel and transport; no required phone |
 | Companion | Shared player use, saved-individual display, training/evolution/bonding and temporary offline activity | Number of carried critters, supported actions, handover, display/controls and power |
 | Caddy | Wireless charging for both portables | Receiver/transmitter solution, separate supply, mechanical alignment, status signal and indicators |
 
@@ -15,9 +15,9 @@ Warm beige shells, charcoal structure and restrained orange accents inform the p
 
 ## Development targets
 
-Owner direction: a more capable Linux-class Lab, an nRF52840 Probe and an ESP32-S3 Companion. These MCU families are the preliminary portable targets, not approval of exact boards, sensor sets, display modules or battery configurations. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
+Owner direction: a more capable Linux-class Lab, an nRF52840 Probe and an ESP32-S3 Companion. The Lab display and Companion board/display below are selected for preliminary development; the Probe panel remains a candidate. Sensor sets, battery configurations and production parts remain open. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
 
-The native development baseline uses C/C++ toolchains for those targets. Compile and link firmware for real MCUs; use host adapters only for explicit behavioral testing. Display-specific simulation and new mockups wait for the preliminary peripheral and resource specification. See the [foundation development plan](../docs/builders/foundation-demo.md).
+The native development baseline uses C/C++ toolchains for those targets. Compile and link firmware for real MCUs; use host adapters only for explicit behavioral testing. Active prototype development is authorized against the display contract below. Native builds must distinguish behavioral adapters from actual board drivers; physical timing, power and display readiness still require board evidence. See the [foundation development plan](../docs/builders/foundation-demo.md).
 
 ## Coupled constraints
 
@@ -44,14 +44,21 @@ PCB and enclosure work are coupled: preserve connector and antenna clearances, s
 The programme target is ten complete kits. US$750 is the maximum full-kit retail ceiling, aiming lower—not a BOM allowance or a verified selling price. Compare all four devices, cases, packaging/booklet, assembly/rework and support, without double-counting integrated controllers/chargers. Neither this target nor a concept render authorizes a parts selection.
 
 
-## Companion display shortlist
+## Display contract for active prototypes
 
-Owner selected **Waveshare ESP32-S3-Touch-AMOLED-1.8** as the preliminary Companion development board: 368 × 448 touch AMOLED, ESP32-S3R8, 8 MB PSRAM and 16 MB flash. The exact PCB revision must be pinned before its board support package; do not mix V1 and V2 drivers. Physical controls, enclosure, battery and production integration remain open. The comparison that informed this selection follows:
+Owner direction: **Lab color 1024×600 landscape; Probe portrait e-ink; Companion color 368×448 portrait**. These are distinct device profiles with separate composition and adapter behavior.
 
-| Candidate | Native raster | Design consideration |
+| Device | Selected requirement versus provisional hardware | Logical profile and implementation limit |
 | --- | --- | --- |
-| [Waveshare 1.8](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.8) | 368 × 448 | Compact portrait; V1 and V2 use different display/touch controllers, so pin the exact revision. |
-| [Waveshare 1.64](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.64) | 280 × 456 | Narrow portrait; V1/V2 pin mapping and charging changes require exact revision tracking. |
-| [Waveshare 1.75](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.75) | 466 × 466, round | Circular visible region needs a round interaction layout; raster corners are not usable screen area. |
+| Lab | **Waveshare 7inch HDMI LCD (H), 1024×600 landscape color, selected for preliminary development.** Linux-class local execution accepted; exact host remains open. | **1024×600 landscape** native and logical profile. Lab screen implementation may proceed. HDMI video and USB capacitive touch require validation on the chosen Linux host. Earlier 400×240 and proposed 800×480 are superseded. Selection does not authorize purchase. |
+| Probe | Portrait e-ink accepted. Waveshare 2.13-inch monochrome e-Paper HAT V4 is a **candidate**, not a final selected panel. | Candidate logical coordinates **122×250 portrait**, over its 250×122 controller raster; handle 90° rotation explicitly in panel adapter or renderer transform. Compose discrete monochrome frames; no smooth-animation or timed-reflex requirement. Change dimensions if another panel is selected. |
+| Companion | **Waveshare ESP32-S3-Touch-AMOLED-1.8 selected for preliminary development:** 368×448 color AMOLED, ESP32-S3R8, 8 MB PSRAM, 16 MB flash. Exact PCB revision unconfirmed. | **368×448 portrait** with a rounded-corner safe region; its own scene/profile, never the Probe renderer flag. V1 SH8601/FT3168 and V2 CO5300/CST820 require matching BSP/drivers. Controls, battery, enclosure and production integration remain open. |
+| Caddy | No display selected or required. | No raster/framebuffer. Indicators use supported electrical status; missing information is unknown. |
 
-Manufacturer specifications checked 26 September 2026, not bench measurements. RGB565 full-frame calculations are respectively 329,728, 255,360 and 434,312 bytes; double buffering doubles these figures before assets, drivers and application memory. Available PSRAM is not proof of frame rate or battery life. Compare physical board size, touch/physical-button pin availability, QSPI driver/revision, sleep/current behavior and power-management integration before selecting the simulation profile.
+Calculated native buffer examples: Lab RGB565 full frame is 1,228,800 bytes; XRGB8888 is 2,457,600 bytes; double buffering doubles either. Actual Linux scanout format/stride and renderer overhead remain to verify. Candidate Probe packed 1-bpp frame 4,000 bytes with byte-aligned rows, before old/new/partial-refresh buffers and driver reserve. Companion RGB565 329,728 bytes/full frame, 659,456 for two. RGB565 is an initial rendering/transfer assumption pending exact driver verification. Budget fonts, decoded assets/motion, stacks, journals, radio/TLS and internal DMA staging separately; PSRAM alone proves neither responsiveness nor runtime.
+
+An RGB888 host image/scanline is a presentation adapter, not a panel-format buffer. Enforce each logical geometry, color policy and safe area, then convert through the selected display adapter. Controller orientation and memory stride remain distinct from player coordinates. Redesign Probe composition for portrait rather than stretching or rotating its landscape screenshot.
+
+Each frame has an identity. Activation waits for that frame to be visibly ready; submitted pixels or SPI/DMA completion do not establish visibility. Consume gestures begun during wake/refresh through release and require fresh activation. E-ink exposes asynchronous busy/readiness/failure behavior; Companion supports bounded animation with a still fallback. Exact refresh scheduling and physical readiness require board evidence.
+
+Existing evidence: [Companion documentation](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.8) and [Probe manual](https://www.waveshare.com/wiki/2.13inch_e-Paper_HAT_Manual), inspected 26 September 2026. No new measurements implied. Pin revisions, mounting and drivers before hardware claims. The selected Lab [manufacturer product](https://www.waveshare.com/7inch-hdmi-lcd-h.htm) and [manual](https://files.waveshare.com/upload/5/58/7inch_HDMI_LCD_%28H%29_User_Manual.pdf) establish the 1024×600 IPS HDMI/USB-touch direction. Verify ordered revision, native mode/EDID, touch mapping, power and cable/enclosure clearance on the actual Linux host. Higher accepted HDMI input modes do not increase native pixels. No refresh, thermal or power performance has been measured; purchasing remains unauthorized.

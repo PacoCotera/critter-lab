@@ -27,10 +27,7 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
   } while (0)
   if (d->phase == 0) {
     if (d->lab_page == 0) {
-      ACTION("select", "Select", "lab");
-      if (d->selected) {
-        ACTION("review", "Review", "lab");
-      }
+      ACTION("review", "Review outing", "lab");
     } else {
       ACTION("back", "Back", "lab");
       ACTION("load", "Load Probe", "lab");
@@ -52,21 +49,18 @@ size_t demo_actions(const Demo *d, DemoAction *out, size_t cap) {
     }
   } else {
     if (d->lab_page == 2) {
-      ACTION("research", "Research", "lab");
-    } else if (d->lab_page == 3) {
+      if (d->finding)
+        ACTION("finding", "View finding", "lab");
+      else
+        ACTION("study_review", "Review Material study", "lab");
+    } else if (d->lab_page == 3 || d->lab_page == 4) {
       ACTION("back", "Back", "lab");
-      ACTION("study_review", "Review Material study", "lab");
-    } else if (d->lab_page == 4) {
-      ACTION("back", "Back", "lab");
-      if (!d->finding && d->reagent >= 1) {
-        ACTION("run", "Run study - 1 reagent", "lab");
-      }
-      if (d->finding) {
-        ACTION("finding", "Saved finding", "lab");
-      }
+      if (!d->finding && d->reagent >= 1)
+        ACTION("run", "Run study", "lab");
+      if (d->finding)
+        ACTION("finding", "View finding", "lab");
     } else {
       ACTION("back", "Sample", "lab");
-      ACTION("research", "Studies", "lab");
     }
     if (d->event == 1) {
       ACTION("inspect", "Inspect encounter note", "lab");
@@ -83,10 +77,10 @@ const char *demo_apply(Demo *d, const char *name) {
       break;
   if (i == n)
     return "Action unavailable in this state";
-  if (!strcmp(name, "select"))
+  if (!strcmp(name, "review")) {
     d->selected = 1;
-  else if (!strcmp(name, "review"))
     d->lab_page = 1;
+  }
   else if (!strcmp(name, "back"))
     d->lab_page = d->phase == 0 ? 0 : 2;
   else if (!strcmp(name, "load"))
@@ -113,9 +107,7 @@ const char *demo_apply(Demo *d, const char *name) {
   else if (!strcmp(name, "receive")) {
     d->phase = 4;
     d->lab_page = 2;
-  } else if (!strcmp(name, "research"))
-    d->lab_page = 3;
-  else if (!strcmp(name, "study_review"))
+  } else if (!strcmp(name, "study_review"))
     d->lab_page = 4;
   else if (!strcmp(name, "run")) {
     --d->reagent;

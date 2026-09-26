@@ -45,11 +45,11 @@ static void word(unsigned n, unsigned bytes) {
   for (unsigned i = 0; i < bytes; ++i)
     putchar((int)((n >> (i * 8)) & 255));
 }
-static void frame(const Demo *d, int probe) {
-  unsigned w, h;
-  demo_dimensions(probe, &w, &h);
+static void frame(const Demo *d, DemoDisplay display) {
+  const DemoDisplayProfile *profile = demo_display_profile(display);
+  unsigned w = profile->width, h = profile->height;
   unsigned stride = (w * 3 + 3) & ~3u;
-  uint8_t row[400 * 3];
+  uint8_t row[1024 * 3];
   fputs("BM", stdout);
   word(54 + stride * h, 4);
   word(0, 4);
@@ -66,11 +66,18 @@ static void frame(const Demo *d, int probe) {
   word(0, 4);
   word(0, 4);
   for (unsigned y = h; y > 0; --y) {
-    demo_row(d, probe, y - 1, row);
+    demo_render_row(d, display, y - 1, row, sizeof(row));
     for (unsigned x = 0; x < w; ++x) {
-      putchar(row[x * 3 + 2]);
-      putchar(row[x * 3 + 1]);
-      putchar(row[x * 3]);
+      if (profile->format == DEMO_MONO1) {
+        int value = row[x / 8] & (0x80u >> (x % 8)) ? 0 : 255;
+        putchar(value);
+        putchar(value);
+        putchar(value);
+      } else {
+        putchar(row[x * 3 + 2]);
+        putchar(row[x * 3 + 1]);
+        putchar(row[x * 3]);
+      }
     }
     for (unsigned i = w * 3; i < stride; ++i)
       putchar(0);
@@ -94,10 +101,13 @@ int main(int argc, char **argv) {
     unsigned revision;
     if (!number(argv[5], &revision) || revision != d.revision)
       result = error("Stale frame");
-    else if (strcmp(argv[4], "lab") && strcmp(argv[4], "probe"))
+    else if (strcmp(argv[4], "lab") && strcmp(argv[4], "probe") &&
+             strcmp(argv[4], "companion"))
       result = error("Unknown device");
     else
-      frame(&d, !strcmp(argv[4], "probe"));
+      frame(&d, !strcmp(argv[4], "probe") ? DEMO_PROBE
+                : !strcmp(argv[4], "companion") ? DEMO_COMPANION
+                                                : DEMO_LAB);
   } else if (argc == 7 && !strcmp(argv[3], "command")) {
     unsigned revision;
     char payload[128];

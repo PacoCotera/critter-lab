@@ -8,7 +8,7 @@ This builder entry point compiles three native programs sharing a bounded C doma
 | Probe | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0, Zephyr GNU SDK 1.0.1 |
 | Companion | `esp32s3` (Xtensa) | ESP-IDF 5.5.5 |
 
-These build targets do not select production boards or configure external peripherals. SDK board defaults supply Probe startup, USB CDC ACM console routing and a UF2-compatible application partition; Companion uses the SDK's generic ESP32-S3 defaults. Neither is a product pin map. The Lab build runs on the development host; it does not verify a Raspberry Pi image or physical Lab. The presentation canvases are provisional: Lab 400Ãƒâ€”240, Probe 250Ãƒâ€”122 monochrome.
+The selected development profiles are Lab 1024x600 color, Probe candidate 122x250 portrait monochrome and Companion 368x448 color. Native builds do not configure external peripherals or prove a physical boot. SDK board defaults are not a product pin map.
 
 ## Ubuntu build environment
 
@@ -52,7 +52,7 @@ export CRITTER_DEMO_PASSWORD
 python3 native/presenter/server.py
 ```
 
-Open the presenter, select/review/load Material trail on Lab, switch to Probe and Start. The external Simulation controls advance the authored scenario twice; inspect or leave the optional fragment between advances. Return to Lab and Receive haul, then Research Ã¢â€ â€™ Review Material study Ã¢â€ â€™ Run. This saves the finding, spends one of two provisional reagents and leaves two regions unknown. The supplied player, outing, quantities and structural alternatives are authored fixtures, not approved economy or genetics content. The second study and creation are deliberately outside this slice.
+Open the presenter: Review outing, Load Probe, switch to Probe and Start. Simulation controls supply two progress steps, with an optional encounter between them. Return to Lab, Receive haul, Review Material study and Run study. The saved finding spends one reagent and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
 
 The browser displays native pixel images and action descriptors; it implements no collection, research or pixel rules. Frames must load before controls activate. Pending requests retain their operation ID for exact retry after uncertainty, including page reload. This is one shared, single-owner playground and one snapshot, not distributed transfer or cloud authority. Receiving atomically moves the fixture haul into the Lab snapshot; there is no radio acknowledgement to infer.
 
@@ -123,3 +123,9 @@ See the [hardware-native development requirement](../docs/builders/foundation-de
 On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 built all three targets. Five native checks and three HTTP checks passed. A browser completed the expedition, received the haul, ran Material study and reloaded the retained finding through an authenticated HTTPS reverse proxy.
 
 Probe linked with 50,008 bytes flash and 13,496 bytes RAM reported; Companion produced a 181,040-byte ESP32-S3 image. Both entry points execute a domain selection transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
+
+## Native display contract
+
+Profiles declare native dimensions, encoding and row size: Lab RGB888 3,072 bytes; Probe packed 1-bpp 16 bytes; Companion RGB888 1,104 bytes. The Linux BMP adapter expands monochrome only for presentation. MCU entry points use their own profiles. Row bounds, capacity and padding are checked by `native/tests/test_pixels.c`, compiled and run in CI.
+
+The revised sample/finding views use conceptual research regions, not a production genome bitmap. Older saved page values remain usable. Browser presentation preserves native pixel size and scrolls on smaller displays. Selected device is remembered; Companion shows an honest empty state. Physical drivers/readiness and final interaction acceptance remain separate.

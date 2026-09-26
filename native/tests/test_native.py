@@ -32,10 +32,10 @@ class NativeLoop(unittest.TestCase):
         return json.loads(self.invoke("command", name, revision, f"op-{self.operation}"))
 
     def complete(self, inspect=True):
-        for action in ("select", "review", "load", "start", "advance"):
+        for action in ("review", "load", "start", "advance"):
             self.command(action)
         self.command("inspect" if inspect else "leave")
-        for action in ("advance", "receive", "research", "study_review", "run"):
+        for action in ("advance", "receive", "study_review", "run"):
             self.command(action)
 
     def test_loop_persists_and_does_not_regrant(self):
@@ -48,18 +48,24 @@ class NativeLoop(unittest.TestCase):
         for action in ("run", "receive", "advance", "start"):
             self.invoke("command", action, saved["revision"], "invalid", success=False)
         self.assertEqual(saved, self.state())
-        for action in ("back", "research", "study_review", "finding"):
+        for action in ("back", "finding"):
             self.command(action)
         self.assertTrue(self.state()["finding"])
         self.assertEqual(self.state()["reagent"], 1)
+        # Old page 3 saves stay useful without rewriting on read or spending.
+        self.save.write_text(self.save.read_text().replace("lab_page 5", "lab_page 3"))
+        legacy = self.state()
+        self.assertNotIn("run", [action["name"] for action in legacy["actions"]])
+        self.command("finding")
+        self.assertEqual(self.state()["reagent"], 1)
 
     def test_exact_retry_and_stale_are_distinct(self):
-        first = self.invoke("command", "select", 0, "same-id")
-        self.assertEqual(first, self.invoke("command", "select", 0, "same-id"))
+        first = self.invoke("command", "review", 0, "same-id")
+        self.assertEqual(first, self.invoke("command", "review", 0, "same-id"))
+        self.invoke("command", "load", 0, "same-id", success=False)
+        self.invoke("command", "review", 0, "old-id", success=False)
+        self.command("load")
         self.invoke("command", "review", 0, "same-id", success=False)
-        self.invoke("command", "select", 0, "old-id", success=False)
-        self.command("review")
-        self.invoke("command", "select", 0, "same-id", success=False)
         self.assertEqual(self.state()["revision"], 2)
 
     def test_leave_is_optional_and_corruption_fails_closed(self):
@@ -68,23 +74,24 @@ class NativeLoop(unittest.TestCase):
         data = self.save.read_bytes() + b"unexpected tail\n"
         self.save.write_bytes(data)
         self.invoke("status", success=False)
-        self.invoke("command", "select", 0, "new", success=False)
+        self.invoke("command", "review", 0, "new", success=False)
         self.assertEqual(self.save.read_bytes(), data)
 
     def test_native_bmp_dimensions_pixels_and_revision(self):
-        for device, dimensions in (("lab", (400, 240)), ("probe", (250, 122))):
+        for device, dimensions in (("lab", (1024, 600)), ("probe", (122, 250)), ("companion", (368, 448))):
             frame = self.invoke("frame", device, 0)
             self.assertEqual(frame[:2], b"BM")
             self.assertEqual(struct.unpack_from("<II", frame, 18), dimensions)
             self.assertEqual(struct.unpack_from("<I", frame, 2)[0], len(frame))
             self.assertGreater(len(set(frame[54:])), 1)
-        self.command("select")
+        self.command("review")
+        self.command("load")
         self.invoke("frame", "lab", 0, success=False)
 
     def test_save_failure_is_uncertain_and_same_identity_can_retry(self):
         temporary = Path(str(self.save) + ".tmp")
         temporary.mkdir()
-        arguments = [BINARY, "--save", str(self.save), "command", "select", "0", "retry-save"]
+        arguments = [BINARY, "--save", str(self.save), "command", "review", "0", "retry-save"]
         result = subprocess.run(arguments, capture_output=True, check=False)
         self.assertEqual(result.returncode, 3, result.stdout)
         temporary.rmdir()

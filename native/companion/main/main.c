@@ -5,15 +5,16 @@
 void app_main(void) {
   ESP_LOGI("critter_companion", "Native scaffold 0.1.0 | target: esp32s3");
   Demo demo;
-  uint8_t row[250 * 3];
+  uint8_t row[1104];
   unsigned checksum = 0;
   demo_init(&demo);
-  const char *failure = demo_apply(&demo, "select");
+  const char *failure = demo_apply(&demo, "review");
   if (failure || !demo_valid(&demo)) {
     ESP_LOGE("critter_companion", "Shared fixture transition validation failed");
     return;
   }
-  demo_row(&demo, 1, 10, row);
+  if (!demo_render_row(&demo, DEMO_COMPANION, 10, row, sizeof(row)))
+    return;
   for (unsigned i = 0; i < sizeof(row); ++i)
     checksum += row[i];
   ESP_LOGI("critter_companion",

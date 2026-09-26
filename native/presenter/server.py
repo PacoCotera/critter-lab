@@ -81,7 +81,7 @@ class Handler(BaseHTTPRequestHandler):
                 if set(query) != {"device", "revision"} or any(len(v) != 1 for v in query.values()):
                     raise ValueError()
                 device, revision = query["device"][0], query["revision"][0]
-                if device not in {"lab", "probe"} or not re.fullmatch(r"[0-9]{1,10}", revision):
+                if device not in {"lab", "probe", "companion"} or not re.fullmatch(r"[0-9]{1,10}", revision):
                     raise ValueError()
                 self.native(["frame", device, revision], image=True)
             else:

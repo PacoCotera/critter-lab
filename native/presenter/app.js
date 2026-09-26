@@ -2,7 +2,7 @@
 const screen = document.querySelector('#frame');
 const statusLine = document.querySelector('#status');
 const retryButton = document.querySelector('#retry');
-let device = 'lab', snapshot = null, ready = false, busy = false, generation = 0, pending = null;
+let device = ['lab', 'probe', 'companion'].includes(localStorage.getItem('critterDevice')) ? localStorage.getItem('critterDevice') : 'lab', snapshot = null, ready = false, busy = false, generation = 0, pending = null;
 let held = false;
 const setStatus = text => { statusLine.textContent = text; };
 function lockControls() {
@@ -21,22 +21,26 @@ async function show(state) {
   await screen.decode();
   if (old.startsWith('blob:')) URL.revokeObjectURL(old);
   if (request !== generation) return;
-  document.querySelector('#instrument').classList.toggle('probe', device === 'probe');
-  for (const id of ['lab', 'probe']) document.querySelector(`#${id}`).setAttribute('aria-pressed', String(id === device));
+  document.querySelector('#instrument').className = 'instrument ' + device;
+  screen.width = device === 'probe' ? 122 : device === 'companion' ? 368 : 1024;
+  screen.height = device === 'probe' ? 250 : device === 'companion' ? 448 : 600;
+  for (const id of ['lab', 'probe', 'companion']) document.querySelector(`#${id}`).setAttribute('aria-pressed', String(id === device));
   for (const id of ['controls', 'engineering']) document.querySelector(`#${id}`).replaceChildren();
-  state.actions.filter(action => action.device === device || action.device === 'engineering').forEach(action => {
+  state.actions.filter(action => action.device === device || (action.device === 'engineering' && device !== 'companion')).forEach(action => {
     const button = document.createElement('button'); button.textContent = action.label; button.dataset.command = action.name;
     button.addEventListener('click', () => activate(action.name));
     document.querySelector(action.device === 'engineering' ? '#engineering' : '#controls').append(button);
   });
-  ready = true; lockControls(); setStatus('Screen ready. Changes are saved after each action.');
+  ready = true; lockControls();
+  document.querySelector('#complete').hidden = !state.finding;
+  if (!busy) setStatus('Screen ready. Changes are saved after each action.');
 }
 async function refresh() {
   if (busy || pending) return;
   busy = true; ready = false; lockControls();
   try { const response = await fetch('/api/status', {cache:'no-store'}); const value = await response.json(); if(!response.ok) throw new Error(value.error); await show(value); }
   catch(error) {setStatus(error.message);}
-  finally {busy = false;lockControls();}
+  finally {busy = false;lockControls();if(ready) setStatus('Screen ready. Changes are saved after each action.');}
 }
 async function sendPending() {
   if (busy || !pending) return;
@@ -50,7 +54,7 @@ async function sendPending() {
     }
     pending = null; sessionStorage.removeItem('critterPending'); await show(value);
   } catch(error) {setStatus(error.message + (pending ? ' Retry keeps the same action.' : ' Refresh to continue.'));}
-  finally {busy = false;retryButton.hidden = !pending;lockControls();}
+  finally {busy = false;retryButton.hidden = !pending;lockControls();if(ready) setStatus('Screen ready. Changes are saved after each action.');}
 }
 function activate(name) {
   if (!ready || busy || pending) return;
@@ -58,8 +62,8 @@ function activate(name) {
   pending = {name, revision:snapshot.revision, operation_id:Array.from(random,n=>n.toString(16).padStart(8,'0')).join('')};
   sessionStorage.setItem('critterPending',JSON.stringify(pending)); sendPending();
 }
-for (const id of ['lab','probe']) document.querySelector(`#${id}`).addEventListener('click',async()=>{
-  if(busy || pending) return; device=id; if(snapshot) {try{await show(snapshot);}catch(error){setStatus(error.message);}}
+for (const id of ['lab','probe','companion']) document.querySelector(`#${id}`).addEventListener('click',async()=>{
+  if(busy || pending) return; device=id; localStorage.setItem('critterDevice', device); if(snapshot) {try{await show(snapshot);}catch(error){setStatus(error.message);}}
 });
 document.querySelector('#refresh').addEventListener('click',refresh);
 retryButton.addEventListener('click',sendPending);
