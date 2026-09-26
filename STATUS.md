@@ -1,11 +1,15 @@
 # Product status
 
-Initial public baseline · 25 September 2026.
+Critter Lab is in system and game design. The public repository contains the product specifications, original hardware concepts and runnable host experiments.
 
-The product architecture and genetics framework are documented; many detailed mechanics remain proposals. Runnable software consists of local host experiments with authored data. No complete firmware, production backend, PCB or editable enclosure model is available yet. Hardware performance is unvalidated.
+| Stage | Current evidence |
+| --- | --- |
+| Game and system design | Research, genetics, player ownership and device responsibilities documented; detailed rules remain open |
+| Local software | Separate breeding/share, founder, transfer and saved-record experiments with authored data |
+| Creature generation | Pipeline specified; no complete genome-to-art or content-management service |
+| Physical kit | Concept references; no production firmware, PCB, editable cases or validated charging assembly |
+| Hosted game | No deployable public production backend or companion app |
 
-The specification map distinguishes accepted directions from open details. The immediate design work connects research, a fully resolved genome, expression, appearance and behavior while preserving individual identity. Simple rules come first; neural adaptation is a proposed later experiment.
+The next design dependencies are research completeness, creation terms and temporary offline activity. The [sample-to-critter contract](specs/sample-to-critter-contract.md) connects them. A [player introduction](docs/players/README.md) explains the intended experience without implementation detail.
 
-This repository is authoritative for product changes. Specifications and affected implementation/examples must change together; a prototype cannot silently redefine a rule. [Build coverage](BUILD.md) is the component inventory, and [versioning](releases/README.md) defines release records.
-
-A [worked sample-to-critter review](design/sample-to-critter-walkthrough.md) and [proposed system contract](specs/sample-to-critter-contract.md) now connect the lifecycle, identity and failure boundaries. They are paper designs, not a new running generation pipeline. Review research completeness first, followed by creation terms and temporary offline activity.
+[Build coverage](BUILD.md) is the component inventory. [Run the experiments](docs/builders/getting-started.md) for available software. Source snapshots and compatibility are described in [versions](releases/README.md).

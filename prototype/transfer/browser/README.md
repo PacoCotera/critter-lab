@@ -14,10 +14,8 @@ node --test prototype/tests/transfer-browser.test.mjs
 node prototype/transfer/browser/browser-check.mjs <installed-playwright-directory>
 ```
 
-`generate.mjs` uses existing domain transitions and host projection to produce `observations.json`; browser imports remain pure. The explicit server map excludes the generator, browser harness, Node domain/projection/storage modules and artifacts. `font.mjs` and `render.mjs` compose pixels; `input.mjs` handles physical gesture state; `host.mjs` connects the canvas, fixture controls and existing semantic controller. No shared presentation or pixel modules are modified.
+`generate.mjs` uses existing domain transitions and host projection to produce `observations.json`; browser imports remain pure. The explicit server map excludes the generator, browser harness, Node domain/projection/storage modules and artifacts. `font.mjs` and `render.mjs` compose pixels; `input.mjs` handles physical gesture state; `host.mjs` connects the canvas, fixture controls and existing semantic controller.
 
-Unit checks cover every supplied state, every Details page and the caller in both palettes, exact identifiers, independent singular/plural counts, overflow, glyph coverage, gate behavior and GET/HEAD import closure/negative routes. The real Chromium harness exercises keyboard down/up/repeat, pointer down/up/outside release, blur/refocus, delayed/reordered/lost reads, coalesced draws, caller reentry and pixel buffers. It saves native screenshots, a vertical review sheet and a local validation report.
+Unit checks cover supplied states, glyph/layout bounds, input gates and served imports. The Chromium harness checks gestures, read/draw interruption and frame buffers, saving screenshots and a report. Install its optional dependencies as described in [builder setup](../../../docs/builders/getting-started.md).
 
 One unpacked index plane costs 307,200 bytes in either palette. The host retains a displayed plane and at most one pending composition; RGBA upload adds 1,228,800 bytes and canvas/browser backing storage is additional. Mono pixels are not packed bits here. Glyphs are authored string rows, not a measured firmware font binary. Device RAM, refresh, readability and power need a separately selected hardware implementation and bench testing.
-
-Optional browser checks require a separately installed Playwright package and browser; they are not part of the application runtime. Host simulations do not establish physical display, firmware, storage or power performance.

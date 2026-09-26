@@ -16,7 +16,7 @@ Unavailable reads can retain separately labeled **Last confirmed status** and pe
 
 Previously verified manifest cargo is retained separately as a consistency check even if a later preview is unavailable. It does not make that preview available or authorize actions, and changing the selected key clears it. If preview data disappears while Details is open, Details shows one bounded unavailable page rather than navigating elsewhere or displaying an empty page count.
 
-Run `node --test prototype/tests/transfer-presentation.test.mjs`. The tests include saved lab snapshots with the probe file removed, stale/null request tokens, A→B→A selection, Back/reentry, last-known error states, bounded Details, copied inputs and dependency boundaries. The semantic adapter remains headless. The separate [pixel browser study](browser/README.md) supplies host rendering and gesture checks without live transfer or persistence. Neither study establishes firmware, physical panel behavior or staging integration.
+Run `node --test prototype/tests/transfer-presentation.test.mjs` for observation, stale-input and navigation guards. The [pixel browser study](browser/README.md) adds host rendering and gesture checks without live transfer or persistence.
 
 ```text
 node --test prototype/tests/transfer-simulator.test.mjs
@@ -55,8 +55,4 @@ Transactions reread and validate committed bytes, write an exclusive temporary f
 
 Corrupt or unsupported records are preserved and rejected. The default file limit is 1 MiB; each cargo category, retained transfer list and history list is bounded to 128 entries. The fixture does not prune receipts/tombstones. Capacity exhaustion requires retaining state and retrying after capacity is available; it must not evict deduplication records. Sample IDs and lot IDs each occupy their own namespace.
 
-Tests inject failures before and after all five writes and all four message deliveries/sends, reopen actual files, lose queues, exercise concurrent duplicate/conflicting deliveries, reject corrupted saves, and replay every old message during a later haul. Failure hooks model disk-full/abort and lost-response boundaries; they are not a physical power-cut or flash-wear experiment. Production transfer, identity authentication, firmware persistence and UI integration need separate reviewed work.
-
-
-
-Optional browser checks require a separately installed Playwright package and browser; they are not part of the application runtime. Host simulations do not establish physical display, firmware, storage or power performance.
+The [transfer tests](../tests/transfer-simulator.test.mjs) cover write/message interruption, reopening, duplicate/conflicting delivery and corrupted saves. Injected faults do not establish physical power-loss durability or flash wear. Production authentication and firmware persistence remain separate work.

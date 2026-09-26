@@ -23,6 +23,10 @@ Caddy charging is separate from data transfer, specimen handoff and gameplay sco
 
 ## Validation gates
 
+Firmware must expose domain-independent adapters for input, visible display readiness, sensing, storage, transport, print and power. Device profiles declare supported content, memory/raster limits and update compatibility; no profile can claim arbitrary future content support. Provisioning, firmware-update recovery and service diagnostics need a concrete design before deployment.
+
+PCB and enclosure work are coupled: preserve connector and antenna clearances, sensor exposure, coil/cell separation, fasteners, tolerances and service access in a shared mechanical envelope. Board files, bills of materials and case drawings must identify compatible revisions. Actual interfaces and dimensions remain open; renders cannot substitute for schematics or fabrication drawings.
+
 1. Rehearse pin/bus/address/voltage and physical envelopes before PCB/case commitments.
 2. Measure native display/input, print/scan, storage/radio, energy and power transients under a concurrent workload.
 3. Exercise portable interruption/restart and two-bay charging, removal/reseat/misalignment and safe fault behavior.

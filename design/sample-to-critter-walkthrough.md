@@ -1,10 +1,10 @@
 # Your first discovery
 
-*A player walkthrough concept for newcomers.*
+*A newcomer story about the intended game, not a released-game manual.*
 
-![Critter Lab hardware concept: tabletop Lab, narrow Probe and portable Companion in beige, charcoal and orange.](references/branded-family.png)
+![The three devices in this story: a tabletop Lab with a printer on the left, a small two-button Probe in the middle, and a larger color Companion on the right.](references/branded-family.png)
 
-*Original hardware concept reference. Story-specific illustrations are being revised; this image introduces the devices rather than depicting the six steps.*
+*Original hardware concept. The devices introduce the story; this image does not depict its six steps or fix the final engineering.*
 
 **1. Take the Probe outside**
 
@@ -16,7 +16,7 @@ Back home, she brings her sample to the **Lab**, the tabletop machine where she 
 
 **3. Follow a clue**
 
-Mara chooses a study about head shape. The Lab presents a clue she can compare with references. Further investigation reveals that this sample supports more than one shape. She starts imagining the critter she might choose to create.
+Mara chooses a study about head shape. She compares a clue with the Lab's references. Further investigation reveals that the sample supports more than one shape. She starts imagining the critter she might choose to create.
 
 **4. Find what the next study needs**
 
@@ -24,14 +24,14 @@ Another study needs a supply she does not have. Her finding stays saved while sh
 
 **5. Understand, choose, then meet**
 
-Mara finishes all the research required to understand the sample's complete genetic possibilities. The Lab explains her creation options, including what the critter will show and what it can carry unseen. Before she commits, she can review her choice and what creation will use.
+Mara finishes all the research required to understand the sample's complete genetic possibilities. The Lab explains her creation options: what the critter will show, what it can carry unseen, and what creation will use. She reviews her choice before committing.
 
-When her critter is ready, the Lab waits. Mara presses **OPEN** herself. Now she meets an individual of her own, with a life beyond this first discovery.
+When her critter is ready, the Lab waits. Mara presses **OPEN** herself. Now she meets an individual of her own.
 
 **6. Take that critter with you**
 
-The **Companion** is the handheld home for spending time with her critter away from the Lab. Mara takes the same individual along, gets to know it, and returns to continue their story. It is not a fresh copy each time she changes devices.
+The **Companion** is the handheld home for spending time with her critter away from the Lab. Mara takes the same individual along, gets to know it, and returns to continue their story. Changing devices does not create another critter.
 
-*Concept walkthrough: study activities, supplies, crafting, creation requirements and life together are still being designed. The hardware reference does not fix screen layouts, engineering details or creature designs.*
+*Study activities, supplies, crafting and life together are still being designed. This example does not select exact costs, screen layouts or creature designs.*
 
-For the design details, see the [sample-to-critter system contract](../specs/sample-to-critter-contract.md).
+Continue with the [player introduction](../docs/players/README.md), [design guide](README.md), or the technical [sample-to-critter contract](../specs/sample-to-critter-contract.md).

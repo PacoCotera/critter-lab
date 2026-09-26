@@ -6,7 +6,7 @@ Status: proposed evidence contract. One fixed sensor set should support extensib
 
 **Sensed conditions + optional phone context + generated world events + player decisions → sample → research → genetic possibilities.**
 
-The same expedition can also yield resources for laboratory activities or critter feeding. Resource gathering and standalone operation without a phone are explicit accepted direction (2026-09-25). The genomic flow above is one use of the probe, not its entire collection loop.
+The same expedition can also yield resources for laboratory activities or critter feeding. Resource gathering and standalone operation without a phone are accepted direction. The genomic flow above is one use of the probe, not its entire collection loop.
 
 The probe should not hard-code one score per gene, dimension or genomic layer. It records a reusable environmental description and a fictional expedition history. The lab interprets both with updateable content/rules. Every future probe-supported recipe can use fixed sensed features, generated events, player choices or combinations; it does not require a matching new physical sensor. A new real physical measurement still cannot be reconstructed from a sensor that never captured it, but that places no corresponding restriction on fictional events.
 
@@ -22,13 +22,13 @@ Proposed resource categories are laboratory supplies and critter nourishment. Ex
 
 Sensed context, fictional encounters and player choices may influence resource availability through versioned game rules. No separate physical sensor is required for each resource. As an illustrative option, a humid/dim expedition could produce a research sample and a fictional nutrient resource; neither the item nor its yield is an approved design.
 
-The probe should show collection results and retain them without a phone. Proposed transfer requirements: record the resource type/version, quantity and collection identity; preserve pending transfers across interruption; retries must not award the same collection twice. Consumption and inventory authority need architecture review, especially for quantities split across devices. Stable identifiers alone do not solve offline double spending. Resource handling adds storage/UI work for hardware and UX review, not an approved capacity or transport change.
+The probe should show collection results and retain them without a phone. Proposed transfer requirements: record the resource type/version, quantity and collection identity; preserve pending transfers across interruption; retries must not award the same collection twice. Consumption and inventory authority need architecture review, especially for quantities split across devices. Stable identifiers alone do not solve offline double spending. Capacity and transport remain open.
 
 Standalone operation is required. Event scheduling and selection remain a future product decision: on-device randomization is an option, not a selected algorithm or a requirement that offline events be random. The device must support its agreed collection loop without a live phone or server; local rules, prepared content and recovery behavior require subsequent firmware design and validation.
 
 ## Candidate fixed sensor envelope
 
-Proposed feasibility comparison for a feasibility comparison: temperature/RH, ambient brightness and low-power 3-axis acceleration form a small measured baseline. Pressure is a useful extra to compare; sound needs a distinct playable benefit and processing/privacy budget. Compare coarse spectral sensing only if it materially improves play beyond brightness. Defer magnetic sensing and gyroscope unless a specific experiment justifies them. Because software events can carry future content, no extra modality is required merely to cover a future gene name. This is a proposed test baseline, not a final parts list or bench-validated minimum.
+Proposed feasibility baseline: temperature/RH, ambient brightness and low-power 3-axis acceleration form a small measured baseline. Pressure is a useful extra to compare; sound needs a distinct playable benefit and processing/privacy budget. Compare coarse spectral sensing only if it materially improves play beyond brightness. Defer magnetic sensing and gyroscope unless a specific experiment justifies them. Because software events can carry future content, no extra modality is required merely to cover a future gene name. This is a proposed test baseline, not a final parts list or bench-validated minimum.
 
 | Modality | Useful evidence | Limits and candidate manufacturer references |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ Design graceful absence: if the phone is disconnected, asleep or unable to provi
 
 For example, mapped coastal context plus measured dim/humid conditions could favor a fictional tidal encounter. The player's choice adds an event signature; laboratory research interprets the combined evidence into candidate affinities or abilities. Location weights possibilities rather than directly becoming a water gene. These mappings remain proposed balancing choices.
 
-Start with optional, explicitly enabled expedition context and support approximate location. Android allows approximate access even when precise location is requested, and foreground/background permissions are separate concerns (Android location permissions). The phone app's background delivery, BLE synchronization and energy use require device testing; pairing alone does not guarantee fresh context.
+Start with optional, explicitly enabled expedition context and support approximate location. Precise/approximate and foreground/background access need platform-specific validation. The phone app's background delivery, transport synchronization and energy use require device testing; pairing alone does not guarantee fresh context.
 
 Associate phone evidence with the correct sample and observation window, recording source, time uncertainty, accuracy and derivation version. A stored pairing is insufficient evidence of co-location. If live association is unavailable, attach later context only when its recorded timing and association support it; do not copy the phone's upload-time location onto earlier collection. Stale or unavailable context does not invalidate the probe's own evidence. Reconnection must not duplicate observations or rewards.
 
@@ -86,7 +86,7 @@ This is a proposed experience, not a final UX layout or approved loss rule. Whil
 
 For a ghost fluctuation, an investigate/leave choice could change the evidence collected; for a radiation storm, shielding versus exposure could influence candidate mutation research. No automatic death, destruction, positive mutation or real hazardous activity follows from those examples. Define stakes at sample/expedition level first; this collection phase need not contain a live critter to damage.
 
-E-ink and two controls suggest discrete stages and deliberate choices as the first interaction to evaluate. Hardware review requires any timed decision to begin only when the choice page is visibly ready, not merely when the display transfer ends. Actions must correspond to visible labels; repeated/held wake input must not accidentally select an outcome. Save and restore pending choices across sleep/reboot, and keep collection/local receipt independent of encounter rendering or transport connectivity. Exact refresh, signaling and timeouts need hardware/UX testing. Proposed default for an unanswered encounter is to preserve progress rather than demand real-time reflexes; product has not selected it.
+The reference e-ink/two-control concept suggests discrete stages and deliberate choices; it does not freeze hardware. Hardware review requires any timed decision to begin only when the choice page is visibly ready, not merely when the display transfer ends. Actions must correspond to visible labels; repeated/held wake input must not accidentally select an outcome. Save and restore pending choices across sleep/reboot, and keep collection/local receipt independent of encounter rendering or transport connectivity. Exact refresh, signaling and timeouts need hardware/UX testing. Proposed default for an unanswered encounter is to preserve progress rather than demand real-time reflexes; it remains unselected.
 
 A shared rule event should describe prerequisites, sensed context (if any), generated inputs, available choices, costs/stakes, outcome and research/resource effects. The probe runs the expedition; the lab interprets samples in more detail. Whether rules/content are prepared by the lab or entirely on the probe requires a memory/power assessment; the agreed standalone collection loop must execute without a live phone/server. Randomized event selection remains an open future decision.
 
@@ -136,7 +136,7 @@ This does not mean 6 humidity genes or +6 health. It is evidence/progress toward
 
 ## From evidence to new genomic content
 
-Each recipe declares required evidence/features, optional context, applicability, progress/eligibility thresholds, candidate variants or expression rules, probability weights, permitted research choices, resource consumption and version. Evidence may favor or unlock possibilities; it need not guarantee a class or ability. Founder generation still checks the full structural/developmental rules.
+Each recipe declares required evidence/features, optional context, applicability, progress thresholds, supported genetic possibilities, permitted research choices, resource consumption and version. Proposed probability weights may establish research possibilities, not secretly replace the fully unlocked selected genome at creation. See the [creation contract](sample-to-critter-contract.md).
 
 | Example recipe direction — not approved mechanics | Potential targets |
 | --- | --- |

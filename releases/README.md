@@ -1,11 +1,20 @@
 # Versions and compatibility
 
-The initial public baseline is an in-development snapshot, not a production release or a frozen 1.0 specification.
+There is no production release or frozen 1.0 specification yet. Git commits identify exact source snapshots.
 
-Track these independently: specification status; app/service/firmware source release; protocol and saved-record schema; genetic/expression/content rules; appearance/animation assets; hardware profile. A compatibility manifest must pin supported combinations and define unknown-version behavior when these formats become production contracts.
+## What changes independently
 
-Design status can be draft, in review, approved or superseded. Evidence can be unimplemented, host experiment, integrated or physically validated. Approval does not imply implementation, and a host test does not imply a hardware measurement.
+| Versioned material | Why it matters |
+| --- | --- |
+| Product specifications | Approved direction can precede implementation |
+| App, service and firmware source | Identifies the code actually running |
+| Saved-record and protocol formats | Determines what consumers can read and exchange |
+| Genetics, expression and content rules | Determines how inherited information is interpreted |
+| Appearance and animation assets | Preserves an individual's finished identity |
+| Hardware profiles | Identifies supported devices and physical capabilities |
 
-Preserve the versions and finished assets associated with saved individuals. New content must not silently rewrite genomes, appearances or acquired behavior. Migration rules and compatibility examples accompany breaking format changes.
+A deployable release must state supported combinations, required migrations and behavior for unsupported data. Breaking changes need migration instructions and compatibility examples. Preserve saved genomes, expression context, versions and finished assets; updating content must not silently rewrite individuals or acquired history.
 
-Git commits identify exact source snapshots. Release manifests and change notes will explain compatibility as deployable product releases become available.
+Design labels (**accepted**, **proposed**, **open**) are distinct from implementation evidence (**unimplemented**, **host experiment**, **integrated**, **physically validated**). The [specification map](../specs/README.md) explains those labels; [build coverage](../BUILD.md) lists current evidence.
+
+Future release notes should identify the source commit, changed components, compatible data/content/hardware versions, build/install instructions, migration or recovery steps and known limitations. This describes required release information, not an existing release system.

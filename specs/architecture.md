@@ -42,6 +42,16 @@ Content creation and management tooling is required from the beginning: author/i
 
 Logical job, validation, storage and publication responsibilities do not require a separate deployed microservice for each step. Retain stable operation identity, pinned inputs and exact resolved output. Store finished art and hashes, not only seeds, prompts or component names. Retrying a resolved request returns its saved result rather than regenerating an approximation.
 
+### Content management boundary
+
+Proposed tool contract: import or author family constraints and assets; record source/provenance; generate a batch; inspect genetic and visual consistency; validate applicability, references and device budgets; publish an immutable content version. Draft content is not eligible for gameplay until validation and publication succeed. Rejected candidates remain distinct from accepted individuals. Distribution must declare supported rules, interpreter and asset profiles; retiring content must not erase saved specimens or their retained art. Exact tool UX, licence checks, publication permissions and content delivery remain to be designed.
+
+## App, website and backend
+
+The supporting app and website consume the same authorized cloud records as devices. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.
+
+The backend owns accepted player records, operation results, authorization, generation jobs and versioned content access. Client drafts/caches cannot authorize mutations. Service/provider topology and production APIs remain open. Account recovery, device revocation, data export/deletion and backup/restore need explicit policies; none is equivalent to fictional death or specimen transfer. [Cloud synchronization](cloud-sync.md) defines the proposed acceptance/retry boundary.
+
 ## Domain and adapter separation
 
 | Boundary | Responsibility |

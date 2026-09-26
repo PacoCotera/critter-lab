@@ -24,7 +24,4 @@ Two standalone 64 × 64 indexed PNGs were prepared once from existing `assets.cr
 | `assets/critter-color.png` | `d1e5307e8c0271ab83d50e1f74279b41b37d8183d58de86c5cc6d3901e85df42` |
 | `assets/critter-mono.png` | `c261d2bb09cc5cd514200de9956fc0a07ce18d11b66809aeb3bc7075efc73a81` |
 
-Four focused checks cover actual save/reopen, identity separation, version/unsupported-byte preservation and missing/corrupt/restored art. Neither hashes nor readable cached facts authenticate ownership, authorize breeding or award progression. No existing store, schema, UI, server or dependencies are changed.
-
-
-Optional browser checks require a separately installed Playwright package and browser; they are not part of the application runtime. Host simulations do not establish physical display, firmware, storage or power performance.
+The focused checks cover save/reopen, identity separation, unsupported-byte preservation and missing/corrupt/restored art. Neither hashes nor readable cached facts authenticate ownership, authorize breeding or award progression.

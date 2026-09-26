@@ -4,7 +4,7 @@ Accepted: cloud holds authoritative durable state; the connected Lab uses remote
 
 ## Identity and rights
 
-Service-derived authenticated context determines the permitted player and current device enrollment. Client-supplied player/owner IDs are not credentials. Player-scoped reads, operation lookup and recovery require authorization; public views expose only permitted projections. Owner, holder/care authority and breeding grant are separate. Ordinary shared-device operator switching is not registration reassignment.
+Service-derived authenticated context determines the permitted player and current device enrollment. Client-supplied player/owner IDs are not credentials. Player-scoped reads, operation lookup and recovery require authorization; public views expose only permitted projections. [Ownership, custody and breeding grants](players-social.md#proposed-rights-model) are separate; ordinary profile switching is not registration reassignment.
 
 A shared Probe's pending expedition remains assigned to its original player; docking it while another profile is active cannot credit that profile. Companion training/progress likewise stays player-attributed. Revocation, registration reassignment, offline handover and late-event eligibility need explicit policies; no cached portrait or physical possession supplies rights.
 

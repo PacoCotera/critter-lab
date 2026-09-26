@@ -1,79 +1,31 @@
 # Critter Lab
 
-### Explore outside. Discover at the Lab. Meet something of your own.
+Explore outside. Investigate a mystery. Meet a critter of your own.
 
-![Critter Lab ecosystem concept: console, two portables, caddy and supporting app](design/references/ecosystem.png)
+![Critter Lab concept: a cream tabletop Lab with printer, a small Probe and larger color Companion in a two-bay Caddy, and a supporting phone collection view.](design/references/ecosystem.png)
 
-*Concept artwork—not manufactured hardware. Displays, dimensions, sensors and controls are still being explored.*
+*Original ecosystem concept. It establishes the device family and intended experience; it is not manufactured hardware or a final screen design.*
 
-Critter Lab is a sandbox creature-research game spanning physical instruments, inherited traits, pixel creatures and a connected world. Collect unusual samples, investigate their possibilities, craft materials and create a fully researched critter. Pursue beautiful combinations, rare discoveries, adaptable companions—or simply an individual you enjoy spending time with.
+Critter Lab is a creature-research game built around physical instruments. Bring samples home, investigate what they could become, experiment with materials and create a critter once its required research is complete. Collect for beauty, curiosity or a particular capability, then spend time with the individuals you create.
 
-**This is the authoritative public product repository.** Specifications, game rules, software, art and buildable hardware/firmware/case designs belong here as they are developed. Today it contains product specifications and runnable host experiments; it is not yet a complete buildable kit. See [what exists and what is next](STATUS.md).
+The **Probe** explores with you. The tabletop **Lab** is your place to research, craft and create. The handheld **Companion** lets you take a critter along, while the **Caddy** provides a home for the two portables. You can also begin investigating at the Lab without owning a Probe.
 
-[Explore the specification](specs/README.md) · [Run the prototype](prototype/README.md) · [Visual tour](design/README.md) · [Build coverage](BUILD.md)
+One household can share equipment while each player keeps their own critters, supplies and discoveries. Cloud services hold durable player records; temporary offline activity and reconciliation are still being designed. The phone supports the experience rather than becoming a requirement for routine play.
 
-## One ecosystem, different kinds of play
+## Start where you are
 
-```mermaid
-flowchart LR
-    World["Your surroundings"] --> Probe["Probe\nObserve and collect"]
-    Probe --> Lab["Lab console\nResearch, craft and create"]
-    Lab --> Companion["Companion\nTrain, develop and bond"]
-    Companion --> Lab
-    Lab <--> Cloud["Cloud services\nDurable player state and generation"]
-    Cloud <--> App["Supporting app and website"]
-    Caddy["Caddy\nDocking and charging"] --- Probe
-    Caddy --- Companion
-```
-
-| Lab console | Probe | Companion | Caddy |
-| --- | --- | --- | --- |
-| An exploratory workbench: inventory, ongoing research, crafting and deliberate reveals. | Real-world sampling, collection and reasons to go exploring. | Time with your critters: behavior, training and development. | A physical home for the portables; charging and feedback remain under design. |
-
-One household can share a kit. Individual player profiles retain their own critters, resources, discoveries and progress. The cloud is authoritative for durable state; bounded offline activity and synchronization are still being specified.
-
-## From a sample to an individual
-
-```mermaid
-flowchart LR
-    A[Sample] --> B[Research and resources]
-    B --> C[Fully unlocked supported genome]
-    C --> D[Expression and phenotype]
-    D --> E[Appearance and behavior]
-    E --> F[READY → OPEN]
-    F --> G[Saved individual and life history]
-```
-
-| Research study | Meeting the saved individual |
+| You want to… | Start here |
 | --- | --- |
-| ![Prototype research finding](prototype/lab/artifacts/05-finding-color-3x.png) | ![Prototype individual with crown and ringed eyes](prototype/lab/artifacts/07-meet-color-3x.png) |
+| Understand the game | [Player introduction](docs/players/README.md), then [Your first discovery](design/sample-to-critter-walkthrough.md) |
+| Review the experience and appearance | [Design reference and review guide](design/README.md) |
+| Understand the rules and systems | [Specification map](specs/README.md) |
+| Run the software or help build | [Builder getting started](docs/builders/getting-started.md) and [build coverage](BUILD.md) |
+| Find a document | [Documentation map](docs/README.md) |
 
-*Renderer output from a small authored fixture. These screens demonstrate a technical experiment, not final UI, generated biodiversity or physical display performance.*
+## What exists today
 
-Genetics links inherited information to expressed appearance and capabilities. Behavioral models can use those properties alongside current conditions and experience. Adaptive neural behavior is an exploration proposal, not implemented functionality. An individual's identity is distinct from its genome, family and appearance.
+This is the authoritative public product repository. It contains specifications, original concept references and runnable local host experiments with authored data. It is **not yet a complete buildable kit**: production services, device firmware, PCBs and editable enclosure designs remain unfinished. See [product status](STATUS.md) for the current boundary.
 
-## Try the current software
+The [prototype guide](prototype/README.md) describes the existing breeding, founder and transfer studies. Their screenshots demonstrate those experiments, not final interaction design, generated biodiversity or physical display performance. Do not expose the unauthenticated host prototype as a public game service.
 
-With Node.js 22 or later:
-
-```sh
-npm ci
-npm start
-# Open http://127.0.0.1:4173
-npm test
-```
-
-The local server provides a breeding/share experiment, `/lab/` for the pixel founder fixture, and `/transfer/` for transfer-status studies. These are local experiments with authored inputs, not production cloud services. Do not expose this unauthenticated host prototype as a public game service.
-
-## Follow the design
-
-Choose the material for your purpose:
-
-- **Players:** [Your first discovery](design/sample-to-critter-walkthrough.md) introduces the game through a short story and hardware reference; dedicated story illustrations are being revised. This is a concept, not a released-game manual.
-- **Design reviewers:** the [visual tour](design/README.md) presents experience concepts and separates them from prototype evidence. Proposals describe intended experiences and open choices.
-- **Technical contributors:** the [specification map](specs/README.md) leads to rules, contracts and system boundaries.
-- **Builders:** [build coverage](BUILD.md) identifies what can be run today and what is missing. It is not yet a complete kit assembly guide.
-
-[Versioning](releases/README.md) distinguishes specification status, source versions and saved-content compatibility.
-
-This repository is in active design. Proposals are labeled; open choices are not presented as finalized mechanics. Publication does not establish hardware validation. Software uses AGPL-3.0-only, hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0. Commercial use is welcome under these reciprocal terms. See [licensing and attribution](LICENSING.md) and [contributing](CONTRIBUTING.md).
+Critter Lab is a project of **Dirty Pawz Press**. Software uses AGPL-3.0-only, hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0. See [licensing](LICENSING.md), [branding and attribution](BRANDING.md), [contributing](CONTRIBUTING.md) and [versioning](releases/README.md).

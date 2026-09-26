@@ -7,6 +7,3 @@ The numbered files cover the eight UX steps, including deliberate Ready/Open/Mee
 This illustrative field source is simulated, supplies zero resource entries, and consumes one fixture sample only. The saved authored outcome is Cc/Rr/Pp with crown and eye rings expressed and pale markings carried but unexpressed. Research focus does not alter genes. All individuals are explicitly parentless lab-created fixtures, separate from the breeding prototype collection.
 
 Regenerate with node prototype/lab/export.mjs. Review limitations and interactive controls in ../README.md.
-
-
-Optional browser checks require a separately installed Playwright package and browser; they are not part of the application runtime. Host simulations do not establish physical display, firmware, storage or power performance.

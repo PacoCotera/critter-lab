@@ -48,7 +48,7 @@ The diagram proposes the creation/asset boundary below; it does not establish re
 
 The cloud validates completeness, compatibility, rights, versions and the approved resource rule before acceptance. It durably commits the individual, creation result and any applicable inventory effect together. A job queue entry is insufficient. Any internal reservation must remain distinct from accepted spending; its expiry/release policy is not selected here. A changed payload using an existing operation identity is rejected rather than overwriting it.
 
-An exact accepted retry returns that same result, identity and genome. A lost acknowledgment remains uncertain: query/retry the original operation rather than submitting another creation. An unresolved conflict or unsupported rule accepts no gameplay effect; a rejection explains the verified reason. Back exits the view without undoing submitted work. Opening, revealing, printing and reloading cannot spend resources again.
+Apply the [cloud retry contract](cloud-sync.md#proposed-operation-boundary): exact retries return the original identity/genome; uncertain delivery requires the same operation lookup, not another creation. Back exits without undoing submitted work. Opening, revealing, printing and reloading cannot spend resources again.
 
 ## Expression and asset failures
 
@@ -68,4 +68,4 @@ The Companion uses saved individuals and records temporary activity without tran
 2. **Creation terms:** sample/resource consumption or reuse, conflict handling and any compensation after accepted creation; none follows automatically from asset success.
 3. **Temporary activity:** supported offline research/care actions, handover retention and reconciliation rules, including when local offload data may safely be discarded.
 
-Recommended review order: settle research completeness first using the [worked example](../design/sample-to-critter-walkthrough.md). For V1, prefer a small declared set of supported configurations, simple studies that explain the relevant bitmap regions, and explicit choice only after every required region is understood. This is a proposed starting rule, not a production cap on genetic diversity. Then settle creation terms before defining offline allowances that depend on them.
+Recommended review order: settle research completeness first. For V1, prefer a small declared set of supported configurations, simple studies that explain the relevant bitmap regions, and explicit choice only after every required region is understood. This is a proposed starting rule, not a production cap on genetic diversity. Then settle creation terms before defining offline allowances that depend on them.

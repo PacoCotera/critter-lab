@@ -23,13 +23,10 @@ Three physical-style buttons map to the screen strip. Arrows rotate focus, Enter
 
 ## Validation
 
-`node --test prototype/tests/lab-*.test.mjs` checks pure transitions, transactional-fake abort/retry/concurrency, corrupt-record preservation, both sources, fixed expression against the existing rule function, palette/bounds, readiness including focus/boot recovery, Collection/Clues return paths and no command from reveal/art retry. The fake does not establish actual IndexedDB behavior; browser persistence/reload/concurrent-tab tests are a separate integration gate.
+Run `node --test prototype/tests/lab-*.test.mjs` for transitions, interrupted operations, record validation, rendering and input readiness. Transactional fakes are not proof of actual IndexedDB behavior; the separate browser harness checks persistence and interaction. See [builder setup](../../docs/builders/getting-started.md) for optional browser dependencies.
 
 `node prototype/lab/export.mjs` produces native and 3× color/mono PNG keyframes under `artifacts/`. These are renderer outputs, not claims of an executed browser flow. A concise exact-record transcript supports screen-reader and full-ID review; the experimental bitmap face displays main copy in uppercase.
 
-Remaining limitations: no firmware, actual sensing, real resource economy, animation, passive timed research, authenticated sharing or physical refresh measurements. Idle wake is simulated; automatic multi-scene idle rotation is outside this loop. Local user-edited IndexedDB is not protected authority. Final style/art and physical legibility remain owner/bench review.
+Remaining limitations: no firmware, actual sensing, real resource economy, animation, passive timed research, authenticated sharing or physical refresh measurements. Idle wake is simulated; automatic multi-scene idle rotation is outside this loop. Local user-edited IndexedDB is not protected authority. Final artwork and physical legibility remain unvalidated.
 
 This baseline does not implement the later homecoming direction: whole-haul offload, confirmed probe-empty readiness and unique initially unreadable genetic sample imagery need a separate reviewed contract.
-
-
-Optional browser checks require a separately installed Playwright package and browser; they are not part of the application runtime. Host simulations do not establish physical display, firmware, storage or power performance.

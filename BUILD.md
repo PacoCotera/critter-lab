@@ -1,22 +1,18 @@
-# Build coverage
+# What can be built today
 
-The public repository is intended to contain everything needed to build the complete game. That is its scope, not a claim that every subsystem exists today.
+Start with [the local setup guide](docs/builders/getting-started.md) to run the available software. This repository is intended to supply the whole product, but a complete physical kit cannot yet be built from it.
 
-| Component | Available now | Required before a complete build |
+| Component | Available | Missing for a complete build |
 | --- | --- | --- |
-| Game rules and genetics | Product specifications and small executable fixtures | Complete balanced content, expression and behavior contracts |
-| Art and animation | Concept references, pixel masks/font/palettes, renderer and static exports | Production assets, animation system and automated generation tooling |
-| Local web experiments | Node server, browser applications, dependencies and tests | Production client/service implementation and authentication |
-| Cloud/backend | Architecture, authority and sync design | Durable backend, generation services, migrations and deployable reference setup |
-| Companion app/site | Product boundaries | Application implementations and reproducible builds |
-| Console/Probe/Companion firmware | Device requirements | Source, board profiles, toolchain versions and flashing instructions |
-| Electronics and caddy | Hardware directions and unresolved choices | Schematics, PCB source, BOM and measured validation |
-| Enclosures | Concept images | Editable case models, drawings, print/fabrication files and assembly instructions |
+| Game and genetics | Specifications and small executable fixtures | Balanced content and complete research/expression/behavior contracts |
+| Art and animation | Original concepts, pixel masks/font, renderer and static exports | Production asset pipeline, animation and automated content tools |
+| Local experiments | Node server, browser applications, pinned dependencies and tests | Integrated game client and production authentication |
+| Cloud services | Architecture and synchronization contracts | Backend, generation jobs, migrations, deployment and recovery tooling |
+| App and website | Responsibilities and product boundaries | Implementations and reproducible builds |
+| Console, Probe and Companion | Device requirements | Firmware, board profiles, toolchains and flashing instructions |
+| Electronics and caddy | Hardware concepts and constraints | Schematics, PCB sources, BOM and measured electrical/charging validation |
+| Enclosures | Concept images | Editable CAD, fabrication files and assembly instructions |
 
-## Run the host experiments
+A concept image is not a wiring diagram or case model. Schematics, pin assignments, charging limits and part selections must accompany validated hardware designs before an assembly guide can be written. No purchase list or substitute build recipe is implied here.
 
-Install Node.js 22 or later and npm. At repository root run `npm ci`, `npm test`, then `npm start`. Open `http://127.0.0.1:4173`, `/lab/` or `/transfer/`. Dependencies are pinned in `package-lock.json`. Browser state is local; it is not a cloud-backed player account.
-
-Regenerate lab frames with `node prototype/lab/export.mjs` and the independent pixel study with `node prototype/pixel/export.mjs`. See the individual experiment READMEs for transfer and compatibility demos. Optional browser checks require a separately installed Playwright package and Chromium browser.
-
-Production build instructions will be added alongside each implementation. No private agent framework is intended to be necessary to build the product. Credentials, real deployment hosts and private player data are never build inputs committed here.
+Product-required build and content tools belong in this public source. Credentials and player data do not. See the [specifications](specs/README.md) for requirements and the [experiment index](prototype/README.md) for implementation boundaries.

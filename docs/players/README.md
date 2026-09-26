@@ -1,0 +1,39 @@
+# Meet Critter Lab
+
+*An introduction to the game being designed. The available software is an early experiment, not the complete game.*
+
+![A tabletop Lab beside the smaller Probe and larger Companion, all in cream, charcoal and orange.](../../design/references/branded-family.png)
+
+Critter Lab is a sandbox about discovering, creating and getting to know unusual creatures. You can pursue beautiful combinations, rare discoveries or useful abilities. There is no single ideal critter everyone must build.
+
+## Four objects, different roles
+
+The **Probe** goes exploring with you. Observations of the surrounding environment contribute to mysterious samples and fictional supplies you can investigate later.
+
+The **Lab** is your research workbench. Examine samples, follow clues, prepare supplies and watch discoveries unfold. Finish the required research before choosing what to create. A slower Lab-only route is also part of the design, so a Probe is not required for every discovery.
+
+The **Companion** is where you spend time with your critter: bonding, training and developing it. Whether it carries one or several critters is still being designed.
+
+The **Caddy** charges the two portable devices. A supporting app and website will complement the kit; routine play is designed around the devices rather than a required phone screen.
+
+## Your first discovery
+
+Bring something home, investigate it, find what the next study needs, and eventually meet the critter you chose to create. The Lab waits for you to press OPEN when it is ready. Follow [one player's first discovery](../../design/sample-to-critter-walkthrough.md).
+
+Crafting lets you experiment with supplies and learn useful combinations. Clues help you make informed attempts; failed attempts can consume supplies or return only a fraction. Your encyclopedia records discoveries for later reference. Exact recipes, costs and timing remain in development.
+
+## A few useful words
+
+| Word | Meaning |
+| --- | --- |
+| Sample | Something to investigate; it is not yet a critter |
+| Genome | A critter's inherited instructions; required parts must be understood before creation |
+| Trait | A characteristic, such as a marking or capability; some inherited variants can be carried without showing |
+| Individual | One particular critter with its own identity and history, even if another looks identical |
+| Family | A grouping of related creature forms, not a substitute for an individual's identity |
+
+## One kit, separate collections
+
+A household can share the Lab, Probe and Companion while players keep separate profiles, progress and critters. Using the same device does not merge collections. Meeting or scanning another player's critter does not make it yours or grant breeding permission; taking a social sample requires its owner's agreement.
+
+The final rules for care, lending and long absences are still open. See [product status](../../STATUS.md) for what exists today rather than treating this introduction as a finished manual.

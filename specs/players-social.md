@@ -32,6 +32,6 @@ Private knowledge/publication boundaries require explicit permitted fields. A pu
 
 ## Care and recovery
 
-Care, development, training and bonding are intended experiences. Lifespan, irreversible death, absence penalties and responsibility during borrowing are not settled. Forgiving absence is a proposal, not an implemented lifecycle rule. Account deletion and fictional death are separate operations.
+Care, development, training and bonding are intended experiences. Lifespan, irreversible death, absence penalties and responsibility during borrowing are not settled. Forgiving care is a design goal; its concrete absence rules are not implemented. Account deletion and fictional death are separate operations.
 
 Hardware reset or sale must not implicitly transfer specimens. Cloud can restore accepted records after valid recovery; unsynced activity may be lost. Registration reassignment and cache removal need explicit privacy/recovery policies. See [cloud synchronization](cloud-sync.md).
