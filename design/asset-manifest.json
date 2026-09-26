@@ -1,0 +1,38 @@
+[
+  {
+    "path": "design/enclosure-concepts/console-and-sampler.png",
+    "sha256": "d119a7c87a33571b32f7b52b66104788345cd22dd682a107b32e5b0a5b18fbde",
+    "bytes": 2384161,
+    "status": "approved concept direction; not engineering specification"
+  },
+  {
+    "path": "design/references/companion.png",
+    "sha256": "50166aea45da5b6bbd1539f065bf94f4a37c92fd18726a764f3e8fc9f10378fe",
+    "bytes": 2393332,
+    "status": "approved concept direction; not engineering specification"
+  },
+  {
+    "path": "design/references/branded-family.png",
+    "sha256": "c2edbbfa9bc98a24051ad4e64b73c1d03f011228a292a2a941e3821f36e8cc08",
+    "bytes": 2255054,
+    "status": "approved concept direction; not engineering specification"
+  },
+  {
+    "path": "design/references/ecosystem.png",
+    "sha256": "d54d9414c92f475a95bcf4ff0dca30b82faa013145e88465c0df7caf06cd94d3",
+    "bytes": 2284223,
+    "status": "approved concept direction; not engineering specification"
+  },
+  {
+    "path": "design/screens/console-studies.png",
+    "sha256": "78ba7328ffeac037b471df56d1ccd37cdd8de11317b74b018ecd962fc76bcc7d",
+    "bytes": 2246218,
+    "status": "approved concept direction; not engineering specification"
+  },
+  {
+    "path": "design/screens/sampler-studies.png",
+    "sha256": "7842324bed72dd5e1eacff6a0769040b5eb6290fb5a945a30b8da4f1f9d69a96",
+    "bytes": 1465517,
+    "status": "approved concept direction; not engineering specification"
+  }
+]
