@@ -1,6 +1,6 @@
-# Native build scaffold
+# Native first-expedition fixture
 
-This builder entry point compiles three minimal native programs. The Linux Lab executable prints its target/version and exits successfully. Probe and Companion contain one boot-log entry point each. Their firmware is cross-compiled for the preliminary targets below; compiling is not evidence of a boot on hardware.
+This builder entry point compiles three native programs sharing a bounded C domain and scanline renderer. The Linux Lab executable runs the saved first-expedition fixture and emits native BMP frames. Probe and Companion link the same portable code, apply and validate one selection transition and render one checksum row at boot; neither has a panel driver. Cross-compilation is not evidence of booting hardware.
 
 | Program | Compile target | Framework |
 | --- | --- | --- |
@@ -8,7 +8,7 @@ This builder entry point compiles three minimal native programs. The Linux Lab e
 | Probe | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0, Zephyr GNU SDK 1.0.1 |
 | Companion | `esp32s3` (Xtensa) | ESP-IDF 5.5.5 |
 
-These build targets do not select production boards or configure external peripherals. SDK board defaults supply Probe startup, USB CDC ACM console routing and a UF2-compatible application partition; Companion uses the SDK's generic ESP32-S3 defaults. Neither is a product pin map. There is no gameplay, adapter contract, display driver, flashing procedure or device emulator here. The Lab build runs on the development host; it does not verify a Raspberry Pi image or physical Lab.
+These build targets do not select production boards or configure external peripherals. SDK board defaults supply Probe startup, USB CDC ACM console routing and a UF2-compatible application partition; Companion uses the SDK's generic ESP32-S3 defaults. Neither is a product pin map. The Lab build runs on the development host; it does not verify a Raspberry Pi image or physical Lab. The presentation canvases are provisional: Lab 400Ãƒâ€”240, Probe 250Ãƒâ€”122 monochrome.
 
 ## Ubuntu build environment
 
@@ -32,11 +32,31 @@ source native/toolchains.env
 ```bash
 cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build native/build/lab
-native/build/lab/critter_lab
+native/build/lab/critter_lab --save /tmp/critter-demo-state.txt status
+python3 native/tests/test_native.py native/build/lab/critter_lab
+python3 native/tests/test_presenter.py native/build/lab/critter_lab
 size native/build/lab/critter_lab
 ```
 
-Expected output is `Critter Lab native scaffold 0.1.0 | target: Linux host`, exit status 0. The ELF executable and map are in `native/build/lab/`.
+Expected initial status has revision 0 and Select available. The ELF executable and map are in `native/build/lab/`.
+
+### Play through the browser presenter
+
+The Python standard-library bridge authenticates every route with HTTP Basic authentication, username `lab`. Set a password in the process environment; never put it in a URL or commit it. Use HTTPS when exposing the presenter beyond a trusted local connection. Bind defaults to loopback; a local tunnel can publish that listener. `CRITTER_DEMO_BIND=0.0.0.0` is an explicit LAN option. Port defaults to 4180.
+
+```bash
+export CRITTER_DEMO_BINARY="$PWD/native/build/lab/critter_lab"
+export CRITTER_DEMO_SAVE="$HOME/critter-demo-state.txt"
+read -rs -p 'Demo password: ' CRITTER_DEMO_PASSWORD
+export CRITTER_DEMO_PASSWORD
+python3 native/presenter/server.py
+```
+
+Open the presenter, select/review/load Material trail on Lab, switch to Probe and Start. The external Simulation controls advance the authored scenario twice; inspect or leave the optional fragment between advances. Return to Lab and Receive haul, then Research Ã¢â€ â€™ Review Material study Ã¢â€ â€™ Run. This saves the finding, spends one of two provisional reagents and leaves two regions unknown. The supplied player, outing, quantities and structural alternatives are authored fixtures, not approved economy or genetics content. The second study and creation are deliberately outside this slice.
+
+The browser displays native pixel images and action descriptors; it implements no collection, research or pixel rules. Frames must load before controls activate. Pending requests retain their operation ID for exact retry after uncertainty, including page reload. This is one shared, single-owner playground and one snapshot, not distributed transfer or cloud authority. Receiving atomically moves the fixture haul into the Lab snapshot; there is no radio acknowledgement to infer.
+
+The native interface is `--save /absolute/path status`, `--save /absolute/path command NAME EXPECTED_REVISION OPERATION_ID`, or `--save /absolute/path frame lab|probe REVISION`. Each command holds a file lock, validates phase and revision, and replaces a versioned explicit-field save using fsync and rename. The most recent operation ID and payload permit an exact retry; older revisions reject. Corrupt state fails closed without resetting. To start another manual demo, stop the presenter and archive its save under a new name before restarting; no browser reset silently destroys shared progress.
 
 ### Probe
 
@@ -47,8 +67,9 @@ python3.12 -m venv "$CRITTER_TOOLS/zephyr-venv"
 source "$CRITTER_TOOLS/zephyr-venv/bin/activate"
 pip install "west==$WEST_VERSION"
 west init -m https://github.com/zephyrproject-rtos/zephyr \
-  --mr "$ZEPHYR_REVISION" "$CRITTER_TOOLS/zephyr-workspace"
+  --mr "$ZEPHYR_TAG" "$CRITTER_TOOLS/zephyr-workspace"
 cd "$CRITTER_TOOLS/zephyr-workspace"
+test "$(git -C zephyr rev-parse HEAD)" = "$ZEPHYR_REVISION"
 west update hal_nordic cmsis cmsis_6
 west zephyr-export
 pip install -r zephyr/scripts/requirements-base.txt
@@ -92,11 +113,13 @@ The application ELF/bin/map, bootloader and partition binary are under `native/b
 
 ## What the evidence means
 
-Successful target builds establish compiler/linker compatibility and the scaffold's static allocations. Lab execution establishes only the Linux process's printed output and exit status. Boot logs for the two MCU targets remain unobserved until run on physical boards. Static size reports do not measure stack/heap peaks, peripheral timing, radio behavior, display refresh, energy or thermal performance. This setup implements no simulator and makes no claim of ESP32-S3 or nRF52840 emulation.
+Successful target builds establish compiler/linker compatibility and the scaffold's static allocations. The Linux checks exercise the fixture's transitions, saved state, retry handling, native frames and authenticated HTTP boundary. Boot logs for the two MCU targets remain unobserved until run on physical boards. Static size reports do not measure stack/heap peaks, peripheral timing, radio behavior, display refresh, energy or thermal performance. This setup implements no simulator and makes no claim of ESP32-S3 or nRF52840 emulation.
 
-See the [hardware-native development requirement](../docs/builders/foundation-demo.md#hardware-native-development-requirement) and [device constraints](../specs/devices.md). Framework references: [Zephyr SDK setup](https://docs.zephyrproject.org/latest/develop/toolchains/zephyr_sdk.html), [XIAO BLE board](https://docs.zephyrproject.org/latest/boards/seeed/xiao_ble/doc/index.html), and [ESP-IDF ESP32-S3 setup](https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/get-started/linux-macos-setup.html).
+See the [hardware-native development requirement](../docs/builders/foundation-demo.md#execution-and-module-boundaries) and [device constraints](../specs/devices.md). Framework references: [Zephyr SDK setup](https://docs.zephyrproject.org/latest/develop/toolchains/zephyr_sdk.html), [XIAO BLE board](https://docs.zephyrproject.org/latest/boards/seeed/xiao_ble/doc/index.html), and [ESP-IDF ESP32-S3 setup](https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/get-started/linux-macos-setup.html).
 
 
-## Verified baseline
+## Verified prototype
 
-On 26 September 2026, an Ubuntu 26.04 x86-64 development host with isolated Python 3.12 built all three targets. Linux execution returned the documented output and exit status 0. Probe linked with 44,692 bytes flash and 13,496 bytes RAM reported; Companion produced an ESP32-S3 image of 161,360 bytes using the minimal component build. These are startup scaffolds, not application capacity forecasts. SDK sources match the manifest. MCU ELF/binary outputs exist; no MCU boot or panel operation was tested. Hosted CI execution remains a separate check from these local builds.
+On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 built all three targets. Five native checks and three HTTP checks passed. A browser completed the expedition, received the haul, ran Material study and reloaded the retained finding through an authenticated HTTPS reverse proxy.
+
+Probe linked with 50,008 bytes flash and 13,496 bytes RAM reported; Companion produced a 181,040-byte ESP32-S3 image. Both entry points execute a domain selection transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.

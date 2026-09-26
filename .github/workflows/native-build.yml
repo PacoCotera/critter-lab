@@ -23,11 +23,13 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Build and run Linux scaffold
+      - name: Build and check native loop
         run: |
           cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build native/build/lab
-          native/build/lab/critter_lab | tee native/build/lab/run.log
+          native/build/lab/critter_lab --save "$RUNNER_TEMP/critter-demo-state" status | tee native/build/lab/run.log
+          python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
+          python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -55,8 +57,9 @@ jobs:
           python3.12 -m venv "$RUNNER_TEMP/zephyr-venv"
           source "$RUNNER_TEMP/zephyr-venv/bin/activate"
           pip install "west==$WEST_VERSION"
-          west init -m https://github.com/zephyrproject-rtos/zephyr --mr "$ZEPHYR_REVISION" "$RUNNER_TEMP/zephyr-workspace"
+          west init -m https://github.com/zephyrproject-rtos/zephyr --mr "$ZEPHYR_TAG" "$RUNNER_TEMP/zephyr-workspace"
           cd "$RUNNER_TEMP/zephyr-workspace"
+          test "$(git -C zephyr rev-parse HEAD)" = "$ZEPHYR_REVISION"
           west update hal_nordic cmsis cmsis_6
           west zephyr-export
           pip install -r zephyr/scripts/requirements-base.txt
