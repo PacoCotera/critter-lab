@@ -69,7 +69,7 @@ The local server provides a breeding/share experiment, `/lab/` for the pixel fou
 
 Choose the material for your purpose:
 
-- **Players:** [Your first discovery](design/sample-to-critter-walkthrough.md) introduces the game through an illustrated story; currently a concept, not a released-game manual.
+- **Players:** [Your first discovery](design/sample-to-critter-walkthrough.md) introduces the game through a short story and hardware reference; dedicated story illustrations are being revised. This is a concept, not a released-game manual.
 - **Design reviewers:** the [visual tour](design/README.md) presents experience concepts and separates them from prototype evidence. Proposals describe intended experiences and open choices.
 - **Technical contributors:** the [specification map](specs/README.md) leads to rules, contracts and system boundaries.
 - **Builders:** [build coverage](BUILD.md) identifies what can be run today and what is missing. It is not yet a complete kit assembly guide.

@@ -2,7 +2,7 @@
 
 ## Follow one discovery
 
-The [first-discovery story](sample-to-critter-walkthrough.md) is a player walkthrough concept: six illustrated moments introducing the game without assuming prior knowledge. It is not a technical specification or a builder guide.
+The [first-discovery story](sample-to-critter-walkthrough.md) is a player walkthrough concept: a short story introducing the game without assuming prior knowledge, accompanied by the original hardware reference. Dedicated story illustrations are under revision. It is not a technical specification or a builder guide.
 
 ## The intended physical experience
 

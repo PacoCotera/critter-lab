@@ -2,7 +2,9 @@
 
 *A player walkthrough concept for newcomers.*
 
-![Six moments in Critter Lab: exploring with the Probe, bringing a sample home, studying a clue, finding supplies, opening a newly created critter, and taking that same critter along on the Companion.](walkthrough/first-discovery.png)
+![Critter Lab hardware concept: tabletop Lab, narrow Probe and portable Companion in beige, charcoal and orange.](references/branded-family.png)
+
+*Original hardware concept reference. Story-specific illustrations are being revised; this image introduces the devices rather than depicting the six steps.*
 
 **1. Take the Probe outside**
 
@@ -30,6 +32,6 @@ When her critter is ready, the Lab waits. Mara presses **OPEN** herself. Now she
 
 The **Companion** is the handheld home for spending time with her critter away from the Lab. Mara takes the same individual along, gets to know it, and returns to continue their story. It is not a fresh copy each time she changes devices.
 
-*Concept walkthrough: study activities, supplies, crafting, creation requirements and life together are still being designed. The illustration sets the scene; it does not fix screen layouts or creature designs.*
+*Concept walkthrough: study activities, supplies, crafting, creation requirements and life together are still being designed. The hardware reference does not fix screen layouts, engineering details or creature designs.*
 
 For the design details, see the [sample-to-critter system contract](../specs/sample-to-critter-contract.md).
