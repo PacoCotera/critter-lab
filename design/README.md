@@ -1,5 +1,9 @@
 # Visual tour
 
+## Follow one discovery
+
+The [sample-to-critter walkthrough](sample-to-critter-walkthrough.md) connects field collection, genome research, creation and Companion life. Its bitmap is a conceptual explanation, not a final screen layout. The paired [system contract](../specs/sample-to-critter-contract.md) shows identity, cloud acceptance and generation boundaries.
+
 ## The intended physical experience
 
 ![Console and probe concept](enclosure-concepts/console-and-sampler.png)
