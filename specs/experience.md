@@ -78,3 +78,10 @@ Player language explains actions without requiring chemistry knowledge. The prot
 Hardware-shaped presenter housings follow the original references but remain provisional appearance studies. Actual screen profiles are enforced; housing dimensions, controls, sensor behavior and physical refresh are not validated by a browser. Engineering time controls and release information stay outside the device face. Release identity uses the first seven commit SHA characters as plain text and fixed deployment timestamp displayed in Mexico City time.
 
 The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab outing; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action.
+
+
+### Prototype control deck
+
+Each simulated device has one working, labelled button deck inside its provisional housing. Buttons come directly from the displayed native action descriptors. There is no duplicate detached action row, invented Back/Details command or decorative key pretending to operate the game. An empty Companion has no play controls. Screen pixels remain native C output; housing buttons are a prototype input mapping, not finalized physical hardware.
+
+Tab follows normal page order. Arrow keys move focus only within the device deck; Enter and Space activate the focused button. Focus alone never spends resources. Keep input unavailable until the matching frame is decoded. A pointer/key gesture must belong to the same device, revision and frame from start through activation; cancelled or held gestures cannot carry into new content. Reset, retry, device selection and engineering controls remain separate from the device action deck.

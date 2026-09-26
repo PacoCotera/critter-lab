@@ -44,22 +44,11 @@ button:disabled { opacity: .45; cursor: wait; }
 .screen { background: var(--charcoal); padding: 14px; border-radius: 12px; overflow: auto; max-width: 100%; }
 #frame { display: block; width: 100%; height: auto; max-width: 100%; image-rendering: pixelated; background: #f6f0de; }
 .lab .housing { width: min(100%, calc((100dvh - 360px) * 1.7067 + 92px)); min-width: min(100%, 440px); }
-.shell-detail { display: flex; align-items: center; gap: 14px; height: 66px; padding-left: 8%; }
-.dial { width: 44px; height: 44px; border-radius: 50%; background: repeating-conic-gradient(#444a43 0deg 6deg, #303632 6deg 12deg); border: 5px solid #444a43; box-shadow: 0 3px 0 #191f1c; margin-right: 16px; }
-.key { display: block; width: 44px; height: 22px; background: var(--charcoal); border-radius: 5px; box-shadow: 0 3px 0 #1e2520; }
-.key.accent { background: var(--orange); box-shadow: 0 3px 0 #924622; }
-.lab .key.last { background: #f7f1e1; box-shadow: 0 3px 0 #b1a991; }
 .paper-slot { width: 43%; height: 7px; border-radius: 5px; background: #51564c; margin: 0 auto 5px; border-bottom: 2px solid #f5efdf; }
 .probe .housing { width: min(232px, calc((100dvh - 360px) * .488 + 66px)); min-width: min(100%, 166px); padding: 22px 17px 16px; border: 7px solid var(--charcoal); border-bottom-width: 13px; border-radius: 28px 28px 23px 23px; }
 .probe .screen { padding: 9px; border-radius: 5px; }
-.probe .shell-detail { height: 54px; padding: 0; justify-content: center; gap: 15px; }
-.probe .dial, .probe .last, .probe .paper-slot { display: none; }
-.probe .key { width: 38px; height: 23px; }
 .companion .housing { width: min(356px, calc((100dvh - 360px) * .82143 + 66px)); min-width: min(100%, 220px); border: 7px solid var(--charcoal); border-bottom-width: 14px; border-radius: 46px; padding: 23px 18px 12px; }
 .companion .screen { padding: 9px; border-radius: 26px; }
-.companion .shell-detail { justify-content: center; padding: 0; gap: 18px; height: 57px; }
-.companion .key { width: 30px; height: 30px; border-radius: 50%; }
-.companion .dial, .companion .paper-slot { display: none; }
 .mapping-note { text-align: center; font-size: 12px; color: #686e63; margin: 22px 0 8px; }
 .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .controls button { min-width: 110px; border-bottom: 3px solid var(--orange); }
@@ -73,8 +62,46 @@ footer { font-size: 12px; line-height: 1.7; color: #60675a; margin-top: 28px; }
   main { padding: 20px 12px 30px; }
   .lab .housing { padding: 12px 10px 12px; border-radius: 16px 16px 24px 24px; }
   .lab .screen { padding: 7px; }
-  .lab .shell-detail { height: 52px; gap: 10px; }
-  .lab .dial { width: 34px; height: 34px; margin-right: 7px; }
-  .lab .key { width: 33px; height: 18px; }
   .controls button { flex: 1; padding: 10px; font-size: 14px; }
 }
+
+/* One native-descriptor control deck, inside the housing. */
+.control-deck {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 18px;
+  align-items: stretch;
+}
+.control-deck:empty { display: none; }
+.control-deck button {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  font-size: 16px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  color: #fff8e8;
+  background: var(--charcoal);
+  border: 1px solid #202821;
+  border-bottom: 4px solid #19211b;
+  border-radius: 8px;
+}
+.control-deck button:last-child { background: #b94f21; border-color: #8b3b19; }
+.control-deck button:active,
+.control-deck button.acknowledged { transform: translateY(2px); border-bottom-width: 2px; }
+.control-deck button:disabled { opacity: .6; cursor: wait; }
+.control-deck button:focus-visible,
+.control-deck:focus-visible,
+.housing:focus-visible { outline: 3px solid #173a54; outline-offset: 4px; }
+.probe .control-deck { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.probe .control-deck:empty { display: none; }
+.probe .control-deck button { font-size: 14px; padding: 10px 6px; }
+.probe .control-deck button:only-child,
+.probe .control-deck button:nth-child(3):last-child { grid-column: 1 / -1; }
+@media (max-width: 600px) {
+  .lab .control-deck { flex-wrap: wrap; }
+  .lab .control-deck button { flex: 1 1 100px; font-size: 14px; }
+}
+.probe .paper-slot, .companion .paper-slot { display: none; }
