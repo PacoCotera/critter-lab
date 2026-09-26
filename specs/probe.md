@@ -2,6 +2,14 @@
 
 Status: proposed evidence contract. One fixed sensor set should support extensible genomic content through both measured and simulated experiences. Fictional events are explicitly permitted; sensor selection, timing and mappings remain open.
 
+## Discovery device — accepted experience direction
+
+The Probe is the player's contact with the world. Its resting screen must show collection activity, expedition progress and the accumulated haul, with encounters visibly distinct from ordinary collecting. A player should be able to see what has changed without repeatedly opening status pages. Sampling remains straightforward and does not demand constant attention.
+
+The owner requests visible collected points as well as progress. Exact point meaning, resource relationships, progression rules and balance remain open; do not substitute supply counts for points or invent a reward counter in the renderer. Progress must come from the expedition state, and observed context must distinguish measured inputs from fictional events and simulator inputs. Show relevant changes rather than animation for its own sake. Refresh cadence and power behavior require physical e-ink validation.
+
+The current native fixture exposes only two simulated collection steps, supplies and an optional encounter. It cannot establish real sensing, passive elapsed-time progression or a complete points economy. The next Probe design must distinguish what can be shown from this state from proposed mechanics.
+
 ## Straightforward sampling — accepted direction
 
 Sampling must stay easy to operate with a limited sensor set. Fictional events can add variety without requiring another sensor for every phenomenon or genetic possibility. Do not turn sampling into manual sensor management, a complicated sequence of physical maneuvers or a requirement for constant attention. Preserve meaningful play in ordinary settings and standalone operation. Exact collection actions, event cadence, distribution and eligibility remain design choices.
