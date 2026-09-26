@@ -16,6 +16,7 @@ The [ecosystem reference](references/ecosystem.png) shows the portables with the
 
 | Question | Material and boundary |
 | --- | --- |
+| Where does the player make meaningful research choices? | [Research and creation proposal](research-and-creation.md) recommends a short adaptive investigation; its test structure and worked example remain proposed. |
 | Can a newcomer understand the journey? | [Your first discovery](sample-to-critter-walkthrough.md) follows exploration, research, a supply shortage, creation and companionship. It is a concept story, not an implemented sequence. |
 | Does the interaction explain what changes? | [Experience specification](../specs/experience.md) covers navigation and feedback. Review the player action, its consequence and the return path together, rather than approving an isolated attractive screen. |
 | What can the hardware actually support? | [Device specification](../specs/devices.md) and [build coverage](../BUILD.md) distinguish exploration from available engineering work. A render cannot demonstrate physical readability, refresh, fit or power. |
