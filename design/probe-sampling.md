@@ -1,35 +1,37 @@
-# Probe sampling: simple outings, varied discoveries
+# Probe sampling: choose at the Lab, explore with the Probe
 
-**Accepted requirement:** probing and sampling must stay straightforward. Artificial events are permitted, and the Probe must work without a phone. **The following defaults are proposed**, building on [probe evidence](../specs/probe.md) and the accepted [research loop](../specs/gameplay.md#research-and-creation).
+**Accepted direction:** the Lab offers selectable expeditions with duration, predefined events or event pools, difficulty and yields. The chosen expedition determines which random events can occur and how sensed evidence contributes to resources and collection points. Probing remains straightforward and standalone. **Examples and defaults below are proposed**, not approved balance or content.
 
-This proposal serves the [simple e-ink Probe experience](../specs/experience.md#physical-experience-is-the-product); its low-attention rhythm is intentionally different from the responsive Companion and richer Lab workbench.
+This preserves the [physical device roles](../specs/experience.md#physical-experience-is-the-product): the Lab is the extensible planning/research workbench; the simple e-ink Probe carries the outing; the responsive Companion serves the relationship with a critter; the Caddy is their physical home and charging place.
 
-## Start, carry, check, bring home
+## Choose, start, carry, check, return
 
-Start an outing, carry or place the Probe normally, check collection when convenient, and bring the results to the Lab. Ordinary indoor and outdoor settings are valid. No mandatory sensor juggling, exact destination, phone connection, timed response or constant attention. Explain unusable observations plainly rather than making the player guess a perfect placement.
+At the Lab, choose an expedition by its purpose, expected duration, possible finds and difficulty. Choose a target that helps current research or invites a different discovery. Then start it on the Probe, carry or place the device normally, check when convenient and bring the results home.
 
-The Probe gathers intriguing starting material; the Lab holds the deeper decisions. Checking shows retained collection progress, clues and supplies, not another task that must be completed before sampling can continue.
+Ordinary indoor and outdoor settings remain valid. No mandatory sensor juggling, exact destination, phone connection, unsafe exposure, timed reflex or constant attention. Explain unusable observations rather than requiring perfect placement. Checking the Probe shows progress, collected clues and any available event; the deeper research decisions wait at the Lab.
 
-## A few sensors need not mean a few samples
+## Illustrative expedition profiles
 
-Recommend three sources of variety:
+Working names and relative lengths, **not canonical resources, genes or yield promises**:
 
-- **Broad environmental tendencies.** Valid sensed conditions influence fictional themes and resource opportunities. They do not deterministically name a creature, prove an allele or require a sensor for every genetic dimension.
-- **Generated variation for each new sample.** Versioned content combines supported possibilities within those tendencies. Once established, preserve that sample’s identity, clues and possibilities. Similar conditions can yield different samples with recognizable relationships; no exact distribution or guaranteed trait is promised.
-- **Occasional optional fictional events.** A small encounter can add a clue or resource opportunity. Any response can wait until the player checks; ignoring it does not damage retained samples or invalidate ordinary collection. Earlier elaborate escape/stay hazards are deferred examples, not the normal collection path.
+| Expedition | Duration / proposed challenge | Target and event character | Reason to choose it |
+| --- | --- | --- | --- |
+| **Local survey** | Short; broad, forgiving collection | General laboratory supplies and varied clues; small incidental fictional encounters | Restock and find a fresh question without a specialized plan |
+| **Material trail** | Medium; narrower collection objective | Structure-related research material; a pool of fictional deposits, fragments and branching leads | Pursue a material-study need instead of maximizing mixed supplies |
+| **Signal watch** | Long; more specialized preparation and uncertain mix of relevant finds | Response-related clues and supporting resources; a pool of fictional pulses, echoes and unusual patterns | Investigate a response question, not earn universally better loot |
 
-Measured evidence and fictional content remain distinguishable in records and explanations. Generated phenomena are game events, not claims about real environmental danger. A content update can broaden future possibilities without rewriting an old sample or changing its saved research results.
+Recommend difficulty mean preparation and game tradeoffs—specialization, opportunity cost and uncertainty—rather than harder physical operation. Its exact mechanics remain open. Longer or harder should not dominate every target. No loss, mandatory rare-drop grind or penalty for missed check-ins is approved here.
 
-## Two ordinary outings
+## Few sensors, many possible discoveries
 
-**Illustrative clues, not canonical content:** on an outing through a familiar shaded courtyard, one sample suggests a layered structure. On another visit in similar conditions, a different sample suggests light-responsive behavior. Both retain the broad context of subdued, changing light, but their questions and useful Lab studies differ. Neither announces a gene or a finished critter. Separately awarded supplies can help run the investigations.
+The expedition profile interprets broad valid observations through versioned fictional rules. The same sensed context may contribute differently on Material trail and Signal watch. Evidence can influence thematic tendencies; it does not deterministically identify a creature or prove an allele. Resource awards, collection points and sample evidence remain distinct.
 
-The first outing need not be bad because it lacked the second clue. Cosmetic possibilities, unusual structures and functional interests can all motivate research. At the Lab, every required genomic region still needs resolution before selecting a complete supported genome and creating anything.
+Randomized events come from the selected profile’s defined pool, not a rigid mandatory sequence. Generated pulses or deposits are fictional encounters, not measured signals or real hazards. Recommend optional responses that can wait for a convenient check; elaborate escape/stay hazards remain deferred examples.
 
-## Keep collecting purposeful
+Two Material trail outings through the same courtyard might suggest layered structure on one visit and flexible structure on another. Both fit the profile without promising the same sample. These are illustrative clues, not approved anatomy. Generated variation is established for each legitimate new sample and then preserved; content updates do not rewrite existing samples.
 
-New legitimate collection can establish new material. Reopening results, restarting the device or retrying delivery preserves the same collection; it does not provide another draw or duplicated supplies. Exact collection eligibility, pacing and anti-abuse limits need later balancing, not extra player chores.
+## Bring back a useful next step
 
-Avoid making progress depend on repeatedly hoping for an exceptional drop. Learned clues should suggest broad conditions or resource preparation worth pursuing, with Lab crafting and console-only investigation providing alternative routes. Familiar knowledge guides the next attempt without guaranteeing another sample’s contents or automatically completing its genome.
+Recommend loading supported expedition content before departure so the Probe can run without a phone or live server; the exact loading protocol is unselected. Keep interrupted outings and collected results stable. Restarting, reopening or retrying delivery does not redraw events or duplicate supplies. Collection eligibility and anti-abuse rates remain balancing work, not extra player chores.
 
-**Recommendation:** make a normal outing satisfying through usable material and an interesting question, then let repeated outings offer variation and increasingly purposeful collection. Complexity belongs primarily in what the player learns and chooses at the Lab, not in operating the Probe.
+At the Lab, findings guide the next study, preparation or expedition choice. Crafting and console-only investigation remain alternative routes. New samples still require their own full genomic resolution before creation; a familiar profile does not make them automatically complete. The payoff is purposeful variety with simple operation, not endless luck or increasing attention demands.

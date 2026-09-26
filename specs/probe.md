@@ -8,9 +8,19 @@ Sampling must stay easy to operate with a limited sensor set. Fictional events c
 
 The [sampling design proposal](../design/probe-sampling.md) explores how broad sensed context and generated variation can produce distinct research leads. Its defaults are not approved algorithms or final UI.
 
+## Lab-selected expedition profiles — accepted direction
+
+The Lab offers a set of expeditions for the player to choose before taking the Probe out. Profiles can define duration, difficulty, yields and predefined events or event pools. The selected expedition shapes random events on the Probe and how sensed evidence contributes to resource types or collection points. A small sensor set can therefore serve different fictional gathering objectives without changing hardware.
+
+The profile provides a bounded context for variation, not necessarily a fixed event sequence. Actual measurements remain distinct from fictional interpretation and generated events. Choosing a profile does not predetermine a complete critter genome or bypass later research. Resource quantities and research evidence remain separate records.
+
+Selection and comparison belong at the Lab; execution must preserve the Probe's straightforward standalone experience. Exact durations, difficulty meaning, event probabilities, yield ranges, eligibility, early return, pause/resume and expiry rules remain open. Difficulty does not yet authorize physical hazards, mandatory reflexes, sample loss or neglect penalties.
+
+Proposed engineering consequence: carry the selected compatible profile/content version and sufficient execution data onto the Probe before departure; retain expedition/player identity and resolved events through interruption. Rules must fit the installed firmware's storage and capabilities. Profile packaging, scheduling, clock trust, validation and synchronization are not selected by this direction.
+
 ## Durable boundary
 
-**Sensed conditions + optional phone context + generated world events + player decisions → sample → research → genetic possibilities.**
+**Selected expedition + sensed conditions + optional phone context + generated world events + player decisions → sample → research → genetic possibilities.**
 
 The same expedition can also yield resources for laboratory activities or critter feeding. Resource gathering and standalone operation without a phone are accepted direction. The genomic flow above is one use of the probe, not its entire collection loop.
 
@@ -30,7 +40,7 @@ Sensed context, fictional encounters and player choices may influence resource a
 
 The probe should show collection results and retain them without a phone. Proposed transfer requirements: record the resource type/version, quantity and collection identity; preserve pending transfers across interruption; retries must not award the same collection twice. Consumption and inventory authority need architecture review, especially for quantities split across devices. Stable identifiers alone do not solve offline double spending. Capacity and transport remain open.
 
-Standalone operation is required. Event scheduling and selection remain a future product decision: on-device randomization is an option, not a selected algorithm or a requirement that offline events be random. The device must support its agreed collection loop without a live phone or server; local rules, prepared content and recovery behavior require subsequent firmware design and validation.
+Standalone operation is required. Expedition profiles now define eligible events and can produce randomized encounters. Exact scheduling and where random choices are resolved remain open; the selected content must support standalone execution. The device must support its agreed collection loop without a live phone or server; local rules, prepared content and recovery behavior require subsequent firmware design and validation.
 
 ## Candidate fixed sensor envelope
 
@@ -64,7 +74,7 @@ A hybrid event can use sensed context to weight its occurrence or parameters, wh
 
 Optional paired-phone context can supplement the device experience. It must remain supporting access, not required routine interaction or assumed continuous location tracking.
 
-Proposed interaction allocation: the probe presents collection progress, encounters and expedition choices; the lab presents sample research and specimen creation; the companion presents everyday critter interaction. The phone may supply permitted context, connectivity and synchronization in the background. Pairing, OS permissions and occasional maintenance may need a phone screen, but routine collection, encounter decisions, research results and critter interaction must not repeatedly send the player to it. Exact device screens and flows remain for UX review.
+Proposed interaction allocation: the probe presents collection progress, encounters and in-expedition choices; the lab presents expedition selection, sample research and specimen creation; the companion presents everyday critter interaction. The phone may supply permitted context, connectivity and synchronization in the background. Pairing, OS permissions and occasional maintenance may need a phone screen, but routine collection, encounter decisions, research results and critter interaction must not repeatedly send the player to it. Exact device screens and flows remain for UX review.
 
 Design graceful absence: if the phone is disconnected, asleep or unable to provide context, the device continues its supported local activity using retained evidence and available simulated content. Do not require opening the app to resolve an encounter. Background assistance is a product intent, not a promise of uninterrupted mobile-OS execution; firmware/app review must establish actual offline behavior and recovery.
 
@@ -94,7 +104,7 @@ For a ghost fluctuation, an investigate/leave choice could change the evidence c
 
 The reference e-ink/two-control concept suggests discrete stages and deliberate choices; it does not freeze hardware. Hardware review requires any timed decision to begin only when the choice page is visibly ready, not merely when the display transfer ends. Actions must correspond to visible labels; repeated/held wake input must not accidentally select an outcome. Save and restore pending choices across sleep/reboot, and keep collection/local receipt independent of encounter rendering or transport connectivity. Exact refresh, signaling and timeouts need hardware/UX testing. Proposed default for an unanswered encounter is to preserve progress rather than demand real-time reflexes; it remains unselected.
 
-A shared rule event should describe prerequisites, sensed context (if any), generated inputs, available choices, costs/stakes, outcome and research/resource effects. The probe runs the expedition; the lab interprets samples in more detail. Whether rules/content are prepared by the lab or entirely on the probe requires a memory/power assessment; the agreed standalone collection loop must execute without a live phone/server. Randomized event selection remains an open future decision.
+A shared rule event should describe prerequisites, sensed context (if any), generated inputs, available choices, costs/stakes, outcome and research/resource effects. The probe runs the expedition; the lab interprets samples in more detail. The Lab selects the expedition; where its execution content is prepared and how random events are scheduled require firmware and service design. The agreed standalone collection loop must execute without a live phone/server, within measured memory and power limits.
 
 New encounter packs should use supported conditions, presentation primitives and bounded data sizes. More elaborate genomic interpretation can remain in the lab; the probe need not execute the entire future genetics framework. Content versions declare compatibility with the installed interpreter. New semantics may require a software update even when hardware remains fixed; arbitrary future processing/storage requirements cannot be promised on an unspecified MCU.
 
