@@ -42,13 +42,12 @@ Expected initial status has revision 0 and Select available. The ELF executable 
 
 ### Play through the browser presenter
 
-The Python standard-library bridge authenticates every route with HTTP Basic authentication, username `lab`. Set a password in the process environment; never put it in a URL or commit it. Use HTTPS when exposing the presenter beyond a trusted local connection. Bind defaults to loopback; a local tunnel can publish that listener. `CRITTER_DEMO_BIND=0.0.0.0` is an explicit LAN option. Port defaults to 4180.
+The Python standard-library bridge permits anonymous shared staging access when `CRITTER_DEMO_PASSWORD` is absent or empty. Anyone with access uses the same saved playground. An optional nonempty password enables HTTP Basic authentication on every route, username `lab`; keep it in the process environment, never in a URL or commit. Same-origin command and body validation apply in both modes. Use HTTPS when exposing the presenter beyond a trusted local connection. Bind defaults to loopback; a local tunnel can publish that listener. `CRITTER_DEMO_BIND=0.0.0.0` is an explicit LAN option. Port defaults to 4180.
 
 ```bash
 export CRITTER_DEMO_BINARY="$PWD/native/build/lab/critter_lab"
 export CRITTER_DEMO_SAVE="$HOME/critter-demo-state.txt"
-read -rs -p 'Demo password: ' CRITTER_DEMO_PASSWORD
-export CRITTER_DEMO_PASSWORD
+# Optional: set CRITTER_DEMO_PASSWORD to require HTTP Basic authentication.
 python3 native/presenter/server.py
 ```
 
@@ -133,4 +132,4 @@ The revised sample/finding views use conceptual research regions, not a producti
 
 Color Lab scenes use separately rasterized Bitstream Vera glyphs and a Lab-only scene/font module. Portable builds retain their own smaller atlas and profile-specific scenes. [Font provenance and regeneration](shared/fonts/README.md) records the license and source hash. These UI assets add read-only flash; row RAM remains bounded by the display profiles.
 
-The authenticated presenter accepts an optional deployment-injected `release.json` beside `server.py`: `commit` (full lowercase SHA), `subject` (optional single-line commit title), and `deployed_at` (ISO 8601 with timezone). It snapshots validated metadata at startup and exposes only those fields through `/api/release`. The footer links the title to the exact public commit and shows release time in `America/Mexico_City`. Missing metadata is shown as a development build. Never put credentials or private deployment details in this file.
+The presenter accepts an optional deployment-injected `release.json` beside `server.py`: `commit` (full lowercase SHA), `subject` (optional single-line commit title), and `deployed_at` (ISO 8601 with timezone). It snapshots validated metadata at startup and exposes only those fields through `/api/release`. The footer links the title to the exact public commit and shows release time in `America/Mexico_City`. Missing metadata is shown as a development build. Never put credentials or private deployment details in this file.

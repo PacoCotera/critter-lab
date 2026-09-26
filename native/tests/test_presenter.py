@@ -51,6 +51,21 @@ class Presenter(unittest.TestCase):
         self.assertEqual(self.request("/api/command", b"{}", authenticated=False)[0], 401)
         self.assertEqual(self.request("/", authenticated=True)[0], 200)
 
+    def test_anonymous_shared_staging_preserves_command_guards(self):
+        self.server.password = ""
+        self.assertEqual(self.request("/", authenticated=False)[0], 200)
+        self.assertEqual(self.request("/api/release", authenticated=False)[0], 200)
+        body = json.dumps({"name": "review", "revision": 0, "operation_id": "anonymous"}).encode()
+        headers = {"Content-Type": "application/json", "X-Requested-With": "CritterLab", "Origin": self.origin}
+        result = subprocess.CompletedProcess([], 0, b'{"revision":1}', b"")
+        with patch.object(PRESENTER.subprocess, "run", return_value=result) as native:
+            self.assertEqual(self.request("/api/command", body, authenticated=False)[0], 403)
+            self.assertEqual(self.request("/api/command", body, authenticated=False,
+                                          headers=dict(headers, Origin="https://another.example"))[0], 403)
+            native.assert_not_called()
+            self.assertEqual(self.request("/api/command", body, authenticated=False, headers=headers)[0], 200)
+            native.assert_called_once()
+
     def test_release_is_validated_and_immutable_for_running_server(self):
         path = Path(self.directory.name) / "release.json"
         metadata = {"commit": "a" * 40, "deployed_at": "2026-09-26T12:34:56Z"}

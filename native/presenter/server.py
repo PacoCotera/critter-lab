@@ -1,4 +1,4 @@
-"""Authenticated presentation transport. All game decisions and pixels come from C."""
+"""Presentation transport with optional authentication. Game decisions and pixels come from C."""
 from datetime import datetime
 import base64
 import binascii
@@ -65,6 +65,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def authorized(self):
+        if not self.server.password:
+            return True
         try:
             scheme, value = self.headers.get("Authorization", "").split(" ", 1)
             supplied = base64.b64decode(value, validate=True)
@@ -157,15 +159,14 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     password = os.environ.get("CRITTER_DEMO_PASSWORD", "")
-    if not password:
-        raise SystemExit("CRITTER_DEMO_PASSWORD is required")
     server = ThreadingHTTPServer((os.environ.get("CRITTER_DEMO_BIND", "127.0.0.1"),
                                   int(os.environ.get("CRITTER_DEMO_PORT", "4180"))), Handler)
     server.release = load_release(ROOT / "release.json")
     server.password = password
     server.binary = str(Path(os.environ["CRITTER_DEMO_BINARY"]).resolve(strict=True))
     server.save = str(Path(os.environ["CRITTER_DEMO_SAVE"]).resolve())
-    print("Critter native presenter listening; authentication required", flush=True)
+    access = "authentication required" if password else "anonymous shared staging access"
+    print(f"Critter native presenter listening; {access}", flush=True)
     server.serve_forever()
 
 
