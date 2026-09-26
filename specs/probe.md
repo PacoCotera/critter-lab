@@ -2,6 +2,12 @@
 
 Status: proposed evidence contract. One fixed sensor set should support extensible genomic content through both measured and simulated experiences. Fictional events are explicitly permitted; sensor selection, timing and mappings remain open.
 
+## Sample disclosure boundary — accepted correction
+
+The Probe must not reveal what is inside a collected sample or infer its genetic traits, structure or supported forms. It may show expedition progress, collection activity, legitimate resources and field encounters, keeping those observations distinct from sample analysis. Sample contents are discovered through research at the Lab. The current prototype's repeated-bands structural clue violates this boundary and is not an approved design.
+
+Progress must develop gradually through actual expedition state. The current two-step fixture is inadequate for this experience; interpolating a cosmetic bar over it does not meet the requirement. Exact pacing, input credit and resource-award rules still require a coherent domain contract.
+
 ## Discovery device — accepted experience direction
 
 The Probe is the player's contact with the world. Its resting screen must show collection activity, expedition progress, collected evidence and resources, with encounters visibly distinct from ordinary collecting. A player should be able to see what has changed without repeatedly opening status pages. Sampling remains straightforward and does not demand constant attention.

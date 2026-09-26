@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "demo_store.h"
+#include "save_bytes.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -16,17 +17,7 @@ static int serialize(char *buffer, size_t size, const Demo *d) {
                   d->last_id, d->last_payload);
 }
 int demo_store_lock(const char *path) {
-  char name[4096];
-  if (snprintf(name, sizeof(name), "%s.lock", path) >= (int)sizeof(name))
-    return -1;
-  int fd = open(name, O_CREAT | O_RDWR, 0600);
-  if (fd < 0)
-    return -1;
-  if (flock(fd, LOCK_EX) < 0) {
-    close(fd);
-    return -1;
-  }
-  return fd;
+  return save_bytes_lock(path);
 }
 int demo_store_read(const char *path, Demo *d) {
   FILE *file = fopen(path, "r");
@@ -59,42 +50,8 @@ int demo_store_read(const char *path, Demo *d) {
                                                                         : 0;
 }
 int demo_store_write(const char *path, const Demo *d) {
-  char temporary[4096], directory[4096], data[1024];
-  if (snprintf(temporary, sizeof(temporary), "%s.tmp", path) >=
-      (int)sizeof(temporary))
-    return -1;
-  int fd = open(temporary, O_CREAT | O_TRUNC | O_WRONLY, 0600);
-  if (fd < 0)
-    return -1;
-  FILE *file = fdopen(fd, "w");
-  if (!file) {
-    close(fd);
-    return -1;
-  }
+  char data[1024];
   int length = serialize(data, sizeof(data), d);
-  int failed = length < 0;
-  if (!failed && fwrite(data, 1, (size_t)length, file) != (size_t)length)
-    failed = 1;
-  if (fflush(file) || fsync(fd))
-    failed = 1;
-  if (fclose(file))
-    failed = 1;
-  if (failed || rename(temporary, path))
-    return -1;
-  if (snprintf(directory, sizeof(directory), "%s", path) >=
-      (int)sizeof(directory))
-    return -1;
-  char *slash = strrchr(directory, '/');
-  if (!slash)
-    return -1;
-  if (slash == directory)
-    slash[1] = 0;
-  else
-    *slash = 0;
-  fd = open(directory, O_RDONLY);
-  if (fd < 0)
-    return -1;
-  failed = fsync(fd);
-  close(fd);
-  return failed ? -1 : 0;
+  if (length < 0 || (size_t)length >= sizeof(data)) return -1;
+  return save_bytes_write(path, data, (size_t)length);
 }
