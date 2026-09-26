@@ -88,5 +88,17 @@
     "sha256": "e58f00135901f26061370d87e1eabcaa36ce3a5d82ee62f9d32720d36737c9d8",
     "bytes": 1429187,
     "status": "generated visual-language proposal; not selected, not implementation evidence"
+  },
+  {
+    "path": "design/visual-language/refinement-02/styleboard.png",
+    "sha256": "5e7171ae202835b0902001744874657ab056c8628e56dea4d3408bc6055a04fb",
+    "bytes": 1309851,
+    "status": "proposed visual refinement; not approved UI or native asset"
+  },
+  {
+    "path": "design/visual-language/refinement-02/component-study.png",
+    "sha256": "3165c362ea2e4b76bf84f333be3385642bbaf4d525fca9e571d424a134ff1773",
+    "bytes": 49526,
+    "status": "proposed visual refinement; not approved UI or native asset"
   }
 ]

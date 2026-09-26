@@ -1,6 +1,6 @@
 # Visual-language explorations
 
-Proposals for discussion, 26 September 2026. These styleboards explore original graphic vocabularies before screen composition. Neither is selected. They are generated concept artwork, not exact font specimens, production components, canonical materials, rendered genomes or implemented interfaces.
+Proposals for discussion, 26 September 2026. These styleboards explore original graphic vocabularies before screen composition. Paco selected B as the foundation for refinement; the final visual language is not approved. See [refinement 02](refinement-02/README.md) for the current proposal. They are generated concept artwork, not exact font specimens, production components, canonical materials, rendered genomes or implemented interfaces.
 
 ## A — Color instruments
 
@@ -23,3 +23,4 @@ The question is which vocabulary conveys curious, purposeful discovery and can r
 Generated lettering, example branding and token values are illustrative. They do not select a font or logo. Motion is represented by still diagrams, not validated animation. Probe monochrome translation and native-size screen application remain to be explored after direction. No staging or device implementation uses these boards.
 
 Next apply the chosen vocabulary to representative states, test physical-control focus and refine the vocabulary where it fails. See the [screen standard](../screen-design-standard.md).
+

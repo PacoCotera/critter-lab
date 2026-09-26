@@ -10,7 +10,7 @@ Use one dominant research subject and subordinate information areas. Panels grou
 
 ## Typography and layout
 
-For the next Lab studies at 1024 × 600, use one readable instrument type family and a proposed three-size scale: 18 px for labels, 22 px for body/actions and 28 px for the activity heading. These are exploration tokens, not a selected font or validated physical readability. Use weight, spacing and position before adding another size. Avoid large website-style headings and long all-caps passages.
+For the next Lab studies at 1024 × 600, use one readable instrument type family and a proposed three-size scale: 22 px for labels, 26 px for body/actions and 30 px for the activity heading. These are exploration tokens, not a selected font or validated physical readability. Use weight, spacing and position before adding another size. Avoid large website-style headings and long all-caps passages.
 
 Use an 8 px grid, consistent margins and aligned panel headings. Compare a persistent record beside a research stage with a broad examination surface above a compact record strip. Explore different information structures, not recolors of one layout. Inspect full screens at native resolution and in the complete-frame presenter; never solve overflow by cropping or shrinking essential labels.
 
@@ -35,3 +35,4 @@ Then apply the selected vocabulary to a few representative states and assess whe
 Review hardware interaction alongside those states: preparation, focus movement, activation, pending, result, recovery and return. A visual concept establishes neither usability nor native/device performance. Previous rejected screen studies must not silently become implementation requirements.
 
 Reject unclear meaning, inconsistent typography, generic filler art, disclosure of unknown sample contents, ambiguous focus, arbitrary control-role changes and clipped essential text. A coherent, reviewed design can then inform bounded implementation and actual interaction validation.
+
