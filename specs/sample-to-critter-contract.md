@@ -64,8 +64,8 @@ The Companion uses saved individuals and records temporary activity without tran
 
 ## Three decisions still required
 
-1. **Research completeness:** how guided candidates become fully unlocked, which resource expenditures resolve regions, and the equivalent console-only acquisition path.
+1. **Research content mapping:** the V1 investigation/completeness structure is accepted in [gameplay](gameplay.md#research-and-creation); exact evidence-to-candidate mappings, resource requirements and equivalent console-only acquisition still need definition.
 2. **Creation terms:** sample/resource consumption or reuse, conflict handling and any compensation after accepted creation; none follows automatically from asset success.
 3. **Temporary activity:** supported offline research/care actions, handover retention and reconciliation rules, including when local offload data may safely be discarded.
 
-Recommended review order: settle research completeness first. For V1, prefer a small declared set of supported configurations, simple studies that explain the relevant bitmap regions, and explicit choice only after every required region is understood. This is a proposed starting rule, not a production cap on genetic diversity. Then settle creation terms before defining offline allowances that depend on them.
+Next review: creation terms, followed by offline allowances that depend on them. The accepted V1 research structure does not approve technical transaction defaults, content mappings or a cap on genetic diversity.

@@ -1,10 +1,10 @@
 # Research and creation: choose what to learn, then what to make
 
-**Recommended V1 mechanic for review; not implemented.** Accepted foundations are full genomic unlock before creation, guided supported possibilities, resource-spending research, personal discoveries and sandbox goals. The experiment structure below is proposed. It preserves [genetics](../specs/genetics.md) and the [creation boundary](../specs/sample-to-critter-contract.md), without selecting costs, clocks, art or canonical traits.
+**Accepted V1 design; not implemented.** The research structure is accepted: choose an investigation, follow relevant findings, resolve all required information and select a complete supported configuration before creation. Costs, timing, exact tests and the fictional content below remain open or illustrative. See [gameplay](../specs/gameplay.md) for the governing rule and the [creation boundary](../specs/sample-to-critter-contract.md) for proposed technical behavior.
 
 ## A short investigation with a consequential ending
 
-Recommend **two initial studies and, when the findings require it, one follow-up**, followed by choosing a complete supported configuration and deliberately creating it. That is four or five meaningful commitments on the introductory path, excluding acquisition, browsing and Open. It is not a minimum: an earlier supported comparison may answer overlapping questions, and already resolved information needs no repeated study.
+V1 uses **two initial studies and, when the findings require it, one follow-up**, followed by choosing a complete supported configuration and deliberately creating it. That is four or five meaningful commitments on the introductory path, excluding acquisition, browsing and Open. It is not a minimum: an earlier supported comparison may answer overlapping questions, and already resolved information needs no repeated study.
 
 Research adapts within authored content; required knowledge does not imply fixed test order. The player chooses which uncertainty to investigate first and, when a finding leaves competing interpretations, which relevant comparison to perform. A follow-up must resolve something the previous result actually left uncertain. Repeating an answered study provides no fresh result or bonus.
 
@@ -37,4 +37,4 @@ Missing reagent pauses the affected study, preserving findings and other availab
 
 The tradeoff is a small set of meaningful investigation rules instead of unlimited experiments. Reusable content rules can be produced through automated authoring tools and validated before use; this does not require hand-authoring each sample or claim an implemented content pipeline. Its appeal is following curiosity, choosing investigations from evidence, and understanding your creation—not optimizing a compulsory “best” critter.
 
-**Owner review topic:** whether this distribution of agency—question order, evidence-led follow-up and final supported configuration—makes one short investigation satisfying enough to build on.
+**Next design topic:** creation terms: what is committed, what remains reusable and what happens if creation cannot finish. Exact resource balance and the example traits are not approved by acceptance of the research structure.
