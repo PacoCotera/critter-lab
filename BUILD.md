@@ -9,7 +9,7 @@ Start with [the local setup guide](docs/builders/getting-started.md) to run the 
 | Local experiments | Node server, browser applications, pinned dependencies and tests | Integrated game client and production authentication |
 | Cloud services | Architecture and synchronization contracts | Backend, generation jobs, migrations, deployment and recovery tooling |
 | App and website | Responsibilities and product boundaries | Implementations and reproducible builds |
-| Console, Probe and Companion | Device requirements | Firmware, board profiles, toolchains and flashing instructions |
+| Console, Probe and Companion | Device requirements and [native build scaffolds](native/README.md) for Linux, nRF52840 and ESP32-S3 | Functional firmware, peripheral profiles, board validation and flashing instructions |
 | Electronics and caddy | Hardware concepts and constraints | Schematics, PCB sources, BOM and measured electrical/charging validation |
 | Enclosures | Concept images | Editable CAD, fabrication files and assembly instructions |
 

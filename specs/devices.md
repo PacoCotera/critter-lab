@@ -13,6 +13,12 @@ The [physical-experience principle](experience.md#physical-experience-is-the-pro
 
 Warm beige shells, charcoal structure and restrained orange accents inform the product family. Concept proportions and earlier renders do not freeze controls, ports, materials or manufacture. No physical slots are implied by virtual Lab chips.
 
+## Development targets
+
+Owner direction: a more capable Linux-class Lab, an nRF52840 Probe and an ESP32-S3 Companion. These MCU families are the preliminary portable targets, not approval of exact boards, sensor sets, display modules or battery configurations. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
+
+The native development baseline uses C/C++ toolchains for those targets. Compile and link firmware for real MCUs; use host adapters only for explicit behavioral testing. Display-specific simulation and new mockups wait for the preliminary peripheral and resource specification. See the [foundation development plan](../docs/builders/foundation-demo.md).
+
 ## Coupled constraints
 
 The Console must budget concurrent display, radio, storage, scanning and dense printing. Verify exact logic levels separately from supply voltage; preserve accessible paper path, roll change, reader sightline and service/programming access. Print conversion needs its own raster profile while preserving identity and scan quiet zones.
@@ -36,3 +42,16 @@ PCB and enclosure work are coupled: preserve connector and antenna clearances, s
 5. Produce repeatable assembly, programming, inspection and service instructions for a complete kit; CAD checks do not replace bench evidence.
 
 The programme target is ten complete kits. US$750 is the maximum full-kit retail ceiling, aiming lower—not a BOM allowance or a verified selling price. Compare all four devices, cases, packaging/booklet, assembly/rework and support, without double-counting integrated controllers/chargers. Neither this target nor a concept render authorizes a parts selection.
+
+
+## Companion display shortlist
+
+Owner selected **Waveshare ESP32-S3-Touch-AMOLED-1.8** as the preliminary Companion development board: 368 × 448 touch AMOLED, ESP32-S3R8, 8 MB PSRAM and 16 MB flash. The exact PCB revision must be pinned before its board support package; do not mix V1 and V2 drivers. Physical controls, enclosure, battery and production integration remain open. The comparison that informed this selection follows:
+
+| Candidate | Native raster | Design consideration |
+| --- | --- | --- |
+| [Waveshare 1.8](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.8) | 368 × 448 | Compact portrait; V1 and V2 use different display/touch controllers, so pin the exact revision. |
+| [Waveshare 1.64](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.64) | 280 × 456 | Narrow portrait; V1/V2 pin mapping and charging changes require exact revision tracking. |
+| [Waveshare 1.75](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.75) | 466 × 466, round | Circular visible region needs a round interaction layout; raster corners are not usable screen area. |
+
+Manufacturer specifications checked 26 September 2026, not bench measurements. RGB565 full-frame calculations are respectively 329,728, 255,360 and 434,312 bytes; double buffering doubles these figures before assets, drivers and application memory. Available PSRAM is not proof of frame rate or battery life. Compare physical board size, touch/physical-button pin availability, QSPI driver/revision, sleep/current behavior and power-management integration before selecting the simulation profile.

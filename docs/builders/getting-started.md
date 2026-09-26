@@ -2,6 +2,8 @@
 
 For builders and developers. These instructions run the existing host software; there is no complete kit to assemble or production service to deploy yet. See [build coverage](../../BUILD.md).
 
+For native Lab/MCU development, use the [native build guide](../../native/README.md). The browser experiments below are separate historical studies, not hardware simulators.
+
 ## Install and start
 
 You need Git, Node.js 22 or later with npm, and a current browser. No hardware, account or private tooling is required.

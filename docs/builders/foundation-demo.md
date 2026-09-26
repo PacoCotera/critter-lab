@@ -1,12 +1,18 @@
 # Foundation demo: one expedition, one saved founder
 
-Status: **queued design contract; not authorized for implementation dispatch**. The required sequence is preliminary hardware agreement → constrained simulation design → mockups within that environment → functional integration. The research and one-sample/one-founder rules are accepted; fixture quantities, timings, evidence mappings and creature content are provisional. This document does not select firmware, sensors, a cloud provider or production authentication.
+Status: **native build/toolchain scaffolding authorized; simulator, mockup and gameplay integration remain gated**. The required sequence is preliminary hardware agreement → constrained simulation design → mockups within that environment → functional integration. The research and one-sample/one-founder rules are accepted; fixture quantities, timings, evidence mappings and creature content are provisional. This document does not select firmware, sensors, a cloud provider or production authentication.
 
 ## Entry gate
 
-Agree a preliminary hardware specification first: controllers, displays, energy, sensors, storage, controls and viable firmware languages/toolchains. Design the simulation environment against those constraints and review its device/domain/adapter contract before creating new mockups. Mockups must use those agreed limits; integration code follows afterward. Existing experiments remain evidence, not an approved target. No new functional demo implementation is authorized by this plan.
+Agree a preliminary hardware specification first: controllers, displays, energy, sensors, storage, controls and viable firmware languages/toolchains. Design the simulation environment against those constraints and review its device/domain/adapter contract before creating new mockups. Mockups must use those agreed limits; integration code follows afterward. Existing experiments remain evidence, not an approved target. The owner now authorizes native toolchain/build scaffolding for the preliminary MCU families and Linux Lab; no new device mockup or functional game implementation is authorized before these gates.
 
-Hardware and architecture are designed together. The preliminary specification must include an execution-placement matrix for sensing, event progression, interaction/rendering, research, generation and synchronization. For each function record its execution host (Lab, Probe/Companion controller or remote service), durable/temporary state owner, offline behavior, CPU/RAM/storage and energy assumptions, network dependency and simulation boundary. Remote generation and cloud-authoritative durable state are accepted; the Lab compute platform and exact local rules remain to be selected. The simulator reproduces this allocation rather than concealing all work in a browser process.
+Hardware and architecture are designed together. The preliminary specification must include an execution-placement matrix for sensing, event progression, interaction/rendering, research, generation and synchronization. For each function record its execution host (Lab, Probe/Companion controller or remote service), durable/temporary state owner, offline behavior, CPU/RAM/storage and energy assumptions, network dependency and simulation boundary. Cloud-authoritative durable state remains accepted. The owner now directs a stronger Linux-class Lab with more local execution and less dependence on remote services; board choice, local generation workload and exact offline rules remain to be selected. The simulator reproduces this allocation rather than concealing all work in a browser process.
+
+## Hardware-native development requirement
+
+Device implementation must target the selected MCU and supported native SDK from the start. A JavaScript recreation of device behavior is not the hardware simulation target. Share portable firmware logic with a host harness through explicit hardware adapters where practical; compile target builds to verify code size and static allocation against actual linker/partition limits. Host results alone cannot prove stack/heap peaks, peripheral timing, radio behavior, display readiness or energy use. Establish those on development boards with the intended peripherals. Use CPU/peripheral emulation only where support for the exact target is verified, and disclose missing behavior. A browser may expose test controls or framebuffer output; it must not silently replace the firmware being tested.
+
+The component proposal must distinguish processor architecture, MCU, board and SDK; resolve Lab MCU versus a Linux host from workload and physical requirements before fixing its simulator. The host-only JavaScript authority experiments below remain service/contract studies, not portable device firmware.
 
 ## The later vertical slice
 
@@ -39,7 +45,7 @@ The [expedition design](../../design/probe-sampling.md), [research design](../..
 
 The current Node review server has no production authentication and includes writable sharing routes. Do not expose it as a secure game backend. Existing browser databases remain isolated experiments; do not silently migrate or overwrite their records.
 
-The public checkout currently lacks its own CI workflow and deployable staging tooling. An older static deployment is not evidence that the current public source or a writable backend is deployed. Establish public-repository CI first, then package the new slice and validate its deployment independently. See [build coverage](../../BUILD.md).
+The public checkout includes [native build CI](../../.github/workflows/native-build.yml) for the preliminary targets; deployable staging tooling still needs migration. An older static deployment is not evidence that the current public source or a writable backend is deployed. Verify hosted target builds, then package the later slice and validate its deployment independently. See [build coverage](../../BUILD.md).
 
 ## Minimal module and authority boundaries
 
@@ -76,10 +82,21 @@ Use pinned retained portraits for the initial slice; no new generation service i
 4. **Functional increments:** only after those gates, integrate accepted complete haul → one saved finding/reopen (A), then full unlock → saved founder/reopen (B). Add the bounded HTTP/access boundary before remote writes.
 5. **Staging delivery:** package the exact tested revision, keep mutable saves outside releases, validate access controls and smoke-test restart/reopen. Rollback must respect save-format compatibility; static rollback does not prove backend recovery. Unattended transport and remote access remain separate gates.
 
-Independent infrastructure scope is limited to a public CI baseline: lockfile install and existing Node tests with pinned official actions and read-only permissions. No secrets or deploy jobs are implied, and CI success does not approve the queued functional scope.
+Independent infrastructure scope now includes native Linux, Zephyr/nRF52840 and ESP-IDF/ESP32-S3 build scaffolds with pinned SDK releases and read-only CI permissions. No secrets or deploy jobs are implied, and CI success does not approve the queued functional scope.
 
 ### Queued functional coder scope — not for dispatch yet
 
 Own only new `prototype/foundation/{content,domain,repository,demo}.mjs`, its README and `prototype/tests/foundation.test.mjs`. For increment A, supply one qualifying complete haul and one supported study with unresolved regions remaining; preserve existing experiments unchanged. Return accepted haul → saved finding → reopen and explicit limits. Increment B later adds the declared complete configuration set and creation transaction. Do not implement account management, dynamic generation, crafting economy, physical transfer or speculative general registries.
 
 Increment A acceptance: accepted haul replay adds nothing; altered/cross-player requests fail; partial haul settlement is unsupported; study retries do not spend again; lost-response/reopen retains the same accepted inventory, finding and unresolved regions; corrupt/unsupported saves remain intact. Increment B additionally rejects incomplete-genome creation, resolves concurrent creation to one founder and preserves exact genome/expression/origin/assets across reopen and missing art. Use actual temporary-file reopen and injected failures around commit. These checks prove the bounded host contract, not hardware flash durability or production authorization.
+
+
+## Proposed remote simulation interaction
+
+An HTML presenter can display native-rendered frames and relay physical inputs without implementing device gameplay. Proposed path: browser controls → authenticated session bridge → native input adapter → firmware application logic → native pixel renderer → display adapter → browser canvas. WebSocket transport is a candidate, not implemented. Keep player controls separate from engineering controls (sensor traces, disconnects, reset and clock advancement).
+
+Build portable firmware application logic against real MCU drivers for devices and explicit host adapters for behavioral tests. This does not run the MCU ELF on Linux; RTOS/SDK-specific behavior needs supported target emulation or real boards. A separate native instance represents each simulated device. Neither the bridge nor browser may award resources or independently choose screen states. Preserve device/profile identity, ordered input edges and frame identifiers across the bridge; define reconnection handling rather than replaying held inputs blindly.
+
+For example, pressing a Companion key sends press/release edges. Native logic chooses its response and emits a 368×448 framebuffer; the canvas displays those pixels with integer scaling. Exact panel revision, touch coordinates and control mapping must be approved before claiming this as its device profile. An e-paper adapter may model busy/ready and retained frames, but estimated timing and energy remain visibly distinct from measurements.
+
+Implement first the smallest approved button-to-frame path, then one sensor input and device interruption. Keep the same presenter protocol available for a later real-board debug bridge where feasible. Hardware-in-loop remains the proof for physical display, power and radio performance. This is a proposed environment architecture, not a running simulator.

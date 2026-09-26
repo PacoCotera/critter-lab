@@ -3,3 +3,6 @@ prototype/.data/
 .env
 .env.*
 !.env.example
+native/build/
+native/companion/sdkconfig
+native/companion/sdkconfig.old

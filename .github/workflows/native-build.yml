@@ -1,0 +1,131 @@
+name: Native target builds
+
+on:
+  push:
+    branches: [main]
+    paths: ['native/**', '.github/workflows/native-build.yml']
+  pull_request:
+    paths: ['native/**', '.github/workflows/native-build.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build and run Linux scaffold
+        run: |
+          cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build native/build/lab
+          native/build/lab/critter_lab | tee native/build/lab/run.log
+          size native/build/lab/critter_lab | tee native/build/lab/size.log
+          cc --version > native/build/lab/compiler.log
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-lab-${{ github.sha }}
+          path: |
+            native/build/lab/critter_lab
+            native/build/lab/*.map
+            native/build/lab/*.log
+          if-no-files-found: error
+          retention-days: 14
+
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Probe toolchain
+        run: |
+          source native/toolchains.env
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3.12-venv python3.12-dev gperf device-tree-compiler ninja-build cmake xz-utils
+          python3.12 -m venv "$RUNNER_TEMP/zephyr-venv"
+          source "$RUNNER_TEMP/zephyr-venv/bin/activate"
+          pip install "west==$WEST_VERSION"
+          west init -m https://github.com/zephyrproject-rtos/zephyr --mr "$ZEPHYR_REVISION" "$RUNNER_TEMP/zephyr-workspace"
+          cd "$RUNNER_TEMP/zephyr-workspace"
+          west update hal_nordic cmsis cmsis_6
+          west zephyr-export
+          pip install -r zephyr/scripts/requirements-base.txt
+          west sdk install --version "$ZEPHYR_SDK_VERSION" --gnu-toolchains arm-zephyr-eabi --no-hosttools
+      - name: Compile nRF52840 firmware
+        run: |
+          source native/toolchains.env
+          source "$RUNNER_TEMP/zephyr-venv/bin/activate"
+          export ZEPHYR_BASE="$RUNNER_TEMP/zephyr-workspace/zephyr"
+          export ZEPHYR_SDK_INSTALL_DIR="$HOME/zephyr-sdk-$ZEPHYR_SDK_VERSION"
+          export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+          west build -b "$PROBE_BOARD" native/probe -d native/build/probe
+          "$ZEPHYR_SDK_INSTALL_DIR/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-size" native/build/probe/zephyr/zephyr.elf | tee native/build/probe/size.log
+          pip freeze > native/build/probe/python-packages.log
+          for file in zephyr.elf zephyr.bin zephyr.map zephyr.dts .config; do
+            test -s "native/build/probe/zephyr/$file"
+          done
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-probe-${{ github.sha }}
+          path: |
+            native/build/probe/zephyr/zephyr.elf
+            native/build/probe/zephyr/zephyr.bin
+            native/build/probe/zephyr/zephyr.map
+            native/build/probe/zephyr/zephyr.dts
+            native/build/probe/zephyr/.config
+            native/build/probe/*.log
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+
+  companion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Companion toolchain
+        run: |
+          source native/toolchains.env
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3.12-venv python3.12-dev cmake ninja-build libffi-dev libssl-dev dfu-util
+          git clone --branch "$IDF_TAG" --depth 1 --recursive --shallow-submodules https://github.com/espressif/esp-idf.git "$RUNNER_TEMP/esp-idf"
+          test "$(git -C "$RUNNER_TEMP/esp-idf" rev-parse HEAD)" = "$IDF_REVISION"
+          python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install --targets="$COMPANION_TARGET"
+          python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install-python-env
+      - name: Compile ESP32-S3 firmware
+        run: |
+          source native/toolchains.env
+          source "$RUNNER_TEMP/esp-idf/export.sh"
+          idf.py -C native/companion -B "$GITHUB_WORKSPACE/native/build/companion" set-target "$COMPANION_TARGET"
+          idf.py -C native/companion -B "$GITHUB_WORKSPACE/native/build/companion" build
+          idf.py -C native/companion -B "$GITHUB_WORKSPACE/native/build/companion" size | tee native/build/companion/size.log
+          pip freeze > native/build/companion/python-packages.log
+          for file in critter_companion.elf critter_companion.bin critter_companion.map bootloader/bootloader.bin partition_table/partition-table.bin flasher_args.json; do
+            test -s "native/build/companion/$file"
+          done
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-companion-${{ github.sha }}
+          path: |
+            native/build/companion/critter_companion.elf
+            native/build/companion/critter_companion.bin
+            native/build/companion/critter_companion.map
+            native/build/companion/bootloader/bootloader.bin
+            native/build/companion/partition_table/partition-table.bin
+            native/build/companion/flasher_args.json
+            native/build/companion/*.log
+            native/companion/sdkconfig
+          if-no-files-found: error
+          retention-days: 14
