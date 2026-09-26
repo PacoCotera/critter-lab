@@ -1,20 +1,6 @@
 // Presentation transport only. Native descriptors supply every playable action.
 const screen = document.querySelector('#frame');
 const statusLine = document.querySelector('#status');
-const sizeButton = document.querySelector('#native-size');
-let nativeSize = false;
-function updateDisplaySize() {
-  document.querySelector('#instrument').classList.toggle('native-size', nativeSize);
-  sizeButton.setAttribute('aria-pressed', String(nativeSize));
-  sizeButton.textContent = nativeSize ? 'Fit complete screen' : '1:1 native pixels';
-  document.querySelector('#viewport-note').textContent = nativeSize
-    ? 'Native pixels shown at 1:1. Scroll inside the screen if needed.'
-    : 'The complete screen fits this view. Use 1:1 to inspect native pixels.';
-}
-sizeButton.addEventListener('click', () => {
-  nativeSize = !nativeSize;
-  updateDisplaySize();
-});
 const retryButton = document.querySelector('#retry');
 let device = ['lab', 'probe', 'companion'].includes(localStorage.getItem('critterDevice')) ? localStorage.getItem('critterDevice') : 'lab', snapshot = null, ready = false, busy = false, generation = 0, pending = null;
 let held = false;
@@ -36,7 +22,7 @@ async function show(state) {
   if (old.startsWith('blob:')) URL.revokeObjectURL(old);
   if (request !== generation) return;
   document.querySelector('#instrument').className = 'instrument ' + device;
-  updateDisplaySize();
+  
   screen.width = device === 'probe' ? 122 : device === 'companion' ? 368 : 1024;
   screen.height = device === 'probe' ? 250 : device === 'companion' ? 448 : 600;
   for (const id of ['lab', 'probe', 'companion']) document.querySelector(`#${id}`).setAttribute('aria-pressed', String(id === device));

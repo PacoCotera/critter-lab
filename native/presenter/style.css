@@ -1,35 +1,80 @@
-:root{font-family:system-ui,sans-serif;color:#252722;background:#f5f0df;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:860px;margin:auto;padding:30px 20px 45px}h1{font-family:Georgia,serif;font-weight:normal;font-size:clamp(2rem,6vw,3.3rem);margin:8px 0}p{line-height:1.5}.eyebrow{font-size:11px;letter-spacing:.17em}nav{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0 16px}button{font:inherit;min-height:48px;padding:10px 20px;border:1px solid #373a32;border-radius:5px;background:#eee7d3;color:#252722;cursor:pointer}button:focus-visible{outline:3px solid #c15c2a;outline-offset:4px}button[aria-pressed=true]{background:#292c25;color:#fff8e8}button:disabled{opacity:.45;cursor:wait}.instrument{padding:24px;background:#dfd8c2;border:2px solid #393c33;border-radius:18px;box-shadow:0 7px 0 #bcb49b}.screen{background:#252722;padding:14px;border-radius:6px}img{display:block;width:100%;height:auto;image-rendering:pixelated;background:#f6f0de;aspect-ratio:auto}.instrument.probe{max-width:550px;margin:auto;background:#383c33;padding:25px 20px}.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.controls button{flex:1;min-width:110px}.controls button:first-child{border-bottom:4px solid #c15c2a}#status{min-height:24px;font-size:.95rem}details{margin-top:30px;border-top:1px solid #c8c0aa;padding-top:18px}summary{cursor:pointer}footer{font-size:12px;line-height:1.7;color:#606154;margin-top:32px}#refresh{font-size:13px;background:transparent}@media(max-width:480px){main{padding:20px 10px}.instrument{padding:12px 8px}.screen{padding:7px}.controls button{padding:9px;font-size:14px}header{padding:0 10px}}
-
-/* Fit the complete native image by default; 1:1 is an explicit inspection mode. */
-.instrument {
+:root {
+  font-family: system-ui, sans-serif;
+  font-synthesis: none;
+  color: #292c29;
+  background: #f3f0e7;
+  --cream: #e9e3d3;
+  --charcoal: #303632;
+  --orange: #cd652f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1180px; margin: auto; padding: 24px 24px 40px; }
+h1 { font-family: Georgia, serif; font-weight: normal; font-size: clamp(2rem, 5vw, 3rem); margin: 6px 0; }
+p { line-height: 1.5; }
+header > p:last-child { margin: 8px 0; }
+.eyebrow { font-size: 11px; letter-spacing: .17em; margin: 0; }
+nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+button {
+  font: inherit;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #62685d;
+  border-radius: 6px;
+  background: #eee9db;
+  color: #292c29;
+  cursor: pointer;
+}
+button:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+button:active { transform: translateY(2px); background: #d9d1bf; }
+button[aria-pressed="true"] { background: var(--charcoal); color: #fff8e8; }
+button:disabled { opacity: .45; cursor: wait; }
+.instrument { margin-inline: auto; max-width: 100%; }
+.housing {
+  width: fit-content;
   max-width: 100%;
-  margin-inline: auto;
+  margin: auto;
+  padding: 22px 30px 18px;
+  background: linear-gradient(165deg, #f2eddf, var(--cream) 60%, #d2cbb8);
+  border: 2px solid #777c70;
+  border-bottom: 10px solid var(--charcoal);
+  border-radius: 22px 22px 32px 32px;
+  box-shadow: 0 9px 0 #c2baa6, 0 15px 24px #30363218;
 }
-.instrument.probe {
-  width: 310px;
-  max-width: 100%;
-}
-.instrument.companion {
-  width: 448px;
-  max-width: 100%;
-}
-.screen {
-  overflow: auto;
-}
-#frame {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: auto;
-}
-.instrument.native-size #frame {
-  width: auto;
-  max-width: none;
-}
-.viewport-controls {
-  margin-top: 18px;
-}
-.viewport-note {
-  margin-top: 8px;
-  font-size: .9rem;
+.screen { background: var(--charcoal); padding: 14px; border-radius: 12px; overflow: auto; max-width: 100%; }
+#frame { display: block; width: 100%; height: auto; max-width: 100%; image-rendering: pixelated; background: #f6f0de; }
+.lab .housing { width: min(100%, calc((100dvh - 360px) * 1.7067 + 92px)); min-width: min(100%, 440px); }
+.shell-detail { display: flex; align-items: center; gap: 14px; height: 66px; padding-left: 8%; }
+.dial { width: 44px; height: 44px; border-radius: 50%; background: repeating-conic-gradient(#444a43 0deg 6deg, #303632 6deg 12deg); border: 5px solid #444a43; box-shadow: 0 3px 0 #191f1c; margin-right: 16px; }
+.key { display: block; width: 44px; height: 22px; background: var(--charcoal); border-radius: 5px; box-shadow: 0 3px 0 #1e2520; }
+.key.accent { background: var(--orange); box-shadow: 0 3px 0 #924622; }
+.lab .key.last { background: #f7f1e1; box-shadow: 0 3px 0 #b1a991; }
+.paper-slot { width: 43%; height: 7px; border-radius: 5px; background: #51564c; margin: 0 auto 5px; border-bottom: 2px solid #f5efdf; }
+.probe .housing { width: min(232px, calc((100dvh - 360px) * .488 + 66px)); min-width: min(100%, 166px); padding: 22px 17px 16px; border: 7px solid var(--charcoal); border-bottom-width: 13px; border-radius: 28px 28px 23px 23px; }
+.probe .screen { padding: 9px; border-radius: 5px; }
+.probe .shell-detail { height: 54px; padding: 0; justify-content: center; gap: 15px; }
+.probe .dial, .probe .last, .probe .paper-slot { display: none; }
+.probe .key { width: 38px; height: 23px; }
+.companion .housing { width: min(356px, calc((100dvh - 360px) * .82143 + 66px)); min-width: min(100%, 220px); border: 7px solid var(--charcoal); border-bottom-width: 14px; border-radius: 46px; padding: 23px 18px 12px; }
+.companion .screen { padding: 9px; border-radius: 26px; }
+.companion .shell-detail { justify-content: center; padding: 0; gap: 18px; height: 57px; }
+.companion .key { width: 30px; height: 30px; border-radius: 50%; }
+.companion .dial, .companion .paper-slot { display: none; }
+.mapping-note { text-align: center; font-size: 12px; color: #686e63; margin: 22px 0 8px; }
+.controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.controls button { min-width: 110px; border-bottom: 3px solid var(--orange); }
+.controls:empty { display: none; }
+#status { min-height: 24px; font-size: .95rem; }
+#refresh { font-size: 13px; background: transparent; }
+details { margin-top: 26px; border-top: 1px solid #c8c0aa; padding-top: 18px; }
+summary { cursor: pointer; }
+footer { font-size: 12px; line-height: 1.7; color: #60675a; margin-top: 28px; }
+@media (max-width: 600px) {
+  main { padding: 20px 12px 30px; }
+  .lab .housing { padding: 12px 10px 12px; border-radius: 16px 16px 24px 24px; }
+  .lab .screen { padding: 7px; }
+  .lab .shell-detail { height: 52px; gap: 10px; }
+  .lab .dial { width: 34px; height: 34px; margin-right: 7px; }
+  .lab .key { width: 33px; height: 18px; }
+  .controls button { flex: 1; padding: 10px; font-size: 14px; }
 }
