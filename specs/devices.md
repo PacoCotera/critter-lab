@@ -9,6 +9,8 @@ Status: intended functions and engineering constraints. No selected production p
 | Companion | Shared player use, saved-individual display, training/evolution/bonding and temporary offline activity | Number of carried critters, supported actions, handover, display/controls and power |
 | Caddy | Wireless charging for both portables | Receiver/transmitter solution, separate supply, mechanical alignment, status signal and indicators |
 
+The [physical-experience principle](experience.md#physical-experience-is-the-product) defines why these are distinct objects: simple e-ink collection, responsive companionship, an extensible Lab workbench and a physical charging home. It guides engineering exploration without selecting production modules.
+
 Warm beige shells, charcoal structure and restrained orange accents inform the product family. Concept proportions and earlier renders do not freeze controls, ports, materials or manufacture. No physical slots are implied by virtual Lab chips.
 
 ## Coupled constraints

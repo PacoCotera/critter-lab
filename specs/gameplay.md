@@ -16,6 +16,8 @@ The [sample-to-critter contract](sample-to-critter-contract.md) owns the propose
 
 ## What each device contributes
 
+The devices provide distinct physical experiences; see the [experience principle](experience.md#physical-experience-is-the-product). A complete software prototype is permitted while preserving those roles.
+
 The **Probe** offers real-world sampling, fictional encounters, collection progress and resources without requiring a phone. Samples carry research evidence; resources are consumable inventory quantities. Evidence points do not automatically become food or materials. [Probe evidence](probe.md) defines sensed versus generated inputs, proposed scoring and measurement limits.
 
 The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, inventory changes, research progress, developmental changes or resources running low, suggesting interventions and the next outing. Major discoveries and individual reveals punctuate that process. Frequent interest does not establish a neglect penalty; timers, notifications and setbacks remain open.

@@ -18,6 +18,8 @@ flowchart LR
 
 The Lab is connected and remote services perform generation; ESP32 is not the generation host. Devices may hold temporary probing, evolving and training state partly offline. Cloud owns accepted durable state and recovery. Phone support is optional for routine device play; device-hosted setup needs no personal home server.
 
+The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The kit's supporting app role does not prohibit that exploration, and shared domain services should not force identical interactions across devices.
+
 ## Creature production pipeline
 
 ```mermaid

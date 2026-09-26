@@ -2,6 +2,8 @@
 
 **Accepted requirement:** probing and sampling must stay straightforward. Artificial events are permitted, and the Probe must work without a phone. **The following defaults are proposed**, building on [probe evidence](../specs/probe.md) and the accepted [research loop](../specs/gameplay.md#research-and-creation).
 
+This proposal serves the [simple e-ink Probe experience](../specs/experience.md#physical-experience-is-the-product); its low-attention rhythm is intentionally different from the responsive Companion and richer Lab workbench.
+
 ## Start, carry, check, bring home
 
 Start an outing, carry or place the Probe normally, check collection when convenient, and bring the results to the Lab. Ordinary indoor and outdoor settings are valid. No mandatory sensor juggling, exact destination, phone connection, timed response or constant attention. Explain unusable observations plainly rather than making the player guess a perfect placement.
