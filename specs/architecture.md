@@ -74,6 +74,8 @@ A historical Lab receipt does not prove current Probe emptiness, remaining Lab i
 
 ## Compatibility and evidence
 
+Native runtime delivery separates verified release bytes from persistent player state. A successful build is not a deployment: promotion must bind a trusted main revision to successful CI and exact archive digests. Activation checks save compatibility on copies, gates player traffic until acceptance and preserves current progress during rollback. The [updater contract](../native/UPDATER.md) distinguishes disposable checks from production service and proxy requirements.
+
 Preserve individual ID, origin versus ancestry, genome revision, expression context/rules, family/mapping versions and exact portrait/motion/sequence assets. A new device-profile derivative has its own version and must not overwrite the original. Unsupported content retains records and verified historical display where possible.
 
 The minimum meaningful foundation proof is one provisional family with related individuals, inherited visible traits, carried/unexpressed and contextual cases; traceable appearance/sequence mapping; stable portraits and one bounded motion set; reopen/update preservation; and measured device-profile budgets. Static placeholders and read/copy fixtures are useful limited evidence, not this complete pipeline.
