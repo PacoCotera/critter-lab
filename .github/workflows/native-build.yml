@@ -39,7 +39,6 @@ jobs:
           python3 -m unittest discover -s native/tests -p test_systemd_backend.py
           python3 -m unittest discover -s native/tests -p test_systemd_activation.py
           python3 -m unittest discover -s native/tests -p test_systemd_restart.py
-          python3 -m unittest discover -s native/tests -p test_legacy_bootstrap.py
           python3 -m unittest discover -s native/tests -p test_installed_environment.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log

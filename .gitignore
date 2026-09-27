@@ -6,3 +6,4 @@ prototype/.data/
 native/build/
 native/companion/sdkconfig
 native/companion/sdkconfig.old
+__pycache__/
