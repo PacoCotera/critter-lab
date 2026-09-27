@@ -2,7 +2,6 @@
 from contextlib import contextmanager
 from datetime import datetime
 import fcntl
-import gzip
 import hashlib
 import json
 import os
@@ -60,14 +59,7 @@ def digest(path):
 
 
 def bounded_tar(path):
-    # Bound all expanded bytes before tarfile consumes hidden PAX/GNU headers.
-    import io
-    compressed = regular_bytes(path)
-    with gzip.GzipFile(fileobj=io.BytesIO(compressed)) as source:
-        expanded = source.read(LIMIT + 1)
-    if len(expanded) > LIMIT:
-        raise ValueError('expanded archive exceeds bound')
-    return tarfile.open(fileobj=io.BytesIO(expanded), mode='r:')
+    return package_staging.bounded_tar(path)
 
 
 class Activation:

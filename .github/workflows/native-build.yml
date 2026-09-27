@@ -33,6 +33,7 @@ jobs:
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_updater.py
+          python3 native/tests/test_delivery.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - name: Package tested Lab staging bundle

@@ -127,8 +127,8 @@ def main():
             # Bound hidden expansion before tarfile interprets any header.
             compressed = root / 'oversized.gz'
             compressed.write_bytes(gzip.compress(b'\0' * 2048))
-            saved_limit = updater_activation.LIMIT
-            updater_activation.LIMIT = 1024
+            saved_limit = package_staging.ARCHIVE_LIMIT
+            package_staging.ARCHIVE_LIMIT = 1024
             try:
                 try:
                     bounded_tar(compressed)
@@ -136,7 +136,7 @@ def main():
                 except ValueError:
                     pass
             finally:
-                updater_activation.LIMIT = saved_limit
+                package_staging.ARCHIVE_LIMIT = saved_limit
             # Mutable installed source fields must not become trusted metadata.
             metadata_path = activation.release(candidate) / 'presenter/release.json'
             metadata_bytes = metadata_path.read_bytes()
