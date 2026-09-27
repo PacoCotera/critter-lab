@@ -30,7 +30,7 @@ The Lab offers a set of expeditions for the player to choose before taking the P
 
 The profile provides a bounded context for variation, not necessarily a fixed event sequence. Actual measurements remain distinct from fictional interpretation and generated events. Choosing a profile does not predetermine a complete critter genome or bypass later research. Resource quantities and research evidence remain separate records.
 
-Selection and comparison belong at the Lab; execution must preserve the Probe's straightforward standalone experience. Exact durations, difficulty meaning, event probabilities, yield ranges, eligibility, early return, pause/resume and expiry rules remain open. Difficulty does not yet authorize physical hazards, mandatory reflexes, sample loss or neglect penalties.
+Selection and comparison belong at the Lab; execution must preserve the Probe's straightforward standalone experience. Exact durations, difficulty meaning, event probabilities, yield ranges, eligibility and expiry rules remain open. Early-return pause/resume and missed-encounter continuity follow the [accepted expedition flow](gameplay.md#expedition-continuity-and-return--accepted). Difficulty does not yet authorize physical hazards, mandatory reflexes, sample loss or neglect penalties.
 
 Proposed engineering consequence: carry the selected compatible profile/content version and sufficient execution data onto the Probe before departure; retain expedition/player identity and resolved events through interruption. Rules must fit the installed firmware's storage and capabilities. Profile packaging, scheduling, clock trust, validation and synchronization are not selected by this direction.
 
