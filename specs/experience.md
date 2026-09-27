@@ -42,6 +42,12 @@ This diagram specifies separation, not a claim that all production joins are imp
 
 ## Input and visibility
 
+### Simulated console controls — accepted
+
+The simulator's depicted device controls are the player input surface. Existing knob and buttons drive visible focus, supported actions and screen feedback. Lab uses rotation and existing Confirm/Back; Probe uses existing Next/Confirm, including a reachable on-screen return target where required. Activate screen targets through those controls. Do not invent device keys, knob-press actions, clickable screen controls or touch/web shortcuts. Unassigned keys remain inactive. Design input, focus, activation, pending/error response and return together. Developer controls stay outside device shells.
+
+Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
+
 Every interaction frame has an identity covering page, object, focus and displayed facts. Activation requires that requested frame to be visibly ready. Pixel submission or SPI completion alone is not physical visibility. Ignore stale draw/readiness callbacks and stale domain responses; scope asynchronous work to the selected identity and request generation.
 
 Discard blocked activation rather than queueing it. A gesture started during refresh, suspension or idle wake remains consumed through repeat/release. Require a fresh gesture; blur and pointer cancellation cancel pending activation. Coalesce navigation to one pending target. Safe Back can request a return frame while waiting, but does not cancel a committed operation; the return frame must itself become ready.

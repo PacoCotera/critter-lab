@@ -50,26 +50,30 @@ Connected services preserve accepted records and perform remote generation. Cont
 
 See [product status](../STATUS.md) for evidence and [build coverage](../BUILD.md) for available components. These are not complete-product claims.
 
-## Design plan: make the same journey coherent
+## Design and delivery roadmap
 
-The following order is proposed. Accepted research/creation foundations are inputs, not choices to reopen without a reason.
+The expedition-to-finding flow choices are accepted. Playful Pixel Lab is the selected visual foundation. Neither decision approves every screen composition or final art. The closed, unmerged PR18 screen packet reused rejected styling and is excluded from current review. The reviewed product baseline is main at 89e14f1; separate experiments remain evidence of their stated scope only.
 
-| Review step | Artifact and question | Decision unlocked |
+| Design outcome | Minimum artifact | Gate before dependent work |
 | --- | --- | --- |
-| 1. Whole journey and visual foundation | Walk one expedition-to-discovery storyboard using existing sampling/research proposals and the selected Playful Pixel Lab direction. Is it understandable, inviting and consistent with device roles? | First prototype scope and keep/change direction for the visual vocabulary |
-| 2. Research-to-individual example | Work one sample through findings, complete selection, creation terms and one recognizable critter. Separate example content from canonical choices. | Concrete V1 content/rule gaps and specimen design direction |
-| 3. Interaction and continuity | Apply the direction to representative Lab/Probe/Companion moments with intended controls, pending/error states and shared-player context | Flows ready for functional implementation; remaining offline/rights decisions |
-| 4. Physical application | Try approved interactions on preliminary device profiles and targeted bench setups | Engineering choices supported by owner direction and measurements |
+| D1. Continue the existing expedition-to-finding screen design | One connected walkthrough using verified selected references: Lab preparation → Probe activity → return → study choice/cost → finding/reentry; actual device gesture, focus and response at each step | Owner accepts the connected screen experience. Do not reopen the accepted flow or substitute rejected screen plates |
+| D2. Connect research to an individual | One worked sample, resolved genomic regions, complete configuration, creation commitment, reveal and saved individual; trace visible traits to the genome | Owner steers the critter and research payoff; example content is distinguished from canonical rules |
+| D3. Establish everyday continuity | Same individual moves to Companion and back; shared-player attribution and one interrupted/offline operation are worked through | Necessary care, permission and reconciliation choices resolved for this slice |
+| D4. Apply the experience physically | Intended-size control/readability trials and targeted display/power/charging experiments | Owner selects hardware using measured evidence before PCB/case commitments or spending |
 
 Current review material: [Probe sampling](../design/probe-sampling.md), [research](../design/research-and-creation.md), [accepted creation terms](../design/creation-terms.md), [design references](../design/README.md). Visual refinement is a proposal, not final artwork. Device modules, controls and enclosures are not frozen by these plans.
 
-**Current design deliverable:** the [connected expedition-to-discovery review](../design/expedition-review/README.md) provides step1 as a paper storyboard with three comparable choices. Show the relevant alternatives and consequences, not a questionnaire or another set of disconnected screen plates. Stop when the owner can decide journey scope and direction. No new functional UI, game phases, canonical creature art or purchases in this step.
+The [connected expedition review](../design/expedition-review/README.md) records accepted flow decisions, not an outstanding three-choice questionnaire. Material studies are V1 placeholders; broader meaningful study types are required for release and remain open. The [refinement reference](../design/visual-language/refinement-02/README.md) is visual vocabulary, not a complete approved screen set. Current recovery has not verified a later complete accepted screen journey. Preserve existing work and establish its lineage before filling a demonstrated gap.
+
+**Next iteration — D1 continuation, not screen rediscovery.** Assemble the verified existing artifacts against the six journey moments above, mark missing coverage and distinguish accepted/proposed/rejected. Present this in one owner-readable walkthrough. A missing or ambiguous selected screen is a source-reconciliation question, not automatic permission to redraw it. Only after that reconciliation, fill necessary gaps within the selected direction. Existing Lab knob/Confirm/Back and Probe Next/Confirm operate focus and actions; screen clicks, touch shortcuts and invented device keys are excluded. Include relevant unavailable/pending/error and return states. No creation/care expansion, functional UI, final critter art or infrastructure in D1.
+
+Acceptance: each moment shows what the player knows, the supported input, visible response and resulting state; Probe reveals no sample contents; the selected typography, palette, icons and art are visibly continuous; unsupported states are explicit. Stop at owner review of the connected experience. If lineage remains uncertain or two correction rounds fail, resolve the framing with the owner before more production. Scope and effort for any new artwork must be stated before generation; no unsupported calendar promise.
 
 ## Implementation plan: build the reviewed journey in usable increments
 
 | Increment | Usable result | Dependency and relevant acceptance |
 | --- | --- | --- |
-| 1. Reviewed research slice | A sample can be investigated, findings retained and a complete supported configuration selected through the agreed interactions | Reviewed step1/2 content and flow; exercise normal path, missing supplies and restart without extra spend |
+| 1. Reviewed research slice | A sample can be investigated, findings retained and a complete supported configuration selected through the agreed interactions | Accepted D1 screen experience and D2 worked content; exercise normal path, missing supplies and restart without extra spend |
 | 2. Saved creation and continuity | Explicit creation yields one durable individual that can be reopened/restored without reroll or duplicate spending | Chosen creation/record boundaries; test uncertain request and restore the same identity. An interim local simulation must be labeled |
 | 3. Identity-driven content | The saved individual has validated appearance/motion tied to its traits; the example is reproducible through content tools | Approved worked critter and mappings; verify variation, recognizability, preserved assets and failed-visual retry without a new individual |
 | 4. Connected virtual ecosystem | The same journey spans Probe, Lab, supporting records and Companion with explicit simulated-device limits | Ready transfer/profile/offline contracts; check attributed cargo, handoff and supported interruption/reconciliation |
@@ -78,13 +82,22 @@ Current review material: [Probe sampling](../design/probe-sampling.md), [researc
 
 This is dependency order, not a promise of sequential projects or fixed dates. A concrete vertical slice may combine small pieces of adjacent increments; it must serve one player outcome. Existing CI/release delivery is reused. No new infrastructure programme is implied. Detail and estimate only the next ready increment after design decisions, based on its actual scope. Later entries stay coarse.
 
-## The next owner checkpoint
+## How the plan is managed
 
-1. Does this whole experience and proposed first review scope represent the product we want next?
-2. Which parts of the visual/journey proposal should be kept or changed in the concrete step1 packet?
-3. What material product tradeoff, if any, blocks the next slice?
+Use an adapted agile workflow: one outcome-sized iteration, ordered work, a reviewable increment and a short review/replan. Design thinking resolves a named uncertainty; it does not restart discovery after selection. System diagrams descend from the ecosystem only when the next slice requires it. The game design document explains player choices and payoff; tests cannot establish fun.
 
-These are checkpoint topics; detailed choices come with actual comparable artifacts. Routine technical implementation remains the coordinator's responsibility. Acceptance for this plan is a navigable whole: explain the journey, system connections, current gaps and next deliverable without reading every specification. The plan does not replace owner design review or detailed contracts when those become necessary.
+| Planning artifact | Authoritative home | Purpose |
+| --- | --- | --- |
+| Product brief, roadmap and iteration goal | This page | Whole experience, dependencies, next outcome and exclusions |
+| Living game design and worked examples | [Gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), linked design examples | Rules, player choices, identity and proposed content |
+| Journey, input flow and visual vocabulary | [Design guide](../design/README.md), [experience](../specs/experience.md) | Screen/device behavior and review evidence |
+| System context and contracts | [Architecture](../specs/architecture.md), [cloud sync](../specs/cloud-sync.md) | Authority, interfaces, interruption and recovery |
+| Ordered implementation backlog | GitHub issues | One task per bounded outcome with dependencies and acceptance; product tasks belong in this repository |
+| Evidence and acceptance | [Status](../STATUS.md), [build coverage](../BUILD.md), relevant experiment/bench reports | Distinguish implemented, simulated, measured and human-reviewed behavior |
+
+Ready means the parent outcome, agreed inputs, consequential open choices, deliverable, exclusions, dependencies, effort bound and acceptance are explicit. Done means the appropriate artifact or integrated behavior is inspectable, relevant checks pass, specifications match, and limitations are stated. Design approval and technical validation are separate gates. Functional changes receive distinct architecture, implementation and independent technical review; documentation needs consistency/link checks, not a review panel.
+
+The coordinator owns sequencing, integration and resource control. The owner steers UI/visual direction, game and critter choices, physical experience and material scope/spending decisions. Reviews are presented as whole player walkthroughs; repository diffs support them. Later roadmap entries stay coarse, and the next iteration is detailed only after its inputs are ready. No permanent busy roles or speculative infrastructure are needed.
 
 ## Follow only the detail you need
 

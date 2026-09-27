@@ -14,13 +14,13 @@ The [ecosystem reference](references/ecosystem.png) shows the portables with the
 
 ## Screen design in progress
 
-Compare the [visual-language explorations](visual-language/README.md) before choosing a screen direction. Playful Pixel Lab is selected as the foundation for refinement; final components and screen designs remain proposals.
+Playful Pixel Lab is selected as the foundation for refinement. Continue the [refinement-02 vocabulary](visual-language/refinement-02/README.md); do not restart selection among earlier explorations. Final components and screen compositions remain proposals. The rejected PR18 packet is closed and excluded from current review. No later complete accepted screen set has been verified in the retained repository artifacts.
 
 The [screen design standard](screen-design-standard.md) defines the current exploration and review sequence. Previous prototype layouts are rejected as the target experience. Visual concepts must be reviewed before their implementation.
 
-## Current connected review
+## Accepted flow and next design gate
 
-[Expedition-to-discovery storyboard](expedition-review/README.md) joins Lab preparation, Probe collection, return and a saved research finding. Three proposed choices cover interruption, optional encounters and the bridge into research. Creation and Companion life are later context; this is paper design, not working screens or approved rules.
+[Expedition-to-discovery storyboard](expedition-review/README.md) records accepted choices for interruption, optional encounters and the bridge into research. Its authored content and artwork are not approval of screen styling. The next gate is the connected device-screen experience described in the [product plan](../docs/README.md#design-and-delivery-roadmap), using existing selected references and actual console controls. Creation and Companion life remain later context.
 
 ## What to review
 
