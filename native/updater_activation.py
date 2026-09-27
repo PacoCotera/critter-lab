@@ -8,6 +8,7 @@ import shutil
 import struct
 import tarfile
 import tempfile
+import uuid
 from zoneinfo import ZoneInfo
 
 import package_staging
@@ -25,13 +26,20 @@ def sync_directory(path):
 
 
 def write_json(path, value):
-    temporary = path.with_suffix('.new')
-    with temporary.open('w') as output:
-        json.dump(value, output, sort_keys=True)
-        output.flush()
-        os.fsync(output.fileno())
-    os.replace(temporary, path)
-    sync_directory(path.parent)
+    temporary = path.parent / ('.record-' + uuid.uuid4().hex)
+    descriptor = os.open(temporary, os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_WRONLY, 0o600)
+    try:
+        os.fchmod(descriptor, 0o644)
+        with os.fdopen(descriptor, 'w', closefd=False) as output:
+            json.dump(value, output, sort_keys=True)
+            output.flush()
+            os.fsync(descriptor)
+        os.replace(temporary, path)
+        sync_directory(path.parent)
+    finally:
+        os.close(descriptor)
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
 
 def digest(path):
@@ -55,7 +63,20 @@ class Activation:
         activation._bind_environment(environment)
         return activation
 
+    @classmethod
+    def from_disposable_systemd(cls, environment):
+        """Root test seam; no production or cross-process recovery admission."""
+        from updater_systemd import DisposableSystemdEnvironment
+        if os.name != 'posix' or os.geteuid() != 0 or type(environment) is not DisposableSystemdEnvironment:
+            raise ValueError('exact root disposable systemd environment required')
+        environment._require_ownership()
+        activation = cls.__new__(cls)
+        activation._bind_environment(environment)
+        activation._systemd_test = True
+        return activation
+
     def _bind_environment(self, environment):
+        self._systemd_test = False
         self.environment = environment
         self.root = environment.root
         self.releases = environment.releases
@@ -124,12 +145,24 @@ class Activation:
                 if digest(destination / 'original.tar.gz') != expected_digest:
                     raise ValueError('different release already admitted')
                 return self.check_integrity(sha)
+            if self._systemd_test:
+                # Only freshly extracted root-owned candidate directories become
+                # readable inside the fixed isolated namespace. Control stays private.
+                (candidate / 'original.tar.gz').chmod(0o644)
+                with (candidate / 'original.tar.gz').open('rb') as original:
+                    os.fsync(original.fileno())
+                for directory in (candidate, *(entry for entry in candidate.rglob('*') if entry.is_dir())):
+                    directory.chmod(0o755)
+                    sync_directory(directory)
+                self.environment.admission_ready(candidate)
             os.rename(candidate, destination)
             sync_directory(self.releases)
         return destination
 
     def check_integrity(self, sha):
         path = self.release(sha)
+        if self._systemd_test:
+            self.environment.admission_ready(path)
         admission = self.read_record(path / 'admission.json')
         if admission != {'sha': sha, 'bundle_sha256': digest(path / 'original.tar.gz')}:
             raise ValueError('admitted archive changed')
@@ -178,7 +211,7 @@ class Activation:
                 frame = self.native(release, copy, 'frame', device, status['revision'])
                 if frame[:2] != b'BM' or struct.unpack_from('<ii', frame, 18) != (width, height):
                     raise ValueError('frame profile mismatch')
-            if copy.read_bytes() != snapshot:
+            if regular_bytes(copy, 4096) != snapshot:
                 raise ValueError('compatibility check rewrote save')
         return status
 
@@ -192,7 +225,7 @@ class Activation:
                                             'advance', 'receive', 'study_review', 'run')):
                 state = json.loads(self.native(release, copy, 'status'))
                 self.native(release, copy, 'command', action, state['revision'], f'compat-{index}')
-                self.compatibility(previous, copy.read_bytes())
+                self.compatibility(previous, regular_bytes(copy, 4096))
 
     def selected(self, validate=True):
         if not self.pointer.exists():
@@ -247,85 +280,115 @@ class Activation:
         sync_directory(self.control)
         return target
 
-    def recover(self):
+    def _complete_systemd_test(self, operation, locked_operation, *arguments, **options):
+        if not self._systemd_test:
+            return operation(*arguments, **options)
         with self.lock():
-            try:
-                if self.journal.exists():
-                    return self.recover_locked()
-                self.service.stop()
-                selected = self.selected()
-                if selected is None:
-                    raise ValueError('no selected release')
-                with self.save_lock():
-                    self.compatibility(selected, regular_bytes(self.save, 4096))
-                    self.start_verified(selected)
-                return selected
-            except Exception:
-                self.service.stop()
-                raise
+            self.environment.begin_maintenance()
+            result = locked_operation(*arguments, **options)
+            self._verify_systemd_acceptance(result)
+            self.environment.accept(result)
+            return result
+
+    def _verify_systemd_acceptance(self, sha):
+        if self.journal.exists() or self.selected() != sha:
+            raise ValueError('test acceptance is not durably reconciled')
+        receipt = self.read_record(self.check_integrity(sha) / 'activation.json')
+        accepted = datetime.fromisoformat(receipt.get('accepted_at', ''))
+        if accepted.tzinfo is None:
+            raise ValueError('test acceptance receipt lacks timezone')
+
+    def recover(self):
+        return self._complete_systemd_test(self._recover, self._recover_locked_transaction)
+
+    def _recover(self):
+        with self.lock():
+            return self._recover_locked_transaction()
+
+    def _recover_locked_transaction(self):
+        try:
+            if self.journal.exists():
+                return self.recover_locked()
+            self.service.stop()
+            selected = self.selected()
+            if selected is None:
+                raise ValueError('no selected release')
+            with self.save_lock():
+                self.compatibility(selected, regular_bytes(self.save, 4096))
+                self.start_verified(selected)
+            return selected
+        except Exception:
+            self.service.stop()
+            raise
 
     def activate(self, sha, rollback=False):
+        return self._complete_systemd_test(self._activate, self._activate_locked_transaction, sha, rollback=rollback)
+
+    def _activate(self, sha, rollback=False):
         with self.lock():
+            return self._activate_locked_transaction(sha, rollback=rollback)
+
+    def _activate_locked_transaction(self, sha, rollback=False):
+        self.service.stop()
+        if self.journal.exists():
+            raise ValueError('recover unfinished transaction first')
+        old = self.selected()
+        if old == sha:
+            raise ValueError('release already selected')
+        self.check_integrity(sha)
+        if not rollback and (self.release(sha) / 'activation.json').exists():
+            raise ValueError('retained activation requires explicit rollback selection')
+        if rollback and not self.read_record(self.release(sha) / 'activation.json').get('accepted_at'):
+            raise ValueError('rollback target was never accepted')
+        try:
+            with self.save_lock():
+                snapshot = regular_bytes(self.save, 4096)
+                before = hashlib.sha256(snapshot).hexdigest()
+                self.compatibility(sha, snapshot)
+                self.written_compatibility(sha, old)
+                journal = {'phase': 'prepared', 'old': old, 'candidate': sha, 'save_digest': before}
+                write_json(self.journal, journal)
+                self.transition_hook('prepared')
+                release = self.release(sha)
+                if not rollback:
+                    with bounded_tar(release / 'original.tar.gz') as original:
+                        metadata = json.load(original.extractfile(package_staging.ROOT_NAME + '/presenter/release.json'))
+                    metadata['deployed_at'] = datetime.now(ZoneInfo('America/Mexico_City')).isoformat()
+                    write_json(release / 'presenter/release.json', metadata)
+                    write_json(release / 'activation.json', {'sha': sha, 'deployed_at': metadata['deployed_at'],
+                               'metadata_sha256': digest(release / 'presenter/release.json')})
+                write_json(self.pointer, {'sha': sha})
+                self.transition_hook('pointer')
+                journal['phase'] = 'switched'
+                write_json(self.journal, journal)
+                self.transition_hook('switched')
+                self.start_verified(sha)
+                if digest(self.save) != before:
+                    raise ValueError('activation changed live save')
+                receipt = self.read_record(release / 'activation.json')
+                if not rollback:
+                    receipt['accepted_at'] = datetime.now(ZoneInfo('America/Mexico_City')).isoformat()
+                    write_json(release / 'activation.json', receipt)
+                self.transition_hook('receipt')
+                journal['phase'] = 'accepted'
+                write_json(self.journal, journal)
+                self.transition_hook('accepted')
+            self.journal.unlink()
+            sync_directory(self.control)
+            return sha
+        except Exception:
             self.service.stop()
             if self.journal.exists():
-                raise ValueError('recover unfinished transaction first')
-            old = self.selected()
-            if old == sha:
-                raise ValueError('release already selected')
-            self.check_integrity(sha)
-            if not rollback and (self.release(sha) / 'activation.json').exists():
-                raise ValueError('retained activation requires explicit rollback selection')
-            if rollback and not self.read_record(self.release(sha) / 'activation.json').get('accepted_at'):
-                raise ValueError('rollback target was never accepted')
-            try:
-                with self.save_lock():
-                    snapshot = regular_bytes(self.save, 4096)
-                    before = hashlib.sha256(snapshot).hexdigest()
-                    self.compatibility(sha, snapshot)
-                    self.written_compatibility(sha, old)
-                    journal = {'phase': 'prepared', 'old': old, 'candidate': sha, 'save_digest': before}
-                    write_json(self.journal, journal)
-                    self.transition_hook('prepared')
-                    release = self.release(sha)
-                    if not rollback:
-                        with bounded_tar(release / 'original.tar.gz') as original:
-                            metadata = json.load(original.extractfile(package_staging.ROOT_NAME + '/presenter/release.json'))
-                        metadata['deployed_at'] = datetime.now(ZoneInfo('America/Mexico_City')).isoformat()
-                        write_json(release / 'presenter/release.json', metadata)
-                        write_json(release / 'activation.json', {'sha': sha, 'deployed_at': metadata['deployed_at'],
-                                   'metadata_sha256': digest(release / 'presenter/release.json')})
-                    write_json(self.pointer, {'sha': sha})
-                    self.transition_hook('pointer')
-                    journal['phase'] = 'switched'
-                    write_json(self.journal, journal)
-                    self.transition_hook('switched')
-                    self.start_verified(sha)
-                    if digest(self.save) != before:
-                        raise ValueError('activation changed live save')
-                    receipt = self.read_record(release / 'activation.json')
-                    if not rollback:
-                        receipt['accepted_at'] = datetime.now(ZoneInfo('America/Mexico_City')).isoformat()
-                        write_json(release / 'activation.json', receipt)
-                    self.transition_hook('receipt')
-                    journal['phase'] = 'accepted'
-                    write_json(self.journal, journal)
-                    self.transition_hook('accepted')
-                self.journal.unlink()
-                sync_directory(self.control)
-                return sha
-            except Exception:
-                self.service.stop()
-                if self.journal.exists():
-                    try:
-                        self.recover_locked()
-                    except Exception:
-                        self.service.stop()
-                elif old is not None:
-                    try:
-                        with self.save_lock():
-                            self.compatibility(old, regular_bytes(self.save, 4096))
-                            self.start_verified(old)
-                    except Exception:
-                        self.service.stop()
-                raise
+                try:
+                    self.recover_locked()
+                except Exception:
+                    self.service.stop()
+            elif old is not None:
+                try:
+                    with self.save_lock():
+                        self.compatibility(old, regular_bytes(self.save, 4096))
+                        self.start_verified(old)
+                except Exception:
+                    self.service.stop()
+            raise
 
