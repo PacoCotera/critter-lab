@@ -52,6 +52,8 @@ See [product status](../STATUS.md) for evidence and [build coverage](../BUILD.md
 
 ## Design plan: make the same journey coherent
 
+Current review: [Lab and Probe screen/input packet](../design/device-interaction-review/README.md) connects expedition return, a study and its finding using the existing simulated console controls. It continues the selected visual foundation; screen compositions and authored numeric fixtures remain proposals. Review this packet before dependent functional UI implementation.
+
 The following order is proposed. Accepted research/creation foundations are inputs, not choices to reopen without a reason.
 
 | Review step | Artifact and question | Decision unlocked |

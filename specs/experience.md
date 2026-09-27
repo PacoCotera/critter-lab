@@ -42,6 +42,12 @@ This diagram specifies separation, not a claim that all production joins are imp
 
 ## Input and visibility
 
+### Simulated console controls — accepted
+
+The simulator's depicted device controls are the player input surface. The existing knob and buttons must drive the device screen's visible focus, supported action and resulting feedback. Do not add fictitious console buttons, clickable on-screen actions, touchscreen substitutes or separate web action controls. Design the gesture, navigation, activation, pending/error response and return path as one UI/UX sequence. Lab rotation navigates with the existing supported Confirm/Back keys; Probe uses its existing Next/Confirm buttons, with a reachable on-screen return target where needed. An on-screen target is activated through those controls, not by clicking it. Unassigned physical keys stay inactive rather than acquire invented actions. Component selection or touch-capable hardware does not authorize a touch shortcut in this simulator.
+
+Continue the selected visual foundation and existing screen work; do not restart exploration or restore rejected layouts. Exact compositions remain proposals until owner review. Simulation/developer controls stay outside device shells and cannot masquerade as gameplay input.
+
 Every interaction frame has an identity covering page, object, focus and displayed facts. Activation requires that requested frame to be visibly ready. Pixel submission or SPI completion alone is not physical visibility. Ignore stale draw/readiness callbacks and stale domain responses; scope asynchronous work to the selected identity and request generation.
 
 Discard blocked activation rather than queueing it. A gesture started during refresh, suspension or idle wake remains consumed through repeat/release. Require a fresh gesture; blur and pointer cancellation cancel pending activation. Coalesce navigation to one pending target. Safe Back can request a return frame while waiting, but does not cancel a committed operation; the return frame must itself become ready.
