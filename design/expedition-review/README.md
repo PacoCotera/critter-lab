@@ -8,9 +8,15 @@ The Lab selects and prepares **Material trail**, the Probe collects with brief o
 
 The optional encounter records only that a fragment was encountered. It does not predict the sample's structure, genetics or critter. Interpretation happens at the Lab, following the boundary in [Probe](../../specs/probe.md). Collected points are required by the accepted experience direction; this paper field is a placeholder with no chosen quantity, meaning or economy; progress represents actual domain collection state, not a cosmetic animation. Loading, pending receipt, accepted receipt and retained research are intended states; this artifact does not establish working transfer, identity persistence, offline storage or cloud behavior. The intended expedition does not require a phone or live server. Cloud authority and actual offline joins remain a separate implementation question.
 
-## Three choices in the same scenario
+## Owner decision — 27 September 2026
 
-| Choice | Recommendation | Comparable alternative and consequence |
+The owner approved the connected flow and all three recommendations below. The governing rules are now in [gameplay](../../specs/gameplay.md#expedition-continuity-and-return--accepted). The alternatives remain comparison history, not active choices. This approval does not finalize screen layout, artwork, numerical content or technical implementation.
+
+**Release follow-up:** material studies are a V1 placeholder. A broader, meaningful study set is required for final release; see the [study-variety requirement](../../specs/gameplay.md#study-variety--release-requirement).
+
+## Approved choices in the same scenario
+
+| Choice | Approved direction | Alternative considered |
 | --- | --- | --- |
 | Return before completion | Retain evidence, supplies and progress; label unfinished sample incomplete. Resume the same expedition. | End the expedition early rather than pause it; retain resources and an incomplete sample record, but do not resume collection for that sample. Simpler expedition lifecycle, but an interrupted session cannot finish the same sample. No earned resources are discarded. |
 | Miss the optional encounter | Keep it available; after completion offer its note at the Lab, without extra material. | Keep a historical note with no later Inspect action. Less interaction at return, but the player loses the chance to engage with the encounter. Neither route gates research or creation. |
@@ -20,4 +26,4 @@ Accepted research boundaries remain: all required regions unlock before final se
 
 ## Evidence and stopping condition
 
-Generated with the small adjacent Pillow script and inspected as a static export. One regeneration check verifies the disposable source produces the same artifact. The paper uses the refinement 02 cyan/lavender/amber/mint meanings with text labels; it does not approve that proposed vocabulary or establish monochrome readability. No sensors, actuators, dimensions or device controls are selected. The packet is complete when its connected sequence and these choices are inspectable; implementation waits for the relevant owner direction.
+Generated with the small adjacent Pillow script and inspected as a static export. One regeneration check verifies the disposable source produces the same artifact. The paper uses the refinement 02 cyan/lavender/amber/mint meanings with text labels; it does not approve that proposed vocabulary or establish monochrome readability. No sensors, actuators, dimensions or device controls are selected. The packet is complete when its connected sequence and these choices are inspectable; the approved flow may now inform a bounded implementation plan. Open study content, visual and technical choices still need their own design.

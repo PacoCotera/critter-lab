@@ -10,6 +10,8 @@ Research adapts within authored content; required knowledge does not imply fixed
 
 For this V1, all configurations in a sample share its required region set. **Every required region must be resolved before final selection.** Choosing an apparently simpler outcome cannot hide or bypass a locked region. Optional deeper comparisons can remain afterward only if they do not conceal required genomic information.
 
+Material studies below are V1 placeholder content. They are not a sufficient final-release study set; the [study-variety requirement](../specs/gameplay.md#study-variety--release-requirement) remains open design work.
+
 ## One worked investigation
 
 **Entire example PROPOSED:** an ordinary field- or console-produced sample has clues suggesting a stable outer structure and an unexplained glow. These fictional clues do not prove real genes. Cosmetic curiosity and possible signaling utility are equally valid goals.

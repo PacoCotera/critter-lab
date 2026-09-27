@@ -28,6 +28,10 @@ The **Companion** centers training, evolution and bonding. One versus several ca
 
 Slower **console-only research** remains a complete acquisition route: choose a question, observe findings and pursue a result without requiring a field sample. Whole families must not be exclusive to Probe ownership. Proposed queued/researching/finding/ready states and intermediate choices need playtesting; missed check-ins must not destroy research work. Exact non-Probe resource acquisition must be reconciled with the creation gate.
 
+## Expedition continuity and return — accepted
+
+Owner approved the connected expedition flow on 27 September 2026. Early return pauses the same expedition, retaining observations, progress and earned resources; an unfinished sample remains incomplete. Resuming does not redraw events or duplicate supplies. A missed optional encounter remains available and, after completion, can be reviewed at the Lab without extra material; it never gates research or creation. Return reviews the sample and resources together and leads into that sample’s next research question, with deeper inventory detail secondary. Technical transfer/reconciliation and exact completion/balance remain open.
+
 ## Research and creation
 
 Accepted research direction: supported possibilities followed by guided synthesis. Research supplies knowledge, not an automatic creature. Creation requires every required genomic region unlocked through research and resource expenditure; incomplete research is not an optional gamble. Research groups are navigation, not replacements for the five genetic layers.
@@ -37,6 +41,10 @@ Accepted V1 structure: two initial studies and, when findings leave a relevant u
 The Lab handles procedure; the player chooses a question, sees the resource cost and receives a clear finding. No manual tuning, control-group setup or interpretation quiz is required. A missing reagent pauses the affected study while preserving findings and other work. Samples differ in clues, possibilities, interactions and supplies. Exact tests, mappings, costs and timings remain open; the [design explanation](../design/research-and-creation.md) uses hypothetical content. This does not cap later genomic complexity or guarantee rarity from a checklist.
 
 The V1 design direction requires complete supported configurations and selection before creation. The [proposed system contract](sample-to-critter-contract.md) describes this boundary; it neither limits production to a few cosmetic configurations nor establishes an implemented generation system. The meaningful bitmap and growing genome complexity are specified in [genetics](genetics.md#genome-imagery-and-progression).
+
+### Study variety — release requirement
+
+Owner direction, 27 September 2026: material studies are an acceptable V1 placeholder, not a sufficient final-release study set. Design a broader range of meaningful investigation questions and findings before release. The study types, content mappings and interactions remain open; this requirement does not select a taxonomy or authorize speculative mechanics. Keep V1 placeholder content explicitly labeled and do not mistake implementing it for completing research design.
 
 ## Creation inputs and retained discoveries
 
