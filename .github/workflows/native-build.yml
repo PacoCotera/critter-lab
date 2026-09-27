@@ -32,6 +32,7 @@ jobs:
           native/build/lab/test_pixels
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
+          python3 native/tests/test_updater.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - name: Package tested Lab staging bundle
@@ -43,6 +44,8 @@ jobs:
           python3 native/package_staging.py verify \
             "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz" \
             --commit "$GITHUB_SHA"
+          python3 native/tests/rehearse_updater.py \
+            "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-lab-${{ github.sha }}
@@ -144,3 +147,70 @@ jobs:
             native/companion/sdkconfig
           if-no-files-found: error
           retention-days: 14
+
+  publish-staging:
+    needs: [lab, probe, companion]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'PacoCotera/critter-lab'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: staging-release-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Publish the tested bundle after all target checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ "$(gh api "repos/$GH_REPO/branches/main" --jq .commit.sha)" != "$GITHUB_SHA" ]; then
+            echo 'A newer main revision exists; skip stale publication.'
+            exit 0
+          fi
+          tag="staging-$GITHUB_SHA"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing overwrite.'
+            exit 1
+          fi
+          if gh api "repos/$GH_REPO/git/ref/tags/$tag" >/dev/null 2>&1; then
+            echo 'Tag already exists; refusing reuse.'
+            exit 1
+          fi
+          delivery_dir="$RUNNER_TEMP/staging-delivery"
+          mkdir "$delivery_dir"
+          gh run download "$GITHUB_RUN_ID" --name "native-lab-$GITHUB_SHA" --dir "$delivery_dir"
+          bundle="$delivery_dir/critter-lab-staging-$GITHUB_SHA.tar.gz"
+          python3 native/package_staging.py verify "$bundle" --commit "$GITHUB_SHA"
+          export CRITTER_DELIVERY_BUNDLE="$bundle"
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          bundle = Path(os.environ['CRITTER_DELIVERY_BUNDLE'])
+          metadata = {
+              'schema': 1, 'repository': os.environ['GITHUB_REPOSITORY'],
+              'sha': os.environ['GITHUB_SHA'], 'workflow': '.github/workflows/native-build.yml',
+              'run_id': int(os.environ['GITHUB_RUN_ID']), 'attempt': int(os.environ['GITHUB_RUN_ATTEMPT']),
+              'bundle': bundle.name, 'bundle_sha256': hashlib.sha256(bundle.read_bytes()).hexdigest(),
+              'save_format': 'CRITTER_DEMO 1',
+          }
+          (bundle.parent / 'delivery.json').write_text(json.dumps(metadata, sort_keys=True) + '\n')
+          PY
+          gh api --method POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA" >/dev/null
+          gh release create "$tag" --target "$GITHUB_SHA" --draft --prerelease \
+            --title "Staging $GITHUB_SHA" --notes 'Tested native staging bundle; publication is not activation.'
+          gh release upload "$tag" "$bundle" "$delivery_dir/delivery.json"
+          if [ "$(gh api "repos/$GH_REPO/branches/main" --jq .commit.sha)" != "$GITHUB_SHA" ]; then
+            echo 'Main advanced; retain unpublished draft for inspection.'
+            exit 0
+          fi
+          if [ "$(gh api "repos/$GH_REPO/git/ref/tags/$tag" --jq .object.sha)" != "$GITHUB_SHA" ]; then
+            echo 'Tag source mismatch; refusing publication.'
+            exit 1
+          fi
+          gh release edit "$tag" --draft=false
