@@ -38,6 +38,7 @@ jobs:
           python3 native/tests/test_deployment_gateway.py
           python3 -m unittest discover -s native/tests -p test_systemd_backend.py
           python3 -m unittest discover -s native/tests -p test_systemd_activation.py
+          python3 -m unittest discover -s native/tests -p test_systemd_restart.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - name: Package tested Lab staging bundle
@@ -219,4 +220,5 @@ jobs:
             exit 1
           fi
           gh release edit "$tag" --draft=false
+
 
