@@ -10,6 +10,27 @@ Return to a workbench with several discoveries in progress. Choose a genome beca
 
 This is a loop with choice and continuity, not one sample's compulsory linear quest. Expeditions support the collection; the current Lab research record need not travel on the Probe. Unknown regions are undiscovered information, not locks. Being unable to afford a study is an inventory condition, not a genome state.
 
+## Shared vocabulary: packs, units and samples
+
+Owner favors **pack**, **sample** and **unit**. The owner accepted these definitions and one-pack/one-resource-storage-unit accounting. Exact storage limits and resource recipes remain provisional. Resource identities and functions remain in [gathering design](probe-sampling.md#prepared-research-resources--concrete-proposal); baseline, sample and phenotype meanings remain in [genetics](../specs/genetics.md#genome-baseline-collected-sample-and-phenotype--accepted-distinction).
+
+| Term | Meaning across the journey | Example / boundary |
+| --- | --- | --- |
+| Resource | A type of research supply prepared by the Probe and spent at the Lab | Data discs, Energy prisms and Essence filaments are the current naming direction; not genes or discovered knowledge |
+| Pack | One completed, usable quantity of a single resource type | A Data disc pack. Not a mixed reward bundle, sample container, physical accessory or extra wrapping to unpack |
+| Unit | A measure of quantity or capacity, not another object | One pack occupies one resource-storage unit. Exact capacity is balance; sensor units such as degrees are unrelated |
+| Stock | Packs currently held, counted by resource type | Probe stock becomes Lab stock after accepted transfer; quantities are not duplicated |
+| Sample | A particular research source containing unknown genomic information consistent with a baseline and its supported variation | Neither a generic baseline blueprint, an already known phenotype nor a research-supply pack |
+| Sample capsule | The identifiable container/presentation holding a sample | Probe acknowledges the capsule without revealing genes or traits. Physical form is undecided; capsule storage is separate from resource-pack capacity |
+| Research record | Retained knowledge about that sample | Preparation establishes the record; studies discover genomic information. The record is not the sample and cannot substitute for it at incubation |
+| Special find | An expedition object with an authored use outside routine supplies and samples | A rare reference may enable a research method; finding it does not itself decode a genome |
+
+Player copy should name the thing, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next pack 65%”**, and a separate **“1 sample capsule”**. A study costs **“2 Data disc packs”**; compact inventory rows can use **“Data discs ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
+
+Each resource accumulates toward its own pack threshold; preparation percentages must identify the resource. All expeditions share baseline resource yields; expedition-specific events may temporarily boost one resource. The [V1 expedition/event/risk framework](probe-sampling.md#v1-expeditions-events-and-risk) owns this distinction. There are no filters or automatic rejection: the player manually discards unwanted cargo. Partial-resource capacity accounting and discard quantities remain to design in [gathering](probe-sampling.md#typed-gathering-pack-thresholds-and-manual-discard). Preparation percentage measures qualified work toward a pack; it is not occupied storage, expedition completion, a chance of a capsule, genetic decoding or battery charge. Checking the screen reveals progress rather than causing it. Preserve the original Probe concept's illustrated contents, ready count and compact bar; distinguish stored quantities from preparation progress and explicitly label charging when docked. Rates, display cadence, fullness/end conditions and container artwork remain to refine; the current single-bar Probe study needs adaptation for simultaneous typed progress.
+
+Whole journey: **gather → prepare resource packs and sometimes collect sample capsules → transfer to the Lab → spend packs researching a sample → retain discoveries in its research record → incubate a fully decoded, selected genome**. A special find can expand available research methods along that journey.
+
 ## Entity and relationship map
 
 ```mermaid
@@ -41,7 +62,7 @@ Points in this map report field progress; they are not an additional spend arrow
 | --- | --- | --- |
 | Probe | Portable executor of a selected expedition; retains activity, collection progress and results | Gathers typed resources and sometimes samples. Does not decode genomes or own the player's research |
 | Lab | Workbench for collection, inventory, research, expedition planning and incubation | Makes player choices and their consequences visible; shared terminal does not merge profiles |
-| Expedition type | Gathering focus, eligible resource mix and encounters; duration/difficulty are separate characteristics | Selected at Lab, shapes opportunities on Probe. Expected mix is not guaranteed yield or a promise of a sample |
+| Expedition type | Investigation theme and eligible events; tier requirements govern availability | Selected at Lab, shapes opportunities on Probe. Expected mix is not guaranteed yield or a promise of a sample |
 | Signals | Sensed observations and separately identified fictional event inputs | Evidence used by expedition rules. Neither spendable materials nor genome zones; no physical sensor per resource/gene |
 | Collection points | **Recommended:** expedition-local measure of qualified gathering activity | Explains gathering progress toward declared collection milestones. Not research XP, money, a resource count or gene count. Conversion/rates remain to design |
 | Resource type / stack | A defined game material and its available quantity | Requirements on studies/creation refer to types and quantities. Stock is shared across that player's genome records |
@@ -64,7 +85,7 @@ Creation retains the accepted rule: one qualifying sample supports one founder. 
 
 ## Gathering: choose a useful direction
 
-Recommend expedition types bias a understandable resource mix, with variation and optional sample finds. They express a goal rather than require a real geographic trip or rare sensor condition. The player may prioritize a scarce reagent, replenish general stock or look for more samples. A selected record's resource shortage is helpful context, not a binding quest that reserves all rewards for that record.
+Expedition types share stable baseline resource yields; their eligible events offer temporary boosts and discoveries. They express a goal rather than require a real geographic trip or rare sensor condition. The player may prioritize a scarce reagent, replenish general stock or look for more samples. A selected record's resource shortage is helpful context, not a binding quest that reserves all rewards for that record.
 
 The Probe's primary view shows the expedition, current gathering progress and actual typed awards. Sample finds appear separately as capsules with neutral identity/origin. Collection points can explain how an expedition is progressing, but only explicit award rules produce resource units or a capsule. Never add the points and item quantities or imply every completed bar creates a sample. Sensor-invalid periods, fictional event contributions and interrupted expeditions need honest retained state; exact scoring/thresholds remain an implementation dependency.
 
@@ -82,24 +103,24 @@ The accepted introductory two-study/conditional-follow-up structure remains a sm
 
 **Illustrative content and numbers only.** These records already contain findings from earlier play; the example is not a two-expedition minimum from acquisition to completion. Resource names describe game items, not real sensor measurements or final science.
 
-- **Sample A / markings:** introductory record, most required information already established. One p copy is known; the other is unknown. Its remaining comparison needs **2 Mineral grains**, establishes Pp and explains why pale markings are carried but not expressed.
-- **Sample B / movement:** more interdependent research. A drive study needs **2 Lumen** and establishes Mm; a subsequent efficiency comparison needs **1 Mineral grain + 1 Catalyst** and establishes Ee, explaining reduced action energy cost for the supported burst capability. Earlier findings cover the worked candidate's other requirements.
-- **Sample C / crown:** another partly decoded record. Its useful next comparison needs **1 Catalyst** to distinguish the second crown allele; more required information remains afterward.
+- **Sample A / markings:** introductory record, most required information already established. One p copy is known; the other is unknown. Its remaining comparison needs **2 Data disc packs**, establishes Pp and explains why pale markings are carried but not expressed.
+- **Sample B / movement:** more interdependent research. A drive study needs **2 Energy prism packs** and establishes Mm; a subsequent efficiency comparison needs **1 Data disc pack + 1 Essence filament packs** and establishes Ee, explaining reduced action energy cost for the supported burst capability. Earlier findings cover the worked candidate's other requirements.
+- **Sample C / crown:** another partly decoded record. Its useful next comparison needs **1 Essence filament packs** to distinguish the second crown allele; more required information remains afterward.
 
-The corresponding allele/expression rules are in the worked genetics bridge. The ledger assumes all other required information for A/B's authored example has already been established; it is not a production-complete trait set or permission to ignore unmodeled families. Resource names/costs are placeholders, with no literal implication that Lumen creates a light or movement gene.
+The corresponding allele/expression rules are in the worked genetics bridge. The ledger assumes all other required information for A/B's authored example has already been established; it is not a production-complete trait set or permission to ignore unmodeled families. Resource names/costs are placeholders, with no literal implication that Energy prism packs creates a light or movement gene.
 
-| Choice / result | Mineral grains | Lumen | Catalyst | Collection consequence |
+| Choice / result | Data disc packs | Energy prism packs | Essence filament packs | Collection consequence |
 | --- | ---: | ---: | ---: | --- |
-| Start with retained stock | 2 | 1 | 0 | A affordable; B short1 Lumen; C short1 Catalyst |
-| Choose Bright Trace; illustrative return +1 Mineral, +2 Lumen and capsule D | 3 | 3 | 0 | B becomes affordable; D may wait unprepared |
-| Study B, spend2 Lumen | 3 | 1 | 0 | Mm drive pair established; efficiency contribution still unknown |
-| Use existing stock to finish A, spend2 Mineral | 1 | 1 | 0 | Pp established: pale variant carried, no pale markings expressed; assumed remaining completeness met |
-| Choose Mixed Survey; illustrative return +1 Mineral, +1 Catalyst, no capsule | 2 | 1 | 1 | Both B and C now have an affordable comparison, but share one Catalyst |
-| Choose B's comparison, spend1 Mineral +1 Catalyst | 1 | 1 | 0 | Ee efficiency contribution established; assumed remaining completeness met. C retains knowledge but needs Catalyst |
+| Start with retained stock | 2 | 1 | 0 | A affordable; B short1 Energy prism packs; C short1 Essence filament packs |
+| Choose Weather research; illustrative return +1 Data disc pack, +2 Energy prism packs and capsule D | 3 | 3 | 0 | B becomes affordable; D may wait unprepared |
+| Study B, spend2 Energy prism packs | 3 | 1 | 0 | Mm drive pair established; efficiency contribution still unknown |
+| Use existing stock to finish A, spend2 Data disc packs | 1 | 1 | 0 | Pp established: pale variant carried, no pale markings expressed; assumed remaining completeness met |
+| Choose General survey; illustrative return +1 Data disc pack, +1 Essence filament packs, no capsule | 2 | 1 | 1 | Both B and C now have an affordable comparison, but share one Essence filament packs |
+| Choose B's comparison, spend1 Data disc pack +1 Essence filament packs | 1 | 1 | 0 | Ee efficiency contribution established; assumed remaining completeness met. C retains knowledge but needs Essence filament packs |
 
-Bright Trace is proposed to favor Lumen with secondary materials; Mixed Survey favors varied reagents including Catalyst. These returns are one authored example, not promises. Field points would account for collection within each expedition and are deliberately not counted as Lab stock or automatically applied to B's research.
+Weather research may offer an Energy boost event; General survey offers calmer mixed opportunities. These returns are one authored example, not promises. Per-resource progress accounts for collection within each expedition and are deliberately not counted as Lab stock or automatically applied to B's research.
 
-The interesting choice is visible: finish A now, pursue the intriguing B, or spend the scarce Catalyst exploring C. Gathering and spending alter opportunities across the whole collection. Complexity does not force the player to abandon simpler records. D brings a future discovery rather than an obligation.
+The interesting choice is visible: finish A now, pursue the intriguing B, or spend the scarce Essence filament packs exploring C. Gathering and spending alter opportunities across the whole collection. Complexity does not force the player to abandon simpler records. D brings a future discovery rather than an obligation.
 
 ## Progression with purpose
 
@@ -116,17 +137,17 @@ Console-only play retains equivalent access to samples and necessary resource ty
 | Choose what to work on | Collection previews the actual genome record, discoveries and affordable studies; chosen workpiece becomes central | Lab rotation previews; Confirm opens; Back restores collection focus |
 | Inspect a zone | Show its partial structure/known relationships with unknown portions, plus relevant findings; no padlock or generic green completion grid | Rotate through meaningful targets, Confirm inspect; monochrome-safe known/unknown distinctions |
 | Run research | Bring the sample, chosen study and actual reagents into a cost review; pending work stays distinct from an accepted discovery | Existing Confirm commits, Back leaves a review; feedback must remain legible without animation or touch |
-| Plan gathering | Compare expedition resource tendencies against inventory gaps and collection interests | Lab controls select profile; Probe receives enough content to operate without a phone |
+| Plan gathering | Compare expedition events and discovery opportunities against inventory gaps and collection interests | Lab controls select profile; Probe receives enough content to operate without a phone |
 | Gather and return | Typed awards, field progress and capsule finds remain distinct; receipt changes Lab availability once | Probe Next/Confirm with visible focus; persistent expedition state; no sensor per item or invented capsule mechanism |
 | Prepare incubation | Complete supported genome, source sample and required materials together | Lab explicit review/commit; physical placement/display/printing remain later engineering design |
 
-Concise candidate language: **Unknown**, **Partly decoded**, **Decoded**, **Mineral grains 2 / Needs 3**, **Pale variant carried**, **Crown present**, **New capsule**, **Prepare**, **Compare**, **Incubate**. These label objects and discoveries backed by the worked genotype/phenotype rules. The visual work must supply the relationships instead of explaining the whole process in paragraphs on the device. Keep the small specimen identity, give the research object a meaningful workbench presence, and use selected refinement-02 vocabulary. Do not copy the previous bare grid/layout.
+Concise candidate language: **Unknown**, **Partly decoded**, **Decoded**, **Data disc packs 2 / Needs 3**, **Pale variant carried**, **Crown present**, **New capsule**, **Prepare**, **Compare**, **Incubate**. These label objects and discoveries backed by the worked genotype/phenotype rules. The visual work must supply the relationships instead of explaining the whole process in paragraphs on the device. Keep the small specimen identity, give the research object a meaningful workbench presence, and use selected refinement-02 vocabulary. Do not copy the previous bare grid/layout.
 
 Genome zones need a dedicated visual example with an actual before/after discovery, relation between zones, carried-versus-expressed knowledge and unknown information. Unknown areas should feel unexplored rather than disabled. No final morphology, mapping or screen layout is selected here.
 
 ## Review and next artifact
 
-The proposed defaults to steer as one coherent model are: capsule preparation creates/reopens a persistent record without a V1 fee; field points explain gathering rather than becoming research currency; expedition profiles bias resource opportunities rather than promise exact bundles. Physical capsule form, exact yield/balance and final terminology remain open. Owner need not specify all resource recipes or interface details.
+The proposed defaults to steer as one coherent model are: capsule preparation creates/reopens a persistent record without a V1 fee; field points explain gathering rather than becoming research currency; expedition profiles shape optional events while baseline resource yields stay stable. Physical capsule form, exact yield/balance and final terminology remain open. Owner need not specify all resource recipes or interface details.
 
 Pip is the [accepted qualitative phenotype reference](../specs/genetics.md#pip-accepted-worked-phenotype-reference). The [completed bounded proof](../prototype/genetics/report.md) demonstrates its baseline, locus/allele definitions, expression and validation. These hereditary facts now support the [collection-to-discovery workbench study](genome-workbench/README.md). The locus library and LLM-assisted authoring direction are described in genetics; no complete tool suite or production service is implied.
 

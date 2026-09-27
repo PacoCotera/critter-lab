@@ -26,6 +26,8 @@ Current review: [the connected research game model](research-and-creation.md) re
 
 The [current Lab collection-to-discovery study](genome-workbench/README.md) applies that direction to the demonstrated Pip genetics: a partial allele pair, explicit resource cost and a carried-versus-expressed discovery. Its five static frames are an owner-approved composition and interaction direction, not a complete journey or implemented UI.
 
+The [Probe expedition study](probe-expedition/README.md) continues gathering through Lab receipt in nine native monochrome states. Existing Next/Confirm controls, unknown capsule contents and separate stock/point accounting are explicit; this study awaits visual review.
+
 ## What to review
 
 | Question | Material and boundary |
