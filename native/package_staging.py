@@ -13,6 +13,7 @@ import tarfile
 import tempfile
 
 ROOT_NAME = "critter-lab-staging"
+ARCHIVE_LIMIT = 64 * 1024 * 1024
 PAYLOAD = ("bin/critter_lab", "presenter/app.js", "presenter/index.html",
            "presenter/release.json", "presenter/server.py", "presenter/style.css")
 MODES = {name: (0o755 if name == "bin/critter_lab" else 0o644) for name in PAYLOAD}
@@ -20,6 +21,19 @@ MODES = {name: (0o755 if name == "bin/critter_lab" else 0o644) for name in PAYLO
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def bounded_tar(path):
+    """Bound all expanded bytes, including hidden PAX/GNU extension records."""
+    with Path(path).open('rb') as source:
+        compressed = source.read(ARCHIVE_LIMIT + 1)
+    if len(compressed) > ARCHIVE_LIMIT:
+        raise ValueError('compressed archive exceeds bound')
+    with gzip.GzipFile(fileobj=io.BytesIO(compressed)) as source:
+        expanded = source.read(ARCHIVE_LIMIT + 1)
+    if len(expanded) > ARCHIVE_LIMIT:
+        raise ValueError('expanded archive exceeds bound')
+    return tarfile.open(fileobj=io.BytesIO(expanded), mode='r:')
 
 
 def git(*arguments):
@@ -120,7 +134,8 @@ def create(binary, output):
 
 
 def verify(archive_path, expected_commit=None):
-    header = Path(archive_path).read_bytes()[:10]
+    with Path(archive_path).open('rb') as source:
+        header = source.read(10)
     # GzipFile at the default compression level produces XFL=2 and OS=255.
     # Requiring the entire fixed header also rejects all optional fields.
     if header != b"\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff":
@@ -128,7 +143,7 @@ def verify(archive_path, expected_commit=None):
     seen = {}
     mtimes = set()
     member_names = []
-    with tarfile.open(archive_path, "r:gz") as archive:
+    with bounded_tar(archive_path) as archive:
         for member in archive:
             path = PurePosixPath(member.name)
             if (member.name.startswith("/") or ".." in path.parts

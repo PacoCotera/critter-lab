@@ -39,3 +39,13 @@ The disposable adapter shares an unprivileged account with candidate code. Sessi
 Actions now defines a publication job after all target checks, restricted to trusted main pushes. It creates a new exact-SHA tag and draft release, uploads only the tested bundle and delivery metadata, verifies the tag and rejects stale publication/overwrite. PR/manual runs do not publish. Hosted execution remains the publication acceptance gate.
 
 The intended automatic chain is trusted main push → Actions checks → published release → signed webhook through the existing HTTP route → queued, verified activation. The separate webhook/production adapter is not installed by this increment. A webhook only wakes a worker; it never executes a command or touches player state. No inbound SSH runner access is required.
+
+## Signed notification boundary
+
+`deployment_hook.py` is a separate loopback sidecar for POST `/deployment/github`. It verifies the raw-body GitHub HMAC-SHA256 signature, expected release event/repository and staging tag before fsynced semantic queue insertion. A duplicate release is acknowledged without overwriting its queued identity. The handler has no native command, download or save interface.
+
+Configure `CRITTER_DEPLOY_QUEUE` as an existing protected queue directory, `CRITTER_DEPLOY_SECRET_FILE` as an external file containing the same strong secret as the repository webhook, and optional `CRITTER_DEPLOY_HOOK_PORT` (default 4181). The existing tunnel can route this exact path separately from the gameplay presenter. The sidecar is not installed or exposed automatically by repository code.
+
+`release_delivery.py` independently verifies public release/tag/asset/run metadata and downloads exact digested assets without an artifact credential. It rejects draft/incomplete releases, wrong tags, unsuccessful or unrelated CI, asset mutation and automatic downgrade from a supplied accepted revision. This is a verification function, not an installed activation worker. Publication-run completion may lag the webhook; a production queue worker must retry boundedly without touching the service meanwhile.
+
+Run `python3 native/tests/test_delivery.py` for signature/metadata checks and Linux durable queue/HTTP checks. These use fixture GitHub metadata; they do not establish a configured external webhook or actual public-release download. GitHub does not automatically redeliver failed hooks; installation needs an operator redelivery or reconciliation procedure. See [signature validation](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries) and [failed deliveries](https://docs.github.com/en/webhooks/using-webhooks/handling-failed-webhook-deliveries).

@@ -20,21 +20,22 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 class GitHubClient:
     """Bounded HTTPS retrieval; credentials stay on the API origin."""
-    def __init__(self, token, timeout=15, limit=64 * 1024 * 1024):
-        if not isinstance(token, str) or not token.strip():
+    def __init__(self, token, timeout=15, limit=64 * 1024 * 1024, public=False):
+        if not public and (not isinstance(token, str) or not token.strip()):
             raise ValueError("authenticated GitHub token required")
-        self.token, self.timeout, self.limit = token.strip(), timeout, limit
+        self.token, self.timeout, self.limit = ('' if public else (token or '').strip()), timeout, limit
         self.opener = urllib.request.build_opener(NoRedirect())
 
-    def read(self, url, limit=None):
+    def read(self, url, limit=None, accept='application/vnd.github+json'):
         limit = self.limit if limit is None else min(limit, self.limit)
         for redirect in range(5):
             parsed = urllib.parse.urlsplit(url)
             if parsed.scheme != "https" or parsed.username or parsed.password or parsed.fragment:
                 raise ValueError("unsafe artifact URL")
-            headers = {"Accept": "application/vnd.github+json", "User-Agent": "critter-lab-manual-updater"}
+            headers = {"Accept": accept, "User-Agent": "critter-lab-manual-updater"}
             if parsed.netloc == "api.github.com":
-                headers["Authorization"] = "Bearer " + self.token
+                if self.token:
+                    headers["Authorization"] = "Bearer " + self.token
                 headers["X-GitHub-Api-Version"] = "2022-11-28"
             request = urllib.request.Request(url, headers=headers)
             try:
