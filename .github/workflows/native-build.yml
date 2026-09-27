@@ -36,6 +36,7 @@ jobs:
           python3 native/tests/test_delivery.py
           python3 native/tests/test_delivery_worker.py
           python3 native/tests/test_deployment_gateway.py
+          python3 -m unittest discover -s native/tests -p test_systemd_backend.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - name: Package tested Lab staging bundle
