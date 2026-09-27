@@ -197,10 +197,9 @@ class DisposableSystemdEnvironment:
         return subprocess.run(arguments, check=True, stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE, timeout=40, env={'PATH': '/usr/bin:/bin'})
 
-    def release_path(self, release):
-        release = Path(release)
-        if release.parent != self.releases or not SHA.fullmatch(release.name):
-            raise ValueError('fixed admitted release path required')
+    def admission_ready(self, release):
+        """Verify privileged admission, including candidate namespace access."""
+        release = protected(release, True)
         if release.stat().st_mode & 0o005 != 0o005:
             raise ValueError('release must be readable and traversable by isolated identities')
         for directory, dirs, files in os.walk(protected(release, True)):
@@ -210,6 +209,12 @@ class DisposableSystemdEnvironment:
                 if entry.stat().st_mode & required != required:
                     raise ValueError('release entries must be readable by isolated identities')
         return release
+
+    def release_path(self, release):
+        release = Path(release)
+        if release.parent != self.releases or not SHA.fullmatch(release.name):
+            raise ValueError('fixed admitted release path required')
+        return self.admission_ready(release)
 
     def begin_maintenance(self):
         self._require_ownership()
