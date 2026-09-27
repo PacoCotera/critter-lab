@@ -118,6 +118,15 @@ Resolve inherited/developmental properties, contextual responses and temporary m
 
 Reserve linkage/provenance now at the conceptual level; do not equate dimension families with chromosomes. These are organizational groups and can share genetic contributors. Example expansion: adding magnetic sensing extends sensing; it does not alter old visual perception or require a new genome layer.
 
+## Genome baseline, collected sample and phenotype — accepted distinction
+
+A **genome baseline** is the reusable genetic foundation for a compatible kind of critter: body-plan constraints, required systems and permitted variation within the existing five-layer framework. It is not a complete individual genome or a class average freshly imposed on every offspring.
+
+A **collected sample** is a particular stable discovery carrying genomic information and supported possibilities consistent with a valid foundation. Research can reveal that foundation and variants distinguishing this sample from others. The sample is not merely a visible-trait fragment. It need not be tissue from an existing individual: tissue is one possible fictional origin, not a universal assumption across all critter classes. Sample provenance does not automatically create a donor parent or ancestry relationship.
+
+A **phenotype** is the expression of a complete genome under specified development and environmental conditions, distinct from lifetime state. A trait-associated fragment alone does not establish the complete genetic information required for incubation. Assembling complementary fragments into a whole genome is not a selected acquisition mechanic.
+
+Discover baseline families through particular samples, and discover variation within those families through further samples. Each sample still requires its own applicable findings, full decoding and selection among explicitly supported configurations. Learning a baseline does not automatically decode another sample, supply missing alleles or permit unrestricted generation. Incubation creates a new individual under the existing one-sample/one-founder rules.
 ## Founders and genomic knowledge
 
 Accepted: researched samples can produce lab-created founders with explicitly no creature parents. Samples and class templates are provenance, not parents; parentless origin differs from unknown ancestry. Founders enter the same framework as bred offspring and can reproduce when compatible and capable.

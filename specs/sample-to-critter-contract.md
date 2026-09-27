@@ -4,6 +4,8 @@ Status: **proposed system-design contract**, carrying accepted product requireme
 
 ## Accepted foundation
 
+The [accepted baseline/sample/phenotype distinction](genetics.md#genome-baseline-collected-sample-and-phenotype--accepted-distinction) governs these records: a sample carries particular genomic information consistent with a reusable foundation, not just a visible-trait fragment. It need not be tissue from a donor; provenance does not create parentage. Fragment assembly is not an implied acquisition step.
+
 Research incrementally decodes genome regions; a fully decoded genome is a prerequisite for incubation. Validate completeness before accepting the creation/incubation commitment. A partial genome must remain research-in-progress rather than being completed implicitly by generation. Genome complexity varies with game progression; this contract must not hard-code the introductory example's study count as a universal completeness rule. Exact complexity and progression rules belong in [genetics](genetics.md#genome-imagery-and-progression).
 
 Creation requires a **fully decoded, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
