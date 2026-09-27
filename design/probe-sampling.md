@@ -2,7 +2,7 @@
 
 **Accepted direction:** the Lab offers selectable expeditions with duration, predefined events or event pools, difficulty and yields. The chosen expedition determines which random events can occur and how sensed evidence contributes to resources and collection points. Probing remains straightforward and standalone. **Examples and defaults below are proposed**, not approved balance or content.
 
-This preserves the [physical device roles](../specs/experience.md#physical-experience-is-the-product): the Lab is the extensible planning/research workbench; the simple e-ink Probe carries the outing; the responsive Companion serves the relationship with a critter; the Caddy is their physical home and charging place.
+This preserves the [physical device roles](../specs/experience.md#physical-experience-is-the-product): the Lab is the extensible planning/research workbench; the simple e-ink Probe carries the expedition; the responsive Companion serves the relationship with a critter; the Caddy is their physical home and charging place.
 
 ## Choose, start, carry, check, return
 
@@ -28,10 +28,10 @@ The expedition profile interprets broad valid observations through versioned fic
 
 Randomized events come from the selected profile’s defined pool, not a rigid mandatory sequence. Generated pulses or deposits are fictional encounters, not measured signals or real hazards. Recommend optional responses that can wait for a convenient check; elaborate escape/stay hazards remain deferred examples.
 
-Two Material trail outings through the same courtyard might suggest layered structure on one visit and flexible structure on another. Both fit the profile without promising the same sample. These are illustrative clues, not approved anatomy. Generated variation is established for each legitimate new sample and then preserved; content updates do not rewrite existing samples.
+Two Material trail expeditions through the same courtyard might suggest layered structure on one visit and flexible structure on another. Both fit the profile without promising the same sample. These are illustrative clues, not approved anatomy. Generated variation is established for each legitimate new sample and then preserved; content updates do not rewrite existing samples.
 
 ## Bring back a useful next step
 
-Recommend loading supported expedition content before departure so the Probe can run without a phone or live server; the exact loading protocol is unselected. Keep interrupted outings and collected results stable. Restarting, reopening or retrying delivery does not redraw events or duplicate supplies. Collection eligibility and anti-abuse rates remain balancing work, not extra player chores.
+Recommend loading supported expedition content before departure so the Probe can run without a phone or live server; the exact loading protocol is unselected. Keep interrupted expeditions and collected results stable. Restarting, reopening or retrying delivery does not redraw events or duplicate supplies. Collection eligibility and anti-abuse rates remain balancing work, not extra player chores.
 
 At the Lab, findings guide the next study, preparation or expedition choice. Crafting and console-only investigation remain alternative routes. New samples still require their own full genomic resolution before creation; a familiar profile does not make them automatically complete. The payoff is purposeful variety with simple operation, not endless luck or increasing attention demands.

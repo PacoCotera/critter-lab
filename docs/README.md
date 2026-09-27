@@ -10,7 +10,7 @@ The whole loop is **explore → investigate → choose → create → live toget
 
 | Player moment | What makes it meaningful | What connects it to the next moment |
 | --- | --- | --- |
-| Choose an outing at the Lab; carry the Probe | A purposeful gathering target with simple standalone operation | Player-attributed samples and resources return intact; fictional encounters remain distinct from measurements |
+| Choose an expedition at the Lab; carry the Probe | A purposeful gathering target with simple standalone operation | Player-attributed samples and resources return intact; fictional encounters remain distinct from measurements |
 | Bring a mystery home | A sample is a question, not a hidden finished creature | Clues and retained findings support investigations |
 | Investigate and prepare | Choose questions, see costs, retain discoveries, pursue supported possibilities | Resolve every required genomic region; missing supplies pause work rather than erase it |
 | Select and create | Understand the complete supported configuration and displayed terms before committing | One qualifying sample and creation supplies produce one saved parentless individual; retries do not create/spend again |
@@ -24,7 +24,7 @@ The [first-discovery story](../design/sample-to-critter-walkthrough.md) illustra
 ```mermaid
 flowchart LR
   Player[Player] --> Lab[Lab: plan, research, create, inspect]
-  Lab <--> Probe[Field Sampler: standalone outings and cargo]
+  Lab <--> Probe[Field Sampler: standalone expeditions and cargo]
   Lab <--> Records[Supporting services: accepted records and generation]
   Records <--> Companion[Companion: same individual, care and development]
   Records <--> Support[Optional app/site: supporting access and management]
@@ -56,7 +56,7 @@ The following order is proposed. Accepted research/creation foundations are inpu
 
 | Review step | Artifact and question | Decision unlocked |
 | --- | --- | --- |
-| 1. Whole journey and visual foundation | Walk one outing-to-discovery storyboard using existing sampling/research proposals and the selected Playful Pixel Lab direction. Is it understandable, inviting and consistent with device roles? | First prototype scope and keep/change direction for the visual vocabulary |
+| 1. Whole journey and visual foundation | Walk one expedition-to-discovery storyboard using existing sampling/research proposals and the selected Playful Pixel Lab direction. Is it understandable, inviting and consistent with device roles? | First prototype scope and keep/change direction for the visual vocabulary |
 | 2. Research-to-individual example | Work one sample through findings, complete selection, creation terms and one recognizable critter. Separate example content from canonical choices. | Concrete V1 content/rule gaps and specimen design direction |
 | 3. Interaction and continuity | Apply the direction to representative Lab/Probe/Companion moments with intended controls, pending/error states and shared-player context | Flows ready for functional implementation; remaining offline/rights decisions |
 | 4. Physical application | Try approved interactions on preliminary device profiles and targeted bench setups | Engineering choices supported by owner direction and measurements |
