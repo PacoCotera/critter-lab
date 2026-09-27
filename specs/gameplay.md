@@ -7,9 +7,9 @@ Status: accepted directions with proposed mechanics identified below. Production
 Players set their own goals: collecting attractive or rare cosmetic combinations is as valid as developing adaptable or specialized critters. Cosmetic value need not grant a practical bonus. Experimentation and personal knowledge support research, crafting, exploration, development and social play; recipe discovery does not normally grant permission to attempt a combination. Explicit resource, compatibility and consent requirements still apply.
 
 1. Collect field evidence and resources, or begin a console-only investigation.
-2. Inspect sample clues, choose an investigation and commit its displayed resources.
+2. Discover sample contents, choose a study and commit its displayed resources.
 3. Retain the finding; pursue a follow-up or supported creation direction.
-4. Fully unlock and select a complete genome before creating a parentless founder. Breeding is a separate route using actual compatible parents.
+4. Fully decode and select a complete genome before creating a parentless founder. Breeding is a separate route using actual compatible parents.
 5. Incubate, deliberately open the saved individual, then study, train, breed, print and share discoveries.
 
 The [sample-to-critter contract](sample-to-critter-contract.md) owns the proposed record and creation-acceptance boundary. [Genetics](genetics.md) owns heredity, expression and genomic completeness; [players and social play](players-social.md) owns shared equipment, consent and personal discovery.
@@ -26,25 +26,41 @@ The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, 
 
 The **Companion** centers training, evolution and bonding. One versus several carried individuals, and a larger habitat with a carried subset, remain open. The **caddy** charges the portables; seating adds no gameplay progress or implicit transfer.
 
-Slower **console-only research** remains a complete acquisition route: choose a question, observe findings and pursue a result without requiring a field sample. Whole families must not be exclusive to Probe ownership. Proposed queued/researching/finding/ready states and intermediate choices need playtesting; missed check-ins must not destroy research work. Exact non-Probe resource acquisition must be reconciled with the creation gate.
+Slower **console-only research** remains a complete acquisition route: research a sample cache, retain discoveries and pursue a result without requiring a field sample. Whole families must not be exclusive to Probe ownership. Proposed queued/researching/finding/ready states and intermediate choices need playtesting; missed check-ins must not destroy research work. Exact non-Probe resource acquisition must be reconciled with the creation gate.
 
 ## Expedition continuity and return — accepted
 
-Owner approved the connected expedition flow on 27 September 2026. Early return pauses the same expedition, retaining observations, progress and earned resources; an unfinished sample remains incomplete. Resuming does not redraw events or duplicate supplies. A missed optional encounter remains available and, after completion, can be reviewed at the Lab without extra material; it never gates research or creation. Return reviews the sample and resources together and leads into that sample’s next research question, with deeper inventory detail secondary. Technical transfer/reconciliation and exact completion/balance remain open.
+Owner approved the connected expedition flow on 27 September 2026. Early return pauses the same expedition, retaining observations, progress and earned resources; an unfinished sample remains incomplete. Resuming does not redraw events or duplicate supplies. A missed optional encounter remains available and, after completion, can be reviewed at the Lab without extra material; it never gates research or creation. Return reviews the sample and resources together and leads into that sample’s next research step, with deeper inventory detail secondary. Technical transfer/reconciliation and exact completion/balance remain open.
 
 ## Research and creation
 
-Accepted research direction: supported possibilities followed by guided synthesis. Research supplies knowledge, not an automatic creature. Creation requires every required genomic region unlocked through research and resource expenditure; incomplete research is not an optional gamble. Research groups are navigation, not replacements for the five genetic layers.
+### Research collection and gathering — accepted
+
+Genome information is **unknown**, not locked. Research discovers and decodes it; missing knowledge is distinct from lacking resources to perform a study. Players keep a collection of partially decoded genomes and choose which to research according to their interests, complexity and the resource types available in their Lab inventory. Switching the active research preserves each record's discoveries. This does not create multiple copies of a sample or confer extra incubation uses.
+
+The Probe gathers resources of different types for Lab research and can also gather samples containing genomes to discover and research. These are distinct expedition outputs. Expedition types shape which resources are gathered; a gathering expedition need not be bound to one sample or yield a new sample every time. Signals/collection points, awarded resource quantities, sample capsules and decoded genome knowledge are distinct concepts. Their detailed conversion and capsule preparation are proposed in the [connected research design](../design/research-and-creation.md), not selected hardware or balance rules.
+
+### Research is discovery across expeditions — accepted
+
+Research discoveries decode parts of the genome. **A fully decoded genome is needed to incubate a critter.** Genomes vary in complexity, with game progression from simpler toward more complex research. Show that decoding process at the Lab, not only a generic study-complete message. [Genetics](genetics.md#genome-imagery-and-progression) owns decoded/unknown representation and complexity boundaries. Exact progression gates and balance remain open.
+
+A sample is a cache containing surprises that the player discovers through research, not a hidden question or a quiz to answer. Discoveries reveal its contents and supported possibilities while preserving sample identity and retained findings. This does not make it a hidden finished critter or change the complete-genome and deliberate-creation requirements.
+
+Completing research requires gathering across several Probe expeditions. The player returns to the same research, retaining discoveries while obtaining what further studies need. A completed expedition is not completed research. The Probe shows actual gathering progress toward the current research needs; the Lab shows the research process, discoveries so far, remaining work and gathering needs. Keep gathering, inventory and research completion distinct. The Probe does not reveal undiscovered sample contents.
+
+Exact expedition count, yields, study requirements, timing and progress presentation remain open. Several expeditions do not imply several new samples or a mandatory attendance schedule. The accepted console-only route remains; its equivalent acquisition/progress design must be reconciled explicitly rather than silently removed. This direction changes the connected walkthrough: demonstrate an initial return, research progress, further gathering and continuation of the same sample.
+
+Accepted research direction: supported possibilities followed by guided synthesis. Research supplies knowledge, not an automatic creature. Creation requires every required genomic region decoded through research and resource expenditure; incomplete research is not an optional gamble. Research groups are navigation, not replacements for the five genetic layers.
 
 Accepted V1 structure: two initial studies and, when findings leave a relevant uncertainty, one follow-up. This is an introductory path, not a minimum click quota. Players choose investigation order and may attempt a known supported comparison early; information it resolves does not require another study. For V1, supported configurations in a sample share its required region set, and every required region must be resolved before final selection. Choosing a simpler configuration cannot bypass unknown required information.
 
-The Lab handles procedure; the player chooses a question, sees the resource cost and receives a clear finding. No manual tuning, control-group setup or interpretation quiz is required. A missing reagent pauses the affected study while preserving findings and other work. Samples differ in clues, possibilities, interactions and supplies. Exact tests, mappings, costs and timings remain open; the [design explanation](../design/research-and-creation.md) uses hypothetical content. This does not cap later genomic complexity or guarantee rarity from a checklist.
+The Lab handles procedure; the player chooses a study, sees the resource cost and receives a clear finding. No manual tuning, control-group setup or interpretation quiz is required. A missing reagent pauses the affected study while preserving findings and other work. Samples differ in clues, possibilities, interactions and supplies. Exact tests, mappings, costs and timings remain open; the [design explanation](../design/research-and-creation.md) uses hypothetical content. This does not cap later genomic complexity or guarantee rarity from a checklist.
 
 The V1 design direction requires complete supported configurations and selection before creation. The [proposed system contract](sample-to-critter-contract.md) describes this boundary; it neither limits production to a few cosmetic configurations nor establishes an implemented generation system. The meaningful bitmap and growing genome complexity are specified in [genetics](genetics.md#genome-imagery-and-progression).
 
 ### Study variety — release requirement
 
-Owner direction, 27 September 2026: material studies are an acceptable V1 placeholder, not a sufficient final-release study set. Design a broader range of meaningful investigation questions and findings before release. The study types, content mappings and interactions remain open; this requirement does not select a taxonomy or authorize speculative mechanics. Keep V1 placeholder content explicitly labeled and do not mistake implementing it for completing research design.
+Owner direction, 27 September 2026: material studies are an acceptable V1 placeholder, not a sufficient final-release study set. Design a broader range of meaningful study types and discoveries before release. The study types, content mappings and interactions remain open; this requirement does not select a taxonomy or authorize speculative mechanics. Keep V1 placeholder content explicitly labeled and do not mistake implementing it for completing research design.
 
 ## Creation inputs and retained discoveries
 
@@ -79,6 +95,13 @@ Lab research chips are **virtual**, follow the player's profile across Labs and 
 
 Crafting, discovery and trading are chip acquisition directions; rare-critter drops are a possible source. This selects no combat, killing, harvesting, neglect or breeding reward. Slot counts, stacking/compatibility, bonuses, fitting costs, active-job switching and drop rules remain open. Virtual chips require no physical slots or accessories.
 
+### Research supplies and capability progression — accepted direction
+
+Start with three research resources prepared by the Probe from its gathering. They must support research across the full variety of critter classes and physiologies; they are neither genomic information nor creature-specific ingredients. Exact identities and recipes remain open. Mineral grains, Lumen and Catalyst are rejected names retained only as labels in earlier illustrative artifacts.
+
+Rare findings can enable retained research methods that make new genomic information analyzable. Ordinary resources fund subsequent studies; capsules supply the unknown information. Acquiring a method does not reveal its findings automatically or change genes. Major progression should combine deliberate pursuit with surprise rather than depend exclusively on indefinite rare-drop luck. Its relationship to reusable virtual research chips, consumption and exact gates remains open.
+
+Findings should normally be proportional to player progress; much more complex genomes should be absent from ordinary early discovery or appear only as low-probability exceptions. Probe tiers with range, capacity and detection are a proposed way to express field capabilities. They do not increase physical hardware capabilities or reveal a capsule's genotype. The [gathering design](../design/probe-sampling.md#progress-proportional-discovery-and-probe-tiers) develops field eligibility versus Lab analysis, attainable upgrade paths and remaining choices. Complexity is not a universal power ranking, and existing samples never reroll on upgrade.
 ## Breeding and lifecycle
 
 Breeding uses actual parents and the shared genetics framework. Whether every breeding requires a sample, and whether samples can enhance it, remain proposed. Founder creation must not fabricate parent records. Starter acquisition, incubation timing and breeding costs remain open.

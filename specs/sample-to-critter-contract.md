@@ -4,7 +4,9 @@ Status: **proposed system-design contract**, carrying accepted product requireme
 
 ## Accepted foundation
 
-Creation requires a **fully unlocked, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
+Research incrementally decodes genome regions; a fully decoded genome is a prerequisite for incubation. Validate completeness before accepting the creation/incubation commitment. A partial genome must remain research-in-progress rather than being completed implicitly by generation. Genome complexity varies with game progression; this contract must not hard-code the introductory example's study count as a universal completeness rule. Exact complexity and progression rules belong in [genetics](genetics.md#genome-imagery-and-progression).
+
+Creation requires a **fully decoded, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
 
 The connected Lab requests remote generation; its device controller does not run the generation stack. Cloud holds accepted durable records. Routine play needs no phone, and a console-only path remains required. Neither an attractive preview nor a completed animation proves a saved creation.
 
@@ -14,7 +16,7 @@ flowchart TD
   Local --> Cloud[Cloud: authorized accepted sample record]
   Console[Console-only investigation] --> Cloud
   Cloud --> Knowledge[Research: findings and unresolved regions]
-  Knowledge --> Selected[Fully unlocked selected genome]
+  Knowledge --> Selected[Fully decoded selected genome]
   Selected --> Validate[Validate request, rights, versions and costs]
   Validate --> Expression[Resolve and validate initial expression]
   Expression --> Individual[Cloud: one accepted individual and creation result]
@@ -31,6 +33,8 @@ flowchart TD
 The diagram proposes the creation/asset boundary below; it does not establish resource prices, permission policies or a selected service topology.
 
 ## Five distinct records
+
+The [connected game model](../design/research-and-creation.md) distinguishes capsule/container, contained sample, prepared research record and shared typed inventory. Preparation creates or reopens sample-specific knowledge; it does not duplicate sample material or allocate an individual. A player can retain many partly decoded records and choose work against their inventory. Expeditions supply resource awards and optional new samples; collection points remain distinct from spendable inventory. Detailed preparation and point-conversion rules are still proposals.
 
 | Record | Meaning and preservation rule |
 | --- | --- |

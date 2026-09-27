@@ -21,6 +21,10 @@ Expedition selection reinforces these roles: compare duration, difficulty, expec
 
 ## Operate the object
 
+The Lab workbench supports a collection of partially decoded genomes. Selecting a record brings its sample identity, discovered/unknown zones and studies into focus; available resource types in Lab inventory make different work possible. Unknown is a knowledge state, not a lock or permission gate. Show discovery through the changing research subject and relevant findings, using concise labels rather than tutorial/report paragraphs. The Probe gathers typed resources and samples under an expedition profile; it does not act as a task counter for only one genome. The connected object and interaction proposal lives in [research and creation](../design/research-and-creation.md).
+
+Research is a process of discovering surprises in a sample cache. The connected experience spans several gathering expeditions: the Probe shows actual gathering progress toward known research needs; the Lab shows retained discoveries, research progress, remaining work and what further gathering enables. Neither an expedition-complete message nor a supply count substitutes for research completion. Design the return to the same sample and continuation together, preserving findings. Exact meters, numbers and timing remain open under [gameplay](gameplay.md#research-is-discovery-across-expeditions--accepted).
+
 A sample, creature, vessel or inventory is the center of each activity. Composition follows purpose: browsing selects; research examines; creation review explains consequences; Meet gives a saved individual room. Use connected explanations where needed rather than scattered short labels. Details adds depth but must not hide instructions essential to play.
 
 Separate **focus**, **retained selection/draft**, **navigation** and **domain commitment**. Focus previews; explicit Select retains a value; entering a named destination navigates. A separate supported command commits. Use generic action labels rather than attribute-specific toggles. Back restores caller, object, page and valid focus without committing a draft or cancelling submitted work. Unsupported choices need explanation and fresh selection, never silent substitution.
@@ -41,6 +45,12 @@ flowchart LR
 This diagram specifies separation, not a claim that all production joins are implemented. Sample opening, research B commitment and creation remain governed by their own domain rules.
 
 ## Input and visibility
+
+### Simulated console controls — accepted
+
+The simulator's depicted device controls are the player input surface. Existing knob and buttons drive visible focus, supported actions and screen feedback. Lab uses rotation and existing Confirm/Back; Probe uses existing Next/Confirm, including a reachable on-screen return target where required. Activate screen targets through those controls. Do not invent device keys, knob-press actions, clickable screen controls or touch/web shortcuts. Unassigned keys remain inactive. Design input, focus, activation, pending/error response and return together. Developer controls stay outside device shells.
+
+Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 
 Every interaction frame has an identity covering page, object, focus and displayed facts. Activation requires that requested frame to be visibly ready. Pixel submission or SPI completion alone is not physical visibility. Ignore stale draw/readiness callbacks and stale domain responses; scope asynchronous work to the selected identity and request generation.
 

@@ -12,7 +12,7 @@ Mara clips the **Probe**, a small portable explorer, to her bag. As she walks, i
 
 **2. Bring the mystery home**
 
-Back home, she brings her sample to the **Lab**, the tabletop machine where she investigates and creates critters. Opening the sample reveals a curious pattern. There is something to discover here, but she cannot make a critter yet.
+Back home, she brings her sample to the **Lab**, the tabletop machine where she researches and creates critters. The sample is a cache of surprises. Research will reveal what it contains and supports; she cannot make a critter yet.
 
 **3. Follow a clue**
 
@@ -20,7 +20,7 @@ Mara chooses a study about head shape. She compares a clue with the Lab's refere
 
 **4. Find what the next study needs**
 
-Another study needs a supply she does not have. Her finding stays saved while she goes gathering or prepares supplies through crafting at the Lab. Returning does not mean starting her research again.
+Completing this sample's research takes several expeditions. The Lab shows what she has discovered, the work still ahead and what further gathering needs to supply. On the Probe, Mara sees gathering progress toward those known needs without learning undiscovered sample contents. She returns, continues research on the same sample and gathers again as needed. Findings remain saved throughout. Exact supplies, expedition count and timing are still being designed; the console-only route also needs an equivalent acquisition path.
 
 **5. Understand, choose, then meet**
 

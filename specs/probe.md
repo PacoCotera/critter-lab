@@ -10,6 +10,8 @@ Progress must develop gradually through actual expedition state. The current two
 
 ## Discovery device — accepted experience direction
 
+Research at the Lab needs several expeditions to complete. The Probe must show gathering progress toward the current research needs, alongside the current expedition's collection state. A finished expedition does not mean research is complete. Show only known gathering requirements and actual collected progress; quantities, targets and yields remain unselected. Receiving results advances the Lab's retained research only according to its study/resource rules, not merely because another expedition ended. See [research across expeditions](gameplay.md#research-is-discovery-across-expeditions--accepted).
+
 The Probe is the player's contact with the world. Its resting screen must show collection activity, expedition progress, collected evidence and resources, with encounters visibly distinct from ordinary collecting. A player should be able to see what has changed without repeatedly opening status pages. Sampling remains straightforward and does not demand constant attention.
 
 Player language must reflect discovery rather than cargo transport. Use expedition consistently; avoid haul as an umbrella for Probe results. Distinguish observations, evidence, discoveries, samples and resources according to what the game actually records. Samples and supplies are part of an expedition, not its entire purpose.
@@ -48,6 +50,8 @@ Genomic layers are information roles, not independent meters to fill. A recipe c
 
 ## Resource gathering alongside samples
 
+Accepted clarification: expedition types shape gathering of multiple resource types; the Probe can also discover sample capsules carrying genomes for later research. Lab inventory supports a collection of partially decoded genomes, rather than a single mandatory active sample. Gathering may serve several known studies or general stock. Show typed collected resources and actual gathering progress, keeping any signals/points distinct from spendable quantities. The Probe does not decode or preview sample genomes. Capsule preparation and point-to-award rules remain design proposals in [research and creation](../design/research-and-creation.md).
+
 The probe gathers both research samples and usable game resources. Keep their meanings distinct: a sample carries evidence for investigation and potential specimen creation; a resource is an inventory quantity that a defined lab or feeding activity can consume. An expedition may award either or both under explicit rules; evidence points are not automatically spendable food or materials.
 
 Proposed resource categories are laboratory supplies and critter nourishment. Exact items, recipes, quantities, storage limits and gathering choices remain open. Nourishment should be compatible with the broad creature framework: resource properties can meet different nutritional or fantastic physiological needs, rather than assuming every critter eats animal-like food. Feeding rules consume expressed nutrition/affinity requirements and affect lifetime state; they do not redefine the genome around gathering jobs or silently rewrite inherited traits.
@@ -57,6 +61,8 @@ Sensed context, fictional encounters and player choices may influence resource a
 The probe should show collection results and retain them without a phone. Proposed transfer requirements: record the resource type/version, quantity and collection identity; preserve pending transfers across interruption; retries must not award the same collection twice. Consumption and inventory authority need architecture review, especially for quantities split across devices. Stable identifiers alone do not solve offline double spending. Capacity and transport remain open.
 
 Standalone operation is required. Expedition profiles now define eligible events and can produce randomized encounters. Exact scheduling and where random choices are resolved remain open; the selected content must support standalone execution. The device must support its agreed collection loop without a live phone or server; local rules, prepared content and recovery behavior require subsequent firmware design and validation.
+
+Current accepted resource/progression direction is in [gameplay](gameplay.md#research-supplies-and-capability-progression--accepted-direction): three Probe-prepared stocks, rare method-enabling finds and progress-proportional discovery. Probe tier details remain proposals in the gathering design.
 
 ## Candidate fixed sensor envelope
 
@@ -168,7 +174,7 @@ This does not mean 6 humidity genes or +6 health. It is evidence/progress toward
 
 ## From evidence to new genomic content
 
-Each recipe declares required evidence/features, optional context, applicability, progress thresholds, supported genetic possibilities, permitted research choices, resource consumption and version. Proposed probability weights may establish research possibilities, not secretly replace the fully unlocked selected genome at creation. See the [creation contract](sample-to-critter-contract.md).
+Each recipe declares required evidence/features, optional context, applicability, progress thresholds, supported genetic possibilities, permitted research choices, resource consumption and version. Proposed probability weights may establish research possibilities, not secretly replace the fully decoded selected genome at creation. See the [creation contract](sample-to-critter-contract.md).
 
 | Example recipe direction — not approved mechanics | Potential targets |
 | --- | --- |

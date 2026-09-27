@@ -11,6 +11,7 @@ For orientation rather than requirements, use the [documentation map](../docs/RE
 | Research, resources, crafting and progression | [Gameplay](gameplay.md) |
 | Players, shared equipment, consent and discovery | [Players and social play](players-social.md) |
 | Heredity, expression, development and behavior | [Genetics](genetics.md) |
+| Bounded Pip content and engine proof | [Genetic engine contract](genetic-engine.md) |
 | Field evidence and fictional encounters | [Probe](probe.md) |
 | Physical devices, power and interfaces | [Devices](devices.md) |
 | Interaction, readability and device profiles | [Experience](experience.md) |

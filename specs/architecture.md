@@ -22,6 +22,8 @@ The [physical-experience principle](experience.md#physical-experience-is-the-pro
 
 ## Creature production pipeline
 
+The next bounded genetic-content foundation uses [Pip content and engine contract](genetic-engine.md). Separate reusable class/locus content from individual genomes, expression results and lifetime state. LLM-assisted authoring produces candidate content; explicit algorithms and validation enforce the selected rules. The first contract covers one baseline, locus definitions, traceable phenotype generation and a compatible cross. Execution location, provider and broader tooling are not selected by this proof; preserve the current local/cloud responsibilities below.
+
 ```mermaid
 flowchart LR
   Input[Approved inheritance or founder inputs] --> Genome[Versioned genome]

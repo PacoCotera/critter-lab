@@ -26,6 +26,10 @@ Open `http://127.0.0.1:4173`. Stop the server with Ctrl+C. There is no compilati
 
 These experiments are separate. An action in one does not form an integrated game progression across the others.
 
+## Pip genetic-content proof
+
+The approved bounded [Pip proof](../../prototype/genetics/README.md) runs separately from these older browser experiments. Its [generated report](../../prototype/genetics/report.md) connects inherited baseline and allele contributions, partial research knowledge and one compatible child. Run `node prototype/genetics/report.mjs` to regenerate it and `node --test prototype/tests/pip-genetics.test.mjs` for its acceptance checks. It creates no living individual and is not wired into the demo.
+
 ## Saved data
 
 The older breeding experiment uses browser local storage. The Lab uses a separate IndexedDB database and preserves prior isolated runs. Transfer-status screens have no live transfer or persistence. Published share snapshots are local JSON files in ignored `prototype/.data/`; headless demos write to the new directory you supply. Browser data belongs to that browser and origin, not a cloud account. Changing ports or browsers can therefore show a different local collection.

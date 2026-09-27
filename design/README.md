@@ -14,13 +14,17 @@ The [ecosystem reference](references/ecosystem.png) shows the portables with the
 
 ## Screen design in progress
 
-Compare the [visual-language explorations](visual-language/README.md) before choosing a screen direction. Playful Pixel Lab is selected as the foundation for refinement; final components and screen designs remain proposals.
+Playful Pixel Lab is selected as the foundation for refinement. Continue the [refinement-02 vocabulary](visual-language/refinement-02/README.md); do not restart selection among earlier explorations. The Lab collection-to-discovery composition is approved; other components and screen compositions remain proposals. The rejected PR18 packet is closed and excluded from current review. No later complete accepted screen set has been verified in the retained repository artifacts.
 
 The [screen design standard](screen-design-standard.md) defines the current exploration and review sequence. Previous prototype layouts are rejected as the target experience. Visual concepts must be reviewed before their implementation.
 
-## Current connected review
+## Accepted flow and next design gate
 
-[Expedition-to-discovery storyboard](expedition-review/README.md) joins Lab preparation, Probe collection, return and a saved research finding. Three proposed choices cover interruption, optional encounters and the bridge into research. Creation and Companion life are later context; this is paper design, not working screens or approved rules.
+Current review: [the connected research game model](research-and-creation.md) relates capsules, prepared genome records, typed inventory, expedition profiles and signals/points. It works through choices among several partially decoded genomes before further screen work. The prior research-journey paper sketch is superseded as screen direction: unknown regions are not locks, and the workbench needs meaningful discovery and collection choices rather than explanatory progress panels.
+
+[Expedition-to-discovery storyboard](expedition-review/README.md) records accepted choices for interruption, optional encounters and the bridge into research. Its authored content and artwork are not approval of screen styling. The next gate is the connected device-screen experience described in the [product plan](../docs/README.md#design-and-delivery-roadmap), using existing selected references and actual console controls. Creation and Companion life remain later context.
+
+The [current Lab collection-to-discovery study](genome-workbench/README.md) applies that direction to the demonstrated Pip genetics: a partial allele pair, explicit resource cost and a carried-versus-expressed discovery. Its five static frames are an owner-approved composition and interaction direction, not a complete journey or implemented UI.
 
 ## What to review
 
