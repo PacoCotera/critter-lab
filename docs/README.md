@@ -63,7 +63,7 @@ The following order is proposed. Accepted research/creation foundations are inpu
 
 Current review material: [Probe sampling](../design/probe-sampling.md), [research](../design/research-and-creation.md), [accepted creation terms](../design/creation-terms.md), [design references](../design/README.md). Visual refinement is a proposal, not final artwork. Device modules, controls and enclosures are not frozen by these plans.
 
-**Next design deliverable:** one connected review packet for step1, using existing assets and worked scenarios. Show the relevant alternatives and consequences, not a questionnaire or another set of disconnected screen plates. Stop when the owner can decide journey scope and direction. No new functional UI, game phases, canonical creature art or purchases in this step.
+**Current design deliverable:** the [connected expedition-to-discovery review](../design/expedition-review/README.md) provides step1 as a paper storyboard with three comparable choices. Show the relevant alternatives and consequences, not a questionnaire or another set of disconnected screen plates. Stop when the owner can decide journey scope and direction. No new functional UI, game phases, canonical creature art or purchases in this step.
 
 ## Implementation plan: build the reviewed journey in usable increments
 
