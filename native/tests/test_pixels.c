@@ -20,9 +20,10 @@ int main(void) {
   assert(!demo_render_row(&demo, (DemoDisplay)99, 30, guarded + 1, 16));
   for (unsigned i = 0; i < sizeof(guarded); ++i)
     assert(guarded[i] == 0xa5);
-  assert(demo_render_row(&demo, DEMO_PROBE, 30, guarded + 1, 16));
+  demo.phase = 1;
+  assert(demo_render_row(&demo, DEMO_PROBE, 66, guarded + 1, 16));
   assert(guarded[0] == 0xa5 && guarded[17] == 0xa5);
-  /* Divider x=8..113: first byte white; MSB-first final black pixels. */
+  /* Collection borders x=8..57 and x=64..113 use MSB-first pixels. */
   assert(guarded[1] == 0 && guarded[2] == 0xff);
   assert(guarded[15] == 0xc0 && guarded[16] == 0);
   for (unsigned y = 0; y < probe->height; ++y) {

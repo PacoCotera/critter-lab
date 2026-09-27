@@ -40,6 +40,49 @@ size native/build/lab/critter_lab
 
 Expected initial status has revision 0 and Select available. The ELF executable and map are in `native/build/lab/`.
 
+### Staging bundle
+
+The Lab CI job packages the already-tested Linux x86-64 executable and the presenter
+`server.py`, HTML, CSS and JavaScript from the same checkout. It also includes a
+generated `release.json` and a concise `MANIFEST.txt` containing the full commit,
+platform, byte sizes and SHA-256 hashes. The archive is deterministic for a given
+checkout and executable: file order, ownership, permissions and timestamps are
+normalized, with the commit timestamp used for its payload entries. Source metadata
+records that instant as `committed_at`; the bundled `deployed_at` is always null, so
+an undeployed staging input never claims an activation.
+
+Create and independently verify the bundle from the repository root:
+
+```bash
+python3 native/package_staging.py create \
+  --binary native/build/lab/critter_lab \
+  --output native/build/lab/critter-lab-staging.tar.gz
+python3 native/package_staging.py verify \
+  native/build/lab/critter-lab-staging.tar.gz \
+  --commit "$(git rev-parse HEAD)"
+```
+
+Creation refuses to overwrite an existing archive, including a file created during
+publication, checks `GITHUB_SHA` when present, and refuses tracked presenter inputs
+whose index or worktree differs from HEAD. Presenter bytes are read from HEAD's Git
+objects. Verification fails closed for unexpected or unsafe
+members, links, duplicate paths, non-normalized metadata, revision disagreement,
+or content that does not match the manifest. The bundle is only a staging input;
+it does not install, publish, run a service or provide remote access. Runtime state
+is deliberately excluded: no save, lock, log, credential, environment file or
+other mutable presenter data is packaged. Supply `CRITTER_DEMO_SAVE` outside the
+unpacked bundle when starting the presenter.
+
+After verification and extraction, an operator may create activation metadata
+before starting the presenter by atomically replacing the adjacent
+`presenter/release.json`: it preserves `commit`, `subject`, and `committed_at` and
+sets `deployed_at` to the actual activation instant as a timezone-aware RFC 3339
+value (including the applicable `America/Mexico_City` offset). Activation is
+deliberately outside this bundle creator and does not mutate the
+archive, install or update software, or touch save state. Until then, the existing
+footer continues to say release metadata is unavailable; once supplied, it formats
+the actual activation time for Mexico City.
+
 ### Play through the browser presenter
 
 The Python standard-library bridge permits anonymous shared staging access when `CRITTER_DEMO_PASSWORD` is absent or empty. Anyone with access uses the same saved playground. An optional nonempty password enables HTTP Basic authentication on every route, username `lab`; keep it in the process environment, never in a URL or commit. Same-origin command and body validation apply in both modes. Use HTTPS when exposing the presenter beyond a trusted local connection. Bind defaults to loopback; a local tunnel can publish that listener. `CRITTER_DEMO_BIND=0.0.0.0` is an explicit LAN option. Port defaults to 4180.

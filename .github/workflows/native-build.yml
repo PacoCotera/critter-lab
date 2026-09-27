@@ -34,6 +34,15 @@ jobs:
           python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
+      - name: Package tested Lab staging bundle
+        run: |
+          python3 native/tests/test_package_staging.py
+          python3 native/package_staging.py create \
+            --binary native/build/lab/critter_lab \
+            --output "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz"
+          python3 native/package_staging.py verify \
+            "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz" \
+            --commit "$GITHUB_SHA"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-lab-${{ github.sha }}
@@ -41,6 +50,7 @@ jobs:
             native/build/lab/critter_lab
             native/build/lab/*.map
             native/build/lab/*.log
+            native/build/lab/critter-lab-staging-*.tar.gz
           if-no-files-found: error
           retention-days: 14
 
