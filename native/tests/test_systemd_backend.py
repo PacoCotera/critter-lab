@@ -56,7 +56,7 @@ class SystemdBackendTests(unittest.TestCase):
             env.root = Path(temporary)
             scratch = env.root / 'check-fixture'
             scratch.mkdir(mode=0o700)
-            with patch('updater_systemd.subprocess.Popen', side_effect=RuntimeError('capture')) as launch, patch.object(env.service, '_drain'):
+            with patch('updater_systemd.subprocess.Popen', side_effect=RuntimeError('capture')) as launch, patch.object(env.service, '_drain'), patch.object(env, '_record_launch'):
                 with self.assertRaisesRegex(RuntimeError, 'capture'):
                     env.run_native(Path('/fixed/release'), scratch / 'state', 'status')
             command = launch.call_args.args[0]
