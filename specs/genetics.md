@@ -122,11 +122,17 @@ Reserve linkage/provenance now at the conceptual level; do not equate dimension 
 
 Accepted: researched samples can produce lab-created founders with explicitly no creature parents. Samples and class templates are provenance, not parents; parentless origin differs from unknown ancestry. Founders enter the same framework as bred offspring and can reproduce when compatible and capable.
 
-Research supports possibilities followed by guided synthesis. Before creation, all required genomic regions must be unlocked and a complete supported genome selected; creation cannot complete missing genes or substitute a hidden lottery. How sample evidence establishes the candidate space remains open. Preserve the console-only route with truthful laboratory provenance. [Gameplay](gameplay.md) defines the research interaction; the [sample-to-critter contract](sample-to-critter-contract.md) separates sample, knowledge, selected genome, phenotype and individual, including transaction/retry boundaries.
+Research supports possibilities followed by guided synthesis. Before creation, all required genomic regions must be decoded and a complete supported genome selected; creation cannot complete missing genes or substitute a hidden lottery. How sample evidence establishes the candidate space remains open. Preserve the console-only route with truthful laboratory provenance. [Gameplay](gameplay.md) defines the research interaction; the [sample-to-critter contract](sample-to-critter-contract.md) separates sample, knowledge, selected genome, phenotype and individual, including transaction/retry boundaries.
 
 Environmental similarity does not establish identical genomes or individual identity. Collection points are neither gene counts nor a universal strength bonus. Research overlays add knowledge without rewriting collected evidence. Opening alone does not promise loot, rarity, family membership or an encyclopedia reward.
 
 ### Genome imagery and progression
+
+Unknown regions represent undiscovered information, never a locked permission or purchased unlock. The player can retain several partially decoded genome research records and choose among them. Resources determine which studies can currently run; they do not make known regions become unknown when spent elsewhere. Zones are a promising owner-supported organizing direction, with visual encoding and exact biological/content mapping still to develop; zones are not automatically the five information layers or one study each.
+
+Accepted: research progressively decodes parts of a genome. A fully decoded genome is required before a critter can be incubated; incubation cannot fill unknown regions or bypass research. The Lab must show which parts are decoded, which remain unknown and the research progress toward completeness. Decoding reveals knowledge and supported possibilities, not mutation of an existing individual.
+
+Genomes vary in complexity, and the game has progression from simpler genomes toward more complex ones. The small V1 worked genome is an introductory example, not a universal study count or ceiling. Exact progression gates, complexity measures and research requirements remain open; do not invent levels, thresholds or assume complexity is merely more pixels.
 
 Accepted: unresolved bitmap regions represent genuinely unresolved required information; findings reveal or annotate them; supported configurations have explainable visual differences. Known carried-but-unexpressed variants must differ from unknown regions. A created individual’s genome view must relate to its actual genome; decorative pixels cannot claim genetic meaning. Encoding, region mapping and minigames remain open.
 
@@ -138,7 +144,95 @@ The bounded host founder fixture uses authored `Cc / Rr / Pp`: crown and eye rin
 
 Unsupported dimensions are unmodeled, not zero biology. The fixture retains one demo identity, genome, phenotype, origin and portrait across reveal/reload; previews do not consume real inventory. The [sample-to-critter contract](sample-to-critter-contract.md) proposes the complete-genome selection and resource-commitment boundary; this older fixture does not implement that production boundary.
 
+## Worked bridge: traits, alleles, research and phenotype
+
+**Proposed teaching example, not canonical anatomy or balance.** This applies the existing five-layer/eleven-family framework. Crown, eye rings and pale markings reuse the bounded fixture's allele rules; the movement/energy extension below is a new proposal. A small example does not replace the complete framework or authorize production incubation with unmodeled required information.
+
+### Vocabulary and the five layers in one individual
+
+A **trait** is a describable property, such as crown presence or locomotion efficiency. A **locus** is a hereditary position; an **allele** is a variant at that position. The **genotype** records the allele copies. **Expression rules** resolve their interactions under a declared life stage/context into the **phenotype**. Current condition and learned behavior can change performance without changing the genotype. A trait need not have one locus, and one locus may influence several traits.
+
+| Framework layer | In this example | Research/presentation consequence |
+| --- | --- | --- |
+| 1 Class/body plan | Compatible example class permits a crown frill, eye rings and body markings; defines applicable structures and reproduction | Establish the applicable vocabulary. A crown allele has no universal meaning across plants, microbes or ghosts |
+| 2 Individual genome | Selected candidate has Cc / Rr / Pp, with optional example movement/energy loci described below | Record both copies, including variants that will not visibly express. Decoding establishes what is present/supported |
+| 3 Expression/development | C dominates c for crown expression; R dominates r for rings; pale markings require pp in the reference context | Rules explain the result. Dominant does not mean stronger/better; no hidden activation roll in this founder example |
+| 4 Resolved phenotype | Crown present, eye rings present, pale markings absent; p is carried but unexpressed | The portrait must agree with this result. A carried allele is known hereditary information, not a faint marking or an unknown region |
+| 5 Lifetime state/history | Same individual can later be tired, trained or injured | Current performance and acquired experience remain distinct from inherited potential and are not filled in by decoding a sample |
+
+Research knowledge is an overlay describing which facts the player has established about these layers; it is not a sixth genomic layer. Before creation the record describes a sample and its supported complete configurations. A chosen configuration becomes the individual genome only through the accepted creation boundary. Studying does not rewrite alleles to improve the result.
+
+### Traceable trait cards
+
+| Trait / family | Locus and proposed alleles | Expression rule in declared reference context | Example result | What a study must actually establish |
+| --- | --- | --- | --- | --- |
+| Crown frill / Structure | crown: C, c; two copies | CC or Cc gives crown; cc gives no crown | Cc → crown present, c carried | Both copies/support for the configuration and the applicable expression rule; appearance alone cannot distinguish CC from Cc |
+| Eye rings / Appearance | rings: R, r; two copies | RR or Rr gives rings; rr gives plain eyes | Rr → rings present, r carried | Rr rather than merely a picture of rings; no assumption that rings improve sensing |
+| Pale markings / Appearance | markings: P, p; two copies | pp gives pale markings; PP or Pp does not | Pp → no pale markings, p carried; pp → pale markings | Whether the record supports Pp, pp or another defined pair, and what that means for phenotype and later inheritance |
+| Burst drive / Mechanics and movement, Energy | move.drive: M, m; two copies; new illustrative content | Any M supports the proposed burst-capable form; mm supports steady form. Under the same maturity/medium/effort context, burst action has greater peak force demand and energy demand | Mm can support burst movement; this alone does not establish exact speed, endurance or learned control | The drive variants, applicable body structure and movement/energy dependency; no numerical speed is implied |
+| Movement energy efficiency / Energy, Mechanics and movement | move.efficiency: E, e; two copies; new illustrative content | Any E reduces the energy required for the same supported action compared with ee under matched conditions; it does not grant a missing locomotion mode or burst capability | Mm/Ee retains the burst-capable phenotype with lower action cost than Mm/ee; absolute costs remain undefined | Efficiency pair and its interaction with the drive result; endurance also depends on capacity/condition and cannot be inferred from E alone |
+
+These are fictional qualitative rules for a worked proposal. IDs, inheritance scheme and directions of effect are explicit; parameter values, ranges, physical units and production validation remain open. Movement and efficiency use the existing two-copy experimental scheme, not a universal rule for all classes. Traits are separate from resource names: spending Lumen does not install a light allele, and collecting Mineral grains does not select a crown.
+
+### Genome zones are views into this structure
+
+Proposed knowledge zones: **form** can link the crown locus and body-plan constraints; **markings** can link rings/markings loci; **movement** can link drive and efficiency, with an explicit relation to energy. These are information groupings, not chromosomes, the five layers, or proof that one study corresponds to one zone. A locus may contribute to several displayed traits without being duplicated in the genome.
+
+For a markings example, the research sequence could be:
+
+1. **Unknown:** the markings pair is not established. Show no invented allele or predicted coat.
+2. **Partly decoded:** one p copy is established; the other remains unknown. Pp and pp have different appearances, so pale appearance is still unresolved. This is incomplete knowledge, not a selected genotype containing a literal question-mark allele.
+3. **Decoded:** Pp is established for the worked supported candidate. The finding is **“Pale variant carried”**; the reference phenotype has no pale markings. A separate fully supported pp candidate, if the sample genuinely supports it, would express pale markings. Research cannot fabricate that alternative.
+
+The visual change must show which hereditary fact became known and its consequence. A filled tile alone cannot explain carried versus expressed. Clicking a zone is not an input model; existing console controls focus, inspect and act on supported studies.
+
+With two compatible Pp parents, the illustrative two-copy model gives PP 25%, Pp 50%, pp 25%, so pale markings can appear in 25% of offspring even when neither parent shows them. These are genotype/expression probabilities under the example rules, not research-success odds or breeding permission. This connects a discovery to an understandable later reason to keep an individual.
+
+### Keep all eleven families visible
+
+| Dimension family | Coverage in the worked bridge |
+| --- | --- |
+| Structure | Crown/body-plan applicability; final body plan remains proposed |
+| Appearance | Rings and pale markings, including carried versus expressed |
+| Mechanics and movement | Proposed drive/efficiency interaction; no invented universal speed stat |
+| Sensing and signaling | Not modeled here; eye-ring appearance grants no sensory capability |
+| Cognition and innate tendencies | Not modeled here; drive does not silently determine personality or intelligence |
+| Energy and nutrition | Proposed movement cost relationship; reserves/food compatibility remain separate |
+| Maintenance and protection | Not modeled here; a crown grants no implicit armor |
+| Affinities and exposure response | Not modeled here; expedition origin does not automatically assign affinity |
+| Development and longevity | Reference maturity must be stated; growth/transformations/lifespan not selected by this example |
+| Reproduction | Bounded two-copy compatible-parent example; other reproduction schemes and compatibility remain open |
+| Fantastic physiology | Not modeled here; optional structured abilities retain their own prerequisites and costs |
+
+“Not modeled” is not absent, zero, known or decoded. For any production sample, authored content must declare which information is required, applicable, known from a valid class definition, or genuinely not applicable. Incubation needs all of that sample's required genomic information decoded, not merely all visible prototype tiles colored in.
+
+### How this supports progression and research choices
+
+An introductory record can teach a discrete inherited feature and carried-versus-expressed variation. A later record can introduce a relationship between loci: knowing Mm alone leaves energy demand incompletely understood until the efficiency contribution is resolved. Later content can add regulatory/developmental or structured-ability prerequisites within the same accepted layers and dimension families. Progression increases meaningful relationships, not mandatory gene count or research repetition.
+
+The [collection/resource example](../design/research-and-creation.md#worked-collection-three-records-two-more-expeditions) now uses these explicit findings. Its study costs remain illustrative. Research tools reveal facts and supported configurations; inventory does not determine alleles and expedition points do not become genetic power.
+
 ## Generation and preservation
+
+### Pip: accepted worked phenotype reference
+
+Owner welcomed Pip as a useful complete qualitative example on 27 September2026. Carry it forward as the worked reference for engine/content design; this does not finalize all species content, numerical balance, lifespan policy or art. Pip is a small six-legged terrestrial critter with a rounded charcoal body, cream underside, short jointed legs/claws, amber eyes with pale rings and a soft crown frill. Cc/Rr/Pp expresses crown and rings while carrying p without pale body markings; proposed Mm/Ee supports short bursts with comparatively efficient movement.
+
+Reference context: healthy, rested adult on firm ground in mild conditions. Structure is flexible, without a rigid shell or wings. Movement includes walking, brief dashes and low rough-obstacle clambering, without flight or specialized swimming. Sensing includes nearby visual motion and surface vibrations; signaling includes quiet chirps and frill display. Innate tendencies are moderate curiosity, caution toward sudden movement and tolerance of familiar individuals, with simple association learning. Energy/nutrition uses a proposed plant-derived profile, modest storage and recovery between repeated bursts. Protection supports minor surface repair but no limb regeneration or implicit armor. Affinities favor mild, shaded, moderately humid settings; prolonged heat/dryness can affect performance, with thresholds open. Development moves from smaller juvenile with less-developed frill to adult; no later transformation or lifespan/death rule selected. Reproduction uses the bounded compatible two-parent/two-copy example; costs/timing and exact compatibility open. Fantastic physiology is deliberately not applicable in this proposed class. Dash, clamber and signaling abilities require their actual structures/capabilities and current conditions. Age, fatigue, hunger, injuries and training remain individual state/history.
+
+These class-baseline facts still need explicit inherited contributors and expression/content definitions before engine generation can claim full validity. Five illustrated loci are not a whole genome. Unknown/unmodeled baseline facts cannot silently become known defaults.
+
+### Proposed genetic engine and content library
+
+Owner requests a genetic engine capable of generating valid genomes and managing a locus library, with LLM-assisted and algorithmic generation to reduce baseline-authoring burden. This is a design objective, not an approved implementation scope, technology choice or API-spending authorization.
+
+Recommended split: LLMs assist content authors by proposing loci, variants, family baselines, relationships and worked phenotype/research examples; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
+
+The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Class baselines compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
+
+Founder generation assembles candidates within these constraints; expression resolves them to a phenotype with an explanation trace. Breeding derives alleles from actual parents under explicit inheritance/viability rules rather than manufacturing a replacement valid child. Invalid combinations are rejected or handled by the chosen reproductive policy, not repaired by silently swapping genes. Content versions and saved genomes, expression and assets remain pinned.
+
+First proposed proof: encode Pip's applicable baseline, a small locus set and declared unmodeled boundaries; generate a varied batch, explain each phenotype's inherited causes, reject deliberately incompatible combinations and demonstrate one compatible cross. Review phenotype variety and research usefulness as well as validity. No whole-library editor, broad class catalogue, universal genetics solver or production service is needed for this proof. Later extension follows the existing extension policy and all five layers/eleven families.
 
 The [architecture pipeline](architecture.md#creature-production-pipeline) owns remote generation, automated content tooling, appearance mapping and retained assets. Genetics supplies inspectable inherited information and resolved expression; art cannot choose genes. Preserve algorithm/input/rules versions and exact outcomes; neither a random seed nor a prompt is a sufficient record. Learned state remains separate.
 

@@ -1,6 +1,6 @@
 # Creation terms: use the sample, keep the discovery
 
-**Accepted V1 game design; not implemented.** The accepted research loop fully unlocks the sample’s required genomic information before a complete supported configuration is selected. Creation introduces no hidden genetic lottery. These rules define what that commitment means for the player; exact prices, durations and resource identities remain unselected.
+**Accepted V1 game design; not implemented.** The accepted research loop fully decodes the sample’s required genomic information before a complete supported configuration is selected. Creation introduces no hidden genetic lottery. These rules define what that commitment means for the player; exact prices, durations and resource identities remain unselected.
 
 ## Creation rule
 

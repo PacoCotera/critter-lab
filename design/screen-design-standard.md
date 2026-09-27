@@ -1,6 +1,6 @@
 # Screen design standard
 
-Design is in exploration. The previous Lab and Probe proposals were rejected; they are not a baseline to implement. Screen composition, typography, art and interaction require review before development resumes.
+Playful Pixel Lab is the selected foundation, with refinement-02 supplying the current proposed vocabulary. Continue that direction. The connected research entity/game model now precedes further composition; previous rejected Lab/Probe layouts and the superseded bare process sketch are not implementation baselines. Screen composition, art and interaction still require owner review.
 
 ## Instrument character
 
@@ -28,7 +28,7 @@ Show one unmistakable focus marker. Distinguish focus from a retained selection,
 
 ## Visual language before screens
 
-First compare original graphic styles through typography, color roles, shapes, icons, pixel-art/illustration treatment and focus/feedback examples. Neither monochrome terminal imitation nor recoloring one layout constitutes a full-color visual language. Current scale and grid values above are exploration hypotheses, not approved tokens.
+Use the selected refinement-02 typography, color roles, shapes and interaction vocabulary as inputs; do not restart graphic-style selection. First establish what the collection, resource choices, discoveries and genome zones mean in [the research game model](research-and-creation.md). Then demonstrate those relationships visually. Current scale and grid values remain proposed tokens, not measured hardware constraints.
 
 Then apply the selected vocabulary to a few representative states and assess whether it remains clear, distinctive and consistent. Revise the vocabulary when application exposes a weakness. Lab and Companion can exploit full color; Probe needs deliberately designed monochrome forms, not automatic grayscale conversion.
 
