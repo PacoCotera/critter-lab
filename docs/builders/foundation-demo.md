@@ -4,7 +4,7 @@ The owner has authorized a small playable scaffold on the preliminary native tar
 
 ## What this increment implements
 
-Review and load Material trail at the Lab, start the Probe, advance demonstration time, optionally inspect a clue, complete the outing, receive its haul once, and spend one unit of lab supplies on Structure study. Reopening retains the finding and remaining inventory. Required genomic regions remain unknown; creation is unavailable. Names, quantities and timing are fixtures, not approved game balance.
+Review and load Material trail at the Lab, start the Probe, advance demonstration time, optionally inspect a clue, complete the expedition, receive its haul once, and spend one unit of lab supplies on Structure study. Reopening retains the finding and remaining inventory. Required genomic regions remain unknown; creation is unavailable. Names, quantities and timing are fixtures, not approved game balance.
 
 Player controls perform explicit actions. Separate engineering controls advance simulated time. The browser cannot award resources, advance research, choose game states or draw device pixels.
 

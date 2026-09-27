@@ -12,7 +12,7 @@ Progress must develop gradually through actual expedition state. The current two
 
 The Probe is the player's contact with the world. Its resting screen must show collection activity, expedition progress, collected evidence and resources, with encounters visibly distinct from ordinary collecting. A player should be able to see what has changed without repeatedly opening status pages. Sampling remains straightforward and does not demand constant attention.
 
-Player language must reflect discovery rather than cargo transport. Use expedition rather than outing; avoid haul as an umbrella for Probe results. Distinguish observations, evidence, discoveries, samples and resources according to what the game actually records. Samples and supplies are part of an expedition, not its entire purpose.
+Player language must reflect discovery rather than cargo transport. Use expedition consistently; avoid haul as an umbrella for Probe results. Distinguish observations, evidence, discoveries, samples and resources according to what the game actually records. Samples and supplies are part of an expedition, not its entire purpose.
 
 The owner requests visible collected points as well as progress. Exact point meaning, resource relationships, progression rules and balance remain open; do not substitute supply counts for points or invent a reward counter in the renderer. Progress must come from the expedition state, and observed context must distinguish measured inputs from fictional events and simulator inputs. Show relevant changes rather than animation for its own sake. Refresh cadence and power behavior require physical e-ink validation.
 

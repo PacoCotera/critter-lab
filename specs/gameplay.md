@@ -20,9 +20,9 @@ The devices provide distinct physical experiences; see the [experience principle
 
 The **Probe** offers real-world sampling, fictional encounters, collection progress and resources without requiring a phone. Samples carry research evidence; resources are consumable inventory quantities. Evidence points do not automatically become food or materials. [Probe evidence](probe.md) defines sensed versus generated inputs, proposed scoring and measurement limits.
 
-Accepted: the Lab offers expedition profiles with duration, difficulty, yield and event characteristics. Choosing one sets the Probe outing's gathering focus and possible events; [Probe profiles](probe.md#lab-selected-expedition-profiles--accepted-direction) define the boundary. Exact balance and difficulty consequences remain open.
+Accepted: the Lab offers expedition profiles with duration, difficulty, yield and event characteristics. Choosing one sets the Probe expedition's gathering focus and possible events; [Probe profiles](probe.md#lab-selected-expedition-profiles--accepted-direction) define the boundary. Exact balance and difficulty consequences remain open.
 
-The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, inventory changes, research progress, developmental changes or resources running low, suggesting interventions and the next outing. Major discoveries and individual reveals punctuate that process. Frequent interest does not establish a neglect penalty; timers, notifications and setbacks remain open.
+The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, inventory changes, research progress, developmental changes or resources running low, suggesting interventions and the next expedition. Major discoveries and individual reveals punctuate that process. Frequent interest does not establish a neglect penalty; timers, notifications and setbacks remain open.
 
 The **Companion** centers training, evolution and bonding. One versus several carried individuals, and a larger habitat with a carried subset, remain open. The **caddy** charges the portables; seating adds no gameplay progress or implicit transfer.
 

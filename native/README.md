@@ -98,7 +98,7 @@ python3 native/presenter/server.py
 
 Open the presenter: Expedition details, Load probe, switch to Probe and Start. Simulated expedition supply two progress steps, with an optional encounter between them. Return to Lab, Bring to lab, Review study and Start study. The saved finding uses one unit of lab supplies and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
 
-Reset sandbox is a simulator control outside the device. Its inline confirmation explains that resetting clears the shared playground for everyone. Confirmation returns to the initial outing and selects Lab. Reset uses the same locked, atomic saved-state command path and retry identity as other commands, while keeping revisions increasing; it is not an MCU/domain action or a physical device capability.
+Reset sandbox is a simulator control outside the device. Its inline confirmation explains that resetting clears the shared playground for everyone. Confirmation returns to the initial expedition and selects Lab. Reset uses the same locked, atomic saved-state command path and retry identity as other commands, while keeping revisions increasing; it is not an MCU/domain action or a physical device capability.
 
 The browser displays native pixel images and action descriptors; it implements no collection, research or pixel rules. Frames must load before controls activate. Pending requests retain their operation ID for exact retry after uncertainty, including page reload. This is one shared, single-owner playground and one snapshot, not distributed transfer or cloud authority. Receiving atomically moves the fixture haul into the Lab snapshot; there is no radio acknowledgement to infer.
 
