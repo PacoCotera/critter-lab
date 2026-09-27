@@ -22,15 +22,24 @@ def load_release(path):
     try:
         metadata = json.loads(path.read_text(encoding="utf-8"))
         commit = metadata["commit"]
+        committed_at = metadata["committed_at"]
         deployed_at = metadata["deployed_at"]
         if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
             raise ValueError()
-        if not isinstance(deployed_at, str):
+        if not isinstance(committed_at, str):
             raise ValueError()
-        timestamp = datetime.fromisoformat(deployed_at.replace("Z", "+00:00"))
-        if timestamp.tzinfo is None:
+        committed = datetime.fromisoformat(committed_at.replace("Z", "+00:00"))
+        if committed.tzinfo is None:
             raise ValueError()
-        result = {"commit": commit, "deployed_at": timestamp.isoformat()}
+        if deployed_at is not None:
+            if not isinstance(deployed_at, str):
+                raise ValueError()
+            deployed = datetime.fromisoformat(deployed_at.replace("Z", "+00:00"))
+            if deployed.tzinfo is None:
+                raise ValueError()
+            deployed_at = deployed.isoformat()
+        result = {"commit": commit, "committed_at": committed.isoformat(),
+                  "deployed_at": deployed_at}
         if "subject" in metadata:
             subject = metadata["subject"]
             if (not isinstance(subject, str) or not 1 <= len(subject) <= 200
@@ -40,7 +49,7 @@ def load_release(path):
             result["subject"] = subject
         return result
     except (OSError, ValueError, KeyError, TypeError, UnicodeError):
-        return {"commit": None, "deployed_at": None}
+        return {"commit": None, "committed_at": None, "deployed_at": None}
 
 
 class Handler(BaseHTTPRequestHandler):

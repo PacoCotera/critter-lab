@@ -68,20 +68,24 @@ class Presenter(unittest.TestCase):
 
     def test_release_is_validated_and_immutable_for_running_server(self):
         path = Path(self.directory.name) / "release.json"
-        metadata = {"commit": "a" * 40, "deployed_at": "2026-09-26T12:34:56Z"}
+        metadata = {"commit": "a" * 40, "committed_at": "2026-09-25T11:00:00Z",
+                    "deployed_at": None}
         path.write_text(json.dumps(metadata))
         self.server.release = PRESENTER.load_release(path)
         path.write_text("invalid metadata")
         code, output, _ = self.request("/api/release")
         self.assertEqual(code, 200)
         self.assertEqual(json.loads(output), {
-            "commit": "a" * 40, "deployed_at": "2026-09-26T12:34:56+00:00"})
-        self.assertEqual(PRESENTER.load_release(path), {"commit": None, "deployed_at": None})
+            "commit": "a" * 40, "committed_at": "2026-09-25T11:00:00+00:00",
+            "deployed_at": None})
+        self.assertEqual(PRESENTER.load_release(path), {
+            "commit": None, "committed_at": None, "deployed_at": None})
         self.assertEqual(self.request("/release.json")[0], 404)
 
     def test_release_subject_validation_and_legacy_fallback(self):
         path = Path(self.directory.name) / "release.json"
-        metadata = {"commit": "b" * 40, "deployed_at": "2026-09-26T12:34:56Z"}
+        metadata = {"commit": "b" * 40, "committed_at": "2026-09-25T11:00:00Z",
+                    "deployed_at": "2026-09-26T12:34:56-06:00"}
         path.write_text(json.dumps(metadata))
         self.assertNotIn("subject", PRESENTER.load_release(path))
         metadata["subject"] = "Keep specimen identity <intact>"
@@ -90,7 +94,14 @@ class Presenter(unittest.TestCase):
         for invalid in (None, 42, "", "   ", "a" * 201, "two\nlines", "two\r lines", "tab\ttext", "line\u2028break"):
             metadata["subject"] = invalid
             path.write_text(json.dumps(metadata))
-            self.assertEqual(PRESENTER.load_release(path), {"commit": None, "deployed_at": None})
+            self.assertEqual(PRESENTER.load_release(path), {
+                "commit": None, "committed_at": None, "deployed_at": None})
+
+        metadata["subject"] = "valid"
+        metadata["committed_at"] = "2026-09-25T11:00:00"
+        path.write_text(json.dumps(metadata))
+        self.assertEqual(PRESENTER.load_release(path), {
+            "commit": None, "committed_at": None, "deployed_at": None})
 
     def test_origin_body_and_native_revision_guards(self):
         body = json.dumps({"name": "review", "revision": 0, "operation_id": "first"}).encode()
