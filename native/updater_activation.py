@@ -65,7 +65,7 @@ class Activation:
 
     @classmethod
     def from_disposable_systemd(cls, environment):
-        """Root test seam; no production or cross-process recovery admission."""
+        """Root test seam requiring held, validated disposable namespace ownership."""
         from updater_systemd import DisposableSystemdEnvironment
         if os.name != 'posix' or os.geteuid() != 0 or type(environment) is not DisposableSystemdEnvironment:
             raise ValueError('exact root disposable systemd environment required')

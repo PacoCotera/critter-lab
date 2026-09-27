@@ -82,3 +82,11 @@ Run python3 -m unittest discover -s native/tests -p test_systemd_activation.py f
 Run `python3 -m unittest discover -s native/tests -p test_systemd_restart.py` for ownership and validation guards. The root-only `native/tests/rehearse_systemd_restart.py` harness requires a trusted bundle, new marked root and separate nonzero identities. A local systemd rehearsal passed nine fresh-process SIGKILL boundaries, save/receipt preservation, surviving check descendants, real gateway maintenance/recovery responses and duplicate reopener exclusion. Synthetic bundles and native wrappers are labeled fixtures, not published releases.
 
 This is explicit restart recovery: a crash after the gate opens leaves it open until a reopener closes it. No automatic supervisor, reboot/power-loss proof, legacy bootstrap or production installation is provided. Setup-failure cleanup was independently source reviewed after the successful rehearsal; that branch was not exercised by the successful run.
+
+## Authored legacy-layout fixture
+
+`native/tests/rehearse_legacy_bootstrap.py` is a root disposable test harness, not a live migration tool. It accepts a trusted test bundle and explicitly authored historical metadata, preserves exact executable/presenter assets through normalization, retains historical metadata separately, and records `local-legacy-fixture` provenance. The fixture SHA mirrors an older layout; its code bytes are not asserted to be that historical installation or its CI artifact.
+
+Run `python3 -m unittest discover -s native/tests -p test_legacy_bootstrap.py` for eight integrity/guard checks. The actual local fixture rehearsal passed initial health failure staying gated, SIGKILL before acceptance, fresh-process recovery after acceptance, and later update/play/rollback preserving progress. Bootstrap itself never writes the supplied state; historical time remains separate from actual acceptance time.
+
+Reset of a failed unaccepted fixture is explicit operator test cleanup, validates all evidence before removal, and is not automatic recovery. This evidence does not authorize live capture, establish actual historical executable compatibility or provide production bootstrap/installation.
