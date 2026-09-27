@@ -1,6 +1,6 @@
 # Native first-expedition fixture
 
-[Release delivery and disposable updater checks](UPDATER.md) define artifact provenance, activation metadata and save-preserving recovery. They do not establish production staging readiness.
+[CI release delivery](UPDATER.md) defines artifact provenance and the staging service boundary.
 
 This builder entry point compiles three native programs sharing a bounded C domain and scanline renderer. The Linux Lab executable runs the saved first-expedition fixture and emits native BMP frames. Probe and Companion link the same portable code, apply and validate one selection transition and render one checksum row at boot; neither has a panel driver. Cross-compilation is not evidence of booting hardware.
 

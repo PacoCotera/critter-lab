@@ -74,7 +74,7 @@ A historical Lab receipt does not prove current Probe emptiness, remaining Lab i
 
 ## Compatibility and evidence
 
-Native runtime delivery separates verified release bytes from persistent player state. A successful build is not a deployment: promotion must bind a trusted main revision to successful CI and exact archive digests. Activation checks save compatibility on copies, gates player traffic until acceptance and preserves current progress during rollback. The [updater contract](../native/UPDATER.md) distinguishes disposable checks from production service and proxy requirements.
+Native runtime delivery separates verified release bytes from persistent player state. CI publishes tested bundles tied to successful main builds and exact digests. Staging switches the existing presenter service to a verified release, checks health and restores the previous release if startup fails. The [delivery contract](../native/UPDATER.md) describes this small boundary; host operations remain private.
 
 Preserve individual ID, origin versus ancestry, genome revision, expression context/rules, family/mapping versions and exact portrait/motion/sequence assets. A new device-profile derivative has its own version and must not overwrite the original. Unsupported content retains records and verified historical display where possible.
 

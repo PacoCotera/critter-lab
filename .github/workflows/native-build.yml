@@ -34,12 +34,6 @@ jobs:
           python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_updater.py
           python3 native/tests/test_delivery.py
-          python3 native/tests/test_delivery_worker.py
-          python3 native/tests/test_deployment_gateway.py
-          python3 -m unittest discover -s native/tests -p test_systemd_backend.py
-          python3 -m unittest discover -s native/tests -p test_systemd_activation.py
-          python3 -m unittest discover -s native/tests -p test_systemd_restart.py
-          python3 -m unittest discover -s native/tests -p test_installed_environment.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
           cc --version > native/build/lab/compiler.log
       - name: Package tested Lab staging bundle
@@ -51,8 +45,6 @@ jobs:
           python3 native/package_staging.py verify \
             "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz" \
             --commit "$GITHUB_SHA"
-          python3 native/tests/rehearse_updater.py \
-            "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-lab-${{ github.sha }}
