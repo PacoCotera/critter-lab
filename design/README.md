@@ -14,9 +14,13 @@ The [ecosystem reference](references/ecosystem.png) shows the portables with the
 
 ## Screen design in progress
 
-Compare the [visual-language explorations](visual-language/README.md) before choosing a screen direction. Neither style is approved.
+Compare the [visual-language explorations](visual-language/README.md) before choosing a screen direction. Playful Pixel Lab is selected as the foundation for refinement; final components and screen designs remain proposals.
 
 The [screen design standard](screen-design-standard.md) defines the current exploration and review sequence. Previous prototype layouts are rejected as the target experience. Visual concepts must be reviewed before their implementation.
+
+## Current connected review
+
+[Expedition-to-discovery storyboard](expedition-review/README.md) joins Lab preparation, Probe collection, return and a saved research finding. Three proposed choices cover interruption, optional encounters and the bridge into research. Creation and Companion life are later context; this is paper design, not working screens or approved rules.
 
 ## What to review
 
