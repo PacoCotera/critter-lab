@@ -90,3 +90,13 @@ This is explicit restart recovery: a crash after the gate opens leaves it open u
 Run `python3 -m unittest discover -s native/tests -p test_legacy_bootstrap.py` for eight integrity/guard checks. The actual local fixture rehearsal passed initial health failure staying gated, SIGKILL before acceptance, fresh-process recovery after acceptance, and later update/play/rollback preserving progress. Bootstrap itself never writes the supplied state; historical time remains separate from actual acceptance time.
 
 Reset of a failed unaccepted fixture is explicit operator test cleanup, validates all evidence before removal, and is not automatic recovery. This evidence does not authorize live capture, establish actual historical executable compatibility or provide production bootstrap/installation.
+
+## Recover-only installed-layout adapter
+
+`activation_manager.py recover` uses the fixed installed profile, protected configuration/tool hashes, permanent fragment hashes and exact transient provenance. `Activation.from_installed_environment()` is an explicit exact-class root seam; default and general disposable root guards remain. Recovery requires an already existing runtime-owned0600 save under a0700 directory and never creates or replaces it. Runtime and gateway bind loopback; public traffic must pass through the gateway.
+
+The placeholder configuration and manager/gateway templates in `native/deployment/` are review inputs, not an installer. A persistent namespace must already exist; only the explicitly marked local test profile can initialize one. `apply-request` and `bootstrap-captured` fail closed and are not implemented. No hook/worker/timer wiring is included.
+
+Run `python3 -m unittest discover -s native/tests -p test_installed_environment.py` for eleven focused guards. `native/tests/rehearse_installed_recovery.py` refuses existing fixed test paths and accepts save input only from a marked disposable fixture. Local template verification, network-independent recovery, unchanged external fixture save and recovery after absent gate/transients with simulated boot identity passed. An initial static-unit lookup race failed before runtime creation; a single bounded permanent-property snapshot corrected it and the fresh fixture passed.
+
+This evidence excludes actual boot startup, public gateway routing, real reboot/power loss, target-host version behavior, request application, captured bootstrap and live installation. Existing disposable entrypoints and transaction remain supported.

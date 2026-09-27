@@ -75,6 +75,20 @@ class Activation:
         activation._systemd_test = True
         return activation
 
+    @classmethod
+    def from_installed_environment(cls, environment):
+        """Exact verified installed-layout seam; transaction behavior is shared."""
+        from updater_systemd import InstalledSystemdEnvironment
+        if os.name != 'posix' or os.geteuid() != 0 or type(environment) is not InstalledSystemdEnvironment:
+            raise ValueError('exact root installed environment required')
+        environment._require_ownership()
+        if Path(__file__).resolve() != environment.tools / 'updater_activation.py':
+            raise ValueError('activation must execute from verified installed tools')
+        activation = cls.__new__(cls)
+        activation._bind_environment(environment)
+        activation._systemd_test = True
+        return activation
+
     def _bind_environment(self, environment):
         self._systemd_test = False
         self.environment = environment
