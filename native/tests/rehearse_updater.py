@@ -63,7 +63,10 @@ def main():
         root = Path(temporary)
         (root / '.disposable').write_bytes(b'critter-lab-disposable\n')
         config = dict(root=str(root), port=free_port(), health_port=free_port(), timeout=2, disposable=True)
-        activation = Activation(config)
+        disposable = Activation(config)
+        activation = Activation.from_environment(disposable.environment)
+        assert activation.service is disposable.service
+        assert activation.save == disposable.save
         try:
             for sha, bundle in ((old, original), (candidate, root / 'candidate.tar.gz'), (broken, root / 'broken.tar.gz')):
                 if sha != old:
@@ -200,3 +203,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

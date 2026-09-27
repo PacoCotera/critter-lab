@@ -1,22 +1,17 @@
 """Disposable Linux activation transaction; never a production privilege adapter."""
-from contextlib import contextmanager
 from datetime import datetime
-import fcntl
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
-import signal
-import stat
 import struct
-import subprocess
 import tarfile
 import tempfile
 from zoneinfo import ZoneInfo
 
 import package_staging
-from updater_service import ProcessService
+from updater_environment import DisposableEnvironment, regular_bytes
 
 LIMIT = 64 * 1024 * 1024
 
@@ -39,21 +34,6 @@ def write_json(path, value):
     sync_directory(path.parent)
 
 
-def regular_bytes(path, limit=LIMIT):
-    descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
-    try:
-        info = os.fstat(descriptor)
-        if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
-            raise ValueError('regular bounded file required')
-        with os.fdopen(descriptor, 'rb', closefd=False) as source:
-            data = source.read(limit + 1)
-        if len(data) > limit:
-            raise ValueError('file exceeds bound')
-        return data
-    finally:
-        os.close(descriptor)
-
-
 def digest(path):
     return hashlib.sha256(regular_bytes(path)).hexdigest()
 
@@ -64,52 +44,32 @@ def bounded_tar(path):
 
 class Activation:
     def __init__(self, config):
-        if os.geteuid() == 0 or set(config) != {'root', 'port', 'health_port', 'timeout', 'disposable'}:
-            raise ValueError('unprivileged disposable configuration required')
-        if config['disposable'] is not True:
-            raise ValueError('production adapter is not implemented')
-        root = Path(config['root'])
-        if not root.is_absolute() or root.resolve() != root:
-            raise ValueError('absolute nonsymlink disposable root required')
-        if regular_bytes(root / '.disposable', 100) != b'critter-lab-disposable\n':
-            raise ValueError('disposable root marker missing')
-        for parent in (root, *root.parents):
-            if parent.is_symlink():
-                raise ValueError('symlink parent rejected')
-        if root.stat().st_uid != os.getuid() or root.stat().st_mode & 0o077:
-            raise ValueError('disposable root must be private and caller owned')
-        for key in ('port', 'health_port'):
-            if type(config[key]) is not int or not 1024 <= config[key] <= 65535:
-                raise ValueError('invalid loopback port')
-        if config['port'] == config['health_port'] or type(config['timeout']) is not int or not 1 <= config['timeout'] <= 30:
-            raise ValueError('invalid service bounds')
-        self.root = root
-        self.releases, self.control = root / 'releases', root / 'control'
-        for directory in (self.releases, self.control):
-            directory.mkdir(mode=0o700, exist_ok=True)
-            if directory.is_symlink() or directory.stat().st_mode & 0o077:
-                raise ValueError('unsafe control directory')
-        self.save = root / 'state'
-        self.pointer, self.journal = self.control / 'current.json', self.control / 'journal.json'
-        self.service = ProcessService({**config, 'control': str(self.control), 'save': str(self.save)})
+        self._bind_environment(DisposableEnvironment(config))
 
-    @contextmanager
+    @classmethod
+    def from_environment(cls, environment):
+        """Inject a trusted backend without duplicating the activation transaction."""
+        if os.name != 'posix' or os.geteuid() == 0:
+            raise ValueError('unprivileged Linux activation required')
+        activation = cls.__new__(cls)
+        activation._bind_environment(environment)
+        return activation
+
+    def _bind_environment(self, environment):
+        self.environment = environment
+        self.root = environment.root
+        self.releases = environment.releases
+        self.control = environment.control
+        self.save = environment.save
+        self.service = environment.service
+        self.pointer = self.control / 'current.json'
+        self.journal = self.control / 'journal.json'
+
     def lock(self):
-        descriptor = os.open(self.control / 'activation.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            yield
-        finally:
-            os.close(descriptor)
+        return self.environment.lock()
 
-    @contextmanager
     def save_lock(self):
-        descriptor = os.open(str(self.save) + '.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            yield
-        finally:
-            os.close(descriptor)
+        return self.environment.save_lock()
 
     def read_record(self, path):
         return json.loads(regular_bytes(path, 10000))
@@ -196,36 +156,13 @@ class Activation:
         return path
 
     def native(self, release, save, *arguments):
-        import resource
-        def limits():
-            resource.setrlimit(resource.RLIMIT_FSIZE, (8 * 1024 * 1024, 8 * 1024 * 1024))
-            resource.setrlimit(resource.RLIMIT_CPU, (10, 10))
-            resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024, 256 * 1024 * 1024))
-        with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
-            process = subprocess.Popen([str(release / 'bin/critter_lab'), '--save', str(save), *map(str, arguments)],
-                                       stdout=output, stderr=errors, start_new_session=True,
-                                       preexec_fn=limits, env={'PATH': '/usr/bin:/bin'})
-            try:
-                result = process.wait(timeout=10)
-            finally:
-                try:
-                    os.killpg(process.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                process.wait()
-            if result:
-                raise ValueError('save compatibility check failed')
-            output.seek(0)
-            data = output.read(8 * 1024 * 1024 + 1)
-            if len(data) > 8 * 1024 * 1024:
-                raise ValueError('native output exceeds bound')
-            return data
+        return self.environment.run_native(release, save, *arguments)
 
     def compatibility(self, sha, snapshot):
         release = self.check_integrity(sha)
         if not snapshot.startswith(b'CRITTER_DEMO 1\n'):
             raise ValueError('save schema outside approved scope')
-        with tempfile.TemporaryDirectory(dir=self.control) as temporary:
+        with self.environment.scratch() as temporary:
             copy = Path(temporary) / 'state'
             copy.write_bytes(snapshot)
             status = json.loads(self.native(release, copy, 'status'))
@@ -249,7 +186,7 @@ class Activation:
         if previous is None:
             return
         release = self.check_integrity(candidate)
-        with tempfile.TemporaryDirectory(dir=self.control) as temporary:
+        with self.environment.scratch() as temporary:
             copy = Path(temporary) / 'state'
             for index, action in enumerate(('review', 'load', 'start', 'advance', 'inspect',
                                             'advance', 'receive', 'study_review', 'run')):
@@ -391,3 +328,4 @@ class Activation:
                     except Exception:
                         self.service.stop()
                 raise
+
