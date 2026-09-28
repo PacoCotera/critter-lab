@@ -29,6 +29,8 @@ The option defaults off; the existing `critter_lab` executable/model remain inta
 
 `input.c` owns the three study targets and same-workbench preview/reference destinations. Rotation changes one focus. Confirm down captures its displayed frame identity; only a fresh matching ready-frame release activates. Blocked holds remain consumed through release, repeats cannot rearm them, and redraw invalidates an armed press. Pointer cancellation clears gestures. Suspend/blur clears gestures and readiness; resume requires a fresh displayed frame. Safe Back can request caller restoration before readiness. Stale frame-ready acknowledgements are ignored.
 
+Several rotations during redraw update the one C-owned pending focus, without queueing intermediate targets. Rotations must identify a revision from the current page visit, within the current revision; an older page visit or pre-suspend/pre-resume revision is ignored. Only the latest pending revision can become ready. A lost input/frame response invalidates queued browser sends, clears local pointer/dial holds and attempts native cancellation. Activation remains blocked until an explicit page reload, even when cancellation cannot be confirmed; reconnect resumes with native gesture clearing and a fresh displayed frame.
+
 The executable's `serve` mode consumes one line per command and replies with one JSON status line:
 
 ```text
@@ -61,3 +63,7 @@ It defaults to localhost. Open its printed URL through the established VM access
 ## Focused evidence
 
 Native CTest passed held-input/readiness, stale-frame, safe Back, cancellation/suspend and caller-focus checks, plus source-pixel/BMP interface checks. Actual browser transport exercise and independent review are the coordinator's integration boundary. No hardware performance, player comprehension or final typography claim is made.
+
+Release test compilation explicitly undefines `NDEBUG`; a compile-time guard rejects a checks target with assertions disabled. The native checks cover rejected prior-page/future/pre-wake rotations, multiple current-page rotations and stale/latest readiness acknowledgements. Build evidence for each revision belongs to the committed-revision workflow above.
+
+Run `node --test native/selected-lab/bridge.test.mjs` for the focused in-process transport regression. It simulates a native down whose response is lost, verifies cancellation and discarded queued release, and proves subsequent input stays blocked until reload. This local check passed; it uses a controlled DOM/fetch mock and does not replace actual native/browser evidence.

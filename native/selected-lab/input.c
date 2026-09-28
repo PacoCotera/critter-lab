@@ -6,11 +6,18 @@ static void changed(SelectedLab *lab) {
   lab->ready = 0;
 }
 
+static void entered_page(SelectedLab *lab) {
+  changed(lab);
+  /* A return or lifecycle boundary invalidates navigation from the prior view. */
+  lab->page_revision = lab->revision;
+}
+
 void selected_lab_init(SelectedLab *lab) {
   memset(lab, 0, sizeof(*lab));
   lab->page = SELECTED_STUDY;
   lab->focus = lab->return_focus = SELECTED_START;
   lab->revision = 1;
+  lab->page_revision = 1;
 }
 
 const char *selected_lab_page(const SelectedLab *lab) {
@@ -33,12 +40,12 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta, unsign
     memset(&lab->back, 0, sizeof(lab->back));
     if (input != SELECTED_CANCEL) {
       lab->suspended = input == SELECTED_SUSPEND;
-      changed(lab);
+      entered_page(lab);
     }
     return;
   }
   if (input == SELECTED_ROTATE) {
-    if (!lab->suspended && lab->page == SELECTED_STUDY && delta) {
+    if (!lab->suspended && lab->page == SELECTED_STUDY && delta && frame >= lab->page_revision && frame <= lab->revision) {
       lab->focus = (SelectedFocus)(((int)lab->focus + (delta > 0 ? 1 : 2)) % 3);
       changed(lab);
     }
@@ -64,7 +71,7 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta, unsign
     if (lab->page != SELECTED_STUDY) {
       lab->page = SELECTED_STUDY;
       lab->focus = lab->return_focus;
-      changed(lab);
+      entered_page(lab);
     }
     return;
   }
@@ -77,5 +84,5 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta, unsign
     lab->page = lab->focus == SELECTED_START ? SELECTED_START_PREVIEW : lab->focus == SELECTED_CROWN_TARGET ? SELECTED_CROWN : SELECTED_EYE_RING;
     lab->focus = SELECTED_RETURN;
   }
-  changed(lab);
+  entered_page(lab);
 }

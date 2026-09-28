@@ -18,7 +18,7 @@ typedef struct { int held, allowed; unsigned revision; } SelectedGesture;
 typedef struct {
   SelectedPage page;
   SelectedFocus focus, return_focus;
-  unsigned revision;
+  unsigned revision, page_revision;
   int ready, suspended;
   SelectedGesture confirm, back;
 } SelectedLab;
