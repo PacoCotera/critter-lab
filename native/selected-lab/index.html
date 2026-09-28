@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Critter Lab · native selected screen</title><link rel="stylesheet" href="/style.css"></head>
+<body><main>
+  <header>CRITTER LAB / NATIVE C SCREEN PROOF · Browser transport only</header>
+  <section class="housing" aria-label="Simulated Lab console">
+    <div class="screen"><img id="frame" width="1024" height="600" alt="Native C Lab frame"></div>
+    <div class="controls">
+      <div class="dial-group"><div id="knob" role="group" aria-label="Console knob; drag around its center or scroll over it to rotate"><span aria-hidden="true"></span></div><span>ROTATE</span></div>
+      <button id="confirm" type="button" tabindex="-1">CONFIRM</button>
+      <button id="back" type="button" tabindex="-1">BACK</button>
+    </div>
+    <div class="paper-slot" aria-hidden="true"></div>
+  </section>
+  <p>Rotate: focus · Confirm: native preview · Back: return. Stock stays2/1/0.</p>
+  <p id="status" role="status">Connecting to native C…</p>
+  <footer>C renders every1024×600 pixel and owns input/focus/readiness. This is Linux host evidence, not MCU firmware or physical-panel validation.</footer>
+</main><script type="module" src="/bridge.mjs"></script></body>
+</html>

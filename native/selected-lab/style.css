@@ -1,0 +1,31 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #15191c; color: #dce4e8; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1200px; margin: auto; padding: 16px 24px; }
+header { font-size: 12px; color: #92adbb; margin-bottom: 12px; }
+.housing {
+  width: min(100%, 1120px, calc((100dvh - 280px) * 1.7067 + 36px));
+  margin: auto; padding: 18px; border: 2px solid #58626a; border-radius: 28px;
+  background: linear-gradient(135deg, #465057, #2d353c 48%, #222a30);
+}
+.screen { width: 100%; aspect-ratio: 1024 / 600; border: 8px solid #0c1216; border-radius: 12px; overflow: hidden; background: #19242b; pointer-events: none; }
+.screen img { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.controls { display: flex; justify-content: center; align-items: center; gap: 36px; margin: 16px 0; touch-action: none; }
+.dial-group { display: flex; align-items: center; gap: 15px; font-size: 11px; letter-spacing: .1em; }
+#knob { width: 72px; height: 72px; border-radius: 50%; border: 5px solid #141a1e; background: repeating-conic-gradient(#525c61 0deg 8deg, #343e44 8deg 16deg); position: relative; cursor: grab; touch-action: none; }
+#knob span { position: absolute; inset: 8px; border-radius: 50%; background: linear-gradient(135deg, #6a7479, #36434b); border: 1px solid #808a8f; }
+#knob span::after { content: ""; position: absolute; width: 5px; height: 17px; background: #c5d1d7; left: calc(50% - 2px); top: 5px; border-radius: 2px; }
+button { width: 106px; height: 52px; border: 3px solid #12191d; border-radius: 12px; background: linear-gradient(#667178, #3f4a51); color: #ebf0f3; font-weight: 700; font-size: 13px; box-shadow: 0 4px 0 #131a1f; touch-action: none; user-select: none; }
+button.held { transform: translateY(3px); box-shadow: 0 1px 0 #131a1f; }
+.paper-slot { width: 44%; height: 9px; border-radius: 5px; margin: auto; background: #141c21; }
+p { font-size: 13px; margin: 10px 0; color: #b3c2ca; }
+#status { font-size: 12px; color: #a8c5d5; }
+footer { font-size: 11px; color: #82949f; }
+@media (max-width: 650px) {
+  main { padding: 12px 8px; }
+  .housing { padding: 12px; border-radius: 20px; }
+  .controls { gap: 15px; }
+  .dial-group > span { display: none; }
+  #knob { width: 65px; height: 65px; }
+  button { width: 85px; height: 48px; }
+}
