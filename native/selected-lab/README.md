@@ -55,15 +55,16 @@ frame REVISION
 The small existing-presenter-style adapter owns one persistent C process and serializes its commands/frames. Run it in the same review session; it has no daemon/restart management or additional dependency:
 
 ```sh
-python3 native/selected-lab/presenter.py --executable build/lab/selected-lab/selected_lab --port 4180
+python3 native/selected-lab/presenter.py --executable native/build/lab/selected-lab/selected_lab --port 4180
 ```
 
 It defaults to localhost. Open its printed URL through the established VM access route. The browser's `bridge.mjs` maps physical knob drag/scroll and button down/up/cancel to native inputs, decodes native BMP frames and acknowledges the matching displayed revision. It introduces no screen touch targets, keyboard shortcuts, knob press or extra device buttons. Browser paint acknowledgement does not establish actual panel visibility.
 
 ## Focused evidence
 
-Native CTest passed held-input/readiness, stale-frame, safe Back, cancellation/suspend and caller-focus checks, plus source-pixel/BMP interface checks. Actual browser transport exercise and independent review are the coordinator's integration boundary. No hardware performance, player comprehension or final typography claim is made.
+Native CTest passed held-input/readiness, stale-frame, safe Back, cancellation/suspend and caller-focus checks, plus source-pixel/BMP interface checks. At source revision e9f3d4a374da950c1962d6e8fc1d1d365efac381, independent source review passed. The actual browser walkthrough passed knob focus, Confirm preview, Crown/Eye-ring reference inspection and Back restoring caller focus; stock stayed2/1/0. [Console capture](console-proof.png) shows the C-rendered frame inside its browser transport. The clean Git-retrieved Linux Release build passed CTest; [Actions run36498323038](https://github.com/PacoCotera/critter-lab/actions/runs/36498323038) passed Lab, Probe and Companion checks. No hardware performance, player comprehension or final typography claim is made.
 
 Release test compilation explicitly undefines `NDEBUG`; a compile-time guard rejects a checks target with assertions disabled. The native checks cover rejected prior-page/future/pre-wake rotations, multiple current-page rotations and stale/latest readiness acknowledgements. Build evidence for each revision belongs to the committed-revision workflow above.
 
 Run `node --test native/selected-lab/bridge.test.mjs` for the focused in-process transport regression. It simulates a native down whose response is lost, verifies cancellation and discarded queued release, and proves subsequent input stays blocked until reload. This local check passed; it uses a controlled DOM/fetch mock and does not replace actual native/browser evidence.
+
