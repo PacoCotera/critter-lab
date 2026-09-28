@@ -36,7 +36,7 @@ jobs:
           cc -std=c17 -Wall -Wextra -Wpedantic -Werror -I native/shared native/tests/test_pixels.c native/shared/demo_domain.c native/shared/demo_pixels.c native/shared/native_font.c native/shared/portable_font_data.c -o native/build/lab/test_pixels
           native/build/lab/test_pixels
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
-          python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
+          python3 native/tests/test_selected_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
           python3 native/tests/test_updater.py
           python3 native/tests/test_delivery.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
@@ -45,7 +45,7 @@ jobs:
         run: |
           python3 native/tests/test_package_staging.py
           python3 native/package_staging.py create \
-            --binary native/build/lab/critter_lab \
+            --binary native/build/lab/selected-lab/selected_lab \
             --output "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz"
           python3 native/package_staging.py verify \
             "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz" \

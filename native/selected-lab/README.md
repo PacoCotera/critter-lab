@@ -15,7 +15,7 @@ ctest --test-dir native/build/lab -R selected_lab_native_checks --output-on-fail
 native/build/lab/selected-lab/selected_lab frame native/build/lab/selected-lab.bmp
 ```
 
-The option defaults off; the existing `critter_lab` executable/model remain intact. The existing Native target builds workflow enables the target, runs CTest and uploads its executable, frame, source revision and SHA-256 hashes with the Lab artifacts. It does not deploy this preview. Earlier local frame experiments predate the versioned build gate and are not release evidence. This target establishes Linux host rendering, not MCU firmware or physical-panel validation.
+The option defaults off; the existing `critter_lab` executable/model remain intact. The existing Native target builds workflow enables the target, runs CTest and uploads its executable, frame, source revision and SHA-256 hashes with the Lab artifacts. The same tested selected executable and the production presenter are packaged by the existing staging job; published main builds feed the existing deployment path. Earlier local frame experiments predate the versioned build gate and are not release evidence. This target establishes Linux host rendering, not MCU firmware or physical-panel validation.
 
 ## Assets and editable rendering
 
@@ -67,4 +67,3 @@ Native CTest passed held-input/readiness, stale-frame, safe Back, cancellation/s
 Release test compilation explicitly undefines `NDEBUG`; a compile-time guard rejects a checks target with assertions disabled. The native checks cover rejected prior-page/future/pre-wake rotations, multiple current-page rotations and stale/latest readiness acknowledgements. Build evidence for each revision belongs to the committed-revision workflow above.
 
 Run `node --test native/selected-lab/bridge.test.mjs` for the focused in-process transport regression. It simulates a native down whose response is lost, verifies cancellation and discarded queued release, and proves subsequent input stays blocked until reload. This local check passed; it uses a controlled DOM/fetch mock and does not replace actual native/browser evidence.
-

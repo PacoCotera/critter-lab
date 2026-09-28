@@ -1,48 +1,19 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Critter Lab / Material trail</title>
-  <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" defer></script>
-</head>
-<body>
-<main>
-  <header>
-    <p class="eyebrow">CRITTER LAB / PLAYABLE STUDY</p>
-    <h1>A material trail</h1>
-    <p>Choose an expedition at the Lab, take the Probe, then bring your sample home.</p>
-  </header>
-  <nav aria-label="Device">
-    <button id="probe" aria-pressed="false">Probe</button>
-    <button id="companion" aria-pressed="false">Companion</button>
-    <button id="lab" aria-pressed="true">Lab</button>
-  </nav>
-  <section class="instrument lab" id="instrument" aria-label="Simulated device">
-    <div class="housing" id="housing" tabindex="-1" role="group" aria-label="Simulated device housing">
-      <div class="screen"><img id="frame" alt="Native device screen" width="1024" height="600"></div>
-      <div id="controls" class="control-deck" role="group" tabindex="-1" aria-label="Lab controls" aria-busy="true"></div>
-      <div class="paper-slot" aria-hidden="true"></div>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Critter Lab · native selected screen</title><link rel="stylesheet" href="/style.css"></head>
+<body><main>
+  <header>CRITTER LAB / NATIVE C SCREEN PROOF · Browser transport only</header>
+  <section class="housing" aria-label="Simulated Lab console">
+    <div class="screen"><img id="frame" width="1024" height="600" alt="Native C Lab frame"></div>
+    <div class="controls">
+      <div class="dial-group"><div id="knob" role="group" aria-label="Console knob; drag around its center or scroll over it to rotate"><span aria-hidden="true"></span></div><span>ROTATE</span></div>
+      <button id="confirm" type="button" tabindex="-1">CONFIRM</button>
+      <button id="back" type="button" tabindex="-1">BACK</button>
     </div>
-    <p class="mapping-note" id="mapping-note" hidden>Simulator controls. Use the buttons or your keyboard.</p>
+    <div class="paper-slot" aria-hidden="true"></div>
   </section>
-  <section class="simulation-panel" id="simulation-panel" aria-labelledby="simulation-title" hidden>
-    <h2 id="simulation-title">Simulated expedition</h2>
-    <p>Use Advance simulated time to move this expedition forward. Check shows its current status.</p>
-    <div id="engineering" class="controls"></div>
-  </section>
-  <p id="complete" hidden>Demo complete. Further research and critter creation are outside this demo.</p>
-  <p id="status" role="status" aria-live="polite">Loading device...</p>
-  <button id="retry" hidden>Retry same action</button>
-  <button id="refresh">Refresh saved state</button>
-  <button id="reset-sandbox">Reset sandbox</button>
-  <div id="reset-confirmation" hidden>
-    <p>Reset clears the shared sandbox for everyone and returns to the first expedition.</p>
-    <button id="confirm-reset">Reset for everyone</button>
-    <button id="cancel-reset">Cancel</button>
-  </div>
-  <footer><p id="release">Development build: release metadata unavailable.</p>Playable concept / simulated expedition and transfer.<br>One shared playground. Progress is saved for everyone with access.<br>Native C pixels and rules; selected Lab and Companion profiles, Probe display candidate. No physical panel is connected.<br>Housing shapes and control details are provisional reference studies.</footer>
-</main>
-</body>
+  <p>Rotate: focus · Confirm: native preview · Back: return. Stock stays2/1/0.</p>
+  <p id="status" role="status">Connecting to native C…</p>
+  <footer><span id="release">Development build: release metadata unavailable.</span><br>C renders every1024×600 pixel and owns input/focus/readiness. This is Linux host evidence, not MCU firmware or physical-panel validation.</footer>
+</main><script type="module" src="/app.js"></script></body>
 </html>

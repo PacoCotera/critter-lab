@@ -32,11 +32,11 @@ source native/toolchains.env
 ### Lab
 
 ```bash
-cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release -DCRITTER_BUILD_SELECTED_LAB=ON
 cmake --build native/build/lab
 native/build/lab/critter_lab --save /tmp/critter-demo-state.txt status
 python3 native/tests/test_native.py native/build/lab/critter_lab
-python3 native/tests/test_presenter.py native/build/lab/critter_lab
+python3 native/tests/test_selected_presenter.py native/build/lab/selected-lab/selected_lab
 size native/build/lab/critter_lab
 ```
 
@@ -57,7 +57,7 @@ Create and independently verify the bundle from the repository root:
 
 ```bash
 python3 native/package_staging.py create \
-  --binary native/build/lab/critter_lab \
+  --binary native/build/lab/selected-lab/selected_lab \
   --output native/build/lab/critter-lab-staging.tar.gz
 python3 native/package_staging.py verify \
   native/build/lab/critter-lab-staging.tar.gz \
@@ -72,7 +72,7 @@ members, links, duplicate paths, non-normalized metadata, revision disagreement,
 or content that does not match the manifest. The bundle is only a staging input;
 it does not install, publish, run a service or provide remote access. Runtime state
 is deliberately excluded: no save, lock, log, credential, environment file or
-other mutable presenter data is packaged. Supply `CRITTER_DEMO_SAVE` outside the
+other mutable presenter data is packaged. Legacy domain callers keep `CRITTER_DEMO_SAVE` outside the
 unpacked bundle when starting the presenter.
 
 After verification and extraction, an operator may create activation metadata
@@ -87,22 +87,20 @@ the actual activation time for Mexico City.
 
 ### Play through the browser presenter
 
-The Python standard-library bridge permits anonymous shared staging access when `CRITTER_DEMO_PASSWORD` is absent or empty. Anyone with access uses the same saved playground. An optional nonempty password enables HTTP Basic authentication on every route, username `lab`; keep it in the process environment, never in a URL or commit. Same-origin command and body validation apply in both modes. Use HTTPS when exposing the presenter beyond a trusted local connection. Bind defaults to loopback; a local tunnel can publish that listener. `CRITTER_DEMO_BIND=0.0.0.0` is an explicit LAN option. Port defaults to 4180.
+The public presenter serves the [selected native Lab preview](selected-lab/README.md). Knob, Confirm and Back drive C-owned focus and frames. Start is a preview; resource stock remains unchanged. Research execution and persistence are not connected. The previous legacy CLI remains available for domain experiments, but is not the public screen.
+
+The standard-library bridge retains optional HTTP Basic authentication (`CRITTER_DEMO_PASSWORD`, username `lab`), same-origin input validation and loopback binding. Use HTTPS for public access. The selected process is shared by visitors and holds only transient preview state. The existing `CRITTER_DEMO_SAVE` file is unused and untouched.
 
 ```bash
-export CRITTER_DEMO_BINARY="$PWD/native/build/lab/critter_lab"
-export CRITTER_DEMO_SAVE="$HOME/critter-demo-state.txt"
-# Optional: set CRITTER_DEMO_PASSWORD to require HTTP Basic authentication.
+export CRITTER_DEMO_BINARY="$PWD/native/build/lab/selected-lab/selected_lab"
 python3 native/presenter/server.py
 ```
 
-Open the presenter: Expedition details, Load probe, switch to Probe and Start. Simulated expedition supply two progress steps, with an optional encounter between them. Return to Lab, Bring to lab, Review study and Start study. The saved finding uses one unit of lab supplies and leaves other regions unknown. View finding revisits without spending. These are authored fixture quantities, not approved economy or complete genetics.
+The existing CI staging bundle packages this executable in its stable `bin/critter_lab` slot. Release metadata, service environment, package member names and deployment health endpoints remain compatible. No new deployment service is needed. Native host execution does not prove physical-panel behavior or flashed firmware.
 
-Reset sandbox is a simulator control outside the device. Its inline confirmation explains that resetting clears the shared playground for everyone. Confirmation returns to the initial expedition and selects Lab. Reset uses the same locked, atomic saved-state command path and retry identity as other commands, while keeping revisions increasing; it is not an MCU/domain action or a physical device capability.
+### Legacy domain CLI
 
-The browser displays native pixel images and action descriptors; it implements no collection, research or pixel rules. Frames must load before controls activate. Pending requests retain their operation ID for exact retry after uncertainty, including page reload. This is one shared, single-owner playground and one snapshot, not distributed transfer or cloud authority. Receiving atomically moves the fixture haul into the Lab snapshot; there is no radio acknowledgement to infer.
-
-The native interface is `--save /absolute/path status`, `--save /absolute/path command NAME EXPECTED_REVISION OPERATION_ID`, or `--save /absolute/path frame lab|probe REVISION`. Each command holds a file lock, validates phase and revision, and replaces a versioned explicit-field save using fsync and rename. The most recent operation ID and payload permit an exact retry; older revisions reject. Corrupt state fails closed without resetting. To start another manual demo, stop the presenter and archive its save under a new name before restarting; no browser reset silently destroys shared progress.
+`native/build/lab/critter_lab --save /absolute/path status` retains the earlier saved expedition/research fixture. Its `command NAME EXPECTED_REVISION OPERATION_ID` and `frame lab|probe REVISION` interfaces remain available for domain tests. The selected screen does not yet connect to that saved game; do not treat the two executables as interchangeable protocols.
 
 ### Probe
 

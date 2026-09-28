@@ -13,8 +13,69 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parent
-LOCK = threading.Lock()
-TOKEN = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
+EVENTS = {"rotate", "confirm-down", "confirm-up", "back-down", "back-up", "cancel", "suspend", "resume", "ready"}
+
+
+class NativeProcess:
+    """One selected native process; serialized status/input and binary frame reads."""
+    def __init__(self, executable, timeout=10):
+        self.process = subprocess.Popen([str(executable), "serve"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self.lock = threading.Lock()
+        self.timeout = timeout
+        self.unavailable = False
+
+    def command(self, line, frame=False):
+        if not self.lock.acquire(timeout=self.timeout):
+            raise RuntimeError("Native transport busy or unavailable")
+        finished = threading.Event()
+
+        def expire():
+            if not finished.is_set():
+                self.unavailable = True
+                self.process.kill()
+
+        deadline = threading.Timer(self.timeout, expire)
+        try:
+            if self.unavailable:
+                raise RuntimeError("Native process unavailable")
+            deadline.start()
+            self.process.stdin.write((line + "\n").encode("ascii"))
+            self.process.stdin.flush()
+            header = self.process.stdout.readline()
+            if not header:
+                raise RuntimeError("Native process unavailable")
+            try:
+                result = json.loads(header)
+            except (ValueError, UnicodeError) as error:
+                raise RuntimeError("Invalid native response") from error
+            if not isinstance(result, dict):
+                raise RuntimeError("Invalid native response")
+            if not frame or "error" in result:
+                return result, None
+            if result.get("bytes") != 54 + 1024 * 600 * 3:
+                raise RuntimeError("Unexpected native frame length")
+            pixels = bytearray()
+            while len(pixels) < result["bytes"]:
+                chunk = self.process.stdout.read(result["bytes"] - len(pixels))
+                if not chunk:
+                    raise RuntimeError("Native frame interrupted")
+                pixels.extend(chunk)
+            return result, bytes(pixels)
+        except (OSError, RuntimeError):
+            self.unavailable = True
+            self.process.kill()
+            raise
+        finally:
+            finished.set()
+            deadline.cancel()
+            self.lock.release()
+    def close(self):
+        self.process.stdin.close()
+        try:
+            self.process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            self.process.terminate()
+            self.process.wait()
 
 
 def load_release(path):
@@ -87,22 +148,6 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(401, {"error": "Authentication required"})
         return valid
 
-    def native(self, arguments, image=False):
-        with LOCK:
-            result = subprocess.run([self.server.binary, "--save", self.server.save, *arguments],
-                                    capture_output=True, timeout=10, check=False)
-        if result.returncode:
-            try:
-                failure = json.loads(result.stdout)
-            except (ValueError, UnicodeError):
-                failure = {"error": "Native process failed; saved state preserved"}
-            # Only exit 2 proves a deterministic rejection. A failed save may
-            # already have renamed its snapshot before directory fsync failed.
-            # Retain the browser's operation identity for every uncertain exit.
-            self.reply(409 if result.returncode == 2 else 503, failure)
-        else:
-            self.reply(200, result.stdout, "image/bmp" if image else "application/json")
-
     def do_GET(self):
         if not self.authorized():
             return
@@ -115,18 +160,22 @@ class Handler(BaseHTTPRequestHandler):
             elif url.path == "/api/release" and not url.query:
                 self.reply(200, self.server.release)
             elif url.path == "/api/status" and not url.query:
-                self.native(["status"])
+                result, _ = self.server.native.command("status")
+                self.reply(200, result)
             elif url.path == "/api/frame":
                 query = parse_qs(url.query, strict_parsing=True)
-                if set(query) != {"device", "revision"} or any(len(v) != 1 for v in query.values()):
+                if set(query) != {"revision"} or any(len(v) != 1 for v in query.values()):
                     raise ValueError()
-                device, revision = query["device"][0], query["revision"][0]
-                if device not in {"lab", "probe", "companion"} or not re.fullmatch(r"[0-9]{1,10}", revision):
+                revision = query["revision"][0]
+                if not re.fullmatch(r"[0-9]{1,10}", revision) or not 0 < int(revision) <= 4294967295:
                     raise ValueError()
-                self.native(["frame", device, revision], image=True)
+                result, pixels = self.server.native.command("frame " + revision, frame=True)
+                self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp")
             else:
                 self.reply(404, {"error": "Unknown route"})
-        except (ValueError, OSError, subprocess.TimeoutExpired):
+        except ValueError:
+            self.reply(400, {"error": "Invalid frame query"})
+        except (OSError, RuntimeError):
             self.reply(503, {"error": "Unable to load native screen"})
 
     def do_POST(self):
@@ -140,7 +189,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(403, {"error": "Invalid origin"})
             return
         scheme = self.headers.get("X-Forwarded-Proto", "http")
-        if (self.path != "/api/command" or scheme not in {"http", "https"}
+        if (self.path != "/api/input" or scheme not in {"http", "https"}
                 or origin.scheme != scheme
                 or origin.netloc != self.headers.get("Host") or origin.path
                 or origin.query or origin.fragment
@@ -153,17 +202,27 @@ class Handler(BaseHTTPRequestHandler):
             if not 1 <= size <= 1024:
                 raise ValueError()
             command = json.loads(self.rfile.read(size))
-            if not isinstance(command, dict) or set(command) != {"name", "revision", "operation_id"}:
+            if not isinstance(command, dict):
                 raise ValueError()
-            if not all(isinstance(command[k], str) and TOKEN.fullmatch(command[k]) for k in ("name", "operation_id")):
+            name, revision = command.get("event"), command.get("revision")
+            expected_keys = {"event", "revision", "delta"} if name == "rotate" else {"event", "revision"}
+            if set(command) != expected_keys or not isinstance(name, str) or name not in EVENTS:
                 raise ValueError()
-            if type(command["revision"]) is not int or not 0 <= command["revision"] <= 4294967295:
+            if type(revision) is not int or not 0 <= revision <= 4294967295:
                 raise ValueError()
-            self.native(["command", command["name"], str(command["revision"]), command["operation_id"]])
+            if name == "rotate":
+                delta = command["delta"]
+                if type(delta) is not int or delta not in (-1, 1):
+                    raise ValueError()
+                line = f"rotate {delta} {revision}"
+            else:
+                line = f"{name} {revision}"
+            result, _ = self.server.native.command(line)
+            self.reply(400 if "error" in result else 200, result)
         except (ValueError, UnicodeError):
             self.reply(400, {"error": "Invalid command body"})
-        except (OSError, subprocess.TimeoutExpired):
-            self.reply(503, {"error": "Command result uncertain; retry the same action"})
+        except (OSError, RuntimeError):
+            self.reply(503, {"error": "Native transport interrupted; activation stopped"})
 
 
 def main():
@@ -173,11 +232,18 @@ def main():
     server.release = load_release(ROOT / "release.json")
     server.password = password
     server.binary = str(Path(os.environ["CRITTER_DEMO_BINARY"]).resolve(strict=True))
-    server.save = str(Path(os.environ["CRITTER_DEMO_SAVE"]).resolve())
+    server.native = NativeProcess(server.binary)
     access = "authentication required" if password else "anonymous shared staging access"
     print(f"Critter native presenter listening; {access}", flush=True)
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
+        server.native.close()
 
 
 if __name__ == "__main__":
     main()
+
