@@ -8,3 +8,10 @@ set_target_properties(critter_lab PROPERTIES C_STANDARD 17 C_STANDARD_REQUIRED Y
 target_compile_options(critter_lab PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_compile_definitions(critter_lab PRIVATE CRITTER_LAB_SCENE=1 CRITTER_LAB_VERSION="${PROJECT_VERSION}")
 target_link_options(critter_lab PRIVATE "-Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/critter_lab.map")
+
+# Isolated selected-screen proof; leave the existing Lab model/executable intact.
+option(CRITTER_BUILD_SELECTED_LAB "Build the selected native Lab screen proof" OFF)
+if(CRITTER_BUILD_SELECTED_LAB)
+  include(CTest)
+  add_subdirectory(../selected-lab selected-lab)
+endif()

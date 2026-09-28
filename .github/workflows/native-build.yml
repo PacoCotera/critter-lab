@@ -25,13 +25,18 @@ jobs:
           persist-credentials: false
       - name: Build and check native loop
         run: |
-          cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release -DCRITTER_BUILD_SELECTED_LAB=ON
           cmake --build native/build/lab
+          node --test native/selected-lab/bridge.test.mjs
+          ctest --test-dir native/build/lab -R selected_lab_native_checks --output-on-failure
+          native/build/lab/selected-lab/selected_lab frame native/build/lab/selected-lab.bmp
+          git rev-parse HEAD > native/build/lab/source-revision.log
+          sha256sum native/build/lab/selected-lab/selected_lab native/build/lab/selected-lab.bmp > native/build/lab/selected-lab-sha256.log
           native/build/lab/critter_lab --save "$RUNNER_TEMP/critter-demo-state" status | tee native/build/lab/run.log
           cc -std=c17 -Wall -Wextra -Wpedantic -Werror -I native/shared native/tests/test_pixels.c native/shared/demo_domain.c native/shared/demo_pixels.c native/shared/native_font.c native/shared/portable_font_data.c -o native/build/lab/test_pixels
           native/build/lab/test_pixels
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
-          python3 native/tests/test_presenter.py "$PWD/native/build/lab/critter_lab"
+          python3 native/tests/test_selected_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
           python3 native/tests/test_updater.py
           python3 native/tests/test_delivery.py
           size native/build/lab/critter_lab | tee native/build/lab/size.log
@@ -40,7 +45,7 @@ jobs:
         run: |
           python3 native/tests/test_package_staging.py
           python3 native/package_staging.py create \
-            --binary native/build/lab/critter_lab \
+            --binary native/build/lab/selected-lab/selected_lab \
             --output "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz"
           python3 native/package_staging.py verify \
             "native/build/lab/critter-lab-staging-${GITHUB_SHA}.tar.gz" \
@@ -50,6 +55,8 @@ jobs:
           name: native-lab-${{ github.sha }}
           path: |
             native/build/lab/critter_lab
+            native/build/lab/selected-lab/selected_lab
+            native/build/lab/selected-lab.bmp
             native/build/lab/*.map
             native/build/lab/*.log
             native/build/lab/critter-lab-staging-*.tar.gz
@@ -213,7 +220,3 @@ jobs:
             exit 1
           fi
           gh release edit "$tag" --draft=false
-
-
-
-
