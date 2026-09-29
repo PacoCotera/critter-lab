@@ -29,3 +29,8 @@ Use identical full-size screen content and the same five-moment journey with pap
 
 Experience Design reviewed the actual PNG and comparison text. Corrections clarify Cradle feature selection, Station draft revalidation and fresh Run strokes, and the absence of drawn icons. The static sheet is acceptable as physical exploration only. Active workspace versus content focus, global pending feedback, restored context and actual operation guards remain interaction-prototype requirements; this is not a usability or implementation pass.
 
+
+## Product concept art
+
+[Instrument pitch board](instrument-pitch-v1.png) visualizes the four possibilities with the selected Lab screen as a reference. Generated concept art, not a control-count or mechanical specification: illustrative extra side dials, symbols and printed material do not add approved functions. Use the layout sheet and mappings above for intended input roles. No winner selected.
+
