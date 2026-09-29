@@ -2,6 +2,14 @@
 
 ## Current concept — Companion-led three-object family
 
+### Current caddy refinement
+
+Experience Design inspected this exact export: ordered navigation group, subordinate Feed below Print, readable compact branding, removed caddy LEDs and retained handheld controls. The depicted paper clears the controls. This is placement/readability evidence only, not physical-clearance or full interaction approval.
+
+![Compact branding and revised caddy controls](combined-family-caddy-v2.png)
+
+Owner-approved correction: Previous/OK/Next cluster, Feed directly below Print, compact Critter Lab by DPP front branding, and no arbitrary caddy LEDs. Handheld palette and controls remain. [Built-in image-generation edit brief](combined-family-caddy-v2-prompt.txt). This supersedes the previous caddy control/branding appearance below. Display graphics are illustrative; network and cloud state must remain distinct in actual UI. No physical-fit or working print/navigation evidence is implied.
+
 ### Branded family and caddy controls
 
 Experience Design inspected the exact branded export: labels and brand hierarchy are legible, controls are separated by purpose and the depicted paper does not obscure them. This is an appearance review only; reach, guarded Feed behavior, print confirmation and indicator meanings still need interaction/mechanical validation.
