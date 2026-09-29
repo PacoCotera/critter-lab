@@ -4,16 +4,28 @@ Status: intended functions and engineering constraints. No selected production p
 
 | Device | Required role | Open physical/firmware choices |
 | --- | --- | --- |
-| Lab / Console | Connected research workbench, local configuration, cached archive, color pixel display, thermal print and QR reading; play without a Probe | Selected development display: Waveshare 7inch HDMI LCD (H), 1024×600 landscape color; Linux host, driver integration, controls, storage, power and print/scan remain open |
+| Lab / Console | Home handheld and supported tabletop research workbench; Wi-Fi, local configuration, cached archive, color pixel display, wireless print requests and QR reading; play without a Probe | Selected development display: Waveshare 7inch HDMI LCD (H), 1024×600 landscape color; Linux host, drivers, two-thumb controls, battery and scan remain open |
 | Field Probe | Standalone evidence and resource gathering, player-attributed expeditions, retained cargo and recoverable offload | Sensor suite, cadence, capacity, battery, exact portrait e-ink panel and transport; no required phone |
 | Companion | Shared player use, saved-individual display, training/evolution/bonding and temporary offline activity | Number of carried critters, supported actions, handover, display/controls and power |
-| Caddy | Wireless charging for both portables | Receiver/transmitter solution, separate supply, mechanical alignment, status signal and indicators |
+| Caddy / home station | Tidy shared home for Lab, Probe and Companion; charging and printer integration; Lab remains playable while supported | Charging implementation, printer packaging, station subdivision, alignment, power and indicators remain open |
 
 The [physical-experience principle](experience.md#physical-experience-is-the-product) defines why these are distinct objects: simple e-ink collection, responsive companionship, an extensible Lab workbench and a physical charging home. It guides engineering exploration without selecting production modules.
 
 Warm beige shells, charcoal structure and restrained orange accents inform the product family. Concept proportions and earlier renders do not freeze controls, ports, materials or manufacture. No physical slots are implied by virtual Lab chips.
 
 ## Development targets
+
+### Owner physical-experience interview — current direction
+
+The Lab invites pickup and exploration at home. It is a two-handed handheld with a Switch-like grip and thumb access to core controls; brief one-hand support while the other turns the inspection/zoom knob is acceptable. A larger body is acceptable to preserve screen and control comfort. The former fixed lower control row and printer-in-handheld enclosure are superseded constraints, not approved ergonomic geometry.
+
+Move the printer into the caddy/home station. Keep all three devices together in one tidy, clean place, preserving the original **Field Lab** concept's character. Whether the home station is one shell or coordinated adjoining sections remains open. The Lab must remain comfortably playable while supported there, and be charged and ready when picked up. Typical handheld sessions are about 30 minutes; this is a use case, not a measured battery-runtime promise. Charging technology and power budget are unselected.
+
+Probe and Companion interact by tapping the Lab; inter-device communication is wireless. Owner does not want custom data connectors. Do not infer a charging connector, radio protocol, tap-reader technology or completed transfer from that preference. Wi-Fi is required for the home Lab. Whether wireless printing requires the Lab to be seated in the station remains undecided.
+
+At rest in the home station, the Lab is a living display: collection and vivarium occupy rotating full screens. Ambient light governs automatic dimming. Rotation timing, brightness curve and behavior on interaction remain to be designed; no new screen UI or sensor part is selected by this interview.
+
+The next visual divergence follows this handheld-plus-home-station experience. **Field Lab** names the warm original concept; Field Instrument and Orbital Lab remain selected sources of inspiration. Visual-first exploration is authorized, followed by model-based geometric development after attribute selection.
 
 Owner direction: a more capable Linux-class Lab, an nRF52840 Probe and an ESP32-S3 Companion. The Lab display and Companion board/display below are selected for preliminary development; the Probe panel remains a candidate. Sensor sets, battery configurations and production parts remain open. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
 
