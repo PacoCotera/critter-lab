@@ -7,7 +7,9 @@
 
 #define PIP_STUDY_COUNT 5u
 #define PIP_SAMPLE_CANDIDATE_MASK 0x03u
-#define PIP_REQUIRED_FACTS_MASK 0x1fu
+/* Five variable-locus study facts for this pinned Pip content package only. */
+#define PIP_REQUIRED_VARIABLE_FACTS_MASK 0x1fu
+#define PIP_REQUIRED_FACTS_MASK PIP_REQUIRED_VARIABLE_FACTS_MASK
 #define PIP_CONTENT_VERSION "pip-proof-v1"
 #define PIP_RULES_VERSION "pip-rules-v1"
 #define PIP_ART_VERSION "pip-playtest-art-v1"

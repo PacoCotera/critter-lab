@@ -6,19 +6,19 @@
  * values for the playable slice; they are not canonical game balance. */
 static const PipStudy STUDIES[PIP_STUDY_COUNT] = {
   {.locus_id="form.crown", .title="Crown form", .allele_a="C", .allele_b="c",
-   .finding="A soft crown frill frames the head.", .fact_mask=1u << 0,
+   .finding="Both supported forms have a soft crown frill.", .fact_mask=1u << 0,
    .cost_data=500, .cost_energy=0, .cost_essence=0},
   {.locus_id="appearance.rings", .title="Eye rings", .allele_a="R", .allele_b="r",
-   .finding="Pale rings surround amber eyes.", .fact_mask=1u << 1,
+   .finding="Both forms have pale rings around amber eyes.", .fact_mask=1u << 1,
    .cost_data=0, .cost_energy=500, .cost_essence=0},
   {.locus_id="appearance.markings", .title="Body markings", .allele_a="P", .allele_b="p",
-   .finding="Plain coats can carry pale markings. Both forms are possible.", .fact_mask=1u << 2,
+   .finding="One form carries pale markings without showing them. The other shows them.", .fact_mask=1u << 2,
    .cost_data=0, .cost_energy=0, .cost_essence=500},
   {.locus_id="movement.drive", .title="Movement", .allele_a="M", .allele_b="m",
-   .finding="Six legs carry Pip in short, quick bursts.", .fact_mask=1u << 3,
+   .finding="Both forms can move in short, quick bursts.", .fact_mask=1u << 3,
    .cost_data=400, .cost_energy=400, .cost_essence=0},
   {.locus_id="movement.efficiency", .title="Energy use", .allele_a="E", .allele_b="e",
-   .finding="Efficient movement leaves more energy for exploring.", .fact_mask=1u << 4,
+   .finding="Both forms share efficient movement.", .fact_mask=1u << 4,
    .cost_data=0, .cost_energy=400, .cost_essence=400},
 };
 

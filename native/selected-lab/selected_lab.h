@@ -6,11 +6,11 @@
 #include "pip_genetics.h"
 #define SELECTED_LAB_WIDTH 1024u
 #define SELECTED_LAB_HEIGHT 600u
-typedef enum { V1_HOME, V1_EXPEDITION, V1_CARGO, V1_SAMPLES, V1_STUDIES, V1_FINDING, V1_CREATE, V1_INCUBATION, V1_REVEAL, V1_HABITAT } SelectedPage;
+typedef enum { V1_HOME, V1_EXPEDITION, V1_CARGO, V1_SAMPLES, V1_STUDIES, V1_FINDING, V1_CREATE, V1_INCUBATION, V1_REVEAL, V1_HABITAT, V1_STUDY_REVIEW, V1_DISCARD_REVIEW } SelectedPage;
 typedef enum { SELECTED_ROTATE, SELECTED_CONFIRM_DOWN, SELECTED_CONFIRM_UP, SELECTED_BACK_DOWN, SELECTED_BACK_UP, SELECTED_CANCEL, SELECTED_SUSPEND, SELECTED_RESUME, SELECTED_READY } SelectedInput;
 typedef struct { int held, allowed; unsigned revision; } SelectedGesture;
 typedef struct {
- SelectedPage page; unsigned focus, sample, study, resident, revision, page_revision;
+ SelectedPage page; unsigned focus, sample, study, resident, discard_resource, revision, page_revision;
  int ready, suspended, storage_error; SelectedGesture confirm, back;
  GameState game; char save_path[512]; char message[96]; uint32_t clock;
 } SelectedLab;

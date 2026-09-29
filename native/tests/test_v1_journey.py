@@ -80,6 +80,7 @@ def journey(binary, frames):
         player.press()
         for label in ("Crown form", "Eye rings", "Body markings", "Movement", "Energy use"):
             player.choose(label)
+            player.choose("Start research")
             assert player.state["page"] == "finding", player.state
             player.capture("03-" + label.replace(" ", "-"))
             player.press()
