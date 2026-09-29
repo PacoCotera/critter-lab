@@ -12,6 +12,14 @@ Exact encounter/capture inputs, capacity, rewards, failure consequences and prob
 
 The connected journey is: choose travelling companions, explore/gather or capture, manage cargo and transport risk, return to the Lab, research discoveries, and manage residents/incubations/environments through the shared home habitat. Persistent world authority is cloud-backed; detailed offline and synchronization contracts remain open. This does not introduce a second independent caddy care game.
 
+## Self-contained habitats
+
+Owner direction: each habitat is a self-contained environment with its own critter populations, environmental resources and interactions. A tank, island or glacier is a simulation space, not merely a collection background. The container analogy describes bounded state and lifecycle; it does not select Docker, a process per habitat or cloud infrastructure. Habitat count and concurrent active limits remain open.
+
+Desired capability: freeze a habitat and restore it from the cloud. Proposed meaning of freeze is an explicit pause of its simulation, preserving residents, their identity and state, environmental conditions, local resources and pending processes as one coherent saved habitat. Restoration would resume that habitat rather than create duplicate residents/resources. No elapsed-time catch-up, unattended penalty, rewind economy or freely cloneable populations is implied. These pause/restore semantics require owner confirmation before implementation; cloud authority, offline operation, snapshot compatibility and transfer consistency need a bounded system-design step.
+
+The proposed player distinction is active versus frozen habitats; merely closing a view or undocking a device must not implicitly freeze a habitat. Lab provides the visual environment and management view; the caddy summarizes habitat/storage state; Companion provides access to the same world and the chosen travelling residents. Taking a resident out must not leave a second active copy inside a frozen snapshot. Exact transfer rules, environment dynamics, resource replenishment and population consequences remain open. Device display responsibilities remain in [devices](devices.md#coordinated-docked-defaults).
+
 ## Sandbox goals and the core loop
 
 Players set their own goals: collecting attractive or rare cosmetic combinations is as valid as developing adaptable or specialized critters. Cosmetic value need not grant a practical bonus. Experimentation and personal knowledge support research, crafting, exploration, development and social play; recipe discovery does not normally grant permission to attempt a combination. Explicit resource, compatibility and consent requirements still apply.
