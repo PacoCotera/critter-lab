@@ -47,3 +47,9 @@ native-size bold headings strengthen hierarchy without degrading body text.
 This slice changes presentation and navigation, not the game rules or save
 format. Actual rendered idle, active, ready and populated states are the review
 surface; source-level style tokens alone do not establish visual fidelity.
+
+Home keeps navigation guidance visible independently of the last action message.
+Empty workspaces explain the relevant next step without promising unavailable
+actions. Active or ready work receives the first status cue; static totals remain
+quieter. Possible expedition finds are distinct from carried cargo. Sample topic
+completion describes discovered knowledge, not a running research job.

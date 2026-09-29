@@ -15,6 +15,7 @@ extern const NativeFont portable_fonts[4];
 extern const NativeFont lab_fonts[LAB_FONT_COUNT];
 #define LAB_HEADING_FONT_COUNT 4
 extern const NativeFont lab_heading_fonts[LAB_HEADING_FONT_COUNT];
+extern const NativeFont lab_heading_narrow_fonts[LAB_HEADING_FONT_COUNT];
 int native_text_width(const NativeFont *font, const char *text);
 void native_text_row(const NativeFont *font, const char *text, int x, int y,
                      unsigned row_y, unsigned width, uint8_t *pixels, int mono,

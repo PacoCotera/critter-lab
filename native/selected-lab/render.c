@@ -67,15 +67,30 @@ static void label(SelectedRow *row, int x, int y, const char *text, int size,
                   row->pixels, 0, colors[color]);
 }
 
+static const NativeFont *heading_font(int size, int narrow) {
+  const NativeFont *fonts =
+      narrow ? lab_heading_narrow_fonts : lab_heading_fonts;
+  for (unsigned index = 0; index < LAB_HEADING_FONT_COUNT; ++index)
+    if (fonts[index].size == size)
+      return &fonts[index];
+  assert(!"Missing native Lab heading font size");
+  return NULL;
+}
+
 static void heading(SelectedRow *row, int x, int y, const char *text, int size,
                     unsigned color) {
-  for (unsigned index = 0; index < LAB_HEADING_FONT_COUNT; ++index)
-    if (lab_heading_fonts[index].size == size) {
-      native_text_row(&lab_heading_fonts[index], text, x, y, row->y,
-                      SELECTED_LAB_WIDTH, row->pixels, 0, colors[color]);
-      return;
-    }
-  assert(!"Missing native Lab heading font size");
+  native_text_row(heading_font(size, 1), text, x, y, row->y, SELECTED_LAB_WIDTH,
+                  row->pixels, 0, colors[color]);
+}
+
+static void stock_amount(SelectedRow *row, int x, unsigned amount) {
+  char whole[16], fraction[8];
+  snprintf(whole, sizeof(whole), "%u", amount / 1000);
+  snprintf(fraction, sizeof(fraction), ".%03u", amount % 1000);
+  const NativeFont *bold = heading_font(32, 0);
+  native_text_row(bold, whole, x, 60, row->y, SELECTED_LAB_WIDTH, row->pixels,
+                  0, colors[INK]);
+  label(row, x + native_text_width(bold, whole) + 2, 73, fraction, 18, MUTED);
 }
 
 static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
@@ -245,9 +260,10 @@ static unsigned preview_resident(const SelectedLab *lab) {
 static void status_region(SelectedRow *row, int x, int y, int width,
                           int height) {
   stepped(row, x + 4, y + 5, width, height, 8, DEEP);
-  stepped(row, x, y, width, height, 8, BLUE);
+  stepped(row, x, y, width, height, 8, EDGE);
   stepped(row, x + 3, y + 3, width - 6, height - 6, 6, PANEL);
   rectangle(row, x + 12, y + 3, width - 24, 2, EDGE);
+  rectangle(row, x + 5, y + 15, 2, height - 30, BLUE);
 }
 
 static void progress(SelectedRow *row, int x, int y, int width,
@@ -268,7 +284,7 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
   status_region(row, 305, 214, 387, 155);
   heading(row, 323, 229, "RESEARCH", 26, INK);
   snprintf(text, sizeof(text), "%u SAMPLES", game->sample_count);
-  heading(row, 326, 272, text, 32, WARM);
+  heading(row, 326, 272, text, 32, INK);
   snprintf(text, sizeof(text), "%u findings recorded", topics);
   label(row, 326, 312, text, 18, INK);
   if (game->sample_count && lab->sample < game->sample_count)
@@ -286,16 +302,16 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
              game->expedition_elapsed);
   else
     strcpy(text, "No expedition active");
-  label(row, 724, 274, text, 18, WARM);
+  label(row, 724, 274, text, 18, game->expedition_id[0] ? WARM : INK);
   status_region(row, 305, 381, 387, 126);
   heading(row, 323, 395, "INCUBATOR", 26, INK);
   label(row, 326, 444,
         game->incubation_ready    ? "Ready to open"
         : game->incubation_active ? "Incubating"
                                   : "No incubation",
-        22, WARM);
+        22, game->incubation_active || game->incubation_ready ? WARM : INK);
   if (game->incubation_active || game->incubation_ready) {
-    snprintf(text, sizeof(text), "%u / %u active seconds",
+    snprintf(text, sizeof(text), "%u / %u s of active play",
              game->incubation_elapsed, GAME_INCUBATION_SECONDS);
     label(row, 326, 477, text, 18, MUTED);
     sprite(row, SPRITE_SAMPLE, 590, 400, 78, 91);
@@ -304,17 +320,75 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
   heading(row, 722, 353, "HABITAT", 26, INK);
   snprintf(text, sizeof(text), "%u revealed resident%s", residents,
            residents == 1 ? "" : "s");
-  label(row, 724, 399, text, 18, WARM);
+  label(row, 724, 399, text, 18, INK);
   if (residents) {
     unsigned selected = preview_resident(lab);
     const GameIndividual *individual = &game->individuals[selected];
     label(row, 724, 437, individual->id, 18, INK);
-    snprintf(text, sizeof(text), "%u visits together", individual->care_visits);
+    snprintf(text, sizeof(text), "%u visit%s together", individual->care_visits,
+             individual->care_visits == 1 ? "" : "s");
     label(row, 724, 468, text, 18, MUTED);
     sprite(row, SELECTED_SPRITE_COUNT + individual->expression.pale_markings,
            868, 425, 91, 75);
   } else
     label(row, 724, 437, "No Beecho revealed", 18, MUTED);
+}
+
+static void landing_strip(SelectedRow *row, const char *text) {
+  rectangle(row, 320, 448, 622, 2, EDGE);
+  rectangle(row, 320, 459, 622, 44, DEEP);
+  rectangle(row, 320, 459, 3, 44, BLUE);
+  label(row, 334, 469, text, 18, MUTED);
+}
+
+static void home_summary(SelectedRow *row, const SelectedLab *lab) {
+  const GameState *game = &lab->game;
+  char summary[96];
+  unsigned color = INK;
+  if (lab->focus == 0) {
+    if (game->incubation_ready) {
+      strcpy(summary, "Incubation ready to open");
+      color = WARM;
+    } else if (game->expedition_active) {
+      strcpy(summary, "Expedition gathering while you play");
+      color = WARM;
+    } else if (game->incubation_active) {
+      strcpy(summary, "Incubation progressing while you play");
+      color = WARM;
+    } else if (game->expedition_id[0]) {
+      strcpy(summary, "Expedition haul ready to return");
+      color = WARM;
+    } else {
+      snprintf(summary, sizeof(summary),
+               "%u samples / %u findings / %u residents", game->sample_count,
+               known_topics(game), revealed_residents(game));
+    }
+  } else if (lab->focus == 1) {
+    if (game->expedition_active) {
+      strcpy(summary, "Gathering while you play");
+      color = WARM;
+    } else if (game->expedition_id[0]) {
+      strcpy(summary, "Haul ready to return");
+      color = WARM;
+    } else
+      strcpy(summary, "No expedition active");
+  } else if (lab->focus == 2) {
+    snprintf(summary, sizeof(summary), "%u retained samples / %u findings",
+             game->sample_count, known_topics(game));
+  } else if (lab->focus == 3) {
+    if (game->incubation_ready) {
+      strcpy(summary, "Ready to open");
+      color = WARM;
+    } else if (game->incubation_active) {
+      strcpy(summary, "Progress while playing");
+      color = WARM;
+    } else
+      strcpy(summary, "No incubation active");
+  } else {
+    snprintf(summary, sizeof(summary), "%u revealed residents",
+             revealed_residents(game));
+  }
+  label(row, 308, 194, summary, 18, color);
 }
 
 static void home_landing(SelectedRow *row, const SelectedLab *lab) {
@@ -329,12 +403,18 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
             game->expedition_active  ? "EXPEDITION GATHERING"
             : game->expedition_id[0] ? "HAUL READY TO RETURN"
                                      : "NO EXPEDITION ACTIVE",
-            32, WARM);
+            32, game->expedition_id[0] ? WARM : INK);
     if (!game->expedition_id[0]) {
       label(row, 320, 285, "Choose an expedition route.", 22, INK);
-      label(row, 320, 330, "Cargo empty", 18, MUTED);
+      label(row, 320, 335, "Possible finds", 18, MUTED);
+      const char *finds[] = {"DATA", "ENERGY", "ESSENCE"};
+      for (unsigned index = 0; index < 3; ++index) {
+        int x = 330 + (int)index * 188;
+        sprite(row, index, x, 374, 40, 53);
+        label(row, x + 50, 392, finds[index], 18, INK);
+      }
     } else {
-      snprintf(text, sizeof(text), "%u / 60 active seconds",
+      snprintf(text, sizeof(text), "%u / 60 s of active play",
                game->expedition_elapsed);
       label(row, 320, 277, text, 22, INK);
       progress(row, 320, 320, 622, game->expedition_elapsed, 60);
@@ -350,13 +430,21 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
         label(row, x + 51, 405, text, 18, INK);
       }
     }
+    if (game->expedition_id[0]) {
+      unsigned cargo = game->expedition_data + game->expedition_energy +
+                       game->expedition_essence;
+      snprintf(text, sizeof(text), "Cargo %u.%03u / 4.000 units", cargo / 1000,
+               cargo % 1000);
+      landing_strip(row, text);
+    } else
+      landing_strip(row, "No cargo loaded");
 
   } else if (lab->focus == 2) {
     unsigned topics = known_topics(game);
     sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
     snprintf(text, sizeof(text), "%u retained sample%s", game->sample_count,
              game->sample_count == 1 ? "" : "s");
-    heading(row, 505, 255, text, 32, WARM);
+    heading(row, 505, 255, text, 32, INK);
     snprintf(text, sizeof(text), "%u findings recorded", topics);
     label(row, 505, 306, text, 22, INK);
     if (game->sample_count && lab->sample < game->sample_count) {
@@ -366,16 +454,35 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
       label(row, 505, 390, text, 18, INK);
     } else
       label(row, 505, 360, "No sample retained yet", 18, MUTED);
-    label(row, 320, 470, "Choose a sample to inspect topics.", 18, MUTED);
+    if (game->sample_count && lab->sample < game->sample_count) {
+      unsigned known = game->samples[lab->sample].decoded_studies;
+      for (unsigned study = 0; study < 5; ++study) {
+        int x = 505 + (int)study * 82;
+        rectangle(row, x, 420, 70, 12, DEEP);
+        outline(row, x, 420, 70, 12, 2, EDGE);
+        if (known & (1u << study))
+          rectangle(row, x + 3, 423, 64, 6, SAGE);
+      }
+    }
+    if (!game->sample_count)
+      landing_strip(row, "Bring a sample to the lab to begin.");
+    else if (lab->sample < game->sample_count &&
+             study_count(game->samples[lab->sample].decoded_studies) == 5)
+      landing_strip(row, game->samples[lab->sample].incubated
+                             ? "This sample already has a Beecho."
+                             : "All topics known. Prepare incubation.");
+    else
+      landing_strip(row, "Choose a sample to inspect topics.");
   } else if (lab->focus == 3) {
-    sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
+    if (game->incubation_active || game->incubation_ready)
+      sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
     heading(row, 505, 245,
             game->incubation_ready    ? "READY TO OPEN"
             : game->incubation_active ? "INCUBATING"
                                       : "NO INCUBATION",
-            32, WARM);
+            32, game->incubation_active || game->incubation_ready ? WARM : INK);
     if (game->incubation_active || game->incubation_ready) {
-      snprintf(text, sizeof(text), "%u / %u active seconds",
+      snprintf(text, sizeof(text), "%u / %u s of active play",
                game->incubation_elapsed, GAME_INCUBATION_SECONDS);
       label(row, 505, 303, text, 22, INK);
       progress(row, 505, 351, 435, game->incubation_elapsed,
@@ -383,8 +490,10 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
       if (game->incubation_sample < game->sample_count)
         label(row, 505, 395, game->samples[game->incubation_sample].id, 18,
               MUTED);
-    } else
+    } else {
       label(row, 505, 303, "No sample is being incubated.", 22, INK);
+      label(row, 320, 470, "Research all five topics first.", 18, MUTED);
+    }
 
   } else if (lab->focus == 4) {
     unsigned count = revealed_residents(game);
@@ -401,11 +510,12 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
       snprintf(text, sizeof(text), "%u revealed resident%s", count,
                count == 1 ? "" : "s");
       label(row, 585, 356, text, 18, MUTED);
-      snprintf(text, sizeof(text), "%u visits together",
-               individual->care_visits);
+      snprintf(text, sizeof(text), "%u visit%s together",
+               individual->care_visits,
+               individual->care_visits == 1 ? "" : "s");
       label(row, 585, 395, text, 18, INK);
     } else {
-      heading(row, 320, 255, "NO REVEALED RESIDENTS", 32, WARM);
+      heading(row, 320, 255, "NO REVEALED RESIDENTS", 32, INK);
       label(row, 320, 314, "A Beecho appears here after reveal.", 22, INK);
     }
   }
@@ -425,10 +535,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     int x = 480 + (int)i * 167;
     sprite(&row, i, x, 35, 40, 53);
     label(&row, x + 53, 34, names[i], 18, MUTED);
-    char amount[24];
-    snprintf(amount, sizeof(amount), "%u.%03u", stock[i] / 1000,
-             stock[i] % 1000);
-    label(&row, x + 54, 63, amount, 28, INK);
+    stock_amount(&row, x + 54, stock[i]);
   }
   int home = lab->page == V1_HOME;
   panel(&row, 24, 134, home ? 240 : 330, 406);
@@ -471,6 +578,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   }
   char text[100];
   if (lab->page == V1_HOME) {
+    home_summary(&row, lab);
     home_landing(&row, lab);
   } else if (lab->page == V1_EXPEDITION || lab->page == V1_CARGO) {
     label(&row, 402, 205,
@@ -648,11 +756,22 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       label(&row, 414, 439, "Research your first sample to begin.", 22, INK);
   }
 
-  label(&row, 30, 557,
-        lab->message[0]
-            ? lab->message
-            : "Up/down: focus | Right: inspect | Confirm: act | Back: return",
-        18, lab->storage_error ? WARM : MUTED);
+  if (lab->page == V1_HOME && !lab->storage_error) {
+    char footer[112];
+    if (lab->focus == 0)
+      strcpy(footer, "Up/down: preview workspaces");
+    else
+      snprintf(footer, sizeof(footer),
+               "Up/down: preview | Confirm: enter %s | Back: Home",
+               selected_lab_focus(lab));
+    label(&row, 30, 557, footer, 18, MUTED);
+  } else {
+    label(&row, 30, 557,
+          lab->message[0]
+              ? lab->message
+              : "Up/down: focus | Right: inspect | Confirm: act | Back: return",
+          18, lab->storage_error ? WARM : MUTED);
+  }
 }
 
 static int word(FILE *output, unsigned value, unsigned bytes) {
