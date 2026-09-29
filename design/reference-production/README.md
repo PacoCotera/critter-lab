@@ -25,6 +25,11 @@ The pair passes a bounded information/layout check but does **not** pass the
 approved reference's material-craft standard. Keep these as experimental sources;
 they are not approved native art masters.
 
+The [Gemini Research sprite trial](gemini-research-trial/README.md) preserves two
+actual browser-generated PNGs and intended-size comparisons. Browser acquisition
+works; neither concept is accepted as the Research master. It does not change
+the live renderer or the approved reference.
+
 ## Production command
 
 The editable masters are `src/*.svg`, authored directly at their intended draw
