@@ -2,6 +2,18 @@
 
 **Current direction:** the [owner physical-experience interview](../../specs/devices.md#owner-physical-experience-interview--current-direction) supersedes the printer-in-handheld case and fixed lower-row layout below. Develop a two-thumb home handheld, playable in its tidy shared caddy, with the printer in that home station. Field Lab is the original concept's name; Field Instrument and Orbital Lab remain inspiration. Retained boards below document earlier exploration, not the new configuration. Next visuals must show both handheld use and the supported living-display/play arrangement.
 
+## Handheld and home station — next divergence
+
+Three visual-first proposals: **Evolution**, carrying the warm original Field Lab character; **Expedition**, adding protective Field Instrument construction cues; and **Discovery**, exploring Orbital Lab curves. Each pairs handheld use with a tidy shared home station for Lab, Probe, Companion and printing. No mechanical fit, charging method or radio technology is selected.
+
+Proposed common input arrangement: directional cross at the left grip; Cancel-left/Confirm-right pair at the right grip; four workspace keys split two above each thumb area; orange-accented Zoom at the upper-right grip/shoulder. This replaces the old center-bottom row for the study. Brief one-hand support for Zoom is acceptable. Station supports must leave grips and buttons accessible. This map is a design proposal, not an implemented input change or measured reach result.
+
+The three concepts compare one play journey: pick up a charged Lab, explore using two thumbs, return it to a shared home station, continue playing while supported, and leave the vivarium/collection visible between sessions. Evolution uses a warm softly squared body and side-by-side portable bays; Expedition uses protective faceting and a stepped station; Discovery uses curved grips and a crescent-like station with the portables on opposite sides. Printing belongs to each station, never to the handheld. Whether printing is allowed while undocked remains open. Ambient screens are illustrative; the artwork does not approve new creatures or UI.
+
+![Handheld and shared home-station concepts](handheld-home-directions-v2.png)
+
+Current visual comparison shows both modes of each proposal. It does not fix dimensions, battery performance, charging, screen aperture or portable body designs. The selected display contract remains unchanged. A physical mock-up must establish supported-play finger clearance, particularly at station side walls and adjacent portable bays. Depicted hands do not establish comfort or reach. Choose character and station arrangement before dimensional development.
+
 Joint physical/interaction exploration, 28 September 2026. No winner, dimensions, selected parts, implementation or purchases. Cream/charcoal/orange identity retained; workspace accent colors are proposals. Research and Library are owner-named destinations. Expedition, Inventory, Collection and Creation keys are tentative shortcuts to existing intended activities, not approved top-level information architecture.
 
 ## Same short journey, four different feels
