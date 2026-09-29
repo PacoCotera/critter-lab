@@ -2,6 +2,16 @@
 
 ## Current concept — Companion-led three-object family
 
+### Related shell colors and three docked displays
+
+![Sage Lab, stone Companion and shared habitat station](combined-family-sage.png)
+
+Owner requested less contrast between the dark blue Lab and cream Companion. This appearance proposal brings their tonal values closer: sage-grey Lab, warm stone Companion and station, shared charcoal guards and orange controls. It preserves distinguishable home/portable identities. The Lab shows a living habitat, Companion shows Probe gathering, and station has a quiet monochrome summary rather than another animated scene. [Exact built-in image-generation brief](combined-family-sage-prompt.txt).
+
+Screen content, species, resource colors and mixed progress units are illustrative, not approved UI or assets. Display dimensions, e-ink availability, clearance, charging and manufacture are not established by the rendering. Review scope is family color and device-purpose hierarchy.
+
+Experience Design inspected this exact export: related shell colors, two-device composition, retained controls and distinct three-display roles are suitable for owner appearance review. Inventory detail, status freshness/unknown states, capture flows and physical ergonomics are outside this pass; no implementation approval follows.
+
 The owner approved consolidating Probe into the everyday **Companion**. Current exploration therefore contains exactly two removable devices and their shared station: Companion goes out; Lab is the home handheld workbench; caddy charges them, prints and presents the living collection. Older separate-Probe boards below are retained references, not the current kit. [Device authority](../../specs/devices.md#current-consolidated-product-architecture) and [capture/gameplay boundary](../../specs/gameplay.md#combined-portable-and-wild-capture) govern this proposal.
 
 **Companion first.** Propose a substantial pocket-oriented portrait body, expressive color screen, wrist loop, protected direction cross, distinct Back and Confirm, and no protruding dial. A large creature view supports companionship; Probe and Cargo need fast readable glances. Actual screen, compute, sensors, power, dimensions, weight and one-thumb reach are unselected/unverified. The previous small Companion display is a development reference, not a limit on this combined role.
