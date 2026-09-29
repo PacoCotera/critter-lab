@@ -75,11 +75,15 @@ def journey(binary, frames):
         player.wait_until(lambda state: state["expedition_seconds"] >= 60, 65)
         player.capture("02-expedition")
         player.choose("Cargo")
+        player.choose("Discard data pack")
+        player.capture("discard-review")
+        player.choose("Keep this pack")
         player.choose("Return + store haul")
         assert player.state["samples"] == 1
         player.press()
         for label in ("Crown form", "Eye rings", "Body markings", "Movement", "Energy use"):
             player.choose(label)
+            player.capture("review-" + label.replace(" ", "-"))
             player.choose("Start research")
             assert player.state["page"] == "finding", player.state
             player.capture("03-" + label.replace(" ", "-"))
@@ -94,6 +98,7 @@ def journey(binary, frames):
         player.choose("Return + store haul")
         player.press()
         player.choose("Prepare incubation")
+        player.capture("candidate-selection")
         player.choose("Pale markings")
         assert player.state["page"] == "incubation"
         player.capture("04-incubation")

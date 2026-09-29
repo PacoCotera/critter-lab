@@ -4,6 +4,7 @@
 #include "native_font.h"
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct { unsigned y; uint8_t *pixels; } SelectedRow;
 enum { BASE, PANEL, INK, MUTED, BLUE, EDGE, DEEP, WARM, SAGE, ACTION };
@@ -79,10 +80,51 @@ static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
   if (used) label(row, x, y, line, size, color);
 }
 
+/* Source PNGs remain untouched. The renderer removes only matte pixels
+ * connected to the perimeter and close to that source's corner color. */
+static const uint8_t *sprite_matte(unsigned asset, const SelectedSprite *source) {
+  static uint8_t *masks[SELECTED_SPRITE_COUNT + 2];
+  static int prepared[SELECTED_SPRITE_COUNT + 2];
+  if (prepared[asset]) return masks[asset];
+  prepared[asset] = 1;
+  size_t count = (size_t)source->width * source->height;
+  uint8_t *mask = calloc(count, 1);
+  unsigned *queue = malloc(count * sizeof(*queue));
+  if (!mask || !queue) { free(mask); free(queue); return NULL; }
+  size_t head = 0, tail = 0;
+  for (unsigned y = 0; y < source->height; ++y) {
+    for (unsigned x = 0; x < source->width; ++x) {
+      if (x && y && x + 1 < source->width && y + 1 < source->height) continue;
+      unsigned pixel = y * source->width + x;
+      int matte = 1;
+      for (unsigned c = 0; c < 3; ++c)
+        if (abs((int)source->pixels[pixel * 3 + c] - source->pixels[c]) > 14) matte = 0;
+      if (matte && !mask[pixel]) { mask[pixel] = 1; queue[tail++] = pixel; }
+    }
+  }
+  while (head < tail) {
+    unsigned pixel = queue[head++], x = pixel % source->width, y = pixel / source->width;
+    unsigned neighbors[4] = {x ? pixel - 1 : pixel, x + 1 < source->width ? pixel + 1 : pixel,
+      y ? pixel - source->width : pixel, y + 1 < source->height ? pixel + source->width : pixel};
+    for (unsigned n = 0; n < 4; ++n) {
+      unsigned next = neighbors[n];
+      if (mask[next]) continue;
+      int matte = 1;
+      for (unsigned c = 0; c < 3; ++c)
+        if (abs((int)source->pixels[next * 3 + c] - source->pixels[c]) > 14) matte = 0;
+      if (matte) { mask[next] = 1; queue[tail++] = next; }
+    }
+  }
+  free(queue);
+  masks[asset] = mask;
+  return mask;
+}
+
 static void sprite(SelectedRow *row, unsigned asset, int x, int y,
                    unsigned width, unsigned height) {
   const SelectedSprite *source = asset < SELECTED_SPRITE_COUNT
       ? &selected_sprites[asset] : &pip_sprites[asset - SELECTED_SPRITE_COUNT];
+  const uint8_t *matte = sprite_matte(asset, source);
   unsigned fitted_width = width;
   unsigned fitted_height = width * source->height / source->width;
   if (fitted_height > height) {
@@ -97,6 +139,7 @@ static void sprite(SelectedRow *row, unsigned asset, int x, int y,
     int destination = x + (int)column;
     if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH) continue;
     unsigned source_x = column * source->width / fitted_width;
+    if (matte && matte[source_y * source->width + source_x]) continue;
     memcpy(row->pixels + destination * 3,
            source->pixels + (source_y * source->width + source_x) * 3, 3);
   }
@@ -183,7 +226,7 @@ void selected_lab_row(const SelectedLab *lab,unsigned y,uint8_t pixels[SELECTED_
   const GameIndividual *individual=&game->individuals[lab->resident];
   label(&row,415,210,visible?individual->id:"Your habitat awaits",22,INK);
   if(visible){
-    outline(&row,407,231,269,297,2,EDGE);sprite(&row,SELECTED_SPRITE_COUNT+individual->expression.pale_markings,411,235,261,289);
+    sprite(&row,SELECTED_SPRITE_COUNT+individual->expression.pale_markings,411,235,261,289);
     label(&row,686,248,individual->expression.pale_markings?"Pale markings":"Plain coat",28,WARM);
     label(&row,686,297,"Crown frill",22,INK);label(&row,686,332,"Pale eye rings",22,INK);
     label(&row,686,379,"Source sample",18,MUTED);label(&row,686,404,individual->source_sample_id,18,INK);
