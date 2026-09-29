@@ -30,6 +30,11 @@ actual browser-generated PNGs and intended-size comparisons. Browser acquisition
 works; neither concept is accepted as the Research master. It does not change
 the live renderer or the approved reference.
 
+The subsequent [coherent Gemini destination family](gemini-overview-family/README.md)
+supplies Explore, Research, Incubator and Habitat to the native Overview candidate.
+It preserves generated material character through explicit crop preparation;
+the original local SVG family remains useful unfinished source.
+
 ## Production command
 
 The editable masters are `src/*.svg`, authored directly at their intended draw
