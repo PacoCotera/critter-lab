@@ -58,7 +58,7 @@ typedef struct {
   unsigned focus, sample, study, resident, discard_resource, revision,
       page_revision, interaction_epoch, minimum_action_revision,
       acknowledged_revision, acknowledged_interaction_epoch;
-  int ready, suspended, storage_error;
+  int ready, suspended, storage_error, kit_mode;
   SelectedGesture gestures[10];
   unsigned workspace, library_index;
   SelectedPage workspace_page[4];
@@ -72,6 +72,8 @@ typedef struct {
 void selected_lab_init(SelectedLab *lab);
 int selected_lab_load(SelectedLab *lab, const char *path, uint32_t clock);
 void selected_lab_tick(SelectedLab *lab, uint32_t clock);
+void selected_lab_tick_devices(SelectedLab *lab, uint32_t clock, int expedition,
+                               int incubation);
 void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
                         unsigned frame);
 const char *selected_lab_page(const SelectedLab *lab);

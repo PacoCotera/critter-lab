@@ -1,6 +1,8 @@
+async function connectDevice(deviceId, controls) {
+const buttons = controls.map(name => document.querySelector(`#${deviceId}-${name}`));
 // Fixed physical-actuator transport only. Page/focus decisions and pixels live in C.
-const image = document.querySelector('#frame');
-const status = document.querySelector('#status');
+const image = document.querySelector(`#${deviceId}-frame`);
+const status = document.querySelector(`#${deviceId}-status`);
 let revision = 0;
 let visibleRevision = 0;
 let drawGeneration = 0;
@@ -16,11 +18,11 @@ async function stopAfterTransportFailure() {
   ++transportGeneration;
   ++drawGeneration;
   held.clear();
-  document.querySelectorAll('button').forEach(button => button.classList.remove('held'));
+  buttons.forEach(button => button.classList.remove('held'));
   status.textContent = 'Transport interrupted; activation stopped. Reload to reconnect with a fresh gesture.';
   // A down may have reached C even when its response was lost. Never send a queued up.
   try {
-    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event: 'cancel', revision: visibleRevision }) });
+    const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event: 'cancel', revision: visibleRevision }) });
     if (!response.ok) return;
     await response.json();
   } catch {
@@ -33,7 +35,7 @@ function send(event, requestedFrame = visibleRevision) {
   const generation = transportGeneration;
   commands = commands.then(async () => {
     if (inputBlocked || generation !== transportGeneration) return;
-    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event, revision: requestedFrame }) });
+    const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event, revision: requestedFrame }) });
     if (!response.ok) throw new Error('Native input transport unavailable.');
     const state = await response.json();
     if (generation === transportGeneration && !inputBlocked) receive(state);
@@ -42,10 +44,12 @@ function send(event, requestedFrame = visibleRevision) {
 
 function receive(state) {
   revision = state.revision;
-  ['research', 'critters', 'library', 'habitat'].forEach((name, index) => {
-    document.querySelector(`#${name}`).setAttribute('aria-pressed', String(state.workspace === index));
+  (deviceId === 'lab' ? ['research', 'critters', 'library', 'habitat'] : []).forEach((name, index) => {
+    document.querySelector(`#${deviceId}-${name}`).setAttribute('aria-pressed', String(state.workspace === index));
   });
-  status.textContent = `Native page: ${state.page} · focus: ${state.focus} · ${state.ready ? 'frame ready' : 'waiting for frame'} · ${state.boundary}`;
+  status.textContent = `${state.focus} · ${state.transfer}`;
+  const link = document.querySelector(`#${deviceId}-link`);
+  if (link) link.checked = state.online;
   if (visibleRevision !== revision && requestedRevision !== revision) draw(revision);
 }
 
@@ -54,7 +58,7 @@ async function draw(frame) {
   const generation = ++drawGeneration;
   let url;
   try {
-    const response = await fetch(`/api/frame?revision=${frame}`);
+    const response = await fetch(`/api/devices/${deviceId}/frame?revision=${frame}`);
     if (response.status === 409) return; // A newer native frame superseded this request.
     if (!response.ok) throw new Error('Native frame unavailable.');
     url = URL.createObjectURL(await response.blob());
@@ -83,8 +87,8 @@ async function draw(frame) {
 }
 
 const held = new Map();
-for (const name of ['up', 'down', 'left', 'right', 'research', 'critters', 'library', 'habitat', 'confirm', 'back']) {
-  const button = document.querySelector(`#${name}`);
+for (const name of controls) {
+  const button = document.querySelector(`#${deviceId}-${name}`);
   button.addEventListener('pointerdown', event => {
     if (inputBlocked || event.button !== 0 || held.has(name)) return;
     event.preventDefault();
@@ -92,7 +96,7 @@ for (const name of ['up', 'down', 'left', 'right', 'research', 'critters', 'libr
       for (const gesture of held.values()) gesture.cancelled = true;
       held.set(name, { pointer: event.pointerId, frame: visibleRevision, cancelled: true });
       button.setPointerCapture(event.pointerId);
-      document.querySelectorAll('button').forEach(control => control.classList.remove('held'));
+      buttons.forEach(control => control.classList.remove('held'));
       send('cancel');
       return;
     }
@@ -113,7 +117,7 @@ for (const name of ['up', 'down', 'left', 'right', 'research', 'critters', 'libr
   for (const type of ['pointercancel', 'lostpointercapture']) button.addEventListener(type, () => {
     if (held.delete(name)) {
       for (const gesture of held.values()) gesture.cancelled = true;
-      document.querySelectorAll('button').forEach(control => control.classList.remove('held'));
+      buttons.forEach(control => control.classList.remove('held'));
       send('cancel');
     }
   });
@@ -122,7 +126,7 @@ for (const name of ['up', 'down', 'left', 'right', 'research', 'critters', 'libr
 
 function suspend() {
   held.clear();
-  document.querySelectorAll('button').forEach(button => button.classList.remove('held'));
+  buttons.forEach(button => button.classList.remove('held'));
   send('suspend');
 }
 function resume() { if (!document.hidden) send('resume'); }
@@ -130,12 +134,43 @@ window.addEventListener('blur', suspend);
 window.addEventListener('focus', resume);
 document.addEventListener('visibilitychange', () => document.hidden ? suspend() : resume());
 try {
-  const response = await fetch('/api/status');
+  const response = await fetch(`/api/devices/${deviceId}/status`);
   if (!response.ok) throw new Error('Native C process unavailable.');
   receive(await response.json());
   if (!document.hidden) send('resume');
 } catch { await stopAfterTransportFailure(); }
 
+
+
+// Poll native time-driven state; timing and gameplay remain in the native process.
+const pollTimer = setInterval(() => {
+ if (inputBlocked || document.hidden || held.size) return;
+ commands=commands.then(async()=>{const response=await fetch(`/api/devices/${deviceId}/status`);if(!response.ok)throw new Error('Unavailable');receive(await response.json());}).catch(stopAfterTransportFailure);
+},1000);
+
+// Node transport tests should not be held open by the browser polling timer.
+pollTimer.unref?.();
+
+}
+
+const profiles = {
+  lab: ['up','down','left','right','research','critters','library','habitat','confirm','back'],
+  companion: ['up','down','left','right','confirm','back'],
+  dock: ['up','down','confirm','research','critters']
+};
+await Promise.all(Object.entries(profiles).map(([device, buttons]) => connectDevice(device, buttons)));
+for (const device of ['companion','dock']) {
+  document.querySelector(`#${device}-link`).addEventListener('change', async event => {
+    const label = document.querySelector('#link-status');
+    try {
+      const response = await fetch('/api/link', {method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'CritterLab'},body:JSON.stringify({device,online:event.target.checked})});
+      if (!response.ok) throw new Error();
+      const state = await response.json();
+      event.target.checked = state.online;
+      label.textContent = `${device}: ${state.online ? 'link available' : 'link interrupted'} (simulated).`;
+    } catch { label.textContent = 'Simulation link control unavailable. Reload to verify state.'; }
+  });
+}
 async function showRelease() {
   const label = document.querySelector('#release');
   try {
@@ -155,12 +190,3 @@ async function showRelease() {
   }
 }
 showRelease();
-
-// Poll native time-driven state; timing and gameplay remain in the native process.
-const pollTimer = setInterval(() => {
- if (inputBlocked || document.hidden || held.size) return;
- commands=commands.then(async()=>{const response=await fetch('/api/status');if(!response.ok)throw new Error('Unavailable');receive(await response.json());}).catch(stopAfterTransportFailure);
-},1000);
-
-// Node transport tests should not be held open by the browser polling timer.
-pollTimer.unref?.();
