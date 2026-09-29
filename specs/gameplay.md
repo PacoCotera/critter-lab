@@ -2,6 +2,16 @@
 
 Status: accepted directions with proposed mechanics identified below. Production balance, recipes, timers and complete progression are not implemented.
 
+## Combined portable and wild capture
+
+The owner accepted consolidation of Probe and Companion into one everyday portable with **Probe**, **Cargo** and **Companions** modes. Probe supports field investigation, gathering and wild encounters; Cargo contains carried resources/findings and separately identified temporary captures; Companions concerns established travelling critters and their interaction/training/development. Mode switching is a change of view, not implicit expedition cancellation, spending or loss of cargo. Lab genome research remains distinct from field investigation. Device responsibilities are in [devices](devices.md#current-consolidated-product-architecture).
+
+Wild critters can be captured during expeditions. Capture has difficulty, and a newly captured specimen can escape before the player brings it back to the Lab. Temporary containment and bonded companionship are distinct states: this escape concept does not make established travelling companions run away. A captured individual has observable appearance/behaviour but is not automatically a decoded genome. Its research/discovery and introduction into the home collection must respect existing knowledge boundaries.
+
+Exact encounter/capture inputs, capacity, rewards, failure consequences and probability rules remain open. Exposure/event-driven risk, visible containment conditions and an explicit return decision are proposals; the previously discussed Stable/Restless/Unstable labels are not final rules. No real-time unattended-loss timer, species catalogue or capture algorithm is approved or implemented by this direction.
+
+The connected journey is: choose travelling companions, explore/gather or capture, manage cargo and transport risk, return to the Lab, research discoveries, and manage residents/incubations/environments through the shared home habitat. Persistent world authority is cloud-backed; detailed offline and synchronization contracts remain open. This does not introduce a second independent caddy care game.
+
 ## Sandbox goals and the core loop
 
 Players set their own goals: collecting attractive or rare cosmetic combinations is as valid as developing adaptable or specialized critters. Cosmetic value need not grant a practical bonus. Experimentation and personal knowledge support research, crafting, exploration, development and social play; recipe discovery does not normally grant permission to attempt a combination. Explicit resource, compatibility and consent requirements still apply.

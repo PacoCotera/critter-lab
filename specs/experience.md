@@ -4,14 +4,13 @@ Accepted direction: retro pixel-based device screens, recognizable critters and 
 
 ## Physical experience is the product
 
-Accepted: the Lab, Probe, Companion and Caddy exist to make the game tangible. Each has a distinct purpose, rhythm and relationship with the player. Their interfaces should express those differences rather than reproduce one generic application on different screens.
+Accepted current architecture: the combined Companion, home Lab and Caddy make the game tangible. Probe is now a Companion mode, not a separate physical device. The [consolidated device direction](devices.md#current-consolidated-product-architecture) supersedes older separate-device studies while preserving their gameplay work.
 
 | Surface | Experience to preserve |
 | --- | --- |
-| Probe | A simple e-ink instrument that accompanies ordinary activity and catches varied observations and fictional events. Brief checks and straightforward collection; deeper interpretation belongs at the Lab. |
-| Companion | A cute, highly interactive presence for bonding, training and development. Responsive creature reactions matter; it is more than a collection viewer. Exact actions and animations remain open. |
+| Companion | Main everyday interaction device: Probe for expeditions/observations/encounters, Cargo for carried findings and temporary captures, Companions for bonding/training/development. Brief field checks coexist with responsive creature presence; mode changes do not silently cancel activity. Combined display and controls remain proposed. |
 | Lab | A customizable research workbench with room for many screens and game loops: investigation, crafting, creation, collections and knowledge. Expand its capabilities through a coherent interaction framework, not trait-specific navigation exceptions. |
-| Caddy | A tangible home and charging place for the portables, supporting the kit's physical routine. Docking does not by itself imply data transfer, ownership change or gameplay rewards. |
+| Caddy | Charges Lab and Companion, prints, and presents the shared world's habitats, eggs, residents and environments. Cloud-backed memory and ambient presence, with offline/cache behavior open. Docking alone confers no transfer, ownership or reward. |
 
 The complete game may first be designed and prototyped in software or an app. A future complete app edition is also allowed in principle; its scope is not committed. A software-first prototype must preserve the different device roles and transitions so it tests the intended experience. It does not validate tactile controls, e-ink refresh, handling, charging or real-world ergonomics.
 

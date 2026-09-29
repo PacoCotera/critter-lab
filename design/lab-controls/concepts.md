@@ -1,5 +1,33 @@
 # Lab physical-design exploration
 
+## Current concept — Companion-led three-object family
+
+The owner approved consolidating Probe into the everyday **Companion**. Current exploration therefore contains exactly two removable devices and their shared station: Companion goes out; Lab is the home handheld workbench; caddy charges them, prints and presents the living collection. Older separate-Probe boards below are retained references, not the current kit. [Device authority](../../specs/devices.md#current-consolidated-product-architecture) and [capture/gameplay boundary](../../specs/gameplay.md#combined-portable-and-wild-capture) govern this proposal.
+
+**Companion first.** Propose a substantial pocket-oriented portrait body, expressive color screen, wrist loop, protected direction cross, distinct Back and Confirm, and no protruding dial. A large creature view supports companionship; Probe and Cargo need fast readable glances. Actual screen, compute, sensors, power, dimensions, weight and one-thumb reach are unselected/unverified. The previous small Companion display is a development reference, not a limit on this combined role.
+
+| Mode | Player purpose | Boundary |
+| --- | --- | --- |
+| Probe | Follow expedition gathering, investigate field signals and inspect wild encounters | Capture is a separate deliberate choice; no automatic catch or invented odds |
+| Cargo | Inspect supplies/samples/findings, manage capacity and see temporary wild containment | Bonded critters are distinct; a captured specimen is not a decoded genome |
+| Companions | Spend time with travelling critters, interact and train | Exact activities, development rules and carrying capacity remain open |
+
+Proposed input: cross moves visible focus, Confirm opens detail or the explicitly reviewed action, Back restores the prior subject. A visible mode target provides access to the three modes without hidden cycling. Switching views does not cancel gathering. Wake must not also activate a consequential choice. Inspection stays free; capture/release and other consequential choices require explicit review rather than a stray mode/wake press. These are concept requirements, not implemented behavior.
+
+**Lab:** larger screen for genome discovery, interpreting findings and entering habitat management; familiar branded home-instrument treatment and tactile workspace shortcuts. **Home habitat station:** one clear rest per device, reachable controls, printer separate from ambient habitat window, residents/environments visible as a home presence. Durable world state is cloud-authoritative; local capture, caching, offline behavior and synchronization need a separate bounded architecture decision before implementation.
+
+Whole journey: prepare and take a Companion → explore while gathering → inspect findings or interact with travelling critters → decide whether to attempt a wild capture/continue exposure → return and reconcile cargo/containment at the Lab → research → place/develop residents and observe habitats through the shared world. Leaving the portable behind must not be confused with moving ownership or completing a transfer. No automatic docking reward or silent transfer is added.
+
+The visual proposal tests physical hierarchy and the three mode identities. It does not select production parts, finalized UI, creature art, printer/display packing or ergonomic geometry. Manufacturing remains small-batch and serviceable as described below.
+
+![Companion and its three modes](combined-companion.png)
+
+![Two removable devices and shared home station](combined-family.png)
+
+[Generation briefs](combined-system-prompts.txt). Experience Design inspected both final exports: two-device hierarchy and three mode identities are clear. The Companion correction adds a Confirm glyph, labels the wild encounter, removes ambiguous progress bars and renders temporary containment as status. Complete capture flow and physical ergonomics are not validated. The family plate's blank Companion Confirm and illustrative Lab content are not finalized controls or UI.
+
+**Subsequent owner direction supersedes the docked screen content in this family render:** Lab shows environments, creatures, incubations and research; caddy provides an e-ink candidate summary of habitats, stored inventory, charging and network/cloud status; Companion keeps scanning/gathering in Probe mode while docked. See [coordinated defaults](../../specs/devices.md#coordinated-docked-defaults). Preserve the physical role proposal; do not copy the render's caddy living scene into implementation.
+
 **Current direction:** the [owner physical-experience interview](../../specs/devices.md#owner-physical-experience-interview--current-direction) supersedes the printer-in-handheld case and fixed lower-row layout below. Develop a two-thumb home handheld, playable in its tidy shared caddy, with the printer in that home station. Field Lab is the original concept's name; Field Instrument and Orbital Lab remain inspiration. Retained boards below document earlier exploration, not the new configuration. Next visuals must show both handheld use and the supported living-display/play arrangement.
 
 ## Handheld and home station — architecture divergence

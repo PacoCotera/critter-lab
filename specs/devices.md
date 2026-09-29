@@ -5,15 +5,32 @@ Status: intended functions and engineering constraints. No selected production p
 | Device | Required role | Open physical/firmware choices |
 | --- | --- | --- |
 | Lab / Console | Home handheld and supported tabletop research workbench; Wi-Fi, local configuration, cached archive, color pixel display, wireless print requests and QR reading; play without a Probe | Selected development display: Waveshare 7inch HDMI LCD (H), 1024×600 landscape color; Linux host, drivers, two-thumb controls, battery and scan remain open |
-| Field Probe | Standalone evidence and resource gathering, player-attributed expeditions, retained cargo and recoverable offload | Sensor suite, cadence, capacity, battery, exact portrait e-ink panel and transport; no required phone |
-| Companion | Shared player use, saved-individual display, training/evolution/bonding and temporary offline activity | Number of carried critters, supported actions, handover, display/controls and power |
-| Caddy / home station | Tidy shared home for Lab, Probe and Companion; charging and printer integration; proposed ambient habitat window for eggs, critters and environments; Lab remains playable while supported | Charging implementation, printer packaging, station subdivision, alignment, power and indicators remain open |
+| Companion / combined portable | Primary everyday interaction device; Probe, Cargo and Companions modes combine expeditions/sensing/capture with carried findings and critter training/interaction | Combined display, compute, sensors, battery, controls, carried-critter and containment capacity require reevaluation; no separate Probe hardware in the current concept |
+| Caddy / home habitat | Charges Lab and Companion, prints records and presents habitats, residents, eggs/embryos/incubations and environmental/population state | Habitat display, charging, printer packaging, local cache and synchronization remain open |
 
 The [physical-experience principle](experience.md#physical-experience-is-the-product) defines why these are distinct objects: simple e-ink collection, responsive companionship, an extensible Lab workbench and a physical charging home. It guides engineering exploration without selecting production modules.
 
 Warm beige shells, charcoal structure and restrained orange accents inform the product family. Concept proportions and earlier renders do not freeze controls, ports, materials or manufacture. No physical slots are implied by virtual Lab chips.
 
 ## Development targets
+
+### Current consolidated product architecture
+
+Owner approved a three-object system: **one everyday Companion, one home handheld Lab, and one caddy/printer/habitat station**. This supersedes separate Probe and Companion hardware. Existing Probe gameplay and sensor work become Companion functions; retain their software/reference evidence rather than discard it. Legacy board/display targets below describe existing development work, not a frozen selection for the combined portable.
+
+The Companion is the most frequently used device and gets priority in interaction, portability, expressive display, control comfort and power budgeting. Its switchable modes are **Probe** (field observations, expeditions, gathering and wild encounters), **Cargo** (carried resources, samples, items and separately identified temporary wild captures), and **Companions** (established travelling critters, interaction, training and development). Switching views must not implicitly stop gathering, spend resources or discard an encounter. Field investigation does not replace Lab genome decoding.
+
+The Lab handles research and entry to the vivarium/habitat. The caddy is the tangible home or "memory" of the world: residents and environments such as tanks, islands or glaciers, with environmental parameters and populations. Durable shared state is cloud-authoritative. A synchronized caddy cache/projection is proposed; exact offline behavior and local authority are not decided. Lab, Companion and later a mobile app access the same world. The caddy does not become a second independent care simulation or an assumed mandatory network gateway.
+
+The accepted wild-capture direction and its open mechanics are recorded in [gameplay](gameplay.md#combined-portable-and-wild-capture). Keep temporary captures distinct from bonded travelling companions and from decoded genomes in all device views.
+
+#### Coordinated docked defaults
+
+Owner direction: the three docked displays form one integrated experience with distinct responsibilities. **Lab** is the most visual: living environments, creatures, incubations and ongoing research. **Caddy/habitat** provides the persistent summary: stored residents, habitats, bulk inventory, device charging, network and cloud connection status. E-ink is a candidate for this summary display; exact technology and color capability remain open. **Companion** defaults to an always-on Probe role, scanning and gathering even while docked. This supersedes the earlier caddy living-scene/matrix proposal; the Lab owns that visual presentation.
+
+These are default views, not locked modes. Charging must not silently stop gathering. Exact stationary gathering rates, capacity behavior, sensor validity during charging and offline operation remain design/engineering work; no automatic wild capture is implied. Status must distinguish fresh, stale and unavailable information rather than display an assumed successful charge or cloud connection. The three views refer to the same world and must not duplicate independent inventories or incubation state.
+
+Current concept exploration may revise the combined portable's enclosure/display/controls; existing simulator inputs and firmware targets are unchanged until an approved implementation slice. No purchase or new PCB is authorized by these proposals.
 
 ### Owner physical-experience interview — current direction
 

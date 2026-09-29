@@ -1,5 +1,7 @@
 # Explore probe: evidence, normalization and genomic recipes
 
+Current hardware direction: Probe is a mode of the combined everyday Companion, not a separate device. This document retains the field-evidence contract; former e-ink/board examples are legacy references, not constraints on the combined portable. See [consolidated devices](devices.md#current-consolidated-product-architecture).
+
 Status: proposed evidence contract. One fixed sensor set should support extensible genomic content through both measured and simulated experiences. Fictional events are explicitly permitted; sensor selection, timing and mappings remain open.
 
 ## Sample disclosure boundary — accepted correction
