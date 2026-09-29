@@ -38,10 +38,11 @@ Experience Design reviewed the actual PNG and comparison text. Corrections clari
 
 ## Control family — owner direction
 
-Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Enlarge the directional cross and the frequent Confirm/Cancel buttons with deliberate finger clearance; less frequent actions such as Inspect may stay smaller. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
+Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Owner-approved action order: Cancel/return arrow on the left; Confirm/checkmark on the right; smaller Inspect above. Enlarge the directional cross and the frequent Confirm/Cancel buttons with deliberate finger clearance; less frequent actions such as Inspect may stay smaller. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
 
 
-[Control-family proportion study](control-family-v1.png) applies larger navigation and primary round actions, while retaining colored workspace keys and orange rotary accents. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
+[Control-family proportion study](control-family-v2.png) applies larger navigation and primary round actions, while retaining colored workspace keys and orange rotary accents. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
 
 Hardware review of enclosure board: useful distinct form attributes; folio closure and knob clearance unproven, all printer volumes unallocated, transparent internals illustrative, supports/rails not established as tilt locks or handles. Capture preferred form attributes before convergence.
+
 
