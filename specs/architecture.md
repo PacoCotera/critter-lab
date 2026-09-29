@@ -4,21 +4,24 @@ Status: accepted responsibilities with proposed implementation boundaries. Servi
 
 ```mermaid
 flowchart LR
-  Probe[Shared Field Probe] -->|player-attributed evidence and cargo| Lab[Shared Lab]
-  Lab -->|authorized requests and sync| Cloud[Cloud authoritative records]
-  Companion[Shared Companion] <-->|temporary activity and reconciliation| Cloud
-  Lab <-->|retained content and accepted results| Cloud
-  Cloud --> Generation[Remote generation and content tools]
-  Generation -->|validated versioned assets| Cloud
-  App[Supporting app and website] <-->|permitted views and actions| Cloud
-  Lab --> Print[Printed individual reference]
-  Caddy[Two-bay charging caddy] -->|power only unless separately designed| Probe
-  Caddy --> Companion
+  Companion[Companion: Probe / Cargo / Companions] <-->|attributed activity and accepted results| Cloud[Shared authoritative records]
+  Lab[Home Lab: research and visual habitats] <--> Cloud
+  Caddy[Caddy: summaries and printer] <-->|timestamped projections and print jobs| Cloud
+  Caddy -->|wireless charging| Lab
+  Caddy -->|wireless charging| Companion
+  Cloud <--> App[Mobile fallback: same game and records]
+  Cloud --> Content[Validated versioned content]
 ```
 
 The Lab is connected. The owner directs a more capable Linux-class Lab to execute more work locally and reduce cloud dependence; the board and local generation workload remain to be selected. Cloud generation remains available, but generation is no longer required to execute exclusively remotely. Devices may hold temporary probing, evolving and training state partly offline. Cloud owns accepted durable state and recovery. Phone support is optional for routine device play; device-hosted setup needs no personal home server.
 
-The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The kit's supporting app role does not prohibit that exploration, and shared domain services should not force identical interactions across devices.
+The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The owner now explicitly directs a mobile fallback if the hardware-oriented software experience does not justify building the kit, and shared domain services should not force identical interactions across devices.
+
+## Current development gate
+
+Define the [electronics-first reference](devices.md#electronics-first-v1-reference-specification), then prove firmware/game behavior in software before PCB/enclosure development. Mobile is an explicit fallback product, not merely a remote control for hardware. Share domain operations, state/identity and preserved content; retain device-specific presentation and input adapters. Simulated peripherals must remain labeled. Existing C/MCU builds do not establish functional device firmware.
+
+The caddy is the tangible home of the collection but not the authoritative memory server or mandatory gateway. Habitats are bounded simulation/state units with proposed freeze/restore; this does not require a process or Docker container per habitat. Preserve a single authoritative inventory and population across clients. Docked Companion Probe activity continues subject to observation validity. Detailed transfer, freeze/time and offline permissions remain explicit domain choices.
 
 ## Creature production pipeline
 

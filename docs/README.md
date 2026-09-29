@@ -1,3 +1,11 @@
+# Current documentation entry point
+
+Start with [the product introduction](../README.md), [device/electronics reference](../specs/devices.md#electronics-first-v1-reference-specification), [current architecture](../specs/architecture.md) and [product status](../STATUS.md). These describe the combined Companion, home Lab and shared habitat/printer caddy. Firmware/game software proof comes before hardware layout, with a mobile fallback using the same rules/content/records.
+
+The earlier roadmap and diagrams below are retained background where they describe separate Probe hardware. They do not supersede current specifications. Existing experiments remain limited evidence, not complete firmware or a manufacturing specification.
+
+## Earlier documentation map and supporting studies
+
 # Critter Lab: the product and the plan
 
 **Connected product plan, 27 September 2026.** This connects the existing accepted direction; it does not approve open rules, visual designs, engineering choices or dates. Domain specifications remain authoritative for their details.

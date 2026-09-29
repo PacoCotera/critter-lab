@@ -2,6 +2,24 @@
 
 Status: accepted directions with proposed mechanics identified below. Production balance, recipes, timers and complete progression are not implemented.
 
+## Combined portable and wild capture
+
+The owner accepted consolidation of Probe and Companion into one everyday portable with **Probe**, **Cargo** and **Companions** modes. Probe supports field investigation, gathering and wild encounters; Cargo contains carried resources/findings and separately identified temporary captures; Companions concerns established travelling critters and their interaction/training/development. Mode switching is a change of view, not implicit expedition cancellation, spending or loss of cargo. Lab genome research remains distinct from field investigation. Device responsibilities are in [devices](devices.md#current-consolidated-product-architecture).
+
+Wild critters can be captured during expeditions. Capture has difficulty, and a newly captured specimen can escape before the player brings it back to the Lab. Temporary containment and bonded companionship are distinct states: this escape concept does not make established travelling companions run away. A captured individual has observable appearance/behaviour but is not automatically a decoded genome. Its research/discovery and introduction into the home collection must respect existing knowledge boundaries.
+
+Exact encounter/capture inputs, capacity, rewards, failure consequences and probability rules remain open. Exposure/event-driven risk, visible containment conditions and an explicit return decision are proposals; the previously discussed Stable/Restless/Unstable labels are not final rules. No real-time unattended-loss timer, species catalogue or capture algorithm is approved or implemented by this direction.
+
+The connected journey is: choose travelling companions, explore/gather or capture, manage cargo and transport risk, return to the Lab, research discoveries, and manage residents/incubations/environments through the shared home habitat. Persistent world authority is cloud-backed; detailed offline and synchronization contracts remain open. This does not introduce a second independent caddy care game.
+
+## Self-contained habitats
+
+Owner direction: each habitat is a self-contained environment with its own critter populations, environmental resources and interactions. A tank, island or glacier is a simulation space, not merely a collection background. The container analogy describes bounded state and lifecycle; it does not select Docker, a process per habitat or cloud infrastructure. Habitat count and concurrent active limits remain open.
+
+Desired capability: freeze a habitat and restore it from the cloud. Proposed meaning of freeze is an explicit pause of its simulation, preserving residents, their identity and state, environmental conditions, local resources and pending processes as one coherent saved habitat. Restoration would resume that habitat rather than create duplicate residents/resources. No elapsed-time catch-up, unattended penalty, rewind economy or freely cloneable populations is implied. These pause/restore semantics require owner confirmation before implementation; cloud authority, offline operation, snapshot compatibility and transfer consistency need a bounded system-design step.
+
+The proposed player distinction is active versus frozen habitats; merely closing a view or undocking a device must not implicitly freeze a habitat. Lab provides the visual environment and management view; the caddy summarizes habitat/storage state; Companion provides access to the same world and the chosen travelling residents. Taking a resident out must not leave a second active copy inside a frozen snapshot. Exact transfer rules, environment dynamics, resource replenishment and population consequences remain open. Device display responsibilities remain in [devices](devices.md#coordinated-docked-defaults).
+
 ## Sandbox goals and the core loop
 
 Players set their own goals: collecting attractive or rare cosmetic combinations is as valid as developing adaptable or specialized critters. Cosmetic value need not grant a practical bonus. Experimentation and personal knowledge support research, crafting, exploration, development and social play; recipe discovery does not normally grant permission to attempt a combination. Explicit resource, compatibility and consent requirements still apply.

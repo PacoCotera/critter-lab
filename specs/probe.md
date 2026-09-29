@@ -1,5 +1,7 @@
 # Explore probe: evidence, normalization and genomic recipes
 
+Current hardware direction: Probe is a mode of the combined everyday Companion, not a separate device. This document retains the field-evidence contract; former e-ink/board examples are legacy references, not constraints on the combined portable. See [consolidated devices](devices.md#current-consolidated-product-architecture).
+
 Status: proposed evidence contract. One fixed sensor set should support extensible genomic content through both measured and simulated experiences. Fictional events are explicitly permitted; sensor selection, timing and mappings remain open.
 
 ## Sample disclosure boundary — accepted correction
@@ -148,7 +150,7 @@ Window duration, cadence, retention and quantization require measured hardware/f
 
 Do not collapse everything into a single sum. Keep **sample progress**, **environmental profile**, **event history**, and **recipe-specific research evidence** distinguishable. The number of recipe matches does not mint extra physical samples or bypass sample consumption. Simulated events use their own bounded, versioned outcome rules; the physical normalization below applies only to sensed features. A combined recipe can require or weight both sources without pretending event intensity is lux or temperature.
 
-1. **Calibrate and validate.** Convert to canonical units; flag saturation, invalid or missing data. Pause collection scoring during charging under the existing hardware direction. Bench evidence determines any post-charge settling time. Suspected pocket/body effects are not perfectly detectable; do not claim automatic certainty.
+1. **Calibrate and validate.** Convert to canonical units; flag saturation, invalid or missing data. Docking/charging does not stop Probe activity. Flag charging-affected channels invalid or unavailable; never fabricate evidence or assume a resource bonus from charge presence. Bench evidence determines any post-charge settling time. Suspected pocket/body effects are not perfectly detectable; do not claim automatic certainty.
 2. **Extract stable features.** Temperature/RH/pressure remain in physical units; light can use a logarithmic transform; spectral ratios require gain/exposure correction and enough light; motion uses gravity-separated activity features where validated; sound features retain their stated reference. Low-light spectral noise is unknown, not a strong color signal.
 3. **Evaluate recipe memberships.** A versioned curve maps a feature into a 0–1 degree of matching: cool, humid, dim, variable, sustained, etc. These labels are game vocabulary with explicit bounds, not universal biological categories. Use shared calibrated bounds; arbitrary per-session min/max scaling would make identical environments incomparable.
 4. **Require the combination.** Mandatory conditions must overlap in the same defined observation window. One proposed conservative combination is the minimum membership among required features. A missing required feature makes the window ineligible, not zero-temperature/zero-sound evidence. Optional inputs cannot compensate for missing mandatory evidence.

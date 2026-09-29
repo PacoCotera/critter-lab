@@ -1,3 +1,9 @@
+# Current build boundary
+
+The new electronics-first specification is [here](specs/devices.md#electronics-first-v1-reference-specification). Current product: combined Companion, home Lab and caddy. Existing separate-Probe targets below are legacy build fixtures; they are not a second current portable. New recommended MCU/display profiles are not yet integrated. Software proof and human playtest precede hardware development; mobile fallback is explicit. No physical kit, power budget or production electronics freeze is claimed.
+
+## Existing build evidence
+
 # What can be built today
 
 Start with [the local setup guide](docs/builders/getting-started.md) to run the available software. This repository is intended to supply the whole product, but a complete physical kit cannot yet be built from it.

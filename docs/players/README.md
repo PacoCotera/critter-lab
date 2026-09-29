@@ -2,19 +2,19 @@
 
 *An introduction to the game being designed. The available software is an early experiment, not the complete game.*
 
-![A tabletop Lab beside the smaller Probe and larger Companion, all in cream, charcoal and orange.](../../design/references/branded-family.png)
+![Current Lab, combined Companion and shared habitat/printer caddy.](../../design/lab-controls/combined-family-materials.png)
 
 Critter Lab is a sandbox about discovering, creating and getting to know unusual creatures. You can pursue beautiful combinations, rare discoveries or useful abilities. There is no single ideal critter everyone must build.
 
-## Four objects, different roles
+## Three objects, one shared world
 
-The **Probe** goes exploring with you. Observations of the surrounding environment contribute to mysterious samples and fictional supplies you can investigate later.
+The **Companion** goes exploring with you. Switch between Probe for gathering and encounters, Cargo for supplies and temporary captures, and Companions for time with your travelling critters.
 
-The **Lab** is your research workbench. Examine samples, follow clues, prepare supplies and watch discoveries unfold. Finish the required research before choosing what to create. A slower Lab-only route is also part of the design, so a Probe is not required for every discovery.
+The **Lab** is the home research workbench and your visual window into habitats, creatures and incubations. Research gradually decodes genomes; a complete genome is needed for parentless incubation.
 
-The **Companion** is where you spend time with your critter: bonding, training and developing it. Whether it carries one or several critters is still being designed.
+The **Caddy** charges both devices, prints records and summarizes your habitats, stored supplies and device status. Habitats contain populations interacting with environmental resources. Freezing/restoring habitats from the cloud is a desired feature; exact limits and rules remain open.
 
-The **Caddy** charges the two portable devices. A supporting app and website will complement the kit; routine play is designed around the devices rather than a required phone screen.
+The game is being validated in software before building hardware. A mobile app is the fallback if dedicated devices do not add enough value.
 
 ## Your first discovery
 
