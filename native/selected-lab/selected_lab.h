@@ -56,8 +56,8 @@ typedef struct {
 typedef struct {
   SelectedPage page;
   unsigned focus, sample, study, resident, discard_resource, revision,
-      page_revision, interaction_epoch, acknowledged_revision,
-      acknowledged_interaction_epoch;
+      page_revision, interaction_epoch, minimum_action_revision,
+      acknowledged_revision, acknowledged_interaction_epoch;
   int ready, suspended, storage_error;
   SelectedGesture gestures[10];
   unsigned workspace, library_index;

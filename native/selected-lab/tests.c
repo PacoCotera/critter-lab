@@ -33,7 +33,8 @@ int main(void) {
   selected_lab_input(&lab, SELECTED_DOWN_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_DOWN_UP, 0, lab.revision);
   assert(lab.focus == 1 && !lab.ready);
-  /* A status tick queued ahead of a press changes pixels but not this action. */
+  /* A status tick queued ahead of a press changes pixels but not this action.
+   */
   SelectedLab timed;
   selected_lab_init(&timed);
   char timed_path[128];
@@ -55,6 +56,22 @@ int main(void) {
   selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, displayed);
   selected_lab_input(&timed, SELECTED_DOWN_UP, 0, displayed);
   assert(timed.focus == 1);
+  /* READY itself can arrive after a harmless tick during frame transport. */
+  selected_lab_init(&timed);
+  strcpy(timed.save_path, timed_path);
+  timed.game.expedition_active = 1;
+  strcpy(timed.game.expedition_id, "late-ready");
+  timed.game.expedition_data = 100;
+  timed.clock = 10;
+  game_rules_resume_runtime(&timed.game, timed.clock);
+  assert(game_state_save(timed_path, &timed.game) == 0);
+  displayed = timed.revision;
+  selected_lab_tick(&timed, 11);
+  selected_lab_input(&timed, SELECTED_READY, 0, displayed);
+  assert(timed.acknowledged_revision == displayed && !timed.ready);
+  selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, displayed);
+  selected_lab_input(&timed, SELECTED_DOWN_UP, 0, displayed);
+  assert(timed.focus == 1);
   /* The first cargo and survey completion change available actions. */
   selected_lab_init(&timed);
   strcpy(timed.save_path, timed_path);
@@ -67,9 +84,13 @@ int main(void) {
   displayed = timed.revision;
   selected_lab_tick(&timed, 11);
   assert(timed.interaction_epoch != timed.acknowledged_interaction_epoch);
-  selected_lab_input(&timed, SELECTED_CONFIRM_DOWN, 0, displayed);
-  selected_lab_input(&timed, SELECTED_CONFIRM_UP, 0, displayed);
-  assert(timed.page == V1_HOME);
+  selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, displayed);
+  selected_lab_input(&timed, SELECTED_DOWN_UP, 0, displayed);
+  assert(timed.focus == 0);
+  ready(&timed);
+  selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, timed.revision);
+  selected_lab_input(&timed, SELECTED_DOWN_UP, 0, timed.revision);
+  assert(timed.focus == 1);
   selected_lab_init(&timed);
   strcpy(timed.save_path, timed_path);
   timed.game.expedition_active = 1;
@@ -83,6 +104,9 @@ int main(void) {
   displayed = timed.revision;
   selected_lab_tick(&timed, 11);
   assert(timed.interaction_epoch != timed.acknowledged_interaction_epoch);
+  selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, displayed);
+  selected_lab_input(&timed, SELECTED_DOWN_UP, 0, displayed);
+  assert(timed.focus == 0);
   unlink(timed_path);
   press(&lab);
   assert(lab.page == V1_HOME);
@@ -216,6 +240,15 @@ int main(void) {
   selected_lab_input(&lab, SELECTED_HABITAT_UP, 0, lab.revision);
   assert(lab.page == V1_HABITAT && lab.resident == 2);
   frame(&lab);
+  lab.focus = 1;
+  ready(&lab);
+  unsigned resident_frame = lab.revision;
+  selected_lab_input(&lab, SELECTED_CONFIRM_DOWN, 0, resident_frame);
+  selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, resident_frame);
+  assert(lab.resident == 1);
+  selected_lab_input(&lab, SELECTED_CONFIRM_DOWN, 0, resident_frame);
+  selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, resident_frame);
+  assert(lab.resident == 1);
   /* Maximum valid stock must not paint over the header's right-hand inset. */
   SelectedLab empty_header, full_header;
   selected_lab_init(&empty_header);

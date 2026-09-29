@@ -34,9 +34,9 @@ static void status(SelectedLab *lab) {
       lab->revision, selected_lab_page(lab), selected_lab_focus(lab),
       lab->ready ? "true" : "false", lab->workspace,
       lab->suspended ? "true" : "false", lab->game.data, lab->game.energy,
-      lab->game.essence, lab->game.expedition_data,
-      lab->game.expedition_energy, lab->game.expedition_essence, lab->message,
-      lab->game.sample_count, lab->game.individual_count,
+      lab->game.essence, lab->game.expedition_data, lab->game.expedition_energy,
+      lab->game.expedition_essence, lab->message, lab->game.sample_count,
+      lab->game.individual_count,
       lab->game.sample_count ? lab->game.samples[lab->sample].decoded_studies
                              : 0,
       lab->game.expedition_elapsed, lab->game.incubation_elapsed,

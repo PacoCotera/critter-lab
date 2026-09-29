@@ -86,8 +86,8 @@ static void heading(SelectedRow *row, int x, int y, const char *text, int size,
 static void stock_amount(SelectedRow *row, int x, unsigned amount) {
   char whole[16], fraction[16];
   snprintf(whole, sizeof(whole), "%u", amount / 100);
-  snprintf(fraction, sizeof(fraction), "+%u/100", amount % 100);
-  /* The valid four-digit cap must keep the same right-hand inset. */
+  snprintf(fraction, sizeof(fraction), "u Next %u%%", amount % 100);
+  /* The valid five-digit unit cap must keep the same right-hand inset. */
   const NativeFont *bold = heading_font(26, 1);
   int top = 90 - bold->baseline;
   native_text_row(bold, whole, x, top, row->y, SELECTED_LAB_WIDTH, row->pixels,
@@ -396,7 +396,7 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
         int x = 324 + (int)index * 215;
         sprite(row, index, x, 374, 40, 53);
         label(row, x + 51, 375, names[index], 18, MUTED);
-        snprintf(text, sizeof(text), "%u u +%u/100", cargo[index] / 100,
+        snprintf(text, sizeof(text), "%u u Next %u%%", cargo[index] / 100,
                  cargo[index] % 100);
         label(row, x + 51, 405, text, 18, INK);
       }
@@ -404,8 +404,8 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
     if (game->expedition_id[0]) {
       unsigned cargo = game->expedition_data + game->expedition_energy +
                        game->expedition_essence;
-      snprintf(text, sizeof(text), "Cargo %u / 40 units +%u/100", cargo / 100,
-               cargo % 100);
+      snprintf(text, sizeof(text), "Cargo %u / 40 units | Next %u%%",
+               cargo / 100, cargo % 100);
       landing_strip(row, text);
     } else
       landing_strip(row, "No cargo loaded");
@@ -578,9 +578,9 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     for (unsigned i = 0; i < 3; i++) {
       int x = 416 + (int)i * 179;
       sprite(&row, i, x + 25, 265, 65, 86);
-      snprintf(text, sizeof(text), "+%u/100", cargo[i] % 100);
-      label(&row, x + 21, 367, text, 28, INK);
       snprintf(text, sizeof(text), "%u units", cargo[i] / 100);
+      label(&row, x + 21, 367, text, 28, INK);
+      snprintf(text, sizeof(text), "Next %u%%", cargo[i] % 100);
       label(&row, x + 7, 410, text, 22, MUTED);
     }
     snprintf(text, sizeof(text), "%u / 60 s  |  Sample: %s",
@@ -589,11 +589,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
              : game->expedition_elapsed >= 60       ? "found"
                                                     : "scanning");
     label(&row, 411, 443, text, 18, MUTED);
-    label(&row, 417, 391, "of next unit", 18, MUTED);
-    label(&row, 596, 391, "of next unit", 18, MUTED);
-    label(&row, 775, 391, "of next unit", 18, MUTED);
     unsigned total = cargo[0] + cargo[1] + cargo[2];
-    snprintf(text, sizeof(text), "Cargo %u / 40 units +%u/100", total / 100,
+    snprintf(text, sizeof(text), "Cargo %u / 40 units | Next %u%%", total / 100,
              total % 100);
     label(&row, 415, 503, text, 18, MUTED);
     outline(&row, 411, 470, 550, 20, 2, EDGE);
@@ -658,15 +655,14 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       for (unsigned i = 0; i < 3; i++) {
         int x = 418 + (int)i * 181;
         sprite(&row, i, x, 343, 36, 48);
-        snprintf(text, sizeof(text), "%u / %u",
-                 known ? 0 : costs[i] / 100, stock[i] / 100);
+        snprintf(text, sizeof(text), "%u / %u", known ? 0 : costs[i] / 100,
+                 stock[i] / 100);
         label(&row, x + 44, 355, text, 18,
               known || stock[i] >= costs[i] ? INK : WARM);
-        snprintf(text, sizeof(text), "+%u/100 next unit", stock[i] % 100);
+        snprintf(text, sizeof(text), "Next %u%%", stock[i] % 100);
         label(&row, x, 385, text, 18, MUTED);
         if (!known && stock[i] < costs[i]) {
-          snprintf(text, sizeof(text), "Need %u units",
-                   (costs[i] - stock[i] + 99) / 100);
+          snprintf(text, sizeof(text), "Short of cost");
           label(&row, x, 409, text, 18, WARM);
         }
       }
@@ -694,8 +690,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     unsigned shortage = 0;
     for (unsigned i = 0; i < 3; i++)
       if (stock[i] < 500) {
-        snprintf(text, sizeof(text), "Need %u %s units", (500 - stock[i] + 99) / 100,
-                 names[i]);
+        snprintf(text, sizeof(text), "%s: %u / 5 units", names[i],
+                 stock[i] / 100);
         label(&row, 410, 454 + (int)shortage * 23, text, 18, WARM);
         shortage++;
       }

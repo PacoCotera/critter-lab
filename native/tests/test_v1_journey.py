@@ -109,7 +109,7 @@ def journey(binary, frames):
         assert player.state["stock"] == [before_stock[index] + carried[index]
                                           for index in range(3)]
         assert player.state["cargo"] == [0, 0, 0]
-        assert player.state["message"].startswith("Haul saved:")
+        assert player.state["message"].startswith("Haul saved. Stock")
         after_frame = player.capture("after-saved-haul")
         width, height = 1024, 600
         stride = width * 3
