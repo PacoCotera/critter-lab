@@ -22,6 +22,21 @@ Research previews therefore show samples and discoveries, with no invented queue
 timer or background work. Incubation previews never expose an unrevealed individual.
 Resource fractions remain real data and must not be rounded away for appearance.
 
+## Section overview and item overview — owner-directed next hierarchy
+
+Global Home summarizes the whole Lab. Each main section also has an **Overview**
+entry that summarizes that section's complete collection/activity, separate from
+its individual records. In Research, Overview sits above the sample list and
+covers all samples and their shared supply needs. Focusing a sample previews only
+that record; Confirm enters its workbench. Returning to Overview must not retain
+the selected sample's numbers as if they described the collection. Explore,
+Incubator and Habitat follow the same section-versus-item distinction with their
+own meaningful records and activities. This is accepted information hierarchy;
+the table above describes the currently delivered, narrower Home implementation.
+Contextual titles read Overview — Lab/Explore/Research/Incubator/Habitat; Back
+means return to the previous context. Overview is the selected name for these
+destinations, replacing ambiguous Home labels in the next implementation.
+
 ## Visual derivation
 
 [Approved refined C18](../game-art-proposals/35-vault-composition/18-c-refined.png)

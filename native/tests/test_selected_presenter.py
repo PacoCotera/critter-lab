@@ -148,7 +148,7 @@ class SelectedPresenter(unittest.TestCase):
         self.input('ready', revision)
         self.input('confirm-down', revision)
         overview = json.loads(self.input('confirm-up', revision)[1])
-        self.assertEqual((overview['page'], overview['focus']), ('home', 'Home'))
+        self.assertEqual((overview['page'], overview['focus']), ('home', 'Overview'))
         self.input('ready', revision)
         self.input('down-down', revision)
         focused = json.loads(self.input('down-up', revision)[1])

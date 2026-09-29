@@ -27,13 +27,16 @@ static void status(SelectedLab *lab) {
       "{\"revision\":%u,\"page\":\"%s\",\"focus\":\"%s\",\"ready\":%s,"
       "\"workspace\":%u,\"suspended\":%s,\"width\":1024,\"height\":600,"
       "\"stock\":[%u,%u,%u],"
+      "\"cargo\":[%u,%u,%u],\"message\":\"%s\","
       "\"samples\":%u,\"individuals\":%u,\"decoded\":%u,\"expedition_seconds\":"
       "%u,\"incubation_seconds\":%u,\"incubation_ready\":%s,\"boundary\":"
       "\"Standalone V1; authored sensor simulation; local save\"}\n",
       lab->revision, selected_lab_page(lab), selected_lab_focus(lab),
       lab->ready ? "true" : "false", lab->workspace,
       lab->suspended ? "true" : "false", lab->game.data, lab->game.energy,
-      lab->game.essence, lab->game.sample_count, lab->game.individual_count,
+      lab->game.essence, lab->game.expedition_data, lab->game.expedition_energy,
+      lab->game.expedition_essence, lab->message, lab->game.sample_count,
+      lab->game.individual_count,
       lab->game.sample_count ? lab->game.samples[lab->sample].decoded_studies
                              : 0,
       lab->game.expedition_elapsed, lab->game.incubation_elapsed,

@@ -39,6 +39,24 @@ questions and the next directed research choice together. Avoid compulsory check
 hidden progress and textbook explanations. Expedition purpose, relevant opportunities
 and observed results must be understandable; renamed identical routes are insufficient.
 
+Each main section also needs its own collection/activity overview, distinct from
+an individual item's overview. Research starts with an **Overview** entry above
+the left sample list: it summarizes all samples, retained discoveries, work in
+progress and supply needs. Focusing a sample previews only that sample; Confirm
+enters its workbench. Returning to Research Overview restores the collection-wide
+picture, not a summary of whichever sample was last selected. Apply this hierarchy
+to Explore, Incubator and Habitat using their meaningful section-wide activity and
+individual expedition, incubation or habitat/resident context. Global Home,
+section overview and selected-item overview have different scopes and must not
+silently substitute for one another. Focus previews without committing or spending.
+
+Use contextual titles **Overview — Lab**, **Overview — Explore**,
+**Overview — Research**, **Overview — Incubator** and **Overview — Habitat**.
+The short menu entry may say Overview where its function context is visible.
+Back remains the separate return-to-previous-context action; an overview label
+must not imply that it is a Back button. The owner selected Overview as the name
+after requesting explicit home/function context.
+
 Current art remains provisional and below the approved C18 reference. Match the
 screen-design standard's margins, palette, frames, typography, focus effects and
 sprite craft in actual native renders. Reported intermittent navigation freezes
@@ -126,7 +144,16 @@ The simulator's depicted device controls are the player input surface. Owner-aut
 
 Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 
-Every interaction frame has an identity covering page, object, focus and displayed facts. Activation requires that requested frame to be visibly ready. Pixel submission or SPI completion alone is not physical visibility. Ignore stale draw/readiness callbacks and stale domain responses; scope asynchronous work to the selected identity and request generation.
+Every interaction frame has an identity covering page, object, focus and action
+meaning. Activation requires a frame acknowledged as visibly ready. A later
+time-only repaint may retain that acknowledged interaction when its object,
+focus, destination, availability and commitment meaning are unchanged. First
+cargo availability, expedition completion, incubation readiness, navigation,
+spending/receipt and error/recovery changes require a newly visible frame.
+An animation or timer must not consume an otherwise valid press. Pixel submission
+or SPI completion alone is not physical visibility. Ignore stale draw/readiness
+callbacks and stale domain responses; scope asynchronous work to the selected
+identity and request generation.
 
 Discard blocked activation rather than queueing it. A gesture started during refresh, suspension or idle wake remains consumed through repeat/release. Require a fresh gesture; blur and pointer cancellation cancel pending activation. Coalesce navigation to one pending target. Safe Back can request a return frame while waiting, but does not cancel a committed operation; the return frame must itself become ready.
 

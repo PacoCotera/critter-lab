@@ -23,10 +23,17 @@ full content catalogue.
 The [Home and feature landings](design/home-landings/README.md) expose current lab
 activity before entering a feature. The accepted directional/workspace panel
 operates the Lab; stock, expedition, discoveries, incubation and revealed-resident
-previews read the same saved world. Owner playtest values this depth but finds
-the art below C18, resource decimals difficult, the haul header stale in play,
-navigation intermittently unresponsive, device roles collapsed and research
-repetitive. Those reports supersede any broader inference from functional checks.
+previews read the same saved world. Contextual headings now use **Overview — Lab**
+and **Overview — function**; Back remains a separate navigation action.
+Resources use whole units with separate progress toward the next unit, preserving
+the saved quantities and costs. Saved-haul feedback reports resulting stock;
+the journey checks the exact credit, immediate header redraw and restart.
+Timer-only updates no longer invalidate an otherwise unchanged button action;
+changed availability, focus and page still reject stale input.
+
+Owner playtest values the overview depth but finds the art below C18, device roles
+collapsed and research repetitive. These remain open; the reliability correction
+does not establish final art quality or resolve every reported navigation case.
 Lab execution is
 C17 Linux x86-64 host simulation; Raspberry Pi4 ARM/display/input remains unverified.
 
@@ -46,12 +53,13 @@ boundary; older separate Probe targets are legacy fixtures after consolidation.
 The [connected correction](design/research-and-creation.md#current-correction-return-to-the-same-research-workpiece)
 retains Home and specifies a persistent sample workbench, separate Companion
 expedition/cargo and Lab receipt, truthful integer supplies, meaningful expedition
-opportunities and supported progressive discoveries. This design/diagnosis is
-not yet a runtime correction. Current Pip samples share the same five studies
+opportunities and supported progressive discoveries. Section-wide overviews must
+remain distinct from selected-item overviews: Research needs an Overview entry
+above its samples, with each sample opening its own workbench. That hierarchy
+and the two-device journey remain pending beyond the input/resource correction.
+Current Pip samples share the same five studies
 and two configurations; authored evidence and completeness must precede claims
-of richer discovery. A timed-update/input race has a code-grounded reproduction
-sequence; the reported HUD failure remains to reproduce with exact saved stock
-and rendered-frame checks. Preserve the existing hardware family and
+of richer discovery. Preserve the existing hardware family and
 approved product direction; do not infer that a working local Pip loop delivers
 cloud, sensor, printer, power or environmental simulation capabilities.
 

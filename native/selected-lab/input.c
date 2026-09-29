@@ -5,6 +5,11 @@ static void changed(SelectedLab *lab) {
   ++lab->revision;
   lab->ready = 0;
 }
+static void interaction_changed(SelectedLab *lab) {
+  ++lab->interaction_epoch;
+  changed(lab);
+  lab->minimum_action_revision = lab->revision;
+}
 static unsigned page_workspace(SelectedPage page) {
   switch (page) {
   case V1_SAMPLES:
@@ -36,10 +41,12 @@ static void remember_workspace(SelectedLab *lab) {
 }
 static void enter(SelectedLab *lab, SelectedPage page) {
   remember_workspace(lab);
+  if (!strncmp(lab->message, "Haul saved.", 11))
+    lab->message[0] = '\0';
   lab->page = page;
   lab->workspace = page_workspace(page);
   lab->focus = 0;
-  changed(lab);
+  interaction_changed(lab);
   lab->page_revision = lab->revision;
 }
 static unsigned discovered_findings(const SelectedLab *lab) {
@@ -86,7 +93,8 @@ void selected_lab_init(SelectedLab *lab) {
   lab->workspace_page[2] = V1_LIBRARY;
   lab->workspace_page[3] = V1_HABITAT;
   lab->workspace = 4;
-  lab->revision = lab->page_revision = 1;
+  lab->revision = lab->page_revision = lab->interaction_epoch = 1;
+  lab->minimum_action_revision = 1;
 }
 int selected_lab_load(SelectedLab *lab, const char *path, uint32_t clock) {
   if (strlen(path) >= sizeof(lab->save_path))
@@ -152,7 +160,7 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   return 1;
 }
 const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
-  static const char *home[] = {"Home", "Explore", "Research", "Incubator",
+  static const char *home[] = {"Overview", "Explore", "Research", "Incubator",
                                "Habitat"};
   static const char *routes[] = {"Field survey", "Garden forage",
                                  "Weather watch"};
@@ -237,16 +245,18 @@ static GameResult commit(SelectedLab *lab, GameCommand command) {
     strcpy(lab->message,
            "Recorded; storage durability uncertain. Reload before continuing.");
     lab->storage_error = 1;
-  } else if (result == GAME_OK || result == GAME_DUPLICATE)
-    strcpy(lab->message, "Saved");
-  else if (result == GAME_UNAVAILABLE)
+  } else if (result == GAME_OK || result == GAME_DUPLICATE) {
+    if (command.type != GAME_COMMAND_EXPEDITION_TICK &&
+        command.type != GAME_COMMAND_INCUBATION_TICK)
+      strcpy(lab->message, "Saved");
+  } else if (result == GAME_UNAVAILABLE)
     strcpy(lab->message, "More supplies or discoveries needed.");
   else if (result == GAME_STORAGE) {
     strcpy(lab->message, "Could not save. No change accepted.");
     lab->storage_error = 1;
   } else
     strcpy(lab->message, "Action unavailable. Your progress is safe.");
-  changed(lab);
+  interaction_changed(lab);
   return result;
 }
 static int selected_lab_held(const SelectedLab *lab) {
@@ -266,12 +276,43 @@ void selected_lab_tick(SelectedLab *lab, uint32_t clock) {
   GameCommand command = {0};
   command.data.monotonic_seconds = clock;
   if (lab->game.expedition_active) {
+    unsigned before_cargo = lab->game.expedition_data +
+                            lab->game.expedition_energy +
+                            lab->game.expedition_essence;
+    unsigned before_resources[] = {lab->game.expedition_data,
+                                   lab->game.expedition_energy,
+                                   lab->game.expedition_essence};
+    int before_active = lab->game.expedition_active;
+    unsigned before_epoch = lab->interaction_epoch;
+    unsigned before_minimum = lab->minimum_action_revision;
     command.type = GAME_COMMAND_EXPEDITION_TICK;
     commit(lab, command);
+    unsigned after_cargo = lab->game.expedition_data +
+                           lab->game.expedition_energy +
+                           lab->game.expedition_essence;
+    int discard_eligibility_unchanged =
+        (before_resources[0] >= GAME_PACK_SIZE) ==
+            (lab->game.expedition_data >= GAME_PACK_SIZE) &&
+        (before_resources[1] >= GAME_PACK_SIZE) ==
+            (lab->game.expedition_energy >= GAME_PACK_SIZE) &&
+        (before_resources[2] >= GAME_PACK_SIZE) ==
+            (lab->game.expedition_essence >= GAME_PACK_SIZE);
+    if (lab->game.expedition_active == before_active &&
+        (before_cargo == 0) == (after_cargo == 0) &&
+        discard_eligibility_unchanged && !lab->storage_error) {
+      lab->interaction_epoch = before_epoch;
+      lab->minimum_action_revision = before_minimum;
+    }
   }
   if (lab->game.incubation_active && !lab->game.incubation_ready) {
+    unsigned before_epoch = lab->interaction_epoch;
+    unsigned before_minimum = lab->minimum_action_revision;
     command.type = GAME_COMMAND_INCUBATION_TICK;
     commit(lab, command);
+    if (!lab->game.incubation_ready && !lab->storage_error) {
+      lab->interaction_epoch = before_epoch;
+      lab->minimum_action_revision = before_minimum;
+    }
   }
 }
 static void activate(SelectedLab *lab) {
@@ -315,7 +356,7 @@ static void activate(SelectedLab *lab) {
       else {
         strcpy(lab->message,
                "Gathering while you explore. Cargo keeps your haul.");
-        changed(lab);
+        interaction_changed(lab);
       }
     } else {
       command.type = GAME_COMMAND_EXPEDITION_START;
@@ -329,8 +370,15 @@ static void activate(SelectedLab *lab) {
   case V1_CARGO:
     if (!focus) {
       command.type = GAME_COMMAND_EXPEDITION_OFFLOAD;
-      if (commit(lab, command) == GAME_OK)
+      if (commit(lab, command) == GAME_OK) {
         enter(lab, V1_SAMPLES);
+        snprintf(lab->message, sizeof(lab->message),
+                 "Haul saved. Stock D %u Next %u%% | E %u Next %u%% | Es %u "
+                 "Next %u%%",
+                 lab->game.data / 100, lab->game.data % 100,
+                 lab->game.energy / 100, lab->game.energy % 100,
+                 lab->game.essence / 100, lab->game.essence % 100);
+      }
     } else {
       lab->discard_resource = focus - 1;
       enter(lab, V1_DISCARD_REVIEW);
@@ -349,7 +397,7 @@ static void activate(SelectedLab *lab) {
         enter(lab, V1_CREATE);
       else {
         strcpy(lab->message, "Discover every region before incubation.");
-        changed(lab);
+        interaction_changed(lab);
       }
     } else {
       lab->study = focus;
@@ -394,13 +442,13 @@ static void activate(SelectedLab *lab) {
     if (lab->game.samples[lab->sample].incubated) {
       strcpy(lab->message,
              "This sample already has a Beecho. Choose another sample.");
-      changed(lab);
+      interaction_changed(lab);
       break;
     }
     if (lab->game.individual_count >= GAME_MAX_INDIVIDUALS) {
       strcpy(lab->message, "Your 8 resident spaces are occupied. Explore or "
                            "visit your habitat.");
-      changed(lab);
+      interaction_changed(lab);
       break;
     }
     command.type = GAME_COMMAND_INCUBATION_START;
@@ -436,7 +484,7 @@ static void activate(SelectedLab *lab) {
       do {
         lab->resident = (lab->resident + 1) % lab->game.individual_count;
       } while (!lab->game.individuals[lab->resident].revealed);
-      changed(lab);
+      interaction_changed(lab);
     } else {
       command.type = GAME_COMMAND_CARE_VISIT;
       command.data.individual = lab->resident;
@@ -455,8 +503,12 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     }
   }
   if (input == SELECTED_READY) {
-    if (frame == lab->revision && !lab->suspended)
-      lab->ready = 1;
+    if (frame >= lab->minimum_action_revision && frame <= lab->revision &&
+        !lab->suspended) {
+      lab->ready = frame == lab->revision;
+      lab->acknowledged_revision = frame;
+      lab->acknowledged_interaction_epoch = lab->interaction_epoch;
+    }
     return;
   }
   if (input == SELECTED_CANCEL || input == SELECTED_SUSPEND ||
@@ -464,7 +516,7 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     memset(lab->gestures, 0, sizeof(lab->gestures));
     if (input != SELECTED_CANCEL) {
       lab->suspended = input == SELECTED_SUSPEND;
-      changed(lab);
+      interaction_changed(lab);
     }
     game_rules_resume_runtime(&lab->game, lab->clock);
     return;
@@ -482,15 +534,18 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
       for (unsigned i = 0; i < 10; ++i)
         lab->gestures[i].allowed = 0;
     gesture->held = 1;
-    gesture->revision = lab->revision;
+    gesture->revision = frame;
+    gesture->interaction_epoch = lab->interaction_epoch;
     gesture->allowed =
-        !overlap && !lab->suspended && lab->ready && frame == lab->revision;
+        !overlap && !lab->suspended && !lab->storage_error &&
+        frame == lab->acknowledged_revision &&
+        lab->acknowledged_interaction_epoch == lab->interaction_epoch;
     return;
   }
   if (!gesture->held)
     return;
-  int allowed = gesture->allowed && gesture->revision == lab->revision &&
-                frame == lab->revision;
+  int allowed = gesture->allowed && gesture->revision == frame &&
+                gesture->interaction_epoch == lab->interaction_epoch;
   memset(gesture, 0, sizeof(*gesture));
   if (!allowed || lab->suspended)
     return;
@@ -499,7 +554,7 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     lab->focus = (lab->focus + (button == 1 ? 1 : count - 1)) % count;
     if (lab->page == V1_CRITTERS)
       focus_resident(lab);
-    changed(lab);
+    interaction_changed(lab);
     return;
   }
   if (button >= 4 && button <= 7) {
