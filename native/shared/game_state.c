@@ -126,7 +126,6 @@ int game_state_valid(const GameState *state) {
         !pip_genome_valid(&individual->genome) ||
         strcmp(individual->art_id, pip_art_id(&individual->genome)) != 0 ||
         individual->habitat >= GAME_HABITAT_COUNT ||
-        individual->care_visits > GAME_MAX_CARE_VISITS ||
         !pip_expression_valid(&individual->genome, &individual->expression))
       return 0;
     for (sample_index = 0; sample_index < state->sample_count; ++sample_index)

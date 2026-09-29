@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(critter_selected_lab VERSION 0.1.0 LANGUAGES C)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED YES)
 
 add_library(selected_lab_core STATIC input.c render.c assets.c pip_art.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/pip_genetics.c ../shared/save_bytes.c
