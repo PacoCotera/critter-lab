@@ -58,3 +58,8 @@ The [dimensioned whole-face reference](ergonomics.md) predates the new horizonta
 
 UX reviewed the actual workspace-row board: roles/order retained, no blocking composition defect for comparing concepts. A has clearest row alignment; B needs left-edge clearance checking; C separates roles but adds a reach-over shelf. Destination symbols need labels or a learned on-screen cue; the concept icons do not establish those meanings. Grip and comfort remain unmeasured.
 
+
+## Current casing exploration
+
+Owner favors B/C workspace-row hierarchy and requests a flush-integrated screen, with some extra horizontal space if needed. [Flush casing with gray screen surround](flush-casing-v2.png) compares continuous cream shell B with charcoal-framed instrument C. The matte gray rubber-like frame is an owner-requested visual direction; its lip, material and mounting are not engineered. Screen/control roles and Cancel-left/Confirm-right remain unchanged. Side profiles show form intent only, not calibrated slope, internal packaging or manufacturing fit. No casing selected.
+
