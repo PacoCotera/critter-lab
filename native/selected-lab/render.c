@@ -223,8 +223,9 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                           "HABITAT",   "RESEARCH PLAN",     "DISCARD PACK",
                           "CRITTERS",  "RECORDED FINDINGS", "SAMPLE FINDING"};
   label(&row, 396, 152,
-        lab->page == V1_FINDING ? pip_study(lab->study)->title
-                                : titles[lab->page],
+        lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING
+            ? pip_study(lab->study)->title
+            : titles[lab->page],
         34, INK);
   unsigned count = selected_lab_options(lab);
   unsigned first = lab->focus >= 6 ? lab->focus - 5 : 0;
@@ -422,7 +423,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
         snprintf(text, sizeof(text), "Visits together: %u",
                  individual->care_visits);
         label(&row, 686, 465, text, 18, SAGE);
-      } else
+      } else if (lab->page == V1_REVEAL)
         label(&row, 686, 465, "Ready to meet you.", 18, SAGE);
     } else
       label(&row, 414, 439, "Research your first sample to begin.", 22, INK);
