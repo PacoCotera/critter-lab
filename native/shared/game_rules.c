@@ -28,7 +28,8 @@ static uint64_t hash_u32(uint64_t value, uint32_t input) {
 static uint64_t command_fingerprint(const GameCommand *command) {
   uint64_t value = 14695981039346656037ULL;
   const unsigned char *text = (const unsigned char *)command->operation_id;
-  while (*text) value = hash_byte(value, *text++);
+  while (*text)
+    value = hash_byte(value, *text++);
   value = hash_u32(value, (uint32_t)command->type);
   switch (command->type) {
   case GAME_COMMAND_EXPEDITION_START:
@@ -70,7 +71,8 @@ static uint64_t command_fingerprint(const GameCommand *command) {
 }
 
 static int add_stock(uint32_t *stock, uint32_t amount) {
-  if (*stock > 1000000u - amount) return 0;
+  if (*stock > 1000000u - amount)
+    return 0;
   *stock += amount;
   return 1;
 }
@@ -89,24 +91,29 @@ static int make_id(char *destination, size_t capacity, const char *prefix,
 static int apply_expedition_tick(GameState *state, uint32_t now) {
   uint32_t elapsed;
   uint32_t index;
-  if (!state->expedition_active) return GAME_UNAVAILABLE;
-  if (!state->runtime_anchors_ready) return GAME_INVALID;
-  if (now < state->expedition_last_tick) return GAME_INVALID;
+  if (!state->expedition_active)
+    return GAME_UNAVAILABLE;
+  if (!state->runtime_anchors_ready)
+    return GAME_INVALID;
+  if (now < state->expedition_last_tick)
+    return GAME_INVALID;
   elapsed = now - state->expedition_last_tick;
-  if (elapsed > EXPEDITION_TICK_CAP) elapsed = EXPEDITION_TICK_CAP;
+  if (elapsed > EXPEDITION_TICK_CAP)
+    elapsed = EXPEDITION_TICK_CAP;
   state->expedition_last_tick = now;
-  for (index = 0; index < elapsed &&
-                  state->expedition_elapsed < GAME_EXPEDITION_SECONDS;
+  for (index = 0;
+       index < elapsed && state->expedition_elapsed < GAME_EXPEDITION_SECONDS;
        ++index) {
     uint32_t after = cargo_total(state) + YIELD_PER_ACTIVE_SECOND[0] +
-                     YIELD_PER_ACTIVE_SECOND[1] +
-                     YIELD_PER_ACTIVE_SECOND[2];
-    if (after > GAME_CARGO_CAPACITY) return GAME_UNAVAILABLE;
+                     YIELD_PER_ACTIVE_SECOND[1] + YIELD_PER_ACTIVE_SECOND[2];
+    if (after > GAME_CARGO_CAPACITY)
+      return GAME_UNAVAILABLE;
     state->expedition_data += YIELD_PER_ACTIVE_SECOND[0];
     state->expedition_energy += YIELD_PER_ACTIVE_SECOND[1];
     state->expedition_essence += YIELD_PER_ACTIVE_SECOND[2];
     ++state->expedition_elapsed;
-    if (after >= GAME_CARGO_CAPACITY) break;
+    if (after >= GAME_CARGO_CAPACITY)
+      break;
   }
   if (state->expedition_elapsed >= GAME_EXPEDITION_SECONDS)
     state->expedition_active = 0;
@@ -117,10 +124,13 @@ static int apply_incubation_tick(GameState *state, uint32_t now) {
   uint32_t elapsed;
   if (!state->incubation_active || state->incubation_ready)
     return GAME_UNAVAILABLE;
-  if (!state->runtime_anchors_ready) return GAME_INVALID;
-  if (now < state->incubation_last_tick) return GAME_INVALID;
+  if (!state->runtime_anchors_ready)
+    return GAME_INVALID;
+  if (now < state->incubation_last_tick)
+    return GAME_INVALID;
   elapsed = now - state->incubation_last_tick;
-  if (elapsed > EXPEDITION_TICK_CAP) elapsed = EXPEDITION_TICK_CAP;
+  if (elapsed > EXPEDITION_TICK_CAP)
+    elapsed = EXPEDITION_TICK_CAP;
   state->incubation_last_tick = now;
   if (elapsed > GAME_INCUBATION_SECONDS - state->incubation_elapsed)
     elapsed = GAME_INCUBATION_SECONDS - state->incubation_elapsed;
@@ -131,27 +141,25 @@ static int apply_incubation_tick(GameState *state, uint32_t now) {
 }
 
 static GameResult apply_domain_command(GameState *state,
-                                      const GameCommand *command) {
+                                       const GameCommand *command) {
   switch (command->type) {
   case GAME_COMMAND_EXPEDITION_START: {
     if (command->data.expedition.kind > GAME_EXPEDITION_RESONANCE ||
         state->expedition_active || state->expedition_id[0] ||
-        cargo_total(state) ||
-        !state->runtime_anchors_ready)
+        cargo_total(state) || !state->runtime_anchors_ready)
       return GAME_UNAVAILABLE;
     state->expedition_active = 1;
     state->expedition_kind = (uint32_t)command->data.expedition.kind;
     state->expedition_elapsed = 0;
-    state->expedition_last_tick =
-        command->data.expedition.monotonic_seconds;
+    state->expedition_last_tick = command->data.expedition.monotonic_seconds;
     if (!make_id(state->expedition_id, sizeof(state->expedition_id), "E",
                  state->next_identity++))
       return GAME_INVALID;
     return GAME_OK;
   }
   case GAME_COMMAND_EXPEDITION_TICK:
-    return (GameResult)apply_expedition_tick(
-        state, command->data.monotonic_seconds);
+    return (GameResult)apply_expedition_tick(state,
+                                             command->data.monotonic_seconds);
   case GAME_COMMAND_EXPEDITION_OFFLOAD: {
     GameSample *sample;
     uint32_t total = cargo_total(state);
@@ -202,10 +210,12 @@ static GameResult apply_domain_command(GameState *state,
     GameSample *sample;
     unsigned index = command->data.study.sample;
     uint8_t bit;
-    if (!study || index >= state->sample_count) return GAME_INVALID;
+    if (!study || index >= state->sample_count)
+      return GAME_INVALID;
     sample = &state->samples[index];
     bit = (uint8_t)(1u << command->data.study.study);
-    if (sample->decoded_studies & bit) return GAME_DUPLICATE;
+    if (sample->decoded_studies & bit)
+      return GAME_DUPLICATE;
     if (sample->incubated || state->data < study->cost_data ||
         state->energy < study->cost_energy ||
         state->essence < study->cost_essence)
@@ -259,15 +269,16 @@ static GameResult apply_domain_command(GameState *state,
     return GAME_OK;
   }
   case GAME_COMMAND_INCUBATION_TICK:
-    return (GameResult)apply_incubation_tick(
-        state, command->data.monotonic_seconds);
+    return (GameResult)apply_incubation_tick(state,
+                                             command->data.monotonic_seconds);
   case GAME_COMMAND_INCUBATION_OPEN: {
     GameIndividual *individual;
     if (!state->incubation_active || !state->incubation_ready ||
         state->incubation_individual >= state->individual_count)
       return GAME_UNAVAILABLE;
     individual = &state->individuals[state->incubation_individual];
-    if (individual->revealed) return GAME_DUPLICATE;
+    if (individual->revealed)
+      return GAME_DUPLICATE;
     individual->revealed = 1;
     state->incubation_active = 0;
     state->incubation_ready = 0;
@@ -282,18 +293,20 @@ static GameResult apply_domain_command(GameState *state,
     if (index >= state->individual_count ||
         command->data.habitat.habitat >= GAME_HABITAT_COUNT)
       return GAME_INVALID;
-    if (!state->individuals[index].revealed) return GAME_UNAVAILABLE;
+    if (!state->individuals[index].revealed)
+      return GAME_UNAVAILABLE;
     if (state->individuals[index].habitat == command->data.habitat.habitat)
       return GAME_DUPLICATE;
-    state->individuals[index].habitat =
-        (uint8_t)command->data.habitat.habitat;
+    state->individuals[index].habitat = (uint8_t)command->data.habitat.habitat;
     state->habitat = (uint8_t)command->data.habitat.habitat;
     return GAME_OK;
   }
   case GAME_COMMAND_CARE_VISIT: {
     unsigned index = command->data.individual;
-    if (index >= state->individual_count) return GAME_INVALID;
-    if (!state->individuals[index].revealed) return GAME_UNAVAILABLE;
+    if (index >= state->individual_count)
+      return GAME_INVALID;
+    if (!state->individuals[index].revealed)
+      return GAME_UNAVAILABLE;
     if (state->individuals[index].care_visits >= GAME_MAX_CARE_VISITS)
       return GAME_DUPLICATE;
     ++state->individuals[index].care_visits;
@@ -305,7 +318,8 @@ static GameResult apply_domain_command(GameState *state,
 }
 
 void game_rules_resume_runtime(GameState *state, uint32_t monotonic_seconds) {
-  if (!state) return;
+  if (!state)
+    return;
   state->runtime_anchors_ready = 1;
   if (state->expedition_active)
     state->expedition_last_tick = monotonic_seconds;
@@ -326,7 +340,8 @@ GameResult game_apply(const char *path, GameState *state,
       !game_state_valid(state))
     return GAME_INVALID;
   operation_length = strlen(command->operation_id);
-  if (operation_length >= sizeof(state->operations[0].id)) return GAME_INVALID;
+  if (operation_length >= sizeof(state->operations[0].id))
+    return GAME_INVALID;
   fingerprint = command_fingerprint(command);
   if (command->sequence <= state->last_operation_sequence) {
     for (index = 0; index < GAME_OPERATION_SLOTS; ++index) {
@@ -351,19 +366,21 @@ GameResult game_apply(const char *path, GameState *state,
 
   candidate = *state;
   result = apply_domain_command(&candidate, command);
-  if (result != GAME_OK) return result;
+  if (result != GAME_OK)
+    return result;
   candidate.last_operation_sequence = command->sequence;
   candidate.revision = command->sequence;
   strcpy(candidate.operations[candidate.operation_cursor].id,
          command->operation_id);
-  candidate.operations[candidate.operation_cursor].sequence =
-      command->sequence;
+  candidate.operations[candidate.operation_cursor].sequence = command->sequence;
   candidate.operations[candidate.operation_cursor].fingerprint = fingerprint;
   candidate.operation_cursor =
       (candidate.operation_cursor + 1u) % GAME_OPERATION_SLOTS;
-  if (!game_state_valid(&candidate)) return GAME_INVALID;
+  if (!game_state_valid(&candidate))
+    return GAME_INVALID;
   save_result = game_state_save(path, &candidate);
-  if (save_result == SAVE_BYTES_NOT_COMMITTED) return GAME_STORAGE;
+  if (save_result == SAVE_BYTES_NOT_COMMITTED)
+    return GAME_STORAGE;
   *state = candidate;
   if (save_result == SAVE_BYTES_COMMITTED_DURABILITY_UNCERTAIN) {
     state->runtime_commit_uncertain = 1;

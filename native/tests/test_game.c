@@ -24,7 +24,8 @@ int fsync(int file_descriptor) {
   return (int)syscall(SYS_fsync, file_descriptor);
 }
 
-static GameResult apply(GameState *state, const char *path, GameCommand command) {
+static GameResult apply(GameState *state, const char *path,
+                        GameCommand command) {
   char operation_id[64];
   command.sequence = state->last_operation_sequence + 1u;
   (void)snprintf(operation_id, sizeof(operation_id), "test-op-%llu",
@@ -130,7 +131,8 @@ int main(void) {
   action.operation_id = "pre-rename-failure";
   GameState unchanged = state;
   char unavailable_path[256];
-  assert(snprintf(unavailable_path, sizeof(unavailable_path), "%s/missing/save", path) > 0);
+  assert(snprintf(unavailable_path, sizeof(unavailable_path), "%s/missing/save",
+                  path) > 0);
   assert(game_apply(unavailable_path, &state, &action) == GAME_STORAGE);
   assert(memcmp(&state, &unchanged, sizeof(state)) == 0);
   assert(game_apply(path, &state, &action) == GAME_OK);
@@ -154,7 +156,8 @@ int main(void) {
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.sample_count == 1);
   assert(state.samples[0].origin_expedition_kind == GAME_EXPEDITION_FORAGE);
-  assert(state.data == 1540u && state.energy == 1540u && state.essence == 1540u);
+  assert(state.data == 1540u && state.energy == 1540u &&
+         state.essence == 1540u);
 
   /* Existing knowledge does not choose the genotype. Choice is explicit. */
   study_all(&state, path, 0u);
@@ -178,7 +181,8 @@ int main(void) {
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.individuals[first_individual].care_visits == 1u);
 
-  /* Restart during incubation resets the timer anchor; downtime adds nothing. */
+  /* Restart during incubation resets the timer anchor; downtime adds nothing.
+   */
   complete_expedition(&state, path, GAME_EXPEDITION_SURVEY, 250u);
   assert(state.sample_count == 3);
   study_all(&state, path, 1u);

@@ -1,6 +1,10 @@
-# Critter Lab
+# Beecho Lab
 
-Explore outside. Investigate a mystery. Meet a critter of your own.
+Explore outside. Investigate a mystery. Meet a Beecho of your own.
+
+Formerly Critter Lab; repository URLs and original concept references retain that name.
+
+**Playable V1:** [Run the local Pip loop](native/selected-lab/V1.md) from gathering and research through genome selection, incubation, reveal and habitat visits. Native C rules and pixels, Gemini artwork and durable local progress; simulated hardware and provisional balance. [Current status](STATUS.md).
 
 ![Current Critter Lab family: sage home Lab, stone combined Companion and shared printer/habitat station.](design/lab-controls/combined-family-materials.png)
 

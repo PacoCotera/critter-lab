@@ -39,13 +39,34 @@ typedef struct {
   uint64_t sequence;
   GameCommandType type;
   union {
-    struct { GameExpeditionKind kind; uint32_t monotonic_seconds; } expedition;
+    struct {
+      GameExpeditionKind kind;
+      uint32_t monotonic_seconds;
+    } expedition;
     uint32_t monotonic_seconds;
-    struct { GameResource resource; uint32_t quantity; uint8_t confirm; } discard;
-    struct { unsigned sample; unsigned study; } study;
-    struct { unsigned sample; unsigned preference; uint32_t monotonic_seconds; } incubation;
-    struct { unsigned sample; unsigned preference; uint32_t monotonic_seconds; } creation;
-    struct { unsigned individual; unsigned habitat; } habitat;
+    struct {
+      GameResource resource;
+      uint32_t quantity;
+      uint8_t confirm;
+    } discard;
+    struct {
+      unsigned sample;
+      unsigned study;
+    } study;
+    struct {
+      unsigned sample;
+      unsigned preference;
+      uint32_t monotonic_seconds;
+    } incubation;
+    struct {
+      unsigned sample;
+      unsigned preference;
+      uint32_t monotonic_seconds;
+    } creation;
+    struct {
+      unsigned individual;
+      unsigned habitat;
+    } habitat;
     unsigned individual;
   } data;
 } GameCommand;
@@ -56,7 +77,8 @@ void game_rules_resume_runtime(GameState *state, uint32_t monotonic_seconds);
 
 /* Saves a candidate state atomically before publishing it through state.
  * sequence must be the next durable command number. Replayed older numbers
- * never apply again, even after their detailed result ages out of the journal. */
+ * never apply again, even after their detailed result ages out of the journal.
+ */
 GameResult game_apply(const char *path, GameState *state,
                       const GameCommand *command);
 

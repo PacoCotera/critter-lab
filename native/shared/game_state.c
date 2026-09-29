@@ -84,8 +84,8 @@ int game_state_valid(const GameState *state) {
          (state->incubation_elapsed >= GAME_INCUBATION_SECONDS)))
       return 0;
   } else if (state->incubation_sample != 0xffu ||
-             state->incubation_individual != 0xffu ||
-             state->incubation_ready || state->incubation_elapsed != 0) {
+             state->incubation_individual != 0xffu || state->incubation_ready ||
+             state->incubation_elapsed != 0) {
     return 0;
   }
 
@@ -104,10 +104,12 @@ int game_state_valid(const GameState *state) {
          (sample->decoded_facts == PIP_REQUIRED_FACTS_MASK)))
       return 0;
     for (earlier = 0; earlier < index; ++earlier)
-      if (strcmp(sample->id, state->samples[earlier].id) == 0) return 0;
+      if (strcmp(sample->id, state->samples[earlier].id) == 0)
+        return 0;
   }
   for (index = state->sample_count; index < GAME_MAX_SAMPLES; ++index)
-    if (state->samples[index].id[0] != '\0') return 0;
+    if (state->samples[index].id[0] != '\0')
+      return 0;
 
   for (index = 0; index < state->individual_count; ++index) {
     const GameIndividual *individual = &state->individuals[index];
@@ -117,9 +119,11 @@ int game_state_valid(const GameState *state) {
     if (!text_valid(individual->id, sizeof(individual->id), 0) ||
         !text_valid(individual->source_sample_id,
                     sizeof(individual->source_sample_id), 0) ||
-        !text_valid(individual->origin_kind, sizeof(individual->origin_kind), 0) ||
+        !text_valid(individual->origin_kind, sizeof(individual->origin_kind),
+                    0) ||
         !text_valid(individual->art_id, sizeof(individual->art_id), 0) ||
-        !text_valid(individual->art_version, sizeof(individual->art_version), 0) ||
+        !text_valid(individual->art_version, sizeof(individual->art_version),
+                    0) ||
         strcmp(individual->art_version, PIP_ART_VERSION) != 0 ||
         individual->origin_founder != 1 || individual->revealed > 1 ||
         individual->art_pending != 0 ||
@@ -133,19 +137,22 @@ int game_state_valid(const GameState *state) {
                  state->samples[sample_index].id) == 0 &&
           state->samples[sample_index].incubated)
         source_found = 1;
-    if (!source_found) return 0;
+    if (!source_found)
+      return 0;
     for (earlier = 0; earlier < index; ++earlier)
       if (strcmp(individual->id, state->individuals[earlier].id) == 0)
         return 0;
   }
   for (index = state->individual_count; index < GAME_MAX_INDIVIDUALS; ++index)
-    if (state->individuals[index].id[0] != '\0') return 0;
+    if (state->individuals[index].id[0] != '\0')
+      return 0;
 
   for (index = 0; index < GAME_OPERATION_SLOTS; ++index) {
     const GameOperation *operation = &state->operations[index];
     unsigned earlier;
     if (operation->sequence == 0) {
-      if (operation->id[0] != '\0' || operation->fingerprint != 0) return 0;
+      if (operation->id[0] != '\0' || operation->fingerprint != 0)
+        return 0;
       continue;
     }
     if (!text_valid(operation->id, sizeof(operation->id), 0) ||
@@ -163,7 +170,8 @@ int game_state_save(const char *path, const GameState *state) {
   SavedGame saved;
   int lock_fd;
   int result;
-  if (!path || !game_state_valid(state)) return -1;
+  if (!path || !game_state_valid(state))
+    return -1;
   memset(&saved, 0, sizeof(saved));
   memcpy(saved.magic, SAVE_MAGIC, sizeof(saved.magic));
   saved.version = GAME_STATE_VERSION;
@@ -173,10 +181,11 @@ int game_state_save(const char *path, const GameState *state) {
   saved.state.runtime_commit_uncertain = 0;
   saved.state.expedition_last_tick = 0;
   saved.state.incubation_last_tick = 0;
-  saved.checksum = checksum_bytes((const unsigned char *)&saved.state,
-                                 sizeof(saved.state));
+  saved.checksum =
+      checksum_bytes((const unsigned char *)&saved.state, sizeof(saved.state));
   lock_fd = save_bytes_lock(path);
-  if (lock_fd < 0) return -1;
+  if (lock_fd < 0)
+    return -1;
   result = save_bytes_write_status(path, &saved, sizeof(saved));
   (void)flock(lock_fd, LOCK_UN);
   (void)close(lock_fd);
@@ -188,9 +197,11 @@ int game_state_load(const char *path, GameState *state) {
   FILE *file;
   size_t read_count;
   int extra;
-  if (!path || !state) return -1;
+  if (!path || !state)
+    return -1;
   file = fopen(path, "rb");
-  if (!file) return errno == ENOENT ? 1 : -1;
+  if (!file)
+    return errno == ENOENT ? 1 : -1;
   read_count = fread(&saved, 1, sizeof(saved), file);
   extra = fgetc(file);
   if (fclose(file) || read_count != sizeof(saved) || extra != EOF ||
