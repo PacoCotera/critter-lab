@@ -1,8 +1,11 @@
 :root {
-  --orange:#ff671f;
-  --ink:#20211e;
-  --paper:#f7f5ed;
-  --line:rgba(32,33,30,.25);
+  --orange:#d97537;
+  --ink:#292c29;
+  --paper:#f3efe7;
+  --stone:#e4dccf;
+  --sage:#a6b0a2;
+  --sage-dark:#73836e;
+  --line:rgba(41,44,41,.25);
   font-family:Arial,Helvetica,sans-serif;
   color:var(--ink);
   background:var(--paper);
@@ -98,11 +101,13 @@ h3 {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  background:var(--orange);
+  background:var(--stone);
   border-bottom:1px solid var(--line)
 }
 
 .wordmark {
+  flex-shrink:0;
+  white-space:nowrap;
   font-size:1.25rem;
   font-weight:900;
   letter-spacing:-.045em;
@@ -112,6 +117,7 @@ h3 {
 }
 
 .brand-dot {
+  color:#a34d1e;
   font-size:2.3rem;
   line-height:.6
 }
@@ -136,7 +142,7 @@ h3 {
 }
 
 .hero {
-  background:var(--orange);
+  background:var(--sage);
   padding:30px 4.5% 25px;
   overflow:hidden
 }
@@ -169,7 +175,7 @@ h3 {
 }
 
 .title-period {
-  color:var(--paper)
+  color:#9d491c
 }
 
 .hero-intro {
@@ -350,11 +356,11 @@ h3 {
 }
 
 .device-tabs button[aria-selected=true] {
-  background:var(--orange)
+  background:var(--sage)
 }
 
 .device-tabs button:hover {
-  background:#ffb68e
+  background:#d4dacd
 }
 
 .device-tabs button span {
@@ -405,7 +411,7 @@ h3 {
 }
 
 .identity {
-  background:#d8e84c
+  background:var(--stone)
 }
 
 .identity-grid {
@@ -441,7 +447,7 @@ h3 {
 }
 
 .preview {
-  background:var(--orange)
+  background:var(--sage)
 }
 
 .preview-grid {
@@ -473,6 +479,7 @@ h3 {
 }
 
 .preview-note {
+  background:var(--paper);
   border:1.5px solid var(--ink);
   border-radius:5px;
   padding:32px;
@@ -688,7 +695,7 @@ footer {
 }
 
 .masthead nav a:nth-child(3) {
-  display:none
+  display:block
 }
 
 .nav-cta {
@@ -888,14 +895,252 @@ footer {
 
 @media(prefers-reduced-motion:reduce) {
   :root {
-  scroll-behavior:auto
+    scroll-behavior:auto;
+  }
+
+  * {
+    transition:none!important;
+  }
 }
 
-* {
-  transition:none!important
+.genomics {
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
 }
 
-
+.genomics-heading {
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:10%;
+  align-items:end;
 }
 
+.genomics-heading h2 {
+  margin-top:25px;
+}
 
+.genomics-heading > p {
+  max-width:470px;
+  font-size:1.1875rem;
+}
+
+.genomic-features {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:8%;
+  row-gap:45px;
+  margin-top:65px;
+}
+
+.genomic-features article {
+  border-top:2px solid var(--sage-dark);
+  padding-top:22px;
+}
+
+.genomic-features h3 {
+  margin:22px 0;
+}
+
+.genomic-features p {
+  max-width:520px;
+  margin-top:15px;
+}
+
+.genomics-language {
+  border-left:4px solid var(--orange);
+  padding:6px 0 6px 23px;
+  margin-top:50px;
+}
+
+.genomics-language p {
+  max-width:1000px;
+}
+
+.inheritance-example {
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:8%;
+  background:var(--stone);
+  border:1px solid var(--line);
+  border-radius:5px;
+  padding:40px;
+  margin-top:55px;
+}
+
+.example-intro h3 {
+  margin:23px 0;
+}
+
+.example-intro p {
+  margin-top:15px;
+}
+
+.cross-table {
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+  text-align:center;
+}
+
+.cross-table caption {
+  text-align:left;
+  font-weight:700;
+  font-size:1rem;
+  padding-bottom:16px;
+}
+
+.cross-table th {
+  padding:12px 5px;
+  font-size:.875rem;
+  line-height:1.4;
+}
+
+.cross-table td:not(:first-child) {
+  border:1px solid var(--sage-dark);
+  background:var(--paper);
+  padding:18px 9px;
+}
+
+.cross-table td.expressed {
+  background:var(--sage);
+}
+
+.cross-table strong {
+  display:block;
+  font-size:1.75rem;
+  font-family:Consolas,monospace;
+}
+
+.cross-table span {
+  display:block;
+  font-size:.875rem;
+  line-height:1.4;
+  margin-top:7px;
+}
+
+.cross-outcomes {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;
+  margin-top:23px;
+}
+
+.cross-outcomes p {
+  font-size:.875rem;
+  line-height:1.5;
+}
+
+.cross-outcomes strong {
+  display:block;
+  font-size:1.65rem;
+}
+
+.example-note {
+  font-size:.8125rem;
+  line-height:1.6;
+  margin-top:20px;
+}
+
+.genomics-status {
+  font-size:.875rem;
+  margin-top:32px;
+  max-width:1050px;
+}
+
+.genomics-status a {
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.play-features {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:40px;
+  margin-top:55px;
+}
+
+.play-features article {
+  padding-top:24px;
+  border-top:1px solid var(--line);
+}
+
+.play-features h3 {
+  font-size:1.75rem;
+  margin-bottom:18px;
+}
+
+.paper-output {
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:10%;
+  background:var(--ink);
+  color:var(--paper);
+}
+
+.paper-output h2 {
+  margin-top:25px;
+}
+
+.paper-output p {
+  margin-bottom:22px;
+  max-width:500px;
+  color:#d4d3cb;
+}
+
+.paper-output .large-copy {
+  color:var(--paper);
+  font-size:clamp(1.6rem,2.65vw,2.6rem);
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:-.04em;
+  margin-bottom:30px;
+}
+
+@media(max-width:900px) {
+  .inheritance-example {
+    grid-template-columns:1fr;
+    gap:30px;
+    padding:30px;
+  }
+
+  .example-intro p {
+    max-width:650px;
+  }
+}
+
+@media(max-width:600px) {
+  .genomics-heading,
+  .genomic-features,
+  .play-features,
+  .paper-output {
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+  .genomics-heading > p {
+    margin-top:25px;
+    font-size:1.0625rem;
+  }
+
+  .genomic-features {
+    margin-top:40px;
+  }
+
+  .inheritance-example {
+    padding:23px 15px;
+    margin-top:35px;
+  }
+
+  .cross-table th,
+  .cross-table span {
+    font-size:.8125rem;
+  }
+
+  .cross-table td:not(:first-child) {
+    padding:16px 4px;
+  }
+
+  .cross-outcomes {
+    gap:9px;
+  }
+}
