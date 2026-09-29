@@ -61,5 +61,8 @@ UX reviewed the actual workspace-row board: roles/order retained, no blocking co
 
 ## Current casing exploration
 
-Owner favors B/C workspace-row hierarchy and requests a flush-integrated screen, with some extra horizontal space if needed. [Flush casing with gray screen surround](flush-casing-v2.png) compares continuous cream shell B with charcoal-framed instrument C. The matte gray rubber-like frame is an owner-requested visual direction; its lip, material and mounting are not engineered. Screen/control roles and Cancel-left/Confirm-right remain unchanged. Side profiles show form intent only, not calibrated slope, internal packaging or manufacturing fit. No casing selected.
+The owner rejects the wedge form. [Printer-and-tap case exploration](printer-tap-cases-v2.png) compares flatbed, tower, open bridge and printer-sidecar architectures. B/C workspace hierarchy remains useful, but control positions and purposeful additional controls may be explored to suit the whole device. No case is selected.
 
+Each proposal gives the printer a visible reserve volume, output path and roll/service access, and provides an accessible shared tap area for Probe and Companion. Printer module, roll size, reader/transport technology, portable-device envelope and internal fit remain open. Tap presence is not transfer success, ownership authorization or a charging promise. The caddy remains a separate charging direction. Paper graphics and decorative control labels are illustrative, not approved game semantics.
+
+The next selection should capture useful attributes—display posture, hand position, tap approach, paper retrieval and roll service—before converging on a housing. Prior flush wedge renders are rejected form references, not the current casing direction.
