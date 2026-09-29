@@ -12,8 +12,8 @@ typedef struct {
 } SelectedRow;
 enum { BASE, PANEL, INK, MUTED, BLUE, EDGE, DEEP, WARM, SAGE, ACTION };
 static const uint8_t colors[][3] = {
-    {25, 36, 43},    {35, 43, 48},   {214, 222, 226}, {183, 198, 205},
-    {24, 143, 234},  {70, 140, 184}, {16, 26, 33},    {237, 197, 106},
+    {25, 36, 43},    {29, 38, 45},   {214, 222, 226}, {183, 198, 205},
+    {29, 119, 191},  {56, 100, 132}, {10, 17, 23},    {237, 197, 106},
     {163, 206, 159}, {41, 41, 34}};
 
 static void rectangle(SelectedRow *row, int x, int y, int width, int height,
@@ -342,53 +342,22 @@ static void landing_strip(SelectedRow *row, const char *text) {
 }
 
 static void home_summary(SelectedRow *row, const SelectedLab *lab) {
+  if (lab->focus != 0)
+    return;
   const GameState *game = &lab->game;
-  char summary[96];
-  unsigned color = INK;
-  if (lab->focus == 0) {
-    if (game->incubation_ready) {
-      strcpy(summary, "Incubation ready to open");
-      color = WARM;
-    } else if (game->expedition_active) {
-      strcpy(summary, "Expedition gathering while you play");
-      color = WARM;
-    } else if (game->incubation_active) {
-      strcpy(summary, "Incubation progressing while you play");
-      color = WARM;
-    } else if (game->expedition_id[0]) {
-      strcpy(summary, "Expedition haul ready to return");
-      color = WARM;
-    } else {
-      snprintf(summary, sizeof(summary),
-               "%u samples / %u findings / %u residents", game->sample_count,
-               known_topics(game), revealed_residents(game));
-    }
-  } else if (lab->focus == 1) {
-    if (game->expedition_active) {
-      strcpy(summary, "Gathering while you play");
-      color = WARM;
-    } else if (game->expedition_id[0]) {
-      strcpy(summary, "Haul ready to return");
-      color = WARM;
-    } else
-      strcpy(summary, "No expedition active");
-  } else if (lab->focus == 2) {
-    snprintf(summary, sizeof(summary), "%u retained samples / %u findings",
-             game->sample_count, known_topics(game));
-  } else if (lab->focus == 3) {
-    if (game->incubation_ready) {
-      strcpy(summary, "Ready to open");
-      color = WARM;
-    } else if (game->incubation_active) {
-      strcpy(summary, "Progress while playing");
-      color = WARM;
-    } else
-      strcpy(summary, "No incubation active");
-  } else {
-    snprintf(summary, sizeof(summary), "%u revealed residents",
-             revealed_residents(game));
-  }
-  label(row, 308, 194, summary, 18, color);
+  const char *summary = NULL;
+  if (game->incubation_ready)
+    summary = "Incubation ready to open";
+  else if (game->expedition_active)
+    summary = "Expedition gathering while you play";
+  else if (game->incubation_active)
+    summary = "Incubation progressing while you play";
+  else if (game->expedition_id[0])
+    summary = "Expedition haul ready to return";
+  if (summary)
+    label(row, 420, 166, summary, 18, WARM);
+  else if (!game->sample_count)
+    label(row, 420, 166, "Explore to bring your first sample home", 18, MUTED);
 }
 
 static void home_landing(SelectedRow *row, const SelectedLab *lab) {
@@ -476,7 +445,8 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
   } else if (lab->focus == 3) {
     if (game->incubation_active || game->incubation_ready)
       sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
-    heading(row, 505, 245,
+    heading(row, game->incubation_active || game->incubation_ready ? 505 : 320,
+            245,
             game->incubation_ready    ? "READY TO OPEN"
             : game->incubation_active ? "INCUBATING"
                                       : "NO INCUBATION",
@@ -487,12 +457,15 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
       label(row, 505, 303, text, 22, INK);
       progress(row, 505, 351, 435, game->incubation_elapsed,
                GAME_INCUBATION_SECONDS);
-      if (game->incubation_sample < game->sample_count)
-        label(row, 505, 395, game->samples[game->incubation_sample].id, 18,
-              MUTED);
+      if (game->incubation_sample < game->sample_count) {
+        snprintf(text, sizeof(text), "Source: %s",
+                 game->samples[game->incubation_sample].id);
+        label(row, 505, 395, text, 18, MUTED);
+      }
     } else {
-      label(row, 505, 303, "No sample is being incubated.", 22, INK);
-      label(row, 320, 470, "Research all five topics first.", 18, MUTED);
+      label(row, 320, 303, "Research all five topics in a sample first.", 22,
+            INK);
+      landing_strip(row, "Prepare incubation from Research.");
     }
 
   } else if (lab->focus == 4) {
