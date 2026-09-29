@@ -53,3 +53,19 @@ Empty workspaces explain the relevant next step without promising unavailable
 actions. Active or ready work receives the first status cue; static totals remain
 quieter. Possible expedition finds are distinct from carried cargo. Sample topic
 completion describes discovered knowledge, not a running research job.
+
+## Native captures
+
+These unscaled 1024×600 frames were produced by the native C renderer during the
+real-time V1 journey at `59d6e0e9e8fc96973c45091883791679d162a368`.
+They are host simulation evidence, not a Raspberry Pi board or physical display test.
+
+- [Home with retained work and a resident](home.png)
+- [Explore before departure](explore-idle.png) and [while gathering](explore-active.png)
+- [Research with five discovered topics](research.png)
+- [Incubation ready for deliberate opening](incubator-ready.png)
+- [Habitat with a revealed resident](habitat.png)
+
+The subsequent boundary correction narrows only a maximum-stock readout and
+makes empty Incubator guidance depend on whether a researched sample is available;
+these captured game states retain the same rendering.

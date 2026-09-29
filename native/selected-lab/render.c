@@ -87,8 +87,11 @@ static void stock_amount(SelectedRow *row, int x, unsigned amount) {
   char whole[16], fraction[8];
   snprintf(whole, sizeof(whole), "%u", amount / 1000);
   snprintf(fraction, sizeof(fraction), ".%03u", amount % 1000);
-  const NativeFont *bold = heading_font(32, 0);
-  native_text_row(bold, whole, x, 60, row->y, SELECTED_LAB_WIDTH, row->pixels,
+  /* The valid four-digit cap must keep the same right-hand inset. */
+  const NativeFont *bold =
+      amount >= 1000000 ? heading_font(26, 1) : heading_font(32, 0);
+  int top = 90 - bold->baseline;
+  native_text_row(bold, whole, x, top, row->y, SELECTED_LAB_WIDTH, row->pixels,
                   0, colors[INK]);
   label(row, x + native_text_width(bold, whole) + 2, 73, fraction, 18, MUTED);
 }
@@ -463,9 +466,18 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
         label(row, 505, 395, text, 18, MUTED);
       }
     } else {
-      label(row, 320, 303, "Research all five topics in a sample first.", 22,
-            INK);
-      landing_strip(row, "Prepare incubation from Research.");
+      int prepared = 0;
+      for (unsigned sample = 0; sample < game->sample_count; ++sample)
+        prepared |= game->samples[sample].decoded_studies == 31 &&
+                    !game->samples[sample].incubated;
+      label(row, 320, 303,
+            prepared ? "A researched sample is ready to prepare."
+                     : "Research all five topics in a sample first.",
+            22, INK);
+      landing_strip(
+          row, prepared
+                   ? "Choose the sample in Research to see its requirements."
+                   : "Prepare incubation from Research.");
     }
 
   } else if (lab->focus == 4) {

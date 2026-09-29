@@ -165,6 +165,19 @@ int main(void) {
   selected_lab_input(&lab, SELECTED_HABITAT_UP, 0, lab.revision);
   assert(lab.page == V1_HABITAT && lab.resident == 2);
   frame(&lab);
+  /* Maximum valid stock must not paint over the header's right-hand inset. */
+  SelectedLab empty_header, full_header;
+  selected_lab_init(&empty_header);
+  full_header = empty_header;
+  full_header.game.data = full_header.game.energy = full_header.game.essence =
+      1000000;
+  uint8_t empty_row[SELECTED_LAB_WIDTH * 3], full_row[SELECTED_LAB_WIDTH * 3];
+  for (unsigned row = 60; row < 96; ++row) {
+    selected_lab_row(&empty_header, row, empty_row);
+    selected_lab_row(&full_header, row, full_row);
+    assert(memcmp(empty_row + 972 * 3, full_row + 972 * 3,
+                  (SELECTED_LAB_WIDTH - 972) * 3) == 0);
+  }
   puts("Native V1 input and frame checks passed");
   return 0;
 }
