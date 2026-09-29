@@ -46,3 +46,8 @@ Retain colored workspace keys, directional cross, orange-accented rotary knob an
 Hardware review of enclosure board: useful distinct form attributes; folio closure and knob clearance unproven, all printer volumes unallocated, transparent internals illustrative, supports/rails not established as tilt locks or handles. Capture preferred form attributes before convergence.
 
 
+
+## Interaction-led sizing
+
+The [ergonomic task and size study](ergonomics.md) proposes a 280 × 125 mm clustered control deck as the first physical trial, compared with a 320 × 135 mm spread deck. These are untested control-surface targets, not final enclosure sizes. Longer examination welcomes two hands; every sequence must also work with either hand alone. Full-scale templates and task-based checks are included.
+
