@@ -1,5 +1,8 @@
 # Current build boundary
 
+Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
+
+
 The new electronics-first specification is [here](specs/devices.md#electronics-first-v1-reference-specification). Current product: combined Companion, home Lab and caddy. Existing separate-Probe targets below are legacy build fixtures; they are not a second current portable. New recommended MCU/display profiles are not yet integrated. Software proof and human playtest precede hardware development; mobile fallback is explicit. No physical kit, power budget or production electronics freeze is claimed.
 
 ## Existing build evidence
