@@ -2,6 +2,14 @@
 
 ## Current concept — Companion-led three-object family
 
+### Branded family and caddy controls
+
+Experience Design inspected the exact branded export: labels and brand hierarchy are legible, controls are separated by purpose and the depicted paper does not obscure them. This is an appearance review only; reach, guarded Feed behavior, print confirmation and indicator meanings still need interaction/mechanical validation.
+
+![Critter Lab family with Dirty Pawz Press caddy](combined-family-branded.png)
+
+Latest owner-requested appearance revision preserves sage/stone shells and adds Critter Lab branding across devices, Dirty Pawz Press with paw emblem on the caddy and receipt, summary navigation arrows, Print, Feed and small indicator lights. [Exact built-in generation prompt](combined-family-branded-prompt.txt). Screen values are illustrative; cloud and active/frozen detail remain required in the browsable summary even though this generated view omits them. Light colors are not an approved signaling contract. No manufactured dimensions, grip, display capability or functional UI is established.
+
 ### Related shell colors and three docked displays
 
 ![Sage Lab, stone Companion and shared habitat station](combined-family-sage.png)

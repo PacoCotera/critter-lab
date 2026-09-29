@@ -26,6 +26,10 @@ The accepted wild-capture direction and its open mechanics are recorded in [game
 
 #### Coordinated docked defaults
 
+Family branding: every device reads **CRITTER LAB**. The caddy carries **Dirty Pawz Press** as its principal signature with a paw emblem and smaller Critter Lab endorsement. Companion retains its secondary device designation. Final typography/emblem artwork remains a visual proposal.
+
+Owner-authorized caddy control concept: Previous/Next for summary pages; Print beside the paper slot with a preview before printing; a subordinate paper-feed service control. One charge indicator per device bay and a printer-attention light supplement the display. Network/cloud details remain on the summary display. Exact confirmation flow, light signals and electrical support are not implemented or selected; consequential habitat operations remain on the Lab.
+
 Owner direction: the three docked displays form one integrated experience with distinct responsibilities. **Lab** is the most visual: living environments, creatures, incubations and ongoing research. **Caddy/habitat** provides the persistent summary: stored residents, habitats, bulk inventory, device charging, network and cloud connection status. E-ink is a candidate for this summary display; exact technology and color capability remain open. **Companion** defaults to an always-on Probe role, scanning and gathering even while docked. This supersedes the earlier caddy living-scene/matrix proposal; the Lab owns that visual presentation.
 
 These are default views, not locked modes. Charging must not silently stop gathering. Exact stationary gathering rates, capacity behavior, sensor validity during charging and offline operation remain design/engineering work; no automatic wild capture is implied. Status must distinguish fresh, stale and unavailable information rather than display an assumed successful charge or cloud connection. The three views refer to the same world and must not duplicate independent inventories or incubation state.
