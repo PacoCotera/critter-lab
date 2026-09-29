@@ -1,5 +1,8 @@
 # Foundation demo: a native expedition loop
 
+Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
+
+
 The owner has authorized a small playable scaffold on the preliminary native targets. This increment ends at **one saved research finding**. It does not create a critter or represent a finished hardware simulator. The [first expedition](../../design/first-expedition.md) supplies the illustrative player journey; [native setup](../../native/README.md) supplies build and run instructions.
 
 ## What this increment implements
@@ -25,7 +28,7 @@ The Linux executable runs shared application logic, **not an MCU ELF or emulated
 
 ## Persistence and access
 
-This fixture keeps Lab and Probe state in one local snapshot. Receiving the haul is one local atomic operation; it does not implement distributed transfer, cloud acceptance or independent offline device storage. Production retains cloud-authoritative synchronized records and separately defined temporary offline activity.
+This fixture keeps Lab and Probe state in one local snapshot. Receiving the haul is one local atomic operation; it does not implement distributed transfer, cloud acceptance or independent offline device storage. The current product direction requires durable standalone core play and optional global synchronization; this fixture does not establish that distributed contract.
 
 Commands carry the displayed revision and an operation ID. Exact retries of the last accepted operation return its retained result; changed payloads reject. Older revisions reject, and domain rules also prevent repeated receipt or research spending. Existing corrupt or unsupported saves fail closed. The Linux adapter locks the save and replaces an explicitly encoded snapshot atomically; it does not write raw C structs.
 
