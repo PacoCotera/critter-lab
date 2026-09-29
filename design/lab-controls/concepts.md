@@ -42,19 +42,19 @@ The next physical proof is a roomy layout showing these envelopes, screw/tool pa
 
 Hardware review of this assembly proposal found no remaining blocking contradiction in the opening/disconnection sequence. This accepts the proposal for layout development only; component envelopes, physical access and fabrication remain unverified.
 
-### Paper sizing trial 01
+### Paper sizing trial 02
 
 [Two-page actual-size PDF](contour-sizing.pdf) · [Editable front SVG](contour-sizing-front.svg) · [Editable rear SVG](contour-sizing-rear.svg) · [Rebuild source](contour-sizing.py)
 
-The trial uses a **270 × 190 mm** continuous body with a 12 mm corner radius, all provisional. Its purpose is to compare screen/hand/control proportions and preserve generous first-build space, not select the final case. The selected display's **164.90 × 124.27 mm module outline** comes from the [manufacturer H Rev4.1 drawing](https://www.waveshare.com/img/devkit/LCD/7HP/Exterior-Size.jpg); it is not an active image aperture. No housing depth is assigned.
+The trial uses a **215 × 190 mm** continuous body with a 12 mm corner radius, all provisional. Its purpose is to compare screen/hand/control proportions and preserve generous first-build space, not select the final case. The selected display's **164.90 × 124.27 mm module outline** comes from the [manufacturer H Rev4.1 drawing](https://www.waveshare.com/img/devkit/LCD/7HP/Exterior-Size.jpg); it is not an active image aperture. No housing depth is assigned.
 
-Body origin is top-left in the front view. Display origin: (52.55, 18). Proposed control centers: navigation (30, 158), Back (220, 158), Confirm (248, 158), four workspace keys (96, 166), (122, 166), (148, 166), (174, 166). Navigation uses a 30 mm circular *footprint reservation*, not a proposed circular replacement for the cross; other cap reservations are 18 mm. Mechanism bodies and thumb reach are unverified. Side Zoom is only a location cue at y=95; its bracket and body remain unallocated.
+Body origin is top-left in the front view. Display origin: (25.05, 18). Proposed control centers: navigation (25, 158), Back (170, 158), Confirm (195, 158), four workspace keys (64, 166), (88, 166), (112, 166), (136, 166). Navigation uses a 30 mm circular *footprint reservation*, not a proposed circular replacement for the cross; other cap reservations are 18 mm. Mechanism bodies and thumb reach are unverified. Side Zoom is only a location cue at y=95; its bracket and body remain unallocated.
 
-The rear view mirrors X. Its 15 mm perimeter study allowance leaves a 240 × 160 mm allocation boundary, **not vacant PCB area**. The display rear projection and unknown control backs overlap that plan region at unresolved depths. Do not sum this area as available capacity. Board heights, connectors, wiring, energy, antenna, thermal and tool paths must be added before a packing claim.
+The rear view mirrors X. Its 15 mm perimeter study allowance leaves a 185 × 160 mm allocation boundary, **not vacant PCB area**. The display rear projection and unknown control backs overlap that plan region at unresolved depths. Do not sum this area as available capacity. Board heights, connectors, wiring, energy, antenna, thermal and tool paths must be added before a packing claim.
 
-Print at 100% / Actual size and verify the 100 mm check bar. PDF pages are 320 × 300 mm: tile/poster-print on smaller paper rather than shrinking. This is an inert paper check, not a fabrication template. Screen/buttons/cables must ultimately be checked with physical mock parts and hand access while supported in the station.
+Print at 100% / Actual size and verify the 100 mm check bar. PDF pages are 265 × 300 mm: tile/poster-print on smaller paper rather than shrinking. This is an inert paper check, not a fabrication template. Screen/buttons/cables must ultimately be checked with physical mock parts and hand access while supported in the station.
 
-Hardware Design inspected both rendered pages and source coordinates, accepting the geometry and evidence labels for a paper sizing study. Its one label-overlap correction is incorporated. No ergonomic, internal-fit or supported-play approval is implied. The source was regenerated and the PDF page dimensions checked at 320 × 300 mm.
+Owner rejected the preceding 270 mm width because it diluted the settled screen-dominant proportions. Trial 02 restores 25.05 mm beside the module, using a 215 mm trial body width; it does not establish an approved final dimension. Extra electronics capacity must first be explored through depth and layout, not automatic face widening. Hardware reviewed trial 01 only; that review does not approve these revised control positions. Coordinator inspected regenerated front/rear exports. No ergonomic, internal-fit or supported-play approval is implied.
 
 ![Front paper sizing trial](contour-sizing-1.png)
 
@@ -196,3 +196,4 @@ Owner requires subsequent enclosure renders to originate from a dimensionally an
 Model the display module, glass and visible aperture as distinct boundaries; use verified manufacturer dimensions where available. Mark proposed housing dimensions, control caps/back clearance, printer mounting/service volume and reader allowance as proposals. Keep one coordinate system and explicit face angle. Resolve transitions between the reclined main face and printer bay, wall thickness, corner radii, groove width/depth, rear access and base contact in geometry. Material assignments belong to model surfaces; shading must not invent recesses or seams.
 
 Before a beauty render, inspect front, side, top and section views from that same model, check component intersections and opening/service paths, then obtain focused independent hardware review. Publish the model, parameter/source table and matching exports together in Git. A dimensional prototype is not manufacturing-ready CAD or proof of ergonomic, thermal, RF or printer performance. No further generated-image approximation of the case is a substitute for this step.
+
