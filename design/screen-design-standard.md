@@ -51,6 +51,14 @@ the research field or replace discovery with identical progress bars. Gemini
 provides art direction/production; engineering preserves the resulting native
 asset scales, anchors and effects. No current native-art final approval is claimed.
 
+The owner explicitly rejected the native Overview styling after the input/resource
+correction. Functional and readability passes do not approve its visual fidelity.
+The next art proof must use actual Gemini-authored production artwork and be
+compared with C18 at native size. Existing JPEG screenshot crops, flood-matted
+edges and procedural outline panels are not production masters or an acceptable
+substitute for that handoff. Preserve current useful information and physical
+controls while the director and production artist resolve the visual craft.
+
 ## Screen design sequence
 
 Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.
