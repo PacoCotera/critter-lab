@@ -62,6 +62,14 @@ controls while the director and production artist resolve the visual craft. The
 owner authorizes the [reference-production workbench](reference-production/README.md)
 to develop the asset family separately before native integration.
 
+The first reference-production Overview was rejected for margins, relative icon
+sizes and text dominance. Retaining its text dashboard and adding blue frames does
+not translate C18. Derive visual subjects and concise live readouts from the player
+questions, then allocate their proportions and shared spacing together. Resource
+icons need coherent optical size beside quantities; empty-state topic illustrations
+must not imply owned samples, revealed creatures or active jobs. Preserve useful
+information without redundant prose or a decorative hero displacing the overview.
+
 ## Screen design sequence
 
 Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.
