@@ -83,5 +83,13 @@ Exterior reference: [A with muted Probe/Companion pad](prototype-a-muted-pad.png
 
 Owner approved exploring a slight backward recline of the screen and control face, provisionally about 15 degrees from vertical, to face upward on a tabletop. Keep the base flat, printer outlet more upright and the compact rounded single assembly; do not revive the rejected large wedge. Add two shallow delimiting grooves: vertically between printer/pad bay and main panel, horizontally between screen and lower controls. The angle is a prototype hypothesis, not a measured ergonomic optimum or a calibrated render dimension.
 
-Current prototype render: [reclined A with section grooves](prototype-a-reclined-grooves.png). The main face reclines while the printer bay remains more upright. A restrained vertical groove separates the bays; a horizontal groove defines the lower control section. Existing input roles/order and muted portable identity remain. This is exterior concept evidence only.
+Rejected geometry reference: [reclined A with section grooves](prototype-a-reclined-grooves.png). Owner found the resulting form inconsistent. Retain the requested recline and delimiting grooves as design intent, not this generated enclosure geometry.
+
+## Dimensioned model before enclosure renders
+
+Owner requires subsequent enclosure renders to originate from a dimensionally and materially coherent model. Use a single editable model in millimetres for every exterior, section and service view. Generated images may inform style, but must not establish or modify mechanical geometry.
+
+Model the display module, glass and visible aperture as distinct boundaries; use verified manufacturer dimensions where available. Mark proposed housing dimensions, control caps/back clearance, printer mounting/service volume and reader allowance as proposals. Keep one coordinate system and explicit face angle. Resolve transitions between the reclined main face and printer bay, wall thickness, corner radii, groove width/depth, rear access and base contact in geometry. Material assignments belong to model surfaces; shading must not invent recesses or seams.
+
+Before a beauty render, inspect front, side, top and section views from that same model, check component intersections and opening/service paths, then obtain focused independent hardware review. Publish the model, parameter/source table and matching exports together in Git. A dimensional prototype is not manufacturing-ready CAD or proof of ergonomic, thermal, RF or printer performance. No further generated-image approximation of the case is a substitute for this step.
 
