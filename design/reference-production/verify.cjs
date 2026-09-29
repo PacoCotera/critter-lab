@@ -34,11 +34,27 @@ async function main() {
     assert.equal(asset.drawScale, 1, `${asset.name} native draw scale`);
     let transparent = false;
     let opaque = false;
+    let left = info.width;
+    let top = info.height;
+    let right = -1;
+    let bottom = -1;
     for (let offset = 3; offset < data.length; offset += 4) {
       transparent ||= data[offset] === 0;
       opaque ||= data[offset] === 255;
+      if (data[offset] >= 128) {
+        const pixel = (offset - 3) / 4;
+        const x = pixel % info.width;
+        const y = Math.floor(pixel / info.width);
+        left = Math.min(left, x);
+        top = Math.min(top, y);
+        right = Math.max(right, x);
+        bottom = Math.max(bottom, y);
+      }
     }
     assert(transparent && opaque, `${asset.name} must have real silhouette alpha and opaque artwork`);
+    assert.deepEqual(asset.occupiedBoundsAtHalfAlpha,
+      { x: left, y: top, width: right - left + 1, height: bottom - top + 1 },
+      `${asset.name} painted bounds must describe actual pixels`);
   }
   const sourceCount = fs.readdirSync(path.join(root, 'src')).filter(file => file.endsWith('.svg')).length;
   assert.equal(names.size, sourceCount, 'Every master must be exported');

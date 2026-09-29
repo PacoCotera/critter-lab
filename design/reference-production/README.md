@@ -11,11 +11,13 @@ The [screen standard](../screen-design-standard.md) governs visual meaning.
 
 First exercise: frame/header components, quiet and focused navigation treatment,
 Data card / Energy crystal / Essence resource family, applied in one 1024×600
-Overview composition. Fixed information areas and console semantics are retained.
+Overview composition. Lab-wide information and console semantics are retained;
+the rejected text-heavy card layout is replaced by four illustrated status anchors.
 No facts, resources or specimen knowledge may be implied by decorative art.
 
 Output is an **offline art proof**, not a native runtime export or deployed UI.
-The first reviewed family contains 11 editable SVG masters and their RGBA exports.
+The current family contains 15 editable SVG masters and their RGBA exports;
+12 are used in the proof and three useful prior variants are retained separately.
 Inspect the [native asset sheet](exports/sheet-native.png) and the
 [1024×600 Overview proof](exports/overview-offline.png).
 
@@ -24,9 +26,29 @@ Inspect the [native asset sheet](exports/sheet-native.png) and the
 The editable masters are `src/*.svg`, authored directly at their intended draw
 dimensions. `build.cjs` reads them without modifying them, rasterizes with Sharp,
 and composes the proof and sheets from the resulting PNGs. The manifest records
-each source hash, native dimensions and alpha contract. Resource masters are
-40×53; the restored sample capsule is80×80. The capsule remains a sample symbol,
-not evidence that a sample has been retained.
+each source/export hash, native dimensions, alpha contract and occupied bounds
+measured at half alpha. Current resource masters are 56×68. The four topic masters
+are 136×144; their visible silhouettes have different widths to balance unlike
+forms, rather than assuming equal canvases establish equal optical weight. The
+topic illustrations identify destinations, not owned items or current activity.
+The retained 80×80 capsule and two prior status frames appear separately on the
+sheet; this composition does not consume those earlier variants.
+
+| Placement | Native footprint / anchor |
+| --- | --- |
+| Screen perimeter and inter-panel gutter | 24px outer inset; 16px gutter |
+| Header | 976×100 at 24,24; resource starts 404/602/800,40 |
+| Navigation | 208×416 at 24,140; 184×60 row masters |
+| Shared read-only field | 752×416 at 248,140; 24px title/field inset |
+| Explore / Research art | 136×144 at 272,213 / 642,213 |
+| Incubator / Habitat art | 136×144 at 272,377 / 642,377 |
+| Topic text | x422 / x790; shared 23px heading tier |
+
+The measured visible topic bounds are 114×123 (Explore), 119×127 (Research),
+104×125 (Incubator), and 120×125 (Habitat). Header resource bounds are 45×62 (Data),
+48×63 (Energy), and 49×54 (Essence). They are authored at those sizes; no bitmap
+rescaling is used in the proof. The next-unit line is subordinate 14px type with
+its nominal baseline at 104, clear of the header's bottom contour.
 
 With Node.js and Sharp available, run from this directory:
 
@@ -49,11 +71,14 @@ used to construct the masters.
 
 ## Review and technical evidence
 
-The [reference comparison](reference-analysis.md) records the form reconstruction
-and bounded visual review. The final offline proof also passed a focused UX check:
-existing empty-Lab facts and illustration roles are retained, only Overview has
-warm focus, whole quantities/progress are readable, and headings clear their frame
-contours. These checks do not approve other states, runtime behavior or final art.
+The first proof's composition acceptance was withdrawn after the owner identified
+poor margins, icon proportions and excessive text. The [reference comparison](reference-analysis.md)
+records the reworked composition. The current proof has larger topic illustrations,
+open status regions, consistent insets and concise adjacent facts. Focused art and
+UX inspections assessed this actual revision, including empty-state truth and
+one warm navigation focus. Proof SHA-256:
+`98151907ef0dc81281c09be18dbaeb76338b4c69db615337865ac8305561ed23`.
+These checks do not establish owner approval, other states or runtime behavior.
 
 Run `node verify.cjs` to regenerate once and inspect actual exported files.
 [Verification](verification.json) records source/export hashes, real RGBA silhouette
