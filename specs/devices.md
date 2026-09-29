@@ -62,3 +62,29 @@ An RGB888 host image/scanline is a presentation adapter, not a panel-format buff
 Each frame has an identity. Activation waits for that frame to be visibly ready; submitted pixels or SPI/DMA completion do not establish visibility. Consume gestures begun during wake/refresh through release and require fresh activation. E-ink exposes asynchronous busy/readiness/failure behavior; Companion supports bounded animation with a still fallback. Exact refresh scheduling and physical readiness require board evidence.
 
 Existing evidence: [Companion documentation](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.8) and [Probe manual](https://www.waveshare.com/wiki/2.13inch_e-Paper_HAT_Manual), inspected 26 September 2026. No new measurements implied. Pin revisions, mounting and drivers before hardware claims. The selected Lab [manufacturer product](https://www.waveshare.com/7inch-hdmi-lcd-h.htm) and [manual](https://files.waveshare.com/upload/5/58/7inch_HDMI_LCD_%28H%29_User_Manual.pdf) establish the 1024×600 IPS HDMI/USB-touch direction. Verify ordered revision, native mode/EDID, touch mapping, power and cable/enclosure clearance on the actual Linux host. Higher accepted HDMI input modes do not increase native pixels. No refresh, thermal or power performance has been measured; purchasing remains unauthorized.
+
+## Lab controls — proposed physical comparison
+
+Owner requested a fresh UX/hardware assessment on28September2026 after the native preview worked well. Proposed test configuration: **one rotary encoder used only for rotation, plus two dedicated buttons: Confirm and Back**. Three physical actuators; power/shutdown remains a separate unresolved function. This is not a hardware freeze or a change to accepted simulator controls.
+
+![Two proposed control arrangements](../design/lab-controls/layout-comparison.png)
+
+Compare the current knob-left arrangement with its full mirror on a front deck below the screen. The sketch communicates ordering only: shapes, proportions, screen/body outline and paper aperture are illustrative, not fabrication dimensions. Keep hands out of the active display and preserve actual paper-path clearance. Confirm and Back need distinct labels and tactile/shape cues, not color alone.
+
+| Player task | Rotary | Confirm | Back |
+| --- | --- | --- | --- |
+| Browse samples, inventory or library | Move visible focus; preserve location | Inspect selected entry | Restore caller and focus |
+| Explore genome findings and expression context | Traverse meaningful related targets | Inspect feature, relation or reference | Return to the same feature |
+| Research or later incubation review | Select supported study/configuration/review targets | Enter review; fresh explicit Start commits only after cost is shown | Leave uncommitted review; never silently reverse submitted work |
+| Recover or revisit a finding | Focus available retry/return | Retry the same operation or inspect for free | Restore context without reroll or extra spend |
+
+Compare alternatives only against a demonstrated task:
+
+- **Push encoder plus Back:** two control bodies, but still rotation plus two press functions. Saves front area; test whether pressing moves focus or causes unintended confirmation. Not the baseline.
+- **Third gameplay button:** possible frequent Home/Details shortcut, but no established task currently requires it. Do not hide essential actions behind long holds or chords.
+- **Two knobs:** useful only for two independent controls with clear roles. Current research tasks do not establish that need.
+- **Directional control plus zoom knob:** conditional alternative if meaningful genome exploration requires continuous spatial pan/zoom. Do not flatten inheritance/expression relationships into a poor list merely to fit one knob.
+
+Smallest physical comparison: movable cardboard/foam control deck, full-size screen print and representative paper aperture, with a secured representative base. Mock caps around35mm for the knob and22mm for buttons are adjustable test fixtures, not selected dimensions. Compare left/right placement with one and two hands, ideally including differently handed participants. Trace a feature through expression conditions and reference appearance, find a distant library entry, inspect/return and cancel a cost review. Observe mispresses, overshoot, hand obstruction, loss of place, paper interference and base slip/rock. Long collections also need meaningful indexing/paging; extra controls cannot replace that information architecture.
+
+Joint UX/hardware discussion supports this test configuration. No physical ergonomic, encoder torque, reach, switch-force or population usability evidence exists yet. Exact spacing, detents, parts, electrical interfaces and enclosure dimensions remain open. The live three-target preview establishes only its present interactions, not the full genome or creation journey.
