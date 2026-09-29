@@ -38,10 +38,10 @@ Experience Design reviewed the actual PNG and comparison text. Corrections clari
 
 ## Control family — owner direction
 
-Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Owner-approved action order: Cancel/return arrow on the left; Confirm/checkmark on the right; smaller Inspect above. Enlarge the directional cross and the frequent Confirm/Cancel buttons with deliberate finger clearance; less frequent actions such as Inspect may stay smaller. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
+Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Owner-approved action order: Cancel/return arrow on the left; Confirm/checkmark on the right. No dedicated Inspect in the current study; Confirm opens the selected detail. Size and group the cross and frequent actions with deliberate finger clearance. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
 
 
-[Control-family proportion study](control-family-v2.png) applies larger navigation and primary round actions, while retaining colored workspace keys and orange rotary accents. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
+[Control-family reference](control-family-v2.png) retains the preferred key, cross, round-action and rotary styling; its standalone Inspect and wide spacing are superseded by the compact study. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
 
 Hardware review of enclosure board: useful distinct form attributes; folio closure and knob clearance unproven, all printer volumes unallocated, transparent internals illustrative, supports/rails not established as tilt locks or handles. Capture preferred form attributes before convergence.
 
@@ -49,5 +49,4 @@ Hardware review of enclosure board: useful distinct form attributes; folio closu
 
 ## Interaction-led sizing
 
-The [ergonomic task and size study](ergonomics.md) proposes a 280 × 125 mm clustered control deck as the first physical trial, compared with a 320 × 135 mm spread deck. These are untested control-surface targets, not final enclosure sizes. Longer examination welcomes two hands; every sequence must also work with either hand alone. Full-scale templates and task-based checks are included.
-
+The [compact whole-face study](ergonomics.md) shows the display and controls together at one millimetre scale: a proposed 215 × 230 mm developed face, not an assembled case footprint. It removes Inspect, groups navigation and actions, and places a compact workspace grid and orange-accented Zoom nearby. Earlier 280/320 mm layouts were rejected and are not active sizing recommendations. Longer examination welcomes two hands; every sequence must also work with either hand alone. Physical comfort and internal packaging remain untested.
