@@ -100,5 +100,11 @@
     "sha256": "3165c362ea2e4b76bf84f333be3385642bbaf4d525fca9e571d424a134ff1773",
     "bytes": 49526,
     "status": "proposed visual refinement; not approved UI or native asset"
+  },
+  {
+    "path": "design/lab-controls/combined-family-materials.png",
+    "sha256": "16c78c7301c120997d35bab734cd615fdcd1565905943b4dd46c60967fa69ca5",
+    "bytes": 2303948,
+    "status": "current owner-liked appearance concept; not CAD, final UI or manufactured finish"
   }
 ]

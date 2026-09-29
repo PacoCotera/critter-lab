@@ -1,3 +1,15 @@
+# Current product direction
+
+The current family is **one combined Companion, one home Lab, and one shared printer/habitat caddy**. Probe is a Companion mode, not a separate device. Current appearance is the sage/stone family with recessed caddy branding and grey OK; original four-object renders below are preserved prior art, not current hardware requirements.
+
+![Current family appearance](lab-controls/combined-family-materials.png)
+
+See [current concept details](lab-controls/concepts.md) and [electronics-first reference](../specs/devices.md#electronics-first-v1-reference-specification). The immediate gate is software game/firmware validation before PCB/enclosure development; a mobile app is the fallback. Renders do not establish dimensions, material finish, display performance or finalized screen assets. The docked Lab owns visual habitats/research, Companion runs Probe, and caddy shows summaries.
+
+## Retained design references and studies
+
+The following material preserves earlier exploration. Where it describes separate Probe hardware or older palettes/layouts, the current direction above supersedes it.
+
 # Design reference and review guide
 
 This page is for reviewing how Critter Lab looks, feels and operates. For a plain introduction to playing, start with [Your first discovery](sample-to-critter-walkthrough.md). For rules and system boundaries, use the [specification map](../specs/README.md); for runnable work, use [builder getting started](../docs/builders/getting-started.md).

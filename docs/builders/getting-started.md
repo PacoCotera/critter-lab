@@ -1,3 +1,7 @@
+# Development sequence
+
+Read the [electronics-first reference](../../specs/devices.md#electronics-first-v1-reference-specification) before new device work. Validate the connected game through existing host/native tools; do not infer complete firmware from MCU fixture builds. New physical profiles remain proposals; the mobile fallback shares domain contracts and records. The commands below run existing experiments, not the proposed full family.
+
 # Run the local experiments
 
 For builders and developers. These instructions run the existing host software; there is no complete kit to assemble or production service to deploy yet. See [build coverage](../../BUILD.md).
