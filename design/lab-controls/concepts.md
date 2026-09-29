@@ -47,6 +47,14 @@ Hardware review of enclosure board: useful distinct form attributes; folio closu
 
 
 
+## Current arrangement exploration
+
+Owner direction: four colored workspace keys in one horizontal row below the screen; directional cross left, Cancel/Confirm together in the middle, orange-accented Zoom right. No Inspect. The [workspace-row comparison](workspace-row-v1.png) explores A evenly distributed row, B centered strip with slightly forward action pair, and C raised workspace shelf. These are arrangement/render proposals, not calibrated mechanical geometry or a selected enclosure. The symbols remain placeholders. Cross-to-edge and knob-to-Confirm clearance require physical layout verification. No option selected.
+
 ## Interaction-led sizing
 
-The [compact whole-face study](ergonomics.md) shows the display and controls together at one millimetre scale: a proposed 215 × 230 mm developed face, not an assembled case footprint. It removes Inspect, groups navigation and actions, and places a compact workspace grid and orange-accented Zoom nearby. Earlier 280/320 mm layouts were rejected and are not active sizing recommendations. Longer examination welcomes two hands; every sequence must also work with either hand alone. Physical comfort and internal packaging remain untested.
+The [dimensioned whole-face reference](ergonomics.md) predates the new horizontal workspace row; its grid arrangement is superseded and its geometry is not a fit claim for the renders. It shows the display and controls together at one millimetre scale: a proposed 215 × 230 mm developed face, not an assembled case footprint. It removes Inspect, groups navigation and actions, and places a compact workspace grid and orange-accented Zoom nearby. Earlier 280/320 mm layouts were rejected and are not active sizing recommendations. Longer examination welcomes two hands; every sequence must also work with either hand alone. Physical comfort and internal packaging remain untested.
+
+
+UX reviewed the actual workspace-row board: roles/order retained, no blocking composition defect for comparing concepts. A has clearest row alignment; B needs left-edge clearance checking; C separates roles but adds a reach-over shelf. Destination symbols need labels or a learned on-screen cue; the concept icons do not establish those meanings. Grip and comfort remain unmeasured.
+

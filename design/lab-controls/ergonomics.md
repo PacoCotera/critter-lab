@@ -1,4 +1,6 @@
-# Compact whole-face study
+# Dimensioned whole-face reference
+
+The workspace-grid arrangement below is superseded by the [horizontal-row exploration](concepts.md#current-arrangement-exploration). Its dimensions remain reference hypotheses; they do not dimension the new renders.
 
 28 September 2026. Current proposal for review; no dedicated Inspect. Nominal **215 × 230 mm flat whole-face template**; screen and controls use the same millimetre scale. This is a developed front/control-face study, not an assembled enclosure, projected tabletop footprint, volume or proof of internal fit. Case shape is open.
 
@@ -29,5 +31,6 @@ Research key → cross selects record → Confirm opens → cross selects known 
 PNG is a legible preview. SVG is editable and dimensioned in mm; print at 100%, no fit-to-page, and check its 100 mm line before using as a full-scale paper mock. The diagram shows the module envelope and controls together at one scale, not measured manufacturing or ergonomics. Screen tilt, control-face slope, housing height/depth, cap forces/travel, knob grip, printer mechanism/roll/feed/tear edge, scanner, computer, connector exits and service space are unallocated. No printer slot or internal fit is invented to make the geometry appear solved.
 
 Hardware inspected the actual PNG for scale, spacing, symbols and captions. Experience Design reviewed the actual final PNG and accepted the whole-face composition study: regular grid, coherent cross/action cluster, correct action order, separate nearby Zoom, no Inspect and adequate caption clearance. Its play-sequence correction is incorporated: select a supported study target before opening paid review, rather than changing the meaning of the same known feature. No redraw requested. This is not an ergonomics or internal-fit approval; dial grip, 13.9 mm cap gap and 11 mm front margin need physical testing. No final size selection.
+
 
 
