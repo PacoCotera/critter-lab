@@ -16,6 +16,10 @@ The **Caddy** charges both devices, prints records and summarizes your habitats,
 
 The game is being validated in software before building hardware. A mobile app is the fallback if dedicated devices do not add enough value.
 
+## Standalone and connected play
+
+The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
+
 ## Your first discovery
 
 Bring something home, investigate it, find what the next study needs, and eventually meet the critter you chose to create. The Lab waits for you to press OPEN when it is ready. Follow [one player's first discovery](../../design/sample-to-critter-walkthrough.md).
@@ -34,6 +38,6 @@ Crafting lets you experiment with supplies and learn useful combinations. Clues 
 
 ## One kit, separate collections
 
-A household can share the Lab, Probe and Companion while players keep separate profiles, progress and critters. Using the same device does not merge collections. Meeting or scanning another player's critter does not make it yours or grant breeding permission; taking a social sample requires its owner's agreement.
+A household can share the Lab, combined Companion and caddy while players keep separate profiles, progress and critters. Using the same device does not merge collections. Meeting or scanning another player's critter does not make it yours or grant breeding permission; taking a social sample requires its owner's agreement.
 
 The final rules for care, lending and long absences are still open. See [product status](../../STATUS.md) for what exists today rather than treating this introduction as a finished manual.
