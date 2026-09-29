@@ -89,10 +89,10 @@ static void stock_amount(SelectedRow *row, int x, unsigned amount) {
   snprintf(fraction, sizeof(fraction), "Next unit %u%%", amount % 100);
   /* The valid five-digit unit cap must keep the same right-hand inset. */
   const NativeFont *bold = heading_font(26, 1);
-  int top = 72 - bold->baseline;
+  int top = 74 - bold->baseline;
   native_text_row(bold, whole, x, top, row->y, SELECTED_LAB_WIDTH, row->pixels,
                   0, colors[INK]);
-  label(row, x, 74, fraction, 18, MUTED);
+  label(row, x, 75, fraction, 18, MUTED);
 }
 
 static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
@@ -516,9 +516,9 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   unsigned stock[] = {game->data, game->energy, game->essence};
   const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
   for (unsigned i = 0; i < 3; i++) {
-    int x = 480 + (int)i * 167;
+    int x = 420 + (int)i * 180;
     sprite(&row, i, x, 35, 40, 53);
-    label(&row, x + 53, 27, names[i], 18, MUTED);
+    label(&row, x + 53, 32, names[i], 18, MUTED);
     stock_amount(&row, x + 54, stock[i]);
   }
   int home = lab->page == V1_HOME;
