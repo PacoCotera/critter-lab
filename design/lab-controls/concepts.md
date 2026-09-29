@@ -79,3 +79,5 @@ The next outcome is printer and tap packaging within A. Owner favors the front-l
 
 Owner rejected the cross-section in [the retained packaging attempt](printer-tap-packaging.png); it is not packaging evidence or a valid mechanical arrangement. Establish an actual dimensioned layout from the printer's mechanical documentation before illustrating internals again. The front pad treatment is also rejected as too bold and generic: use a muted surface with recognizable Probe and Companion identity, rather than a large TAP label and payment-like radio symbol. Front-above-output placement and rear roll access remain the working direction. Rendered screen and paper graphics are incidental, not approved UI or specimen art.
 
+Current exterior review: [A with muted Probe/Companion pad](prototype-a-muted-pad.png). Preserves the screen-first case and control order, removes the pad latch, and uses a quiet sage-gray inset with paired device icons and names. This is an exterior prototype render; rear loading is the intended arrangement but not visible here. It makes no internal packaging claim. Screen and printed specimen remain illustrative.
+
