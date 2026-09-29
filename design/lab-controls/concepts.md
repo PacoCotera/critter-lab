@@ -70,3 +70,8 @@ The colored workspace row, cross, Cancel-left/Confirm-right and orange-accented 
 ## Selected C refinement
 
 Owner chose C with integrated left printer bay and requested a vertical workspace-key column at the far-right front edge, counterbalancing the printer and freeing room to raise the main controls. [C with vertical workspace keys](c-vertical-keys-v1.png) is the current visual review target. No horizontal workspace row remains in this revision. Cross, Cancel-left/Confirm-right and orange Zoom remain beneath the screen with more base clearance; no Inspect. The left-side tap surface is separate from front keys. This supersedes horizontal-row placement for the selected case, without changing the control roles. Rendered screen/paper art remains illustrative; case dimensions, grip clearance, printer and tap implementation are unverified.
+
+## Screen prominence refinement
+
+Owner finds the selected C display too visually small. [Screen-first comparison](screen-first-v2.png) reduces workspace-key/bezel dominance and compares a narrow side column against a compact top row. Retain selected 7-inch screen; renderer proportions are not calibrated dimensions. Printer depth is a reserve hypothesis, not proof of a narrower front bay: actual roll, feed and cutter determine minimum width and service routing. Tap remains on outer side, no Inspect, Cancel-left/Confirm-right. Current review is visual hierarchy; do not implement generated UI text or infer mechanical fit. The first screen-first render had unequal display proportions and is not the current comparison.
+
