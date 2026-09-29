@@ -2,17 +2,31 @@
 
 **Current direction:** the [owner physical-experience interview](../../specs/devices.md#owner-physical-experience-interview--current-direction) supersedes the printer-in-handheld case and fixed lower-row layout below. Develop a two-thumb home handheld, playable in its tidy shared caddy, with the printer in that home station. Field Lab is the original concept's name; Field Instrument and Orbital Lab remain inspiration. Retained boards below document earlier exploration, not the new configuration. Next visuals must show both handheld use and the supported living-display/play arrangement.
 
-## Handheld and home station — next divergence
+## Handheld and home station — architecture divergence
 
-Three visual-first proposals: **Evolution**, carrying the warm original Field Lab character; **Expedition**, adding protective Field Instrument construction cues; and **Discovery**, exploring Orbital Lab curves. Each pairs handheld use with a tidy shared home station for Lab, Probe, Companion and printing. No mechanical fit, charging method or radio technology is selected.
+The first handheld board was rejected: its three proposals were too toy-like and too similar in physical form. The former common upper-shoulder Zoom placement is withdrawn; no top-mounted knob. Preserve two-thumb use and control functions while exploring placement. The [earlier board](handheld-home-directions-v2.png) remains a reference to rejected exploration, not a baseline.
 
-Proposed common input arrangement: directional cross at the left grip; Cancel-left/Confirm-right pair at the right grip; four workspace keys split two above each thumb area; orange-accented Zoom at the upper-right grip/shoulder. This replaces the old center-bottom row for the study. Brief one-hand support for Zoom is acceptable. Station supports must leave grips and buttons accessible. This map is a design proposal, not an implemented input change or measured reach result.
+Three new visual hypotheses compare the same journey: pick up the home Lab, explore with physical controls, return it to the shared printer station, continue playing while supported, then leave rotating collection/vivarium screens visible. These are concept renders, not dimensionally verified models. No new UI, creature, charging method or hardware is approved.
 
-The three concepts compare one play journey: pick up a charged Lab, explore using two thumbs, return it to a shared home station, continue playing while supported, and leave the vivarium/collection visible between sessions. Evolution uses a warm softly squared body and side-by-side portable bays; Expedition uses protective faceting and a stepped station; Discovery uses curved grips and a crescent-like station with the portables on opposite sides. Printing belongs to each station, never to the handheld. Whether printing is allowed while undocked remains open. Ambient screens are illustrative; the artwork does not approve new creatures or UI.
+| Proposal | Handheld architecture | Station relationship | Main uncertainty to test after visual selection |
+| --- | --- | --- | --- |
+| Contour | Closed continuous body, narrowed waist and lower thumb shoulders | Compact drawer-console with open grip space and portable pockets | Lower control arc reach and palm support |
+| Yoke | Screen between separate-looking integral side grips with visible air gaps | Freestanding support over a horizontal printer/portable tray | Total width, handle clearance and rigidity |
+| Keel | Broad screen above one continuous full-width handbar | Low radial hub with printer and rear-side portable pockets | Central workspace-key reach and balanced handheld support |
 
-![Handheld and shared home-station concepts](handheld-home-directions-v2.png)
+Core functions remain directional navigation, Cancel-left/Confirm-right, four workspace shortcuts and inspection/zoom. Proposed placements are exploratory. Recessed side/end wheels replace a top knob. Screen artwork is a placeholder; these images do not change the approved Lab visual baseline. Printer belongs to the station, not the handheld. Printing while undocked is still open.
 
-Current visual comparison shows both modes of each proposal. It does not fix dimensions, battery performance, charging, screen aperture or portable body designs. The selected display contract remains unchanged. A physical mock-up must establish supported-play finger clearance, particularly at station side walls and adjacent portable bays. Depicted hands do not establish comfort or reach. Choose character and station arrangement before dimensional development.
+A physical mock-up must establish thumb reach, workspace-key identification, support stability and finger clearance while docked. Concept images cannot establish comfort, screen aperture, battery runtime, fit or material performance.
+
+![A — Contour](architecture-a-contour.png)
+
+![B — Yoke](architecture-b-yoke.png)
+
+![C — Keel](architecture-c-keel.png)
+
+The [generation and correction prompts](architecture-prompts.txt) retain provenance for these built-in image-generation studies. Keel's final study uses visible front-rail workspace keys instead of the initial rear-paddle hypothesis. Station underside clearance remains unresolved in Contour and Keel; Yoke makes open grip access more visible. The screen and receipt illustrations are placeholders, not firmware output or approved specimen art.
+
+Experience Design inspected all three exact final exports. The comparison is ready for owner character/architecture review: rectangular portables, four workspace keys, Cancel left of Confirm, side/end Zoom and station-only printing are visible. This is not an ergonomic pass. Contour's central keys require hand relocation; Yoke's lower right hand approach may conflict with the portables; Keel's rim remains close to the grip underside and wheel. Support stability, physical reach and clearances need model/mock-up evidence after direction selection. No winner is selected.
 
 Joint physical/interaction exploration, 28 September 2026. No winner, dimensions, selected parts, implementation or purchases. Cream/charcoal/orange identity retained; workspace accent colors are proposals. Research and Library are owner-named destinations. Expedition, Inventory, Collection and Creation keys are tentative shortcuts to existing intended activities, not approved top-level information architecture.
 
@@ -126,4 +140,3 @@ Owner requires subsequent enclosure renders to originate from a dimensionally an
 Model the display module, glass and visible aperture as distinct boundaries; use verified manufacturer dimensions where available. Mark proposed housing dimensions, control caps/back clearance, printer mounting/service volume and reader allowance as proposals. Keep one coordinate system and explicit face angle. Resolve transitions between the reclined main face and printer bay, wall thickness, corner radii, groove width/depth, rear access and base contact in geometry. Material assignments belong to model surfaces; shading must not invent recesses or seams.
 
 Before a beauty render, inspect front, side, top and section views from that same model, check component intersections and opening/service paths, then obtain focused independent hardware review. Publish the model, parameter/source table and matching exports together in Git. A dimensional prototype is not manufacturing-ready CAD or proof of ergonomic, thermal, RF or printer performance. No further generated-image approximation of the case is a substitute for this step.
-
