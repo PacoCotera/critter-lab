@@ -41,6 +41,16 @@ Preserve richness during local implementation. Match the actual baseline beside 
 
 Home and feature landing derivations are specified in the [Home contract](home-landings/README.md). Compare actual native exports against C18; the earlier control-migration pass did not approve broad visual fidelity.
 
+Current owner playtest retains the Home information architecture but rejects its
+visual fidelity as final. The next workbench follows the [connected correction](research-and-creation.md#current-correction-return-to-the-same-research-workpiece).
+Inspect the actual study/finding screen as well as Home previews: a functional
+landing pass does not approve a text-only finding page. Preserve illustrated
+findings, intentional panel depth, controlled negative space, saturated shared
+sprites and restrained warm focus halo. Do not enlarge a generic capsule to fill
+the research field or replace discovery with identical progress bars. Gemini
+provides art direction/production; engineering preserves the resulting native
+asset scales, anchors and effects. No current native-art final approval is claimed.
+
 ## Screen design sequence
 
 Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.

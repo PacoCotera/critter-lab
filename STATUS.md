@@ -23,8 +23,11 @@ full content catalogue.
 The [Home and feature landings](design/home-landings/README.md) expose current lab
 activity before entering a feature. The accepted directional/workspace panel
 operates the Lab; stock, expedition, discoveries, incubation and revealed-resident
-previews read the same saved world. The renderer derives margins, typography,
-frame depth and focus from the approved C18 visual baseline. Lab execution is
+previews read the same saved world. Owner playtest values this depth but finds
+the art below C18, resource decimals difficult, the haul header stale in play,
+navigation intermittently unresponsive, device roles collapsed and research
+repetitive. Those reports supersede any broader inference from functional checks.
+Lab execution is
 C17 Linux x86-64 host simulation; Raspberry Pi4 ARM/display/input remains unverified.
 
 The established CI validates the native domain, input/transport and a complete
@@ -40,8 +43,15 @@ boundary; older separate Probe targets are legacy fixtures after consolidation.
 
 ## Next proof
 
-Human playtesting of this first round decides retain/refine/reroll before broader
-content or hardware commitments. Preserve the existing hardware family and
+The [connected correction](design/research-and-creation.md#current-correction-return-to-the-same-research-workpiece)
+retains Home and specifies a persistent sample workbench, separate Companion
+expedition/cargo and Lab receipt, truthful integer supplies, meaningful expedition
+opportunities and supported progressive discoveries. This design/diagnosis is
+not yet a runtime correction. Current Pip samples share the same five studies
+and two configurations; authored evidence and completeness must precede claims
+of richer discovery. A timed-update/input race has a code-grounded reproduction
+sequence; the reported HUD failure remains to reproduce with exact saved stock
+and rendered-frame checks. Preserve the existing hardware family and
 approved product direction; do not infer that a working local Pip loop delivers
 cloud, sensor, printer, power or environmental simulation capabilities.
 
