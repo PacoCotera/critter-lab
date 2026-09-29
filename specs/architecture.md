@@ -4,16 +4,20 @@ Status: accepted responsibilities with proposed implementation boundaries. Servi
 
 ```mermaid
 flowchart LR
-  Companion[Companion: Probe / Cargo / Companions] <-->|attributed activity and accepted results| Cloud[Shared authoritative records]
-  Lab[Home Lab: research and visual habitats] <--> Cloud
-  Caddy[Caddy: summaries and printer] <-->|timestamped projections and print jobs| Cloud
+  Companion[Companion: Probe / Cargo / Companions] <--> Core[Standalone kit game and retained records]
+  Lab[Home Lab: research and visual habitats] <--> Core
+  Caddy[Caddy: summaries and printer] <--> Core
+  Core <-->|nearby-kit interaction| Nearby[Another standalone kit]
   Caddy -->|wireless charging| Lab
   Caddy -->|wireless charging| Companion
-  Cloud <--> App[Mobile fallback: same game and records]
-  Cloud --> Content[Validated versioned content]
+  Core <-->|optional global operations: reconciliation OPEN| Cloud[Cloud Pass]
+  App[Mobile fallback: same core game] <--> Core
+  Cloud --> Global[Global trading / breeding / lineage / certificates / minigames]
 ```
 
-The Lab is connected. The owner directs a more capable Linux-class Lab to execute more work locally and reduce cloud dependence; the board and local generation workload remain to be selected. Cloud generation remains available, but generation is no longer required to execute exclusively remotely. Devices may hold temporary probing, evolving and training state partly offline. Cloud owns accepted durable state and recovery. Phone support is optional for routine device play; device-hosted setup needs no personal home server.
+The core kit works standalone from the box, including nearby-kit interaction. Core in this diagram is a logical responsibility, not a selected server, process or device. Exact local authority placement, nearby-kit protocol and local/global reconciliation remain OPEN. Preserve one coherent inventory and individual identity rather than invent independent per-device worlds.
+
+The optional Cloud Pass supplies global trading and breeding, lineage, certificates and minigames. It is not required to accept core research, creation or other local play. No price, provider or subscription enforcement design is selected. The Linux-class Lab may execute work locally; cloud generation is an optional capability, not a dependency that prevents core play when disconnected. Exact generation workloads and content delivery remain unselected. Routine play needs no phone or personal home server.
 
 The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The owner now explicitly directs a mobile fallback if the hardware-oriented software experience does not justify building the kit, and shared domain services should not force identical interactions across devices.
 
@@ -21,7 +25,7 @@ The [physical-experience principle](experience.md#physical-experience-is-the-pro
 
 Define the [electronics-first reference](devices.md#electronics-first-v1-reference-specification), then prove firmware/game behavior in software before PCB/enclosure development. Mobile is an explicit fallback product, not merely a remote control for hardware. Share domain operations, state/identity and preserved content; retain device-specific presentation and input adapters. Simulated peripherals must remain labeled. Existing C/MCU builds do not establish functional device firmware.
 
-The caddy is the tangible home of the collection but not the authoritative memory server or mandatory gateway. Habitats are bounded simulation/state units with proposed freeze/restore; this does not require a process or Docker container per habitat. Preserve a single authoritative inventory and population across clients. Docked Companion Probe activity continues subject to observation validity. Detailed transfer, freeze/time and offline permissions remain explicit domain choices.
+The caddy is the tangible home of the collection, not an assumed mandatory gateway or selected authority server. Habitats are bounded simulation/state units with proposed freeze/restore; this does not require a process or Docker container per habitat. Preserve coherent inventory and population across core devices and permitted global operations; the authority and reconciliation mechanisms remain open. Docked Companion Probe activity continues subject to observation validity. Detailed transfer, freeze/time and offline permissions remain explicit domain choices.
 
 ## Creature production pipeline
 
@@ -55,9 +59,9 @@ Proposed tool contract: import or author family constraints and assets; record s
 
 ## App, website and backend
 
-The supporting app and website consume the same authorized cloud records as devices. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.
+The mobile fallback shares core rules, identity and preserved content; supporting app/website surfaces access the local or optional global records their role permits. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.
 
-The backend owns accepted player records, operation results, authorization, generation jobs and versioned content access. Client drafts/caches cannot authorize mutations. Service/provider topology and production APIs remain open. Account recovery, device revocation, data export/deletion and backup/restore need explicit policies; none is equivalent to fictional death or specimen transfer. [Cloud synchronization](cloud-sync.md) defines the proposed acceptance/retry boundary.
+For optional global operations, the backend owns accepted service records, operation results, authorization and its generation/content jobs. Local core records remain valid without that backend; exact local acceptance and global reconciliation are unselected. A cache or client claim alone does not confer global rights. Service/provider topology and production APIs remain open. Account recovery, device revocation, data export/deletion and backup/restore need explicit policies; none is equivalent to fictional death or specimen transfer. [Local/global synchronization](cloud-sync.md) defines the scope distinction and proposed global acceptance/retry boundary.
 
 ## Domain and adapter separation
 
@@ -75,7 +79,7 @@ The backend owns accepted player records, operation results, authorization, gene
 
 The bounded host experiment uses five durable steps: Probe seals immutable cargo; Lab stores receipt plus all cargo; Probe clears that matching cargo and retains a tombstone; Lab confirms clearance; Probe records final completion before new gathering. Replayed old messages cannot clear a later haul. No post-seal cancellation is supported by that experiment. Identity/digest consistency is not authenticated provenance.
 
-A historical Lab receipt does not prove current Probe emptiness, remaining Lab inventory or delivery of the final acknowledgment. Local offload is distinct from cloud acceptance. Production design must define when local cargo may be discarded and recovery exposure before cloud sync. Sample opening, resource spending and founder creation are separate operations.
+A historical Lab receipt does not prove current Probe emptiness, remaining Lab inventory or delivery of the final acknowledgment. Local offload is distinct from optional global acceptance. Production design must define local cargo acceptance, safe discard and recovery without making cloud synchronization mandatory. Sample opening, resource spending and founder creation are separate operations.
 
 ## Compatibility and evidence
 
