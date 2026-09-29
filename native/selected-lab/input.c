@@ -5,11 +5,64 @@ static void changed(SelectedLab *lab) {
   ++lab->revision;
   lab->ready = 0;
 }
+static unsigned page_workspace(SelectedPage page) {
+  switch (page) {
+  case V1_SAMPLES:
+  case V1_STUDIES:
+  case V1_FINDING:
+  case V1_CREATE:
+  case V1_STUDY_REVIEW:
+    return 0;
+  case V1_CRITTERS:
+    return 1;
+  case V1_LIBRARY:
+  case V1_LIBRARY_FINDING:
+    return 2;
+  case V1_HABITAT:
+    return 3;
+  default:
+    return 4;
+  }
+}
+static void remember_workspace(SelectedLab *lab) {
+  if (lab->workspace >= 4)
+    return;
+  unsigned workspace = lab->workspace;
+  lab->workspace_page[workspace] = lab->page;
+  lab->workspace_focus[workspace] = lab->focus;
+  lab->workspace_sample[workspace] = lab->sample;
+  lab->workspace_study[workspace] = lab->study;
+  lab->workspace_resident[workspace] = lab->resident;
+}
 static void enter(SelectedLab *lab, SelectedPage page) {
+  remember_workspace(lab);
   lab->page = page;
+  lab->workspace = page_workspace(page);
   lab->focus = 0;
   changed(lab);
   lab->page_revision = lab->revision;
+}
+static unsigned discovered_findings(const SelectedLab *lab) {
+  unsigned count = 0;
+  for (unsigned i = 0; i < lab->game.sample_count; ++i)
+    for (unsigned study = 0; study < 5; ++study)
+      count += (lab->game.samples[i].decoded_studies >> study) & 1u;
+  return count;
+}
+int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
+                               unsigned *sample_result,
+                               unsigned *study_result) {
+  unsigned index = 0;
+  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
+    for (unsigned study = 0; study < 5; ++study)
+      if (lab->game.samples[sample].decoded_studies & (1u << study)) {
+        if (index++ == option) {
+          *sample_result = sample;
+          *study_result = study;
+          return 1;
+        }
+      }
+  return 0;
 }
 static unsigned visible_residents(const SelectedLab *lab) {
   unsigned count = 0;
@@ -20,6 +73,11 @@ static unsigned visible_residents(const SelectedLab *lab) {
 void selected_lab_init(SelectedLab *lab) {
   memset(lab, 0, sizeof(*lab));
   game_state_init(&lab->game);
+  lab->workspace_page[0] = V1_SAMPLES;
+  lab->workspace_page[1] = V1_CRITTERS;
+  lab->workspace_page[2] = V1_LIBRARY;
+  lab->workspace_page[3] = V1_HABITAT;
+  lab->workspace = 4;
   lab->revision = lab->page_revision = 1;
 }
 int selected_lab_load(SelectedLab *lab, const char *path, uint32_t clock) {
@@ -47,11 +105,18 @@ const char *selected_lab_page(const SelectedLab *lab) {
   static const char *names[] = {"home",     "expedition",   "cargo",
                                 "samples",  "research",     "finding",
                                 "creation", "incubation",   "reveal",
-                                "habitat",  "study-review", "discard-review"};
+                                "habitat",  "study-review", "discard-review",
+                                "critters", "library",      "library-finding"};
   return names[lab->page];
 }
 unsigned selected_lab_options(const SelectedLab *lab) {
   switch (lab->page) {
+  case V1_CRITTERS:
+    return visible_residents(lab) ? visible_residents(lab) : 1;
+  case V1_LIBRARY:
+    return discovered_findings(lab) ? discovered_findings(lab) : 1;
+  case V1_LIBRARY_FINDING:
+    return 1;
   case V1_STUDY_REVIEW:
   case V1_DISCARD_REVIEW:
     return 2;
@@ -87,6 +152,29 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   static const char *care[] = {"Spend time together", "Next resident",
                                "Explore again"};
   switch (lab->page) {
+  case V1_CRITTERS: {
+    unsigned index = 0;
+    for (unsigned i = 0; i < lab->game.individual_count; ++i)
+      if (lab->game.individuals[i].revealed && index++ == option)
+        return lab->game.individuals[i].id;
+    return "Return to workbench";
+  }
+  case V1_LIBRARY: {
+    unsigned index = 0;
+    for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
+      for (unsigned study = 0; study < 5; ++study)
+        if (lab->game.samples[sample].decoded_studies & (1u << study)) {
+          if (index++ == option) {
+            static char label[96];
+            snprintf(label, sizeof(label), "%s / %s",
+                     lab->game.samples[sample].id, pip_study(study)->title);
+            return label;
+          }
+        }
+    return "No discoveries yet";
+  }
+  case V1_LIBRARY_FINDING:
+    return "Back to library";
   case V1_STUDY_REVIEW:
     return option ? "Return to topics" : "Start research";
   case V1_DISCARD_REVIEW:
@@ -152,11 +240,17 @@ static GameResult commit(SelectedLab *lab, GameCommand command) {
   changed(lab);
   return result;
 }
+static int selected_lab_held(const SelectedLab *lab) {
+  for (unsigned i = 0; i < 10; ++i)
+    if (lab->gestures[i].held)
+      return 1;
+  return 0;
+}
 void selected_lab_tick(SelectedLab *lab, uint32_t clock) {
   if (clock <= lab->clock)
     return;
   lab->clock = clock;
-  if (lab->suspended || lab->confirm.held || lab->back.held) {
+  if (lab->suspended || selected_lab_held(lab)) {
     game_rules_resume_runtime(&lab->game, clock);
     return;
   }
@@ -175,6 +269,21 @@ static void activate(SelectedLab *lab) {
   GameCommand command = {0};
   unsigned focus = lab->focus;
   switch (lab->page) {
+  case V1_CRITTERS:
+    if (!visible_residents(lab))
+      enter(lab, V1_HOME);
+    return;
+  case V1_LIBRARY:
+    if (discovered_findings(lab)) {
+      lab->library_index = focus;
+      selected_lab_library_entry(lab, focus, &lab->sample, &lab->study);
+      enter(lab, V1_LIBRARY_FINDING);
+    }
+    return;
+  case V1_LIBRARY_FINDING:
+    enter(lab, V1_LIBRARY);
+    lab->focus = lab->library_index;
+    return;
   case V1_HOME: {
     static const SelectedPage pages[] = {V1_EXPEDITION, V1_SAMPLES,
                                          V1_INCUBATION, V1_HABITAT};
@@ -341,33 +450,30 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
   }
   if (input == SELECTED_CANCEL || input == SELECTED_SUSPEND ||
       input == SELECTED_RESUME) {
-    memset(&lab->confirm, 0, sizeof(lab->confirm));
-    memset(&lab->back, 0, sizeof(lab->back));
+    memset(lab->gestures, 0, sizeof(lab->gestures));
     if (input != SELECTED_CANCEL) {
       lab->suspended = input == SELECTED_SUSPEND;
       changed(lab);
-      game_rules_resume_runtime(&lab->game, lab->clock);
     }
+    game_rules_resume_runtime(&lab->game, lab->clock);
     return;
   }
-  if (input == SELECTED_ROTATE) {
-    if (!lab->suspended && delta && frame >= lab->page_revision &&
-        frame <= lab->revision) {
-      unsigned count = selected_lab_options(lab);
-      lab->focus = (lab->focus + (delta > 0 ? 1 : count - 1)) % count;
-      changed(lab);
-    }
+  (void)delta;
+  if (input > SELECTED_BACK_UP)
     return;
-  }
-  int back = input == SELECTED_BACK_DOWN || input == SELECTED_BACK_UP;
-  SelectedGesture *gesture = back ? &lab->back : &lab->confirm;
-  if (input == SELECTED_CONFIRM_DOWN || input == SELECTED_BACK_DOWN) {
-    if (!gesture->held) {
-      gesture->held = 1;
-      gesture->revision = lab->revision;
-      gesture->allowed =
-          !lab->suspended && lab->ready && frame == lab->revision;
-    }
+  unsigned button = (unsigned)input / 2;
+  SelectedGesture *gesture = &lab->gestures[button];
+  if ((unsigned)input % 2 == 0) {
+    if (gesture->held)
+      return;
+    int overlap = selected_lab_held(lab);
+    if (overlap)
+      for (unsigned i = 0; i < 10; ++i)
+        lab->gestures[i].allowed = 0;
+    gesture->held = 1;
+    gesture->revision = lab->revision;
+    gesture->allowed =
+        !overlap && !lab->suspended && lab->ready && frame == lab->revision;
     return;
   }
   if (!gesture->held)
@@ -377,10 +483,64 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
   memset(gesture, 0, sizeof(*gesture));
   if (!allowed || lab->suspended)
     return;
-  if (back) {
+  if (button == 0 || button == 1) {
+    unsigned count = selected_lab_options(lab);
+    lab->focus = (lab->focus + (button == 1 ? 1 : count - 1)) % count;
+    if (lab->page == V1_CRITTERS && visible_residents(lab)) {
+      unsigned index = 0;
+      for (unsigned i = 0; i < lab->game.individual_count; ++i)
+        if (lab->game.individuals[i].revealed && index++ == lab->focus) {
+          lab->resident = i;
+          break;
+        }
+    }
+    changed(lab);
+    return;
+  }
+  if (button >= 4 && button <= 7) {
+    unsigned current_resident = lab->resident;
+    int from_critters = lab->workspace == 1;
+    remember_workspace(lab);
+    unsigned workspace = button - 4;
+    enter(lab, lab->workspace_page[workspace]);
+    lab->focus = lab->workspace_focus[workspace];
+    lab->sample = lab->workspace_sample[workspace];
+    lab->study = lab->workspace_study[workspace];
+    lab->resident = workspace == 3 && from_critters
+                        ? current_resident
+                        : lab->workspace_resident[workspace];
+    if (lab->focus >= selected_lab_options(lab))
+      lab->focus = 0;
+    if ((lab->page == V1_HABITAT || lab->page == V1_CRITTERS) &&
+        visible_residents(lab) &&
+        !lab->game.individuals[lab->resident].revealed)
+      for (unsigned i = 0; i < lab->game.individual_count; ++i)
+        if (lab->game.individuals[i].revealed) {
+          lab->resident = i;
+          break;
+        }
+    return;
+  }
+  if (button == 3) {
+    int safe = (lab->page == V1_HOME ||
+                (lab->page == V1_SAMPLES && lab->game.sample_count) ||
+                (lab->page == V1_STUDIES && lab->focus < 5 &&
+                 (lab->game.samples[lab->sample].decoded_studies &
+                  (1u << lab->focus))) ||
+                (lab->page == V1_EXPEDITION && lab->game.expedition_id[0] &&
+                 (lab->focus || !lab->game.expedition_active)) ||
+                lab->page == V1_LIBRARY);
+    if (safe)
+      activate(lab);
+    return;
+  }
+  if (button == 2 || button == 9) {
     SelectedPage previous = lab->page;
-    if (previous == V1_FINDING || previous == V1_STUDY_REVIEW ||
-        previous == V1_CREATE) {
+    if (previous == V1_LIBRARY_FINDING) {
+      enter(lab, V1_LIBRARY);
+      lab->focus = lab->library_index;
+    } else if (previous == V1_FINDING || previous == V1_STUDY_REVIEW ||
+               previous == V1_CREATE) {
       enter(lab, V1_STUDIES);
       lab->focus = previous == V1_CREATE ? 5 : lab->study;
     } else if (previous == V1_STUDIES) {

@@ -1,7 +1,6 @@
 // Fixed physical-actuator transport only. Page/focus decisions and pixels live in C.
 const image = document.querySelector('#frame');
 const status = document.querySelector('#status');
-const knob = document.querySelector('#knob');
 let revision = 0;
 let visibleRevision = 0;
 let drawGeneration = 0;
@@ -18,7 +17,6 @@ async function stopAfterTransportFailure() {
   ++drawGeneration;
   held.clear();
   document.querySelectorAll('button').forEach(button => button.classList.remove('held'));
-  dial = null;
   status.textContent = 'Transport interrupted; activation stopped. Reload to reconnect with a fresh gesture.';
   // A down may have reached C even when its response was lost. Never send a queued up.
   try {
@@ -30,12 +28,12 @@ async function stopAfterTransportFailure() {
   }
 }
 
-function send(event, requestedFrame = visibleRevision, delta) {
+function send(event, requestedFrame = visibleRevision) {
   if (inputBlocked) return;
   const generation = transportGeneration;
   commands = commands.then(async () => {
     if (inputBlocked || generation !== transportGeneration) return;
-    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event, revision: requestedFrame, ...(delta === undefined ? {} : { delta }) }) });
+    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event, revision: requestedFrame }) });
     if (!response.ok) throw new Error('Native input transport unavailable.');
     const state = await response.json();
     if (generation === transportGeneration && !inputBlocked) receive(state);
@@ -44,6 +42,9 @@ function send(event, requestedFrame = visibleRevision, delta) {
 
 function receive(state) {
   revision = state.revision;
+  ['research', 'critters', 'library', 'habitat'].forEach((name, index) => {
+    document.querySelector(`#${name}`).setAttribute('aria-pressed', String(state.workspace === index));
+  });
   status.textContent = `Native page: ${state.page} · focus: ${state.focus} · ${state.ready ? 'frame ready' : 'waiting for frame'} · ${state.boundary}`;
   if (visibleRevision !== revision && requestedRevision !== revision) draw(revision);
 }
@@ -82,10 +83,19 @@ async function draw(frame) {
 }
 
 const held = new Map();
-for (const [name, button] of [['confirm', document.querySelector('#confirm')], ['back', document.querySelector('#back')]]) {
+for (const name of ['up', 'down', 'left', 'right', 'research', 'critters', 'library', 'habitat', 'confirm', 'back']) {
+  const button = document.querySelector(`#${name}`);
   button.addEventListener('pointerdown', event => {
     if (inputBlocked || event.button !== 0 || held.has(name)) return;
     event.preventDefault();
+    if (held.size) {
+      for (const gesture of held.values()) gesture.cancelled = true;
+      held.set(name, { pointer: event.pointerId, frame: visibleRevision, cancelled: true });
+      button.setPointerCapture(event.pointerId);
+      document.querySelectorAll('button').forEach(control => control.classList.remove('held'));
+      send('cancel');
+      return;
+    }
     held.set(name, { pointer: event.pointerId, frame: visibleRevision });
     button.setPointerCapture(event.pointerId);
     button.classList.add('held');
@@ -98,53 +108,21 @@ for (const [name, button] of [['confirm', document.querySelector('#confirm')], [
     button.classList.remove('held');
     const bounds = button.getBoundingClientRect();
     const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-    send(inside ? `${name}-up` : 'cancel', gesture.frame);
+    if (!gesture.cancelled) send(inside ? `${name}-up` : 'cancel', gesture.frame);
   });
   for (const type of ['pointercancel', 'lostpointercapture']) button.addEventListener(type, () => {
-    if (held.delete(name)) { button.classList.remove('held'); send('cancel'); }
+    if (held.delete(name)) {
+      for (const gesture of held.values()) gesture.cancelled = true;
+      document.querySelectorAll('button').forEach(control => control.classList.remove('held'));
+      send('cancel');
+    }
   });
   button.addEventListener('keydown', event => event.preventDefault());
 }
 
-let dial;
-let degrees = 0;
-function angle(event) {
-  const bounds = knob.getBoundingClientRect();
-  return Math.atan2(event.clientY - bounds.top - bounds.height / 2, event.clientX - bounds.left - bounds.width / 2) * 180 / Math.PI;
-}
-function rotate(delta) {
-  if (inputBlocked) return;
-  degrees += delta * 24;
-  knob.querySelector('span').style.transform = `rotate(${degrees}deg)`;
-  send('rotate', visibleRevision, delta);
-}
-knob.addEventListener('pointerdown', event => {
-  if (inputBlocked || event.button !== 0 || dial) return;
-  event.preventDefault();
-  knob.setPointerCapture(event.pointerId);
-  dial = { pointer: event.pointerId, previous: angle(event), accumulated: 0 };
-});
-knob.addEventListener('pointermove', event => {
-  if (dial?.pointer !== event.pointerId) return;
-  const current = angle(event);
-  let difference = current - dial.previous;
-  if (difference > 180) difference -= 360;
-  if (difference < -180) difference += 360;
-  dial.previous = current;
-  dial.accumulated += difference;
-  while (Math.abs(dial.accumulated) >= 24) {
-    const delta = Math.sign(dial.accumulated);
-    dial.accumulated -= delta * 24;
-    rotate(delta);
-  }
-});
-for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) knob.addEventListener(type, () => { dial = null; });
-knob.addEventListener('wheel', event => { event.preventDefault(); if (event.deltaY) rotate(Math.sign(event.deltaY)); }, { passive: false });
-
 function suspend() {
   held.clear();
   document.querySelectorAll('button').forEach(button => button.classList.remove('held'));
-  dial = null;
   send('suspend');
 }
 function resume() { if (!document.hidden) send('resume'); }

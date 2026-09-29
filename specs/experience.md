@@ -16,7 +16,7 @@ The complete game may first be designed and prototyped in software or an app. A 
 
 Lab extensibility is not a fixed page count or a commitment to unlimited hardware capacity. Physical display count, display modules, controls and performance budgets remain separate decisions. Current kit play still supports operation without a required phone. Final layouts, creature behavior and physical designs retain their own review gates.
 
-Expedition selection reinforces these roles: compare duration, difficulty, expected rewards and event character at the Lab, then carry the chosen expedition on the simple Probe. Exact comparison layout and on-device event interactions remain to be designed.
+Expedition selection reinforces these roles: compare investigation theme, tier eligibility and optional event opportunities at the Lab, then carry the chosen expedition on the simple Probe. Baseline resource gathering is shared; accepted events may temporarily boost it. Return is player-directed or required by simulated damage, not a fixed survey countdown. The [connected expedition study](../design/probe-expedition/README.md) proposes layouts and existing-control interactions; rates, tier unlock order and physical performance remain unvalidated.
 
 ## Operate the object
 
@@ -43,11 +43,52 @@ flowchart LR
 
 This diagram specifies separation, not a claim that all production joins are implemented. Sample opening, research B commitment and creation remain governed by their own domain rules.
 
+The proposed Probe [Observations and expedition log](../design/probe-sampling.md#observations-and-expedition-log--requested-destination) makes sensed context and its connection to encounters inspectable. It is read-only, uses existing Next/Confirm, distinguishes measured observations from game events and does not create collection rewards. Layout remains part of the full UI revisit.
+
 ## Input and visibility
+
+### Feature-led research journey — proposed screen projection
+
+The [player-facing genetics projection](../design/research-and-creation.md#player-facing-genetics-abstraction--proposed-projection) supplies the game contract. The proposed screen journey lets a player choose research, retain discoveries and understand what those discoveries enable. Features, findings and supported outcomes organize the player view; internal loci do not prescribe its navigation. A feature can depend on several inherited facts, and a finding can inform several features. This is an information and interaction proposal, not an implemented screen sequence or approved layout.
+
+The overview keeps the selected sample, useful research topics, retained knowledge and remaining opportunities together. A known inherited possibility, an established reference outcome and unresolved information have distinct roles. Do not reduce them to a completion color or infer absence from an unknown fact. The engine supplies what can be established under the named reference conditions; partial research does not universally mean an unknown outcome. Generic feature art identifies a topic, not the appearance of a living critter or an undiscovered sample result.
+
+#### Worked interaction: Sample A
+
+Implementation evidence: the [selected Lab prototype](../prototype/lab-selected/README.md) supports the authored two-Data Markings study, local saved finding, reload/retry and free inspection through the console controls. This is an isolated browser fixture using the existing Pip engine; it does not establish expedition inventory integration, incubation, final result artwork or a complete Lab application.
+
+The existing illustrative fixture starts with Data 2, Energy 1 and Essence 0. A pale-marking variant is known; the other required markings fact and adult-reference appearance are unresolved. All other required information in this small authored example is assumed established. Labels below illustrate purpose and hierarchy, not final player copy.
+
+| State | What the player sees and can do | Console input and retained context |
+| --- | --- | --- |
+| Sample overview | Sample A is the workpiece. Markings shows the known pale variant and remaining research; the supported Markings study is available. Other records and inventory remain reachable in their existing context. | Rotate changes one visible focus. Confirm opens the focused destination; Back restores collection and sample focus. Browsing spends nothing. |
+| Research choice and review | Markings study names a discovery topic, not a question to answer or a desired allele. Show its purpose, Data cost 2, available Data 2 and explicit Start study. Inspecting known findings is free and distinct from starting research. | Rotate moves focus among available actions; a fresh Confirm on Start commits. Back leaves the review without spending or losing Sample A. No genotype or result selection. |
+| Work pending | Keep Sample A and the committed study identifiable. Show pending work without displaying a finding as saved. | A return gesture may leave the view, but does not cancel submitted work. Repeated input does not submit another study; uncertain delivery checks the same operation. |
+| Finding saved | Reveal the accepted result: the pale variant is retained, but pale markings would not appear under the adult, mild-condition reference. Show what became known and what remains unresolved. Accepted stock is Data 0, Energy 1, Essence 0. | Focus a supported return action; do not automatically focus another consequential command. The record retains the finding, reference context and operation result. |
+| Free inspection and return | Explain the saved markings finding and its reference rule. Known inherited potential remains distinguishable from an expressed feature. Technical genotype notation, if later selected for a secondary view, is not required to understand the result. | Confirm inspects without spending or rerolling. In detail, Return and Back restore Sample A, its feature context and valid overview focus. Detail need not repeat inventory or the entire overview index. |
+| Research and incubation readiness | The overview reflects engine-derived remaining work. For this authored fixture, completing the last required finding can make research complete; that alone does not commit incubation. Supported complete configuration, source sample and required materials are reviewed separately. | Existing explicit selection, review and commit boundaries apply. No automatic incubation, feature-count completion test or new device control is introduced. |
+
+Each view answers its own purpose: overview offers useful places to explore; review explains the spend; pending identifies submitted work; result reveals the discovery; inspection explains retained evidence; readiness explains the next supported step. Moving detail off the default view must not erase evidence or meaningful inheritance relationships. Return restores that broader context rather than trapping the player in a result page.
+
+#### Connected sample overview, study review and inspection
+
+The [27 connected screen proposal](../design/game-art-proposals/README.md#connected-feature-led-research-proposal--27) uses a clearly illustrative combination of existing crown, eye-ring and markings findings. It is not a new canonical baseline. Crown and Eye rings are established free-inspection destinations; Markings begins with known pale inheritance and unknown expected appearance. The scope label is Research because the view crosses genomic dimension families.
+
+- **Overview:** three stable feature targets. Rotate moves one focus; Confirm inspects a known finding for free or opens the supported Markings study review. Action hints follow the focused target. Back restores collection. Only Markings has an authored study in this fixture; do not invent studies for the other two.
+- **Review:** name the study purpose and show cost2 Data packs against stock2. Start study is the explicit spending boundary. Return or Back leaves without spending and restores Markings focus. The reference art does not reveal the unknown result.
+- **Saved inspection:** retain pale inheritance beside the expected absence of pale markings under adult/mild reference conditions. Stock is now0/1/0. Return/Back restores the sample overview with Markings known and freely inspectable, preserving focus. No second spend, reroll or automatic incubation.
+
+The same shared feature references and selected resource assets appear across frames. The three exports cover representative composition and information; pending/uncertain-operation behavior follows the journey above, while dynamic focus and return still need a connected console prototype. They do not establish human comprehension, complete genomic coverage, physical readability or final visual approval.
+
+One focus marker identifies an action or navigable target. Feature illustrations, reference examples, knowledge states and resource items have visibly different roles; they do not imitate focus or touch controls. A static storyboard can assess that distinction and information visibility. A later connected console sequence must establish comprehension, operation feedback and return behavior; it cannot be inferred from readable labels alone.
+
+### Visual-system direction
+
+The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The owner now favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#current-visual-system-discovery) for current research boundaries. Rejected concept plates do not define the UI.
 
 ### Simulated console controls — accepted
 
-The simulator's depicted device controls are the player input surface. Existing knob and buttons drive visible focus, supported actions and screen feedback. Lab uses rotation and existing Confirm/Back; Probe uses existing Next/Confirm, including a reachable on-screen return target where required. Activate screen targets through those controls. Do not invent device keys, knob-press actions, clickable screen controls or touch/web shortcuts. Unassigned keys remain inactive. Design input, focus, activation, pending/error response and return together. Developer controls stay outside device shells.
+The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Research/Critters/Library/Habitat workspace keys in the middle, Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Critters shows revealed residents; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
 
 Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 
@@ -93,7 +134,7 @@ The shared prototype exposes Reset sandbox outside the device controls. Confirma
 
 ### Physical navigation design
 
-The earlier per-command browser button deck is rejected as the target interaction. Fixed simulated hardware actuators send logical input; native C owns focus, activation and screen feedback. The provisional map is Lab rotation/Confirm/Back, Probe Next/Confirm, and Companion previous/Confirm/next. Additional keys and touch functions remain unassigned until designed. Read-only art and status panels must not look like touch targets.
+The earlier per-command browser button deck is rejected as the target interaction. Fixed simulated hardware actuators send logical input; native C owns focus, activation and screen feedback. The Lab map is the accepted directional/workspace/Back/Confirm panel above; legacy Probe Next/Confirm and Companion previous/Confirm/next mappings are separate. Additional keys and touch functions remain unassigned until designed. Read-only art and status panels must not look like touch targets.
 
 Preserve fresh-gesture, frame-readiness and cancellation rules above. Engineering controls, Reset and device selection remain outside the device face. Current implementation coverage is recorded in build documentation; a proposed map is not proof of hardware behavior.
 

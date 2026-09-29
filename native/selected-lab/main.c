@@ -25,14 +25,15 @@ static void status(SelectedLab *lab) {
   selected_lab_tick(lab, now_seconds());
   printf(
       "{\"revision\":%u,\"page\":\"%s\",\"focus\":\"%s\",\"ready\":%s,"
-      "\"suspended\":%s,\"width\":1024,\"height\":600,\"stock\":[%u,%u,%u],"
+      "\"workspace\":%u,\"suspended\":%s,\"width\":1024,\"height\":600,"
+      "\"stock\":[%u,%u,%u],"
       "\"samples\":%u,\"individuals\":%u,\"decoded\":%u,\"expedition_seconds\":"
       "%u,\"incubation_seconds\":%u,\"incubation_ready\":%s,\"boundary\":"
       "\"Standalone V1; authored sensor simulation; local save\"}\n",
       lab->revision, selected_lab_page(lab), selected_lab_focus(lab),
-      lab->ready ? "true" : "false", lab->suspended ? "true" : "false",
-      lab->game.data, lab->game.energy, lab->game.essence,
-      lab->game.sample_count, lab->game.individual_count,
+      lab->ready ? "true" : "false", lab->workspace,
+      lab->suspended ? "true" : "false", lab->game.data, lab->game.energy,
+      lab->game.essence, lab->game.sample_count, lab->game.individual_count,
       lab->game.sample_count ? lab->game.samples[lab->sample].decoded_studies
                              : 0,
       lab->game.expedition_elapsed, lab->game.incubation_elapsed,
@@ -40,9 +41,13 @@ static void status(SelectedLab *lab) {
 }
 
 static int event(const char *name, SelectedInput *input) {
-  static const char *const names[] = {"rotate",    "confirm-down", "confirm-up",
-                                      "back-down", "back-up",      "cancel",
-                                      "suspend",   "resume",       "ready"};
+  static const char *const names[] = {
+      "up-down",       "up-up",       "down-down",     "down-up",
+      "left-down",     "left-up",     "right-down",    "right-up",
+      "research-down", "research-up", "critters-down", "critters-up",
+      "library-down",  "library-up",  "habitat-down",  "habitat-up",
+      "confirm-down",  "confirm-up",  "back-down",     "back-up",
+      "cancel",        "suspend",     "resume",        "ready"};
   for (unsigned index = 0; index < sizeof(names) / sizeof(names[0]); ++index)
     if (!strcmp(name, names[index])) {
       *input = (SelectedInput)index;
@@ -103,20 +108,15 @@ int main(int argc, char **argv) {
     } else {
       SelectedInput input;
       int valid = count >= 2 && event(name, &input);
-      int delta = 0;
-      if (valid && input == SELECTED_ROTATE) {
-        valid = count == 3 &&
-                (!strcmp(argument, "1") || !strcmp(argument, "-1")) &&
-                number(frame_argument, &frame);
-        delta = argument[0] == '-' ? -1 : 1;
-      } else
-        valid = valid && count == 2 && number(argument, &frame);
+      valid = valid && count == 2 && number(argument, &frame);
       if (!valid)
         puts("{\"error\":\"Unsupported input\"}");
       else {
         if (input == SELECTED_RESUME)
           lab.clock = now_seconds();
-        selected_lab_input(&lab, input, delta, frame);
+        if (input != SELECTED_RESUME)
+          selected_lab_tick(&lab, now_seconds());
+        selected_lab_input(&lab, input, 0, frame);
         status(&lab);
       }
     }

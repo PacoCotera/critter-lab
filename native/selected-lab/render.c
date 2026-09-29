@@ -217,10 +217,11 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   }
   panel(&row, 24, 134, 330, 406);
   panel(&row, 376, 134, 624, 406);
-  const char *titles[] = {"WORKBENCH", "EXPEDITION",    "CARGO",
-                          "SAMPLES",   "RESEARCH",      "DISCOVERY",
-                          "INCUBATE",  "INCUBATOR",     "HELLO, BEECHO",
-                          "HABITAT",   "RESEARCH PLAN", "DISCARD PACK"};
+  const char *titles[] = {"WORKBENCH", "EXPEDITION",        "CARGO",
+                          "SAMPLES",   "RESEARCH",          "DISCOVERY",
+                          "INCUBATE",  "INCUBATOR",         "HELLO, BEECHO",
+                          "HABITAT",   "RESEARCH PLAN",     "DISCARD PACK",
+                          "CRITTERS",  "RECORDED FINDINGS", "SAMPLE FINDING"};
   label(&row, 396, 152,
         lab->page == V1_FINDING ? pip_study(lab->study)->title
                                 : titles[lab->page],
@@ -233,8 +234,17 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       rectangle(&row, 39, yy - 2, 299, 46, DEEP);
       focus(&row, 37, yy - 4, 303, 50);
     }
-    label(&row, 53, yy + 7, selected_lab_option(lab, i), 18,
-          i == lab->focus ? WARM : INK);
+    unsigned sample, study;
+    if (lab->page == V1_LIBRARY &&
+        selected_lab_library_entry(lab, i, &sample, &study)) {
+      label(&row, 53, yy, game->samples[sample].id, 16,
+            i == lab->focus ? WARM : MUTED);
+      label(&row, 53, yy + 23, pip_study(study)->title, 18,
+            i == lab->focus ? WARM : INK);
+    } else {
+      label(&row, 53, yy + 7, selected_lab_option(lab, i), 18,
+            i == lab->focus ? WARM : INK);
+    }
   }
   char text[100];
   if (lab->page == V1_HOME) {
@@ -304,13 +314,13 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
               : "No complete pack of this resource yet.",
           18, INK);
   } else if (lab->page == V1_STUDIES || lab->page == V1_FINDING ||
-             lab->page == V1_STUDY_REVIEW) {
+             lab->page == V1_LIBRARY_FINDING || lab->page == V1_STUDY_REVIEW) {
     unsigned study = lab->page == V1_STUDIES ? lab->focus : lab->study;
     const PipStudy *entry = pip_study(study);
     int known =
         (game->samples[lab->sample].decoded_studies & (1u << study)) != 0;
     label(&row, 402, 203, game->samples[lab->sample].id, 18, MUTED);
-    if (lab->page == V1_FINDING) {
+    if (lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING) {
       label(&row, 416, 252, "SAMPLE FINDING", 22, SAGE);
       if (study < 2)
         sprite(&row, study == 0 ? SPRITE_CROWN : SPRITE_EYE_RING, 437, 300, 115,
@@ -351,6 +361,14 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                 : "Confirm reviews the research plan.",
             18, INK);
     }
+  } else if (lab->page == V1_LIBRARY) {
+    label(&row, 420, 252,
+          game->sample_count ? "Your recorded discoveries"
+                             : "No discoveries yet",
+          24, INK);
+    label(&row, 420, 310, "Research topics to record findings here.", 22,
+          MUTED);
+    label(&row, 420, 366, "Select a finding to inspect it freely.", 22, INK);
   } else if (lab->page == V1_CREATE) {
     sprite(&row, SPRITE_SAMPLE, 448, 240, 128, 128);
     label(&row, 605, 235, "Genome decoded", 28, SAGE);
@@ -384,8 +402,11 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     int visible =
         game->individual_count && game->individuals[lab->resident].revealed;
     const GameIndividual *individual = &game->individuals[lab->resident];
-    label(&row, 415, 210, visible ? individual->id : "Your habitat awaits", 22,
-          INK);
+    label(&row, 415, 210,
+          visible                    ? individual->id
+          : lab->page == V1_CRITTERS ? "No revealed residents yet"
+                                     : "Your habitat awaits",
+          22, INK);
     if (visible) {
       sprite(&row, SELECTED_SPRITE_COUNT + individual->expression.pale_markings,
              411, 235, 261, 289);
@@ -408,9 +429,10 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   }
 
   label(&row, 30, 557,
-        lab->message[0] ? lab->message
-                        : "Rotate to explore / Confirm to act / Back to return",
-        22, lab->storage_error ? WARM : MUTED);
+        lab->message[0]
+            ? lab->message
+            : "Up/down: focus | Right: inspect | Confirm: act | Back: return",
+        18, lab->storage_error ? WARM : MUTED);
 }
 
 static int word(FILE *output, unsigned value, unsigned bytes) {

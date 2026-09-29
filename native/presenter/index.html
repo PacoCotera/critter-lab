@@ -1,19 +1,33 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Beecho Lab · playable V1</title><link rel="stylesheet" href="/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Beecho Lab · Raspberry Pi Lab simulator</title><link rel="stylesheet" href="/style.css"></head>
 <body><main>
-  <header>BEECHO LAB / PLAYABLE V1</header>
-  <section class="housing" aria-label="Simulated Lab console">
+  <header>BEECHO LAB / PLAYABLE V1 <span>Raspberry Pi 4 Lab profile · native Linux simulation</span></header>
+  <section class="housing" aria-label="Simulated Raspberry Pi 4 Lab console">
+    <div class="brand" aria-hidden="true">BEECHO LAB</div>
     <div class="screen"><img id="frame" width="1024" height="600" alt="Native C Lab frame"></div>
     <div class="controls">
-      <div class="dial-group"><div id="knob" role="group" aria-label="Console knob; drag around its center or scroll over it to rotate"><span aria-hidden="true"></span></div><span>ROTATE</span></div>
-      <button id="confirm" type="button" tabindex="-1">CONFIRM</button>
-      <button id="back" type="button" tabindex="-1">BACK</button>
+      <div class="dpad" role="group" aria-label="Directional navigation">
+        <button id="up" class="direction up" type="button" tabindex="-1" aria-label="Up">▲</button>
+        <button id="left" class="direction left" type="button" tabindex="-1" aria-label="Left — parent">◀</button>
+        <span class="dpad-center" aria-hidden="true"></span>
+        <button id="right" class="direction right" type="button" tabindex="-1" aria-label="Right — inspect">▶</button>
+        <button id="down" class="direction down" type="button" tabindex="-1" aria-label="Down">▼</button>
+      </div>
+      <div class="workspaces" role="group" aria-label="Lab workspaces">
+        <div class="workspace"><button id="research" type="button" tabindex="-1" aria-label="Research" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M18 4l10 8M21 6L7 23c-4 5 2 10 6 5L26 10M13 17l7 5"/></svg></button><span>Research</span></div>
+        <div class="workspace"><button id="critters" type="button" tabindex="-1" aria-label="Critters" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 24c-3-5 1-8 4-10 2-2 4-2 6 0 3 2 7 5 4 10-2 3-4 1-7 1s-5 2-7-1Z"/><ellipse cx="7" cy="12" rx="2" ry="3"/><ellipse cx="13" cy="7" rx="2" ry="3"/><ellipse cx="21" cy="7" rx="2" ry="3"/><ellipse cx="26" cy="13" rx="2" ry="3"/></svg></button><span>Critters</span></div>
+        <div class="workspace"><button id="library" type="button" tabindex="-1" aria-label="Library" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 8C12 4 6 5 3 6v21c4-2 9-2 13 1 4-3 9-3 13-1V6c-3-1-9-2-13 2v20"/></svg></button><span>Library</span></div>
+        <div class="workspace"><button id="habitat" type="button" tabindex="-1" aria-label="Habitat" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 24C2 11 16 11 26 4c1 13-3 26-17 21M5 29l16-17"/></svg></button><span>Habitat</span></div>
+      </div>
+      <div class="actions" role="group" aria-label="Lab actions">
+        <div><button id="back" type="button" tabindex="-1" aria-label="Back">←</button><span>Back</span></div>
+        <div><button id="confirm" type="button" tabindex="-1" aria-label="Confirm">✓</button><span>Confirm</span></div>
+      </div>
     </div>
-    <div class="paper-slot" aria-hidden="true"></div>
   </section>
-  <p>Rotate the knob to choose · Confirm to act · Back to return. Explore, research, hatch and care.</p>
+  <p>↑ ↓ Choose · ← Back · → Inspect · Confirm to act. Colored keys switch workspaces.</p>
   <p id="status" role="status">Connecting to native C…</p>
-  <footer><span id="release">Development build: release metadata unavailable.</span><br>Native C game and 1024×600 rendering. Local save, active-session time and provisional balance. Sensors, hardware and cloud services are simulated or unavailable.</footer>
+  <footer><span id="release">Development build: release metadata unavailable.</span><br>Raspberry Pi 4 Model B reference · 1024×600 display. This is a Linux host simulation, not a physical-board test. Local save; provisional V1 balance.</footer>
 </main><script type="module" src="/app.js"></script></body>
 </html>
