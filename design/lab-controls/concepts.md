@@ -2,6 +2,12 @@
 
 ## Current concept — Companion-led three-object family
 
+### Current material reference
+
+![Owner-liked material cleanup](combined-family-materials.png)
+
+Owner accepted this quieter matte-case/tabletop appearance after the patchy texture correction. [Exact built-in edit prompt](combined-family-materials-prompt.txt). Earlier iterations remain below as source exploration; this image is not a measured finish, geometry or final UI. Electronics/software validation now precedes physical development; see [the device reference](../../specs/devices.md#electronics-first-v1-reference-specification).
+
 ### Current appearance: recessed brand and grey OK
 
 ![Recessed caddy identity and grey confirmation key](combined-family-caddy-v3.png)

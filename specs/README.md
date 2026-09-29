@@ -25,4 +25,4 @@ The proposed [sample-to-critter system contract](sample-to-critter-contract.md) 
 
 Version product releases separately from record/protocol formats, genetics rules/content, expression contexts, appearance mappings, preserved assets and firmware/hardware profiles. A consumer must identify the versions it supports. Unsupported records are preserved; upgrades never silently add genes, reroll an individual or replace its finished art. Compatibility and migration policy remain explicit design work.
 
-The target is a complete four-device ecosystem with supporting software. Current host experiments do not establish production cloud generation, firmware, sensing, charging, printing or manufacturing readiness.
+The current target is a combined Companion, home Lab and shared caddy, with a mobile fallback. The electronics-first software gate precedes physical development. Current host experiments do not establish production cloud generation, firmware, sensing, charging, printing or manufacturing readiness.

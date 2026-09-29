@@ -1,12 +1,14 @@
 # Cloud authority, temporary activity and recovery
 
-Accepted: cloud holds authoritative durable state; the connected Lab uses remote generation. Devices may retain temporary probing, evolving and training activity until sync. Protocol fields, authentication provider, database, offline allowances, clocks and conflict rules remain proposed.
+Accepted: cloud holds authoritative durable state; the Lab may use local and cloud generation according to the architecture contract; exact workload placement is unselected. Devices may retain temporary probing, evolving and training activity until sync. Protocol fields, authentication provider, database, offline allowances, clocks and conflict rules remain proposed.
+
+The same authority contract applies to the combined Companion, Lab, caddy projections and mobile fallback. A caddy cache is not a second world authority. Habitat freeze/restore must preserve resident identity and prevent restoring transferred residents as duplicates; exact semantics remain proposed in [gameplay](gameplay.md#self-contained-habitats). Changing a view, docking or closing the app is not an implicit freeze operation.
 
 ## Identity and rights
 
 Service-derived authenticated context determines the permitted player and current device enrollment. Client-supplied player/owner IDs are not credentials. Player-scoped reads, operation lookup and recovery require authorization; public views expose only permitted projections. [Ownership, custody and breeding grants](players-social.md#proposed-rights-model) are separate; ordinary profile switching is not registration reassignment.
 
-A shared Probe's pending expedition remains assigned to its original player; docking it while another profile is active cannot credit that profile. Companion training/progress likewise stays player-attributed. Revocation, registration reassignment, offline handover and late-event eligibility need explicit policies; no cached portrait or physical possession supplies rights.
+A shared Companion's pending Probe-mode expedition remains assigned to its original player; docking it while another profile is active cannot credit that profile. Companion training/progress likewise stays player-attributed. Revocation, registration reassignment, offline handover and late-event eligibility need explicit policies; no cached portrait or physical possession supplies rights.
 
 ## Proposed operation boundary
 
@@ -43,4 +45,4 @@ After valid recovery, restore accepted cloud records and retained exact assets. 
 
 Preserve individual/genome/expression identity, provenance, pinned versions and finished art. Do not generate a replacement portrait or recompute old outcomes under new defaults. Unsupported records remain intact; only independently validated historical facts may be displayed. Missing art is unavailable, not a missing individual. Backup retention, service availability and account recovery still need operational design.
 
-Local Lab offload receipt and Probe clearance are not cloud acceptance. Production inventory must define discard/retention and failure exposure before synchronization. Breeding, lending, lifecycle and offline reward/time effects need approved game semantics before an executable reconciliation policy. See [players and social play](players-social.md) and [architecture](architecture.md).
+Local Lab offload receipt and Companion Cargo clearance are not cloud acceptance. Production inventory must define discard/retention and failure exposure before synchronization. Breeding, lending, lifecycle and offline reward/time effects need approved game semantics before an executable reconciliation policy. See [players and social play](players-social.md) and [architecture](architecture.md).

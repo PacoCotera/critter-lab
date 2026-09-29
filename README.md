@@ -2,15 +2,17 @@
 
 Explore outside. Investigate a mystery. Meet a critter of your own.
 
-![Critter Lab concept: a cream tabletop Lab with printer, a small Probe and larger color Companion in a two-bay Caddy, and a supporting phone collection view.](design/references/ecosystem.png)
+![Current Critter Lab family: sage home Lab, stone combined Companion and shared printer/habitat station.](design/lab-controls/combined-family-materials.png)
 
-*Original ecosystem concept. It establishes the device family and intended experience; it is not manufactured hardware or a final screen design.*
+*Current appearance direction; electronics, physical performance and manufacturing remain unvalidated. [Original references](design/references/ecosystem.png) are preserved as earlier exploration.*
 
 Critter Lab is a creature-research game built around physical instruments. Bring samples home, investigate what they could become, experiment with materials and create a critter once its required research is complete. Collect for beauty, curiosity or a particular capability, then spend time with the individuals you create.
 
-The **Probe** explores with you. The tabletop **Lab** is your place to research, craft and create. The handheld **Companion** lets you take a critter along, while the **Caddy** provides a home for the two portables. You can also begin investigating at the Lab without owning a Probe.
+The **Companion** is the everyday portable: Probe mode gathers and investigates, Cargo holds findings, and Companions supports interaction and training. The **Lab** is the home handheld research workbench and visual window into living habitats. The **Caddy** charges both devices, prints and summarizes habitats, inventory and device status. There is no separate Probe in the current hardware family.
 
-One household can share equipment while each player keeps their own critters, supplies and discoveries. Cloud services hold durable player records; temporary offline activity and reconciliation are still being designed. The phone supports the experience rather than becoming a requirement for routine play.
+Habitats are self-contained environments with populations and resources; cloud freeze/restore is a desired capability with exact rules still being designed. Cloud services own accepted durable records. Docked Lab shows the living world, Companion continues Probe activity, and the caddy provides a quiet summary.
+
+**Development now: electronics specification → complete firmware/game software proof → hardware decision.** Build no enclosure or PCB before the experience earns that investment. A mobile app is the explicit fallback, reusing game rules, content and records. See the [electronics-first reference](specs/devices.md#electronics-first-v1-reference-specification). New reference parts are proposals, not a purchase list.
 
 ## Start where you are
 

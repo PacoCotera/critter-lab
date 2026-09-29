@@ -8,9 +8,53 @@ Status: intended functions and engineering constraints. No selected production p
 | Companion / combined portable | Primary everyday interaction device; Probe, Cargo and Companions modes combine expeditions/sensing/capture with carried findings and critter training/interaction | Combined display, compute, sensors, battery, controls, carried-critter and containment capacity require reevaluation; no separate Probe hardware in the current concept |
 | Caddy / home habitat | Charges Lab and Companion, prints records and presents habitats, residents, eggs/embryos/incubations and environmental/population state | Habitat display, charging, printer packaging, local cache and synchronization remain open |
 
-The [physical-experience principle](experience.md#physical-experience-is-the-product) defines why these are distinct objects: simple e-ink collection, responsive companionship, an extensible Lab workbench and a physical charging home. It guides engineering exploration without selecting production modules.
+The [physical-experience principle](experience.md#physical-experience-is-the-product) defines why these are distinct objects: portable discovery/companionship, an extensible Lab workbench and a shared charging home. Former separate-Probe e-ink references are historical; the combined Companion color profile is proposed above. It guides engineering exploration without selecting production modules.
 
 Warm beige shells, charcoal structure and restrained orange accents inform the product family. Concept proportions and earlier renders do not freeze controls, ports, materials or manufacture. No physical slots are implied by virtual Lab chips.
+
+## Electronics-first V1 reference specification
+
+Owner direction: validate firmware and the complete game in software before enclosure, PCB or hardware development. If dedicated devices do not justify themselves, deliver a mobile app using the same game and accepted records. No purchases or new development environment are authorized. This table is the specialist-recommended **software reference profile**, pending owner acceptance of new component choices; it is not a final electrical BOM or a claim of measured hardware performance.
+
+| Device | Recommended reference electronics | Software contract / remaining gate |
+| --- | --- | --- |
+| Lab | Raspberry Pi 4 Model B, 2 GB RAM, microSD; existing Waveshare 7inch HDMI LCD (H), 1024×600; Wi-Fi; HDMI display and physical-control input adapter | Linux C/C++ rendering and local rules; no mandatory on-device LLM. Four directions, Confirm, Back and four workspace keys from the current concept; no exposed knob in the new profile. Existing deployed knob UI remains unchanged until an explicit input migration. Host reference is new/proposed; display is existing accepted development target. |
+| Combined Companion | Waveshare ESP32-S3-Touch-AMOLED-2.41 reference: ESP32-S3R8, 8 MB PSRAM, 16 MB flash, native 600×450 QSPI panel rotated into 450×600 portrait; Wi-Fi/BLE, RTC, onboard QMI8658 acceleration, optional TF storage | One firmware image and inventory, three modes. Four directions, Confirm, Back; touch hardware is not permission for touch-only play. Pin exact board revision/BSP before drivers; V1/V2 differ. Replaces neither legacy binary nor profile until explicitly implemented. |
+| Companion sensor envelope | Proposed minimum: SHT40 temperature/RH, VEML7700 ambient light and onboard acceleration. LIS2DW12 is a later board-level alternative, not an additional required sensor | Canonical readings carry source/time/quality/configuration. Pressure, spectral, sound and magnetic sensing remain owner choices, not silently removed requirements. No location, chemical or weather certainty inferred from these channels. |
+| Caddy | ESP32-S3-WROOM-1-N16R8 reference; Wi-Fi; Waveshare 3.7-inch monochrome 480×280 e-paper over SPI with BUSY/reset; Previous/OK/Next, Print and Feed | Timestamped projection/cache, printer jobs and device-status reception; no duplicate habitat simulation. Panel is a candidate, not a fit claim: active area about 81.12×47.32 mm, not the very narrow strip in concept art. Driver board/FPC are additional. Inspect exact supply and signal levels before hardware. |
+| Printer | DFRobot DFR0503-EN / GY-EP204X reference, 58 mm paper, 384 dots per line, documented 9–24 V supply; propose TTL UART option | Exact purchased interface, logic levels, status/flow control, raster commands and paper/fault support require confirmation. Supply voltage is not UART logic voltage. Interrupted physical printing is uncertain; never blindly replay it as though output were transactional. |
+| Power and charging | Two wireless bays, independently managed; protected portable cells, regulated rails, power-path/source arbitration, charge/fault/temperature telemetry | Battery capacity, receiver/transmitter modules, supply headroom and runtime are unselected. Lab's 30-minute handheld intent is a test target. Pi 4's recommended 15 W supply is not measured load; no assumption that a 5 W receiver powers Lab plus screen and charges its battery. Caddy external supply remains open. |
+
+### Budgets and interfaces to implement first
+
+Calculated RGB565 frame storage: Lab 1,228,800 bytes; Companion 540,000 bytes (1,080,000 for two frames). Caddy packed 1-bpp frame: 16,800 bytes. These are pixel arithmetic, not total memory or speed evidence. Independently reserve firmware/OTA recovery, decoded assets/fonts, radio/TLS, internal DMA buffers, stacks and durable journals; fail bounded allocations explicitly. Do not fill all 16 MB flash with artwork. Essential state must not depend on optional removable storage. Asset and firmware partitions need a measured budget before shipping.
+
+Expose semantic buttons, asynchronous frame readiness, canonical sensor observations, monotonic elapsed time with reset/gap handling, atomic local saves, network/result states, printer job outcomes and power telemetry through adapters. Share domain operations and preserved identity/content; do not share raw GPIO values or force identical layouts across Linux, MCU and mobile. Polling a cached screen is not proof of charge, connectivity or a fresh observation. Firmware recovery must retain player state, reject unsupported versions and support a documented service path.
+
+All docking/tap exchange is wireless in normal use; docking does not itself transfer ownership or award resources. Wi-Fi is the recommended cloud path, BLE a candidate for proximity/setup. NFC/tap identification and printed QR scanning are still unresolved capability/driver choices; neither proximity nor scanning grants ownership. Do not claim NFC from an ESP32 module or QR capability without an imager/reader. Service/programming access is distinct from player-facing connectors. Audio and haptics remain optional capability flags, not silently assumed speakers/motors.
+
+Probe activity continues while docked. Charging heat or interference can invalidate individual sensor channels; invalid data is not fabricated evidence. Always-on Probe means ongoing activity, not an approved full-brightness AMOLED duty cycle or battery-life claim. Mobile adapters must expose unavailable sensors and OS background suspension honestly. No new ecosystem schema, scheduler, microservice-per-habitat or Docker deployment follows from the container analogy.
+
+### Software gate before hardware investment
+
+Use the existing installed VM/toolchain pins and CI; develop/check locally, commit/push, and build only the exact pushed clean revision on that VM. Retain legacy nRF52840 and 368×448 fixtures as historical regression evidence, not the combined device target. Existing MCU apps are build scaffolds/fixtures, not working sensor/display firmware. No toolchain upgrades are required by this specification.
+
+One connected test journey: attributed Companion expedition → mode changes and docked gathering → retained Cargo and retry-safe acceptance → Lab resource-funded research and saved finding → decoded-genome creation and stable individual → habitat view and proposed freeze/restore → travelling-companion activity → caddy summary/print simulation → restart and lost-network recovery. Implement accepted semantics first; wild-capture odds, training effects, freeze/time rules and stationary gathering balance must not be invented by fixtures. Mark unimplemented branches explicitly.
+
+Pass conditions: no duplicate inventory/spending/individuals on retries; exact identity/art survives reopening; sensor sources/unknowns remain truthful; readiness prevents stale-frame actions; device views reconcile to one accepted world; equivalent domain operations work through a mobile-shaped adapter without the caddy. Native-size UI and resource budgets need measured software evidence. A human play session must establish comprehension and worthwhile play, not merely test counts. This gate authorizes consideration of a minimal bench kit, not production manufacture. It cannot establish battery, RF, sensing, ergonomics or printer reliability.
+
+Decision after the software proof: continue to a small measured hardware bench phase if controls, sensing and paper add value; otherwise carry the same rules/content/records into the mobile product. Avoid committing enclosure/PCB effort before this decision. Final electronics freeze requires exact board/panel revisions, bus/pin/voltage audit, storage/partition budget and workable power/charging choices; those are not yet established.
+
+### Primary component evidence
+
+Hardware specialist consulted manufacturer references; these establish capabilities, not assembled performance or availability commitments:
+
+- [Waveshare 2.41-inch Companion board](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-2.41) and [existing Lab display](https://www.waveshare.com/7inch-hdmi-lcd-h.htm).
+- [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/); [CM4](https://www.raspberrypi.com/products/compute-module-4/) is a later integration option requiring a carrier, not this development reference.
+- [SHT40](https://sensirion.com/products/catalog/SHT40), [VEML7700](https://www.vishay.com/en/product/84286/), [LIS2DW12](https://www.st.com/en/mems-and-sensors/lis2dw12.html).
+- [ESP32-S3 module](https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf), [3.7-inch panel](https://www.waveshare.com/product/displays/e-paper/3.7inch-e-paper.htm), [panel integration manual](https://www.waveshare.com/wiki/3.7inch_e-Paper_HAT_Manual).
+- [Printer manufacturer documentation](https://wiki.dfrobot.com/dfr0503-en/), [printer datasheet](https://dfimg.dfrobot.com/wiki/19355/DFR0503-EN_embedded-thermal-printer_datasheet_V1.0.pdf).
+- [BQ24074 power-path reference](https://www.ti.com/product/BQ24074), [BQ51013B receiver reference](https://www.ti.com/product/BQ51013B); neither is a selected complete charging design.
 
 ## Development targets
 
@@ -54,9 +98,9 @@ First-build packaging must accommodate electronics sourced and designed by the p
 
 Owner supports the rugged treatment but requests distinguishable device roles: branded home Lab with a potentially different case color; Probe and Companion retain portable character. Workspace keys need recognizable purposes beyond color. Explore a V1 face without the exposed knob; omitting it is a proposal until its interaction consequences are resolved, not an instruction to remove the existing simulator input. Companion must read as a substantial distinct device, and station spacing must permit pickup rather than crowding the devices. Reduce perceived caddy bulk while retaining honest printer/service reservations. Branding and status lights are candidates; the proposed small display has the habitat purpose below, with no hardware or implementation selected.
 
-Owner subsequently gave the caddy display a product purpose: the **home habitat**, showing eggs, critters and their living environments. Explore a small persistent living-scene display in the station; Lab remains the research/management device. This is an experience direction, not selection of an LED matrix/panel, local storage authority, incubation rules, care mechanic or firmware architecture. The relationship to Lab's collection/vivarium views, off-dock behavior and synchronized state must be resolved before implementation.
+Historical intermediate direction, superseded by coordinated docked defaults above: owner gave the caddy display a product purpose: the **home habitat**, showing eggs, critters and their living environments. Explore a small persistent living-scene display in the station; Lab remains the research/management device. This is an experience direction, not selection of an LED matrix/panel, local storage authority, incubation rules, care mechanic or firmware architecture. The relationship to Lab's collection/vivarium views, off-dock behavior and synchronized state must be resolved before implementation.
 
-Owner direction: a more capable Linux-class Lab, an nRF52840 Probe and an ESP32-S3 Companion. The Lab display and Companion board/display below are selected for preliminary development; the Probe panel remains a candidate. Sensor sets, battery configurations and production parts remain open. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
+Historical development targets before consolidation: a Linux-class Lab, a separate nRF52840 Probe and an ESP32-S3 Companion. The separate Probe is no longer part of the current kit; these targets preserve build evidence only. The Lab display and Companion board/display below are selected for preliminary development; the Probe panel remains a candidate. Sensor sets, battery configurations and production parts remain open. Compare Lab SBC/compute-module options against concurrent graphics, local rules/generation, storage and peripheral workloads. Cloud remains authoritative for synchronized durable player state; exact local/offline acceptance policies remain open.
 
 The native development baseline uses C/C++ toolchains for those targets. Compile and link firmware for real MCUs; use host adapters only for explicit behavioral testing. Active prototype development is authorized against the display contract below. Native builds must distinguish behavioral adapters from actual board drivers; physical timing, power and display readiness still require board evidence. See the [foundation development plan](../docs/builders/foundation-demo.md).
 
@@ -68,7 +112,7 @@ Probe sensor vents/windows must account for hand/body effects, enclosure, electr
 
 Both portables' cells, receiver coils, charging/load-sharing paths and caddy geometry form one coupled design. Avoid parallel chargers or backfeed between USB and wireless sources. Review cell-specific limits, receiver orientation, separation, retention, removal and sensor ventilation together. A shaped bay proves neither placement detection nor full charge.
 
-Caddy charging is separate from data transfer, specimen handoff and gameplay scoring. Charge/full/fault/empty indications require actual supported signals; stale/missing reports are unknown. No screen, presence sensor or data channel is assumed.
+Caddy charging is separate from data transfer, specimen handoff and gameplay scoring. Charge/full/fault/empty indications require actual supported signals; stale/missing reports are unknown. The proposed summary screen does not establish any physical presence sensor or charge-data channel.
 
 ## Validation gates
 
@@ -82,12 +126,12 @@ PCB and enclosure work are coupled: preserve connector and antenna clearances, s
 4. Recheck thermals, radio, sensing, charging and physical readability inside representative enclosures.
 5. Produce repeatable assembly, programming, inspection and service instructions for a complete kit; CAD checks do not replace bench evidence.
 
-The programme target is ten complete kits. US$750 is the maximum full-kit retail ceiling, aiming lower—not a BOM allowance or a verified selling price. Compare all four devices, cases, packaging/booklet, assembly/rework and support, without double-counting integrated controllers/chargers. Neither this target nor a concept render authorizes a parts selection.
+The programme target is ten complete kits. US$750 is the maximum full-kit retail ceiling, aiming lower—not a BOM allowance or a verified selling price. Compare the two removable devices and shared station, cases, packaging/booklet, assembly/rework and support, without double-counting integrated controllers/chargers. Neither this target nor a concept render authorizes a parts selection.
 
 
-## Display contract for active prototypes
+## Legacy display contract for existing prototypes
 
-Owner direction: **Lab color 1024×600 landscape; Probe portrait e-ink; Companion color 368×448 portrait**. These are distinct device profiles with separate composition and adapter behavior.
+Retained build profiles: **Lab 1024×600; separate Probe portrait e-ink; former Companion 368×448**. These describe existing software targets only. The electronics-first reference above supersedes them for new combined-device design; do not silently relabel old binaries as the new profile.
 
 | Device | Selected requirement versus provisional hardware | Logical profile and implementation limit |
 | --- | --- | --- |
@@ -104,7 +148,7 @@ Each frame has an identity. Activation waits for that frame to be visibly ready;
 
 Existing evidence: [Companion documentation](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.8) and [Probe manual](https://www.waveshare.com/wiki/2.13inch_e-Paper_HAT_Manual), inspected 26 September 2026. No new measurements implied. Pin revisions, mounting and drivers before hardware claims. The selected Lab [manufacturer product](https://www.waveshare.com/7inch-hdmi-lcd-h.htm) and [manual](https://files.waveshare.com/upload/5/58/7inch_HDMI_LCD_%28H%29_User_Manual.pdf) establish the 1024×600 IPS HDMI/USB-touch direction. Verify ordered revision, native mode/EDID, touch mapping, power and cable/enclosure clearance on the actual Linux host. Higher accepted HDMI input modes do not increase native pixels. No refresh, thermal or power performance has been measured; purchasing remains unauthorized.
 
-## Lab controls — exploration in progress
+## Earlier Lab control exploration — retained context
 
 Owner direction, 28 September 2026: explore a playful dedicated Lab instrument with separate navigation and meaningful manipulation controls. Directional arrows or other navigation controls, additional action buttons, and dedicated zoom/special-action knobs are permitted proposals. The existing simulator does not fix the final control count. A rotary knob need not perform menu navigation. A grid of colored, labeled workspace keys may provide direct access to Research, Library and other proposed destinations, separate from navigation and action controls. Explore different physical instrument identities before selecting a layout; neither minimum control count nor the current demo is the design objective.
 
