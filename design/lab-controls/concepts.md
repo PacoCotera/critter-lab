@@ -1,5 +1,8 @@
 # Lab physical-design exploration
 
+Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
+
+
 ## Current concept — Companion-led three-object family
 
 ### Current material reference
@@ -52,7 +55,7 @@ The owner approved consolidating Probe into the everyday **Companion**. Current 
 
 Proposed input: cross moves visible focus, Confirm opens detail or the explicitly reviewed action, Back restores the prior subject. A visible mode target provides access to the three modes without hidden cycling. Switching views does not cancel gathering. Wake must not also activate a consequential choice. Inspection stays free; capture/release and other consequential choices require explicit review rather than a stray mode/wake press. These are concept requirements, not implemented behavior.
 
-**Lab:** larger screen for genome discovery, interpreting findings and entering habitat management; familiar branded home-instrument treatment and tactile workspace shortcuts. **Home habitat station:** one clear rest per device, reachable controls, printer separate from ambient habitat window, residents/environments visible as a home presence. Durable world state is cloud-authoritative; local capture, caching, offline behavior and synchronization need a separate bounded architecture decision before implementation.
+**Lab:** larger screen for genome discovery, interpreting findings and entering habitat management; familiar branded home-instrument treatment and tactile workspace shortcuts. **Home habitat station:** one clear rest per device, reachable controls, printer separate from ambient habitat window, residents/environments visible as a home presence. Standalone core play requires durable local state; optional global operations use cloud validation. Exact allocation and synchronization remain open; see the current architecture.
 
 Whole journey: prepare and take a Companion → explore while gathering → inspect findings or interact with travelling critters → decide whether to attempt a wild capture/continue exposure → return and reconcile cargo/containment at the Lab → research → place/develop residents and observe habitats through the shared world. Leaving the portable behind must not be confused with moving ownership or completing a transfer. No automatic docking reward or silent transfer is added.
 
