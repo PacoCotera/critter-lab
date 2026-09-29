@@ -2,6 +2,12 @@
 
 ## Current concept — Companion-led three-object family
 
+### Current appearance: recessed brand and grey OK
+
+![Recessed caddy identity and grey confirmation key](combined-family-caddy-v3.png)
+
+Owner-approved visual adjustment: medium-grey OK matching Feed, navigation slightly raised, recessed CRITTER LAB below navigation, printer-front text removed. [Built-in image-generation edit prompt](combined-family-caddy-v3-prompt.txt). Coordinator inspected the actual export for these four changes; prior V2 interaction review remains limited to unchanged control roles. Handhelds and palette retained; exact lettering depth, printability and ergonomics remain unverified. This is the current appearance proposal; earlier views below are retained references.
+
 ### Current caddy refinement
 
 Experience Design inspected this exact export: ordered navigation group, subordinate Feed below Print, readable compact branding, removed caddy LEDs and retained handheld controls. The depicted paper clears the controls. This is placement/readability evidence only, not physical-clearance or full interaction approval.

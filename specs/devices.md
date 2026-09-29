@@ -26,7 +26,7 @@ The accepted wild-capture direction and its open mechanics are recorded in [game
 
 #### Coordinated docked defaults
 
-Family branding: every device reads **Critter Lab**. The caddy front uses the compact **Critter Lab by DPP** mark; Dirty Pawz Press remains its underlying brand, with full identity on service labeling/printed material rather than a crowded front wordmark. Companion retains its secondary device designation. Final typography/emblem artwork remains a visual proposal.
+Family branding: every device reads **Critter Lab**. The caddy front has shallow recessed **CRITTER LAB** lettering beneath the slightly raised navigation cluster; the printer area stays unbranded. Dirty Pawz Press remains its underlying brand, with full identity on service labeling/printed material rather than a crowded front wordmark. Companion retains its secondary device designation. The caddy OK cap uses the same medium grey as Feed, distinct from charcoal arrows. Lettering depth and manufacturing legibility require a physical sample; final typography/emblem artwork remains a visual proposal.
 
 Owner-authorized caddy control concept: Previous/OK/Next beside the summary display; arrows browse/move focus, OK opens or confirms, and detail views provide a visible Back choice. Print beside the paper slot opens a preview with Print/Cancel choices confirmed by OK; subordinate recessed Feed sits directly below Print. Remove arbitrary standalone caddy LEDs. Charging and separate network/cloud statuses belong on the summary display; add a labeled bay light only if physical testing identifies a need for immediate feedback. Exact confirmation flow, feedback latency and electrical support are not implemented or validated; consequential habitat operations remain on the Lab.
 
