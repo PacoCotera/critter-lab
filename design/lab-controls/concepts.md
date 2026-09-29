@@ -87,6 +87,26 @@ Rejected geometry reference: [reclined A with section grooves](prototype-a-recli
 
 ## Dimensioned model before enclosure renders
 
+**Current exploration exception:** owner explicitly requested **visuals first** for five divergent enclosure concepts, drawing from different design traditions and varying shape, proportions, color and materials. These are loose visual proposals, not dimensional proofs. Preserve the agreed functional layout and screen prominence. After selecting attributes, return to the model-based workflow below for convergence and mechanical claims.
+
+## Five enclosure directions — current visual comparison
+
+![Five visual enclosure directions](five-enclosure-directions.png)
+
+| Direction | Form and material proposal | Experience intent |
+| --- | --- | --- |
+| A — Field Instrument | Faceted graphite protection, mineral-gray face and exposed fastener language | A compact scientific tool with tactile protective edges |
+| B — Radical Lab | Stepped architectural massing, vermilion and ultramarine body, yellow control ledge | An expressive, playful object inspired by Italian radical design |
+| C — Precision Desk | Thin metal face, fine perimeter frame, cool gray and black | A restrained instrument whose controls supply the color |
+| D — Bio Workshop | Rounded ash-like wooden cheeks, forest-green face and warm metal details | A welcoming craft object for biological discovery |
+| E — Orbital Lab | Continuous capsule shell, silver, midnight blue and lime accents | A friendly space-age tabletop instrument |
+
+The fixed layout survives across all five: dominant landscape screen; left printer output with portable-presentation area above; four right workspace keys; cross, Cancel-left/Confirm-right and Zoom below. Rear loading remains a requirement but is not shown. The board compares visual character, not exact scale or component fit. Depicted metals/wood need material, reader and manufacturing evaluation before selection; screen and printed art are illustrative. No winner selected. Capture preferred attributes before making a dimensioned model; do not infer a final enclosure from this image.
+
+Brief references include [HIOKI's compact field instrument](https://www.hioki.com/in-en/products/testers/compact/id_5844), [Triennale Milano on Memphis](https://triennale.org/en/magazine/a-graphic-story-about-the-italian-design-collective), and [HfG-Archiv Ulm](https://www.hfg-archiv.ulm.de/). These inform design principles rather than authorizing copies or defining a national style.
+
+## Model-based convergence after selection
+
 Owner requires subsequent enclosure renders to originate from a dimensionally and materially coherent model. Use a single editable model in millimetres for every exterior, section and service view. Generated images may inform style, but must not establish or modify mechanical geometry.
 
 Model the display module, glass and visible aperture as distinct boundaries; use verified manufacturer dimensions where available. Mark proposed housing dimensions, control caps/back clearance, printer mounting/service volume and reader allowance as proposals. Keep one coordinate system and explicit face angle. Resolve transitions between the reclined main face and printer bay, wall thickness, corner radii, groove width/depth, rear access and base contact in geometry. Material assignments belong to model surfaces; shading must not invent recesses or seams.
