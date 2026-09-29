@@ -41,6 +41,8 @@ static void remember_workspace(SelectedLab *lab) {
 }
 static void enter(SelectedLab *lab, SelectedPage page) {
   remember_workspace(lab);
+  if (!strncmp(lab->message, "Haul saved.", 11))
+    lab->message[0] = '\0';
   lab->page = page;
   lab->workspace = page_workspace(page);
   lab->focus = 0;

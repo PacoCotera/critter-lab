@@ -357,9 +357,9 @@ static void home_summary(SelectedRow *row, const SelectedLab *lab) {
   else if (game->expedition_id[0])
     summary = "Expedition haul ready to return";
   if (summary)
-    label(row, 420, 166, summary, 18, WARM);
+    label(row, 306, 190, summary, 18, WARM);
   else if (!game->sample_count)
-    label(row, 420, 166, "Explore to bring your first sample home", 18, MUTED);
+    label(row, 306, 190, "Explore to bring your first sample home", 18, MUTED);
 }
 
 static void home_landing(SelectedRow *row, const SelectedLab *lab) {
@@ -598,7 +598,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
               12, BLUE);
   } else if (lab->page == V1_SAMPLES) {
     sprite(&row, SPRITE_SAMPLE, 602, 235, 155, 155);
-    snprintf(text, sizeof(text), "%u samples retained", game->sample_count);
+    snprintf(text, sizeof(text), "%u sample%s retained", game->sample_count,
+             game->sample_count == 1 ? "" : "s");
     label(&row, 452, 432, text, 28, INK);
   } else if (lab->page == V1_STUDIES && lab->focus == 5) {
     unsigned discovered = 0;
@@ -654,19 +655,19 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                           entry->cost_essence};
       for (unsigned i = 0; i < 3; i++) {
         int x = 418 + (int)i * 181;
+        label(&row, x, 317, "Cost / in Lab", 18, MUTED);
         sprite(&row, i, x, 343, 36, 48);
         snprintf(text, sizeof(text), "%u / %u", known ? 0 : costs[i] / 100,
                  stock[i] / 100);
         label(&row, x + 44, 355, text, 18,
               known || stock[i] >= costs[i] ? INK : WARM);
-        snprintf(text, sizeof(text), "Next unit %u%%", stock[i] % 100);
+        snprintf(text, sizeof(text), "Stock: next %u%%", stock[i] % 100);
         label(&row, x, 385, text, 18, MUTED);
         if (!known && stock[i] < costs[i]) {
           snprintf(text, sizeof(text), "Short of cost");
           label(&row, x, 409, text, 18, WARM);
         }
       }
-      label(&row, 419, 445, "Cost / available resource units", 18, MUTED);
       label(&row, 419, 485,
             known ? "Confirm inspects this finding."
             : lab->page == V1_STUDY_REVIEW
