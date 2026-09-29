@@ -72,6 +72,16 @@ information without redundant prose or a decorative hero displacing the overview
 
 ## Screen design sequence
 
+The Overview destination family is now supplied by the
+[Gemini preparation workbench](reference-production/gemini-overview-family/README.md).
+Generic compass, microscope, incubation vessel and terrarium symbols identify
+destinations; adjacent live counts and captions describe actual state. A topic
+metaphor is not a discovered specimen or an owned inventory item. Keep the same
+symbols across empty and populated states. The four prepared 136×144 files retain
+their opaque graphite backing and must be rendered 1:1 on the documented matching
+field, without the older corner-color matte. This is a bounded implementation
+candidate; it does not approve other screens or establish final pixel masters.
+
 Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.
 
 ## Typography, composition and native craft
