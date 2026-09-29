@@ -107,6 +107,30 @@ int main(void) {
   selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, displayed);
   selected_lab_input(&timed, SELECTED_DOWN_UP, 0, displayed);
   assert(timed.focus == 0);
+  /* Crossing a complete-pack boundary must not arm an unseen discard. */
+  selected_lab_init(&timed);
+  strcpy(timed.save_path, timed_path);
+  timed.page = V1_DISCARD_REVIEW;
+  timed.discard_resource = 0;
+  timed.game.expedition_active = 1;
+  strcpy(timed.game.expedition_id, "pack-threshold");
+  timed.game.expedition_data = 990;
+  timed.clock = 10;
+  game_rules_resume_runtime(&timed.game, timed.clock);
+  assert(game_state_save(timed_path, &timed.game) == 0);
+  ready(&timed);
+  displayed = timed.revision;
+  selected_lab_tick(&timed, 11);
+  assert(timed.game.expedition_data == 1012);
+  unsigned tick_sequence = timed.game.last_operation_sequence;
+  selected_lab_input(&timed, SELECTED_CONFIRM_DOWN, 0, displayed);
+  selected_lab_input(&timed, SELECTED_CONFIRM_UP, 0, displayed);
+  assert(timed.game.expedition_data == 1012 &&
+         timed.game.last_operation_sequence == tick_sequence);
+  ready(&timed);
+  press(&timed);
+  assert(timed.game.expedition_data == 12 &&
+         timed.game.last_operation_sequence == tick_sequence + 1);
   unlink(timed_path);
   press(&lab);
   assert(lab.page == V1_HOME);
