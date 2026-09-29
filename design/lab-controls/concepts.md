@@ -42,6 +42,24 @@ The next physical proof is a roomy layout showing these envelopes, screw/tool pa
 
 Hardware review of this assembly proposal found no remaining blocking contradiction in the opening/disconnection sequence. This accepts the proposal for layout development only; component envelopes, physical access and fabrication remain unverified.
 
+### Paper sizing trial 01
+
+[Two-page actual-size PDF](contour-sizing.pdf) · [Editable front SVG](contour-sizing-front.svg) · [Editable rear SVG](contour-sizing-rear.svg) · [Rebuild source](contour-sizing.py)
+
+The trial uses a **270 × 190 mm** continuous body with a 12 mm corner radius, all provisional. Its purpose is to compare screen/hand/control proportions and preserve generous first-build space, not select the final case. The selected display's **164.90 × 124.27 mm module outline** comes from the [manufacturer H Rev4.1 drawing](https://www.waveshare.com/img/devkit/LCD/7HP/Exterior-Size.jpg); it is not an active image aperture. No housing depth is assigned.
+
+Body origin is top-left in the front view. Display origin: (52.55, 18). Proposed control centers: navigation (30, 158), Back (220, 158), Confirm (248, 158), four workspace keys (96, 166), (122, 166), (148, 166), (174, 166). Navigation uses a 30 mm circular *footprint reservation*, not a proposed circular replacement for the cross; other cap reservations are 18 mm. Mechanism bodies and thumb reach are unverified. Side Zoom is only a location cue at y=95; its bracket and body remain unallocated.
+
+The rear view mirrors X. Its 15 mm perimeter study allowance leaves a 240 × 160 mm allocation boundary, **not vacant PCB area**. The display rear projection and unknown control backs overlap that plan region at unresolved depths. Do not sum this area as available capacity. Board heights, connectors, wiring, energy, antenna, thermal and tool paths must be added before a packing claim.
+
+Print at 100% / Actual size and verify the 100 mm check bar. PDF pages are 320 × 300 mm: tile/poster-print on smaller paper rather than shrinking. This is an inert paper check, not a fabrication template. Screen/buttons/cables must ultimately be checked with physical mock parts and hand access while supported in the station.
+
+Hardware Design inspected both rendered pages and source coordinates, accepting the geometry and evidence labels for a paper sizing study. Its one label-overlap correction is incorporated. No ergonomic, internal-fit or supported-play approval is implied. The source was regenerated and the PDF page dimensions checked at 320 × 300 mm.
+
+![Front paper sizing trial](contour-sizing-1.png)
+
+![Rear service reservations](contour-sizing-2.png)
+
 The first handheld board was rejected: its three proposals were too toy-like and too similar in physical form. The former common upper-shoulder Zoom placement is withdrawn; no top-mounted knob. Preserve two-thumb use and control functions while exploring placement. The [earlier board](handheld-home-directions-v2.png) remains a reference to rejected exploration, not a baseline.
 
 Three new visual hypotheses compare the same journey: pick up the home Lab, explore with physical controls, return it to the shared printer station, continue playing while supported, then leave rotating collection/vivarium screens visible. These are concept renders, not dimensionally verified models. No new UI, creature, charging method or hardware is approved.
