@@ -237,7 +237,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     unsigned sample, study;
     if (lab->page == V1_LIBRARY &&
         selected_lab_library_entry(lab, i, &sample, &study)) {
-      label(&row, 53, yy, game->samples[sample].id, 16,
+      label(&row, 53, yy, game->samples[sample].id, 18,
             i == lab->focus ? WARM : MUTED);
       label(&row, 53, yy + 23, pip_study(study)->title, 18,
             i == lab->focus ? WARM : INK);

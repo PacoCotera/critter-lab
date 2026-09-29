@@ -70,6 +70,14 @@ static unsigned visible_residents(const SelectedLab *lab) {
     count += lab->game.individuals[i].revealed;
   return count;
 }
+static void focus_resident(SelectedLab *lab) {
+  unsigned index = 0;
+  for (unsigned i = 0; i < lab->game.individual_count; ++i)
+    if (lab->game.individuals[i].revealed && index++ == lab->focus) {
+      lab->resident = i;
+      return;
+    }
+}
 void selected_lab_init(SelectedLab *lab) {
   memset(lab, 0, sizeof(*lab));
   game_state_init(&lab->game);
@@ -486,14 +494,8 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
   if (button == 0 || button == 1) {
     unsigned count = selected_lab_options(lab);
     lab->focus = (lab->focus + (button == 1 ? 1 : count - 1)) % count;
-    if (lab->page == V1_CRITTERS && visible_residents(lab)) {
-      unsigned index = 0;
-      for (unsigned i = 0; i < lab->game.individual_count; ++i)
-        if (lab->game.individuals[i].revealed && index++ == lab->focus) {
-          lab->resident = i;
-          break;
-        }
-    }
+    if (lab->page == V1_CRITTERS)
+      focus_resident(lab);
     changed(lab);
     return;
   }
@@ -511,9 +513,10 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
                         : lab->workspace_resident[workspace];
     if (lab->focus >= selected_lab_options(lab))
       lab->focus = 0;
-    if ((lab->page == V1_HABITAT || lab->page == V1_CRITTERS) &&
-        visible_residents(lab) &&
-        !lab->game.individuals[lab->resident].revealed)
+    if (lab->page == V1_CRITTERS)
+      focus_resident(lab);
+    else if (lab->page == V1_HABITAT && visible_residents(lab) &&
+             !lab->game.individuals[lab->resident].revealed)
       for (unsigned i = 0; i < lab->game.individual_count; ++i)
         if (lab->game.individuals[i].revealed) {
           lab->resident = i;
