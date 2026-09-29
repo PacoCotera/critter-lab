@@ -40,6 +40,14 @@
     ],
     "statusAreasReadOnly": true
   },
+  "fixtures": {
+    "source": "fixtures.json",
+    "sha256": "b187e92dccce427a7900a382168a87fc1af346327551dadca4f412a519f244a7",
+    "exports": [
+      "overview-offline.png",
+      "overview-populated.png"
+    ]
+  },
   "assets": [
     {
       "name": "data",
@@ -101,13 +109,13 @@
       "drawScale": 1,
       "alpha": true,
       "occupiedBoundsAtHalfAlpha": {
-        "x": 10,
-        "y": 4,
-        "width": 114,
-        "height": 123
+        "x": 14,
+        "y": 12,
+        "width": 108,
+        "height": 114
       },
-      "sha256": "9457080834203b70cff609d830b2be6489dc67d4d1434dbe78be790a490abbf1",
-      "exportSha256": "0c3eedcb0607878debe3c207dc2e1be842b3eddcf171c643bd0cbe9c394e4657"
+      "sha256": "abb260750fe156ba603b12688ff11f915d0d47ec4c28650dd0d2739411319811",
+      "exportSha256": "e3364e7f6f66159ee77dc3a07b05f3b7bf447defb613ea73b4066b199258cad4"
     },
     {
       "name": "habitat-topic",
@@ -118,13 +126,13 @@
       "drawScale": 1,
       "alpha": true,
       "occupiedBoundsAtHalfAlpha": {
-        "x": 7,
-        "y": 9,
-        "width": 120,
-        "height": 125
+        "x": 16,
+        "y": 20,
+        "width": 108,
+        "height": 110
       },
-      "sha256": "07864ed6a0fe5b51519ef97e9a410fbd4b3cbdd7345310b7ab320d44b03ae0c5",
-      "exportSha256": "edde421840a1aa40f441f404cbd8d894427a341e75e4eca9abf3830e9e196ae1"
+      "sha256": "1bff61f5fd684fa7b43d463a31cf58c9d317806b59b6cca266156521537557df",
+      "exportSha256": "277dd82b6a396d4b2829c2d92e54f6f7d15f759b92fe9d3ed2f6bc77b06d2a02"
     },
     {
       "name": "header",
@@ -140,7 +148,7 @@
         "width": 976,
         "height": 100
       },
-      "sha256": "47660272c8d872f83ca2096d84aecebc0482a05af7778aaf0bcf78e348dc1173",
+      "sha256": "f56ce77b40c903d1bf54fa897201dc71bbf377401dfeeb3e79583fd428998a13",
       "exportSha256": "d22e73f737c4dc63f292b1f87db4216682ca73531d057d685cd023261dad165b"
     },
     {
@@ -152,13 +160,13 @@
       "drawScale": 1,
       "alpha": true,
       "occupiedBoundsAtHalfAlpha": {
-        "x": 15,
-        "y": 10,
-        "width": 104,
-        "height": 125
+        "x": 20,
+        "y": 16,
+        "width": 98,
+        "height": 112
       },
-      "sha256": "129c59f13d46f11bea174a11f42d8ebde6450d1c0223652f0a0611cedcbe548c",
-      "exportSha256": "17adf31ecc72ec977c51392c6ec7946e0c79ffd8266618af2bc908885d7800c0"
+      "sha256": "02736a0e5c9ca7d2119d500e1e0e2baea911402b1acc5ab87c9af4b750dbb50c",
+      "exportSha256": "0d5aa885e7d6ff302d8e967988d0f6b4c536c99d73e9ed76e74e592a8a942f5b"
     },
     {
       "name": "information-narrow",
@@ -208,7 +216,7 @@
         "width": 182,
         "height": 58
       },
-      "sha256": "f32e919d56c92c244e105cc8326a087d1c337e61c0bce82c2ce2a4ff7dc65c68",
+      "sha256": "e09044b0348d14363ed652fbb1f89724837f96eb901aa26d456d51510f69b74b",
       "exportSha256": "fe36a074fab6c2a186daecf22eef3bc1afe7f4d09ec62cb7aaf1611ab5765412"
     },
     {
@@ -271,13 +279,13 @@
       "drawScale": 1,
       "alpha": true,
       "occupiedBoundsAtHalfAlpha": {
-        "x": 5,
-        "y": 7,
-        "width": 119,
-        "height": 127
+        "x": 10,
+        "y": 20,
+        "width": 114,
+        "height": 110
       },
-      "sha256": "c246cf4c1f2ccde761067cd59996fd5637fb1b75f36941d7b7f67f515d76141a",
-      "exportSha256": "e0db7367fe6d8fa1ababf4aa74ff36ad3406fa8adea8b32b6a2d53246b990dec"
+      "sha256": "50a5e69ed53e70ca3dcc3fa65f8bfc8400440a4e00eac40939ea79b96ad56744",
+      "exportSha256": "a53f1d698be854accc0e80e8296084bf2865614bc7bf2ccf60a50e3edf4ac3c4"
     },
     {
       "name": "sample-capsule",

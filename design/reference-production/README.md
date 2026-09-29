@@ -18,8 +18,12 @@ No facts, resources or specimen knowledge may be implied by decorative art.
 Output is an **offline art proof**, not a native runtime export or deployed UI.
 The current family contains 15 editable SVG masters and their RGBA exports;
 12 are used in the proof and three useful prior variants are retained separately.
-Inspect the [native asset sheet](exports/sheet-native.png) and the
-[1024×600 Overview proof](exports/overview-offline.png).
+Inspect the [native asset sheet](exports/sheet-native.png),
+[empty Overview](exports/overview-offline.png) and
+[populated Overview](exports/overview-populated.png), both 1024×600.
+The pair passes a bounded information/layout check but does **not** pass the
+approved reference's material-craft standard. Keep these as experimental sources;
+they are not approved native art masters.
 
 ## Production command
 
@@ -40,15 +44,29 @@ sheet; this composition does not consume those earlier variants.
 | Header | 976×100 at 24,24; resource starts 404/602/800,40 |
 | Navigation | 208×416 at 24,140; 184×60 row masters |
 | Shared read-only field | 752×416 at 248,140; 24px title/field inset |
-| Explore / Research art | 136×144 at 272,213 / 642,213 |
+| Explore / Research art | 136×144 at 272,213 / 642,207 |
 | Incubator / Habitat art | 136×144 at 272,377 / 642,377 |
-| Topic text | x422 / x790; shared 23px heading tier |
+| Topic text | x422 / x790; actual ink groups centered at y283 / y447 |
 
-The measured visible topic bounds are 114×123 (Explore), 119×127 (Research),
-104×125 (Incubator), and 120×125 (Habitat). Header resource bounds are 45×62 (Data),
+The measured visible topic bounds are 108×114 (Explore), 114×110 (Research),
+98×112 (Incubator), and 108×110 (Habitat). Header resource bounds are 45×62 (Data),
 48×63 (Energy), and 49×54 (Essence). They are authored at those sizes; no bitmap
 rescaling is used in the proof. The next-unit line is subordinate 14px type with
 its nominal baseline at 104, clear of the header's bottom contour.
+
+Topic masters use deliberately authored 2px contour and reflection clusters with
+upper-left lighting. This is a production choice, not a claimed source grid for
+the compressed C18 reference. The inspection lens contains no specimen; the habitat
+niche contains no resident. Their identity remains unchanged between fixtures.
+Type roles are 22px brand, 28px context title, 20px navigation, 18px topic labels,
+22px main readouts and 16px supporting facts. Readout blocks are placed using their
+rendered ink height, rather than giving unlike text blocks identical top anchors.
+
+`fixtures.json` supplies both compositions. It records the existing populated
+native capture and its hash, with two samples, five findings and one revealed
+resident. Its raw stock1240/840/1240 uses the current `stock_amount` conversion:
+12/8/12 whole units, each40% toward the next unit. No running expedition or
+incubation is implied. The manifest hashes this fixture source alongside the art.
 
 With Node.js and Sharp available, run from this directory:
 
@@ -63,7 +81,8 @@ Some hosts report an unwritable fontconfig cache; rendering still uses the expli
 font files. The art PNGs themselves contain no type or live game facts.
 
 Inspect `exports/sheet-native.png` at1×, `exports/sheet-3x.png` at its labeled
-nearest-neighbor3×, and `exports/overview-offline.png` at1024×600. This proof retains
+nearest-neighbor3×, and both `exports/overview-offline.png` (empty) and
+`exports/overview-populated.png` at1024×600. Both compositions retain
 five navigation choices, four read-only status regions and whole supply counts;
 only the Overview row is focused. It is an offline composition, not runtime or
 physical-display evidence. No screenshot matting or large-image downsampling is
@@ -71,14 +90,20 @@ used to construct the masters.
 
 ## Review and technical evidence
 
-The first proof's composition acceptance was withdrawn after the owner identified
-poor margins, icon proportions and excessive text. The [reference comparison](reference-analysis.md)
-records the reworked composition. The current proof has larger topic illustrations,
-open status regions, consistent insets and concise adjacent facts. Focused art and
-UX inspections assessed this actual revision, including empty-state truth and
-one warm navigation focus. Proof SHA-256:
-`98151907ef0dc81281c09be18dbaeb76338b4c69db615337865ac8305561ed23`.
-These checks do not establish owner approval, other states or runtime behavior.
+The [reference comparison](reference-analysis.md) records the exact reviewed pair
+and remaining craft failures after one production pass and one focused correction.
+Research now reads separately from Data, and the four icon/readout groups use
+consistent optical alignment. Actual-file UX inspection found no blocking issue
+in navigation meaning, supported counts or margins. The populated Explore hint
+could be more state-aware: it still says “Bring a sample home” with two retained
+samples. No active expedition or incubation is claimed.
+
+Independent art review rejects native-master readiness: thick stepped perimeters
+surround small busy interiors, with insufficient modeled depth and saturated
+character relative to C18. A layout/meaning pass does not override that verdict.
+Before propagating this approach, prove one destination sprite beside the reference
+at its intended displayed size. No further revision or runtime integration is
+implied by retaining this experiment.
 
 Run `node verify.cjs` to regenerate once and inspect actual exported files.
 [Verification](verification.json) records source/export hashes, real RGBA silhouette
@@ -87,5 +112,5 @@ files after regeneration. Pixel-level reproducibility is established on the reco
 tool versions, not promised across every font/raster library version.
 
 The reference's exact type identity remains unresolved; this proof retains the
-licensed bundled font. Before native integration, review actual composed dynamic
-states and supply the renderer with these same masters and measured placements.
+licensed bundled font. Native integration requires accepted art and actual dynamic
+state review. These static compositions establish neither.
