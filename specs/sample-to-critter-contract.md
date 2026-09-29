@@ -10,26 +10,24 @@ Research incrementally decodes genome regions; a fully decoded genome is a prere
 
 Creation requires a **fully decoded, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
 
-The connected Lab requests remote generation; its device controller does not run the generation stack. Cloud holds accepted durable records. Routine play needs no phone, and a console-only path remains required. Neither an attractive preview nor a completed animation proves a saved creation.
+The core kit must perform this journey standalone from the box, including supported nearby-kit interaction. Local research and creation cannot require Cloud Pass acceptance or remote generation. The optional Cloud Pass adds global trading/breeding, lineage, certificates and minigames. Local authority placement, generation execution and local/global reconciliation remain OPEN. Routine play needs no phone; a console-only path remains required. Neither an attractive preview nor a completed animation proves a saved creation.
 
 ```mermaid
 flowchart TD
-  Probe[Probe: player-attributed evidence and cargo] --> Local[Lab: retained local receipt]
-  Local --> Cloud[Cloud: authorized accepted sample record]
-  Console[Console-only investigation] --> Cloud
-  Cloud --> Knowledge[Research: findings and unresolved regions]
+  Companion[Companion Probe / Cargo: attributed evidence] --> Receipt[Kit: retained accepted receipt]
+  Console[Console-only investigation] --> Knowledge[Research: findings and unresolved regions]
+  Receipt --> Knowledge
   Knowledge --> Selected[Fully decoded selected genome]
   Selected --> Validate[Validate request, rights, versions and costs]
   Validate --> Expression[Resolve and validate initial expression]
-  Expression --> Individual[Cloud: one accepted individual and creation result]
-  Individual --> Generation[Remote constrained asset pipeline]
+  Expression --> Individual[Kit: one saved individual and creation result]
+  Individual --> Generation[Constrained asset pipeline: execution OPEN]
   Generation --> Assets[Validated preserved portraits and motion]
-  Assets --> Lab[Lab: reveal the saved individual]
-  Individual --> Companion[Companion: authorized care and temporary activity]
-  Companion --> Sync[Cloud reconciliation]
-  App[Optional app / website] <--> Cloud
-  Caddy[Caddy: charging] --> Probe
-  Caddy --> Companion
+  Assets --> Lab[Lab: reveal saved individual]
+  Individual --> Activity[Companion: attributed interaction and activity]
+  Individual <-->|optional global acceptance: protocol OPEN| Global[Cloud Pass services]
+  Caddy[Caddy: summary / printer / charging] <--> Receipt
+  App[Mobile fallback: same core rules and records] <--> Individual
 ```
 
 The diagram proposes the creation/asset boundary below; it does not establish resource prices, permission policies or a selected service topology.
@@ -50,28 +48,28 @@ The [connected game model](../design/research-and-creation.md) distinguishes cap
 
 ## Creation and retry boundary
 
-**PROPOSED:** creation submits one stable operation identity plus the exact selected genome reference, required inputs and displayed terms. Authenticated service context supplies the player and valid device enrollment; client claims alone cannot supply ownership or permissions. Shared-device profile switching cannot reassign an earlier player's request.
+**PROPOSED:** creation submits one stable operation identity plus the exact selected genome reference, required inputs and displayed terms. Local-core identity and authorization must support standalone and nearby-kit play; exact mechanisms remain open. For global operations, authenticated service context supplies the player and valid device enrollment; client claims alone cannot supply global ownership or permissions. Shared-device profile switching cannot reassign an earlier player's request.
 
-The cloud validates completeness, compatibility, rights, versions and the approved resource rule before acceptance. It durably commits the individual, creation result and any applicable inventory effect together. A job queue entry is insufficient. Any internal reservation must remain distinct from accepted spending; its expiry/release policy is not selected here. A changed payload using an existing operation identity is rejected rather than overwriting it.
+The accepting core authority, whose placement is OPEN, validates completeness, compatibility, rights, versions and the approved resource rule. It durably commits the individual, creation result and any applicable inventory effect together without requiring a cloud round trip. Optional global acceptance has its own validation and cannot be inferred from a local receipt. A job queue entry is insufficient. Any internal reservation must remain distinct from accepted spending; its expiry/release policy is not selected here. A changed payload using an existing operation identity is rejected rather than overwriting it.
 
-Apply the [cloud retry contract](cloud-sync.md#proposed-operation-boundary): exact retries return the original identity/genome; uncertain delivery requires the same operation lookup, not another creation. Back exits without undoing submitted work. Opening, revealing, printing and reloading cannot spend resources again.
+Preserve the same idempotency requirement locally and globally; the [global retry contract](cloud-sync.md#proposed-global-operation-boundary) applies to Cloud Pass: exact retries return the original identity/genome; uncertain delivery requires the same operation lookup, not another creation. Back exits without undoing submitted work. Opening, revealing, printing and reloading cannot spend resources again.
 
 ## Expression and asset failures
 
 **PROPOSED:** commit creation only after the selected genome and initial expression record pass domain validation, but permit visual production to finish afterward. Subsequent asset production has no authority to modify that committed phenotype.
 
-If art fails, retain the individual and report unavailable visuals or pending completion. Retry the asset job for the same pinned descriptor and versions, not a new birth. Once validated art is published, retain exact bytes and content hashes; a missing local copy is fetched again rather than generated anew. Later device-profile derivatives cannot overwrite the originals. Motion preserves anatomy and markings, with a stable still alternative. Missing assets cannot authorize substitute traits, refunds or duplicate specimens. Compensation policy is not established here.
+If art fails, retain the individual and report unavailable visuals or pending completion. Retry the asset job for the same pinned descriptor and versions, not a new birth. Once validated art is published, retain exact bytes and content hashes; a missing copy is restored from retained original bytes where available rather than generated anew; recovery cannot assume a cloud connection or backup exists. Later device-profile derivatives cannot overwrite the originals. Motion preserves anatomy and markings, with a stable still alternative. Missing assets cannot authorize substitute traits, refunds or duplicate specimens. Compensation policy is not established here.
 
 ## Offline and ecosystem boundaries
 
-Local Probe offload and cargo clearance do not establish cloud inventory acceptance. Temporary evidence, research drafts and authorized Companion activity remain attributed to their original player until reconciliation. **PROPOSED:** this contract offers no offline authoritative creation; an offline draft must pass current cloud validation before becoming an individual. Lost unsynced activity cannot be promised recoverable. Accepted records can be restored through authorized cloud recovery.
+Local Companion Cargo offload and clearance require a durable core acceptance boundary; they do not establish global inventory acceptance. Core research and creation are supported without Cloud Pass. Exact local authority, nearby-kit transfer, safe discard, handover retention and optional global enrollment/reconciliation remain OPEN. Do not treat saved local individuals as cloud-pending drafts or promise recovery of lost records without a retained copy.
 
-The Companion uses saved individuals and records temporary activity without transferring ownership; exact care effects remain separately defined. The caddy supplies charging, not sample delivery, creation confirmation or care credit. Optional app/website views use the same authorized records and operations rather than a parallel inventory or required phone approval step.
+Companion activity remains attributed to its player and does not itself transfer ownership. The caddy summarizes the same records, prints and charges; it is not an assumed mandatory gateway or a second inventory. Mobile/app views use permitted records and operations rather than a parallel world or required phone approval step. Global rights and certificates require the applicable optional service validation, not merely a scan or local creation.
 
 ## Three decisions still required
 
 1. **Research content mapping:** the V1 investigation/completeness structure is accepted in [gameplay](gameplay.md#research-and-creation); exact evidence-to-candidate mappings, resource requirements and equivalent console-only acquisition still need definition.
-2. **Creation implementation:** [gameplay](gameplay.md#creation-inputs-and-retained-discoveries) now defines accepted one-use material, retained knowledge and spending/retry semantics. Reservations, competing-request conflicts and remedies for permanent service/content failure still need design.
-3. **Temporary activity:** supported offline research/care actions, handover retention and reconciliation rules, including when local offload data may safely be discarded.
+2. **Creation implementation:** [gameplay](gameplay.md#creation-inputs-and-retained-discoveries) now defines accepted one-use material, retained knowledge and spending/retry semantics. Reservations, competing-request conflicts and remedies for permanent acceptance/content failure still need design.
+3. **Temporary activity:** local and nearby-kit identity/acceptance, temporary activity, handover retention and optional global reconciliation rules, including when local offload data may safely be discarded.
 
-Creation terms are accepted; current experience review addresses straightforward Probe sampling and variability before returning to offline allowances. The accepted V1 research structure does not approve technical transaction defaults, content mappings or a cap on genetic diversity.
+Creation terms remain accepted for the standalone core; exact local acceptance and nearby/global reconciliation need design without reopening those genetic rules. The accepted V1 research structure does not approve technical transaction defaults, content mappings or a cap on genetic diversity.
