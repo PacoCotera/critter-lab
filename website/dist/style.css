@@ -946,112 +946,6 @@ footer {
   margin-top:15px;
 }
 
-.genomics-language {
-  border-left:4px solid var(--orange);
-  padding:6px 0 6px 23px;
-  margin-top:50px;
-}
-
-.genomics-language p {
-  max-width:1000px;
-}
-
-.inheritance-example {
-  display:grid;
-  grid-template-columns:1fr 1.3fr;
-  gap:8%;
-  background:var(--stone);
-  border:1px solid var(--line);
-  border-radius:5px;
-  padding:40px;
-  margin-top:55px;
-}
-
-.example-intro h3 {
-  margin:23px 0;
-}
-
-.example-intro p {
-  margin-top:15px;
-}
-
-.cross-table {
-  width:100%;
-  table-layout:fixed;
-  border-collapse:collapse;
-  text-align:center;
-}
-
-.cross-table caption {
-  text-align:left;
-  font-weight:700;
-  font-size:1rem;
-  padding-bottom:16px;
-}
-
-.cross-table th {
-  padding:12px 5px;
-  font-size:.875rem;
-  line-height:1.4;
-}
-
-.cross-table td:not(:first-child) {
-  border:1px solid var(--sage-dark);
-  background:var(--paper);
-  padding:18px 9px;
-}
-
-.cross-table td.expressed {
-  background:var(--sage);
-}
-
-.cross-table strong {
-  display:block;
-  font-size:1.75rem;
-  font-family:Consolas,monospace;
-}
-
-.cross-table span {
-  display:block;
-  font-size:.875rem;
-  line-height:1.4;
-  margin-top:7px;
-}
-
-.cross-outcomes {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:15px;
-  margin-top:23px;
-}
-
-.cross-outcomes p {
-  font-size:.875rem;
-  line-height:1.5;
-}
-
-.cross-outcomes strong {
-  display:block;
-  font-size:1.65rem;
-}
-
-.example-note {
-  font-size:.8125rem;
-  line-height:1.6;
-  margin-top:20px;
-}
-
-.genomics-status {
-  font-size:.875rem;
-  margin-top:32px;
-  max-width:1050px;
-}
-
-.genomics-status a {
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
-
 .play-features {
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -1096,51 +990,39 @@ footer {
   margin-bottom:30px;
 }
 
-@media(max-width:900px) {
-  .inheritance-example {
-    grid-template-columns:1fr;
-    gap:30px;
-    padding:30px;
-  }
 
-  .example-intro p {
-    max-width:650px;
-  }
-}
-
+.genomic-features { grid-template-columns:repeat(3,minmax(0,1fr)); gap:40px; }
+.research-art { max-width:940px; margin:55px auto 0; padding:28px; background:var(--ink); border-radius:8px; }
+.research-art img, .field-art img { display:block; width:100%; height:auto; }
+.research-art figcaption { color:var(--paper); margin-top:18px; font-size:.8125rem; }
+.field-art { margin:50px 0 0; }
+.field-art figcaption { margin-top:14px; font-size:.8125rem; }
+.science-detail { margin-top:45px; padding:22px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.science-detail summary { cursor:pointer; font-weight:700; }
+.science-detail p { max-width:900px; margin:20px 0; }
+.science-detail a, .license-note a { text-decoration:underline; }
+.play-modes { background:var(--stone); }
+.mode-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:25px; margin-top:50px; }
+.mode-grid article { padding:40px; border-radius:6px; }
+.local-mode { background:var(--paper); }
+.cloud-mode { background:var(--ink); color:var(--paper); }
+.mode-grid h3 { margin:24px 0; font-size:clamp(2rem,3vw,3rem); }
+.mode-grid ul { padding-left:20px; margin:25px 0; }
+.mode-grid li { margin:12px 0; line-height:1.5; }
+.mode-signoff { display:block; border-top:1px solid currentColor; padding-top:20px; }
+.section-note { font-size:.875rem; margin-top:25px; }
+.open-source { background:var(--paper); }
+.open-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:10%; margin-top:30px; }
+.open-grid p { margin:0 0 25px; }
+.open-grid .large-copy { margin-top:30px; font-size:1.65rem; font-weight:700; }
+.open-grid .license-note { margin-top:25px; font-size:.8125rem; }
+@media(max-width:900px) { .genomic-features { gap:25px; } .mode-grid article { padding:28px; } }
 @media(max-width:600px) {
-  .genomics-heading,
-  .genomic-features,
-  .play-features,
-  .paper-output {
-    grid-template-columns:1fr;
-    gap:30px;
-  }
-
-  .genomics-heading > p {
-    margin-top:25px;
-    font-size:1.0625rem;
-  }
-
-  .genomic-features {
-    margin-top:40px;
-  }
-
-  .inheritance-example {
-    padding:23px 15px;
-    margin-top:35px;
-  }
-
-  .cross-table th,
-  .cross-table span {
-    font-size:.8125rem;
-  }
-
-  .cross-table td:not(:first-child) {
-    padding:16px 4px;
-  }
-
-  .cross-outcomes {
-    gap:9px;
-  }
+  .genomics-heading, .genomic-features, .play-features, .paper-output, .mode-grid, .open-grid { grid-template-columns:1fr; gap:30px; }
+  .genomics-heading > p { margin-top:25px; font-size:1.0625rem; }
+  .genomic-features { margin-top:40px; }
+  .research-art { padding:12px; margin-top:35px; }
+  .mode-grid article { padding:28px 24px; }
 }
+
+.play-modes .section-heading p { color:var(--ink); }
