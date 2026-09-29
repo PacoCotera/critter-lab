@@ -51,12 +51,13 @@ typedef enum {
 } SelectedInput;
 typedef struct {
   int held, allowed;
-  unsigned revision;
+  unsigned revision, interaction_epoch;
 } SelectedGesture;
 typedef struct {
   SelectedPage page;
   unsigned focus, sample, study, resident, discard_resource, revision,
-      page_revision;
+      page_revision, interaction_epoch, acknowledged_revision,
+      acknowledged_interaction_epoch;
   int ready, suspended, storage_error;
   SelectedGesture gestures[10];
   unsigned workspace, library_index;

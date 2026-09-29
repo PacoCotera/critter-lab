@@ -53,21 +53,21 @@ class Player:
             assert len(content) == header["bytes"] and content[:2] == b"BM"
             (self.frames / (name + ".bmp")).write_bytes(content)
             self.command("status")
-            return
+            return content
         raise AssertionError("Could not capture a stable native frame")
 
     def home_views(self, label):
         assert self.state["page"] == "home", self.state
         for attempt in range(5):
-            if self.state["focus"] == "Home":
+            if self.state["focus"] == "Overview":
                 break
             self.press("down")
-        assert self.state["focus"] == "Home", self.state
-        for index, focus in enumerate(("Home", "Explore", "Research", "Incubator", "Habitat")):
+        assert self.state["focus"] == "Overview", self.state
+        for index, focus in enumerate(("Overview", "Explore", "Research", "Incubator", "Habitat")):
             assert self.state["focus"] == focus, self.state
             self.capture(f"{label}-home-{index}-{focus.lower()}")
             self.press("down")
-        assert self.state["page"] == "home" and self.state["focus"] == "Home"
+        assert self.state["page"] == "home" and self.state["focus"] == "Overview"
 
     def wait_until(self, predicate, timeout):
         deadline = time.monotonic() + timeout
@@ -102,8 +102,29 @@ def journey(binary, frames):
         player.choose("Discard data pack")
         player.capture("discard-review")
         player.choose("Keep this pack")
+        carried = player.state["cargo"]
+        before_stock = player.state["stock"]
+        before_frame = player.capture("before-saved-haul")
         player.choose("Return + store haul")
+        assert player.state["stock"] == [before_stock[index] + carried[index]
+                                          for index in range(3)]
+        assert player.state["cargo"] == [0, 0, 0]
+        assert player.state["message"].startswith("Haul saved:")
+        after_frame = player.capture("after-saved-haul")
+        width, height = 1024, 600
+        stride = width * 3
+        header_rows = range(60, 96)
+        assert any(before_frame[54 + (height - 1 - y) * stride + 30 * 3:
+                                54 + (height - 1 - y) * stride + 970 * 3] !=
+                   after_frame[54 + (height - 1 - y) * stride + 30 * 3:
+                               54 + (height - 1 - y) * stride + 970 * 3]
+                   for y in header_rows), "Stock header did not redraw after offload"
         assert player.state["samples"] == 1
+        player.close()
+        player = Player(binary, save, frames)
+        assert player.state["stock"] == [before_stock[index] + carried[index]
+                                          for index in range(3)]
+        player.choose("Research")
         player.press()
         for label in ("Crown form", "Eye rings", "Body markings", "Movement", "Energy use"):
             player.choose(label)

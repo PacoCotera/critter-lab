@@ -27,7 +27,8 @@ proof does not claim their implementation.
 | Lab Explore | Shared baseline gathering, each expedition's distinct possible opportunity, and relevant supply needs. A route cannot promise a genotype or merely rename identical behavior. |
 | Companion Probe/Cargo | Active expedition, actual observations/progress and owned cargo. Mode changes preserve activity; return/receipt states are explicit. Simulator device selection is outside the device face. |
 | Lab receipt | Named haul, exact quantities and samples, pending/saved result. Credit once; retries return the same receipt. Companion clears only the acknowledged matching haul. |
-| Research workbench | Pending samples at left; the retained sample's established findings, unresolved question and directed study together. Findings change the workpiece, not just a completion counter. |
+| Research overview | Overview entry above the left sample list; collection-wide discoveries, pending work and shared supply needs. It does not borrow the last selected sample's progress as the collection status. |
+| Selected sample/workbench | Focusing a sample previews that sample; Confirm enters its retained findings, unresolved question and directed study. Findings change the workpiece, not just a completion counter. |
 
 The workbench uses the accepted directional/workspace/Back/Confirm panel. Up/Down
 browse the sample rail; Confirm retains the sample and enters its study/inspection
