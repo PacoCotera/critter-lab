@@ -1,4 +1,6 @@
-# Critter Lab website
+# Beecho Lab website
+
+Owner selected **Beecho Lab** for the website and **Beecho / Beechos** for the creatures on 29 September 2026. Existing repository and hosting URLs remain in use. Retained concept images carry earlier Critter Lab branding and are captioned accordingly; original reference artwork is unchanged.
 
 Static product introduction using the sage, stone, charcoal and restrained orange device palette. The marketing story leads with player curiosity and explains genomic depth through hidden traits, interesting pairings and individual lives. Technical detail is available in a native disclosure and the linked public genetics framework.
 
