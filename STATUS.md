@@ -6,6 +6,10 @@ Current direction: combined everyday Companion (Probe/Cargo/Companions), home ha
 
 [Electronics-first specification](specs/devices.md#electronics-first-v1-reference-specification) → firmware/game software proof → human playtest → hardware or mobile decision. New reference parts are specialist recommendations awaiting owner selection; do not start PCB/enclosure development or purchases from them. Mobile fallback reuses game contracts/content/accepted records.
 
+The caddy development reference is the Waveshare 5.79-inch monochrome module (SKU 26892), 792×272. The 3.7-inch candidate is superseded. Fit, driver operation and refresh behavior need bench evidence.
+
+The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
+
 ## Delivered evidence
 
 The native Lab preview is live at https://critterlab.basicberry.com from revision 0e4c87a. It supports focus, known-feature inspection and Start preview; it does not execute/persist research. Existing CI builds and host experiments establish limited software behavior, not flashed devices, power/thermal performance, sensor calibration, wireless charging or printing.
