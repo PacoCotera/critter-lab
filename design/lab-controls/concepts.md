@@ -32,5 +32,16 @@ Experience Design reviewed the actual PNG and comparison text. Corrections clari
 
 ## Product concept art
 
-[Instrument pitch board](instrument-pitch-v1.png) visualizes the four possibilities with the selected Lab screen as a reference. Generated concept art, not a control-count or mechanical specification: illustrative extra side dials, symbols and printed material do not add approved functions. Use the layout sheet and mappings above for intended input roles. No winner selected.
+[Instrument pitch board](instrument-pitch-v1.png) visualizes the four possibilities with the selected Lab screen as a reference. Generated concept art, not a control-count or mechanical specification: illustrative extra side dials, symbols and printed material do not add approved functions. Use the layout sheet and mappings above for intended input roles. Owner favors layouts/compositions 1 (Chromatic Desk) and 3 (Experiment Station), but rejects their enclosure shapes. Continue enclosure divergence before combining preferred attributes; neither illustrated case is a baseline.
+
+
+
+## Control family — owner direction
+
+Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Enlarge the directional cross and the frequent Confirm/Cancel buttons with deliberate finger clearance; less frequent actions such as Inspect may stay smaller. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
+
+
+[Control-family proportion study](control-family-v1.png) applies larger navigation and primary round actions, while retaining colored workspace keys and orange rotary accents. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
+
+Hardware review of enclosure board: useful distinct form attributes; folio closure and knob clearance unproven, all printer volumes unallocated, transparent internals illustrative, supports/rails not established as tilt locks or handles. Capture preferred form attributes before convergence.
 
