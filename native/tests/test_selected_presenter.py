@@ -44,7 +44,7 @@ class SelectedPresenter(unittest.TestCase):
         self.save = Path(self.directory.name) / 'legacy-save.txt'
         self.save.write_bytes(b'legacy save sentinel\nDo not reset or migrate.\n')
         self.save_hash = hashlib.sha256(self.save.read_bytes()).hexdigest()
-        environment = patch.dict(os.environ, {"CRITTER_DEMO_SAVE": str(self.save)})
+        environment = patch.dict(os.environ, {"CRITTER_DEMO_SAVE": str(self.save), "BEECHO_V1_SAVE": str(Path(self.directory.name) / "v1.save")})
         environment.start()
         self.addCleanup(environment.stop)
         self.server = PRESENTER.ThreadingHTTPServer(('127.0.0.1', 0), PRESENTER.Handler)
@@ -146,11 +146,12 @@ class SelectedPresenter(unittest.TestCase):
         self.input('ready', revision)
         self.input('confirm-down', revision)
         result = json.loads(self.input('confirm-up', revision)[1])
-        self.assertEqual(result['page'], 'start-preview')
-        self.assertEqual(result['stock'], [2, 1, 0])
+        self.assertEqual(result['page'], 'expedition')
+        self.assertEqual(result['stock'], [0, 0, 0])
+        self.input('ready', result['revision'])
         self.input('back-down', result['revision'])
         returned = json.loads(self.input('back-up', result['revision'])[1])
-        self.assertEqual((returned['page'], returned['focus']), ('study', 'start'))
+        self.assertEqual((returned['page'], returned['focus']), ('home', 'Explore'))
         self.assertEqual(hashlib.sha256(self.save.read_bytes()).hexdigest(), self.save_hash)
 
 

@@ -10,14 +10,32 @@ The caddy development reference is the Waveshare 5.79-inch monochrome module (SK
 
 The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
 
-## Delivered evidence
+## Delivered software evidence
 
-The native Lab preview is live at https://critterlab.basicberry.com from revision 0e4c87a. It supports focus, known-feature inspection and Start preview; it does not execute/persist research. Existing CI builds and host experiments establish limited software behavior, not flashed devices, power/thermal performance, sensor calibration, wireless charging or printing.
+The [standalone Pip V1](native/selected-lab/V1.md) connects expedition gathering,
+retained cargo, five resource-funded discoveries, explicit complete-genome
+selection, incubation, deliberate reveal and habitat visits. Native C owns rules,
+persistence, focus and pixels; the browser transports the existing simulated
+controls. Records survive process restart. Gemini art provenance is retained.
+This is a bounded local playable prototype, not a complete physical kit or the
+full content catalogue.
 
-The complete connected journey is not delivered. Genetic/research, expedition/transfer and native presentation experiments need integration. The [build guide](BUILD.md) identifies existing targets; older standalone Probe binaries are legacy fixtures after consolidation.
+The established CI validates the native domain, input/transport and a complete
+real-time journey with restart. Hardware behavior remains unmeasured. Route
+specific events, capture/training, nearby-kit interaction, cloud services and
+habitat ecology remain outside this slice. The eight-record limits, active-time
+simulation and provisional balance are explicit in its guide.
+
+The live preview at https://critterlab.basicberry.com reports its running Git
+revision. Only the existing CI release/deployment path publishes accepted source.
+The [build guide](BUILD.md) describes the wider unfinished hardware/software
+boundary; older separate Probe targets are legacy fixtures after consolidation.
 
 ## Next proof
 
-One attributed Companion expedition and cargo return, resource-funded Lab research with a retained result, stable individual/habitat state, caddy summary/print simulation and restart/offline recovery. New capture/training/freeze/stationary gathering semantics must be agreed before treating those branches as functional. Use the same accepted operations through a mobile-shaped client adapter.
+Human playtesting of this first round decides retain/refine/reroll before broader
+content or hardware commitments. Preserve the existing hardware family and
+approved product direction; do not infer that a working local Pip loop delivers
+cloud, sensor, printer, power or environmental simulation capabilities.
 
 Exact electronics revisions, budgets, tap/scan paths, battery/wireless-power design and native-size UI remain unresolved. No ten-kit date, production BOM or measured hardware feasibility is claimed. Preserve original art and useful unfinished experiments; historical documents do not override the current specifications.
