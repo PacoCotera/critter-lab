@@ -1,5 +1,8 @@
 # Current product direction
 
+Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
+
+
 The current family is **one combined Companion, one home Lab, and one shared printer/habitat caddy**. Probe is a Companion mode, not a separate device. Current appearance is the sage/stone family with recessed caddy branding and grey OK; original four-object renders below are preserved prior art, not current hardware requirements.
 
 ![Current family appearance](lab-controls/combined-family-materials.png)
