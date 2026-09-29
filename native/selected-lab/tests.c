@@ -37,7 +37,7 @@ int main(void) {
   assert(lab.page == V1_HOME);
   ready(&lab);
   press(&lab);
-  assert(lab.page == V1_SAMPLES);
+  assert(lab.page == V1_EXPEDITION);
   ready(&lab);
   selected_lab_input(&lab, SELECTED_BACK_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_BACK_UP, 0, lab.revision);
@@ -78,6 +78,31 @@ int main(void) {
   selected_lab_input(&lab, SELECTED_RIGHT_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_RIGHT_UP, 0, lab.revision);
   assert(lab.page == V1_STUDY_REVIEW && lab.game.last_operation_sequence == 0);
+  /* Home focus previews cannot mutate the world; only non-Home Confirm enters.
+   */
+  SelectedLab navigation;
+  selected_lab_init(&navigation);
+  ready(&navigation);
+  press(&navigation);
+  assert(navigation.page == V1_HOME && navigation.focus == 0);
+  for (unsigned home_focus = 1; home_focus <= 4; ++home_focus) {
+    ready(&navigation);
+    selected_lab_input(&navigation, SELECTED_DOWN_DOWN, 0, navigation.revision);
+    selected_lab_input(&navigation, SELECTED_DOWN_UP, 0, navigation.revision);
+    assert(navigation.page == V1_HOME && navigation.focus == home_focus);
+    assert(navigation.game.last_operation_sequence == 0);
+    ready(&navigation);
+    selected_lab_input(&navigation, SELECTED_CONFIRM_DOWN, 0,
+                       navigation.revision);
+    selected_lab_input(&navigation, SELECTED_CONFIRM_UP, 0,
+                       navigation.revision);
+    assert(navigation.page != V1_HOME);
+    assert(navigation.game.last_operation_sequence == 0);
+    ready(&navigation);
+    selected_lab_input(&navigation, SELECTED_BACK_DOWN, 0, navigation.revision);
+    selected_lab_input(&navigation, SELECTED_BACK_UP, 0, navigation.revision);
+    assert(navigation.page == V1_HOME && navigation.focus == home_focus);
+  }
   char path[128];
   snprintf(path, sizeof(path), "/tmp/beecho-ui-recovery-%ld.save",
            (long)getpid());
@@ -113,6 +138,9 @@ int main(void) {
   strcpy(lab.game.individuals[1].id, "resident-0001");
   strcpy(lab.game.individuals[2].id, "resident-0002");
   lab.game.individuals[1].revealed = lab.game.individuals[2].revealed = 1;
+  lab.page = V1_HOME;
+  for (lab.focus = 0; lab.focus < 5; ++lab.focus)
+    frame(&lab);
   lab.page = V1_LIBRARY;
   for (lab.focus = 0; lab.focus < selected_lab_options(&lab); ++lab.focus)
     frame(&lab);

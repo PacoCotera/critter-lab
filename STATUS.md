@@ -20,6 +20,13 @@ controls. Records survive process restart. Gemini art provenance is retained.
 This is a bounded local playable prototype, not a complete physical kit or the
 full content catalogue.
 
+The [Home and feature landings](design/home-landings/README.md) expose current lab
+activity before entering a feature. The accepted directional/workspace panel
+operates the Lab; stock, expedition, discoveries, incubation and revealed-resident
+previews read the same saved world. The renderer derives margins, typography,
+frame depth and focus from the approved C18 visual baseline. Lab execution is
+C17 Linux x86-64 host simulation; Raspberry Pi4 ARM/display/input remains unverified.
+
 The established CI validates the native domain, input/transport and a complete
 real-time journey with restart. Hardware behavior remains unmeasured. Route
 specific events, capture/training, nearby-kit interaction, cloud services and

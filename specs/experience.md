@@ -86,6 +86,16 @@ One focus marker identifies an action or navigable target. Feature illustrations
 
 The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The owner now favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#current-visual-system-discovery) for current research boundaries. Rejected concept plates do not define the UI.
 
+### Home and feature landings
+
+The Lab opens with Home selected: a lab-wide overview of retained resources,
+expedition/cargo, samples/discoveries, incubation and revealed residents. Moving
+focus through Home, Explore, Research, Incubator and Habitat changes the large
+preview to that feature's actual state; it never commits an action. Confirm enters
+the focused feature; Back restores its Home focus. See the [landing contract](../design/home-landings/README.md)
+for state coverage and visual derivation from the approved baseline. Current V1
+research resolves on commitment and has no background research queue.
+
 ### Simulated console controls — accepted
 
 The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Research/Critters/Library/Habitat workspace keys in the middle, Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Critters shows revealed residents; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.

@@ -3,12 +3,22 @@ Run from this directory: python generate.py. Original unmodified Bitstream Vera
 from ReportLab's font distribution; exact redistribution license in LICENSE.txt.
 """
 from pathlib import Path
+import sys
 from PIL import Image, ImageDraw, ImageFont
 root = Path(__file__).resolve().parent
-for name, sizes in [('portable', [9, 11, 20, 24]), ('lab', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48])]:
+profiles = [
+    ('portable', 'Vera.ttf', [9, 11, 20, 24]),
+    ('lab', 'Vera.ttf', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48]),
+    ('lab_heading', 'VeraBd.ttf', [26, 32, 34, 40]),
+]
+if sys.argv[1:] == ['--heading']:
+    profiles = profiles[-1:]
+elif sys.argv[1:]:
+    raise SystemExit('Usage: python generate.py [--heading]')
+for name, font_file, sizes in profiles:
     data=[]; glyphs=[]; records=[]
     for size in sizes:
-        font=ImageFont.truetype(str(root/'Vera.ttf'),size)
+        font=ImageFont.truetype(str(root/font_file),size)
         first=len(glyphs)
         for code in range(32,127):
             char=chr(code); left,top,right,bottom=font.getbbox(char)
