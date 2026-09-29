@@ -1,23 +1,21 @@
 # Gemini Overview destination family
 
 Four persistent destination symbols for the existing native Lab Overview. Gemini
-authored the family together, then corrected structural materials against the
-owner-selected hardware reference. Preparation preserves that artwork. The active
-source is `gemini-family-hardware-materials.png`, paired with
-`hardware-materials-prompt.txt`; both are retained unchanged. These metaphors identify destinations;
+authored the family together; preparation preserves that artwork. The original
+PNG and prompt are retained unchanged. These metaphors identify destinations;
 nearby game text supplies current activity, sample and resident facts.
 
 ## Native handoff
 
 Use `exports/explore.png`, `research.png`, `incubator.png` and `habitat.png`.
 Each is 136×144 and must be drawn 1:1. The compass has a deliberately smaller
-painted footprint to balance its broad compass face against the narrower subjects.
+painted footprint to balance its broad gold disk against the narrower subjects.
 The [native sheet](exports/sheet-native.png) and [3× diagnostic](exports/sheet-3x.png)
 show the exact handoff files.
 
 **These assets are opaque.** The source PNG has four channels, but every alpha
-byte is 255. Its dominant backing is RGB(42,51,56), `#2a3338`; small original
-background variations are retained. Draw on a matching `#2a3338` region and
+byte is 255. Its dominant backing is RGB(40,51,57), `#283339`; small original
+background variations are retained. Draw on a matching `#283339` region and
 copy the prepared opaque pixels directly. Do not apply the legacy corner-color
 `sprite_matte` path or claim transparent sprite edges. Direct-crop inspection
 found the backing visually clean at the intended size.
@@ -45,11 +43,3 @@ The source is a 1024×1024 Gemini image acquired with Copy image, not a screensh
 of the browser. Source art remains distinct from these reduced usage assets.
 This preparation does not establish native-screen acceptance; the reviewer must
 inspect the actual empty and populated Overview rendered by the application.
-
-## Preserved first version
-
-`versions/brass-v1/` preserves the superseded brass source, prompt, preparation
-recipe, manifest and derived PNGs. `snapshot.json` hashes the original snapshot
-files. It is provenance, not a competing active family. The archived recipe
-retains its original relative runtime/font paths; reproduce it in the original
-workbench context if needed. Root-level first-source files also remain untouched.

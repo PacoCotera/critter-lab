@@ -5,8 +5,8 @@ const sharp = require('sharp');
 const crypto = require('crypto');
 const root = __dirname;
 const output = path.join(root, 'exports');
-const sourcePath = path.join(root, 'gemini-family-hardware-materials.png');
-const background = { r: 42, g: 51, b: 56, alpha: 1 };
+const sourcePath = path.join(root, 'gemini-family-original.png');
+const background = { r: 40, g: 51, b: 57, alpha: 1 };
 const kernel = 'lanczos3';
 const definitions = [
   { name: 'explore', crop: { left: 95, top: 75, width: 352, height: 360 }, resized: [118, 121] },
@@ -108,20 +108,17 @@ async function main() {
       width: sourceMetadata.width,
       height: sourceMetadata.height,
       acquisition: 'Gemini Copy image control in the existing conversation; not a screenshot',
-      prompt: 'hardware-materials-prompt.txt',
-      promptSha256: digest(fs.readFileSync(path.join(root, 'hardware-materials-prompt.txt'))),
       alphaMin: sourceMeasurement.alphaMin,
       alphaMax: sourceMeasurement.alphaMax,
     },
     process: 'Explicit crop, aspect-preserving Lanczos3 reduction, and centered opaque padding; no redraw, color key, flood matte or recoloring',
     resampling: kernel,
-    previousVersion: { directory: 'versions/brass-v1', disposition: 'Superseded material direction, retained source/prompt/preparation/export provenance' },
     backing: {
-      rgb: [42, 51, 56],
-      hex: '#2a3338',
+      rgb: [40, 51, 57],
+      hex: '#283339',
       kind: 'Opaque original artwork backing, with slight source color variation retained',
       transparencyClaim: false,
-      nativeRequirement: 'Draw 1:1 on matching #2a3338 region; copy opaque pixels directly and bypass legacy corner-color sprite_matte',
+      nativeRequirement: 'Draw 1:1 on matching #283339 region; copy opaque pixels directly and bypass legacy corner-color sprite_matte',
     },
     boundsMeasurement: 'Bounding box of output pixels differing by more than 14 in any RGB channel from the measured backing; measurement only, not an alpha mask',
     assets,

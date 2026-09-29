@@ -74,6 +74,12 @@ information without redundant prose or a decorative hero displacing the overview
 
 The Overview destination family is now supplied by the
 [Gemini preparation workbench](reference-production/gemini-overview-family/README.md).
+Its material language must agree with the [current hardware family](lab-controls/combined-family-materials.png):
+matte sage/stone shells, charcoal protection and restrained playful orange accents.
+The owner likes the destination silhouettes but rejects their initial brass finish
+as steampunk. Revise materials while preserving expressive saturated sprite detail;
+screen iconography, UI and hardware must convey one identity. Do not turn this into
+uniform grey icons or replace the approved electric-blue screen framing.
 Generic compass, microscope, incubation vessel and terrarium symbols identify
 destinations; adjacent live counts and captions describe actual state. A topic
 metaphor is not a discovered specimen or an owned inventory item. Keep the same

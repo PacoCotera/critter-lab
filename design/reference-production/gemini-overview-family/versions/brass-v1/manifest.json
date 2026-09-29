@@ -2,31 +2,25 @@
   "status": "Prepared Gemini destination artwork for native integration; not a native screen capture",
   "source": {
     "file": "gemini-family-original.png",
-    "sha256": "347691931814e62e545c0d6e816c80da417ee674c6b02fd799b58b689e3018b0",
+    "sha256": "9b6a400c1dd8542b521d742f9f09d5c179436480ba10f774bad817922a5a135e",
     "width": 1024,
     "height": 1024,
     "acquisition": "Gemini Copy image control in the existing conversation; not a screenshot",
-    "prompt": "hardware-materials-prompt.txt",
-    "promptSha256": "f5d400fc411ad8e780c5f6494b0fb260fdf5c49df30733083ef06093f338a2b4",
     "alphaMin": 255,
     "alphaMax": 255
   },
   "process": "Explicit crop, aspect-preserving Lanczos3 reduction, and centered opaque padding; no redraw, color key, flood matte or recoloring",
   "resampling": "lanczos3",
-  "previousVersion": {
-    "directory": "versions/brass-v1",
-    "disposition": "Superseded material direction, retained source/prompt/preparation/export provenance"
-  },
   "backing": {
     "rgb": [
-      42,
+      40,
       51,
-      56
+      57
     ],
-    "hex": "#2a3338",
+    "hex": "#283339",
     "kind": "Opaque original artwork backing, with slight source color variation retained",
     "transparencyClaim": false,
-    "nativeRequirement": "Draw 1:1 on matching #2a3338 region; copy opaque pixels directly and bypass legacy corner-color sprite_matte"
+    "nativeRequirement": "Draw 1:1 on matching #283339 region; copy opaque pixels directly and bypass legacy corner-color sprite_matte"
   },
   "boundsMeasurement": "Bounding box of output pixels differing by more than 14 in any RGB channel from the measured backing; measurement only, not an alpha mask",
   "assets": [
@@ -56,7 +50,7 @@
         68,
         72
       ],
-      "sha256": "e32a33dc7d0e4fc4c0524d0a12688fd54739ee2fd6af1859486f25a457089011",
+      "sha256": "a09b49c99566348ea11f76a162559775c0e50e18ef0939d0ab8d7ffdc7891dc6",
       "width": 136,
       "height": 144,
       "channels": 4,
@@ -68,7 +62,7 @@
         "width": 110,
         "height": 112
       },
-      "decodedRgbaSha256": "a068599a51ea3e22be38f2f845a5c838d3306f8f7a23655d30dac7d4b0c5e274"
+      "decodedRgbaSha256": "52038ab02e645a67aff09f59cbf88fc811e2866045825fd279f0e189770225a7"
     },
     {
       "name": "research",
@@ -96,19 +90,19 @@
         68,
         72
       ],
-      "sha256": "5dad51882ebffdae4689fe18f015ba0b8f2fc1ea6b61feaa049cd238c08ee6e6",
+      "sha256": "4531d96fa81695bf15a883c957d4818405e98e536c8964544f6f9171aa5e38f9",
       "width": 136,
       "height": 144,
       "channels": 4,
       "alphaMin": 255,
       "alphaMax": 255,
       "contrastBounds": {
-        "x": 20,
+        "x": 19,
         "y": 8,
         "width": 97,
-        "height": 128
+        "height": 129
       },
-      "decodedRgbaSha256": "c0c81826e28dc2dc1df9e4710fdfe293eb7f5c99a32579efa96ccdbd52433629"
+      "decodedRgbaSha256": "7aa9d76ee9fc7a7e330a2d4561f656489f2d36a33d2fe146140d98ca6c2642ed"
     },
     {
       "name": "incubator",
@@ -136,19 +130,19 @@
         68,
         72
       ],
-      "sha256": "b3d979e5bbbbec97ab631c1b2619f079f653354b14efd7ee11c636be1110860a",
+      "sha256": "f3e78d8fb0f824b566052a77f17bda253fbc5d4cb8fa6fb40af4344f44e0d03b",
       "width": 136,
       "height": 144,
       "channels": 4,
       "alphaMin": 255,
       "alphaMax": 255,
       "contrastBounds": {
-        "x": 28,
+        "x": 24,
         "y": 8,
-        "width": 80,
+        "width": 88,
         "height": 128
       },
-      "decodedRgbaSha256": "94a61902ea079b00a434086c196055ff37034365205b79a8a0fa33e2bb4e2fd0"
+      "decodedRgbaSha256": "77fc1254cf732b79d006391969399e624f594fc35672b735eda6a8b6e282851e"
     },
     {
       "name": "habitat",
@@ -176,7 +170,7 @@
         68,
         72
       ],
-      "sha256": "93fcbb614eb6400f17a3ee101ea4034010a70dc423ce1374bc58f34f0f92bcd5",
+      "sha256": "c4eb3464532693068df438c4c2953e53d0cb3240475f5c525ee84f9498bbba4b",
       "width": 136,
       "height": 144,
       "channels": 4,
@@ -186,9 +180,9 @@
         "x": 20,
         "y": 7,
         "width": 96,
-        "height": 128
+        "height": 125
       },
-      "decodedRgbaSha256": "b713a0cd93ea7eea2eedb7f689a122f2c08c49695ad493b9b733776b08869eef"
+      "decodedRgbaSha256": "d7d857807c0db79715c81946f5921e5be20680bfb73c1b0e102bc467b6894f57"
     }
   ]
 }
