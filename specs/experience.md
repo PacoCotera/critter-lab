@@ -20,6 +20,30 @@ Expedition selection reinforces these roles: compare investigation theme, tier e
 
 ## Operate the object
 
+### Current owner playtest requirements
+
+Keep the lab-wide Home overview and focus-driven feature previews. Correct the
+prototype's single-device shortcut: Lab plans and receives; the separate Companion
+conducts Probe-mode expeditions and owns carried cargo until acknowledged receipt.
+The simulator must make both device roles and their transfer visible.
+
+Display resources as integer counts with explicit units; gathering progress is
+separate from usable stock. Do not round away saved quantities or imply that a
+rounded count is spendable. The stock header must reflect a saved haul receipt
+immediately. Current fractional prototype recipes need an explicit representation
+or migration decision before changing accounting.
+
+Research uses one persistent workbench: pending samples on the left, each retaining
+its own discoveries; the selected sample shows established findings, unresolved
+questions and the next directed research choice together. Avoid compulsory checklists,
+hidden progress and textbook explanations. Expedition purpose, relevant opportunities
+and observed results must be understandable; renamed identical routes are insufficient.
+
+Current art remains provisional and below the approved C18 reference. Match the
+screen-design standard's margins, palette, frames, typography, focus effects and
+sprite craft in actual native renders. Reported intermittent navigation freezes
+require reproduction and recovery checks, not an assumption of user error.
+
 The Lab workbench supports a collection of partially decoded genomes. Selecting a record brings its sample identity, discovered/unknown zones and studies into focus; available resource types in Lab inventory make different work possible. Unknown is a knowledge state, not a lock or permission gate. Show discovery through the changing research subject and relevant findings, using concise labels rather than tutorial/report paragraphs. The Probe gathers typed resources and samples under an expedition profile; it does not act as a task counter for only one genome. The connected object and interaction proposal lives in [research and creation](../design/research-and-creation.md).
 
 Research is a process of discovering surprises in a sample cache. The connected experience spans several gathering expeditions: the Probe shows actual gathering progress toward known research needs; the Lab shows retained discoveries, research progress, remaining work and what further gathering enables. Neither an expedition-complete message nor a supply count substitutes for research completion. Design the return to the same sample and continuation together, preserving findings. Exact meters, numbers and timing remain open under [gameplay](gameplay.md#research-is-discovery-across-expeditions--accepted).
