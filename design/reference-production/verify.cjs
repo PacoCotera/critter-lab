@@ -10,7 +10,7 @@ const root = __dirname;
 const digest = file => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
 
 async function main() {
-  const tracked = ['manifest.json'];
+  const tracked = ['manifest.json', 'fixtures.json'];
   for (const directory of ['src', 'exports']) {
     for (const name of fs.readdirSync(path.join(root, directory)).sort()) {
       if (/\.(svg|png)$/.test(name)) tracked.push(`${directory}/${name}`);
@@ -58,8 +58,20 @@ async function main() {
   }
   const sourceCount = fs.readdirSync(path.join(root, 'src')).filter(file => file.endsWith('.svg')).length;
   assert.equal(names.size, sourceCount, 'Every master must be exported');
-  const proof = await sharp(path.join(root, 'exports/overview-offline.png')).metadata();
-  assert.deepEqual([proof.width, proof.height], [1024, 600]);
+  const fixtures = JSON.parse(fs.readFileSync(path.join(root, manifest.fixtures.source), 'utf8'));
+  assert.equal(digest(manifest.fixtures.source), manifest.fixtures.sha256, 'Fixture source hash');
+  assert.deepEqual(fixtures.states.map(state => state.export), manifest.fixtures.exports);
+  const proofs = [];
+  for (const state of fixtures.states) {
+    const file = `exports/${state.export}`;
+    const proof = await sharp(path.join(root, file)).metadata();
+    assert.deepEqual([proof.width, proof.height], [1024, 600], `${state.id} native panel dimensions`);
+    if (state.provenance.sourceCapture) {
+      assert.equal(digest(state.provenance.sourceCapture), state.provenance.sourceCaptureSha256,
+        `${state.id} recorded game capture must remain traceable`);
+    }
+    proofs.push({ state: state.id, file, pixels: [proof.width, proof.height], sha256: digest(file) });
+  }
   const native = await sharp(path.join(root, 'exports/sheet-native.png')).raw().toBuffer({ resolveWithObject: true });
   const large = await sharp(path.join(root, 'exports/sheet-3x.png')).raw().toBuffer({ resolveWithObject: true });
   assert.deepEqual([large.info.width, large.info.height, large.info.channels], [native.info.width * 3, native.info.height * 3, native.info.channels]);
@@ -78,9 +90,9 @@ async function main() {
     assets: names.size,
     reproducibleFiles: tracked.length,
     rgbaSilhouettes: true,
-    overviewPixels: [proof.width, proof.height],
+    proofs,
     exactNearestNeighborEnlargement: 3,
-    overviewSha256: digest('exports/overview-offline.png'),
+    fixturesSha256: digest('fixtures.json'),
     manifestSha256: digest('manifest.json'),
     versions: { node: process.versions.node, sharp: sharp.versions.sharp, vips: sharp.versions.vips },
   };
