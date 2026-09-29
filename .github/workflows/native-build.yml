@@ -37,6 +37,7 @@ jobs:
           native/build/lab/test_pixels
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_selected_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
+          python3 native/tests/test_kit_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
           python3 native/tests/test_v1_journey.py "$PWD/native/build/lab/selected-lab/selected_lab" native/build/lab/journey
           python3 native/tests/test_updater.py
           python3 native/tests/test_delivery.py

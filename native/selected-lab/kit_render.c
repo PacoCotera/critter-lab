@@ -2,6 +2,7 @@
 #include "native_font.h"
 #include "overview_assets.h"
 #include <string.h>
+#include <time.h>
 
 typedef struct {
   unsigned y, width;
@@ -175,8 +176,13 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
          TEXT);
     text(row, 24, 155, "Radio protocol: unselected", 18, TEXT);
   }
-  snprintf(value, sizeof(value), "Snapshot r%llu%s",
-           (unsigned long long)journal->dock_world_revision,
+  time_t local_stamp = (time_t)journal->dock_updated_at - 6 * 3600;
+  struct tm *local_time = gmtime(&local_stamp);
+  char stamp[32] = "unknown";
+  if (journal->dock_updated_at && local_time)
+    strftime(stamp, sizeof(stamp), "%H:%M:%S Mexico City", local_time);
+  snprintf(value, sizeof(value), "%sSnapshot %s%s",
+           view->page == 1 ? "OK: Back / " : "", stamp,
            journal->dock_online ? "" : " / stale");
   text(row, 24, 185, view->message[0] ? view->message : value, 18, TEXT);
   unsigned count = view->page == 2 ? 2 : 3;

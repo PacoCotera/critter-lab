@@ -27,7 +27,7 @@ typedef struct {
   char haul_id[64];
   uint32_t cargo[3], elapsed, kind;
   uint32_t dock_stock[3], dock_samples, dock_residents, dock_incubations;
-  uint64_t dock_world_revision;
+  uint64_t dock_world_revision, dock_updated_at;
 } KitJournal;
 
 typedef struct {

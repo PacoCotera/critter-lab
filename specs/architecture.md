@@ -90,3 +90,36 @@ Preserve individual ID, origin versus ancestry, genome revision, expression cont
 The minimum meaningful foundation proof is one provisional family with related individuals, inherited visible traits, carried/unexpressed and contextual cases; traceable appearance/sequence mapping; stable portraits and one bounded motion set; reopen/update preservation; and measured device-profile budgets. Static placeholders and read/copy fixtures are useful limited evidence, not this complete pipeline.
 
 See [cloud synchronization](cloud-sync.md), [genetics](genetics.md), [devices](devices.md) and [experience](experience.md).
+
+## Three-device host simulator
+
+The current simulator presents Lab, combined Companion and Dock together, with
+separate native frame/control contexts at1024×600,450×600 and792×272 monochrome.
+One C17 host aggregate remains the simulation authority: existing expedition
+fields are Companion-owned carried cargo; stock, samples and residents are the
+Lab-accepted world. Only Companion controls start expeditions. This does not
+claim separate MCU processes, endpoint storage or radio firmware.
+
+The native kit adapter seals an immutable haul snapshot in an atomic sidecar.
+Simulated delivery makes it available for explicit Lab acceptance in Explore.
+Acceptance first persists its exact command sequence and haul ID, then uses the
+existing atomic offload rule to credit stock/sample and clear canonical cargo.
+A durable receipt keeps the Companion's sealed, unspendable display pending until
+acknowledgement; only then may another expedition start. Restart at the split
+write boundary reconciles the exact journal operation before permitting another
+mutation. Missing required sidecar, corruption, mismatched cargo or durability
+uncertainty fails closed, preserving the game save. GameState format is unchanged.
+The sidecar is a host fixture, not a production wire format or migration policy.
+
+Wireless controls outside the shells independently interrupt Companion and Dock
+links. Dock retains a timestamped accepted-world projection while offline and
+catches up after reconnect; it never owns a second inventory or awards rewards.
+Cloud/charging are unavailable, and Print/Feed are explicitly simulated feedback.
+Production distributed receipts still need independent endpoint persistence,
+authentication, pairing, delivery ordering and radio failure validation.
+
+Radio choice remains open. The current Pi4 and ESP32-S3 references support Wi-Fi
+and BLE; neither supplies native802.15.4/Zigbee in the selected profile. Zigbee
+would need additional suitable radio hardware. No radio stack, BOM or connector
+is selected by this simulator. [Device references](devices.md) remain hardware
+authority. Native APIs expose logical device input and link availability only.

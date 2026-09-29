@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stddef.h>
 #include <string.h>
+#include <time.h>
 
 static void refresh(KitView *view, int interaction) {
   ++view->revision;
@@ -11,6 +12,11 @@ static void refresh(KitView *view, int interaction) {
 }
 static void refresh_all(DeviceKit *kit) {
   ++kit->lab->revision;
+  ++kit->lab->interaction_epoch;
+  kit->lab->minimum_action_revision = kit->lab->revision;
+  kit->lab->ready = 0;
+  for (unsigned i = 0; i < 10; ++i)
+    kit->lab->gestures[i].allowed = 0;
   refresh(&kit->companion, 1);
   refresh(&kit->dock, 1);
 }
@@ -166,6 +172,21 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
       !same_cargo(kit)) {
     fail(kit);
     return 0;
+  }
+  if (kit->journal.phase >= KIT_ACK_PENDING) {
+    if (!kit->journal.accept_sequence ||
+        lab->game.last_operation_sequence < kit->journal.accept_sequence) {
+      fail(kit);
+      return 0;
+    }
+    for (unsigned i = 0; i < GAME_OPERATION_SLOTS; ++i) {
+      const GameOperation *operation = &lab->game.operations[i];
+      if (operation->sequence == kit->journal.accept_sequence &&
+          strcmp(operation->id, kit->journal.haul_id)) {
+        fail(kit);
+        return 0;
+      }
+    }
   }
   if (kit->journal.phase == KIT_ACK_PENDING && lab->game.expedition_id[0]) {
     fail(kit);
@@ -425,13 +446,25 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
   if (kit->failed || kit->lab->storage_error || !reconcile(kit))
     return;
   uint64_t before = kit->lab->game.revision;
+  int before_active = kit->lab->game.expedition_active;
+  int before_empty =
+      !(kit->lab->game.expedition_data + kit->lab->game.expedition_energy +
+        kit->lab->game.expedition_essence);
   int portable_held = held(&kit->companion);
-  int expedition = !pending(kit) && !portable_held && !kit->companion.suspended;
+  int expedition = !pending(kit) && !portable_held &&
+                   !kit->companion.suspended &&
+                   kit->companion.page != COMP_SEND_REVIEW;
   if (!expedition)
     kit->lab->game.expedition_last_tick = clock;
   selected_lab_tick_devices(kit->lab, clock, expedition, 1);
-  if (kit->lab->game.revision != before)
-    refresh(&kit->companion, 0);
+  if (kit->lab->game.revision != before) {
+    int after_empty =
+        !(kit->lab->game.expedition_data + kit->lab->game.expedition_energy +
+          kit->lab->game.expedition_essence);
+    refresh(&kit->companion,
+            before_active != kit->lab->game.expedition_active ||
+                before_empty != after_empty);
+  }
   if (kit->journal.companion_online && clock >= kit->next_delivery) {
     if (kit->journal.phase == KIT_WAITING) {
       kit->journal.phase = KIT_ARRIVED;
@@ -469,6 +502,7 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
       kit->journal.dock_incubations = game->incubation_active;
       kit->journal.dock_world_revision = game->revision;
       kit->dock_updated = clock;
+      kit->journal.dock_updated_at = (uint64_t)time(NULL);
       if (!persist(kit))
         return;
       refresh(&kit->dock, 0);

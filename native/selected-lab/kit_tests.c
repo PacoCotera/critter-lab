@@ -83,12 +83,18 @@ int main(void) {
   assert(recovered.journal.phase == KIT_WAITING &&
          !recovered.journal.companion_online);
   assert(kit_link(&recovered, KIT_COMPANION, 1));
+  press(&recovered, KIT_LAB, SELECTED_DOWN_DOWN);
+  press(&recovered, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  unsigned old_frame = kit_revision(&recovered, KIT_LAB);
+  kit_input(&recovered, KIT_LAB, SELECTED_READY, old_frame);
+  kit_input(&recovered, KIT_LAB, SELECTED_CONFIRM_DOWN, old_frame);
   kit_tick(&recovered, 302);
+  kit_input(&recovered, KIT_LAB, SELECTED_CONFIRM_UP, old_frame);
+  assert(reopened.game.data ==
+         0); /* Arrival cannot authorize an old held Confirm. */
   assert(recovered.journal.phase == KIT_ARRIVED);
   assert(kit_link(&recovered, KIT_DOCK, 0));
   assert(kit_link(&recovered, KIT_COMPANION, 0));
-  press(&recovered, KIT_LAB, SELECTED_DOWN_DOWN);
-  press(&recovered, KIT_LAB, SELECTED_CONFIRM_DOWN);
   press(&recovered, KIT_LAB, SELECTED_CONFIRM_DOWN);
   assert(recovered.journal.phase == KIT_ACK_PENDING &&
          reopened.game.data == cargo);
@@ -109,6 +115,19 @@ int main(void) {
   assert(kit_init(&kit, &lab, 400));
   assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.data == cargo &&
          lab.game.sample_count == 1);
+  /* A missing/rolled-back accepted world cannot authorize an acknowledgement.
+   */
+  GameState accepted_world = lab.game;
+  game_state_init(&lab.game);
+  assert(game_state_save(path, &lab.game) == 0);
+  SelectedLab missing;
+  selected_lab_init(&missing);
+  assert(selected_lab_load(&missing, path, 401));
+  DeviceKit missing_kit;
+  assert(!kit_init(&missing_kit, &missing, 401));
+  assert(missing_kit.failed);
+  lab.game = accepted_world;
+  assert(game_state_save(path, &lab.game) == 0);
   assert(kit_link(&kit, KIT_COMPANION, 1));
   kit_tick(&kit, 402);
   assert(kit.journal.phase == KIT_COMPLETE && !lab.game.expedition_id[0]);

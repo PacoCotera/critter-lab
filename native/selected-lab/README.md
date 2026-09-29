@@ -56,3 +56,20 @@ not a full-screen screenshot. Host scaling does not establish physical readabili
 The superseded standalone review presenter was removed after checking callers;
 use `native/presenter/server.py` with `CRITTER_DEMO_BINARY` pointing at the selected
 Lab executable. The production path is the one exercised by HTTP tests and CI.
+
+## Three-device mode
+
+`selected_lab kit-serve` is used by the deployed presenter. Device0 is Lab,
+1 Companion and2 Dock. `device ID status`, `device ID frame REVISION` and
+`device ID INPUT REVISION` address distinct native contexts. Companion/Dock
+`device ID link 0|1` is a simulation fault control, not a hardware action.
+Legacy `serve` remains the single-device regression fixture; its old mutation
+commands are unavailable in kit mode. Health/release routes remain compatible.
+
+The same game save gains `.kit` and `.kit.required` sidecars. Preserve all files
+together: the first is the atomic transfer/cache journal; the marker prevents
+silently replacing a missing journal after a transfer. Do not delete a sidecar
+to bypass recovery. The simulator runs one host process and logical wireless
+exchange, with no claim of independent endpoint stores or physical radio tests.
+`three_device_kit_checks` covers ownership, interruption, duplicate acceptance,
+restart at commit intent, required-journal loss and monochrome/native dimensions.
