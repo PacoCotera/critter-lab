@@ -1,0 +1,140 @@
+{
+  "status": "Offline art proof; not runtime integration or owner approval",
+  "reference": "../game-art-proposals/37-lab-extracted-kit/screen-reference.png",
+  "referenceSize": [
+    752,
+    421
+  ],
+  "font": "Explicit bundled Bitstream Vera Sans/Vera Bold font files; C18 type identity unresolved",
+  "paletteRoles": {
+    "surface": "#222d35",
+    "frame": "#2877aa",
+    "focus": "#f5d77f",
+    "data": "#2568a6",
+    "energy": "#f7bc42",
+    "essence": "#a4e566"
+  },
+  "assets": [
+    {
+      "name": "data",
+      "source": "src/data.svg",
+      "export": "exports/data.png",
+      "width": 40,
+      "height": 53,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "77330165b8adf1337dc3477ac7e415f0996bc47653185a71fd2c1abeae0ee951",
+      "exportSha256": "55073b750c7bf25cd6797cf307179ba20a1292aadde0e111c41c381a29a56ca5"
+    },
+    {
+      "name": "energy",
+      "source": "src/energy.svg",
+      "export": "exports/energy.png",
+      "width": 40,
+      "height": 53,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "12fab3330acbff2e8e58834c4c4df27d6114d6132b642103826eeffad3c52613",
+      "exportSha256": "b60eb5df746d048df6739d58e362d2b5db03ccb837b8fea13e99f6623030334f"
+    },
+    {
+      "name": "essence",
+      "source": "src/essence.svg",
+      "export": "exports/essence.png",
+      "width": 40,
+      "height": 53,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "6ae5d8d4b9439a88415405d53027685c223f4c136a3b824f8d4511fcc04a5355",
+      "exportSha256": "f2c6e759f8fdf4e30357b765baa0d2dff087d5a692db0f88b804ce334f4c9b01"
+    },
+    {
+      "name": "header",
+      "source": "src/header.svg",
+      "export": "exports/header.png",
+      "width": 984,
+      "height": 100,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "979638898716fb39668569a5655e68aac9d10e7c460bf5fd6b12861fe4edf387",
+      "exportSha256": "9f3d46be821b791adba251b9cf5476ef46d5a666b3c8452e994f72c309461649"
+    },
+    {
+      "name": "information-narrow",
+      "source": "src/information-narrow.svg",
+      "export": "exports/information-narrow.png",
+      "width": 272,
+      "height": 147,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "469ace7005f41baba37523586a03d6d5a5984adc5afae7d770f3fb40ac513ec4",
+      "exportSha256": "437e394a0b0f6374c528d77d334f27aaab135f3cd304126afaa744f43e666aa0"
+    },
+    {
+      "name": "information-wide",
+      "source": "src/information-wide.svg",
+      "export": "exports/information-wide.png",
+      "width": 390,
+      "height": 147,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "ae06d383f44e8f1b8218e0b0a9babfe6a18964e9ceb04f4569fd99dc75591cc6",
+      "exportSha256": "3a678cdbe484c781aa792db144c2b3b3ea1346784ee007963bb89f45bdfcc80b"
+    },
+    {
+      "name": "nav-focus",
+      "source": "src/nav-focus.svg",
+      "export": "exports/nav-focus.png",
+      "width": 218,
+      "height": 60,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "aadfb4e20fc86fc2d8839d0b0f796a7cbac952cdd382fbfa352df2c38a67e915",
+      "exportSha256": "de76d9ae847c1385950b89565f2b02a647861e708ae20c31a0d24adf67b09dd5"
+    },
+    {
+      "name": "nav-quiet",
+      "source": "src/nav-quiet.svg",
+      "export": "exports/nav-quiet.png",
+      "width": 218,
+      "height": 60,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "37858c44b647204ce8eb5e8af43959a0827166c890660d3de6ec54461d092a9f",
+      "exportSha256": "9675b6e779c58d3b1835f42ef1d0f6b6c41e23bb9323b4af5d8ff4b1a5831ae1"
+    },
+    {
+      "name": "navigation-frame",
+      "source": "src/navigation-frame.svg",
+      "export": "exports/navigation-frame.png",
+      "width": 244,
+      "height": 412,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "3fe53c10d1ec8e8297b6e717af70f395967063e435f06d8e282dc905589343d8",
+      "exportSha256": "ae9009c031094c7f9116aa202ef94c1ec8fe07ec78ee76adb0892098881d66e9"
+    },
+    {
+      "name": "overview-frame",
+      "source": "src/overview-frame.svg",
+      "export": "exports/overview-frame.png",
+      "width": 714,
+      "height": 412,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "27c209e8777acb8e37dde6b4b56457d8b0d3701324b8e8c7961a5f656a5d911c",
+      "exportSha256": "a84a3c09ec2a6e4c826db5fa1c804af690f4a4d2b24daf817dff9558b1b063ca"
+    },
+    {
+      "name": "sample-capsule",
+      "source": "src/sample-capsule.svg",
+      "export": "exports/sample-capsule.png",
+      "width": 80,
+      "height": 80,
+      "drawScale": 1,
+      "alpha": true,
+      "sha256": "4fd47b9973795e47993198405649f29058cd929ca01543023060b7c5d381ded0",
+      "exportSha256": "6c70eca5fafbc62777d73aa9454c290649aacc3c011fa0b037202a303a134164"
+    }
+  ]
+}

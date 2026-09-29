@@ -48,16 +48,19 @@ landing pass does not approve a text-only finding page. Preserve illustrated
 findings, intentional panel depth, controlled negative space, saturated shared
 sprites and restrained warm focus halo. Do not enlarge a generic capsule to fill
 the research field or replace discovery with identical progress bars. Gemini
-provides art direction/production; engineering preserves the resulting native
+provides the approved visual references; the production crew reconstructs reusable
+masters and engineering preserves the resulting native
 asset scales, anchors and effects. No current native-art final approval is claimed.
 
 The owner explicitly rejected the native Overview styling after the input/resource
 correction. Functional and readability passes do not approve its visual fidelity.
-The next art proof must use actual Gemini-authored production artwork and be
+The next art proof must faithfully translate the approved Gemini references and be
 compared with C18 at native size. Existing JPEG screenshot crops, flood-matted
 edges and procedural outline panels are not production masters or an acceptable
 substitute for that handoff. Preserve current useful information and physical
-controls while the director and production artist resolve the visual craft.
+controls while the director and production artist resolve the visual craft. The
+owner authorizes the [reference-production workbench](reference-production/README.md)
+to develop the asset family separately before native integration.
 
 ## Screen design sequence
 

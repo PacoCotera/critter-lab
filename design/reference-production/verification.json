@@ -1,0 +1,19 @@
+{
+  "result": "pass",
+  "scope": "One local regeneration and actual export inspection; not visual or runtime acceptance",
+  "assets": 11,
+  "reproducibleFiles": 26,
+  "rgbaSilhouettes": true,
+  "overviewPixels": [
+    1024,
+    600
+  ],
+  "exactNearestNeighborEnlargement": 3,
+  "overviewSha256": "0cf5138491bc7958c1eaebeac87086e4d70ed6c3b3c3f5e787cc92b2ab4cb43c",
+  "manifestSha256": "7371daa4a9e5148585dd56b7b64cbd018d708644751d4f6e4485d5ff4eb759da",
+  "versions": {
+    "node": "24.19.0",
+    "sharp": "0.35.4",
+    "vips": "8.18.6"
+  }
+}
