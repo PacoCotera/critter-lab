@@ -1,16 +1,23 @@
-# Native first-expedition fixture
+# Native builds and Lab simulation
 
 [CI release delivery](UPDATER.md) defines artifact provenance and the staging service boundary.
 
-This builder entry point compiles three native programs sharing a bounded C domain and scanline renderer. The Linux Lab executable runs the saved first-expedition fixture and emits native BMP frames. Probe and Companion link the same portable code, apply and validate one selection transition and render one checksum row at boot; neither has a panel driver. Cross-compilation is not evidence of booting hardware.
+The playable Lab target is `selected_lab`: native C17 rules, durable local records
+and a scanline renderer, displayed through the browser transport. See its
+[current contract](selected-lab/README.md) and [playable loop](selected-lab/V1.md).
+The earlier `critter_lab` fixture and portable MCU scaffolds remain separate build
+targets; compiling them does not establish the complete game on those devices.
 
-| Program | Compile target | Framework |
+| Program | Current compiler target | Toolchain / evidence |
 | --- | --- | --- |
-| Lab | Linux host, C17 | CMake and host GCC |
-| Probe | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0, Zephyr GNU SDK 1.0.1 |
-| Companion | `esp32s3` (Xtensa) | ESP-IDF 5.5.5 |
+| Lab | Linux x86-64 host; Raspberry Pi4 Model B is the selected device reference | GCC + CMake + Ninja, C17. Not ESP-IDF. ARM build, physical display/input and Pi performance unverified. |
+| Legacy Probe scaffold | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr4.4.0 + Zephyr GNU SDK1.0.1; no panel driver or physical boot evidence. |
+| Companion scaffold | `esp32s3` (Xtensa) | ESP-IDF5.5.5; separate from Lab; no panel driver or physical boot evidence. |
 
-The selected development profiles are Lab 1024x600 color, Probe candidate 122x250 portrait monochrome and Companion 368x448 color. Native builds do not configure external peripherals or prove a physical boot. SDK board defaults are not a product pin map.
+Current product roles and selected electronics are in [devices](../specs/devices.md).
+Legacy portable build targets do not freeze the consolidated kit's final electronics.
+The simulator panel represents the Lab directional cross, four workspace keys,
+Back and Confirm. It does not emulate a Pi4 CPU or GPIO.
 
 ## Ubuntu build environment
 

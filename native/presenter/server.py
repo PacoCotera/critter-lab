@@ -13,7 +13,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parent
-EVENTS = {"rotate", "confirm-down", "confirm-up", "back-down", "back-up", "cancel", "suspend", "resume", "ready"}
+BUTTONS = {'up', 'down', 'left', 'right', 'research', 'critters', 'library', 'habitat', 'confirm', 'back'}
+EVENTS = {f'{button}-{edge}' for button in BUTTONS for edge in ('down', 'up')} | {'cancel', 'suspend', 'resume', 'ready'}
 
 
 class NativeProcess:
@@ -68,7 +69,10 @@ class NativeProcess:
         finally:
             finished.set()
             deadline.cancel()
+            if deadline.ident is not None:
+                deadline.join()
             self.lock.release()
+
     def close(self):
         self.process.stdin.close()
         try:
@@ -205,18 +209,12 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(command, dict):
                 raise ValueError()
             name, revision = command.get("event"), command.get("revision")
-            expected_keys = {"event", "revision", "delta"} if name == "rotate" else {"event", "revision"}
+            expected_keys = {"event", "revision"}
             if set(command) != expected_keys or not isinstance(name, str) or name not in EVENTS:
                 raise ValueError()
             if type(revision) is not int or not 0 <= revision <= 4294967295:
                 raise ValueError()
-            if name == "rotate":
-                delta = command["delta"]
-                if type(delta) is not int or delta not in (-1, 1):
-                    raise ValueError()
-                line = f"rotate {delta} {revision}"
-            else:
-                line = f"{name} {revision}"
+            line = f"{name} {revision}"
             result, _ = self.server.native.command(line)
             self.reply(400 if "error" in result else 200, result)
         except (ValueError, UnicodeError):
@@ -246,4 +244,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 

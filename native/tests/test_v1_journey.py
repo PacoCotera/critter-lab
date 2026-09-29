@@ -37,7 +37,7 @@ class Player:
         for _ in range(10):
             if self.state["focus"] == label:
                 return self.press()
-            self.command(f"rotate 1 {self.state['revision']}")
+            self.press("down")
         raise AssertionError((label, self.state))
 
     def capture(self, name):

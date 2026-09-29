@@ -98,7 +98,9 @@ class SelectedPresenter(unittest.TestCase):
         self.assertEqual(self.request('/api/input', body, authenticated=False, headers=headers)[0], 200)
 
     def test_input_shape_and_frame_bounds(self):
-        self.assertEqual(self.input('rotate', extra={'delta': 1})[0], 200)
+        for button in PRESENTER.BUTTONS:
+            for edge in ('down', 'up'):
+                self.assertEqual(self.input(f'{button}-{edge}')[0], 200)
         for event, revision, extra in [('rotate', 1, {'delta': 0}), ('rotate', 1, {'delta': True}), ('confirm-down', True, None), ('cancel', -1, None), ('cancel', 4294967296, None), ('incubate', 1, None), ('cancel', 1, {'operation_id': 'legacy'})]:
             self.assertEqual(self.input(event, revision, extra)[0], 400)
         for query in ('revision=0', 'revision=4294967296', 'revision=1&revision=2', 'device=lab&revision=1'):
