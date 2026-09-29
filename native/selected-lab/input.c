@@ -7,11 +7,11 @@ static unsigned visible_residents(const SelectedLab *lab) {unsigned count=0;for(
 void selected_lab_init(SelectedLab *lab) { memset(lab,0,sizeof(*lab)); game_state_init(&lab->game);lab->revision=lab->page_revision=1; }
 int selected_lab_load(SelectedLab *lab,const char *path,uint32_t clock) {
  if(strlen(path)>=sizeof(lab->save_path)) return 0;
- strcpy(lab->save_path,path);lab->clock=clock;
+ if(path!=lab->save_path)strcpy(lab->save_path,path);lab->clock=clock;
  int loaded=game_state_load(path,&lab->game);
  if(loaded<0) { lab->storage_error=1;strcpy(lab->message,"Save unavailable. Existing data preserved.");return 0; }
  if(loaded>0&&game_state_save(path,&lab->game)!=0){lab->storage_error=1;strcpy(lab->message,"Storage unavailable. Reload before continuing.");return 0;}
- game_rules_resume_runtime(&lab->game,clock);return 1;
+ lab->storage_error=0;game_rules_resume_runtime(&lab->game,clock);return 1;
 }
 const char *selected_lab_page(const SelectedLab *lab) {
  static const char *names[]={"home","expedition","cargo","samples","research","finding","creation","incubation","reveal","habitat","study-review","discard-review"};return names[lab->page];
@@ -33,7 +33,7 @@ const char *selected_lab_option(const SelectedLab *lab,unsigned option) {
  case V1_STUDY_REVIEW:return option?"Return to topics":"Start research";
  case V1_DISCARD_REVIEW:return option?"Keep this pack":"Discard 1 pack";
  case V1_HOME:return home[option%4];
- case V1_EXPEDITION:return lab->game.expedition_id[0]?(option?"Cargo":"Keep exploring"):routes[option%3];
+ case V1_EXPEDITION:return lab->game.expedition_id[0]?(option?"Cargo":lab->game.expedition_active?"Keep exploring":"Review completed haul"):routes[option%3];
  case V1_CARGO:return cargo[option%4];
  case V1_SAMPLES:return lab->game.sample_count?lab->game.samples[option%lab->game.sample_count].id:"Find a sample outdoors";
  case V1_STUDIES:return option<5?pip_study(option)->title:"Prepare incubation";
@@ -70,7 +70,7 @@ static void activate(SelectedLab *lab) {
  switch(lab->page) {
  case V1_HOME: {static const SelectedPage pages[]={V1_EXPEDITION,V1_SAMPLES,V1_INCUBATION,V1_HABITAT};enter(lab,pages[focus]);if(lab->page==V1_HABITAT&&visible_residents(lab)){for(unsigned i=0;i<lab->game.individual_count;i++)if(lab->game.individuals[i].revealed){lab->resident=i;break;}}break;}
  case V1_EXPEDITION:
-  if(lab->game.expedition_id[0]) {if(focus)enter(lab,V1_CARGO);else {strcpy(lab->message,"Gathering while you explore. Cargo keeps your haul.");changed(lab);} }
+  if(lab->game.expedition_id[0]) {if(focus||!lab->game.expedition_active)enter(lab,V1_CARGO);else {strcpy(lab->message,"Gathering while you explore. Cargo keeps your haul.");changed(lab);} }
   else {command.type=GAME_COMMAND_EXPEDITION_START;command.data.expedition.kind=(GameExpeditionKind)focus;command.data.expedition.monotonic_seconds=lab->clock;commit(lab,command);lab->focus=0;game_rules_resume_runtime(&lab->game,lab->clock);} break;
  case V1_CARGO:
   if(!focus) {command.type=GAME_COMMAND_EXPEDITION_OFFLOAD;if(commit(lab,command)==GAME_OK)enter(lab,V1_SAMPLES);}
@@ -97,6 +97,7 @@ static void activate(SelectedLab *lab) {
  }
 }
 void selected_lab_input(SelectedLab *lab,SelectedInput input,int delta,unsigned frame) {
+ if(input==SELECTED_RESUME&&lab->storage_error&&lab->save_path[0]){if(selected_lab_load(lab,lab->save_path,lab->clock)){enter(lab,V1_HOME);strcpy(lab->message,"Saved progress restored. Choose a fresh action.");}}
  if(input==SELECTED_READY){if(frame==lab->revision&&!lab->suspended)lab->ready=1;return;}
  if(input==SELECTED_CANCEL||input==SELECTED_SUSPEND||input==SELECTED_RESUME){memset(&lab->confirm,0,sizeof(lab->confirm));memset(&lab->back,0,sizeof(lab->back));if(input!=SELECTED_CANCEL){lab->suspended=input==SELECTED_SUSPEND;changed(lab);game_rules_resume_runtime(&lab->game,lab->clock);}return;}
  if(input==SELECTED_ROTATE){if(!lab->suspended&&delta&&frame>=lab->page_revision&&frame<=lab->revision){unsigned count=selected_lab_options(lab);lab->focus=(lab->focus+(delta>0?1:count-1))%count;changed(lab);}return;}
