@@ -2,31 +2,26 @@
 #define SELECTED_LAB_H
 #include <stdint.h>
 #include <stdio.h>
-
+#include "game_rules.h"
+#include "pip_genetics.h"
 #define SELECTED_LAB_WIDTH 1024u
 #define SELECTED_LAB_HEIGHT 600u
-
-typedef enum { SELECTED_STUDY, SELECTED_START_PREVIEW, SELECTED_CROWN, SELECTED_EYE_RING } SelectedPage;
-typedef enum { SELECTED_START, SELECTED_CROWN_TARGET, SELECTED_EYE_TARGET, SELECTED_RETURN } SelectedFocus;
-typedef enum {
-  SELECTED_ROTATE, SELECTED_CONFIRM_DOWN, SELECTED_CONFIRM_UP,
-  SELECTED_BACK_DOWN, SELECTED_BACK_UP, SELECTED_CANCEL,
-  SELECTED_SUSPEND, SELECTED_RESUME, SELECTED_READY
-} SelectedInput;
-
+typedef enum { V1_HOME, V1_EXPEDITION, V1_CARGO, V1_SAMPLES, V1_STUDIES, V1_FINDING, V1_CREATE, V1_INCUBATION, V1_REVEAL, V1_HABITAT } SelectedPage;
+typedef enum { SELECTED_ROTATE, SELECTED_CONFIRM_DOWN, SELECTED_CONFIRM_UP, SELECTED_BACK_DOWN, SELECTED_BACK_UP, SELECTED_CANCEL, SELECTED_SUSPEND, SELECTED_RESUME, SELECTED_READY } SelectedInput;
 typedef struct { int held, allowed; unsigned revision; } SelectedGesture;
 typedef struct {
-  SelectedPage page;
-  SelectedFocus focus, return_focus;
-  unsigned revision, page_revision;
-  int ready, suspended;
-  SelectedGesture confirm, back;
+ SelectedPage page; unsigned focus, sample, study, resident, revision, page_revision;
+ int ready, suspended, storage_error; SelectedGesture confirm, back;
+ GameState game; char save_path[512]; char message[96]; uint32_t clock;
 } SelectedLab;
-
 void selected_lab_init(SelectedLab *lab);
+int selected_lab_load(SelectedLab *lab, const char *path, uint32_t clock);
+void selected_lab_tick(SelectedLab *lab, uint32_t clock);
 void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta, unsigned frame);
 const char *selected_lab_page(const SelectedLab *lab);
 const char *selected_lab_focus(const SelectedLab *lab);
-void selected_lab_row(const SelectedLab *lab, unsigned row, uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
+unsigned selected_lab_options(const SelectedLab *lab);
+const char *selected_lab_option(const SelectedLab *lab, unsigned option);
+void selected_lab_row(const SelectedLab *lab, unsigned row, uint8_t pixels[SELECTED_LAB_WIDTH*3]);
 int selected_lab_bmp(const SelectedLab *lab, FILE *output);
 #endif

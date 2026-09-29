@@ -177,3 +177,12 @@ async function showRelease() {
   }
 }
 showRelease();
+
+// Poll native time-driven state; timing and gameplay remain in the native process.
+const pollTimer = setInterval(() => {
+ if (inputBlocked || document.hidden || held.size) return;
+ commands=commands.then(async()=>{const response=await fetch('/api/status');if(!response.ok)throw new Error('Unavailable');receive(await response.json());}).catch(stopAfterTransportFailure);
+},1000);
+
+// Node transport tests should not be held open by the browser polling timer.
+pollTimer.unref?.();

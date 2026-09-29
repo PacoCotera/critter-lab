@@ -22,7 +22,7 @@ async function stopAfterTransportFailure() {
   status.textContent = 'Transport interrupted; activation stopped. Reload to reconnect with a fresh gesture.';
   // A down may have reached C even when its response was lost. Never send a queued up.
   try {
-    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'cancel', revision: visibleRevision }) });
+    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event: 'cancel', revision: visibleRevision }) });
     if (!response.ok) return;
     await response.json();
   } catch {
@@ -35,7 +35,7 @@ function send(event, requestedFrame = visibleRevision, delta) {
   const generation = transportGeneration;
   commands = commands.then(async () => {
     if (inputBlocked || generation !== transportGeneration) return;
-    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event, revision: requestedFrame, ...(delta === undefined ? {} : { delta }) }) });
+    const response = await fetch('/api/input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ event, revision: requestedFrame, ...(delta === undefined ? {} : { delta }) }) });
     if (!response.ok) throw new Error('Native input transport unavailable.');
     const state = await response.json();
     if (generation === transportGeneration && !inputBlocked) receive(state);
@@ -157,3 +157,32 @@ try {
   receive(await response.json());
   if (!document.hidden) send('resume');
 } catch { await stopAfterTransportFailure(); }
+
+async function showRelease() {
+  const label = document.querySelector('#release');
+  try {
+    const response = await fetch('/api/release', { cache: 'no-store' });
+    if (!response.ok) return;
+    const release = await response.json();
+    if (!/^[0-9a-f]{40}$/.test(release.commit || '') || !release.deployed_at) return;
+    const timestamp = new Date(release.deployed_at);
+    if (!Number.isFinite(timestamp.getTime())) return;
+    const formatted = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'America/Mexico_City', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+    }).format(timestamp);
+    label.textContent = `Release ${release.commit.slice(0, 7)} | ${formatted} Mexico City`;
+  } catch {
+    // Missing metadata retains the honest development label.
+  }
+}
+showRelease();
+
+// Poll native time-driven state; timing and gameplay remain in the native process.
+const pollTimer = setInterval(() => {
+ if (inputBlocked || document.hidden || held.size) return;
+ commands=commands.then(async()=>{const response=await fetch('/api/status');if(!response.ok)throw new Error('Unavailable');receive(await response.json());}).catch(stopAfterTransportFailure);
+},1000);
+
+// Node transport tests should not be held open by the browser polling timer.
+pollTimer.unref?.();

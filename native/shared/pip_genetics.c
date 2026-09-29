@@ -1,0 +1,88 @@
+#include "pip_genetics.h"
+
+#include <string.h>
+
+/* Provisional balance v1. Costs, expedition yields and durations are fixture
+ * values for the playable slice; they are not canonical game balance. */
+static const PipStudy STUDIES[PIP_STUDY_COUNT] = {
+    {"form.crown", "Crown form", "A soft crown frill frames the head.",
+     500, 0, 0, 1u << 0},
+    {"appearance.rings", "Eye rings", "Pale rings surround amber eyes.",
+     0, 500, 0, 1u << 1},
+    {"appearance.markings", "Body markings", "Plain coats can carry pale markings. Both forms are possible.",
+     0, 0, 500, 1u << 2},
+    {"movement.drive", "Movement", "Six legs carry Pip in short, quick bursts.",
+     400, 400, 0, 1u << 3},
+    {"movement.efficiency", "Energy use", "Efficient movement leaves more energy for exploring.",
+     0, 400, 400, 1u << 4},
+};
+
+const PipStudy *pip_studies(void) { return STUDIES; }
+
+const PipStudy *pip_study(unsigned index) {
+  return index < PIP_STUDY_COUNT ? &STUDIES[index] : 0;
+}
+
+int pip_genome_valid(const PipGenome *genome) {
+  static const char EXPECTED[GAME_GENETIC_LOCI][2] = {
+      {'C', 'c'}, {'R', 'r'}, {0, 0}, {'M', 'm'}, {'E', 'e'}};
+  unsigned locus;
+  if (!genome || strcmp(genome->class_id, "critter:pip") != 0 ||
+      strcmp(genome->content_version, PIP_CONTENT_VERSION) != 0 ||
+      strcmp(genome->rules_version, PIP_RULES_VERSION) != 0)
+    return 0;
+  for (locus = 0; locus < GAME_GENETIC_LOCI; ++locus) {
+    if (locus == 2) {
+      int carried = genome->loci[locus][0] == 'P' &&
+                    genome->loci[locus][1] == 'p';
+      int expressed = genome->loci[locus][0] == 'p' &&
+                      genome->loci[locus][1] == 'p';
+      if (!carried && !expressed) return 0;
+      continue;
+    }
+    if (genome->loci[locus][0] != EXPECTED[locus][0] ||
+        genome->loci[locus][1] != EXPECTED[locus][1])
+      return 0;
+  }
+  return 1;
+}
+
+int pip_genome_for_sample(unsigned candidate, PipGenome *genome) {
+  static const char COMMON[GAME_GENETIC_LOCI][2] = {
+      {'C', 'c'}, {'R', 'r'}, {'P', 'p'}, {'M', 'm'}, {'E', 'e'}};
+  if (!genome || candidate > 1) return -1;
+  memset(genome, 0, sizeof(*genome));
+  memcpy(genome->loci, COMMON, sizeof(COMMON));
+  if (candidate == 1) {
+    genome->loci[2][0] = 'p';
+    genome->loci[2][1] = 'p';
+  }
+  strcpy(genome->class_id, "critter:pip");
+  strcpy(genome->content_version, PIP_CONTENT_VERSION);
+  strcpy(genome->rules_version, PIP_RULES_VERSION);
+  return 0;
+}
+
+void pip_express(const PipGenome *genome, PipExpression *expression) {
+  memset(expression, 0, sizeof(*expression));
+  expression->crown = genome->loci[0][0] == 'C' || genome->loci[0][1] == 'C';
+  expression->eye_rings = genome->loci[1][0] == 'R' || genome->loci[1][1] == 'R';
+  expression->pale_markings = genome->loci[2][0] == 'p' && genome->loci[2][1] == 'p';
+  expression->burst_movement = genome->loci[3][0] == 'M' || genome->loci[3][1] == 'M';
+  expression->efficient_movement = genome->loci[4][0] == 'E' || genome->loci[4][1] == 'E';
+}
+
+const char *pip_art_id(const PipGenome *genome) {
+  if (!pip_genome_valid(genome)) return 0;
+  return genome->loci[2][0] == 'p' && genome->loci[2][1] == 'p'
+             ? "design/v1-pip/pip-marked.png"
+             : "design/v1-pip/pip-carried.png";
+}
+
+int pip_expression_valid(const PipGenome *genome,
+                         const PipExpression *expression) {
+  PipExpression resolved;
+  if (!pip_genome_valid(genome) || !expression) return 0;
+  pip_express(genome, &resolved);
+  return memcmp(&resolved, expression, sizeof(resolved)) == 0;
+}
