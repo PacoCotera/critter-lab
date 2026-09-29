@@ -129,7 +129,7 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   case V1_DISCARD_REVIEW:
     return 2;
   case V1_HOME:
-    return 4;
+    return 5;
   case V1_EXPEDITION:
     return lab->game.expedition_id[0] ? 2 : 3;
   case V1_CARGO:
@@ -152,7 +152,8 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   return 1;
 }
 const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
-  static const char *home[] = {"Explore", "Research", "Incubator", "Habitat"};
+  static const char *home[] = {"Home", "Explore", "Research", "Incubator",
+                               "Habitat"};
   static const char *routes[] = {"Field survey", "Garden forage",
                                  "Weather watch"};
   static const char *cargo[] = {"Return + store haul", "Discard data pack",
@@ -188,7 +189,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_DISCARD_REVIEW:
     return option ? "Keep this pack" : "Discard 1 pack";
   case V1_HOME:
-    return home[option % 4];
+    return home[option % 5];
   case V1_EXPEDITION:
     return lab->game.expedition_id[0]
                ? (option                        ? "Cargo"
@@ -293,8 +294,10 @@ static void activate(SelectedLab *lab) {
     lab->focus = lab->library_index;
     return;
   case V1_HOME: {
-    static const SelectedPage pages[] = {V1_EXPEDITION, V1_SAMPLES,
+    static const SelectedPage pages[] = {V1_HOME, V1_EXPEDITION, V1_SAMPLES,
                                          V1_INCUBATION, V1_HABITAT};
+    if (!focus)
+      break;
     enter(lab, pages[focus]);
     if (lab->page == V1_HABITAT && visible_residents(lab)) {
       for (unsigned i = 0; i < lab->game.individual_count; i++)
@@ -557,10 +560,11 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
       lab->focus = lab->game.expedition_id[0] ? 1 : 0;
     } else {
       enter(lab, V1_HOME);
-      lab->focus = previous == V1_SAMPLES      ? 1
-                   : previous == V1_INCUBATION ? 2
-                   : previous == V1_HABITAT    ? 3
-                                               : 0;
+      lab->focus = previous == V1_EXPEDITION                            ? 1
+                   : previous == V1_SAMPLES                             ? 2
+                   : previous == V1_INCUBATION || previous == V1_REVEAL ? 3
+                   : previous == V1_HABITAT                             ? 4
+                                                                        : 0;
     }
   } else
     activate(lab);

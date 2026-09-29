@@ -1,38 +1,86 @@
 # Screen design standard
 
-Playful Pixel Lab is the selected foundation, with refinement-02 supplying the current proposed vocabulary. Continue that direction. The connected research entity/game model now precedes further composition; previous rejected Lab/Probe layouts and the superseded bare process sketch are not implementation baselines. Screen composition, art and interaction still require owner review.
+## Approved Lab UI baseline
 
-## Instrument character
+Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The [baseline entry](game-art-proposals/35-vault-composition/README.md) records scope and evidence. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
 
-The Lab is a research workbench. Its screen should organize a sample, its known and unknown properties, the current investigation and the next useful action into a coherent instrument. Supplied research-terminal explorations are inspiration for coherent instruments, not templates for layouts, palettes or graphics. Develop an original visual language before composing screens. They do not establish fictional metrics, biological claims, new controls or approved hardware.
+The Lab is a playful genetics research device: graphite surfaces, defined electric-blue frames, saturated crisp pixel artwork and selective warm focus. Preserve biological curiosity and the original pixel personality; avoid cosmic/starfield imagery, purple-dominant surfaces, generic web cards and hardware depicted inside hardware.
 
-Use one dominant research subject and subordinate information areas. Panels group related facts; they are not decoration. A richer interface does not require more mechanics or filler. The Probe is a field discovery instrument: show expedition state, real progress, collected resources and neutral events, without revealing sample contents. The Companion centers the individual and its response.
+### Visual roles
 
-## Typography and layout
+| Element | Approved baseline / derivation rule |
+| --- | --- |
+| Base surfaces | Graphite/dark neutral depth; quieter than art and information |
+| Frames | Defined electric-blue leading edges, dark edge contrast and consistent stepped corners; crisp rather than bloomy |
+| Resources | Saturated blue Data card, gold faceted Energy crystal, rounded translucent lime Essence; stable shape/color identity across Lab screens |
+| Focus | Quiet dark action with selective warm edge/corner highlights and readable light text; one console target, no solid bright yellow fill dominating the screen |
+| Header | Unified sample/context identity and aligned resource inventory; preserve hierarchy and comfortable spacing |
+| Findings | Equal, clearly labeled illustration panels with art directly on the dark field; no trapezoid platforms or pedestals |
+| Type | Friendly prominent headings and legible supporting text, using panel resolution fully |
+| Pixel craft | Saturated well-delineated sprites, intentional clusters and consistent apparent pixel density; detail through drawing, not blur or excessive micro-shading |
+| Knowledge | Known and unknown remain explicit; unknown imagery reveals no specimen result and must not imply absent, locked or unaffordable |
+| Feedback | Pending/saved/error remain distinct from knowledge and focus. Red is for actual error/risk, not affordable study cost |
 
-For the next Lab studies at 1024 × 600, use one readable instrument type family and a proposed three-size scale: 22 px for labels, 26 px for body/actions and 30 px for the activity heading. These are exploration tokens, not a selected font or validated physical readability. Use weight, spacing and position before adding another size. Avoid large website-style headings and long all-caps passages.
+Approval establishes visual direction, composition grammar and hierarchy. It does not establish exact sampled color tokens, font licensing, native sprite masters, motion, physical-display performance or implemented navigation. Author reusable assets and compact variants faithfully; verify them against this baseline rather than redesigning them independently per screen. Decorative biological imagery is not genomic data. Resource colors must not imply relationships to unrelated traits.
 
-Use an 8 px grid, consistent margins and aligned panel headings. Compare a persistent record beside a research stage with a broad examination surface above a compact record strip. Explore different information structures, not recolors of one layout. Inspect full screens at native resolution and in the complete-frame presenter; never solve overflow by cropping or shrinking essential labels.
+## Across the device family
 
-## Color and illustration
+- **Lab:** a landscape research workbench with visible sample/topic, useful findings, unknowns, stock, study cost and explicit commitment. Illustration supports an activity rather than displacing it.
+- **Probe:** compact expedition/gathering progress first; shared resources and state vocabulary, with authored monochrome alternatives where needed. No sensor readings, sonar or event mechanics invented by art.
+- **Companion:** individual critter identity, care and response; preserve recognizable heredity across representations.
+- **Atlas:** detailed specimen/reference illustration that rewards inspection, using the same identity. Richer editorial treatment may vary without adopting the unselected Archive as the primary UI.
+- **Print:** recognizable specimen and symbol family in ordinary monochrome. Specialty finishes are not requirements.
 
-Assign colors stable jobs: working field, text, panel structure, information category, focus and exceptional state. A category accent must not look like the focused action. Color is reinforced by labels and shapes. The enclosure palette does not constrain the display palette.
+The board's moth-like critter, sample data, counts, hypothetical controls and layouts are exploratory examples, not approved species, implemented mechanics or hardware decisions. Final display technologies remain open. A generated dark-screen board establishes no outdoor readability or physical power/refresh behavior.
 
-Illustration must explain the currently permitted subject. Distinct form studies need intentional silhouettes, texture, scale and equal visual weight. An arbitrary question mark or decorative geometry is not a research illustration. Unresolved information stays visibly unresolved. Do not invent DNA sequences, probabilities, gauges, graphs or streaming logs to make a screen appear active. Conceptual reference artwork is not a generated genotype or final specimen asset.
+## Deriving the remaining Lab app
 
-## Physical interaction
+Carry the approved baseline into the existing research journey: study preview, explicit commitment, research feedback and saved finding, then related Lab views. Reuse the header, frame vocabulary, resource family, typography hierarchy and focus treatment. Adapt information architecture to the player task; do not force every screen into the same two-column template. Preserve current game rules and physical console controls. New information structures and consequential visual departures still need owner review; baseline approval is not blanket approval of every future screen or mechanic.
 
-Design the gesture, focus change, activation, feedback, result and return path together. Fixed physical controls keep consistent roles; on-screen actions can change with context. The provisional Lab mapping is rotation to navigate, Confirm to activate and Back to return. Probe uses Next and Confirm. These mappings do not finalize switch components or enclosure measurements.
+Preserve richness during local implementation. Match the actual baseline beside the rendered result: icon craft, spacing, frame detail, focus balance and useful visual information. Rejected local34 is not an implementation style reference. A matching palette alone does not establish fidelity.
 
-Show one unmistakable focus marker. Distinguish focus from a retained selection, a disabled action and a completed result. Read-only panels do not imitate selectable controls. Avoid overlapping windows and mouse-oriented chrome unless a usable physical navigation model is explicitly designed. Focus changes do not spend resources. Show cost and stock at the commitment; show pending, failure/recovery and saved results distinctly. Preserve the sample and return focus across the sequence.
+Home and feature landing derivations are specified in the [Home contract](home-landings/README.md). Compare actual native exports against C18; the earlier control-migration pass did not approve broad visual fidelity.
 
-## Visual language before screens
+## Screen design sequence
 
-Use the selected refinement-02 typography, color roles, shapes and interaction vocabulary as inputs; do not restart graphic-style selection. First establish what the collection, resource choices, discoveries and genome zones mean in [the research game model](research-and-creation.md). Then demonstrate those relationships visually. Current scale and grid values remain proposed tokens, not measured hardware constraints.
+Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.
 
-Then apply the selected vocabulary to a few representative states and assess whether it remains clear, distinctive and consistent. Revise the vocabulary when application exposes a weakness. Lab and Companion can exploit full color; Probe needs deliberately designed monochrome forms, not automatic grayscale conversion.
+## Typography, composition and native craft
 
-Review hardware interaction alongside those states: preparation, focus movement, activation, pending, result, recovery and return. A visual concept establishes neither usability nor native/device performance. Previous rejected screen studies must not silently become implementation requirements.
+Use the1024×600 Lab study profile at full useful resolution; it is not a procurement decision. Establish outer insets, anchors, spacing rhythm and shared dimensions before construction. Essential text must remain legible; sibling components must not resize arbitrarily with labels. Test actual-length content, whole-screen balance, margins and clipping.
 
-Reject unclear meaning, inconsistent typography, generic filler art, disclosure of unknown sample contents, ambiguous focus, arbitrary control-role changes and clipped essential text. A coherent, reviewed design can then inform bounded implementation and actual interaction validation.
+Use coherent apparent pixel density and intentional detail hierarchy across resources, symbols and illustration. Typography may use finer rasterization for readability. Do not enlarge crude low-resolution symbols beside finely modeled resources and claim consistency from dimensions alone.
+
+## Sprite-sheet production and application
+
+The [exact baseline extraction kit](game-art-proposals/37-lab-extracted-kit/README.md) provides fixed source-pixel references, a manifest and comparison sheets. Use it to check fidelity. It is not a native sprite master set or finished resizable component library.
+
+
+Author the assets needed by the current screen as one family, then reuse those exact assets. Maintain recognizable silhouettes, optical weight, light direction, shading clusters and material identity. Data is a card; Energy reads as crystal; Essence is a rounded symmetric translucent drop or sphere. Original owner references remain preserved.
+
+Native masters need measured source dimensions, explicit display scale and deliberate compact variants. Show actual1× use and integer enlargements when claiming pixel work. Generated boards and browser previews are concept references, not native sprite masters. Inspect the whole resource family together, including stock and study sizes.
+
+## Proposed feature-facing visual contract
+
+The player-facing projection leads with features, discovery topics and retained findings rather than requiring players to learn loci or allele notation. The genomic engine and its knowledge rules remain authoritative. The genomic engine remains unchanged; the selected visual identity below governs its presentation. The game mapping belongs in the [player-facing genetics projection](research-and-creation.md#player-facing-genetics-abstraction--proposed-projection); device interaction belongs in the [feature-led research journey](../specs/experience.md#feature-led-research-journey--proposed-screen-projection). Content and information architecture precede screen production.
+
+The visual subject is the feature being explored; the useful content is what this record establishes about it. A generic feature illustration identifies a topic or reference, while a finding states record-specific knowledge. Neither its presence nor its brightness proves that the sample expresses the feature. Default views need no locus grid, mandatory gene letters, copy-count lesson or invented biological network.
+
+| Visual role | Proposed treatment and meaning |
+| --- | --- |
+| Feature / discovery topic | A stable name and recognizable reference glyph or compact illustration. Keep its identity across overview, study and inspection; do not redraw it as a different object for each knowledge state. A study is discovery, not a quiz or a choice of desired allele. |
+| Finding | A short record-specific statement beside the feature, with supported evidence or a free inspection destination. An illustration does not replace the finding. One finding may inform several features; one feature may depend on several findings. |
+| Expected outcome | A clear conditional result, with the relevant reference context available. Distinguish the record's expected appearance or behavior from an observed living individual. Use an actual specimen image only when its identity and appearance are supported and approved. |
+| Known inherited information | Keep the reference art visible and use a plain knowledge caption. When expression is established as absent, identify inherited-but-not-showing potential explicitly; do not fade it into an unknown, disabled or missing feature. Before expression is established, do not call it unexpressed. |
+| Not yet discovered | A labeled information gap or unfinished study destination. Do not use an empty collectible slot, missing body part, blacked-out creature or ghost image to imply absence. Unknown expression is not a negative finding. Outcomes come from the allowed engine-backed knowledge, not an icon's fill state. |
+| Console focus / retained context / feedback | Only the current console target receives the focus marker. The selected record remains identifiable through quiet retained context. Pending, saved acknowledgement and error are operation feedback, not feature-knowledge states; a saved check does not mean the whole record is complete. Read-only references receive no button-like treatment or simultaneous focus. |
+
+For Sample A before the supported Markings study, the projection must preserve that a pale-marking version is known while its adult-reference appearance is not yet established. After the accepted `Pp` finding, it may present the expected absence of pale markings and the known inherited pale-marking version under the adult/mild reference. These are two kinds of knowledge, not a single “feature absent” badge. Exact brief labels remain a content/layout decision; the preceding statements define meaning rather than prescribe paragraph copy.
+
+Overview should expose useful features, retained findings and available discovery destinations. Free inspection should add interpretation or evidence rather than repeat the overview. Cost review makes the chosen topic, supplies, affordability and explicit commitment clear; it does not preview the undiscovered answer. Subsequent states retain the record/topic identity. Engine-backed completeness and creation eligibility are separate from the count of visible feature illustrations or finished-looking panels.
+
+Use the selected Vault Data-card, crystal and rounded-Essence visual family. Their material colors and shapes identify supplies; they do not color genes, feature categories or movement/energy relationships. A functional energy-use finding and an Energy resource cost need distinct names and visual roles. Preserve the accepted atlas's reference illustration craft without importing its paper treatment into the primary device screen.
+
+After game/UX content and layout settle, production builds a reusable asset sheet and applies the same assets in the representative native screen. Preserve the selected family when authoring native variants; generated concept crops are not native pixel masters. Art direction checks meaningful illustration/data relationships, stable sibling footprints, margins, spacing, optical weight and focus at the actual 1024×600 study profile. Do not substitute a decorative hero with menus, a jargon form, or labels on unexplained symbols for that visual system. Actual final exports require art, gameplay and UX review; dimensions, checklists and a declared pixel grid do not establish craft or comprehension. This proposal makes no live-control, physical-display or player-comprehension claim.
+
 

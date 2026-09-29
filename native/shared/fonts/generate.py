@@ -3,19 +3,38 @@ Run from this directory: python generate.py. Original unmodified Bitstream Vera
 from ReportLab's font distribution; exact redistribution license in LICENSE.txt.
 """
 from pathlib import Path
+import sys
 from PIL import Image, ImageDraw, ImageFont
 root = Path(__file__).resolve().parent
-for name, sizes in [('portable', [9, 11, 20, 24]), ('lab', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48])]:
+profiles = [
+    ('portable', 'Vera.ttf', [9, 11, 20, 24], 1.0),
+    ('lab', 'Vera.ttf', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48], 1.0),
+    ('lab_heading', 'VeraBd.ttf', [26, 32, 34, 40], 1.0),
+    ('lab_heading_narrow', 'VeraBd.ttf', [26, 32, 34, 40], 0.8),
+]
+if sys.argv[1:] == ['--heading']:
+    profiles = profiles[-2:]
+elif sys.argv[1:] == ['--heading-narrow']:
+    profiles = profiles[-1:]
+elif sys.argv[1:]:
+    raise SystemExit('Usage: python generate.py [--heading|--heading-narrow]')
+for name, font_file, sizes, horizontal_scale in profiles:
     data=[]; glyphs=[]; records=[]
     for size in sizes:
-        font=ImageFont.truetype(str(root/'Vera.ttf'),size)
+        font=ImageFont.truetype(str(root/font_file),size)
         first=len(glyphs)
         for code in range(32,127):
             char=chr(code); left,top,right,bottom=font.getbbox(char)
             width=right-left; height=bottom-top
             mask=Image.new('L',(max(1,width),max(1,height)))
             ImageDraw.Draw(mask).text((-left,-top),char,font=font,fill=255)
-            glyphs.append((len(data),width,height,left,top,round(font.getlength(char))))
+            if horizontal_scale != 1.0 and width and height:
+                mask = mask.resize((max(1, round(width * horizontal_scale)), height),
+                                   Image.Resampling.LANCZOS)
+            glyph_width = mask.width if width else 0
+            glyph_left = round(left * horizontal_scale)
+            glyph_advance = round(font.getlength(char) * horizontal_scale)
+            glyphs.append((len(data), glyph_width, height, glyph_left, top, glyph_advance))
             data.extend(mask.tobytes() if width and height else [])
         records.append((size,font.getmetrics()[0],first))
     text='#include "native_font.h"\n'

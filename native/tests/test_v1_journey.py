@@ -41,12 +41,33 @@ class Player:
         raise AssertionError((label, self.state))
 
     def capture(self, name):
-        revision = self.command("status")["revision"]
-        header = self.command(f"frame {revision}")
-        content = self.process.stdout.read(header["bytes"])
-        assert len(content) == header["bytes"] and content[:2] == b"BM"
-        (self.frames / (name + ".bmp")).write_bytes(content)
-        self.command("status")
+        for attempt in range(4):
+            revision = self.command("status")["revision"]
+            self.process.stdin.write(f"frame {revision}\n".encode())
+            self.process.stdin.flush()
+            header = json.loads(self.process.stdout.readline())
+            if header.get("error") == "Stale frame request":
+                continue
+            assert "error" not in header, header
+            content = self.process.stdout.read(header["bytes"])
+            assert len(content) == header["bytes"] and content[:2] == b"BM"
+            (self.frames / (name + ".bmp")).write_bytes(content)
+            self.command("status")
+            return
+        raise AssertionError("Could not capture a stable native frame")
+
+    def home_views(self, label):
+        assert self.state["page"] == "home", self.state
+        for attempt in range(5):
+            if self.state["focus"] == "Home":
+                break
+            self.press("down")
+        assert self.state["focus"] == "Home", self.state
+        for index, focus in enumerate(("Home", "Explore", "Research", "Incubator", "Habitat")):
+            assert self.state["focus"] == focus, self.state
+            self.capture(f"{label}-home-{index}-{focus.lower()}")
+            self.press("down")
+        assert self.state["page"] == "home" and self.state["focus"] == "Home"
 
     def wait_until(self, predicate, timeout):
         deadline = time.monotonic() + timeout
@@ -64,9 +85,12 @@ def journey(binary, frames):
     with tempfile.TemporaryDirectory() as directory:
         save = Path(directory) / "world.save"
         player = Player(binary, save, frames)
-        player.capture("01-workbench")
+        player.home_views("empty")
         player.choose("Explore")
         player.choose("Field survey")
+        player.press("back")
+        player.home_views("active-expedition")
+        player.choose("Explore")
         player.command(f"suspend {player.state['revision']}")
         before = player.state["expedition_seconds"]
         time.sleep(2.2)
@@ -91,6 +115,7 @@ def journey(binary, frames):
         assert player.state["decoded"] == 31
         player.press("back")
         player.press("back")
+        player.home_views("researched")
         player.choose("Explore")
         player.choose("Garden forage")
         player.wait_until(lambda state: state["expedition_seconds"] >= 60, 65)
@@ -102,10 +127,16 @@ def journey(binary, frames):
         player.choose("Pale markings")
         assert player.state["page"] == "incubation"
         player.capture("04-incubation")
+        player.press("back")
+        player.home_views("incubation-active")
+        player.choose("Incubator")
         player.close()
         player = Player(binary, save, frames)
         player.choose("Incubator")
         player.wait_until(lambda state: state["incubation_ready"], 25)
+        player.press("back")
+        player.home_views("incubation-ready")
+        player.choose("Incubator")
         player.choose("Open incubation")
         assert player.state["page"] == "reveal"
         player.capture("05-reveal")
@@ -113,6 +144,8 @@ def journey(binary, frames):
         assert player.state["page"] == "habitat"
         player.choose("Spend time together")
         player.capture("06-habitat")
+        player.press("back")
+        player.home_views("revealed-resident")
         stock = player.state["stock"]
         player.close()
         player = Player(binary, save, frames)
