@@ -530,6 +530,12 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   int home = lab->page == V1_HOME;
   rectangle(&row, 0, 0, 1024, 600, BASE);
   panel(&row, 24, home ? 24 : 18, 976, home ? 100 : 94);
+  /* The shared Home header needs breathing room for the three-line stock
+   *
+   * readout. Retain its outer stepped frame without an internal crossing rule.
+   */
+  if (home)
+    rectangle(&row, 37, 37, 950, 75, PANEL);
   heading(&row, 46, home ? 36 : 32, "BEECHO LAB", 34, INK);
   label(&row, 47, home ? 84 : 77, "LAB STOCK", 18, MUTED);
   unsigned stock[] = {game->data, game->energy, game->essence};
@@ -537,13 +543,13 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   for (unsigned i = 0; i < 3; i++) {
     int x = home ? 402 + (int)i * 196 : 420 + (int)i * 180;
     sprite(&row, i, x, home ? 41 : 35, home ? 56 : 40, home ? 68 : 53);
-    label(&row, x + (home ? 62 : 53), home ? 36 : 32, names[i], 18, MUTED);
+    label(&row, x + (home ? 62 : 53), home ? 45 : 32, names[i], 18, MUTED);
     if (home) {
       char amount[32];
       snprintf(amount, sizeof(amount), "%u", stock[i] / 100);
-      heading(&row, x + 62, 61, amount, 26, INK);
+      heading(&row, x + 62, 64, amount, 26, INK);
       snprintf(amount, sizeof(amount), "Next unit %u%%", stock[i] % 100);
-      label(&row, x + 62, 91, amount, 18, MUTED);
+      label(&row, x + 62, 87, amount, 18, MUTED);
     } else
       stock_amount(&row, x + 54, stock[i]);
   }
@@ -577,7 +583,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       if (home)
         outline(&row, x - 4, yy - 8, width + 8, height + 8, 3, FOCUS_GLOW);
       rectangle(&row, x, yy - 4, width, height, ACTION);
-      outline(&row, x, yy - 4, width, height, 2, WARM);
+      if (!home)
+        outline(&row, x, yy - 4, width, height, 2, WARM);
       focus(&row, x - 2, yy - 6, width + 4, height + 4);
     }
     unsigned sample, study;

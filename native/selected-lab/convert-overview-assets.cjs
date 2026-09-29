@@ -12,10 +12,13 @@ async function main() {
   for (const name of names) {
     const source = `../../design/reference-production/gemini-overview-family/exports/${name}.png`;
     const bytes = fs.readFileSync(path.resolve(__dirname, source));
-    const { data, info } = await sharp(bytes).ensureAlpha().raw()
+    const { data, info } = await sharp(bytes).raw()
       .toBuffer({ resolveWithObject: true });
     if (info.width !== 136 || info.height !== 144 || info.channels !== 4)
       throw new Error(`Invalid prepared sprite dimensions: ${name}`);
+    for (let alpha = 3; alpha < data.length; alpha += 4)
+      if (data[alpha] !== 255)
+        throw new Error(`Expected the documented opaque backing: ${name}`);
     definitions.push(`  { /* ${name} */`);
     for (let offset = 0; offset < data.length; offset += 32)
       definitions.push('    ' + Array.from(data.subarray(offset, offset + 32)).join(', ') + ',');
