@@ -10,6 +10,38 @@ Construction hypothesis: broad softly rectangular body with usable edge thicknes
 
 First-build priorities: accessible assembly using common tools, room for project-designed/sourced electronics, larger boards and wiring, and straightforward reopening. Do not optimize away connector access, cable routing or assembly clearance to preserve a thin silhouette. Enclosure dimensions follow the actual electronics layout. Later revisions may improve density. The next layout must show component envelopes, board mounting, wire paths, shell opening and tool access together; it must not claim manufacturing readiness from exterior art.
 
+### Rugged Contour — opening and assembly proposal
+
+Purpose: let the builder assemble, debug and replace the Lab's electronics while preserving pickup/two-thumb play, supported play and the shared printer home. This is a proposed service topology, not a section drawing, dimensional layout or approved fabrication design. The printer and its roll remain in the station.
+
+```mermaid
+flowchart LR
+  A[Passive rear cover] -->|Remove accessible screws| B[Open rear service space]
+  B --> C[Reach connectors and harness retention]
+  C -->|Disconnect identified front harnesses| D[Remove electronics carrier if needed]
+  D --> E[Access display and control retainers]
+  E --> F[Replace one front module]
+```
+
+| Assembly | Proposed construction / access | What must remain open |
+| --- | --- | --- |
+| Front shell | Broad rectangular face with protected edges; display and control modules retained independently from inside, never released by removing the electronics support | Actual display mounting, button travel, side-wheel mount and thumb positions |
+| Rear cover | Passive lid with accessible screws; no boards, battery or wiring attached to the lid | Screw count/type, shell joint and print orientation |
+| Electronics support | Open removable carrier or accessible mounting rails; boards fasten independently without a dense overlapping stack | Actual PCB envelopes, underside clearance and whether a separate carrier earns its extra part |
+| Harness space | Reachable connector latches, identified mating pairs/directions, strain relief, retained routing and sufficient service slack; connectors carry no structural load | Connector exit directions, disconnect grip, bend space and cable lengths |
+| Protective guards | Separately replaceable edge/corner protection; cover screws remain accessible | Guard material, retention, printing capability and protection evidence |
+| Energy / radio / thermal reservations | Accessible fixed-body zones, not mounted on the service lid | Cell and power topology, antenna keepouts, heat paths and cooling needs |
+
+**Assembly sequence.** Fit and retain the display and control modules in the front shell; install their leads while both sides are accessible. Populate the electronics support separately and inspect its fasteners. Place the support in the body, connect the identified harnesses, and secure routing clear of switches, wheel motion, screw paths and the closing seam. Inspect both sides before closing the passive rear cover. Protective guards must not turn routine opening into destructive removal. The power subsystem's selected design must supply its isolation and test procedure before powered assembly is attempted; this proposal does not define one.
+
+**Service sequence.** Use the eventual documented power-isolation procedure, remove the cover screws and lift the passive cover straight away without a wire tether. Reach routine connectors and individual board fasteners from the open rear. If deeper access requires removing the support, disconnect and release the crossing harnesses first; do not suspend the assembly on its leads. Display/control retainers become accessible after support removal but remain secured until deliberately released. The side-wheel bracket must not trap unrelated front controls behind it. Avoid a second hidden carrier layer that blocks fasteners or latches. A power source inside the body is still a separate service consideration even with the lid removed.
+
+**Dimensional inputs before a fit claim.** Collect the actual display assembly and mounting drawing; intended compute/control/power board envelopes including connectors and component heights; control bodies and mounting depths; cell/holder or alternate power envelope; cable exits and bend/handling space; antenna/thermal constraints; and available printer build volume/process limits. These determine width, height and depth together with hands, tools and station support. Do not assign a finished external size from the concept render. The earlier display envelope is a starting reference only, not a complete packing model.
+
+The next physical proof is a roomy layout showing these envelopes, screw/tool paths and a lid-off service state, followed by an inert assembly/hand-clearance mock-up. A render cannot establish accessible fasteners, wire clearance, comfort or printability. No new parts, charging technology, enclosure size or manufacturing process is selected here.
+
+Hardware review of this assembly proposal found no remaining blocking contradiction in the opening/disconnection sequence. This accepts the proposal for layout development only; component envelopes, physical access and fabrication remain unverified.
+
 The first handheld board was rejected: its three proposals were too toy-like and too similar in physical form. The former common upper-shoulder Zoom placement is withdrawn; no top-mounted knob. Preserve two-thumb use and control functions while exploring placement. The [earlier board](handheld-home-directions-v2.png) remains a reference to rejected exploration, not a baseline.
 
 Three new visual hypotheses compare the same journey: pick up the home Lab, explore with physical controls, return it to the shared printer station, continue playing while supported, then leave rotating collection/vivarium screens visible. These are concept renders, not dimensionally verified models. No new UI, creature, charging method or hardware is approved.

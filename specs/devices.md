@@ -37,7 +37,7 @@ The native development baseline uses C/C++ toolchains for those targets. Compile
 
 ## Coupled constraints
 
-The Console must budget concurrent display, radio, storage, scanning and dense printing. Verify exact logic levels separately from supply voltage; preserve accessible paper path, roll change, reader sightline and service/programming access. Print conversion needs its own raster profile while preserving identity and scan quiet zones.
+The Lab must budget concurrent display, radio, storage, scanning and print preparation/transmission. The home station owns the printer mechanism, paper path, roll access and its power requirements. Verify exact logic levels separately from supply voltage; preserve reader sightline and service/programming access in the relevant device. Print conversion needs its own raster profile while preserving identity and scan quiet zones.
 
 Probe sensor vents/windows must account for hand/body effects, enclosure, electronics and charging heat. Local valid measurements, optional phone context and generated fictional events remain distinct internally. Sensor capability limits future measured features; it does not limit fictional content to matching physical sensors. See [probe evidence](probe.md).
 
