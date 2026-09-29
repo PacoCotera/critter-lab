@@ -43,8 +43,12 @@ The 3× sheet uses nearest-neighbor enlargement only for inspection.
 
 The source is a 1024×1024 Gemini image acquired with Copy image, not a screenshot
 of the browser. Source art remains distinct from these reduced usage assets.
-This preparation does not establish native-screen acceptance; the reviewer must
-inspect the actual empty and populated Overview rendered by the application.
+The [empty](native-proof/final-empty.png) and [populated](native-proof/final-populated.png)
+proofs are actual 1024�600 C17 Linux host renders from pushed source
+`492b90f9dd3d74286c282e3d0696bf1dc0d75c2e`. All four asset regions in both
+frames match these exports pixel for pixel. Native input/frame checks and the
+existing Actions target builds passed. These images demonstrate host rendering,
+not physical Pi/display performance or approval of other screens.
 
 ## Preserved first version
 
