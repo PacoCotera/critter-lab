@@ -60,8 +60,10 @@ the fallback. See the [build boundary](BUILD.md).
 | Run or help build the software | [Builder getting started](docs/builders/getting-started.md) |
 | Find evidence and documents | [Status](STATUS.md) and [documentation map](docs/README.md) |
 
-This is the authoritative public product repository. It is not a complete
-buildable physical kit. [Earlier host experiments](prototype/README.md) remain
+This is the authoritative public product repository for specifications, code,
+product documentation, designs, hardware concepts/sources, original references
+and source art. Concepts and unfinished studies retain their provenance and
+approval status. It is not a complete buildable physical kit. [Earlier host experiments](prototype/README.md) remain
 useful studies with separate saves and limits.
 
 Beecho Lab is a project of **Dirty Pawz Press**. Software uses AGPL-3.0-only,

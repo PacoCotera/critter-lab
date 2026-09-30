@@ -88,3 +88,11 @@ with each artifact's retained provenance and licensing.
 The [full tactile Companion proposal](companion-experience.md) consumes the audit findings
 into one mode, focus, screen-response and return contract. It was independently
 reviewed as design; implementation and native art remain outstanding.
+
+[Companion promise versus actual pixels](companion-promise/README.md) compares the newly supplied
+marketing concept/studies with the native frames. Next acceptance must demonstrate
+reference-quality reusable art, a truthful illustrated activity and recognizable
+saved-individual experience; blue frames and matching counts alone are insufficient.
+Missing capture/training/portable resident functions remain explicit gaps.
+
+[Three-device promise and delivery gap](three-device-playability-audit/promise-gap.md) joins actual art, interaction, game and genomic findings across the whole family.
