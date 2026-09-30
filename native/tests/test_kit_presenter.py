@@ -115,10 +115,12 @@ def run(binary, proof=None):
             time.sleep(2.1)
             assert state("companion")["phase"] == 5
             assert state("companion")["cargo"] == [0, 0, 0]
+            assert state("companion")["focus"] == "Return to Probe"
             assert state("dock")["dock_stock"] == cargo
             press("lab", "back")
             for device in ("lab", "companion", "dock"):
                 frame(device, "complete")
+            assert press("companion", "confirm")["page"] == "probe"
             print("Three-device HTTP/native frame, handoff, link recovery and endpoint guards passed", flush=True)
         finally:
             server.shutdown()

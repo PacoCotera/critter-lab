@@ -56,7 +56,7 @@ static void art(KitRow *row, unsigned icon, int x, int y) {
   }
 }
 static void units(char *buffer, size_t size, uint32_t value) {
-  snprintf(buffer, size, "%u units + %u%%", value / 100, value % 100);
+  snprintf(buffer, size, "%u units / Next unit %u%%", value / 100, value % 100);
 }
 static void companion_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
@@ -90,9 +90,10 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   } else if (view->page == COMP_CARGO || view->page == COMP_SEND_REVIEW) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      snprintf(value, sizeof(value), "%s: %u + %u%%", labels[i], cargo[i] / 100,
-               cargo[i] % 100);
-      text(row, 181, 137 + (int)i * 40, value, 18, TEXT);
+      snprintf(value, sizeof(value), "%s: %u units", labels[i], cargo[i] / 100);
+      text(row, 181, 128 + (int)i * 44, value, 18, TEXT);
+      snprintf(value, sizeof(value), "Next unit %u%%", cargo[i] % 100);
+      text(row, 181, 148 + (int)i * 44, value, 18, SECONDARY);
     }
   } else {
     text(row, 184, 140,
@@ -164,8 +165,11 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
       text(row, 24 + (int)i * 248, 85, labels[i], 22, TEXT);
-      units(value, sizeof(value), journal->dock_stock[i]);
+      snprintf(value, sizeof(value), "%u units", journal->dock_stock[i] / 100);
       text(row, 24 + (int)i * 248, 122, value, 22, TEXT);
+      snprintf(value, sizeof(value), "Next unit %u%%",
+               journal->dock_stock[i] % 100);
+      text(row, 24 + (int)i * 248, 156, value, 18, TEXT);
     }
   } else {
     text(row, 24, 88,
@@ -221,9 +225,14 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
                                         : "early return / resources only");
     text(row, 239, 318, value, 18, SECONDARY);
   }
-  text(row, 48, 389, kit_stage(kit), 26, TEXT);
+  text(row, 48, 389,
+       kit->journal.phase == KIT_ACK_PENDING ? "Haul accepted into Lab stock"
+                                             : kit_stage(kit),
+       26, TEXT);
   text(row, 48, 434,
-       kit->journal.companion_online
+       kit->journal.phase == KIT_ACK_PENDING
+           ? "Waiting for Companion to receive receipt and clear cargo"
+       : kit->journal.companion_online
            ? "Companion link available (simulation)"
            : "Companion link offline / receipt waits here",
        22, SECONDARY);

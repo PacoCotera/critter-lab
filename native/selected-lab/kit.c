@@ -245,7 +245,10 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
   case COMP_SEND_REVIEW:
     return index ? "Keep gathering" : "Seal and send haul";
   case COMP_CARGO:
-    return index ? "Modes" : pending(kit) ? "Check receipt" : "Send haul";
+    return index                             ? "Modes"
+           : pending(kit)                    ? "Check receipt"
+           : kit->lab->game.expedition_id[0] ? "Send haul"
+                                             : "Return to Probe";
   case COMP_FRIENDS:
     return "Modes";
   default: {
@@ -306,8 +309,8 @@ static void activate_companion(DeviceKit *kit) {
                kit->lab->game.expedition_essence)
       companion_page(kit, COMP_SEND_REVIEW);
     else {
-      strcpy(kit->companion.message, "No cargo. Choose a Probe expedition.");
-      refresh(&kit->companion, 0);
+      companion_page(kit, COMP_PROBE);
+      strcpy(kit->companion.message, "Ready to gather. Choose an expedition.");
     }
     break;
   case COMP_FRIENDS:
@@ -556,9 +559,12 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
           "radio not selected\"}\n",
           device, kit_revision(kit, device), kit_width(device),
           kit_height(device), page, focus, kit->lab->workspace,
-          online ? "true" : "false", kit_stage(kit), kit->journal.phase,
-          kit->journal.haul_id, game->data, game->energy, game->essence,
-          cargo ? cargo[0] : game->expedition_data,
+          online ? "true" : "false",
+          device == KIT_LAB && kit->journal.phase == KIT_ACK_PENDING
+              ? "Haul accepted; Companion receipt pending"
+              : kit_stage(kit),
+          kit->journal.phase, kit->journal.haul_id, game->data, game->energy,
+          game->essence, cargo ? cargo[0] : game->expedition_data,
           cargo ? cargo[1] : game->expedition_energy,
           cargo ? cargo[2] : game->expedition_essence, game->sample_count,
           kit->journal.dock_residents, kit->journal.dock_stock[0],
