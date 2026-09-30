@@ -813,10 +813,16 @@ static void field_control_and_receipt(const char *directory) {
   assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.sample_count == 1 && lab.game.received_count == 1);
   assert(!lab.game.field.version && !lab.game.expedition_id[0]);
   assert(kit.caller_valid);
+  unsigned restored_home_focus = kit.caller.focus;
   press(&kit, KIT_LAB, SELECTED_BACK_DOWN);
   assert(!kit.caller_valid && lab.page == V1_HOME);
+  assert(lab.focus == restored_home_focus);
   /* Re-entering Explore after acceptance opens the received log, preserving
    * the accepted haul while navigation returns to the remembered Home focus. */
+  while (lab.focus < 1)
+    press(&kit, KIT_LAB, SELECTED_DOWN_DOWN);
+  while (lab.focus > 1)
+    press(&kit, KIT_LAB, SELECTED_UP_DOWN);
   press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
   assert(lab.page == V1_EXPEDITION && !kit.caller_valid);
   press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
