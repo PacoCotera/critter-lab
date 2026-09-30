@@ -55,9 +55,6 @@ static void art(KitRow *row, unsigned icon, int x, int y) {
     memcpy(row->pixels + (x + col) * 3, pixel, 3);
   }
 }
-static void units(char *buffer, size_t size, uint32_t value) {
-  snprintf(buffer, size, "%u units / Next unit %u%%", value / 100, value % 100);
-}
 static void companion_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   const KitView *view = &kit->companion;
@@ -216,7 +213,7 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
   if (has_manifest) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      snprintf(value, sizeof(value), "%s  %u + %u%%", labels[i],
+      snprintf(value, sizeof(value), "%s  %u units / Next unit %u%%", labels[i],
                kit->journal.cargo[i] / 100, kit->journal.cargo[i] % 100);
       text(row, 239 + (int)i * 234, 278, value, 22, TEXT);
     }
