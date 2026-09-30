@@ -613,10 +613,15 @@ int main(void) {
   assert(kit_init(&kit, &lab, 100));
   mode_navigation(&kit);
   unsigned painted_dock = kit_revision(&kit, KIT_DOCK);
-  kit_tick(&kit, 100);
-  /* A timestamp/cache repaint may occur while an already decoded frame is
+  unsigned dock_action_epoch = kit.dock.epoch;
+  /* Init already populates the cache. Model a missing timestamp so the next
+   * tick has an actual passive cache update to publish. */
+  kit.journal.dock_updated_at = 0;
+  kit_tick(&kit, 101);
+  /* A passive cache repaint may occur while an already decoded frame is
    * being acknowledged. It does not change the action meaning. */
   assert(kit_revision(&kit, KIT_DOCK) > painted_dock);
+  assert(kit.dock.epoch == dock_action_epoch);
   kit_input(&kit, KIT_DOCK, SELECTED_READY, painted_dock);
   kit_input(&kit, KIT_DOCK, SELECTED_DOWN_DOWN, painted_dock);
   kit_input(&kit, KIT_DOCK, SELECTED_DOWN_UP, painted_dock);
