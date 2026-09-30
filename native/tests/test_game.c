@@ -113,7 +113,7 @@ static void start_and_open(GameState *state, const char *path, unsigned sample,
 }
 
 /* Write the historical same-ABI payload without the appended V2 fields. This
- * deliberately does not call the current writer, whose header must be V2. */
+ * deliberately does not call the current writer, whose header must be V3. */
 static void write_legacy_save(const char *path, const GameState *state) {
   struct {
     char magic[8];
@@ -171,6 +171,8 @@ static void test_whole_supply_rules(const char *path) {
   assert(GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER == 14);
   assert(GAME_COMMAND_EXPEDITION_FINISH == 15);
   assert(GAME_COMMAND_EXPEDITION_UNLOAD == 16);
+  assert(GAME_COMMAND_INVESTIGATE == 17);
+  assert(GAME_COMMAND_SUPPORTED_CREATION == 18);
 
   /* A legacy file is decoded without modifying raw inventory or its source
    * file. Its pending encoding flag survives a V2 save and restart. */
@@ -588,6 +590,300 @@ static void test_unload_ends_outing(const char *path) {
          state.gather_progress_ms[0] == 1760u);
 }
 
+static uint32_t frozen_checksum(const unsigned char *bytes, size_t length) {
+  uint32_t hash = 2166136261u;
+  for (size_t i = 0; i < length; ++i)
+    hash = (hash ^ bytes[i]) * 16777619u;
+  return hash;
+}
+
+static void test_frozen_save_files(const char *path) {
+  const char *names[] = {"authored-v1.save", "authored-v2.save", "runtime-v2.save"};
+  for (unsigned fixture = 0; fixture < 3; ++fixture) {
+    char fixture_path[1024];
+    const char *separator = strrchr(__FILE__, '/');
+    assert(separator);
+    snprintf(fixture_path, sizeof(fixture_path), "%.*s/fixtures/%s",
+             (int)(separator - __FILE__), __FILE__, names[fixture]);
+    FILE *file = fopen(fixture_path, "rb");
+    assert(file);
+    unsigned char original[6000];
+    size_t length = fread(original, 1, sizeof(original), file);
+    assert(feof(file) && fclose(file) == 0);
+    assert(length == (fixture == 0 ? 5752u : 5784u));
+    uint32_t payload_size, stored_checksum;
+    memcpy(&payload_size, original + 12, 4);
+    memcpy(&stored_checksum, original + 16, 4);
+    assert(payload_size == (fixture == 0 ? 5728u : 5760u));
+    assert(stored_checksum == frozen_checksum(original + 24, payload_size));
+    GameState loaded;
+    assert(game_state_load(fixture_path, &loaded) == 0);
+    unsigned char expected[5760];
+    memcpy(expected, original + 24, payload_size);
+    uint32_t new_version = GAME_STATE_VERSION;
+    memcpy(expected, &new_version, 4);
+    assert(!memcmp(&loaded, expected, payload_size));
+    assert(loaded.sample_metadata[0].profile == GAME_SAMPLE_LEGACY_FIVE);
+    if (fixture < 2) {
+      assert(loaded.samples[0].decoded_studies == 1 && loaded.samples[0].decoded_facts == 1);
+      assert(!strcmp(loaded.individuals[0].id, "frozen-resident"));
+      assert(!strcmp(loaded.individual_metadata[0].candidate_id, "legacy-carried"));
+      assert(!strcmp(loaded.individual_metadata[0].original_art_sha256,
+                     "38b0fa7fc24ffea47cb128fdcaf46f701a2396bd3bfcbb81e3d86f962f262534"));
+      GameCommand retry = command(GAME_COMMAND_STUDY);
+      retry.operation_id = "frozen-study";
+      retry.sequence = 1;
+      retry.data.study.sample = retry.data.study.study = 0;
+      GameState before = loaded;
+      assert(game_apply(path, &loaded, &retry) == GAME_DUPLICATE);
+      assert(!memcmp(&loaded, &before, sizeof(before)));
+      /* A normal accepted mutation writes V3 without reinterpreting stock or
+       * partial legacy findings. The original fixture remains read-only. */
+      GameCommand care = command(GAME_COMMAND_CARE_VISIT);
+      care.data.individual = 0;
+      assert(apply(&loaded, path, care) == GAME_OK);
+      GameState reopened;
+      assert(game_state_load(path, &reopened) == 0);
+      assert(reopened.data == before.data && reopened.energy == before.energy &&
+             reopened.essence == before.essence);
+      assert(!memcmp(reopened.samples, before.samples, sizeof(before.samples)));
+      assert(!memcmp(&reopened.operations[0], &before.operations[0], sizeof(GameOperation)));
+      assert(reopened.legacy_supply_encoding == (fixture == 0));
+    } else {
+      assert(loaded.last_operation_sequence == 15 && loaded.gather_attempt_count == 9);
+      assert(loaded.gather_random_state == 4184948546u);
+      assert(game_state_save(path, &loaded) == 0);
+      GameState reopened;
+      assert(game_state_load(path, &reopened) == 0);
+      assert(!memcmp(&loaded, &reopened, sizeof(loaded)));
+    }
+    unsigned char after[6000];
+    file = fopen(fixture_path, "rb");
+    assert(file && fread(after, 1, sizeof(after), file) == length && fclose(file) == 0);
+    assert(!memcmp(original, after, length));
+  }
+}
+
+static GameCommand investigation(const GameState *state, unsigned sample, unsigned method) {
+  GameCommand action = command(GAME_COMMAND_INVESTIGATE);
+  action.data.investigation.sample = sample;
+  action.data.investigation.sample_id = state->samples[sample].id;
+  action.data.investigation.content_version = pip_sample_content_version(state, sample);
+  action.data.investigation.method_id = pip_investigation(state, sample, method)->id;
+  return action;
+}
+
+static GameCommand supported_creation(const GameState *state, unsigned sample,
+                                      const char *candidate) {
+  GameCommand action = command(GAME_COMMAND_SUPPORTED_CREATION);
+  action.data.supported_creation.sample = sample;
+  action.data.supported_creation.sample_id = state->samples[sample].id;
+  action.data.supported_creation.content_version = pip_sample_content_version(state, sample);
+  action.data.supported_creation.candidate_id = candidate;
+  action.data.supported_creation.monotonic_seconds = 100;
+  return action;
+}
+
+static void test_discovery_content(const char *path) {
+  GameState state;
+  game_state_init(&state);
+  state.data = state.energy = state.essence = 4000;
+  game_rules_resume_runtime(&state, 100);
+  for (unsigned sample = 0; sample < 2; ++sample) {
+    snprintf(state.expedition_id, sizeof(state.expedition_id), "discovery-intake-%u", sample);
+    state.expedition_elapsed = GAME_EXPEDITION_SECONDS;
+    GameCommand accept = command(GAME_COMMAND_EXPEDITION_UNLOAD);
+    assert(apply(&state, path, accept) == GAME_OK);
+  }
+  assert(state.sample_metadata[0].profile == GAME_SAMPLE_DISCOVERY_A &&
+         state.sample_metadata[1].profile == GAME_SAMPLE_DISCOVERY_B);
+  GameState initial = state;
+  PipResearchProjection projection;
+  PipSupportedCandidate candidate;
+  PipCandidateKnowledge knowledge;
+  assert(pip_research_projection(&state, 0, &projection) && !projection.established_references);
+  assert(!pip_candidate_count(&state, 0) && !pip_supported_candidate(&state, 0, 0, &candidate));
+  assert(!pip_investigation(&state, 0, 0)->finding);
+  assert(!pip_candidate_knowledge(&state, 0, 0, &knowledge));
+  for (unsigned reference = 0; reference < 17; ++reference)
+    assert(pip_reference_id(reference));
+  assert(!pip_reference_id(17));
+  GameCommand action = investigation(&state, 0, 0);
+  action.operation_id = "A-heritage";
+  action.sequence = state.last_operation_sequence + 1;
+  assert(game_apply(path, &state, &action) == GAME_OK);
+  assert(state.data == 3600 && state.energy == 4000 && state.essence == 4000);
+  GameState before = state;
+  assert(game_apply(path, &state, &action) == GAME_DUPLICATE);
+  assert(!memcmp(&state, &before, sizeof(before)));
+  GameState investigation_reload;
+  assert(game_state_load(path, &investigation_reload) == 0);
+  assert(investigation_reload.sample_metadata[0].profile == GAME_SAMPLE_DISCOVERY_A &&
+         investigation_reload.sample_metadata[1].profile == GAME_SAMPLE_DISCOVERY_B);
+  game_rules_resume_runtime(&investigation_reload, 100);
+  GameState before_retry = investigation_reload;
+  assert(game_apply(path, &investigation_reload, &action) == GAME_DUPLICATE &&
+         !memcmp(&investigation_reload, &before_retry, sizeof(before_retry)));
+  action.data.investigation.method_id = "movement";
+  assert(game_apply(path, &state, &action) == GAME_CONFLICT);
+  assert(pip_research_projection(&state, 0, &projection));
+  assert(projection.established_references == 0x3fff && projection.partial_p);
+  assert(projection.common_loci[2][0] == 'p' && !projection.common_loci[2][1]);
+  assert(!projection.complete && !projection.disclosed_candidates);
+  assert(pip_investigation(&state, 0, 0)->finding);
+  action = supported_creation(&state, 0, "A0");
+  assert(apply(&state, path, action) == GAME_UNAVAILABLE);
+  assert(!memcmp(&state, &before, sizeof(before)));
+  state.energy = 300;
+  before = state;
+  action = investigation(&state, 0, 1);
+  assert(apply(&state, path, action) == GAME_UNAVAILABLE);
+  assert(!memcmp(&state, &before, sizeof(before)));
+  state.energy = 4000;
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 0, &projection) &&
+         projection.established_references == 0x1bfff && !projection.complete);
+  action = investigation(&state, 0, 2);
+  before = state;
+  action.data.investigation.content_version = "pip-discovery-v2";
+  assert(apply(&state, path, action) == GAME_CONFLICT && !memcmp(&before, &state, sizeof(state)));
+  action = investigation(&state, 0, 2);
+  action.data.investigation.sample_id = "wrong-sample";
+  assert(apply(&state, path, action) == GAME_CONFLICT && !memcmp(&before, &state, sizeof(state)));
+  action = investigation(&state, 0, 2);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 0, &projection) && projection.complete &&
+         projection.established_references == 0x1ffff && projection.disclosed_candidates == 3);
+  assert(pip_supported_candidate(&state, 0, 1, &candidate) && !strcmp(candidate.id, "A1"));
+  assert(candidate.genome.loci[2][0] == 'p' && candidate.genome.loci[2][1] == 'p');
+  before = state;
+  action = supported_creation(&state, 0, "B0");
+  assert(apply(&state, path, action) == GAME_INVALID && !memcmp(&before, &state, sizeof(state)));
+  action = supported_creation(&state, 0, "A1");
+  action.data.supported_creation.content_version = "pip-discovery-v2";
+  assert(apply(&state, path, action) == GAME_CONFLICT && !memcmp(&before, &state, sizeof(state)));
+  action = supported_creation(&state, 0, "A1");
+  action.data.supported_creation.sample_id = "wrong-sample";
+  assert(apply(&state, path, action) == GAME_CONFLICT && !memcmp(&before, &state, sizeof(state)));
+  action = supported_creation(&state, 0, "A1");
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(state.individuals[0].expression.pale_markings && state.samples[0].incubated);
+  assert(!strcmp(state.individual_metadata[0].candidate_id, "A1"));
+  action = command(GAME_COMMAND_INCUBATION_TICK);
+  action.data.monotonic_seconds = 120;
+  assert(apply(&state, path, action) == GAME_OK);
+  action = command(GAME_COMMAND_INCUBATION_OPEN);
+  assert(apply(&state, path, action) == GAME_OK);
+  before = state;
+  action = supported_creation(&state, 0, "A1");
+  assert(apply(&state, path, action) == GAME_UNAVAILABLE &&
+         !memcmp(&before, &state, sizeof(state)));
+  /* B's early coupled comparison supplies M/E itself: no paid Movement gate. */
+  action = investigation(&state, 1, 2);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 1, &projection) &&
+         projection.established_references == 0x18000 && !projection.complete);
+  assert(!pip_investigation_useful(&state, 1, 1));
+  assert(pip_investigation(&state, 1, 1)->finding && !pip_investigation(&state, 1, 1)->cost_energy);
+  before = state;
+  action = investigation(&state, 1, 1);
+  assert(apply(&state, path, action) == GAME_DUPLICATE && !memcmp(&before, &state, sizeof(state)));
+  action = investigation(&state, 1, 0);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 1, &projection) && projection.complete &&
+         projection.disclosed_candidates == 12);
+  assert(pip_supported_candidate(&state, 1, 0, &candidate) && !candidate.expression.burst_movement &&
+         candidate.expression.efficient_movement && !pip_genome_valid(&candidate.genome));
+  assert(pip_supported_candidate(&state, 1, 1, &candidate) && candidate.expression.burst_movement &&
+         !candidate.expression.efficient_movement);
+  before = state;
+  action = supported_creation(&state, 1, "A0"); /* The appealing Mm/Ee mix is unsupported for B. */
+  assert(apply(&state, path, action) == GAME_INVALID && !memcmp(&before, &state, sizeof(state)));
+  state.data = 400;
+  before = state;
+  action = supported_creation(&state, 1, "B1");
+  assert(apply(&state, path, action) == GAME_UNAVAILABLE && !memcmp(&before, &state, sizeof(state)));
+  state.data = 2000;
+  before = state;
+  action = supported_creation(&state, 1, "B1");
+  action.operation_id = "B-creation";
+  action.sequence = state.last_operation_sequence + 1;
+  assert(game_apply(path, &state, &action) == GAME_OK);
+  assert(state.data == before.data - 500 && state.energy == before.energy - 500 &&
+         state.essence == before.essence - 500 && state.individual_count == 2);
+  assert(!strcmp(state.individual_metadata[1].candidate_id, "B1") &&
+         !strcmp(state.individuals[1].art_id, "design/v1-pip/pip-carried.png"));
+  GameState reopened;
+  assert(game_state_load(path, &reopened) == 0);
+  game_rules_resume_runtime(&reopened, 200);
+  before = reopened;
+  assert(game_apply(path, &reopened, &action) == GAME_DUPLICATE &&
+         !memcmp(&reopened, &before, sizeof(before)));
+  action.data.supported_creation.candidate_id = "B0";
+  assert(game_apply(path, &reopened, &action) == GAME_CONFLICT);
+  assert(!memcmp(state.individuals, reopened.individuals, sizeof(state.individuals)) &&
+         !memcmp(state.individual_metadata, reopened.individual_metadata, sizeof(state.individual_metadata)));
+  reopened.sample_metadata[1].disclosed_candidates = 3;
+  assert(!game_state_valid(&reopened));
+  reopened = initial;
+  reopened.sample_metadata[0].established_references = 0x1ffff;
+  reopened.sample_metadata[0].disclosed_candidates = 3;
+  assert(!game_state_valid(&reopened)); /* All-known flags alone are not evidence. */
+  /* Ordinary A comparison can run first, but grants only P/support, not baseline. */
+  state = initial;
+  action = investigation(&state, 0, 2);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 0, &projection) &&
+         projection.established_references == 0x4000 && !projection.complete);
+  assert(pip_candidate_knowledge(&state, 0, 0, &knowledge) &&
+         knowledge.known_loci[2][0] == 'P' && !knowledge.known_loci[0][0]);
+  action = investigation(&state, 0, 0);
+  assert(apply(&state, path, action) == GAME_OK);
+  action = investigation(&state, 0, 1);
+  assert(apply(&state, path, action) == GAME_OK);
+  action = investigation(&state, 1, 0);
+  assert(apply(&state, path, action) == GAME_OK);
+  action = investigation(&state, 1, 1);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_research_projection(&state, 1, &projection) &&
+         projection.established_references == 0xffff && !projection.complete);
+  assert(pip_candidate_knowledge(&state, 1, 1, &knowledge) &&
+         knowledge.known_loci[3][0] == 'M' && !knowledge.known_loci[4][0]);
+  action = investigation(&state, 1, 2);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(pip_candidate_count(&state, 0) == 2 && pip_candidate_count(&state, 1) == 2);
+  /* Capacity rejection is independent of completeness and resource shortage.
+   * Populate valid legacy resident records; keep B's unused material intact. */
+  GameState capacity;
+  game_state_init(&capacity);
+  capacity.sample_count = 2;
+  strcpy(capacity.samples[0].id, "legacy-capacity-source");
+  strcpy(capacity.samples[0].origin_expedition_id, "capacity-reference");
+  capacity.samples[0].decoded_studies = capacity.samples[0].decoded_facts = 31;
+  capacity.samples[0].supported_candidates = 3;
+  capacity.samples[0].incubated = 1;
+  capacity.samples[1] = state.samples[1];
+  capacity.sample_metadata[1] = state.sample_metadata[1];
+  capacity.data = capacity.energy = capacity.essence = 1000;
+  capacity.individual_count = GAME_MAX_INDIVIDUALS;
+  for (unsigned individual = 0; individual < GAME_MAX_INDIVIDUALS; ++individual) {
+    GameIndividual *resident = &capacity.individuals[individual];
+    snprintf(resident->id, sizeof(resident->id), "legacy-capacity-%u", individual);
+    strcpy(resident->source_sample_id, capacity.samples[0].id);
+    strcpy(resident->origin_kind, "parentless-founder");
+    pip_genome_for_sample(0, &resident->genome);
+    pip_express(&resident->genome, &resident->expression);
+    strcpy(resident->art_id, pip_art_id(&resident->genome));
+    strcpy(resident->art_version, PIP_ART_VERSION);
+    resident->origin_founder = resident->revealed = 1;
+  }
+  assert(game_state_valid(&capacity));
+  before = capacity;
+  action = supported_creation(&capacity, 1, "B0");
+  assert(apply(&capacity, path, action) == GAME_UNAVAILABLE &&
+         !memcmp(&capacity, &before, sizeof(before)));
+}
+
 int main(void) {
   char path[] = "/tmp/beecho-game-XXXXXX";
   GameState state;
@@ -738,6 +1034,8 @@ int main(void) {
   assert(game_state_load(path, &reopened) == -1);
   test_whole_supply_rules(path);
   test_unload_ends_outing(path);
+  test_frozen_save_files(path);
+  test_discovery_content(path);
   unlink(path);
   char lock_path[256];
   char temporary_path[256];

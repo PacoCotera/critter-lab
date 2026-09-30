@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define GAME_STATE_VERSION 2u
+#define GAME_STATE_VERSION 3u
 #define GAME_MAX_SAMPLES 8u
 #define GAME_MAX_INDIVIDUALS 8u
 #define GAME_OPERATION_SLOTS 32u
@@ -72,6 +72,32 @@ typedef struct {
   uint64_t fingerprint;
 } GameOperation;
 
+typedef enum {
+  GAME_SAMPLE_LEGACY_FIVE = 0,
+  GAME_SAMPLE_DISCOVERY_A = 1,
+  GAME_SAMPLE_DISCOVERY_B = 2
+} GameSampleProfile;
+
+/* Parallel extensions preserve the original sample/genome/operation ABI.
+ * Zero sample extensions mean the pinned legacy five-study package. */
+typedef struct {
+  uint32_t profile;
+  char content_version[24];
+  uint32_t investigated_methods;
+  uint32_t established_references;
+  uint32_t disclosed_candidates;
+  uint32_t partial_p;
+} GameSampleMetadata;
+
+typedef struct {
+  char candidate_id[32];
+  char reference_context[48];
+  char mapping_version[32];
+  char appearance_descriptor[40];
+  char original_art_version[24];
+  char original_art_sha256[65];
+} GameIndividualMetadata;
+
 typedef struct {
   uint32_t version;
   char balance_version[40];
@@ -115,6 +141,11 @@ typedef struct {
   uint8_t legacy_supply_encoding;
   uint8_t gather_last_attempted_mask;
   uint8_t gather_last_awarded_mask;
+  /* These five bytes were padding in the frozen V2 payload. Keep them before
+   * extensions, so its original length and checksum remain independently read. */
+  uint8_t legacy_v2_padding[5];
+  GameSampleMetadata sample_metadata[GAME_MAX_SAMPLES];
+  GameIndividualMetadata individual_metadata[GAME_MAX_INDIVIDUALS];
 } GameState;
 
 void game_state_init(GameState *state);

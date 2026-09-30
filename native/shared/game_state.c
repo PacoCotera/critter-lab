@@ -21,6 +21,69 @@ typedef struct {
   GameState state;
 } SavedGame;
 
+typedef struct {
+  uint32_t version;
+  char balance_version[40];
+  uint64_t revision;
+  uint64_t last_operation_sequence;
+  uint32_t data;
+  uint32_t energy;
+  uint32_t essence;
+  uint32_t expedition_data;
+  uint32_t expedition_energy;
+  uint32_t expedition_essence;
+  uint32_t expedition_elapsed;
+  uint32_t expedition_last_tick;
+  uint32_t expedition_kind;
+  uint32_t incubation_elapsed;
+  uint32_t incubation_last_tick;
+  uint32_t next_identity;
+  uint32_t operation_cursor;
+  uint8_t expedition_active;
+  uint8_t sample_count;
+  uint8_t individual_count;
+  uint8_t incubation_sample;
+  uint8_t incubation_individual;
+  uint8_t incubation_choice;
+  uint8_t incubation_active;
+  uint8_t incubation_ready;
+  uint8_t habitat;
+  uint8_t reserved;
+  uint8_t runtime_anchors_ready;
+  uint8_t runtime_commit_uncertain;
+  char expedition_id[64];
+  GameSample samples[GAME_MAX_SAMPLES];
+  GameIndividual individuals[GAME_MAX_INDIVIDUALS];
+  GameOperation operations[GAME_OPERATION_SLOTS];
+  /* Append-only: the preceding bytes are the version-one save payload.
+   * Inventory retains its historical scale of 100 per indivisible item.
+   * Preparation time is not inventory and does not occupy cargo capacity. */
+  uint32_t gather_progress_ms[3];
+  uint32_t gather_random_state;
+  uint64_t gather_attempt_count;
+  uint8_t legacy_supply_encoding;
+  uint8_t gather_last_attempted_mask;
+  uint8_t gather_last_awarded_mask;
+  uint8_t historical_tail_padding[5];
+} GameStateV2;
+
+/* Frozen Linux host ABI from the released V2 save. V1 ended at offset 5728,
+ * excluding the V2 gathering extension, not sizeof a reconstructed V1. */
+_Static_assert(sizeof(GameSample) == 112, "Legacy sample ABI changed");
+_Static_assert(sizeof(PipGenome) == 82, "Legacy genome ABI changed");
+_Static_assert(sizeof(GameIndividual) == 260, "Legacy individual ABI changed");
+_Static_assert(sizeof(GameOperation) == 80, "Legacy operation ABI changed");
+_Static_assert(sizeof(GameStateV2) == 5760, "Frozen V2 size mismatch");
+_Static_assert(offsetof(GameStateV2, samples) == 192, "Frozen sample offset");
+_Static_assert(offsetof(GameStateV2, individuals) == 1088, "Frozen resident offset");
+_Static_assert(offsetof(GameStateV2, operations) == 3168, "Frozen operation offset");
+_Static_assert(offsetof(GameStateV2, gather_progress_ms) == 5728, "Frozen V1 length");
+_Static_assert(offsetof(GameStateV2, gather_random_state) == 5740, "Frozen chance offset");
+_Static_assert(offsetof(GameStateV2, gather_attempt_count) == 5744, "Frozen attempt offset");
+_Static_assert(offsetof(GameStateV2, historical_tail_padding) == 5755, "Frozen V2 padding offset");
+_Static_assert(offsetof(GameState, sample_metadata) == sizeof(GameStateV2), "V3 must append after the entire V2 payload");
+_Static_assert(offsetof(SavedGame, state) == 24, "Legacy save header ABI changed");
+
 static uint32_t checksum_bytes(const unsigned char *bytes, size_t length) {
   uint32_t value = 2166136261u;
   size_t index;
@@ -120,6 +183,7 @@ int game_state_valid(const GameState *state) {
         sample->supported_candidates != PIP_SAMPLE_CANDIDATE_MASK ||
         sample->origin_expedition_kind > GAME_EXPEDITION_RESONANCE ||
         sample->incubated > 1 ||
+        !pip_sample_metadata_valid(state, index) ||
         ((sample->decoded_studies == ((1u << PIP_STUDY_COUNT) - 1u)) !=
          (sample->decoded_facts == PIP_REQUIRED_FACTS_MASK)))
       return 0;
@@ -127,9 +191,12 @@ int game_state_valid(const GameState *state) {
       if (strcmp(sample->id, state->samples[earlier].id) == 0)
         return 0;
   }
-  for (index = state->sample_count; index < GAME_MAX_SAMPLES; ++index)
-    if (state->samples[index].id[0] != '\0')
+  for (index = state->sample_count; index < GAME_MAX_SAMPLES; ++index) {
+    const GameSampleMetadata empty = {0};
+    if (state->samples[index].id[0] != '\0' ||
+        memcmp(&state->sample_metadata[index], &empty, sizeof(empty)))
       return 0;
+  }
 
   for (index = 0; index < state->individual_count; ++index) {
     const GameIndividual *individual = &state->individuals[index];
@@ -147,10 +214,11 @@ int game_state_valid(const GameState *state) {
         strcmp(individual->art_version, PIP_ART_VERSION) != 0 ||
         individual->origin_founder != 1 || individual->revealed > 1 ||
         individual->art_pending != 0 ||
-        !pip_genome_valid(&individual->genome) ||
-        strcmp(individual->art_id, pip_art_id(&individual->genome)) != 0 ||
+        !pip_content_genome_valid(&individual->genome) ||
+        strcmp(individual->art_id, pip_content_art_id(&individual->genome)) != 0 ||
         individual->habitat >= GAME_HABITAT_COUNT ||
-        !pip_expression_valid(&individual->genome, &individual->expression))
+        !pip_content_expression_valid(&individual->genome, &individual->expression) ||
+        !pip_individual_metadata_valid(state, index))
       return 0;
     for (sample_index = 0; sample_index < state->sample_count; ++sample_index)
       if (strcmp(individual->source_sample_id,
@@ -163,9 +231,23 @@ int game_state_valid(const GameState *state) {
       if (strcmp(individual->id, state->individuals[earlier].id) == 0)
         return 0;
   }
-  for (index = state->individual_count; index < GAME_MAX_INDIVIDUALS; ++index)
-    if (state->individuals[index].id[0] != '\0')
+  for (index = state->individual_count; index < GAME_MAX_INDIVIDUALS; ++index) {
+    const GameIndividualMetadata empty = {0};
+    if (state->individuals[index].id[0] != '\0' ||
+        memcmp(&state->individual_metadata[index], &empty, sizeof(empty)))
       return 0;
+  }
+  for (index = 0; index < state->sample_count; ++index) {
+    if (!state->samples[index].incubated ||
+        state->sample_metadata[index].profile == GAME_SAMPLE_LEGACY_FIVE)
+      continue;
+    unsigned founders = 0;
+    for (unsigned individual = 0; individual < state->individual_count; ++individual)
+      founders += !strcmp(state->samples[index].id,
+                          state->individuals[individual].source_sample_id);
+    if (founders != 1)
+      return 0;
+  }
 
   for (index = 0; index < GAME_OPERATION_SLOTS; ++index) {
     const GameOperation *operation = &state->operations[index];
@@ -217,7 +299,7 @@ int game_state_load(const char *path, GameState *state) {
   FILE *file;
   size_t read_count;
   int extra;
-  const size_t legacy_payload_size = offsetof(GameState, gather_progress_ms);
+  const size_t legacy_payload_size = offsetof(GameStateV2, gather_progress_ms);
   const size_t legacy_file_size =
       offsetof(SavedGame, state) + legacy_payload_size;
   if (!path || !state)
@@ -242,6 +324,13 @@ int game_state_load(const char *path, GameState *state) {
       return -1;
     saved.state.version = GAME_STATE_VERSION;
     saved.state.legacy_supply_encoding = 1;
+  } else if (saved.version == 2u) {
+    if (read_count != offsetof(SavedGame, state) + sizeof(GameStateV2) ||
+        saved.payload_size != sizeof(GameStateV2) || saved.state.version != 2u ||
+        saved.checksum != checksum_bytes((const unsigned char *)&saved.state,
+                                         sizeof(GameStateV2)))
+      return -1;
+    saved.state.version = GAME_STATE_VERSION;
   } else if (saved.version != GAME_STATE_VERSION ||
              read_count != sizeof(saved) ||
              saved.payload_size != sizeof(saved.state) ||
@@ -251,6 +340,12 @@ int game_state_load(const char *path, GameState *state) {
   }
   if (!game_state_valid(&saved.state))
     return -1;
+  if (saved.version < GAME_STATE_VERSION)
+    for (unsigned individual = 0; individual < saved.state.individual_count;
+         ++individual)
+      pip_pin_individual_art(&saved.state, individual,
+                            saved.state.individuals[individual].expression.pale_markings
+                                ? "legacy-marked" : "legacy-carried");
   *state = saved.state;
   state->runtime_anchors_ready = 0;
   state->runtime_commit_uncertain = 0;

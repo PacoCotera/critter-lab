@@ -203,6 +203,18 @@ cargo capacity or pays a cost. New inventory is multiples of the internal100
 encoding for each indivisible item; [V1](../native/selected-lab/V1.md) owns fixture
 timing, chances and costs. Saved chance outcomes prevent restart/retry rerolls.
 
+Core V1 version3 appends parallel research and individual-art metadata after
+the complete frozen version2 payload, including its original tail padding.
+Version1/2 lengths and checksums are validated before read-only conversion;
+committed old samples retain their five-study content. First-ever acceptance
+through command16 after upgrade pins current A/B content, including a still
+uncommitted older arrival. Its haul fingerprint and receipt retry remain unchanged.
+New commands17/18 bind sample identity, content version and method/candidate;
+required evidence and disclosed support authorize creation. The domain owns
+stock, unused material, exact genome/expression and retained original-art hashes.
+The Lab input/view integration is in development; domain source alone does not
+establish a playable new research screen. Old binaries cannot read version3.
+
 Restart reconciles the exact intent before allowing another mutation. A matching
 operation ID alone is insufficient: the command fingerprint must also match.
 Missing required sidecar, corruption, mismatched cargo or durability uncertainty

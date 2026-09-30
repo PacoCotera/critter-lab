@@ -39,7 +39,9 @@ typedef enum {
   GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER,
   GAME_COMMAND_EXPEDITION_FINISH,
   /* Fresh unload ends its source outing; command14 remains replayable. */
-  GAME_COMMAND_EXPEDITION_UNLOAD
+  GAME_COMMAND_EXPEDITION_UNLOAD,
+  GAME_COMMAND_INVESTIGATE,
+  GAME_COMMAND_SUPPORTED_CREATION
 } GameCommandType;
 
 typedef struct {
@@ -76,6 +78,19 @@ typedef struct {
       unsigned habitat;
     } habitat;
     unsigned individual;
+    struct {
+      unsigned sample;
+      const char *sample_id;
+      const char *content_version;
+      const char *method_id;
+    } investigation;
+    struct {
+      unsigned sample;
+      const char *sample_id;
+      const char *content_version;
+      const char *candidate_id;
+      uint32_t monotonic_seconds;
+    } supported_creation;
   } data;
 } GameCommand;
 

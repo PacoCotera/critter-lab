@@ -1,0 +1,22 @@
+{
+  "fixtures": [
+    {
+      "file": "authored-v1.save",
+      "bytes": 5752,
+      "sha256": "739bdee5ace881e6a391461b353192346b3c7aae227144834836d338bab3edd5",
+      "source": "authored fixed-offset historical ABI"
+    },
+    {
+      "file": "authored-v2.save",
+      "bytes": 5784,
+      "sha256": "980278dd0316f6b162f0b8d83926cb23ec7bc2dc02898a93000a5a3f78147616",
+      "source": "authored fixed-offset historical ABI"
+    },
+    {
+      "file": "runtime-v2.save",
+      "bytes": 5784,
+      "sha256": "52dd0b8166454b8b66afbc3206bb2db2463d6fb290a2fe7f652c138b4edb6b25",
+      "source": "native runtime at revision 04ea5a3b41c5b0e988a3c656802b0baa4eec05cb"
+    }
+  ]
+}
