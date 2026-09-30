@@ -213,14 +213,17 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
   if (has_manifest) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      snprintf(value, sizeof(value), "%s  %u units / Next unit %u%%", labels[i],
-               kit->journal.cargo[i] / 100, kit->journal.cargo[i] % 100);
-      text(row, 239 + (int)i * 234, 278, value, 22, TEXT);
+      snprintf(value, sizeof(value), "%s  %u units", labels[i],
+               kit->journal.cargo[i] / 100);
+      text(row, 239 + (int)i * 234, 265, value, 22, TEXT);
+      snprintf(value, sizeof(value), "Next unit %u%%",
+               kit->journal.cargo[i] % 100);
+      text(row, 239 + (int)i * 234, 298, value, 18, SECONDARY);
     }
     snprintf(value, sizeof(value), "Sample eligibility: %s",
              kit->journal.elapsed >= 60 ? "expedition complete"
                                         : "early return / resources only");
-    text(row, 239, 318, value, 18, SECONDARY);
+    text(row, 239, 332, value, 18, SECONDARY);
   }
   text(row, 48, 389,
        kit->journal.phase == KIT_ACK_PENDING ? "Haul accepted into Lab stock"
