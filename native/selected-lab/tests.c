@@ -77,6 +77,8 @@ int main(void) {
   strcpy(timed.save_path, timed_path);
   timed.game.expedition_active = 1;
   strcpy(timed.game.expedition_id, "first-cargo");
+  timed.game.gather_progress_ms[0] = GAME_GATHER_ATTEMPT_MS - 1000;
+  timed.game.gather_random_state = 1;
   timed.clock = 10;
   game_rules_resume_runtime(&timed.game, timed.clock);
   assert(game_state_save(timed_path, &timed.game) == 0);
@@ -114,23 +116,72 @@ int main(void) {
   timed.discard_resource = 0;
   timed.game.expedition_active = 1;
   strcpy(timed.game.expedition_id, "pack-threshold");
-  timed.game.expedition_data = 990;
+  timed.game.expedition_data = 900;
+  timed.game.gather_progress_ms[0] = GAME_GATHER_ATTEMPT_MS - 1000;
+  timed.game.gather_random_state = 1;
   timed.clock = 10;
   game_rules_resume_runtime(&timed.game, timed.clock);
   assert(game_state_save(timed_path, &timed.game) == 0);
   ready(&timed);
   displayed = timed.revision;
   selected_lab_tick(&timed, 11);
-  assert(timed.game.expedition_data == 1012);
+  assert(timed.game.expedition_data == 1000);
   unsigned tick_sequence = timed.game.last_operation_sequence;
   selected_lab_input(&timed, SELECTED_CONFIRM_DOWN, 0, displayed);
   selected_lab_input(&timed, SELECTED_CONFIRM_UP, 0, displayed);
-  assert(timed.game.expedition_data == 1012 &&
+  assert(timed.game.expedition_data == 1000 &&
          timed.game.last_operation_sequence == tick_sequence);
   ready(&timed);
   press(&timed);
-  assert(timed.game.expedition_data == 12 &&
+  assert(timed.game.expedition_data == 0 &&
          timed.game.last_operation_sequence == tick_sequence + 1);
+  /* Right remains read-only; fresh physical return/store ends an early outing.
+   * The next route starts from zero with a new identity and retained activity. */
+  selected_lab_init(&timed);
+  strcpy(timed.save_path, timed_path);
+  timed.page = V1_EXPEDITION;
+  strcpy(timed.game.expedition_id, "early-unload");
+  timed.game.expedition_active = 1;
+  timed.game.expedition_data = 100;
+  timed.game.expedition_elapsed = 5;
+  timed.game.gather_progress_ms[0] = 1000;
+  uint32_t random_before_unload = timed.game.gather_random_state;
+  timed.clock = 10;
+  game_rules_resume_runtime(&timed.game, timed.clock);
+  assert(game_state_save(timed_path, &timed.game) == 0);
+  ready(&timed);
+  selected_lab_input(&timed, SELECTED_RIGHT_DOWN, 0, timed.revision);
+  selected_lab_input(&timed, SELECTED_RIGHT_UP, 0, timed.revision);
+  assert(timed.game.expedition_active && timed.game.expedition_elapsed == 5 &&
+         !timed.game.last_operation_sequence);
+  ready(&timed);
+  selected_lab_input(&timed, SELECTED_DOWN_DOWN, 0, timed.revision);
+  selected_lab_input(&timed, SELECTED_DOWN_UP, 0, timed.revision);
+  assert(!strcmp(selected_lab_focus(&timed), "Cargo"));
+  ready(&timed);
+  press(&timed);
+  assert(timed.page == V1_CARGO);
+  assert(!strcmp(selected_lab_focus(&timed), "Return + store haul"));
+  ready(&timed);
+  press(&timed);
+  assert(timed.page == V1_SAMPLES && timed.game.data == 100 &&
+         timed.game.expedition_data == 0 && timed.game.sample_count == 0);
+  assert(!timed.game.expedition_active && !timed.game.expedition_id[0] &&
+         timed.game.expedition_elapsed == 0);
+  assert(timed.game.gather_progress_ms[0] == 1000 &&
+         timed.game.gather_random_state == random_before_unload &&
+         timed.game.gather_attempt_count == 0);
+  ready(&timed);
+  press(&timed); /* Empty samples view returns to route selection. */
+  assert(timed.page == V1_EXPEDITION &&
+         !strcmp(selected_lab_focus(&timed), "Field survey"));
+  ready(&timed);
+  press(&timed);
+  assert(timed.game.expedition_active && timed.game.expedition_elapsed == 0 &&
+         strcmp(timed.game.expedition_id, "early-unload") != 0);
+  assert(timed.game.gather_progress_ms[0] == 1000 &&
+         timed.game.gather_random_state == random_before_unload &&
+         timed.game.sample_count == 0);
   unlink(timed_path);
   press(&lab);
   assert(lab.page == V1_HOME);

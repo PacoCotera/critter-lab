@@ -1,38 +1,47 @@
-# Critter Lab: product and plan
+# Beecho Lab documentation
 
-Critter Lab connects exploration, genomic discovery and life with the critters you create. The whole journey is **explore → gather → investigate → decode → create → care and discover more**. Research preserves discoveries across expeditions; a complete genome is required for parentless incubation. Breeding uses actual compatible parents and permissions.
+The whole journey is **explore → gather → return → investigate → decode → create
+→ live with your Beecho and discover more**. One combined Companion, home Lab
+and shared Caddy serve the same world. [The player introduction](players/README.md)
+explains those roles; [gameplay](../specs/gameplay.md) owns their game rules.
 
-## One kit, three roles
+## Current reality and next outcome
 
-```mermaid
-flowchart LR
-  Companion[Companion: Probe / Cargo / Companions] <--> Lab[Lab: research and visual habitats]
-  Lab <--> Caddy[Caddy: home summary, charging and printing]
-  Companion <--> Caddy
-  Lab <--> Local[Durable standalone world]
-  Local <-. optional synchronization .-> Cloud[Cloud Pass: global network]
-```
+The [native three-device host simulator](../native/selected-lab/README.md)
+connects Companion gathering/Cargo, explicit Lab reception, Pip research,
+incubation, reveal and habitat visits, with durable saves. Inspect the
+[actual native screen gallery](../design/connected-device-review/native/README.md)
+and [status](../STATUS.md) for evidence and limits. One Linux C17 process simulates
+the three devices and their links; hardware, production cloud services and human
+playtest acceptance remain unproved.
 
-The Companion combines the former separate Probe and companion roles. Lab is the home handheld workbench. The shared caddy is the tangible home for the collection. These roles do not prescribe which processor owns local simulation/storage; that allocation remains open. Docking does not transfer ownership or silently spend resources.
+The next screen outcome is faithful native derivation of the
+[reviewed Gemini connected concepts](../design/companion-connected-art/README.md)
+using C18's shared art family. Current connected presentation is functional
+scaffolding. Retain the existing Home hierarchy and distinguish Research's
+collection-wide Overview from a sample workbench. Requirements belong in
+[experience](../specs/experience.md) and the [screen standard](../design/screen-design-standard.md).
 
-The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
-
-## Current development gate
-
-Electronics reference → integrated firmware/game software proof → human playtest → hardware or mobile decision. The current caddy reference is Waveshare 5.79-inch monochrome module, 792×272; the 3.7-inch proposal is superseded. Module/raw-panel integration, exact dimensions and evidence belong in [devices](../specs/devices.md#electronics-first-v1-reference-specification).
-
-The native Lab preview and host experiments establish bounded software behavior. The complete kit, production services, device drivers, charging and printer are not implemented or physically validated. The next bounded implementation is expedition cargo → resource-funded research → saved finding with restart/retry recovery. Later creation, habitats and caddy branches must be labelled when simulated or unresolved. No PCB/enclosure commitment or purchase follows from concept art.
+The wider gate is [electronics reference](../specs/devices.md#electronics-first-v1-reference-specification)
+→ integrated software proof → human playtest → hardware or mobile decision.
+No new physical-family discovery, PCB/enclosure commitment or purchase follows
+from this software checkpoint.
 
 ## Authoritative map
 
 | Need | Source |
 | --- | --- |
-| Player introduction | [Meet Critter Lab](players/README.md) |
-| Actual evidence and missing work | [Product status](../STATUS.md), [build coverage](../BUILD.md) |
-| Mechanics and genomic framework | [Gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [genetic engine](../specs/genetic-engine.md) |
+| Introduction and current play | [Meet Beecho Lab](players/README.md), [Pip guide](../native/selected-lab/V1.md) |
+| Evidence and unfinished work | [Status](../STATUS.md), [build coverage](../BUILD.md) |
+| Mechanics and heredity | [Gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [genetic engine](../specs/genetic-engine.md) |
 | Research and creation | [Connected research design](../design/research-and-creation.md), [creation contract](../specs/sample-to-critter-contract.md) |
-| Software/device boundaries | [Architecture](../specs/architecture.md), [cloud and local records](../specs/cloud-sync.md), [devices](../specs/devices.md) |
-| Appearance and preserved references | [Design guide](../design/README.md) |
-| Build and contribute | [Getting started](builders/getting-started.md), [foundation evidence](builders/foundation-demo.md) |
+| Input, screen response and state | [Experience](../specs/experience.md) |
+| Software and local/cloud boundaries | [Architecture](../specs/architecture.md), [cloud/local records](../specs/cloud-sync.md) |
+| Physical device responsibilities | [Devices](../specs/devices.md) |
+| Appearance and preserved art | [Design guide](../design/README.md) |
+| Run or contribute | [Getting started](builders/getting-started.md), [native build guide](../native/README.md), [contributing](../CONTRIBUTING.md) |
+| Earlier foundation study | [Foundation evidence](builders/foundation-demo.md), with historical limits |
 
-Older experiments and original art are preserved with their evidence limits. They do not override current specifications or reopen selected direction. Hardware proceeds only after software proof; the fallback mobile app reuses domain rules, content and durable identity.
+The public specifications, implementation and art here are product authority.
+Older experiments and original references remain preserved with their boundaries;
+they neither override current requirements nor reopen selected direction.

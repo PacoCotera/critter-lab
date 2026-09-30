@@ -1,0 +1,145 @@
+{
+  "artist": "Gemini, operated signed-in browser conversation",
+  "conversation": "https://gemini.google.com/app/ebc52519d5f5f3fb",
+  "boundary": "Screen concepts and display-size previews, not editable native pixel masters",
+  "artifacts": [
+    {
+      "path": "01-brief.txt",
+      "sha256": "a9e21dc94bbf2239f7a419c72aaf4fc8202d709ecf764937d38e58720c01f6b8",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "01-gemini-family.png",
+      "sha256": "a06adef7b4d9748c6b27eab5e3b381ded2e6518eb617c7da0a57fdeff63e0916",
+      "dimensions": [
+        1024,
+        683
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "02-gemini-probe.png",
+      "sha256": "64ac1d5ec95e14d38b83690ca8987a97e205948a739d839a76b0c5d2c50d64dd",
+      "dimensions": [
+        765,
+        1024
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "03-correction-brief.txt",
+      "sha256": "75e9725416f49542ec3484862340f9eb8f7cc6f2e18a0751c03c2256825115e3",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "03-gemini-probe-corrected.png",
+      "sha256": "abd0840b6720fbb12e7652bf72536ed39822a79b4f43006771e934c2598c2669",
+      "dimensions": [
+        765,
+        1024
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "03-usage-preview-450x600.png",
+      "sha256": "64389732495f6a0205ea23c1e9ba3783a6920bbc51a58edeab1e85623b456c01",
+      "dimensions": [
+        450,
+        600
+      ],
+      "kind": "display-size preview"
+    },
+    {
+      "path": "04-gemini-cargo.png",
+      "sha256": "17d95ecc7dd0a548826d9dfe0bc360b7a764b267bae70e82132d9073f93b5b9e",
+      "dimensions": [
+        765,
+        1024
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "04-send-brief.txt",
+      "sha256": "4887353c2a6d136af8b50a66c2d838b2bc6ed8a70649693325e756c59ee350f4",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "04-usage-preview-450x600.png",
+      "sha256": "af080ae4565d158db747e19172b2ae9357c17c166479b1f0d35280f5a190fc16",
+      "dimensions": [
+        450,
+        600
+      ],
+      "kind": "display-size preview"
+    },
+    {
+      "path": "05-gemini-lab-arrival.png",
+      "sha256": "509e42e2ecac97855c6971c3910794dbc3aae314616b07dff61a10721e7bd4b1",
+      "dimensions": [
+        1024,
+        597
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "05-lab-arrival-brief.txt",
+      "sha256": "af433d615847c00db45e4bae55112e5f919a5e6adddab328e40b4d15159e3c98",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "05-usage-preview-1024x600.png",
+      "sha256": "62107900488604fb93e81c1ed6c67311222b9be455b9b5213d2b61f16c9ae3a7",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "kind": "display-size preview"
+    },
+    {
+      "path": "06-gemini-lab-arrival-lighter.png",
+      "sha256": "c8eee92a3509f93d4e2cf7d2d21de02d117e1f15bee276f325dfdd1bae24ad56",
+      "dimensions": [
+        1024,
+        597
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "06-lighter-arrival-brief.txt",
+      "sha256": "d6de03f1297ef08b852de291d6a1b9451b33d33faa564df42747f811b6d3cdba",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "06-usage-preview-1024x600.png",
+      "sha256": "2cc359e367163471e597ca01ab4835abb6f9e4fd651313ceb1b7b96306d8be35",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "kind": "display-size preview"
+    },
+    {
+      "path": "07-frame-color-brief.txt",
+      "sha256": "c2dceafbae2ca0215448abbbdead7e058553b456d426cfe4ed92d6908efa512b",
+      "kind": "submitted brief"
+    },
+    {
+      "path": "07-gemini-lab-arrival-blue.png",
+      "sha256": "ad46c0bbc063d3be60d07ffdd56e50f8e82fcd9ffb4308191ccff75c4b590ffb",
+      "dimensions": [
+        1024,
+        597
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "07-usage-preview-1024x600.png",
+      "sha256": "73ec9f833c9e28d4d9894929ed3834290a97b462fd7f57cea2f249df3f29c979",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "kind": "display-size preview"
+    }
+  ]
+}

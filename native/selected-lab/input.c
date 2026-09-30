@@ -49,6 +49,60 @@ static void enter(SelectedLab *lab, SelectedPage page) {
   interaction_changed(lab);
   lab->page_revision = lab->revision;
 }
+/* Only navigation is captured. World state, clocks and gesture readiness stay
+ * authoritative when a received haul temporarily replaces the current view. */
+void selected_lab_capture_context(const SelectedLab *lab,
+                                  SelectedLabContext *context) {
+  context->page = lab->page;
+  context->focus = lab->focus;
+  context->sample = lab->sample;
+  context->study = lab->study;
+  context->resident = lab->resident;
+  context->discard_resource = lab->discard_resource;
+  context->workspace = lab->workspace;
+  context->library_index = lab->library_index;
+  memcpy(context->workspace_page, lab->workspace_page,
+         sizeof(lab->workspace_page));
+  memcpy(context->workspace_focus, lab->workspace_focus,
+         sizeof(lab->workspace_focus));
+  memcpy(context->workspace_sample, lab->workspace_sample,
+         sizeof(lab->workspace_sample));
+  memcpy(context->workspace_study, lab->workspace_study,
+         sizeof(lab->workspace_study));
+  memcpy(context->workspace_resident, lab->workspace_resident,
+         sizeof(lab->workspace_resident));
+  memcpy(context->message, lab->message, sizeof(lab->message));
+}
+void selected_lab_open_reception(SelectedLab *lab) {
+  enter(lab, V1_CARGO);
+  lab->message[0] = 0;
+  memset(lab->gestures, 0, sizeof(lab->gestures));
+}
+void selected_lab_restore_context(SelectedLab *lab,
+                                  const SelectedLabContext *context) {
+  lab->page = context->page;
+  lab->focus = context->focus;
+  lab->sample = context->sample;
+  lab->study = context->study;
+  lab->resident = context->resident;
+  lab->discard_resource = context->discard_resource;
+  lab->workspace = context->workspace;
+  lab->library_index = context->library_index;
+  memcpy(lab->workspace_page, context->workspace_page,
+         sizeof(lab->workspace_page));
+  memcpy(lab->workspace_focus, context->workspace_focus,
+         sizeof(lab->workspace_focus));
+  memcpy(lab->workspace_sample, context->workspace_sample,
+         sizeof(lab->workspace_sample));
+  memcpy(lab->workspace_study, context->workspace_study,
+         sizeof(lab->workspace_study));
+  memcpy(lab->workspace_resident, context->workspace_resident,
+         sizeof(lab->workspace_resident));
+  memcpy(lab->message, context->message, sizeof(lab->message));
+  memset(lab->gestures, 0, sizeof(lab->gestures));
+  interaction_changed(lab);
+  lab->page_revision = lab->revision;
+}
 static unsigned discovered_findings(const SelectedLab *lab) {
   unsigned count = 0;
   for (unsigned i = 0; i < lab->game.sample_count; ++i)
@@ -199,10 +253,13 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_HOME:
     return home[option % 5];
   case V1_EXPEDITION:
+    if (lab->game.expedition_id[0] &&
+        !game_transfer_available(&lab->game))
+      return option ? "Cargo" : "Finish expedition";
     return lab->game.expedition_id[0]
                ? (option                        ? "Cargo"
                   : lab->game.expedition_active ? "Keep exploring"
-                                                : "Review completed haul")
+                  : "Review haul")
                : routes[option % 3];
   case V1_CARGO:
     return cargo[option % 4];
@@ -358,7 +415,10 @@ static void activate(SelectedLab *lab) {
     if (lab->kit_mode)
       return;
     if (lab->game.expedition_id[0]) {
-      if (focus || !lab->game.expedition_active)
+      if (!focus && !game_transfer_available(&lab->game)) {
+        command.type = GAME_COMMAND_EXPEDITION_FINISH;
+        commit(lab, command);
+      } else if (focus || !lab->game.expedition_active)
         enter(lab, V1_CARGO);
       else {
         strcpy(lab->message,
@@ -378,15 +438,14 @@ static void activate(SelectedLab *lab) {
     if (lab->kit_mode)
       return;
     if (!focus) {
-      command.type = GAME_COMMAND_EXPEDITION_OFFLOAD;
+      command.type = GAME_COMMAND_EXPEDITION_UNLOAD;
       if (commit(lab, command) == GAME_OK) {
         enter(lab, V1_SAMPLES);
         snprintf(lab->message, sizeof(lab->message),
-                 "Haul saved. Stock D %u Next %u%% | E %u Next %u%% | Es %u "
-                 "Next %u%%",
-                 lab->game.data / 100, lab->game.data % 100,
-                 lab->game.energy / 100, lab->game.energy % 100,
-                 lab->game.essence / 100, lab->game.essence % 100);
+                 "Haul saved. Lab stock: Data %u | Energy %u | Essence %u",
+                 lab->game.data / GAME_SUPPLY_UNIT,
+                 lab->game.energy / GAME_SUPPLY_UNIT,
+                 lab->game.essence / GAME_SUPPLY_UNIT);
       }
     } else {
       lab->discard_resource = focus - 1;
@@ -598,7 +657,10 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
                  (lab->game.samples[lab->sample].decoded_studies &
                   (1u << lab->focus))) ||
                 (lab->page == V1_EXPEDITION && lab->game.expedition_id[0] &&
-                 (lab->focus || !lab->game.expedition_active)) ||
+                 (lab->focus ||
+                  (!lab->game.expedition_active &&
+                   lab->game.expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
+                   game_transfer_available(&lab->game)))) ||
                 lab->page == V1_LIBRARY);
     if (safe)
       activate(lab);

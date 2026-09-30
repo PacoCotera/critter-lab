@@ -9,9 +9,6 @@
 #define EXPEDITION_TICK_CAP 60u
 #define GAME_STUDY_BITS ((1u << PIP_STUDY_COUNT) - 1u)
 
-/* Internal stock units are 1/1000 of a pack. Yields are per active second. */
-static const uint32_t YIELD_PER_ACTIVE_SECOND[3] = {22u, 22u, 22u};
-
 static uint64_t hash_byte(uint64_t value, unsigned char byte) {
   return (value ^ byte) * 1099511628211ULL;
 }
@@ -38,6 +35,7 @@ static uint64_t command_fingerprint(const GameCommand *command) {
     break;
   case GAME_COMMAND_EXPEDITION_TICK:
   case GAME_COMMAND_INCUBATION_TICK:
+  case GAME_COMMAND_EXPEDITION_CONTINUE:
     value = hash_u32(value, command->data.monotonic_seconds);
     break;
   case GAME_COMMAND_EXPEDITION_DISCARD:
@@ -63,6 +61,11 @@ static uint64_t command_fingerprint(const GameCommand *command) {
     break;
   case GAME_COMMAND_EXPEDITION_OFFLOAD:
   case GAME_COMMAND_INCUBATION_OPEN:
+  case GAME_COMMAND_EXPEDITION_TRANSFER:
+  case GAME_COMMAND_STOCK_NORMALIZE:
+  case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
+  case GAME_COMMAND_EXPEDITION_FINISH:
+  case GAME_COMMAND_EXPEDITION_UNLOAD:
     break;
   default:
     break;
@@ -82,16 +85,218 @@ static unsigned cargo_total(const GameState *state) {
          state->expedition_essence;
 }
 
+int game_stock_normalized(const GameState *state) {
+  return state && !state->legacy_supply_encoding &&
+         state->data % GAME_SUPPLY_UNIT == 0 &&
+         state->energy % GAME_SUPPLY_UNIT == 0 &&
+         state->essence % GAME_SUPPLY_UNIT == 0 &&
+         state->expedition_data % GAME_SUPPLY_UNIT == 0 &&
+         state->expedition_energy % GAME_SUPPLY_UNIT == 0 &&
+         state->expedition_essence % GAME_SUPPLY_UNIT == 0;
+}
+
+int game_supply_conversion_pending(const GameState *state) {
+  return state && state->legacy_supply_encoding;
+}
+
+static int expedition_sample_ready(const GameState *state) {
+  return state->expedition_id[0] &&
+         state->expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
+         state->sample_count < GAME_MAX_SAMPLES;
+}
+
+int game_transfer_available(const GameState *state) {
+  return state &&
+         (state->expedition_data >= GAME_SUPPLY_UNIT ||
+          state->expedition_energy >= GAME_SUPPLY_UNIT ||
+          state->expedition_essence >= GAME_SUPPLY_UNIT ||
+          expedition_sample_ready(state));
+}
+
+/* Version-two journal intents reserved this raw split policy. Keep it intact
+ * until that intent is reconciled; only command twelve changes the encoding. */
+static GameResult normalize_legacy_stock(GameState *state) {
+  uint32_t *stock[] = {&state->data, &state->energy, &state->essence};
+  uint32_t *carried[] = {&state->expedition_data, &state->expedition_energy,
+                         &state->expedition_essence};
+  uint32_t returned = 0;
+  for (unsigned i = 0; i < 3; ++i)
+    returned += *stock[i] % GAME_SUPPLY_UNIT;
+  if (!returned)
+    return GAME_DUPLICATE;
+  if (cargo_total(state) + returned > GAME_CARGO_CAPACITY)
+    return GAME_UNAVAILABLE;
+  for (unsigned i = 0; i < 3; ++i) {
+    uint32_t remainder = *stock[i] % GAME_SUPPLY_UNIT;
+    *stock[i] -= remainder;
+    *carried[i] += remainder;
+  }
+  return GAME_OK;
+}
+
+static GameResult convert_supply_encoding(GameState *state) {
+  uint32_t *stock[] = {&state->data, &state->energy, &state->essence};
+  uint32_t *carried[] = {&state->expedition_data, &state->expedition_energy,
+                         &state->expedition_essence};
+  if (!state->legacy_supply_encoding)
+    return GAME_DUPLICATE;
+  for (unsigned i = 0; i < 3; ++i) {
+    uint32_t stock_remainder = *stock[i] % GAME_SUPPLY_UNIT;
+    uint32_t carried_remainder = *carried[i] % GAME_SUPPLY_UNIT;
+    *stock[i] -= stock_remainder;
+    *carried[i] -= carried_remainder;
+    /* Historical partial work becomes time credit, never an earned item.
+     * Credits may exceed one interval; later qualified attempts consume them. */
+    state->gather_progress_ms[i] =
+        (stock_remainder + carried_remainder) * GAME_GATHER_ATTEMPT_MS /
+        GAME_SUPPLY_UNIT;
+  }
+  state->gather_random_state = GAME_GATHER_INITIAL_RANDOM_STATE;
+  state->gather_attempt_count = 0;
+  state->gather_last_attempted_mask = 0;
+  state->gather_last_awarded_mask = 0;
+  state->legacy_supply_encoding = 0;
+  return GAME_OK;
+}
+
+uint32_t game_gather_remaining_ms(const GameState *state) {
+  uint32_t remaining = GAME_GATHER_ATTEMPT_MS;
+  if (!state || state->legacy_supply_encoding)
+    return remaining;
+  for (unsigned i = 0; i < 3; ++i) {
+    uint32_t class_remaining =
+        state->gather_progress_ms[i] >= GAME_GATHER_ATTEMPT_MS
+            ? 0
+            : GAME_GATHER_ATTEMPT_MS - state->gather_progress_ms[i];
+    if (class_remaining < remaining)
+      remaining = class_remaining;
+  }
+  return remaining;
+}
+
+unsigned game_gather_due_mask(const GameState *state) {
+  unsigned mask = 0;
+  uint32_t remaining = game_gather_remaining_ms(state);
+  if (!state || state->legacy_supply_encoding)
+    return 0;
+  for (unsigned i = 0; i < 3; ++i) {
+    uint32_t class_remaining =
+        state->gather_progress_ms[i] >= GAME_GATHER_ATTEMPT_MS
+            ? 0
+            : GAME_GATHER_ATTEMPT_MS - state->gather_progress_ms[i];
+    if (class_remaining == remaining)
+      mask |= 1u << i;
+  }
+  return mask;
+}
+
+unsigned game_gather_required_slots(const GameState *state) {
+  unsigned count = 0;
+  if (!state || state->legacy_supply_encoding)
+    return 0;
+  for (unsigned i = 0; i < 3; ++i)
+    if (state->gather_progress_ms[i] + 1000u >= GAME_GATHER_ATTEMPT_MS)
+      ++count;
+  return count;
+}
+
+int game_gather_capacity_blocked(const GameState *state) {
+  return !state || state->legacy_supply_encoding ||
+         cargo_total(state) >= GAME_CARGO_CAPACITY ||
+         game_gather_required_slots(state) * GAME_SUPPLY_UNIT >
+             GAME_CARGO_CAPACITY - cargo_total(state);
+}
+
 static int make_id(char *destination, size_t capacity, const char *prefix,
                    uint32_t identity) {
   int count = snprintf(destination, capacity, "BEE-%s-%05u", prefix, identity);
   return count >= 0 && (size_t)count < capacity;
 }
 
+static GameResult record_expedition_sample(GameState *state) {
+  if (expedition_sample_ready(state)) {
+    GameSample *sample = &state->samples[state->sample_count];
+    memset(sample, 0, sizeof(*sample));
+    if (!make_id(sample->id, sizeof(sample->id), "S", state->next_identity++))
+      return GAME_INVALID;
+    strcpy(sample->origin_expedition_id, state->expedition_id);
+    sample->origin_expedition_kind = (uint8_t)state->expedition_kind;
+    sample->supported_candidates = PIP_SAMPLE_CANDIDATE_MASK;
+    ++state->sample_count;
+  }
+  return GAME_OK;
+}
+
+static GameResult transfer_expedition(GameState *state) {
+  uint32_t *stock[] = {&state->data, &state->energy, &state->essence};
+  uint32_t *carried[] = {&state->expedition_data, &state->expedition_energy,
+                         &state->expedition_essence};
+  uint32_t complete[3];
+  if (!cargo_total(state) && !expedition_sample_ready(state))
+    return GAME_UNAVAILABLE;
+  for (unsigned i = 0; i < 3; ++i) {
+    complete[i] = *carried[i] - *carried[i] % GAME_SUPPLY_UNIT;
+    *carried[i] -= complete[i];
+  }
+  /* Returning old Lab fractions here avoids changing an immutable sealed
+   * snapshot before its explicit acceptance. All changes share one save. */
+  GameResult normalized = normalize_legacy_stock(state);
+  if (normalized != GAME_OK && normalized != GAME_DUPLICATE)
+    return normalized;
+  for (unsigned i = 0; i < 3; ++i)
+    if (!add_stock(stock[i], complete[i]))
+      return GAME_UNAVAILABLE;
+  GameResult sample_result = record_expedition_sample(state);
+  if (sample_result != GAME_OK)
+    return sample_result;
+  state->expedition_active = 0;
+  if (state->expedition_elapsed >= GAME_EXPEDITION_SECONDS) {
+    state->expedition_elapsed = 0;
+    state->expedition_id[0] = '\0';
+  }
+  return GAME_OK;
+}
+
+static GameResult transfer_whole_expedition(GameState *state) {
+  int legacy_haul = state->legacy_supply_encoding && cargo_total(state);
+  if (state->legacy_supply_encoding) {
+    GameResult converted = convert_supply_encoding(state);
+    if (converted != GAME_OK)
+      return converted;
+  }
+  if (!legacy_haul && !game_transfer_available(state))
+    return GAME_UNAVAILABLE;
+  if (!add_stock(&state->data, state->expedition_data) ||
+      !add_stock(&state->energy, state->expedition_energy) ||
+      !add_stock(&state->essence, state->expedition_essence))
+    return GAME_UNAVAILABLE;
+  GameResult sample_result = record_expedition_sample(state);
+  if (sample_result != GAME_OK)
+    return sample_result;
+  state->expedition_data = 0;
+  state->expedition_energy = 0;
+  state->expedition_essence = 0;
+  state->expedition_active = 0;
+  if (state->expedition_elapsed >= GAME_EXPEDITION_SECONDS) {
+    state->expedition_elapsed = 0;
+    state->expedition_id[0] = '\0';
+  }
+  return GAME_OK;
+}
+
+static uint32_t next_gather_random(GameState *state) {
+  uint32_t value = state->gather_random_state;
+  value ^= value << 13;
+  value ^= value >> 17;
+  value ^= value << 5;
+  state->gather_random_state = value;
+  return value;
+}
+
 static int apply_expedition_tick(GameState *state, uint32_t now) {
   uint32_t elapsed;
   uint32_t index;
-  if (!state->expedition_active)
+  if (!state->expedition_active || state->legacy_supply_encoding)
     return GAME_UNAVAILABLE;
   if (!state->runtime_anchors_ready)
     return GAME_INVALID;
@@ -104,16 +309,35 @@ static int apply_expedition_tick(GameState *state, uint32_t now) {
   for (index = 0;
        index < elapsed && state->expedition_elapsed < GAME_EXPEDITION_SECONDS;
        ++index) {
-    uint32_t after = cargo_total(state) + YIELD_PER_ACTIVE_SECOND[0] +
-                     YIELD_PER_ACTIVE_SECOND[1] + YIELD_PER_ACTIVE_SECOND[2];
-    if (after > GAME_CARGO_CAPACITY)
-      return GAME_UNAVAILABLE;
-    state->expedition_data += YIELD_PER_ACTIVE_SECOND[0];
-    state->expedition_energy += YIELD_PER_ACTIVE_SECOND[1];
-    state->expedition_essence += YIELD_PER_ACTIVE_SECOND[2];
+    uint32_t *carried[] = {&state->expedition_data, &state->expedition_energy,
+                           &state->expedition_essence};
+    unsigned required = game_gather_required_slots(state);
+    unsigned attempted = 0;
+    unsigned awarded = 0;
+    /* Reserve worst-case room before consuming time or any chance draw. This
+     * lets capacity pauses resume without discarding a success or rerolling. */
+    if (game_gather_capacity_blocked(state) ||
+        state->gather_attempt_count > UINT64_MAX - required)
+      return index ? GAME_OK : GAME_UNAVAILABLE;
+    for (unsigned i = 0; i < 3; ++i) {
+      state->gather_progress_ms[i] += 1000u;
+      if (state->gather_progress_ms[i] >= GAME_GATHER_ATTEMPT_MS) {
+        state->gather_progress_ms[i] -= GAME_GATHER_ATTEMPT_MS;
+        attempted |= 1u << i;
+        ++state->gather_attempt_count;
+        /* Provisional V1 fixture: each class independently succeeds on three
+         * of four outcomes. Stable class order and saved PRNG prevent rerolls. */
+        if (next_gather_random(state) % 4u < 3u) {
+          *carried[i] += GAME_SUPPLY_UNIT;
+          awarded |= 1u << i;
+        }
+      }
+    }
+    if (attempted) {
+      state->gather_last_attempted_mask = (uint8_t)attempted;
+      state->gather_last_awarded_mask = (uint8_t)awarded;
+    }
     ++state->expedition_elapsed;
-    if (after >= GAME_CARGO_CAPACITY)
-      break;
   }
   if (state->expedition_elapsed >= GAME_EXPEDITION_SECONDS)
     state->expedition_active = 0;
@@ -146,7 +370,8 @@ static GameResult apply_domain_command(GameState *state,
   case GAME_COMMAND_EXPEDITION_START: {
     if (command->data.expedition.kind > GAME_EXPEDITION_RESONANCE ||
         state->expedition_active || state->expedition_id[0] ||
-        cargo_total(state) || !state->runtime_anchors_ready)
+        state->legacy_supply_encoding ||
+        !state->runtime_anchors_ready)
       return GAME_UNAVAILABLE;
     state->expedition_active = 1;
     state->expedition_kind = (uint32_t)command->data.expedition.kind;
@@ -160,27 +385,54 @@ static GameResult apply_domain_command(GameState *state,
   case GAME_COMMAND_EXPEDITION_TICK:
     return (GameResult)apply_expedition_tick(state,
                                              command->data.monotonic_seconds);
+  case GAME_COMMAND_EXPEDITION_CONTINUE:
+    if (state->expedition_active || !state->expedition_id[0] ||
+        state->expedition_elapsed >= GAME_EXPEDITION_SECONDS ||
+        state->legacy_supply_encoding ||
+        !state->runtime_anchors_ready)
+      return GAME_UNAVAILABLE;
+    if (command->data.monotonic_seconds < state->expedition_last_tick)
+      return GAME_INVALID;
+    state->expedition_active = 1;
+    state->expedition_last_tick = command->data.monotonic_seconds;
+    return GAME_OK;
+  case GAME_COMMAND_EXPEDITION_TRANSFER:
+    if (!state->legacy_supply_encoding)
+      return GAME_UNAVAILABLE;
+    return transfer_expedition(state);
+  case GAME_COMMAND_STOCK_NORMALIZE:
+    return convert_supply_encoding(state);
+  case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
+    return transfer_whole_expedition(state);
+  case GAME_COMMAND_EXPEDITION_UNLOAD: {
+    GameResult result = transfer_whole_expedition(state);
+    if (result != GAME_OK)
+      return result;
+    /* Unloading ends even an early outing. Preparation and committed chance
+     * outcomes belong to the Companion and remain available for the next one. */
+    state->expedition_id[0] = '\0';
+    state->expedition_elapsed = 0;
+    return GAME_OK;
+  }
+  case GAME_COMMAND_EXPEDITION_FINISH:
+    if (state->legacy_supply_encoding || !state->expedition_id[0] ||
+        game_transfer_available(state))
+      return GAME_UNAVAILABLE;
+    state->expedition_active = 0;
+    state->expedition_id[0] = '\0';
+    state->expedition_elapsed = 0;
+    return GAME_OK;
   case GAME_COMMAND_EXPEDITION_OFFLOAD: {
-    GameSample *sample;
     uint32_t total = cargo_total(state);
-    int award_sample = state->expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
-                       state->sample_count < GAME_MAX_SAMPLES;
-    if (!state->expedition_id[0] || !total)
+    if (!state->legacy_supply_encoding || !state->expedition_id[0] || !total)
       return GAME_UNAVAILABLE;
     if (!add_stock(&state->data, state->expedition_data) ||
         !add_stock(&state->energy, state->expedition_energy) ||
         !add_stock(&state->essence, state->expedition_essence))
       return GAME_UNAVAILABLE;
-    if (award_sample) {
-      sample = &state->samples[state->sample_count];
-      memset(sample, 0, sizeof(*sample));
-      if (!make_id(sample->id, sizeof(sample->id), "S", state->next_identity++))
-        return GAME_INVALID;
-      strcpy(sample->origin_expedition_id, state->expedition_id);
-      sample->origin_expedition_kind = (uint8_t)state->expedition_kind;
-      sample->supported_candidates = PIP_SAMPLE_CANDIDATE_MASK;
-      ++state->sample_count;
-    }
+    GameResult sample_result = record_expedition_sample(state);
+    if (sample_result != GAME_OK)
+      return sample_result;
     state->expedition_data = 0;
     state->expedition_energy = 0;
     state->expedition_essence = 0;
@@ -202,6 +454,9 @@ static GameResult apply_domain_command(GameState *state,
       resource = &state->expedition_essence;
     if (!resource || command->data.discard.quantity > *resource)
       return GAME_INVALID;
+    if (!state->legacy_supply_encoding &&
+        command->data.discard.quantity % GAME_SUPPLY_UNIT != 0)
+      return GAME_INVALID;
     *resource -= command->data.discard.quantity;
     return GAME_OK;
   }
@@ -216,7 +471,8 @@ static GameResult apply_domain_command(GameState *state,
     bit = (uint8_t)(1u << command->data.study.study);
     if (sample->decoded_studies & bit)
       return GAME_DUPLICATE;
-    if (sample->incubated || state->data < study->cost_data ||
+    if (!game_stock_normalized(state) || sample->incubated ||
+        state->data < study->cost_data ||
         state->energy < study->cost_energy ||
         state->essence < study->cost_essence)
       return GAME_UNAVAILABLE;
@@ -239,7 +495,8 @@ static GameResult apply_domain_command(GameState *state,
     sample = &state->samples[sample_index];
     if (sample->decoded_studies != GAME_STUDY_BITS || sample->incubated)
       return GAME_UNAVAILABLE;
-    if (state->data < 500u || state->energy < 500u || state->essence < 500u)
+    if (!game_stock_normalized(state) || state->data < 500u ||
+        state->energy < 500u || state->essence < 500u)
       return GAME_UNAVAILABLE;
     individual = &state->individuals[state->individual_count];
     memset(individual, 0, sizeof(*individual));

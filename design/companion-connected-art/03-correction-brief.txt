@@ -1,0 +1,14 @@
+
+UX clarifications: associate the concise Data/Energy/Essence names with their counts, since first-time players must identify resource classes. Use Back: modes, not an invented B button. Reserve warm focus light for the actual VIEW CARGO target; read-only Next attempt can use the cool instrument vocabulary. Last attempt plus the actual resource names is enough history wording. Essential copy must survive a450x600 usage preview; source artwork may be larger.
+This is substantially closer in typography, crafted framing, resource presence and focus light. Preserve that visual character. Our game/UX/director review finds a small factual correction before this can guide production.
+
+Framing clarification: despite the word Probe, this is an expedition/collecting GAME, not a live telemetry scanner. There is no radar, heading, real terrain map or sensing data in this mechanic. Keep a compelling expressive visual subject; you choose a clear fictional expedition/collection illustration or emblem. Remove the radar sweep/map and pictured physical Probe. Do not replace your visual subject with another blank text box, and do not invent measurements or a creature discovery.
+
+Make these exact factual corrections in the SAME complete3:4portrait screen:
+1. Use the concise caption EXPEDITION with5/60sec as elapsed expedition time. The extra big5/ring is redundant; either remove it or represent exactly that same5/60 elapsed fraction, never a sensor reading.
+2. Replace PREPARATION STATE / SECONDS UNTIL READY with NEXT ATTEMPT / IN3SEC. It is an opportunity, not a guaranteed item. Keep this separate from whole collected inventory.
+3. Essence is a rounded translucent lime resource orb/drop, symmetric and smooth in silhouette with deliberate pixel shading, not an egg, organism or faceted gem. Energy remains the sharp gold crystal. Use the same Essence in inventory and history.
+
+Keep Probe/Cargo/Companions mode identity, all whole counts0/1/1, historical Last attempt awardedEnergy/Essence, restrained warm VIEW CARGO focus and the existing physical Confirm/Back meanings. Keep your rich native game typography, layered electric-blue pixel frame craft, graphite depth and saturated cohesive art. No extra prose, physical keys/casings, decorative sensor status or approval checkmarks.
+
+Draw the corrected actual screen art now, not a plan or code. This is a second bounded factual correction, not another stylistic divergence.

@@ -43,12 +43,14 @@ void game_state_init(GameState *state) {
   state->next_identity = 1;
   state->incubation_sample = 0xffu;
   state->incubation_individual = 0xffu;
+  state->gather_random_state = GAME_GATHER_INITIAL_RANDOM_STATE;
 }
 
 int game_state_valid(const GameState *state) {
   uint64_t cargo;
   unsigned index;
   if (!state || state->version != GAME_STATE_VERSION ||
+      !text_valid(state->balance_version, sizeof(state->balance_version), 0) ||
       strcmp(state->balance_version, GAME_BALANCE_VERSION) != 0 ||
       state->revision != state->last_operation_sequence ||
       state->operation_cursor >= GAME_OPERATION_SLOTS ||
@@ -60,7 +62,27 @@ int game_state_valid(const GameState *state) {
       state->expedition_elapsed > GAME_EXPEDITION_SECONDS ||
       state->incubation_elapsed > GAME_INCUBATION_SECONDS ||
       state->habitat >= GAME_HABITAT_COUNT || state->reserved != 0 ||
-      state->runtime_commit_uncertain > 1)
+      state->runtime_commit_uncertain > 1 || state->legacy_supply_encoding > 1 ||
+      (state->gather_last_attempted_mask & ~7u) ||
+      (state->gather_last_awarded_mask & ~state->gather_last_attempted_mask))
+    return 0;
+  for (index = 0; index < 3; ++index)
+    if (state->gather_progress_ms[index] >
+            2u * (GAME_SUPPLY_UNIT - 1u) * GAME_GATHER_ATTEMPT_MS /
+                GAME_SUPPLY_UNIT ||
+        (state->legacy_supply_encoding && state->gather_progress_ms[index]))
+      return 0;
+  if ((!state->legacy_supply_encoding && !state->gather_random_state) ||
+      (state->legacy_supply_encoding &&
+       (state->gather_attempt_count || state->gather_last_attempted_mask ||
+        state->gather_last_awarded_mask)))
+    return 0;
+  if (!state->legacy_supply_encoding &&
+      (state->data % GAME_SUPPLY_UNIT || state->energy % GAME_SUPPLY_UNIT ||
+       state->essence % GAME_SUPPLY_UNIT ||
+       state->expedition_data % GAME_SUPPLY_UNIT ||
+       state->expedition_energy % GAME_SUPPLY_UNIT ||
+       state->expedition_essence % GAME_SUPPLY_UNIT))
     return 0;
   cargo = (uint64_t)state->expedition_data + state->expedition_energy +
           state->expedition_essence;
@@ -70,9 +92,7 @@ int game_state_valid(const GameState *state) {
       (state->expedition_active &&
        (state->expedition_id[0] == '\0' ||
         state->expedition_elapsed >= GAME_EXPEDITION_SECONDS)) ||
-      (cargo != 0 && state->expedition_id[0] == '\0') ||
-      (cargo == 0 && !state->expedition_active &&
-       state->expedition_id[0] != '\0') ||
+      (state->expedition_id[0] == '\0' && state->expedition_elapsed != 0) ||
       state->runtime_anchors_ready > 1 ||
       !text_valid(state->expedition_id, sizeof(state->expedition_id), 1))
     return 0;
@@ -197,20 +217,39 @@ int game_state_load(const char *path, GameState *state) {
   FILE *file;
   size_t read_count;
   int extra;
+  const size_t legacy_payload_size = offsetof(GameState, gather_progress_ms);
+  const size_t legacy_file_size =
+      offsetof(SavedGame, state) + legacy_payload_size;
   if (!path || !state)
     return -1;
   file = fopen(path, "rb");
   if (!file)
     return errno == ENOENT ? 1 : -1;
+  memset(&saved, 0, sizeof(saved));
   read_count = fread(&saved, 1, sizeof(saved), file);
   extra = fgetc(file);
-  if (fclose(file) || read_count != sizeof(saved) || extra != EOF ||
-      memcmp(saved.magic, SAVE_MAGIC, sizeof(saved.magic)) != 0 ||
-      saved.version != GAME_STATE_VERSION ||
-      saved.payload_size != sizeof(saved.state) ||
-      saved.checksum != checksum_bytes((const unsigned char *)&saved.state,
-                                       sizeof(saved.state)) ||
-      !game_state_valid(&saved.state))
+  if (fclose(file) || extra != EOF ||
+      memcmp(saved.magic, SAVE_MAGIC, sizeof(saved.magic)) != 0)
+    return -1;
+  if (saved.version == 1u) {
+    /* Same-ABI version-one saves retain their exact quantities and operation
+     * fingerprints until the Kit settles any reserved legacy receipt. Loading
+     * is read-only; semantic conversion is a separate atomic domain command. */
+    if (read_count != legacy_file_size ||
+        saved.payload_size != legacy_payload_size || saved.state.version != 1u ||
+        saved.checksum != checksum_bytes((const unsigned char *)&saved.state,
+                                         legacy_payload_size))
+      return -1;
+    saved.state.version = GAME_STATE_VERSION;
+    saved.state.legacy_supply_encoding = 1;
+  } else if (saved.version != GAME_STATE_VERSION ||
+             read_count != sizeof(saved) ||
+             saved.payload_size != sizeof(saved.state) ||
+             saved.checksum != checksum_bytes(
+                 (const unsigned char *)&saved.state, sizeof(saved.state))) {
+    return -1;
+  }
+  if (!game_state_valid(&saved.state))
     return -1;
   *state = saved.state;
   state->runtime_anchors_ready = 0;

@@ -1,23 +1,49 @@
-# Lab physical-design exploration
+# Lab physical-design references
 
-Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
+## Current family and evidence boundary
 
+The current product has **one combined Companion**, **one home handheld Lab** and
+**one shared Caddy**. Probe is a Companion mode. The selected appearance keeps
+sage/stone matte shells, charcoal protection, restrained orange controls,
+recessed caddy identity and grey OK. [Devices](../../specs/devices.md) owns the
+physical architecture and development profiles; its caddy reference is
+5.79-inch monochrome, 792×272. Earlier separate-Probe and 3.7-inch studies do not
+supply current requirements.
 
-## Current concept — Companion-led three-object family
+![Current selected material/appearance reference](combined-family-materials.png)
 
-### Current material reference
+Owner accepted this quieter matte-case/tabletop treatment after the patchy texture
+correction. [Exact edit prompt](combined-family-materials-prompt.txt) preserves
+provenance. This generated view is not a calibrated model, measured finish,
+working display, ergonomic proof or approved firmware screen. Lab shows the
+visual world/research; Companion continues Probe activity; Caddy provides a quiet
+summary. Display artwork and species in the render remain illustrative.
 
-![Owner-liked material cleanup](combined-family-materials.png)
+The current [native three-device gallery](../connected-device-review/native/README.md)
+records implemented host pixels and controls independently of this case art.
+The [Gemini connected references](../companion-connected-art/README.md) record
+reviewed screen concepts, still awaiting faithful native art derivation.
+[Experience](../../specs/experience.md) owns current simulated input; earlier
+control hypotheses below must not add a knob, Inspect key or touchscreen shortcut
+to the accepted panel.
 
-Owner accepted this quieter matte-case/tabletop appearance after the patchy texture correction. [Exact built-in edit prompt](combined-family-materials-prompt.txt). Earlier iterations remain below as source exploration; this image is not a measured finish, geometry or final UI. Electronics/software validation now precedes physical development; see [the device reference](../../specs/devices.md#electronics-first-v1-reference-specification).
+Software proof and human playtest precede physical investment. No new family,
+case or component is selected by this release. Physical dimensions, print/charge
+packing, ergonomics, drivers, power and manufacturing remain unverified.
 
-### Current appearance: recessed brand and grey OK
+## Retained appearance iterations
+
+These originals preserve how the selected family was developed. Later material
+cleanup above governs finish; reviews here apply only to the exact historical
+exports and named changes. They do not approve working hardware or final UI.
+
+### Recessed brand and grey OK reference
 
 ![Recessed caddy identity and grey confirmation key](combined-family-caddy-v3.png)
 
-Owner-approved visual adjustment: medium-grey OK matching Feed, navigation slightly raised, recessed CRITTER LAB below navigation, printer-front text removed. [Built-in image-generation edit prompt](combined-family-caddy-v3-prompt.txt). Coordinator inspected the actual export for these four changes; prior V2 interaction review remains limited to unchanged control roles. Handhelds and palette retained; exact lettering depth, printability and ergonomics remain unverified. This is the current appearance proposal; earlier views below are retained references.
+Owner-approved visual adjustment: medium-grey OK matching Feed, navigation slightly raised, recessed CRITTER LAB below navigation, printer-front text removed. [Built-in image-generation edit prompt](combined-family-caddy-v3-prompt.txt). Coordinator inspected the actual export for these four changes; prior V2 interaction review remains limited to unchanged control roles. Handhelds and palette retained; exact lettering depth, printability and ergonomics remain unverified. Its branding/control refinement carries into the material reference above; this earlier view remains provenance.
 
-### Current caddy refinement
+### Earlier caddy control refinement
 
 Experience Design inspected this exact export: ordered navigation group, subordinate Feed below Print, readable compact branding, removed caddy LEDs and retained handheld controls. The depicted paper clears the controls. This is placement/readability evidence only, not physical-clearance or full interaction approval.
 
@@ -31,9 +57,9 @@ Experience Design inspected the exact branded export: labels and brand hierarchy
 
 ![Critter Lab family with Dirty Pawz Press caddy](combined-family-branded.png)
 
-Latest owner-requested appearance revision preserves sage/stone shells and adds Critter Lab branding across devices, Dirty Pawz Press with paw emblem on the caddy and receipt, summary navigation arrows, Print, Feed and small indicator lights. [Exact built-in generation prompt](combined-family-branded-prompt.txt). Screen values are illustrative; cloud and active/frozen detail remain required in the browsable summary even though this generated view omits them. Light colors are not an approved signaling contract. No manufactured dimensions, grip, display capability or functional UI is established.
+This earlier requested appearance revision preserves sage/stone shells and adds Critter Lab branding across devices, Dirty Pawz Press with paw emblem on the caddy and receipt, summary navigation arrows, Print, Feed and small indicator lights. [Exact built-in generation prompt](combined-family-branded-prompt.txt). Screen values are illustrative; cloud and active/frozen detail remain required in the browsable summary even though this generated view omits them. Light colors are not an approved signaling contract. No manufactured dimensions, grip, display capability or functional UI is established.
 
-### Related shell colors and three docked displays
+### Sage/stone color and three-display study
 
 ![Sage Lab, stone Companion and shared habitat station](combined-family-sage.png)
 
@@ -43,7 +69,7 @@ Screen content, species, resource colors and mixed progress units are illustrati
 
 Experience Design inspected this exact export: related shell colors, two-device composition, retained controls and distinct three-display roles are suitable for owner appearance review. Inventory detail, status freshness/unknown states, capture flows and physical ergonomics are outside this pass; no implementation approval follows.
 
-The owner approved consolidating Probe into the everyday **Companion**. Current exploration therefore contains exactly two removable devices and their shared station: Companion goes out; Lab is the home handheld workbench; caddy charges them, prints and presents the living collection. Older separate-Probe boards below are retained references, not the current kit. [Device authority](../../specs/devices.md#current-consolidated-product-architecture) and [capture/gameplay boundary](../../specs/gameplay.md#combined-portable-and-wild-capture) govern this proposal.
+The following consolidation study established exactly two removable devices and their shared station. Its role proposals are retained below; current Lab visual-world and Caddy summary responsibilities supersede its ambient caddy scene. Older separate-Probe boards are historical, not the current kit. [Device authority](../../specs/devices.md#current-consolidated-product-architecture) and [capture/gameplay boundary](../../specs/gameplay.md#combined-portable-and-wild-capture) govern this proposal.
 
 **Companion first.** Propose a substantial pocket-oriented portrait body, expressive color screen, wrist loop, protected direction cross, distinct Back and Confirm, and no protruding dial. A large creature view supports companionship; Probe and Cargo need fast readable glances. Actual screen, compute, sensors, power, dimensions, weight and one-thumb reach are unselected/unverified. The previous small Companion display is a development reference, not a limit on this combined role.
 
@@ -53,7 +79,7 @@ The owner approved consolidating Probe into the everyday **Companion**. Current 
 | Cargo | Inspect supplies/samples/findings, manage capacity and see temporary wild containment | Bonded critters are distinct; a captured specimen is not a decoded genome |
 | Companions | Spend time with travelling critters, interact and train | Exact activities, development rules and carrying capacity remain open |
 
-Proposed input: cross moves visible focus, Confirm opens detail or the explicitly reviewed action, Back restores the prior subject. A visible mode target provides access to the three modes without hidden cycling. Switching views does not cancel gathering. Wake must not also activate a consequential choice. Inspection stays free; capture/release and other consequential choices require explicit review rather than a stray mode/wake press. These are concept requirements, not implemented behavior.
+Proposed input: cross moves visible focus, Confirm opens detail or the explicitly reviewed action, Back restores the prior subject. A visible mode target provides access to the three modes without hidden cycling. Switching views does not cancel gathering. Wake must not also activate a consequential choice. Inspection stays free; capture/release and other consequential choices require explicit review rather than a stray mode/wake press. These were concept requirements at the time of this study; current implemented mode/input behavior is recorded in the experience specification and native gallery.
 
 **Lab:** larger screen for genome discovery, interpreting findings and entering habitat management; familiar branded home-instrument treatment and tactile workspace shortcuts. **Home habitat station:** one clear rest per device, reachable controls, printer separate from ambient habitat window, residents/environments visible as a home presence. Standalone core play requires durable local state; optional global operations use cloud validation. Exact allocation and synchronization remain open; see the current architecture.
 
@@ -69,11 +95,19 @@ The visual proposal tests physical hierarchy and the three mode identities. It d
 
 **Subsequent owner direction supersedes the docked screen content in this family render:** Lab shows environments, creatures, incubations and research; caddy provides an e-ink candidate summary of habitats, stored inventory, charging and network/cloud status; Companion keeps scanning/gathering in Probe mode while docked. See [coordinated defaults](../../specs/devices.md#coordinated-docked-defaults). Preserve the physical role proposal; do not copy the render's caddy living scene into implementation.
 
-**Current direction:** the [owner physical-experience interview](../../specs/devices.md#owner-physical-experience-interview--current-direction) supersedes the printer-in-handheld case and fixed lower-row layout below. Develop a two-thumb home handheld, playable in its tidy shared caddy, with the printer in that home station. Field Lab is the original concept's name; Field Instrument and Orbital Lab remain inspiration. Retained boards below document earlier exploration, not the new configuration. Next visuals must show both handheld use and the supported living-display/play arrangement.
+**Handheld direction retained:** the [owner physical-experience interview](../../specs/devices.md#owner-physical-experience-interview--current-direction) supersedes the printer-in-handheld case and fixed lower-row layout below. Develop a two-thumb home handheld, playable in its tidy shared caddy, with the printer in that home station. Field Lab is the original concept's name; Field Instrument and Orbital Lab remain inspiration. Retained boards below document earlier exploration, not the new configuration. Any later physical review must show both handheld use and supported play; no additional render work is active in this release.
 
-## Handheld and home station — architecture divergence
+## Historical architecture and physical studies
 
-**Current refinement:** owner likes the rugged family and asks for a clearly branded home Lab with a distinct case color, meaningful workspace keys, a more substantial Companion and less crowded station. Trial V1 omits the exposed knob; current firmware/simulator inputs remain unchanged. The caddy's proposed small display is the **home habitat**, showing eggs, critters and environments rather than arbitrary status content. The Lab remains the place for deliberate research and management.
+The remaining boards preserve useful unfinished physical exploration and original
+references. Study-time proposals and next steps below are historical context, not
+an active hardware queue. Current devices/experience specifications govern any
+resumption; software proof and human playtest are the present gate. Printer-in-Lab,
+separate Probe, caddy living scenes and earlier control layouts are superseded.
+
+### Handheld and home station divergence
+
+**Earlier refinement:** owner liked the rugged family and asked for a clearly branded home Lab with a distinct case color, meaningful workspace keys, a more substantial Companion and less crowded station. This trial omitted the exposed knob; its then-current simulator mapping was separate. Current accepted input is in the experience specification. The caddy's proposed small display is the **home habitat**, showing eggs, critters and environments rather than arbitrary status content. The Lab remains the place for deliberate research and management.
 
 Proposed keys pair icon, label and color: **Research** (sample capsule, samples/studies), **Critters** (individual silhouette, owned individuals/history), **Library** (book, learned reference), **Habitat** (living environment, resident/environment detail). These names and destinations are proposals, not approved implemented navigation. Critters and Habitat must serve distinct purposes, not duplicate portrait lists. Cross/Confirm/Back can open authored detail pages without a hidden zoom mode; removing the knob must not make free inspection or research depend on an extra ritual. The habitat window represents the same world, not an additional care game. Off-dock operation, state authority/freshness, technology and storage remain unresolved.
 
@@ -83,7 +117,7 @@ This [generated appearance study](contour-home-habitat-prompts.txt) proposes a p
 
 Experience Design inspected this exact image and accepted it for appearance/workspace-purpose review: destinations are clearer than unlabeled colors and the station window reads as a living scene. Dock lip/lower-corner nesting, portable proximity, finger wrap, pickup and handheld balance remain unresolved. This is not an approval of ergonomic layout, hardware or implemented navigation.
 
-**Owner selection:** carry Contour forward, not its sculpted handles. Replace the narrow-waisted gamepad body with a substantial rugged Lab that belongs with the Probe and Companion and their protective bumpers. Small-batch 3D printing, straightforward owner assembly and obtainable controls govern convergence. Yoke and Keel remain exploration references and are not proceeding. No manufacturing feasibility is established by these renders. The next proof is a simple enclosure/component arrangement and assembly approach, followed by a model-based appearance study; preserve the dominant screen and shared printer station.
+**Owner selection:** carry Contour forward, not its sculpted handles. Replace the narrow-waisted gamepad body with a substantial rugged Lab that belongs with the Probe and Companion and their protective bumpers. Small-batch 3D printing, straightforward owner assembly and obtainable controls govern convergence. Yoke and Keel remain exploration references and are not proceeding. No manufacturing feasibility is established by these renders. The study proposed a later simple enclosure/component arrangement and assembly approach, followed by a model-based appearance study; preserve the dominant screen and shared printer station.
 
 **Rugged appearance trial:** after the narrower paper study, the owner authorized trying the treatment visually. The [rugged Contour study](contour-rugged-study.png) replaces the sculpted waist/handles with a continuous cream shell, separate-looking charcoal corner guards and exposed fasteners. It shows the same control functions and shared printer home. This generated exterior is an appearance hypothesis guided by the paper study, **not a CAD-derived or dimensionally faithful render**. Perspective, depth, guard construction, service access and dock clearance are unverified. It does not replace the sourced display dimensions or approve the placeholder screen/receipt artwork. [Exact generation brief](contour-rugged-prompt.txt).
 
@@ -123,7 +157,11 @@ flowchart LR
 
 **Dimensional inputs before a fit claim.** Collect the actual display assembly and mounting drawing; intended compute/control/power board envelopes including connectors and component heights; control bodies and mounting depths; cell/holder or alternate power envelope; cable exits and bend/handling space; antenna/thermal constraints; and available printer build volume/process limits. These determine width, height and depth together with hands, tools and station support. Do not assign a finished external size from the concept render. The earlier display envelope is a starting reference only, not a complete packing model.
 
-The next physical proof is a roomy layout showing these envelopes, screw/tool paths and a lid-off service state, followed by an inert assembly/hand-clearance mock-up. A render cannot establish accessible fasteners, wire clearance, comfort or printability. No new parts, charging technology, enclosure size or manufacturing process is selected here.
+The [rough CORE One caddy split sketch](caddy-shell-split-sketch.svg) proposes two joined base trays, separate removable dock cradles, a front display bezel spanning the seam and independent printer service access. It illustrates a printable-part strategy before CAD; proportions, seam location, fasteners, print orientation and fit are unverified.
+
+The retained [front view](caddy-centered-joint-front.png) follows the [measured alignment guide](caddy-front-alignment-guide.svg): the groove is centered in the open gap between docked devices and their inner locators, and the summary display and Print button have balanced clear fascia around that same centerline. The shorter printer-side section centers the Companion on its printed module. Both handhelds sit on open low-profile shoes over a wipeable top deck; the front retains the summary controls and paper outlet. Use uniform satin surfaces. The earlier [rear service study](caddy-centered-module-rear.png) expresses a flat rear without a dust-catching fin and two possible flush covers, but its seam is off-center and it is not a matched current view. A true rear view needs to come from the same dimensioned model as the front. Printer packaging and roll/jam access, rear cover count, docking contact and retention, exact seam, print orientation and internal fit remain unverified. Earlier unbalanced, empty-well and fin/rail images are retained as rejected visual references, not current geometry.
+
+The retained physical proposal calls for a roomy layout showing these envelopes, screw/tool paths and a lid-off service state, followed by an inert assembly/hand-clearance mock-up. A render cannot establish accessible fasteners, wire clearance, comfort or printability. No new parts, charging technology, enclosure size or manufacturing process is selected here.
 
 Hardware review of this assembly proposal found no remaining blocking contradiction in the opening/disconnection sequence. This accepts the proposal for layout development only; component envelopes, physical access and fabrication remain unverified.
 
@@ -198,23 +236,17 @@ Use identical full-size screen content and the same five-moment journey with pap
 
 Experience Design reviewed the actual PNG and comparison text. Corrections clarify Cradle feature selection, Station draft revalidation and fresh Run strokes, and the absence of drawn icons. The static sheet is acceptable as physical exploration only. Active workspace versus content focus, global pending feedback, restored context and actual operation guards remain interaction-prototype requirements; this is not a usability or implementation pass.
 
-
 ## Product concept art
 
 [Instrument pitch board](instrument-pitch-v1.png) visualizes the four possibilities with the selected Lab screen as a reference. Generated concept art, not a control-count or mechanical specification: illustrative extra side dials, symbols and printed material do not add approved functions. Use the layout sheet and mappings above for intended input roles. Owner favors layouts/compositions 1 (Chromatic Desk) and 3 (Experiment Station), but rejects their enclosure shapes. Continue enclosure divergence before combining preferred attributes; neither illustrated case is a baseline.
-
-
 
 ## Control family — owner direction
 
 Retain colored workspace keys, directional cross, orange-accented rotary knob and round action buttons. Owner-approved action order: Cancel/return arrow on the left; Confirm/checkmark on the right. No dedicated Inspect in the current study; Confirm opens the selected detail. Size and group the cross and frequent actions with deliberate finger clearance. These are size/priority requirements, not measured dimensions. Case form remains open. [Six enclosure directions](enclosure-divergence-v1.png) explore form only; shown small controls are superseded by this direction. Confirm/Cancel naming and context behavior need alignment with existing Back semantics before implementation.
 
-
 [Control-family reference](control-family-v2.png) retains the preferred key, cross, round-action and rotary styling; its standalone Inspect and wide spacing are superseded by the compact study. It isolates controls from the unresolved enclosure, not a standalone accessory proposal. Rendered proportions are not measured ergonomics; workspace symbols are placeholders.
 
 Hardware review of enclosure board: useful distinct form attributes; folio closure and knob clearance unproven, all printer volumes unallocated, transparent internals illustrative, supports/rails not established as tilt locks or handles. Capture preferred form attributes before convergence.
-
-
 
 ## Current arrangement exploration
 
@@ -224,11 +256,9 @@ Owner direction: four colored workspace keys in one horizontal row below the scr
 
 The [dimensioned whole-face reference](ergonomics.md) predates the new horizontal workspace row; its grid arrangement is superseded and its geometry is not a fit claim for the renders. It shows the display and controls together at one millimetre scale: a proposed 215 × 230 mm developed face, not an assembled case footprint. It removes Inspect, groups navigation and actions, and places a compact workspace grid and orange-accented Zoom nearby. Earlier 280/320 mm layouts were rejected and are not active sizing recommendations. Longer examination welcomes two hands; every sequence must also work with either hand alone. Physical comfort and internal packaging remain untested.
 
-
 UX reviewed the actual workspace-row board: roles/order retained, no blocking composition defect for comparing concepts. A has clearest row alignment; B needs left-edge clearance checking; C separates roles but adds a reach-over shelf. Destination symbols need labels or a learned on-screen cue; the concept icons do not establish those meanings. Grip and comfort remain unmeasured.
 
-
-## Current casing exploration
+## Earlier integrated-printer casing exploration
 
 The Lab is one integrated assembly. Owner permits an asymmetric body with the screen/control group offset beside an internal printer and tap-electronics zone, or printing below the controls. The [single-body allocation study](single-body-allocation-v1.png) compares right service bay, lower printer bay and left service bay. Owner selected C (left printer bay) for refinement. The [README ecosystem reference](../references/ecosystem.png) anchors textured warm cream, charcoal screen surround, visible service fasteners and restrained orange accents; its old controls and wedge shape are not revived.
 
@@ -238,13 +268,13 @@ The colored workspace row, cross, Cancel-left/Confirm-right and orange-accented 
 
 ## Selected C refinement
 
-Owner chose C with integrated left printer bay and requested a vertical workspace-key column at the far-right front edge, counterbalancing the printer and freeing room to raise the main controls. [C with vertical workspace keys](c-vertical-keys-v1.png) is the current visual review target. No horizontal workspace row remains in this revision. Cross, Cancel-left/Confirm-right and orange Zoom remain beneath the screen with more base clearance; no Inspect. The left-side tap surface is separate from front keys. This supersedes horizontal-row placement for the selected case, without changing the control roles. Rendered screen/paper art remains illustrative; case dimensions, grip clearance, printer and tap implementation are unverified.
+Owner chose C with integrated left printer bay and requested a vertical workspace-key column at the far-right front edge, counterbalancing the printer and freeing room to raise the main controls. [C with vertical workspace keys](c-vertical-keys-v1.png) was the visual review target for this earlier integrated-printer case. No horizontal workspace row remains in this revision. Cross, Cancel-left/Confirm-right and orange Zoom remain beneath the screen with more base clearance; no Inspect. The left-side tap surface is separate from front keys. This supersedes horizontal-row placement for the selected case, without changing the control roles. Rendered screen/paper art remains illustrative; case dimensions, grip clearance, printer and tap implementation are unverified.
 
 ## Screen prominence refinement
 
 Owner approved A in the [screen-first comparison](screen-first-v2.png): narrow vertical workspace keys at the right front, prominent 7-inch screen, integrated printer bay on the left, Cancel-left/Confirm-right and no Inspect. This supersedes the earlier horizontal-row and smaller-screen review targets. Renderer proportions are not calibrated dimensions; generated UI text is illustrative.
 
-The next outcome is printer and tap packaging within A. Owner favors the front-left panel above the paper outlet as a contrasting, clearly labeled TAP surface and permits rear roll access. Top or right-side tapping remain alternatives if this arrangement encounters a concrete packaging problem. Keep the tap panel fixed and distinct from the service door. Preserve screen prominence while resolving roll orientation, feed path, output/cutter allowance and service access; actual components and mechanical fit remain open. See [packaging study](ergonomics.md#selected-a--printer-and-tap-packaging-discovery) for sourced constraints and proposals.
+The earlier integrated-printer study proposed printer and tap packaging within A. Owner favors the front-left panel above the paper outlet as a contrasting, clearly labeled TAP surface and permits rear roll access. Top or right-side tapping remain alternatives if this arrangement encounters a concrete packaging problem. Keep the tap panel fixed and distinct from the service door. Preserve screen prominence while resolving roll orientation, feed path, output/cutter allowance and service access; actual components and mechanical fit remain open. See [packaging study](ergonomics.md#selected-a--printer-and-tap-packaging-discovery) for sourced constraints and proposals.
 
 Owner rejected the cross-section in [the retained packaging attempt](printer-tap-packaging.png); it is not packaging evidence or a valid mechanical arrangement. Establish an actual dimensioned layout from the printer's mechanical documentation before illustrating internals again. The front pad treatment is also rejected as too bold and generic: use a muted surface with recognizable Probe and Companion identity, rather than a large TAP label and payment-like radio symbol. Front-above-output placement and rear roll access remain the working direction. Rendered screen and paper graphics are incidental, not approved UI or specimen art.
 
@@ -256,9 +286,9 @@ Rejected geometry reference: [reclined A with section grooves](prototype-a-recli
 
 ## Dimensioned model before enclosure renders
 
-**Current exploration exception:** owner explicitly requested **visuals first** for five divergent enclosure concepts, drawing from different design traditions and varying shape, proportions, color and materials. These are loose visual proposals, not dimensional proofs. Preserve the agreed functional layout and screen prominence. After selecting attributes, return to the model-based workflow below for convergence and mechanical claims.
+**Study-specific exploration exception:** owner explicitly requested **visuals first** for five divergent enclosure concepts, drawing from different design traditions and varying shape, proportions, color and materials. These are loose visual proposals, not dimensional proofs. Preserve the agreed functional layout and screen prominence. After selecting attributes, return to the model-based workflow below for convergence and mechanical claims.
 
-## Five enclosure directions — current visual comparison
+## Five enclosure directions — historical visual comparison
 
 ![Five visual enclosure directions](five-enclosure-directions.png)
 
@@ -281,4 +311,3 @@ Owner requires subsequent enclosure renders to originate from a dimensionally an
 Model the display module, glass and visible aperture as distinct boundaries; use verified manufacturer dimensions where available. Mark proposed housing dimensions, control caps/back clearance, printer mounting/service volume and reader allowance as proposals. Keep one coordinate system and explicit face angle. Resolve transitions between the reclined main face and printer bay, wall thickness, corner radii, groove width/depth, rear access and base contact in geometry. Material assignments belong to model surfaces; shading must not invent recesses or seams.
 
 Before a beauty render, inspect front, side, top and section views from that same model, check component intersections and opening/service paths, then obtain focused independent hardware review. Publish the model, parameter/source table and matching exports together in Git. A dimensional prototype is not manufacturing-ready CAD or proof of ergonomic, thermal, RF or printer performance. No further generated-image approximation of the case is a substitute for this step.
-

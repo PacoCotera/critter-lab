@@ -106,10 +106,10 @@ def journey(binary, frames):
         before_stock = player.state["stock"]
         before_frame = player.capture("before-saved-haul")
         player.choose("Return + store haul")
-        assert player.state["stock"] == [before_stock[index] + carried[index]
+        assert player.state["stock"] == [before_stock[index] + carried[index] // 100 * 100
                                           for index in range(3)]
-        assert player.state["cargo"] == [0, 0, 0]
-        assert player.state["message"].startswith("Haul saved. Stock")
+        assert player.state["cargo"] == [amount % 100 for amount in carried]
+        assert player.state["message"].startswith("Haul saved. Lab stock")
         after_frame = player.capture("after-saved-haul")
         width, height = 1024, 600
         stride = width * 3
@@ -122,12 +122,28 @@ def journey(binary, frames):
         assert player.state["samples"] == 1
         player.close()
         player = Player(binary, save, frames)
-        assert player.state["stock"] == [before_stock[index] + carried[index]
+        assert player.state["stock"] == [before_stock[index] + carried[index] // 100 * 100
                                           for index in range(3)]
         player.choose("Research")
         player.press()
-        for label in ("Crown form", "Eye rings", "Body markings", "Movement", "Energy use"):
+        costs = {"Crown form": [500, 0, 0], "Eye rings": [0, 500, 0],
+                 "Body markings": [0, 0, 500], "Movement": [400, 400, 0],
+                 "Energy use": [0, 400, 400]}
+        for label, required in costs.items():
             player.choose(label)
+            if any(player.state["stock"][i] < required[i] for i in range(3)):
+                # A miss is real: return to the same research after gathering,
+                # rather than assuming a fixed first-expedition reward.
+                for _ in range(3):
+                    player.press("back")
+                player.choose("Explore")
+                player.choose("Garden forage")
+                player.wait_until(lambda state: all(state["stock"][i] + state["cargo"][i] >= required[i]
+                                                     for i in range(3)), 65)
+                player.choose("Cargo")
+                player.choose("Return + store haul")
+                player.press()
+                player.choose(label)
             player.capture("review-" + label.replace(" ", "-"))
             player.choose("Start research")
             assert player.state["page"] == "finding", player.state
@@ -139,7 +155,19 @@ def journey(binary, frames):
         player.home_views("researched")
         player.choose("Explore")
         player.choose("Garden forage")
-        player.wait_until(lambda state: state["expedition_seconds"] >= 60, 65)
+        for outing in range(3):
+            player.wait_until(lambda state: state["expedition_seconds"] >= 60 or
+                              state["gather_capacity_blocked"], 65)
+            if player.state["expedition_seconds"] >= 60:
+                break
+            player.choose("Cargo")
+            player.choose("Return + store haul")
+            assert player.state["samples"] == 1
+            player.press("back")
+            player.choose("Explore")
+            player.choose("Garden forage")
+        else:
+            raise AssertionError(("No completed outing within three fresh routes", player.state))
         player.choose("Cargo")
         player.choose("Return + store haul")
         player.press()
@@ -174,7 +202,7 @@ def journey(binary, frames):
         player.choose("Habitat")
         player.choose("Explore again")
         player.choose("Weather watch")
-        player.wait_until(lambda state: state["expedition_seconds"] >= 2, 5)
+        player.wait_until(lambda state: sum(state["cargo"]) > 0, 10)
         player.choose("Cargo")
         player.choose("Return + store haul")
         assert player.state["samples"] == 2, "Early return must not mint a sample"

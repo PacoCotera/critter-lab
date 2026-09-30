@@ -98,15 +98,14 @@ static void heading(SelectedRow *row, int x, int y, const char *text, int size,
 }
 
 static void stock_amount(SelectedRow *row, int x, unsigned amount) {
-  char whole[16], fraction[16];
+  char whole[16];
   snprintf(whole, sizeof(whole), "%u", amount / 100);
-  snprintf(fraction, sizeof(fraction), "Next unit %u%%", amount % 100);
   /* The valid five-digit unit cap must keep the same right-hand inset. */
   const NativeFont *bold = heading_font(26, 1);
   int top = 74 - bold->baseline;
   native_text_row(bold, whole, x, top, row->y, SELECTED_LAB_WIDTH, row->pixels,
                   0, colors[INK]);
-  label(row, x, 75, fraction, 18, MUTED);
+  label(row, x, 75, amount == GAME_SUPPLY_UNIT ? "unit" : "units", 18, MUTED);
 }
 
 static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
@@ -228,6 +227,13 @@ static void sprite(SelectedRow *row, unsigned asset, int x, int y,
   }
 }
 
+void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
+                             unsigned height, unsigned y_row,
+                             uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
+  SelectedRow row = {y_row, pixels};
+  sprite(&row, asset, x, y, width, height);
+}
+
 static void focus(SelectedRow *row, int x, int y, int width, int height) {
   const int weight = 4, length = 22;
   rectangle(row, x, y, length, weight, WARM);
@@ -317,16 +323,21 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
 
   label(row, 422, 223, "EXPLORE", 18, MUTED);
   heading(row, 422, 255,
-          game->expedition_active  ? "Gathering"
-          : game->expedition_id[0] ? "Haul ready"
-                                   : "At the Lab",
+          game->expedition_active ? "Gathering"
+          : game->expedition_id[0]
+              ? (game_transfer_available(game) ? "Haul ready" : "Paused")
+              : "At the Lab",
           26, INK);
   if (game->expedition_id[0]) {
     snprintf(text, sizeof(text), "%u / 60 seconds", game->expedition_elapsed);
     label(row, 422, 292, text, 18, MUTED);
     label(row, 422, 318,
-          game->expedition_active ? "Expedition active" : "Ready to return", 18,
-          MUTED);
+          game->expedition_active         ? "Expedition active"
+          : game_transfer_available(game) ? "Ready to return"
+          : game->expedition_elapsed < GAME_EXPEDITION_SECONDS
+              ? "Continue on Companion"
+              : "Finish on Companion",
+          18, MUTED);
   } else {
     label(row, 422, 292, "No expedition", 18, MUTED);
     label(row, 422, 318, "Choose a route", 18, MUTED);
@@ -414,16 +425,16 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
         int x = 324 + (int)index * 215;
         sprite(row, index, x, 374, 40, 53);
         label(row, x + 51, 375, names[index], 18, MUTED);
-        snprintf(text, sizeof(text), "%u u Next unit %u%%", cargo[index] / 100,
-                 cargo[index] % 100);
+        snprintf(text, sizeof(text), "%u units",
+                 cargo[index] / GAME_SUPPLY_UNIT);
         label(row, x + 51, 405, text, 18, INK);
       }
     }
     if (game->expedition_id[0]) {
       unsigned cargo = game->expedition_data + game->expedition_energy +
                        game->expedition_essence;
-      snprintf(text, sizeof(text), "Cargo %u / 40 units | Next unit %u%%",
-               cargo / 100, cargo % 100);
+      snprintf(text, sizeof(text), "Collected %u / 40 units",
+               cargo / GAME_SUPPLY_UNIT);
       landing_strip(row, text);
     } else
       landing_strip(row, "No cargo loaded");
@@ -548,8 +559,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       char amount[32];
       snprintf(amount, sizeof(amount), "%u", stock[i] / 100);
       heading(&row, x + 62, 64, amount, 26, INK);
-      snprintf(amount, sizeof(amount), "Next unit %u%%", stock[i] % 100);
-      label(&row, x + 62, 87, amount, 18, MUTED);
+      label(&row, x + 62, 87, stock[i] == GAME_SUPPLY_UNIT ? "unit" : "units",
+            18, MUTED);
     } else
       stock_amount(&row, x + 54, stock[i]);
   }
@@ -605,9 +616,12 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     home_landing(&row, lab);
   } else if (lab->page == V1_EXPEDITION || lab->page == V1_CARGO) {
     label(&row, 402, 205,
-          game->expedition_active  ? "PROBE / GATHERING"
-          : game->expedition_id[0] ? "SURVEY COMPLETE / RETURN WITH HAUL"
-                                   : "CHOOSE YOUR EXPEDITION",
+          game->expedition_active ? "PROBE / GATHERING"
+          : game->expedition_id[0]
+              ? (game->expedition_elapsed >= 60
+                     ? "EXPEDITION COMPLETE / RETURN WITH HAUL"
+                     : "EXPEDITION PAUSED / CONTINUE OR SEND")
+              : "CHOOSE YOUR EXPEDITION",
           24, WARM);
     unsigned cargo[] = {game->expedition_data, game->expedition_energy,
                         game->expedition_essence};
@@ -616,8 +630,6 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       sprite(&row, i, x + 25, 265, 65, 86);
       snprintf(text, sizeof(text), "%u units", cargo[i] / 100);
       label(&row, x + 21, 367, text, 28, INK);
-      snprintf(text, sizeof(text), "Next unit %u%%", cargo[i] % 100);
-      label(&row, x + 7, 410, text, 22, MUTED);
     }
     snprintf(text, sizeof(text), "%u / 60 s  |  Sample: %s",
              game->expedition_elapsed,
@@ -626,8 +638,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                                                     : "scanning");
     label(&row, 411, 443, text, 18, MUTED);
     unsigned total = cargo[0] + cargo[1] + cargo[2];
-    snprintf(text, sizeof(text), "Cargo %u / 40 units | Next unit %u%%",
-             total / 100, total % 100);
+    snprintf(text, sizeof(text), "Collected %u / 40 units",
+             total / GAME_SUPPLY_UNIT);
     label(&row, 415, 503, text, 18, MUTED);
     outline(&row, 411, 470, 550, 20, 2, EDGE);
     rectangle(&row, 415, 474, (int)(542 * (total > 4000 ? 4000 : total) / 4000),
@@ -697,8 +709,6 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                  stock[i] / 100);
         label(&row, x + 44, 355, text, 18,
               known || stock[i] >= costs[i] ? INK : WARM);
-        snprintf(text, sizeof(text), "Stock: next %u%%", stock[i] % 100);
-        label(&row, x, 385, text, 18, MUTED);
         if (!known && stock[i] < costs[i]) {
           snprintf(text, sizeof(text), "Short of cost");
           label(&row, x, 409, text, 18, WARM);

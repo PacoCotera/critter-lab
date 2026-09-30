@@ -1,67 +1,81 @@
-# Current product direction
-
-Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
-
-
-The current family is **one combined Companion, one home Lab, and one shared printer/habitat caddy**. Probe is a Companion mode, not a separate device. Current appearance is the sage/stone family with recessed caddy branding and grey OK; original four-object renders below are preserved prior art, not current hardware requirements.
-
-![Current family appearance](lab-controls/combined-family-materials.png)
-
-See [current concept details](lab-controls/concepts.md) and [electronics-first reference](../specs/devices.md#electronics-first-v1-reference-specification). The immediate gate is software game/firmware validation before PCB/enclosure development; a mobile app is the fallback. Renders do not establish dimensions, material finish, display performance or finalized screen assets. The docked Lab owns visual habitats/research, Companion runs Probe, and caddy shows summaries.
-
-## Retained design references and studies
-
-The following material preserves earlier exploration. Where it describes separate Probe hardware or older palettes/layouts, the current direction above supersedes it.
-
 # Design reference and review guide
 
-This page is for reviewing how Critter Lab looks, feels and operates. For a plain introduction to playing, start with [Your first discovery](sample-to-critter-walkthrough.md). For rules and system boundaries, use the [specification map](../specs/README.md); for runnable work, use [builder getting started](../docs/builders/getting-started.md).
+Beecho Lab connects one combined Companion, one home Lab and a shared Caddy.
+The same journey runs from field gathering and a deliberate return through Lab
+research, creation and life with an individual. [Experience](../specs/experience.md)
+owns device input and screen response; [gameplay](../specs/gameplay.md) owns the
+rules. Static images and host output carry different evidence limits.
 
-## The device family
+## Current family and screen direction
 
-![Original Critter Lab family: a sloped tabletop Lab with landscape display, rotary control, three keys and printer; a narrow two-key Probe; and a larger color Companion with three lower controls.](references/branded-family.png)
+![Current sage/stone family appearance](lab-controls/combined-family-materials.png)
 
-*Approved concept direction, not an engineering specification. These are the original device references; final dimensions, electronics, controls and display modules remain open.*
+*Selected material/appearance reference: sage Lab, stone combined Companion,
+charcoal guards and restrained orange controls. Caddy summary and printer are
+part of the home station. This is concept art, without calibrated geometry,
+measured materials, fit or working hardware.*
 
-The family uses cream enclosures, charcoal frames, restrained orange controls and tactile details. Pixel critters bring character to the screens and printed cards. The Lab is a deliberate workbench, the Probe a quick outdoor instrument, and the Companion a portable place for an individual. Their different proportions and controls should remain recognizable across illustrations.
+[Concept details](lab-controls/concepts.md) preserve the original prompts and
+review boundaries. [Devices](../specs/devices.md) owns current hardware roles:
+Probe is a Companion mode; Lab shows research and visual habitats; Caddy gives
+quiet accepted-world summaries. Earlier separate-Probe and printer-in-Lab cases
+are retained exploration, not a second current architecture.
 
-The [ecosystem reference](references/ecosystem.png) shows the portables with their Caddy and an optional app view. The [Companion close-up](references/companion.png) provides a clearer view of its silhouette, controls and creature display. Use these references to understand the physical relationships; they do not establish charging measurements, data transfer or completed app behavior.
+The approved Lab UI baseline is [C18](game-art-proposals/35-vault-composition/18-c-refined.png):
+Playful Pixel Lab with graphite depth, defined electric-blue frames, saturated
+pixel subjects and restrained warm focus. The [screen design standard](screen-design-standard.md)
+is authoritative for derivation. Earlier Bioluminescent Vault boards remain
+lineage; they do not supersede C18 or reopen selected direction.
 
-## Screen design in progress
+## Connected screen evidence
 
-Playful Pixel Lab is selected as the foundation for refinement. Continue the [refinement-02 vocabulary](visual-language/refinement-02/README.md); do not restart selection among earlier explorations. The Lab collection-to-discovery composition is approved; other components and screen compositions remain proposals. The rejected PR18 packet is closed and excluded from current review. No later complete accepted screen set has been verified in the retained repository artifacts.
-
-The [screen design standard](screen-design-standard.md) defines the current exploration and review sequence. Previous prototype layouts are rejected as the target experience. Visual concepts must be reviewed before their implementation.
-
-## Accepted flow and next design gate
-
-Current review: [the connected research game model](research-and-creation.md) relates capsules, prepared genome records, typed inventory, expedition profiles and signals/points. It works through choices among several partially decoded genomes before further screen work. The prior research-journey paper sketch is superseded as screen direction: unknown regions are not locks, and the workbench needs meaningful discovery and collection choices rather than explanatory progress panels.
-
-[Expedition-to-discovery storyboard](expedition-review/README.md) records accepted choices for interruption, optional encounters and the bridge into research. Its authored content and artwork are not approval of screen styling. The next gate is the connected device-screen experience described in the [product plan](../docs/README.md#design-and-delivery-roadmap), using existing selected references and actual console controls. Creation and Companion life remain later context.
-
-The [current Lab collection-to-discovery study](genome-workbench/README.md) applies that direction to the demonstrated Pip genetics: a partial allele pair, explicit resource cost and a carried-versus-expressed discovery. Its five static frames are an owner-approved composition and interaction direction, not a complete journey or implemented UI.
-
-The [Probe expedition study](probe-expedition/README.md) continues gathering through Lab receipt in nine native monochrome states. Existing Next/Confirm controls, unknown capsule contents and separate stock/point accounting are explicit; this study awaits visual review.
-
-## What to review
-
-| Question | Material and boundary |
+| Inspect | What it establishes |
 | --- | --- |
-| Where does the player make meaningful research choices? | [Research and creation](research-and-creation.md) explains the accepted V1 investigation structure; the worked content, costs and timing remain illustrative or open. |
-| What is spent when a critter is created? | [Creation terms](creation-terms.md) explains accepted sample use, retained knowledge, repeat creation and interruption handling. |
-| Can simple sampling stay varied? | [Probe sampling](probe-sampling.md) proposes broad sensed context, stable per-sample variation and optional fictional events. |
-| How does one expedition play out? | [First expedition](first-expedition.md) is a proposed textual scenario from preparation to a saved research finding; [foundation demo plan](../docs/builders/foundation-demo.md) records hardware and simulation gates. |
-| Can a newcomer understand the journey? | [Your first discovery](sample-to-critter-walkthrough.md) follows exploration, research, a supply shortage, creation and companionship. It is a concept story, not an implemented sequence. |
-| Does the interaction explain what changes? | [Experience specification](../specs/experience.md) covers navigation and feedback. Review the player action, its consequence and the return path together, rather than approving an isolated attractive screen. |
-| What can the hardware actually support? | [Device specification](../specs/devices.md) and [build coverage](../BUILD.md) distinguish exploration from available engineering work. A render cannot demonstrate physical readability, refresh, fit or power. |
-| What have the screen experiments demonstrated? | [Lab prototype](../prototype/lab/README.md) and [transfer study](../prototype/transfer/browser/README.md) contain scoped implementation evidence. Their authored placeholders and earlier layouts are not the target visual design. |
+| [Actual native three-device gallery](connected-device-review/native/README.md) | Current functional frames and native player journey; connected UI remains art scaffolding |
+| [Gemini Probe03 / Cargo04 / reception07](companion-connected-art/README.md) | Reviewed connected screen concepts, with original sources and display-size previews; not implemented native assets |
+| [C18 and production rules](screen-design-standard.md) | Selected Lab visual baseline and shared family requirements; not a completed screen set |
+| [Home landings](home-landings/README.md) | Retained Home/feature information hierarchy; owner rejected current native art fidelity as final |
+| [Reference-production workbench](reference-production/README.md) | Useful unfinished shared-asset studies; no implicit production or native approval |
 
-Keep shared direction separate from unresolved choices. The original instrument character guides presentation; final screen compositions, individual creature designs, motion and engineering details still need their own review. A new illustration must not silently add controls, change a critter's identity or turn a proposed mechanic into a promise.
+The functional journey uses actual whole supplies, separate gathering activity,
+Cargo/Send review and fresh Lab acceptance. [Gameplay](../specs/gameplay.md)
+and [the three-device experience](../specs/experience.md#playable-three-device-simulator-boundary)
+define state and interaction; the gallery records output. Gemini concepts require
+editable shared resources, native typography, live counters, focus and feedback.
+No new art generation is needed for this release-maintenance pass.
 
-## Sources and attribution
+## Preserved references and earlier studies
 
-The [asset manifest](asset-manifest.json) records original-image hashes and design status. Concept references are AI-generated product explorations, preserved as supplied; they are not CAD or assembly instructions. Existing pixel experiments include source masks, palettes, font data and rendering code under `prototype/pixel/`.
+![Original separate-device family exploration](references/branded-family.png)
 
-Use the project name and restrained Dirty Pawz Press attribution consistently with the [branding policy](../BRANDING.md). That policy addresses attribution and official status; it does not supply a company-wide visual identity standard.
+*Historical concept reference: cream shells, charcoal structure and orange accents.
+Separate Probe, earlier Lab printer placement and depicted controls are superseded
+where they conflict with current device specifications. The original is preserved,
+not promoted as current hardware or interaction.*
 
-[All documentation](../docs/README.md) Â· [Player introduction](../docs/players/README.md) Â· [Current product status](../STATUS.md)
+The [ecosystem original](references/ecosystem.png) and [Companion close-up](references/companion.png)
+retain provenance. Earlier [expedition storyboard](expedition-review/README.md),
+[Probe journey](probe-expedition/README.md) and [genome workbench](genome-workbench/README.md)
+retain scoped interaction/content experiments. Their sample values, palettes,
+controls and compositions must not override current authority. The old
+[connected review packet](connected-device-review/README.md) is visually rejected.
+Its new native subdirectory records actual output independently of those plates.
+
+## Review by player question
+
+| Question | Authoritative source / useful study |
+| --- | --- |
+| What does the player discover and retain? | [Research and creation](research-and-creation.md), [genetics](../specs/genetics.md) |
+| What changes when a haul returns? | [Gameplay](../specs/gameplay.md#expedition-continuity-and-return--accepted), [simulator architecture](../specs/architecture.md#three-device-host-simulator) |
+| What is spent when an individual is created? | [Creation terms](creation-terms.md), [creation contract](../specs/sample-to-critter-contract.md) |
+| What is the whole intended journey? | [Your first discovery](sample-to-critter-walkthrough.md), a concept story; [Pip guide](../native/selected-lab/V1.md), the implemented fixture |
+| Which control drives the screen and what happens next? | [Experience](../specs/experience.md); screen pixels are not touch targets |
+| What can hardware support? | [Devices](../specs/devices.md) and [build coverage](../BUILD.md); physical claims need bench evidence |
+
+The [asset manifest](asset-manifest.json) records original-image hashes and status.
+Preserve individual identity and heredity across screen and paper. New visuals
+must not invent controls, disclose unknown genomic facts or canonicalize open
+creature, palette or hardware decisions. Use [branding and attribution](../BRANDING.md)
+with each artifact's retained provenance and licensing.
+
+[Documentation](../docs/README.md) · [Player introduction](../docs/players/README.md) · [Status](../STATUS.md)

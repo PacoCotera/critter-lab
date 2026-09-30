@@ -1,66 +1,70 @@
 # Product status
 
-Current direction: combined everyday Companion (Probe/Cargo/Companions), home handheld Lab and shared printer/habitat caddy. [Current appearance](design/lab-controls/combined-family-materials.png) preserves sage/stone cases, physical controls and recessed Critter Lab branding; it is concept art, not a physical prototype.
+Current outcome: Companion gathering → Cargo return → Lab acceptance → research
+and creation in the same durable local world. The current family remains a
+combined Companion, home Lab and shared printer/summary Caddy.
+[Selected sage/stone appearance](design/lab-controls/combined-family-materials.png)
+is concept art, not a physical prototype.
 
-## Current gate
+## Delivered software boundary
 
-[Electronics-first specification](specs/devices.md#electronics-first-v1-reference-specification) → firmware/game software proof → human playtest → hardware or mobile decision. New reference parts are specialist recommendations awaiting owner selection; do not start PCB/enclosure development or purchases from them. Mobile fallback reuses game contracts/content/accepted records.
+The [three-device host simulator](native/selected-lab/README.md) presents native
+Lab, Companion and Dock contexts together. Companion modes preview Probe, Cargo
+and Companions before entering an action; activation requires a separate fresh
+input. Whole earned supplies and next-attempt activity remain visibly distinct.
+Sending seals a haul and stops gathering. Arrival opens Lab reception; fresh
+Accept credits once and ends that outing. Receipt confirms transport metadata;
+a new outing has a new identity. [Gameplay](specs/gameplay.md#expedition-continuity-and-return--accepted)
+and [architecture](specs/architecture.md#three-device-host-simulator) own those rules and recovery limits.
 
-The caddy development reference is the Waveshare 5.79-inch monochrome module (SKU 26892), 792×272. The 3.7-inch candidate is superseded. Fit, driver operation and refresh behavior need bench evidence.
+The local [Pip loop](native/selected-lab/V1.md) continues through five paid
+research findings, explicit complete-genome selection, incubation, deliberate
+reveal and habitat visits. Saves retain supplies, discoveries, individual
+identity and transfer state across restart. The browser presents native pixels
+and the accepted physical-control panel; screen artwork is not clickable.
+The sandbox reset is outside device shells and preserves the matching saved
+world and sidecars in a recoverable backup.
 
-The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
+The validated source checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
+three native CTest suites, HTTP presenter checks and the full timed
+research/incubation/restart journey passed. [CI run 36673219813](https://github.com/PacoCotera/critter-lab/actions/runs/36673219813)
+passed for that revision. The [live sandbox](https://critterlab.basicberry.com)
+reports its running release revision and activation time; source validation alone
+does not establish that live activation. Only the existing Git/CI release path
+publishes accepted source.
 
-## Delivered software evidence
+Inspect the [actual native gallery](design/connected-device-review/native/README.md)
+for the current functional presentation. The [Gemini Probe03, Cargo04 and reception07 references](design/companion-connected-art/README.md)
+are reviewed concepts, not native implementation. The owner rejected earlier
+native visual fidelity as final; behavioral checks do not approve art quality.
 
-The [standalone Pip V1](native/selected-lab/V1.md) connects expedition gathering,
-retained cargo, five resource-funded discoveries, explicit complete-genome
-selection, incubation, deliberate reveal and habitat visits. Native C owns rules,
-persistence, focus and pixels; the browser transports the existing simulated
-controls. Records survive process restart. Gemini art provenance is retained.
-This is a bounded local playable prototype, not a complete physical kit or the
-full content catalogue.
+## Remaining proof
 
-The [Home and feature landings](design/home-landings/README.md) expose current lab
-activity before entering a feature. The accepted directional/workspace panel
-operates the Lab; stock, expedition, discoveries, incubation and revealed-resident
-previews read the same saved world. Contextual headings now use **Overview — Lab**
-and **Overview — function**; Back remains a separate navigation action.
-Resources use whole units with separate progress toward the next unit, preserving
-the saved quantities and costs. Saved-haul feedback reports resulting stock;
-the journey checks the exact credit, immediate header redraw and restart.
-Timer-only updates no longer invalidate an otherwise unchanged button action;
-changed availability, focus and page still reject stale input.
+The next named screen outcome is faithful shared-asset derivation from the
+approved C18 and connected Gemini concepts, followed by native-size inspection.
+The retained Home hierarchy continues. Research still needs its collection-wide
+Overview separated from each sample workbench; its current five-study Pip
+fixture is not a complete research content system. [Experience](specs/experience.md)
+and the [screen standard](design/screen-design-standard.md) own these requirements.
 
-Owner playtest values the overview depth but finds the art below C18, device roles
-collapsed and research repetitive. These remain open; the reliability correction
-does not establish final art quality or resolve every reported navigation case.
-Lab execution is
-C17 Linux x86-64 host simulation; Raspberry Pi4 ARM/display/input remains unverified.
+The Lab reference is Raspberry Pi4; current execution is Linux x86-64 C17 host
+simulation. One process owns three logical devices and simulated radio exchange.
+ARM builds, independent endpoint storage, radio, display/input drivers, printer,
+charging, power and physical performance remain unverified. Companions marks
+party assignment as unavailable; capture/training, distinct authored route
+events, cloud services and habitat ecology remain outside this slice. Timings,
+chance, capacities and content limits remain provisional in the play guide.
 
-The established CI validates the native domain, input/transport and a complete
-real-time journey with restart. Hardware behavior remains unmeasured. Route
-specific events, capture/training, nearby-kit interaction, cloud services and
-habitat ecology remain outside this slice. The eight-record limits, active-time
-simulation and provisional balance are explicit in its guide.
+## Product development gate
 
-The live preview at https://critterlab.basicberry.com reports its running Git
-revision. Only the existing CI release/deployment path publishes accepted source.
-The [build guide](BUILD.md) describes the wider unfinished hardware/software
-boundary; older separate Probe targets are legacy fixtures after consolidation.
+[Electronics reference](specs/devices.md#electronics-first-v1-reference-specification)
+→ integrated software proof → human playtest → hardware or mobile decision.
+The caddy development display is the 5.79-inch monochrome module, 792×272; earlier
+3.7-inch and separate-Probe depictions are historical. Bench evidence and owner
+selection precede dependent PCB/enclosure work or purchases.
 
-## Next proof
-
-The [connected correction](design/research-and-creation.md#current-correction-return-to-the-same-research-workpiece)
-retains Home and specifies a persistent sample workbench, separate Companion
-expedition/cargo and Lab receipt, truthful integer supplies, meaningful expedition
-opportunities and supported progressive discoveries. Section-wide overviews must
-remain distinct from selected-item overviews: Research needs an Overview entry
-above its samples, with each sample opening its own workbench. That hierarchy
-and the two-device journey remain pending beyond the input/resource correction.
-Current Pip samples share the same five studies
-and two configurations; authored evidence and completeness must precede claims
-of richer discovery. Preserve the existing hardware family and
-approved product direction; do not infer that a working local Pip loop delivers
-cloud, sensor, printer, power or environmental simulation capabilities.
-
-Exact electronics revisions, budgets, tap/scan paths, battery/wireless-power design and native-size UI remain unresolved. No ten-kit date, production BOM or measured hardware feasibility is claimed. Preserve original art and useful unfinished experiments; historical documents do not override the current specifications.
+Standalone core play and optional global Cloud Pass operations are desired
+capabilities. Their authority, reconciliation and entitlement contracts remain
+open under [architecture](specs/architecture.md) and [cloud/local records](specs/cloud-sync.md).
+No complete V1, physical kit, human-playtest acceptance, production BOM or hardware
+feasibility is claimed. [Build coverage](BUILD.md) identifies available sources.

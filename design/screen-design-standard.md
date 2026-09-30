@@ -129,3 +129,11 @@ Use the selected Vault Data-card, crystal and rounded-Essence visual family. The
 After game/UX content and layout settle, production builds a reusable asset sheet and applies the same assets in the representative native screen. Preserve the selected family when authoring native variants; generated concept crops are not native pixel masters. Art direction checks meaningful illustration/data relationships, stable sibling footprints, margins, spacing, optical weight and focus at the actual 1024×600 study profile. Do not substitute a decorative hero with menus, a jargon form, or labels on unexplained symbols for that visual system. Actual final exports require art, gameplay and UX review; dimensions, checklists and a declared pixel grid do not establish craft or comprehension. This proposal makes no live-control, physical-display or player-comprehension claim.
 
 
+
+## Connected Companion art derivation
+
+The connected native Companion/reception text-panel composition is rejected as visual design. Functional validation and preserved individual icons do not establish an authored game screen. Gemini supplies the [connected screen family](companion-connected-art/README.md), working from C18, the accepted hardware materials and actual native states.
+
+Translate the artist's composition, frame craft, typography and visual subjects into reusable assets with live state. Preserve real counts, gathering attempts, ownership, physical controls and saved outcomes. Use one reviewed resource master family and one type hierarchy across states; generated sibling images still vary and cannot serve as independent per-screen sprite libraries.
+
+Inspect a composed native-size proof before promoting the new visual treatment. Keep concept assessment separate from native/all-state acceptance. A whole-screen screenshot with baked counters behind overlays, arbitrary sprite scaling or generic replacement panels does not establish fidelity.

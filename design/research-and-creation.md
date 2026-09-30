@@ -25,8 +25,8 @@ proof does not claim their implementation.
 | --- | --- |
 | Lab Home | Saved Lab stock, Companion activity/awaiting receipt, retained research, incubation and residents. Carried cargo is separate from spendable stock. |
 | Lab Explore | Shared baseline gathering, each expedition's distinct possible opportunity, and relevant supply needs. A route cannot promise a genotype or merely rename identical behavior. |
-| Companion Probe/Cargo | Active expedition, actual observations/progress and owned cargo. Mode changes preserve activity; return/receipt states are explicit. Simulator device selection is outside the device face. |
-| Lab receipt | Named haul, exact quantities and samples, pending/saved result. Credit once; retries return the same receipt. Companion clears only the acknowledged matching haul. |
+| Companion Probe/Cargo | Active expedition, actual observations/progress and owned cargo. Mode changes preserve the current outing. Send stops collection; accepted unloading ends it. Receipt confirms transport; the next outing is a new expedition. Simulator device selection is outside the device face. |
+| Lab receipt | Named haul, exact quantities and samples, pending/saved result. Credit once; retries return the same receipt. Fresh Lab acceptance transfers ownership and clears matching carried quantities once; a matching acknowledgment then closes the pending receipt metadata. Lost acknowledgment must not leave spendable copies on both devices. |
 | Research overview | Overview entry above the left sample list; collection-wide discoveries, pending work and shared supply needs. It does not borrow the last selected sample's progress as the collection status. |
 | Selected sample/workbench | Focusing a sample previews that sample; Confirm enters its retained findings, unresolved question and directed study. Findings change the workpiece, not just a completion counter. |
 
@@ -58,15 +58,7 @@ investigate. A route-specific opportunity must execute in this proof; descriptiv
 copy over identical outcomes is insufficient. Exact events, probability and
 balance remain provisional.
 
-**Integer presentation experiment:** preserve existing saved arithmetic while
-displaying one supply unit per 100 internal units. Current recipe costs 400/500
-then read 4/5; 1,320 held reads 13 with a separate 20% next-unit progress indicator.
-Affordability stays exact for existing costs, all multiples of 100. No remainder
-is lost or rounded up. A legacy pack remains 1,000 internal units (10 displayed
-supply units), and its storage unit is not silently renamed. This is a provisional
-display denomination, not an approved new pack economy. Apply one denomination
-to stock, cargo, cost, shortage and discard; reconcile permanent terminology and
-future nonmultiple costs before promoting it beyond the prototype.
+**Whole-resource accounting:** inventory, costs, shortages, transfers and discard use whole items in the same denomination. The native compatibility encoding uses 100 internal units per whole item; it is not player-facing fractional stock. Legacy saves and reserved transfers must recover safely before conversion. Residual legacy values become retained activity preparation, never an awarded item. The authoritative rule is in [gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted); exact native conversion and receipt behavior belong in [architecture](../specs/architecture.md).
 
 The actual native screens must retain C18's illustrated findings, graphite depth,
 defined blue edges, dark shadow separation, friendly type and selective warm halo.
@@ -105,9 +97,9 @@ Owner favors **pack**, **sample** and **unit**. The owner accepted these definit
 | Research record | Retained knowledge about that sample | Preparation establishes the record; studies discover genomic information. The record is not the sample and cannot substitute for it at incubation |
 | Special find | An expedition object with an authored use outside routine supplies and samples | A rare reference may enable a research method; finding it does not itself decode a genome |
 
-Player copy should name the thing, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next pack 65%”**, and a separate **“1 sample capsule”**. A study costs **“2 Data card packs”**; compact inventory rows can use **“Data cards ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
+Player copy should name the thing, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next attempt in 3 sec”**, and a separate **“1 sample capsule”**. A study costs **“2 Data card packs”**; compact inventory rows can use **“Data cards ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
 
-Each resource accumulates toward its own pack threshold; preparation percentages must identify the resource. All expeditions share baseline resource yields; expedition-specific events may temporarily boost one resource. The [V1 expedition/event/risk framework](probe-sampling.md#v1-expeditions-events-and-risk) owns this distinction. There are no filters or automatic rejection: the player manually discards unwanted cargo. Accepted fractional-capacity accounting and discard quantities are defined in [gathering](probe-sampling.md#typed-gathering-pack-thresholds-and-manual-discard). Preparation percentage measures qualified work toward a pack; it is not occupied storage, expedition completion, a chance of a capsule, genetic decoding or battery charge. Checking the screen reveals progress rather than causing it. Preserve the original Probe concept's illustrated contents, ready count and compact bar; distinguish stored quantities from preparation progress and explicitly label charging when docked. Rates, display cadence, fullness/end conditions and container artwork remain to refine; the current single-bar Probe study needs adaptation for simultaneous typed progress.
+Collected resources are whole items, fungible within their own class. Time-and-chance preparation toward another award attempt is separate from inventory; it consumes no cargo space and cannot pay research costs or transfer to Lab. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this accounting rule; [gathering](probe-sampling.md#typed-gathering-pack-thresholds-and-manual-discard) describes its field presentation. Completing an attempt need not award an item. Checking the screen reveals state rather than causing collection. Preserve illustrated resource identity, whole counts and concise activity feedback; expedition time, battery charge, sample discovery and resource attempts must remain distinguishable. Exact rates, probabilities, event boosts, cadence and artwork remain to refine.
 
 Whole journey: **gather → prepare resource packs and sometimes collect sample capsules → transfer to the Lab → spend packs researching a sample → retain discoveries in its research record → incubate a fully decoded, selected genome**. A special find can expand available research methods along that journey.
 

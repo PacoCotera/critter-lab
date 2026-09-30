@@ -69,6 +69,21 @@ typedef struct {
   char message[96];
   uint32_t clock;
 } SelectedLab;
+typedef struct {
+  SelectedPage page;
+  unsigned focus, sample, study, resident, discard_resource, workspace,
+      library_index;
+  SelectedPage workspace_page[4];
+  unsigned workspace_focus[4], workspace_sample[4], workspace_study[4],
+      workspace_resident[4];
+  char message[96];
+} SelectedLabContext;
+
+void selected_lab_capture_context(const SelectedLab *lab,
+                                  SelectedLabContext *context);
+void selected_lab_open_reception(SelectedLab *lab);
+void selected_lab_restore_context(SelectedLab *lab,
+                                  const SelectedLabContext *context);
 void selected_lab_init(SelectedLab *lab);
 int selected_lab_load(SelectedLab *lab, const char *path, uint32_t clock);
 void selected_lab_tick(SelectedLab *lab, uint32_t clock);
@@ -84,5 +99,9 @@ int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
                                unsigned *sample_result, unsigned *study_result);
 void selected_lab_row(const SelectedLab *lab, unsigned row,
                       uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
+/* Shared existing asset treatment for the connected native device views. */
+void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
+                             unsigned height, unsigned row,
+                             uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
 int selected_lab_bmp(const SelectedLab *lab, FILE *output);
 #endif

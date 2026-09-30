@@ -92,10 +92,54 @@ that sequence. Kit READY uses the same minimum/current interaction range as Lab;
 semantic refresh still invalidates earlier frames. Native kit tests cover delayed
 acknowledgement after a time-only repaint and rejection after navigation.
 
+## Companion gathering and receipt interaction
+
+The mode selector previews Probe/Cargo/Companions immediately with clamped
+Left/Right. Down/Confirm enters actions, with a separate fresh Confirm required
+to invoke one. Back restores task callers before returning to the selector.
+Probe separates earned integer inventory, expedition elapsed progress and actual
+Next attempt preparation. Cargo/Send use the same source resource sprites and
+whole counts; no item fractions or preparation appear in their manifest.
+
+Lab reception opens automatically once on arrival and cancels held input. Back
+restores its previous navigation; world state remains current. Acceptance and
+receipt are distinct durable states. Send stops gathering; fresh acceptance
+unloads once and ends the source expedition, including an early return. Receipt
+closes the handoff, and the next outing starts a new route identity. An empty
+outing can Finish without sending a phantom haul. The shared domain retains preparation and
+chance outcomes across restart and transfer. Versioned recovery boundaries are
+in [architecture](../../specs/architecture.md#three-device-host-simulator);
+provisional time/chance values belong in [V1](V1.md).
+
+The [Gemini connected screen references](../../design/companion-connected-art/README.md)
+preserve the reviewed Probe/Cargo/reception compositions and production constraints.
+Reception07 is the lighter concept with concise Returning copy. These concepts
+are not currently native assets; functional screen output remains scaffolding
+pending faithful shared-asset derivation and native inspection.
+
 ## Resetting the simulator sandbox
 
-Use **Reset sandbox** above the device shells and confirm to start a fresh Lab, Companion and Dock game. This is a simulator control, not a hardware button. All device views reconnect; input from the old game is discarded.
+The presenter has one **Reset sandbox** control above the device shells. Confirming
+starts a fresh native game across Lab, Companion and Dock, with the fixture's
+default links and stock. This is simulator administration, not a device button or
+hardware reset. Other connected browsers reconnect when the sandbox changes;
+held input, queued releases and old frames cannot carry into the fresh game.
 
-The previous save and matching device records are retained together in a uniquely named backup beside the save. If a reset fails, reload to check the restored state before playing. A failed restoration stops the sandbox and requires restoring the matching backup files together.
+Before starting the new process, the presenter stops native under its command
+lock and moves the configured save, `.kit`, `.kit.required` and any corresponding
+`.tmp` files into a uniquely named `<save>.reset-<id>` sibling directory. It keeps
+session and storage lock files at their original paths. The response identifies
+the backup directory. Backups are retained until the operator disposes of them.
+There is no browser restore or arbitrary file-management endpoint.
 
-The existing CI runs the focused reset checks, including a real native fresh-game and persistence check. No reset service, restore UI or arbitrary file-management endpoint is added.
+If fresh startup fails, the presenter restores the old files and checks all three
+devices before serving them again. Failed new files are retained in the backup
+with `.failed-new` suffixes. A failed rollback leaves native transport unavailable;
+stop the presenter and restore the matching save and sidecars together from the
+backup before restarting. An interrupted multi-file move also requires that
+operator recovery. Do not combine files from different worlds or delete the
+required marker to bypass recovery. After any unconfirmed reset, reload to verify
+state before playing. The focused check is
+`python3 native/tests/test_sandbox_reset.py [path/to/selected_lab]`; supplying the
+binary exercises the actual three-device fresh state, old-input rejection,
+backup sidecars and persistence after restart.
