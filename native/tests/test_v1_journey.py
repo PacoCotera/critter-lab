@@ -137,8 +137,7 @@ def journey(binary, frames):
                 for _ in range(3):
                     player.press("back")
                 player.choose("Explore")
-                player.choose("Continue expedition" if player.state["focus"] == "Continue expedition"
-                              else "Garden forage")
+                player.choose("Garden forage")
                 player.wait_until(lambda state: all(state["stock"][i] + state["cargo"][i] >= required[i]
                                                      for i in range(3)), 65)
                 player.choose("Cargo")
@@ -155,9 +154,8 @@ def journey(binary, frames):
         player.press("back")
         player.home_views("researched")
         player.choose("Explore")
-        player.choose("Continue expedition" if player.state["focus"] == "Continue expedition"
-                      else "Garden forage")
-        while True:
+        player.choose("Garden forage")
+        for outing in range(3):
             player.wait_until(lambda state: state["expedition_seconds"] >= 60 or
                               state["gather_capacity_blocked"], 65)
             if player.state["expedition_seconds"] >= 60:
@@ -167,7 +165,9 @@ def journey(binary, frames):
             assert player.state["samples"] == 1
             player.press("back")
             player.choose("Explore")
-            player.choose("Continue expedition")
+            player.choose("Garden forage")
+        else:
+            raise AssertionError(("No completed outing within three fresh routes", player.state))
         player.choose("Cargo")
         player.choose("Return + store haul")
         player.press()

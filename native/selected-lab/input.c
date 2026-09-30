@@ -253,16 +253,13 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_HOME:
     return home[option % 5];
   case V1_EXPEDITION:
-    if (lab->game.expedition_id[0] && !lab->game.expedition_active &&
-        lab->game.expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
+    if (lab->game.expedition_id[0] &&
         !game_transfer_available(&lab->game))
       return option ? "Cargo" : "Finish expedition";
     return lab->game.expedition_id[0]
                ? (option                        ? "Cargo"
                   : lab->game.expedition_active ? "Keep exploring"
-                  : lab->game.expedition_elapsed < GAME_EXPEDITION_SECONDS
-                      ? "Continue expedition"
-                      : "Review completed haul")
+                  : "Review haul")
                : routes[option % 3];
   case V1_CARGO:
     return cargo[option % 4];
@@ -418,14 +415,8 @@ static void activate(SelectedLab *lab) {
     if (lab->kit_mode)
       return;
     if (lab->game.expedition_id[0]) {
-      if (!focus && lab->game.expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
-          !game_transfer_available(&lab->game)) {
+      if (!focus && !game_transfer_available(&lab->game)) {
         command.type = GAME_COMMAND_EXPEDITION_FINISH;
-        commit(lab, command);
-      } else if (!focus && !lab->game.expedition_active &&
-                 lab->game.expedition_elapsed < GAME_EXPEDITION_SECONDS) {
-        command.type = GAME_COMMAND_EXPEDITION_CONTINUE;
-        command.data.monotonic_seconds = lab->clock;
         commit(lab, command);
       } else if (focus || !lab->game.expedition_active)
         enter(lab, V1_CARGO);
@@ -447,7 +438,7 @@ static void activate(SelectedLab *lab) {
     if (lab->kit_mode)
       return;
     if (!focus) {
-      command.type = GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER;
+      command.type = GAME_COMMAND_EXPEDITION_UNLOAD;
       if (commit(lab, command) == GAME_OK) {
         enter(lab, V1_SAMPLES);
         snprintf(lab->message, sizeof(lab->message),

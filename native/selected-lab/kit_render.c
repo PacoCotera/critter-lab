@@ -415,9 +415,7 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
                kit->journal.cargo[i] == GAME_SUPPLY_UNIT ? "unit" : "units");
       text(row, x + 123, 337, value, 26, TEXT);
     }
-    if (kit->journal.elapsed < GAME_EXPEDITION_SECONDS)
-      text(row, 48, 416, "Gathering progress stays on Companion", 22,
-           SECONDARY);
+    text(row, 48, 416, kit_expedition_status(kit), 22, SECONDARY);
     const GameSample *sample = kit_received_sample(kit);
     if (accepted && sample) {
       snprintf(value, sizeof(value), "Sample recorded: %s", sample->id);

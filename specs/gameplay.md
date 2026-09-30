@@ -48,7 +48,9 @@ Slower **console-only research** remains a complete acquisition route: research 
 
 ## Expedition continuity and return — accepted
 
-Owner approved the connected expedition flow on 27 September 2026. Early return pauses the same expedition, retaining observations, progress and earned resources; an unfinished sample remains incomplete. Resuming does not redraw events or duplicate supplies. A missed optional encounter remains available and, after completion, can be reviewed at the Lab without extra material; it never gates research or creation. Return reviews the sample and resources together and leads into that sample’s next research step, with deeper inventory detail secondary. Technical transfer/reconciliation and exact completion/balance remain open.
+Returning to the Lab and unloading ends the expedition. Browsing Cargo or cancelling an unsealed send review does not end it. Sending seals the returning haul and stops collection; successful fresh Lab acceptance stores it once and ends the source expedition. A later matching receipt confirms delivery metadata; it cannot credit another copy or resume the ended expedition. The next outing starts a new expedition identity.
+
+Early return is an end, not completion of every timed discovery threshold. It cannot grant an unearned sample, extra attempt or late reward. Preserve earned contents, committed outcomes and retained Lab research. Preparation toward an award remains separate from inventory; its carryover into a new expedition is a provisional fixture, not an approved balance rule. Empty outings need an explicit finish path without a phantom haul. Optional encounters never require attendance or gate research/creation. Return reviews actual samples and resources and leads into useful research; exact pacing, events and balance remain open.
 
 ## Research and creation
 

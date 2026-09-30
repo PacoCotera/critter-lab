@@ -226,9 +226,10 @@ inputs. A fresh Confirm explicitly accepts the whole-item manifest. Back leaves
 it pending and restores the caller's navigation with the current world retained.
 Only accepted whole supplies fund research. Link loss before
 send retains the sealed haul; loss after acceptance retains the receipt until
-Companion receives it. Duplicate acceptance cannot award another haul. The
-Companion can continue the same unfinished expedition after the matching receipt,
-with identity/activity preserved, or start a new route after completion.
+Companion receives it. Duplicate acceptance cannot award another haul. Successful fresh acceptance ends the source expedition. Before acceptance use
+Returning; afterward use Returned or Expedition ended, separately from receipt
+status. The matching receipt enables a new outing, never Continue for the ended
+route. Browsing Cargo or cancelling before Send keeps the current expedition.
 Gathering progress remains an activity state on Companion and is never presented
 as an unfinished inventory item in either manifest. Timing/chance fixtures are
 provisional under [gameplay](gameplay.md#research-collection-and-gathering--accepted).

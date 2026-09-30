@@ -121,6 +121,7 @@ def run(binary, proof=None):
             credited = [amount // 100 * 100 for amount in cargo]
             retained = [amount % 100 for amount in cargo]
             assert accepted["phase"] == 4 and accepted["stock"] == credited
+            assert accepted["expedition_seconds"] == 0 and accepted["samples"] == 0
             for device in ("lab", "companion", "dock"):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]
@@ -138,9 +139,10 @@ def run(binary, proof=None):
             for device in ("lab", "companion", "dock"):
                 frame(device, "complete")
             assert press("companion", "confirm")["page"] == "probe"
-            assert state("companion")["focus"] == "Continue expedition"
+            assert state("companion")["focus"] == "Field survey"
             press("companion", "confirm")
-            frame("companion", "continued")
+            assert state("companion")["expedition_seconds"] == 0
+            frame("companion", "new-expedition")
             print("Three-device HTTP/native frame, handoff, link recovery and endpoint guards passed", flush=True)
         finally:
             server.shutdown()

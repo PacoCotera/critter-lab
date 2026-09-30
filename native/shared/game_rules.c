@@ -65,6 +65,7 @@ static uint64_t command_fingerprint(const GameCommand *command) {
   case GAME_COMMAND_STOCK_NORMALIZE:
   case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
   case GAME_COMMAND_EXPEDITION_FINISH:
+  case GAME_COMMAND_EXPEDITION_UNLOAD:
     break;
   default:
     break;
@@ -403,12 +404,21 @@ static GameResult apply_domain_command(GameState *state,
     return convert_supply_encoding(state);
   case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
     return transfer_whole_expedition(state);
+  case GAME_COMMAND_EXPEDITION_UNLOAD: {
+    GameResult result = transfer_whole_expedition(state);
+    if (result != GAME_OK)
+      return result;
+    /* Unloading ends even an early outing. Preparation and committed chance
+     * outcomes belong to the Companion and remain available for the next one. */
+    state->expedition_id[0] = '\0';
+    state->expedition_elapsed = 0;
+    return GAME_OK;
+  }
   case GAME_COMMAND_EXPEDITION_FINISH:
-    if (state->legacy_supply_encoding || state->expedition_active ||
-        !state->expedition_id[0] ||
-        state->expedition_elapsed < GAME_EXPEDITION_SECONDS ||
+    if (state->legacy_supply_encoding || !state->expedition_id[0] ||
         game_transfer_available(state))
       return GAME_UNAVAILABLE;
+    state->expedition_active = 0;
     state->expedition_id[0] = '\0';
     state->expedition_elapsed = 0;
     return GAME_OK;

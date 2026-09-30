@@ -559,7 +559,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       char amount[32];
       snprintf(amount, sizeof(amount), "%u", stock[i] / 100);
       heading(&row, x + 62, 64, amount, 26, INK);
-      label(&row, x + 62, 87, "units", 18, MUTED);
+      label(&row, x + 62, 87, stock[i] == GAME_SUPPLY_UNIT ? "unit" : "units",
+            18, MUTED);
     } else
       stock_amount(&row, x + 54, stock[i]);
   }

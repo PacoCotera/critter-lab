@@ -37,7 +37,9 @@ typedef enum {
   GAME_COMMAND_STOCK_NORMALIZE,
   GAME_COMMAND_EXPEDITION_CONTINUE,
   GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER,
-  GAME_COMMAND_EXPEDITION_FINISH
+  GAME_COMMAND_EXPEDITION_FINISH,
+  /* Fresh unload ends its source outing; command14 remains replayable. */
+  GAME_COMMAND_EXPEDITION_UNLOAD
 } GameCommandType;
 
 typedef struct {
@@ -86,8 +88,9 @@ void game_rules_resume_runtime(GameState *state, uint32_t monotonic_seconds);
 int game_supply_conversion_pending(const GameState *state);
 int game_stock_normalized(const GameState *state);
 
-/* Normal UI eligibility. WHOLE_TRANSFER also permits fresh acceptance of an
- * immutable legacy haul, converting its raw encoding in the atomic candidate. */
+/* Normal UI eligibility. UNLOAD also permits fresh acceptance of an immutable
+ * legacy haul, converting its encoding atomically. WHOLE_TRANSFER retains the
+ * preceding policy for already reserved version3 journal intents. */
 int game_transfer_available(const GameState *state);
 
 /* Provisional V1 opportunity timing. Bits 1/2/4 name Data/Energy/Essence.

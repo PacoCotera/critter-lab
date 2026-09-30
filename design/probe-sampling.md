@@ -1,6 +1,6 @@
 # Gathering and exploration: from field context to Lab discovery
 
-**Current gathering design, 27 September 2026.** Accepted foundations: Lab-selected expedition profiles; simple standalone Probe operation; retained progress on early return; optional encounters without missed-check-in punishment; typed resources and capsules; no genetic disclosure on the Probe. The resource roles, events, acquisition model and worked example below are proposals for owner steering, not final balance or hardware selection.
+**Current gathering design, 27 September 2026.** Accepted foundations: Lab-selected expedition profiles; simple standalone Probe operation; expeditions end when returned resources are accepted at Lab; optional encounters without missed-check-in punishment; typed resources and capsules; no genetic disclosure on the Probe. The resource roles, events, acquisition model and worked example below are proposals for owner steering, not final balance or hardware selection.
 
 The approved [Lab workbench](genome-workbench/README.md) gives gathering its purpose: replenish useful studies, choose among partial genomes and discover new ones. [Probe specification](../specs/probe.md) owns measured-evidence boundaries; [research and creation](research-and-creation.md) owns inventory and sample lifecycle. The [Pip proof](../prototype/genetics/report.md) supplies valid content, not the field-award algorithm.
 
@@ -15,7 +15,7 @@ Choose a purpose at the Lab → load an expedition → carry or place the Probe 
 
 The player chooses what to pursue, not how to operate individual sensors. Ordinary indoor and outdoor settings remain useful. No required phone, constant attention, exact destination, physical hazard or reflex test. Collection and exploration should support both purposeful resupply and curiosity.
 
-Use the connected model's [shared vocabulary](research-and-creation.md#shared-vocabulary-packs-units-and-samples) for packs, capacity units, samples and capsules. Resource quantities in this document count prepared packs. Show next-pack preparation separately from storage, following the original Probe concept; the pacing proposal below supplies current illustrative arithmetic.
+Use the connected model's [shared vocabulary](research-and-creation.md#shared-vocabulary-packs-units-and-samples) for packs, capacity units, samples and capsules. Resource quantities in this document count prepared packs. Show time-and-chance activity toward the next award attempt separately from whole-item storage; gameplay owns the current accounting rule.
 
 ## Three different kinds of find
 
@@ -35,19 +35,21 @@ Resources support the Lab's methods; samples supply the unknown genomic informat
 
 ### Prepared research resources — concrete proposal
 
-**Data discs / Energy prisms / Essence filaments** follow the owner's naming direction. Their purposes below are proposals for steering, superseding the earlier reference/distinction/relationship resource taxonomy. The Probe prepares fictional research stocks; these are not new physical consumables, chemical processors or hardware requirements.
+**Data cards / Energy prisms / Essence** follow the owner's naming direction. Their purposes below are proposals for steering, superseding the earlier reference/distinction/relationship resource taxonomy. The Probe prepares fictional research stocks; these are not new physical consumables, chemical processors or hardware requirements.
 
 | Resource | What it is in the game | What the Lab uses it for | Why demand varies |
 | --- | --- | --- | --- |
-| Data disc | A prepared analysis medium carrying organized reference patterns from the expedition | Comparing and resolving ambiguous genomic information | A study distinguishing several supported alternatives needs more comparison capacity than a straightforward reading |
+| Data card | A prepared analysis medium carrying organized reference patterns from the expedition | Comparing and resolving ambiguous genomic information | A study distinguishing several supported alternatives needs more comparison capacity than a straightforward reading |
 | Energy prism | A concentrated fictional power supply for research operations | Running demanding scans and controlled analytical trials | Some methods require longer or more intensive operation, independent of the critter's own energy system |
-| Essence filament | A prepared coupling medium: a temporary interface between sample and analytical instrument | Making difficult genomic information readable without altering it | Some encoded structures need a better interface; this can occur in ordinary or fantastic samples |
+| Essence | A prepared coupling medium: a temporary interface between sample and analytical instrument | Making difficult genomic information readable without altering it | Some encoded structures need a better interface; this can occur in ordinary or fantastic samples |
 
-For Data discs, the consumed unit is prepared analysis capacity/media, not durable knowledge. Findings are retained in the research record; repeated studies cannot charge merely for rereading an already established fact. Energy prisms are gameplay stock, never the device's actual battery charge. Filaments are neither donor genes nor an ingredient that adds a trait; their effect ends with the study while its findings remain. They are not automatically rare, ghost-specific or a replacement for a required method chip.
+For Data cards, the consumed unit is prepared analysis capacity/media, not durable knowledge. Findings are retained in the research record; repeated studies cannot charge merely for rereading an already established fact. Energy prisms are gameplay stock, never the device's actual battery charge. Essence is neither donor genes nor an ingredient that adds a trait; its effect ends with the study while its findings remain. It is not automatically rare, ghost-specific or a replacement for a required method chip.
 
-The Probe prepares discs from fictional collection opportunities themed around organized observations, prisms from excitation-themed opportunities, and filaments from binding/coherence-themed opportunities. Baseline typed yields are shared across profiles. Profiles control optional event pools; coarse real sensor context can influence event eligibility but does not measure these fictional properties. Different environments can supply every essential stock through available routes. No mandatory shaking, strong light, exact weather, physical harvesting or three extra field minigames.
+The Probe prepares discs from fictional collection opportunities themed around organized observations, prisms from excitation-themed opportunities, and Essence from binding/coherence-themed opportunities. Baseline typed yields are shared across profiles. Profiles control optional event pools; coarse real sensor context can influence event eligibility but does not measure these fictional properties. Different environments can supply every essential stock through available routes. No mandatory shaking, strong light, exact weather, physical harvesting or three extra field minigames.
 
-Recommended inventory copy: **Data discs · 3**, **Energy prisms · 2**, **Essence filaments · 1**. A study names its purpose and exact cost, not a claim that the resource causes an allele. Names and recipe quantities remain unselected; this is not a global rename of the approved screen artifact's old placeholders.
+**Selected third-resource identity: Essence.** Its visual direction is a simple droplet alongside discs and prisms; depict the contents, not a vial that could be mistaken for a sample capsule. It retains the prepared analytical-medium role and existing pack, gathering and study mechanics. Essence is not harvested organism matter, a donor gene or an ingredient that grants a trait. Retained concept plates and prototype identifiers may still use the superseded filament name/form; those are pending presentation updates, not alternative resource definitions.
+
+Recommended inventory copy: **Data cards · 3**, **Energy prisms · 2**, **Essence · 1**. A study names its purpose and exact cost, not a claim that the resource causes an allele. Resource names are selected; recipe quantities remain illustrative. Retained artwork and implementation identifiers have not yet been migrated.
 
 ### Cross-critter uses and an actual choice
 
@@ -55,25 +57,63 @@ These costs are arithmetic fixtures, not selected balance. The plantlike and pha
 
 | Study | Finding sought | Example stock cost | Why these inputs |
 | --- | --- | --- | --- |
-| Pip markings comparison | Resolve the second copy, then establish Pp and carried-but-unexpressed pale variation | 2 Data discs | Comparison-heavy; existing sample preparation and basic instrument operation suffice |
-| Pip movement relationship | Establish how known drive and efficiency contributions combine | 1 Data disc + 1 Energy prism | Compare the contributions and run the supported analysis |
-| Plantlike genome with intertwined contributors | Distinguish supported pigment alternatives in this sample | 1 Data disc + 1 Essence filament | Compare alternatives through a temporary analytical interface; the filament does not change pigmentation |
-| Hypothetical phase-capable genome | Resolve a supported phase-related locus after acquiring the appropriate method | 1 Data disc + 2 Energy prisms + 1 Essence filament | Requires the method, demanding analysis and an appropriate sample interface; none of these supplies grants the ability |
+| Pip markings comparison | Resolve the second copy, then establish Pp and carried-but-unexpressed pale variation | 2 Data cards | Comparison-heavy; existing sample preparation and basic instrument operation suffice |
+| Pip movement relationship | Establish how known drive and efficiency contributions combine | 1 Data card + 1 Energy prism | Compare the contributions and run the supported analysis |
+| Plantlike genome with intertwined contributors | Distinguish supported pigment alternatives in this sample | 1 Data card + 1 Essence pack | Compare alternatives through a temporary analytical interface; the Essence does not change pigmentation |
+| Hypothetical phase-capable genome | Resolve a supported phase-related locus after acquiring the appropriate method | 1 Data card + 2 Energy prisms + 1 Essence pack | Requires the method, demanding analysis and an appropriate sample interface; none of these supplies grants the ability |
 
-Starting with 2 discs / 1 prism / 1 filament, the player could finish Pip's markings comparison (leaving 0/1/1), or perform its movement relationship study (leaving 1/0/1) and still afford the plantlike comparison (leaving 0/0/0). This makes the same inventory relevant across different subjects. A missing method still prevents the phase study even with ample resources. No study automatically demands all three stocks; lower-demand work remains useful later.
-## Sensors shape opportunities, not genetic answers
+Starting with 2 discs / 1 prism / 1 Essence pack, the player could finish Pip's markings comparison (leaving 0/1/1), or perform its movement relationship study (leaving 1/0/1) and still afford the plantlike comparison (leaving 0/0/0). This makes the same inventory relevant across different subjects. A missing method still prevents the phase study even with ample resources. No study automatically demands all three stocks; lower-demand work remains useful later.
+## Sensors connect ordinary surroundings to expedition mechanics
 
-Use the already proposed small envelope for experiments: ambient brightness, temperature/humidity and acceleration. It is not a selected bill of materials. Hardware thresholds, calibration, cadence and power require later bench work.
+Owner requires the Probe's hardware sensors to participate in the game loop. The existing [Probe evidence contract](../specs/probe.md) owns measured-input limits and the wider candidate sensor set. The small V1 experiment envelope is brightness, temperature/humidity and acceleration; it is a proposal, not selected hardware. Pressure, spectral channels, sound features and magnetic sensing remain candidates pending demonstrated gameplay value and bench constraints. No new component or purchase is selected here.
 
-| Observed context | Proposed game interpretation | Boundary |
+### Proposed V1 sensor-to-mechanics connection
+
+**Sensor observations → valid observation windows → coarse context → expedition event eligibility/weights → explicit player choice → resource or discovery consequence → Lab research.** Stable baseline yields stay shared across expedition types. Sensors make context and opportunities meaningful rather than directly converting brightness into Energy, motion into Essence or a measurement into an allele.
+
+| Measured context | Player experience | Proposed mechanical effect |
 | --- | --- | --- |
-| Brightness and changes between brighter/dimmer settings | Different field opportunities or event-pool weights; a weather-themed event may offer a temporary Energy prism boost | Bright light does not guarantee a resource or determine an allele; extreme exposure gains no special requirement |
-| Thermal/moisture context | Variety in fictional deposits, residue and conditions for profile encounters | Not a real habitat, organism, chemical or hazard identification |
-| Motion and stillness | Distinguish broad active-carry and settled-observation periods for collection opportunities | Not GPS, distance or proof of exploration; shaking must not become the best strategy |
+| Broad light level and sustained transitions | A desk, a pocket and a brighter setting feel different to the instrument | Change the context of eligible Patterned echo, Charged front or other authored encounters; never guarantee an event or reward brighter extremes |
+| Broad temperature/humidity conditions and changes | Leaving the Probe to observe a setting can be useful | Diversify eligible atmosphere/coherence encounters within the selected expedition; no claim to identify weather, habitat or materials |
+| Activity versus settled observation | Carrying and placing the Probe both contribute | Tag observation periods for event variety; neither movement nor repeated shaking is a mandatory collection multiplier |
 
-Profile defines event opportunities; valid sensor context adds event variation; bounded fictional randomness supplies surprise. Do not demand exact environmental thresholds for essential progression. Missing data remain missing; if a profile supports a fictional fallback, it must use that declared route rather than manufacture a measurement. Any measured/generated distinction stays in evidence provenance without turning the player screen into diagnostics.
+An event's authored rule may prefer a context without making it the only possible route. Expedition and Probe tier first define eligible content; sensed context adjusts that pool; bounded generated variation selects an opportunity. A Weather expedition in changing conditions might favor a fictional Electrical storm, but the display must never claim a real storm was detected. Accepting that event applies its finite Energy boost and explicit simulated damage risk. Real environment readings do not themselves damage the game Probe.
 
-Points represent accumulated field collection progress. Supplies are awarded by explicit expedition milestones/events, not by spending points at the Lab. Profile, sensor-window credit, caps and award thresholds need a later small balance experiment. Sensor noise or repeated checking must not mint unlimited points or reroll results.
+### Collection credit and sensor feedback
+
+One eligible observation interval can advance baseline resource preparation once, regardless of how many sensors reported. More channels, repeated reads, screen checks and rapid threshold crossings cannot multiply its elapsed-time credit. Use broad states, sustained changes and bounded context contributions; exact thresholds, smoothing windows and cadence require sensor/bench evidence. Ordinary stable indoor observations remain useful, not inferior to dangerous/extreme conditions. Player feedback can acknowledge a measured change or a settled observation without exposing raw diagnostics in the main gathering view.
+
+Missing/stale/invalid channels remain explicitly unavailable. A documented subset may still support ordinary observation; if no required evidence is valid, show sensing paused rather than invent data. An explicitly selected simulator/fallback mode may provide authored context, always kept distinct from actual measurements. Apply the existing charging-related collection constraints; charging/hand/enclosure effects require bench review before treating readings as environment evidence.
+
+Tier upgrades can unlock new interpretations, expeditions and event pools using installed sensors. They cannot create an absent physical capability. No GPS, phone, microphone or location service is required by this proposed V1 slice; the wider optional context design remains separate.
+
+### Observations and expedition log — requested destination
+
+Owner asks for a view conveying sensor accumulators or logs. Proposed V1 destination: **Observations**, separate from resource gathering. Current observations show broad light/climate/activity summaries, valid observed duration, and freshness or unavailable status. Its **Log** page lists recent measured changes and game events with distinct labels/symbols. The exact layout remains part of the complete UI revisit; this is an interaction/data proposal, not approved screen art.
+
+Do not introduce a second resource economy: sensor accumulation means retained observation coverage and context, not three spendable sensor scores. Observed duration counts a valid time interval once across channels, not once per sensor. Observation coverage and credited resource-gathering work are distinct: the hold can be full while the instrument still observes; seeing more observed minutes must not imply that resource stock increased. Per-channel missing data remain visible even when the remaining valid channels support an observation.
+
+Example current view: “Light — dim, steady”; “Climate — warm, humid”; “Activity — mostly still”; “Observed — 24 min”; “Last reading — recent”. All these values require supporting trace evidence; “unavailable” replaces any unsupported field. Qualitative thresholds and freshness limits remain unselected calibration parameters. In the simulator, the view must clearly identify simulated observations.
+
+Example log sequence: **Observation: light increased** → **Observation: settled period** → **Game event: storm available** → **Choice: exposure accepted** → **Game result: Energy boost ended**. A fictional storm never appears as a sensor measurement. The display is a bounded recent summary, not a new permanent raw-data archive; presentation retention must not erase receipt/research deduplication records.
+
+Existing Probe controls only: choose Observations from gathering using Next/Confirm; its visible targets offer Log and Return; the log offers previous/next entries where available and Return through the same two controls. Reading or scrolling never generates collection credit, draws a new event, accepts exposure or changes resource state. Return restores the caller and safe focus. Raw sensor units belong in a later diagnostic/learning view if selected, not an unrequested main-screen instrument panel.
+
+### Sensor experiment acceptance examples
+
+| Authored trace | Expected observations/log | Expected game boundary |
+| --- | --- | --- |
+| Stable desk, valid light/climate/activity | Stable summaries and elapsed observation coverage, without repeated change entries | Ordinary eligible gathering; stable surroundings are useful |
+| Ordinary carry, sustained light transition, then stillness | One supported change and later settled context | Context can alter the selected expedition's eligible event weighting; no guaranteed storm or extra credit per sensor |
+| Missing/stale channel or no valid required input | Per-channel unavailable state; sensing paused if no supported observation remains | No fabricated measurement or free progress during invalid periods |
+| Replay the same intervals after restart | Same retained coverage/log, no duplicate entries | No additional gathering credit, event reroll or item award |
+| Full resource hold while observations continue | Observation coverage may advance; resource-full reason remains clear | No overflow resource bank; reading the log changes nothing |
+
+One trace comparison and bounded readable projection suffice for the next host experiment. No real sensor driver, new final UI, broader event engine or hardware procurement is implied.
+
+### Executable integration boundary
+
+The [simulated observation adapter](../prototype/expedition/README.md#simulated-observation-adapter) wraps the existing expedition rules and save repository. Timestamped quality-marked windows credit ordinary gathering once; a sustained light-context change alters one fictional Weather opportunity. Explicit acceptance remains required for the resource boost. Observations/log projections separate coverage, current availability, game events, player choices and results. The comparison covers desk, changing light, missing/stale input, replay/restart and full storage. This remains a bounded host experiment: its window duration, freshness threshold, event weights and 128-window history cap are test parameters, not final hardware, balance or production storage choices. Physical evidence begins only with actual hardware tests.
 
 ## V1 expeditions, events and risk
 
@@ -108,10 +148,10 @@ An upgrade's prerequisites must be obtainable through current-tier expeditions o
 | --- | --- | --- |
 | 1. Charged front | Collect or pass | One finite Energy prism gathering boost; no damage |
 | 2. Electrical storm | Shelter or accept exposure; optionally take one stronger second exposure | Energy boost; explicit simulated-shock risk that rises on the second exposure |
-| 3. Patterned echo | Record or pass | One finite Data disc gathering boost; no damage |
+| 3. Patterned echo | Record or pass | One finite Data card gathering boost; no damage |
 | 4. Signal overload | Leave or accept exposure; optionally take one stronger second exposure | Data boost; explicit simulated-overload risk |
-| 5. Filament drift | Gather or pass | One finite Essence filament gathering boost; no damage |
-| 6. Unstable weave | Leave or accept exposure; optionally take one stronger second exposure | Filament boost; explicit simulated-strain risk |
+| 5. Essence drift | Gather or pass | One finite Essence gathering boost; no damage |
+| 6. Unstable weave | Leave or accept exposure; optionally take one stronger second exposure | Essence boost; explicit simulated-strain risk |
 | 7. Mixed deposit | Gather or pass | A small finite boost across all three resources; no damage |
 | 8. Capsule trace | Follow or leave pending | Advance a retained, bounded lead toward an eligible capsule; no genomic disclosure |
 | 9. Sealed capsule | Collect or leave pending | One stable sample capsule if its compartment has room; no species/trait reveal |
@@ -127,17 +167,17 @@ Use one visible lifecycle: **available → choice → bounded activity → resul
 
 A risky event permits at most two accepted exposure intervals for V1. The second offers a stronger boost and greater disclosed risk. After each interval, shelter automatically while awaiting the next choice; no missed-response damage. Shock can occur within an accepted interval even if the screen is not being watched—that bounded risk was explicitly accepted. No repeated live rolls based on screen checks. Pausing retains the same exposure/risk state; resuming does not restart its odds. Voluntary withdrawal forfeits remaining opportunity, not already earned contents; it cannot undo damage already incurred.
 
-If the target resource cannot fit, block activation or suspend remaining exposure without more yield or risk. On storage release, resume only the remaining saved budget. No infinite bonus reserve. Manual discarding frees only the capacity actually occupied; partial-resource accounting remains a required design decision. Returning to the Lab ends the current boost and preserves cargo, partial resource amounts and completed lead steps. Unused encounters can remain as notes/leads, never retroactive rewards. Closing the expedition cannot resurrect a used boost.
+If the target resource cannot fit, block activation or suspend remaining exposure without more yield or risk. On storage release, resume only the remaining saved budget. No infinite bonus reserve. Manual discarding removes whole items and frees their occupied capacity; activity preparation consumes no cargo space. Returning to the Lab ends the current boost and preserves cargo, saved activity preparation and completed lead steps. Unused encounters can remain as notes/leads, never retroactive rewards. Closing the expedition cannot resurrect a used boost.
 
 ### Simple damage and recovery
 
-Use only **Operational** and **Damaged — return to Lab**. No durability percentage, damage categories, repair currency, equipment-loss roll or repair timer in V1. A simulated shock/overload/strain changes the condition to Damaged and stops resource gathering and discovery advancement. Controls, cargo inspection and transfer remain usable. Every earned pack, sample, special find and partial amount is retained.
+Use only **Operational** and **Damaged — return to Lab**. No durability percentage, damage categories, repair currency, equipment-loss roll or repair timer in V1. A simulated shock/overload/strain changes the condition to Damaged and stops resource gathering and discovery advancement. Controls, cargo inspection and transfer remain usable. Every earned resource, sample, special find and saved activity preparation is retained.
 
 At the Lab, offload first, then use a simple explicit service action to restore operation. Service is free in this V1 proposal: the consequence is an interrupted expedition and required return, not a new repair economy. It never depends on a resource obtainable only with an operational Probe. Repair does not restore the resolved event or unearned boost. This is game state, not evidence that a physical device has been damaged or repaired.
 
 ### Worked storm encounter and review boundary
 
-Choose Weather research; ordinary disc/energy/filament rates remain unchanged. A storm notice waits while gathering continues. Ignore it safely, or inspect: see an Energy boost, one bounded exposure and a disclosed shock chance. Accept once. Success retains extra Energy progress; then shelter automatically. Leave with the gain, or accept the stronger second interval. If shocked, stop the expedition's collection and show the retained cargo plus return requirement. Offload/service at the Lab; continue research with what was brought home. No supply is converted from a discarded type into Energy.
+Choose Weather research; ordinary disc/energy/Essence rates remain unchanged. A storm notice waits while gathering continues. Ignore it safely, or inspect: see an Energy boost, one bounded exposure and a disclosed shock chance. Accept once. Success retains extra Energy progress; then shelter automatically. Leave with the gain, or accept the stronger second interval. If shocked, stop the expedition's collection and show the retained cargo plus return requirement. Offload/service at the Lab; continue research with what was brought home. No supply is converted from a discarded type into Energy.
 
 Paper checks before implementation: ignored notice; accepted exposure while unattended; first success then withdrawal; second-stage damage; storage full mid-exposure; pause/resume without new risk draw; and return/service without event replay. Inspect quantity conservation and retained state. Rates, probabilities and whether returning feels costly enough need player testing; agent review is not playtest evidence. Current storyboard lacks these event/damage states and is not an implementation specification.
 
@@ -224,7 +264,7 @@ This is one proposed fictional branch, not a committed ghost class or universal 
 | --- | --- | --- |
 | 1. Starting capability | Use baseline expeditions and Lab methods; collect useful stock and approachable capsules | All essential starting inputs have field and console-only sources |
 | 2. Follow a reference lead | A baseline-compatible survey can yield a **Reference shard**, a special finding separate from capsules | Its collection signature is detectable at the starting capability; the directed lead offers bounded pursuit alongside a surprise route |
-| 3. Investigate the shard | A one-time study using starting methods and, illustratively, 1 Data disc + 1 Energy prism establishes **Phase analysis** | No phase-analysis prerequisite and no second rare item. Retain the reference record; ordinary stock is consumed only upon accepted study |
+| 3. Investigate the shard | A one-time study using starting methods and, illustratively, 1 Data card + 1 Energy prism establishes **Phase analysis** | No phase-analysis prerequisite and no second rare item. Retain the reference record; ordinary stock is consumed only upon accepted study |
 | 4. Equip the new method | Receive access to a reusable virtual Phase analysis chip; equip it in an available compatible Lab slot | Owning the method retains it across Labs; equipping makes relevant studies available. It does not instantly decode samples |
 | 5. Calibrate Probe detection | Completing the same investigation makes a related fictional detection calibration available at the Lab | Recommend no second rare-drop gate; fitting/calibration price remains open. It enables a game content capability, not a new sensor |
 | 6. Explore the new sources | Compatible profiles can now yield capsules with phase-related genomic requirements | Both field eligibility and owned Lab capability precede ordinary rewards from this new family; complexity is still weighted toward progress |
@@ -249,17 +289,21 @@ Ordinary results favor samples that can be researched with owned methods; a smal
 
 ## Expedition pacing and return — team proposal
 
-**For owner steering, not selected balance.** Gather under the selected profile until the player returns or eligible storage fills. Full storage pauses collection; it does not mean the expedition's scientific purpose is completed. Offload and resume, or explicitly close the expedition at the Lab and choose another profile. This avoids a third progress meter alongside next-pack preparation and storage.
+**For owner steering, not selected balance.** Gather under the selected profile until the player returns or eligible storage fills. Full storage pauses collection; it does not mean the expedition's scientific purpose is completed. Returning and accepting the unload ends the expedition; the next outing chooses a new expedition. Cargo inspection or cancelled review can return to gathering before Send. Keep expedition time, the next award attempt and whole-item storage distinct; avoid unnecessary duplicate meters.
 
 ### Typed gathering, pack thresholds and manual discard
 
-**Owner direction:** no filters, automatic rejection or keep-only settings. Every expedition gathers all three baseline resources; events can temporarily boost one type. Each resource accumulates toward its own pack threshold; the type is not selected randomly at a single shared completion boundary. The player can keep unwanted resources as they reach pack readiness or manually discard them to make room for more gathering.
+Current owner direction: resources are fungible within their own class and indivisible. Cargo holds whole Data cards, Energy crystals and Essence drops. Gathering progress is time and chance based; it is activity toward another award attempt, never unfinished contents. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this rule and supersedes the earlier fractional reservoir example.
 
-Represent the arithmetic as amount[type] += eligible yield[type]; each full threshold produces one pack of that type, retaining the remainder. Baseline yield proportions are shared across expeditions; an accepted event may modify them temporarily. Example only: with a threshold of 100 for each resource, a period might yield 60 filament progress, 25 disc progress and 15 energy progress. After two such periods that means one filament pack plus 20% toward the next, discs 50%, energy 30%. These internal quantities are not a new player currency; rates and ratios remain balance work.
+Each resource can retain its own preparation state. Completing an eligible attempt can award a whole item or award nothing. Preserve preparation and resolved outcomes across view changes and returns; checking the screen must not generate yield or reroll results. Exact rates, probabilities and event boosts remain balance work. The native connected fixture is a bounded simulation, not selected field pacing.
 
-Discard destroys the selected resource quantity without refund, conversion, immediate replacement or increasing the filament yield rate. It frees occupied capacity so gathering can continue under the same mixed yields. No unwanted resource is silently filtered. Retain undiscarded progress and contents; screen checks do not generate yield. Deliberate cargo management may change eventual cargo composition, but ignoring the device does not destroy earned cargo or decay pending encounters.
+Manual discard remains an explicit player choice, with Keep as the initial confirmation choice. Show the resource class and whole count removed. Do not add filters, automatic rejection, fractional discard or a player currency for activity progress. Discard does not increase future yield or immediately replace the removed item.
 
-One complete pack occupies one resource-storage unit; resource types share capacity. **Still to design:** how unfinished amounts occupy that capacity, and the exact discard quantity/action for partial contents versus ready packs. Do not invent free, unlimited partial storage or claim that discarding partial contents frees a whole slot. Capsule and special-find stores remain separate. Full collection pauses with an explicit reason, not silent overflow or a hidden reserve. The existing single next-pack bar and fixed 30-minute-per-pack arithmetic require revision to reflect simultaneous typed gathering.
+### Whole storage and retained activity progress
+
+All resource classes share a whole-item hold. Two Data cards and one Essence drop occupy three units; retained preparation occupies none. Capsules and special finds have separate stores. Full storage pauses resource gathering with a visible reason. No hidden overflow or invisible earned stock is allowed.
+
+Offload awarded whole items to Lab stock. Preparation remains on the Companion, independent of the transferred manifest and the Lab's spendable stock. Returning, discarding or changing a view cannot convert preparation into an item. The screen should show cargo counts, storage capacity and the next attempt as distinct facts, using concise labels and meaningful resource art.
 
 ### Expedition identity
 
@@ -273,10 +317,14 @@ Rare method-enabling references should take a longer authored lead, potentially 
 
 ### Connection to Lab choices and next design step
 
-A player pursuing filaments can keep incidental discs and energy for another genome's studies, or discard them to continue collecting with limited capacity. On return, accepted packs credit Lab stock once; spending on one research record changes affordability elsewhere without erasing discoveries. More complex genomes require repeated studies and expeditions; introductory content should demonstrate discovery promptly.
+A player pursuing Essence can keep incidental discs and energy for another genome's studies, or discard them to continue collecting with limited capacity. On return, accepted packs credit Lab stock once; spending on one research record changes affordability elsewhere without erasing discoveries. More complex genomes require repeated studies and expeditions; introductory content should demonstrate discovery promptly.
 
-Next bounded design decision is partial-resource storage accounting, shown with a worked mixed-yield/fullness/discard example and corresponding container display. Check conservation of retained/discarded quantities, meaningful storage release and no hidden overflow. Exact timing then needs human playtesting against research costs. Current single-bar and Survey complete storyboard states are not authoritative for these corrected mechanics; do not implement them unchanged.
+Partial-resource storage accounting is accepted; the [connected visual journey](probe-expedition/README.md) applies it to mixed gathering, discard, risk and Lab return. Check conservation of retained/discarded quantities, meaningful storage release and no hidden overflow. Exact timing then needs human playtesting against research costs. The visual study is not functional UI or approval of balance.
 
 ## Owner review boundary
 
-Review the four expedition themes, ten shared event types and binary damage/free Lab service model above. The owner approved the stable-baseline/event-boost direction and simple V1 scope; these concrete names and rules are proposals. Partial-resource capacity accounting, event rates/odds and numerical economy remain open. No new screens, functional code or hardware changes are delivered by this framework.
+Review the four expedition themes, ten shared event types and binary damage/free Lab service model above. The owner approved the stable-baseline/event-boost direction and simple V1 scope; these concrete names and rules are proposals. Partial-resource capacity and discard behavior are accepted; their visual presentation, event rates/odds and numerical economy remain open. No new screens, functional code or hardware changes are delivered by this framework.
+
+## Executable slice and limits
+
+The [host experiment](../prototype/expedition/README.md) implements the accepted storage/discard/offload boundaries plus one authored storm and a paid existing Pip Crown study. Its rates boost only Energy while keeping the other baseline yields unchanged; these executable arithmetic fixtures differ from the earlier static-story quantities and do not select final balance. It omits capsule generation, second exposure, all other events, tier upgrades and visual UI. See its reproducible transcript for actual measured software behavior; the design catalogue is not an implementation-completeness claim.

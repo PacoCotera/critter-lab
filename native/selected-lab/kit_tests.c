@@ -131,6 +131,180 @@ static void legacy_intent_recovery(const char *directory) {
     }
   }
 }
+static void reserved_whole_intent_recovery(const char *directory) {
+  /* Version3's reserved command14 has its original early-return result at
+   * every crash boundary, including an already persisted ACK_PENDING. */
+  for (unsigned boundary = 0; boundary < 3; ++boundary) {
+    char path[512];
+    snprintf(path, sizeof(path), "%s/reserved-v3-%u", directory, boundary);
+    SelectedLab lab;
+    selected_lab_init(&lab);
+    assert(selected_lab_load(&lab, path, 100));
+    DeviceKit kit;
+    assert(kit_init(&kit, &lab, 100));
+    strcpy(lab.game.expedition_id, "reserved-v3-expedition");
+    lab.game.expedition_elapsed = 5;
+    lab.game.expedition_data = 100;
+    lab.game.gather_progress_ms[0] = 1000;
+    assert(game_state_save(path, &lab.game) == 0);
+    kit.journal.version = 3;
+    kit.journal.phase = boundary == 2 ? KIT_ACK_PENDING : KIT_COMMITTING;
+    kit.journal.accept_sequence = 1;
+    strcpy(kit.journal.haul_id, lab.game.expedition_id);
+    kit.journal.cargo[0] = 100;
+    kit.journal.elapsed = 5;
+    persist_fixture(&kit);
+    GameCommand command = {0};
+    command.operation_id = kit.journal.haul_id;
+    command.sequence = 1;
+    command.type = GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER;
+    if (boundary)
+      assert(game_apply(path, &lab.game, &command) == GAME_OK);
+    selected_lab_init(&lab);
+    assert(selected_lab_load(&lab, path, 200));
+    assert(kit_init(&kit, &lab, 200));
+    assert(kit.journal.version == 3 && kit.journal.phase == KIT_ACK_PENDING);
+    assert(lab.game.data == 100 && lab.game.expedition_elapsed == 5 &&
+           !strcmp(lab.game.expedition_id, "reserved-v3-expedition"));
+    assert(lab.game.operations[0].fingerprint == UINT64_C(6413247596869858167));
+    assert(game_apply(path, &lab.game, &command) == GAME_DUPLICATE);
+    kit_tick(&kit, 202);
+    assert(kit.journal.phase == KIT_COMPLETE);
+    /* Only after the reserved receipt is closed may the empty route finish. */
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    assert(!strcmp(kit_option(&kit, KIT_COMPANION, 1), "Finish expedition"));
+    press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    assert(!lab.game.expedition_id[0] && lab.game.sample_count == 0 &&
+           lab.game.gather_progress_ms[0] == 1000);
+    char marker[580];
+    snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
+    unlink(marker);
+    unlink(kit.journal_path);
+    unlink(path);
+  }
+}
+static void early_unload_journey(const char *directory) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/early-unload", directory);
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  DeviceKit kit;
+  assert(kit_init(&kit, &lab, 100));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  kit_tick(&kit, 105);
+  char source_id[64];
+  strcpy(source_id, lab.game.expedition_id);
+  uint32_t preparation[3];
+  memcpy(preparation, lab.game.gather_progress_ms, sizeof(preparation));
+  uint32_t random_state = lab.game.gather_random_state;
+  uint64_t attempts = lab.game.gather_attempt_count;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(!strcmp(lab.game.expedition_id, source_id) &&
+         lab.game.expedition_active && lab.game.expedition_elapsed == 5);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit_link(&kit, KIT_COMPANION, 0));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_WAITING && kit.journal.version == 4);
+  assert(!strcmp(kit_expedition_status(&kit), "Returning"));
+  kit_tick(&kit, 200);
+  assert(lab.game.expedition_elapsed == 5);
+  assert(kit_link(&kit, KIT_COMPANION, 1));
+  kit_tick(&kit, 202);
+  assert(kit.journal.phase == KIT_ARRIVED);
+  assert(kit_link(&kit, KIT_COMPANION, 0));
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_ACK_PENDING &&
+         !lab.game.expedition_id[0] && lab.game.expedition_elapsed == 0 &&
+         !lab.game.expedition_active && lab.game.sample_count == 0);
+  assert(!strcmp(kit_expedition_status(&kit), "Expedition ended"));
+  uint32_t credited[] = {lab.game.data, lab.game.energy, lab.game.essence};
+  assert(credited[0] + credited[1] + credited[2] > 0);
+  /* Restart at ACK_PENDING verifies ended state before receipt delivery. */
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 300));
+  assert(kit_init(&kit, &lab, 300));
+  assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_ACK_PENDING);
+  /* Also recover a crash between game commit and receipt-sidecar save. */
+  kit.journal.phase = KIT_COMMITTING;
+  persist_fixture(&kit);
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 400));
+  assert(kit_init(&kit, &lab, 400));
+  assert(lab.game.data == credited[0] && lab.game.energy == credited[1] &&
+         lab.game.essence == credited[2] && lab.game.sample_count == 0);
+  assert(kit_link(&kit, KIT_COMPANION, 1));
+  kit_tick(&kit, 402);
+  assert(kit.journal.phase == KIT_COMPLETE);
+  assert(memcmp(preparation, lab.game.gather_progress_ms, sizeof(preparation)) == 0);
+  assert(lab.game.gather_random_state == random_state &&
+         lab.game.gather_attempt_count == attempts);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(!strcmp(kit_option(&kit, KIT_COMPANION, 0), "Field survey"));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(strcmp(lab.game.expedition_id, source_id) != 0 &&
+         lab.game.expedition_elapsed == 0 && lab.game.expedition_active);
+  assert(lab.game.gather_random_state == random_state &&
+         memcmp(preparation, lab.game.gather_progress_ms, sizeof(preparation)) == 0);
+  /* Early empty return has an explicit Finish path and seals no fake haul. */
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus),
+                 "Finish expedition"));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_IDLE &&
+         lab.game.sample_count == 0 && lab.game.gather_random_state == random_state);
+  char marker[580];
+  snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
+  unlink(marker);
+  unlink(kit.journal_path);
+  unlink(path);
+}
+static void empty_finish_focus_after_award(const char *directory) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/finish-focus", directory);
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  DeviceKit kit;
+  assert(kit_init(&kit, &lab, 100));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus),
+                 "Finish expedition"));
+  /* Remember Finish in the selector, then reenter without invoking it. */
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit.companion.action_focus[COMP_PROBE] == 1);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.focus == 1 && lab.game.expedition_active);
+  lab.game.gather_progress_ms[0] = 3000;
+  lab.game.gather_random_state = 1;
+  assert(game_state_save(path, &lab.game) == 0);
+  unsigned old_frame = kit_revision(&kit, KIT_COMPANION);
+  kit_tick(&kit, 101);
+  assert(game_transfer_available(&lab.game) &&
+         kit_option_count(&kit, KIT_COMPANION) == 1);
+  assert(kit.companion.focus == 0 &&
+         kit.companion.action_focus[COMP_PROBE] == 0);
+  assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus),
+                 "View cargo"));
+  /* The old Finish frame cannot activate the new action after the award. */
+  kit_input(&kit, KIT_COMPANION, SELECTED_READY, old_frame);
+  kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN, old_frame);
+  kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_UP, old_frame);
+  assert(kit.companion.page == COMP_PROBE && lab.game.expedition_active);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_CARGO && lab.game.expedition_active);
+  char marker[580];
+  snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
+  unlink(marker);
+  unlink(kit.journal_path);
+  unlink(path);
+}
 static void cargo_action_threshold(const char *directory) {
   char path[512];
   snprintf(path, sizeof(path), "%s/threshold", directory);
@@ -166,6 +340,9 @@ int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
   legacy_intent_recovery(directory);
+  reserved_whole_intent_recovery(directory);
+  early_unload_journey(directory);
+  empty_finish_focus_after_award(directory);
   cargo_action_threshold(directory);
   char path[512];
   snprintf(path, sizeof(path), "%s/game", directory);

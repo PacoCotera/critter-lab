@@ -170,6 +170,7 @@ static void test_whole_supply_rules(const char *path) {
   assert(GAME_COMMAND_EXPEDITION_CONTINUE == 13);
   assert(GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER == 14);
   assert(GAME_COMMAND_EXPEDITION_FINISH == 15);
+  assert(GAME_COMMAND_EXPEDITION_UNLOAD == 16);
 
   /* A legacy file is decoded without modifying raw inventory or its source
    * file. Its pending encoding flag survives a V2 save and restart. */
@@ -515,6 +516,78 @@ static void test_whole_supply_rules(const char *path) {
   assert(memcmp(&state, &unchanged, sizeof(state)) == 0);
 }
 
+static void test_unload_ends_outing(const char *path) {
+  GameState state;
+  GameState reopened;
+  game_state_init(&state);
+  state.gather_random_state = 1u;
+  start_gathering(&state, path, 100u);
+  tick_gathering(&state, path, 105u);
+  assert(state.expedition_elapsed == 5u && state.gather_attempt_count == 3u);
+  char source_id[64];
+  strcpy(source_id, state.expedition_id);
+  uint32_t preparation[3];
+  memcpy(preparation, state.gather_progress_ms, sizeof(preparation));
+  uint32_t random_state = state.gather_random_state;
+  uint64_t attempts = state.gather_attempt_count;
+  uint32_t awarded[] = {state.expedition_data, state.expedition_energy,
+                        state.expedition_essence};
+  GameCommand action = command(GAME_COMMAND_EXPEDITION_UNLOAD);
+  action.sequence = state.last_operation_sequence + 1u;
+  action.operation_id = "fresh-early-unload";
+  assert(game_apply(path, &state, &action) == GAME_OK);
+  assert(state.data == awarded[0] && state.energy == awarded[1] &&
+         state.essence == awarded[2]);
+  assert(!state.expedition_id[0] && !state.expedition_active &&
+         state.expedition_elapsed == 0u && state.sample_count == 0u);
+  assert(state.gather_random_state == random_state &&
+         state.gather_attempt_count == attempts);
+  assert(memcmp(preparation, state.gather_progress_ms, sizeof(preparation)) == 0);
+  assert(game_state_load(path, &reopened) == 0);
+  game_rules_resume_runtime(&reopened, 900u);
+  state = reopened;
+  GameState unchanged = state;
+  assert(game_apply(path, &state, &action) == GAME_DUPLICATE);
+  assert(memcmp(&state, &unchanged, sizeof(state)) == 0);
+  action = command(GAME_COMMAND_EXPEDITION_CONTINUE);
+  action.data.monotonic_seconds = 900u;
+  assert(apply(&state, path, action) == GAME_UNAVAILABLE);
+  start_gathering(&state, path, 900u);
+  assert(strcmp(state.expedition_id, source_id) != 0 &&
+         state.expedition_elapsed == 0u);
+  assert(state.gather_random_state == random_state &&
+         state.gather_attempt_count == attempts);
+  assert(memcmp(preparation, state.gather_progress_ms, sizeof(preparation)) == 0);
+  /* Finishing an empty outing is an explicit ending, never a phantom Send or
+   * completed sample. Its independent preparation/chance state survives. */
+  action = command(GAME_COMMAND_EXPEDITION_FINISH);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(!state.expedition_active && !state.expedition_id[0] &&
+         state.sample_count == 0u && state.gather_random_state == random_state);
+  assert(memcmp(preparation, state.gather_progress_ms, sizeof(preparation)) == 0);
+  /* Capacity pausing also ends on fresh unload without a late chance draw. */
+  state.expedition_data = 3800u;
+  for (unsigned i = 0; i < 3; ++i)
+    state.gather_progress_ms[i] = 3000u;
+  start_gathering(&state, path, 1000u);
+  assert(game_gather_capacity_blocked(&state));
+  action = command(GAME_COMMAND_EXPEDITION_UNLOAD);
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(!state.expedition_id[0] && state.sample_count == 0u &&
+         state.gather_random_state == random_state &&
+         state.gather_attempt_count == attempts);
+  /* A fresh old partial-only haul converts preparation and ends atomically. */
+  game_state_init(&state);
+  state.legacy_supply_encoding = 1u;
+  state.expedition_data = 44u;
+  state.expedition_elapsed = 2u;
+  strcpy(state.expedition_id, "old-partial-haul");
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(!state.expedition_id[0] && state.expedition_elapsed == 0u &&
+         state.sample_count == 0u && state.data == 0u &&
+         state.gather_progress_ms[0] == 1760u);
+}
+
 int main(void) {
   char path[] = "/tmp/beecho-game-XXXXXX";
   GameState state;
@@ -549,22 +622,15 @@ int main(void) {
   action = command(GAME_COMMAND_EXPEDITION_TICK);
   action.data.monotonic_seconds = 110u;
   assert(apply(&state, path, action) == GAME_OK);
-  action = command(GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER);
+  action = command(GAME_COMMAND_EXPEDITION_UNLOAD);
   assert(apply(&state, path, action) == GAME_OK);
-  assert(state.sample_count == 0 && state.expedition_elapsed == 10u);
+  assert(state.sample_count == 0 && !state.expedition_id[0] &&
+         state.expedition_elapsed == 0u);
   assert(game_stock_normalized(&state) &&
          state.data + state.energy + state.essence > 0u);
 
-  /* Continue the same source expedition after its early receipt. Samples are
-   * awarded at completed acceptance, independently of the gathering outcomes. */
-  action = command(GAME_COMMAND_EXPEDITION_CONTINUE);
-  action.data.monotonic_seconds = 110u;
-  assert(apply(&state, path, action) == GAME_OK);
-  action = command(GAME_COMMAND_EXPEDITION_TICK);
-  action.data.monotonic_seconds = 160u;
-  assert(apply(&state, path, action) == GAME_OK);
-  action = command(GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER);
-  assert(apply(&state, path, action) == GAME_OK);
+  /* A fresh completed outing can independently earn its sample. */
+  complete_expedition(&state, path, GAME_EXPEDITION_SURVEY, 110u);
   assert(state.sample_count == 1);
   assert(state.samples[0].origin_expedition_kind == GAME_EXPEDITION_SURVEY);
   assert(game_stock_normalized(&state));
@@ -671,6 +737,7 @@ int main(void) {
   close(file);
   assert(game_state_load(path, &reopened) == -1);
   test_whole_supply_rules(path);
+  test_unload_ends_outing(path);
   unlink(path);
   char lock_path[256];
   char temporary_path[256];

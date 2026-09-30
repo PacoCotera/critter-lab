@@ -103,7 +103,37 @@ whole counts; no item fractions or preparation appear in their manifest.
 
 Lab reception opens automatically once on arrival and cancels held input. Back
 restores its previous navigation; world state remains current. Acceptance and
-receipt are distinct durable states. The shared domain retains preparation and
+receipt are distinct durable states. Send stops gathering; fresh acceptance
+unloads once and ends the source expedition, including an early return. Receipt
+closes the handoff, and the next outing starts a new route identity. An empty
+outing can Finish without sending a phantom haul. The shared domain retains preparation and
 chance outcomes across restart and transfer. Versioned recovery boundaries are
 in [architecture](../../specs/architecture.md#three-device-host-simulator);
 provisional time/chance values belong in [V1](V1.md).
+
+## Resetting the simulator sandbox
+
+The presenter has one **Reset sandbox** control above the device shells. Confirming
+starts a fresh native game across Lab, Companion and Dock, with the fixture's
+default links and stock. This is simulator administration, not a device button or
+hardware reset. Other connected browsers reconnect when the sandbox changes;
+held input, queued releases and old frames cannot carry into the fresh game.
+
+Before starting the new process, the presenter stops native under its command
+lock and moves the configured save, `.kit`, `.kit.required` and any corresponding
+`.tmp` files into a uniquely named `<save>.reset-<id>` sibling directory. It keeps
+session and storage lock files at their original paths. The response identifies
+the backup directory. Backups are retained until the operator disposes of them.
+There is no browser restore or arbitrary file-management endpoint.
+
+If fresh startup fails, the presenter restores the old files and checks all three
+devices before serving them again. Failed new files are retained in the backup
+with `.failed-new` suffixes. A failed rollback leaves native transport unavailable;
+stop the presenter and restore the matching save and sidecars together from the
+backup before restarting. An interrupted multi-file move also requires that
+operator recovery. Do not combine files from different worlds or delete the
+required marker to bypass recovery. After any unconfirmed reset, reload to verify
+state before playing. The focused check is
+`python3 native/tests/test_sandbox_reset.py [path/to/selected_lab]`; supplying the
+binary exercises the actual three-device fresh state, old-input rejection,
+backup sidecars and persistence after restart.

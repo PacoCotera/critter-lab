@@ -100,7 +100,9 @@ static int reconcile(DeviceKit *kit) {
   command.type = kit->journal.version == 1 ? GAME_COMMAND_EXPEDITION_OFFLOAD
                  : kit->journal.version == 2
                      ? GAME_COMMAND_EXPEDITION_TRANSFER
-                     : GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER;
+                 : kit->journal.version == 3
+                     ? GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER
+                     : GAME_COMMAND_EXPEDITION_UNLOAD;
   command.sequence = kit->journal.accept_sequence;
   int committed = 0;
   if (game->last_operation_sequence == kit->journal.accept_sequence) {
@@ -138,7 +140,7 @@ static int valid_journal(const KitJournal *journal) {
         !separator[1] || strchr(separator + 1, '/'))
       return 0;
   }
-  return journal->version >= 1 && journal->version <= 3 &&
+  return journal->version >= 1 && journal->version <= 4 &&
          journal->checksum == checksum(journal) &&
          journal->phase <= KIT_COMPLETE && journal->companion_online <= 1 &&
          journal->dock_online <= 1 &&
@@ -218,7 +220,7 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
       fail(kit);
       return 0;
     }
-    kit->journal.version = 3;
+    kit->journal.version = 4;
     kit->journal.companion_online = kit->journal.dock_online = 1;
     if (!persist(kit))
       return 0;
@@ -258,7 +260,9 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
   }
   if (kit->journal.phase == KIT_ACK_PENDING &&
       (lab->game.expedition_active ||
-       (kit->journal.version == 1 ? lab->game.expedition_id[0] != 0
+       (kit->journal.version == 1 || kit->journal.version >= 4
+            ? lab->game.expedition_id[0] != 0 ||
+                  lab->game.expedition_elapsed != 0
         : kit->journal.elapsed < GAME_EXPEDITION_SECONDS
             ? strcmp(lab->game.expedition_id,
                      source_expedition(&kit->journal)) ||
@@ -300,10 +304,14 @@ const char *kit_route(const DeviceKit *kit) {
 }
 const char *kit_expedition_status(const DeviceKit *kit) {
   const GameState *game = &kit->lab->game;
-  if ((pending(kit) ? kit->journal.elapsed : game->expedition_elapsed) >=
-      GAME_EXPEDITION_SECONDS)
+  if (kit->journal.phase >= KIT_ACK_PENDING &&
+      !game->expedition_id[0] && source_expedition(&kit->journal)[0])
+    return "Expedition ended";
+  if (pending(kit))
+    return "Returning";
+  if (game->expedition_elapsed >= GAME_EXPEDITION_SECONDS)
     return "Expedition complete";
-  if (pending(kit) || kit->companion.page == COMP_SEND_REVIEW ||
+  if (kit->companion.page == COMP_SEND_REVIEW ||
       (game->expedition_id[0] && !game->expedition_active))
     return "Paused";
   if (game->expedition_active) {
@@ -323,6 +331,12 @@ const GameSample *kit_received_sample(const DeviceKit *kit) {
 int kit_lab_explore(const DeviceKit *kit) {
   return kit->lab->page == V1_EXPEDITION || kit->lab->page == V1_CARGO;
 }
+static unsigned probe_option_count(const DeviceKit *kit) {
+  if (!pending(kit) && kit->lab->game.expedition_id[0] &&
+      !game_transfer_available(&kit->lab->game))
+    return 2;
+  return kit->lab->game.expedition_id[0] || pending(kit) ? 1 : 3;
+}
 unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
   if (device == KIT_DOCK)
     return kit->dock.page == 2 ? 2 : 3;
@@ -336,11 +350,7 @@ unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
   case COMP_FRIENDS:
     return 0;
   default:
-    if (!pending(kit) && kit->lab->game.expedition_id[0] &&
-        !kit->lab->game.expedition_active &&
-        kit->lab->game.expedition_elapsed < GAME_EXPEDITION_SECONDS)
-      return 2;
-    return kit->lab->game.expedition_id[0] || pending(kit) ? 1 : 3;
+    return probe_option_count(kit);
   }
 }
 const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
@@ -367,15 +377,8 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
     static const char *routes[] = {"Field survey", "Garden forage",
                                    "Weather watch"};
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
-        !kit->lab->game.expedition_active &&
-        kit->lab->game.expedition_elapsed < GAME_EXPEDITION_SECONDS) {
-      static const char *paused[] = {"Continue expedition", "View cargo"};
-      return paused[index % 2];
-    }
-    if (!pending(kit) && kit->lab->game.expedition_id[0] &&
-        kit->lab->game.expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
         !game_transfer_available(&kit->lab->game))
-      return "Finish expedition";
+      return index ? "Finish expedition" : "View cargo";
     return kit->lab->game.expedition_id[0] || pending(kit) ? "View cargo"
                                                            : routes[index % 3];
   }
@@ -438,7 +441,7 @@ static void seal(DeviceKit *kit) {
     refresh(&kit->companion, 1);
     return;
   }
-  kit->journal.version = 3;
+  kit->journal.version = 4;
   strcpy(kit->journal.haul_id, identity);
   kit->journal.cargo[0] = game->expedition_data;
   kit->journal.cargo[1] = game->expedition_energy;
@@ -483,29 +486,14 @@ static void activate_companion(DeviceKit *kit) {
     break;
   default:
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
-        !kit->lab->game.expedition_active &&
-        kit->lab->game.expedition_elapsed < GAME_EXPEDITION_SECONDS) {
-      if (focus) {
-        companion_task(kit, COMP_CARGO);
-      } else {
-        GameCommand command = {0};
-        command.type = GAME_COMMAND_EXPEDITION_CONTINUE;
-        command.data.monotonic_seconds = kit->clock;
-        if (apply(kit, command, NULL) == GAME_OK) {
-          kit->journal.phase = KIT_IDLE;
-          if (persist(kit))
-            refresh_all(kit);
-        }
-      }
-      break;
-    }
-    if (!pending(kit) && kit->lab->game.expedition_id[0] &&
-        kit->lab->game.expedition_elapsed >= GAME_EXPEDITION_SECONDS &&
+        focus == 1 &&
         !game_transfer_available(&kit->lab->game)) {
       GameCommand command = {0};
       command.type = GAME_COMMAND_EXPEDITION_FINISH;
-      if (apply(kit, command, NULL) == GAME_OK)
+      if (apply(kit, command, NULL) == GAME_OK) {
+        strcpy(kit->companion.message, "Expedition ended. Choose a new route.");
         refresh_all(kit);
+      }
       break;
     }
     if (kit->lab->game.expedition_id[0] || pending(kit))
@@ -531,9 +519,9 @@ static void accept(DeviceKit *kit) {
   if (kit->journal.phase != KIT_ARRIVED || !same_cargo(kit))
     return;
   kit->journal.accept_sequence = kit->lab->game.last_operation_sequence + 1;
-  /* A preacceptance legacy snapshot is intact; only its new intent uses the
-   * whole-unit command. Already reserved v1 COMMITTING intents stay v1. */
-  kit->journal.version = 3;
+  /* A preacceptance snapshot stays intact; only this fresh intent adopts the
+   * ending policy. Already reserved v1/v2/v3 intents keep their exact command. */
+  kit->journal.version = 4;
   kit->journal.phase = KIT_COMMITTING;
   if (persist(kit) && reconcile(kit))
     normalize_stock(kit);
@@ -712,11 +700,20 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
     kit->lab->game.expedition_last_tick = clock;
   selected_lab_tick_devices(kit->lab, clock, expedition, 1);
   if (kit->lab->game.revision != before) {
+    unsigned count = kit_option_count(kit, KIT_COMPANION);
+    int focus_changed = kit->companion.focus >= count &&
+                        kit->companion.focus != 0;
+    if (focus_changed)
+      kit->companion.focus = count ? count - 1 : 0;
+    unsigned probe_count = probe_option_count(kit);
+    if (kit->companion.action_focus[COMP_PROBE] >= probe_count)
+      kit->companion.action_focus[COMP_PROBE] = probe_count - 1;
     int after_empty =
         !(kit->lab->game.expedition_data + kit->lab->game.expedition_energy +
           kit->lab->game.expedition_essence);
     refresh(&kit->companion,
-            before_active != kit->lab->game.expedition_active ||
+            focus_changed ||
+                before_active != kit->lab->game.expedition_active ||
                 before_empty != after_empty ||
                 before_transfer != game_transfer_available(&kit->lab->game));
   }
@@ -731,7 +728,7 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
       if (!persist(kit))
         return;
       strcpy(kit->companion.message,
-             "Receipt confirmed. Gathering progress stays here.");
+             "Receipt confirmed. Choose a new expedition.");
       strcpy(kit->lab->message, "Haul accepted; Companion receipt confirmed.");
       refresh_all(kit);
     }

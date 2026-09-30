@@ -106,14 +106,21 @@ state are separate Companion activity. Simulated arrival opens Lab reception onc
 never acceptance. The input module captures/restores navigation only, without
 restoring world state, clocks or armed gestures. A fresh Confirm accepts the haul.
 
-Acceptance first persists its exact game sequence and haul ID. Journal version3
-reserves whole-transfer command14. Versions1/2 remain readable; already reserved
-COMMITTING intents replay original commands3/11 with their exact fingerprints.
-An unreserved legacy snapshot stays immutable through WAITING/ARRIVED; fresh
-acceptance may reserve command14, which converts its raw legacy encoding and
-transfers earned whole portions atomically. Source expedition ID is distinct from
-each haul ID, permitting several offloads of one paused route without duplicate
-credits. Matching receipt unlocks Continue for that same unfinished expedition.
+Acceptance first persists its exact game sequence and haul ID. Fresh acceptance
+uses journal version4 and command16 (EXPEDITION_UNLOAD): credit the immutable haul
+once and end its source expedition in the same durable game commit. An early
+return does not earn a completion sample. Independent preparation and committed
+chance state remain on Companion for a later new outing; neither is cargo.
+Matching receipt closes transport metadata, not a second award or a continuation.
+
+Journal versions1/2/3 remain readable. Reserved COMMITTING intents replay their
+original commands3/11/14 and exact fingerprints before any newer mutation. Version3
+early acceptance retains its historical source identity until receipt; its empty
+route can then explicitly Finish. Fresh unreserved legacy acceptance may reserve
+command16, converting its raw supply encoding atomically before ending the route.
+Version4 receipt validation expects the source route already ended. An empty
+outing can Finish without a phantom haul, sample or extra chance draw. The next
+outing gets a new identity; no Continue action follows an accepted unload.
 
 Version2 game saves append separately persisted gathering preparation, chance
 state, attempted/awarded classes and a legacy-encoding flag. The decoder checks
