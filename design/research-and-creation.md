@@ -2,6 +2,108 @@
 
 **Design proposal for owner review.** Accepted foundations come from [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [Probe](../specs/probe.md) and [creation terms](creation-terms.md). The recommended capsule preparation, field-point meaning, example resources/profiles and progression model below are proposals. No numerical economy, final screen, genome encoding or hardware design is approved by this document.
 
+## Discovery proposal — 30 September 2026
+
+Joined game-design, genomics and UX proposal; methods, costs and pacing remain
+for owner steering. The current native loop still has five fixed purchases and
+two identical supported Pip outcomes per sample. Better labels alone cannot make
+that loop variable. Accepted requirements remain sample-specific retained
+knowledge, complete supported selection, indivisible supplies and deliberate
+creation. This proposal explains the next bounded content/interaction proof.
+
+**Play loop:** return with a stable sample → pursue a clue → gain a specific
+finding → choose the next useful investigation or resupply → compare supported
+possibilities → deliberately create one individual. Lab keeps the same workpiece
+across trips; Companion gathers actual whole items; acceptance ends each outing;
+Dock reflects the same accepted records. A collection Overview and the selected
+sample workbench have distinct subjects. Known findings stay free to inspect.
+
+### A discovery that changes the next question
+
+Sample A has a stable neutral capsule/pattern and origin. It supports exactly two
+Pip-proof configurations, `Cc/Rr/Pp/Mm/Ee` and `Cc/Rr/pp/Mm/Ee`, under the pinned
+baseline. This is proposed versioned sample content, not current native support
+or a hidden already-living creature. No portrait or secret candidate count is
+shown before the relevant evidence exists. Full genotype notation stays secondary
+to readable feature language.
+
+| Moment | Player purpose and screen response | Retained consequence |
+| --- | --- | --- |
+| Prepare | Choose between `Read the pattern` and `Trace movement`; preview spends nothing | Reopen this sample's record, not a new specimen |
+| Read the pattern | `Pale variation found` / `How it shows is still unknown` | Establish the explicitly validated baseline bundle, crown/ring facts and one pale-variant copy; remaining markings is unresolved |
+| Trace movement | `Short bursts supported` / `Less energy for the same action` | Establish movement/efficiency relationship in matched adult, healthy/rested reference conditions; no invented speed or endurance |
+| Inspect next question | `Compare the coat` becomes useful; show exact whole-item shortage if needed | Preserve every finding while switching sample or going for supplies |
+| Compare the coat | `Plain coat · pale variation carried` versus `Pale markings` | Fully explain both supported alternatives; spending does not grant an arbitrary allele |
+| Choose form | Inspect either fully understood supported configuration | Retain a reversible draft; selecting does not spend creation inputs |
+| Incubate | Separate review names the selected form, sample and creation supplies; fresh Start commits | Save one parentless founder with exact genome/context/identity and consumed material; research record remains |
+| Meet | Deliberately open the already-saved individual | Reveal cannot reroll genes or mint a second birth; retained portrait and identity persist |
+
+The hypothesis “Could that pattern show on a Beecho?” expresses curiosity, not a
+quiz or desired answer purchase. A known reference may inspire it but cannot
+certify this sample. A carried pale variant must never appear as faint pale
+markings in art. Unknown, partly known, established absence, carried/unexpressed,
+not applicable and unsupported remain distinct.
+
+### Progression through relationships, not more compulsory clicks
+
+Sample B offers a different relationship using existing rules: supported B1
+`Cc/Rr/Pp/mm/Ee` is steady with lower cost for the same walking action; B2
+`Cc/Rr/Pp/Mm/ee` is burst-capable with baseline walking cost. Heritage establishes
+their common plain/carried-marking facts. Movement reveals capabilities; a
+relevant effort comparison resolves their actual pairing. B has no irrelevant
+coat follow-up. Picking two appealing findings cannot create an unsupported
+third `Mm/Ee` form. A sample whose initial investigations resolve everything
+needs no artificial third purchase.
+
+Keep each sample's complete support, content version and evidence arrangement
+stable. Vary real configurations, useful methods and relationships before
+wording or container color. More complex questions need validated content, not
+automatic strength/rarity/XP claims. Introductory two investigations plus a
+relevant follow-up is a useful arrangement, not a universal click quota.
+
+An applicable broader comparison can run early if its declared evidence bundle
+establishes the same baseline/markings facts. Movement still needs investigation
+if unresolved. Omit redundant resolved work rather than charge again. Method
+applicability, prerequisites and exact price remain proposed. Deterministic
+findings from accepted sample/method come first; assay noise, research failure
+and destructive tests are not introduced here.
+
+### Genomic acceptance boundary
+
+The worked manifest contains nine baseline-module references, three fixed-locus
+references and five variable-locus references. An investigation can establish
+several justified entries. Completion requires validated evidence for all
+required facts and fully disclosed supported configurations; study count is not
+eligibility. Candidate-scoped Pp and pp are separate supported alternatives,
+not contradictory facts merged into one genome.
+
+The host engine supports these four configurations, a partial p projection with
+unresolved appearance, and the 17-entry manifest. It does **not** validate this
+proposed study/evidence mapping. Its current `researchCompleteness()` accepts
+fact statuses; an added evidence-to-fact/support check is necessary before those
+statuses can authorize game creation. Recognizing Pip or receiving a familiar
+reference cannot silently mark a new sample complete.
+
+### One review ledger and next proof
+
+Whole-item arithmetic example only, not approved balance or promised yields:
+start4 Data/4 Energy/0 Essence; pattern costs4 Data; movement costs4 Energy;
+one actual possible accepted haul adds2/2/4; comparison costs4 Essence;
+a later possible haul adds3/3/5; incubation costs5 of each plus A's material.
+27 items available equal27 spent. Research completeness and creation affordability
+are separate states; neither haul is guaranteed by a route label.
+
+Next bounded proof: a paper/control walkthrough of A and B, retained findings,
+shortage/resupply, an early applicable comparison, supported-form draft and
+explicit creation. Observe whether a person can explain the discovery, choose
+a useful next study, distinguish reference from sample, and describe carried
+versus expressed. Joy and progression are playtest hypotheses, not established
+by agent agreement. New art derives from the retained Gemini/C18 family and
+permitted knowledge; do not regenerate whole screens or disclose hidden anatomy.
+[Generation authority](../specs/architecture.md#generation-backend-proposal--30-september-2026)
+and [audit defects](three-device-playability-audit/README.md) constrain the next
+implementation. No service, code, final art or canonical balance is delivered here.
+
 ## The experience
 
 ### Current correction: return to the same research workpiece
@@ -84,20 +186,20 @@ This is a loop with choice and continuity, not one sample's compulsory linear qu
 
 ## Shared vocabulary: packs, units and samples
 
-Owner favors **pack**, **sample** and **unit**. The owner accepted these definitions and one-pack/one-resource-storage-unit accounting. Exact storage limits and resource recipes remain provisional. Resource identities and functions remain in [gathering design](probe-sampling.md#prepared-research-resources--concrete-proposal); baseline, sample and phenotype meanings remain in [genetics](../specs/genetics.md#genome-baseline-collected-sample-and-phenotype--accepted-distinction).
+Current player accounting uses whole **items**, **samples** and capacity counts. Earlier pack/storage conversion language is superseded by the indivisible-item rule. Exact storage limits and resource recipes remain provisional. Resource identities and functions remain in [gathering design](probe-sampling.md#prepared-research-resources--concrete-proposal); baseline, sample and phenotype meanings remain in [genetics](../specs/genetics.md#genome-baseline-collected-sample-and-phenotype--accepted-distinction).
 
 | Term | Meaning across the journey | Example / boundary |
 | --- | --- | --- |
 | Resource | A type of research supply prepared by the Probe and spent at the Lab | Data cards, Energy prisms and Essence are the selected resource names; not genes or discovered knowledge |
 | Pack | One completed, usable quantity of a single resource type | A Data card pack. Not a mixed reward bundle, sample container, physical accessory or extra wrapping to unpack |
-| Unit | A measure of quantity or capacity, not another object | One pack occupies one resource-storage unit. Exact capacity is balance; sensor units such as degrees are unrelated |
+| Unit | A measure of quantity or capacity, not another object | One awarded item occupies one resource-storage unit; no player-facing pack conversion is selected. Exact capacity is balance; sensor units such as degrees are unrelated |
 | Stock | Packs currently held, counted by resource type | Probe stock becomes Lab stock after accepted transfer; quantities are not duplicated |
 | Sample | A particular research source containing unknown genomic information consistent with a baseline and its supported variation | Neither a generic baseline blueprint, an already known phenotype nor a research-supply pack |
 | Sample capsule | The identifiable container/presentation holding a sample | Probe acknowledges the capsule without revealing genes or traits. Physical form is undecided; capsule storage is separate from resource-pack capacity |
 | Research record | Retained knowledge about that sample | Preparation establishes the record; studies discover genomic information. The record is not the sample and cannot substitute for it at incubation |
 | Special find | An expedition object with an authored use outside routine supplies and samples | A rare reference may enable a research method; finding it does not itself decode a genome |
 
-Player copy should name the thing, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next attempt in 3 sec”**, and a separate **“1 sample capsule”**. A study costs **“2 Data card packs”**; compact inventory rows can use **“Data cards ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
+The older pack-named examples below are retained provisional design, not active quantity rules. Current player copy counts Data cards, Energy crystals and Essence items directly, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next attempt in 3 sec”**, and a separate **“1 sample capsule”**. A study costs **“2 Data card packs”**; compact inventory rows can use **“Data cards ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
 
 Collected resources are whole items, fungible within their own class. Time-and-chance preparation toward another award attempt is separate from inventory; it consumes no cargo space and cannot pay research costs or transfer to Lab. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this accounting rule; [gathering](probe-sampling.md#typed-gathering-pack-thresholds-and-manual-discard) describes its field presentation. Completing an attempt need not award an item. Checking the screen reveals state rather than causing collection. Preserve illustrated resource identity, whole counts and concise activity feedback; expedition time, battery charge, sample discovery and resource attempts must remain distinguishable. Exact rates, probabilities, event boosts, cadence and artwork remain to refine.
 

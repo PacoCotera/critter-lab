@@ -22,6 +22,14 @@ Expedition selection reinforces these roles: compare investigation theme, tier e
 
 ### Current owner playtest requirements
 
+Owner playtest, 30 September 2026: one existing Lab color shortcut must become
+**Home**, returning to the global **Overview · Lab** without spending, sending,
+revealing or ending an ongoing activity. The key to replace and its final mapping
+are pending the three-device audit; no extra hardware button is added. Every
+Companion mode, including Cargo after accepted unloading, must retain a visible,
+usable route back to its mode selector and another task. The reported post-haul
+Cargo trap is pending isolated reproduction; it is not claimed repaired.
+
 Keep the lab-wide Home overview and focus-driven feature previews. Correct the
 prototype's single-device shortcut: Lab plans and receives; the separate Companion
 conducts Probe-mode expeditions and owns carried cargo until acknowledged receipt.
@@ -126,7 +134,7 @@ One focus marker identifies an action or navigable target. Feature illustrations
 
 ### Visual-system direction
 
-The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The owner now favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#current-visual-system-discovery) for current research boundaries. Rejected concept plates do not define the UI.
+The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The owner now favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#proposed-feature-facing-visual-contract) for current research boundaries. Rejected concept plates do not define the UI.
 
 ### Home and feature landings
 
@@ -246,3 +254,8 @@ visual design. Its mechanics and native rendering evidence do not approve the
 text-panel composition. Screen art is being derived from Gemini with the approved
 C18/hardware references while preserving the real gathering/whole-item/reception
 journey above.
+
+The [Companion experience proposal](../design/companion-experience.md) records
+the owner-requested tactile full-device overhaul: immediate mode overviews,
+clear Home/Back orientation, game language and visible results. Its detailed
+interaction map and resident extension are proposals, not released behavior.

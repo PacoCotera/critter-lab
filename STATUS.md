@@ -40,6 +40,15 @@ native visual fidelity as final; behavioral checks do not approve art quality.
 
 ## Remaining proof
 
+The owner-reported post-accept Cargo exit remains open; isolated native Back/Confirm
+paths worked, so no repair is claimed. One existing Lab shortcut must become Home.
+The [three-device defect packet](design/three-device-playability-audit/README.md)
+prioritizes later repairs, with native/source/visual evidence distinguished.
+[Research](design/research-and-creation.md#discovery-proposal--30-september-2026)
+now has a joined A/B discovery proposal and
+[backend generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
+are bounded design only. No service or new canonical traits were introduced.
+
 The next named screen outcome is faithful shared-asset derivation from the
 approved C18 and connected Gemini concepts, followed by native-size inspection.
 The retained Home hierarchy continues. Research still needs its collection-wide
