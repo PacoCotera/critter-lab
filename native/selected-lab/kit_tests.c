@@ -98,29 +98,33 @@ static void resident_cache_and_visits(const char *directory) {
     strcpy(sample->origin_expedition_id, "retained-resident-fixture");
     sample->decoded_studies = sample->decoded_facts = 31;
     sample->supported_candidates = 3;
-    sample->incubated = 1;
     snprintf(resident->id, sizeof(resident->id), "resident-%u", i);
     strcpy(resident->source_sample_id, sample->id);
     strcpy(resident->origin_kind, "parentless-founder");
     resident->origin_founder = 1;
     resident->revealed = i < 2;
     resident->care_visits = i ? 7 : 3;
-    assert(pip_genome_for_sample(0, &resident->genome) == 0);
-    pip_express(&resident->genome, &resident->expression);
-    strcpy(resident->art_id, pip_art_id(&resident->genome));
+    if (i == 1) {
+      /* Research precedes incubation, including in this saved B fixture. */
+      sample->decoded_studies = sample->decoded_facts = 0;
+      pip_pin_sample_profile(&lab.game, i);
+      assert(pip_record_investigation(&lab.game, i, 0));
+      assert(pip_record_investigation(&lab.game, i, 2));
+      PipSupportedCandidate candidate;
+      assert(pip_supported_candidate(&lab.game, i, 1, &candidate));
+      resident->genome = candidate.genome;
+      resident->expression = candidate.expression;
+      pip_pin_individual_art(&lab.game, i, candidate.id);
+    } else {
+      assert(pip_genome_for_sample(0, &resident->genome) == 0);
+      pip_express(&resident->genome, &resident->expression);
+      pip_pin_individual_art(&lab.game, i, "legacy-carried");
+    }
+    strcpy(resident->art_id, pip_content_art_id(&resident->genome));
     strcpy(resident->art_version, PIP_ART_VERSION);
-    pip_pin_individual_art(&lab.game, i, "legacy-carried");
+    sample->incubated = 1;
   }
-  /* A saved B resident retains the selected movement/effort relationship. */
-  lab.game.samples[1].decoded_studies = lab.game.samples[1].decoded_facts = 0;
-  pip_pin_sample_profile(&lab.game, 1);
-  assert(pip_record_investigation(&lab.game, 1, 0));
-  assert(pip_record_investigation(&lab.game, 1, 2));
-  PipSupportedCandidate candidate;
-  assert(pip_supported_candidate(&lab.game, 1, 1, &candidate));
-  lab.game.individuals[1].genome = candidate.genome;
-  lab.game.individuals[1].expression = candidate.expression;
-  pip_pin_individual_art(&lab.game, 1, candidate.id);
+  assert(game_state_valid(&lab.game));
   assert(game_state_save(path, &lab.game) == 0);
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
