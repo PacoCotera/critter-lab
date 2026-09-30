@@ -113,7 +113,7 @@ async function connectDevice(deviceId, controls) {
     if (!acceptSandbox(state.sandbox) || inputBlocked || state.revision < revision) return;
     revision = state.revision;
     (deviceId === 'lab' ? ['research', 'critters', 'library', 'habitat'] : []).forEach((name, index) => {
-      document.querySelector(`#${deviceId}-${name}`).setAttribute('aria-pressed', String(state.workspace === index));
+      document.querySelector(`#${deviceId}-${name}`).setAttribute('aria-pressed', String(name === 'critters' ? state.page === 'home' : state.workspace === index));
     });
     status.textContent = `${state.focus} · ${state.transfer}`;
     const link = document.querySelector(`#${deviceId}-link`);

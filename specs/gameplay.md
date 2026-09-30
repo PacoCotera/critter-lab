@@ -24,7 +24,7 @@ The proposed player distinction is active versus frozen habitats; merely closing
 
 Players set their own goals: collecting attractive or rare cosmetic combinations is as valid as developing adaptable or specialized critters. Cosmetic value need not grant a practical bonus. Experimentation and personal knowledge support research, crafting, exploration, development and social play; recipe discovery does not normally grant permission to attempt a combination. Explicit resource, compatibility and consent requirements still apply.
 
-1. Collect field evidence and resources, or begin a console-only investigation.
+1. Gather field resources and samples with the Companion, then receive them at the Lab.
 2. Discover sample contents, choose a study and commit its displayed resources.
 3. Retain the finding; pursue a follow-up or supported creation direction.
 4. Fully decode and select a complete genome before creating a parentless founder. Breeding is a separate route using actual compatible parents.
@@ -44,7 +44,7 @@ The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, 
 
 The **Companion** centers training, evolution and bonding. One versus several carried individuals, and a larger habitat with a carried subset, remain open. The **caddy** charges the Lab and Companion, prints and summarizes habitats/inventory/status; seating adds no gameplay progress or implicit transfer.
 
-Slower **console-only research** remains a complete acquisition route: research a sample cache, retain discoveries and pursue a result without requiring a field sample. Whole families must not be exclusive to Probe ownership. Proposed queued/researching/finding/ready states and intermediate choices need playtesting; missed check-ins must not destroy research work. Exact non-Probe resource acquisition must be reconciled with the creation gate.
+The owner removed console-only acquisition from the product roadmap on 30 September 2026. The Companion conducts gathering; the Lab investigates accepted samples and resources. Local core-kit play remains independent of Cloud Pass and routine phone use. Research discoveries persist; current native studies resolve immediately, with no unattended research queue or missed-check-in penalty.
 
 ## Expedition continuity and return — accepted
 
@@ -77,7 +77,7 @@ A sample is a cache containing surprises that the player discovers through resea
 
 Completing research requires gathering across several Probe expeditions. The player returns to the same research, retaining discoveries while obtaining what further studies need. A completed expedition is not completed research. The Probe shows actual gathering progress toward the current research needs; the Lab shows the research process, discoveries so far, remaining work and gathering needs. Keep gathering, inventory and research completion distinct. The Probe does not reveal undiscovered sample contents.
 
-Exact expedition count, yields, study requirements, timing and progress presentation remain open. Several expeditions do not imply several new samples or a mandatory attendance schedule. The accepted console-only route remains; its equivalent acquisition/progress design must be reconciled explicitly rather than silently removed. This direction changes the connected walkthrough: demonstrate an initial return, research progress, further gathering and continuation of the same sample.
+Exact expedition count, yields, study requirements, timing and progress presentation remain open. Several expeditions do not imply several new samples or a mandatory attendance schedule. Console-only acquisition is removed by owner direction; this loop uses the Companion for gathering. This direction changes the connected walkthrough: demonstrate an initial return, research progress, further gathering and continuation of the same sample.
 
 Accepted research direction: supported possibilities followed by guided synthesis. Research supplies knowledge, not an automatic creature. Creation requires every required genomic region decoded through research and resource expenditure; incomplete research is not an optional gamble. Research groups are navigation, not replacements for the five genetic layers.
 

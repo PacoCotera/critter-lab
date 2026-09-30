@@ -188,7 +188,7 @@ One observation can inform several candidate recipes; a research/creation event 
 
 For each future dimension or genuinely new layer, content review must provide at least one meaningful route through sensed features, generated encounters, decisions or laboratory research. New layers cannot bypass identity, lineage, compatibility or permission rules. Extension means adding declared interpretations or event content; no dedicated physical sensor per dimension is needed.
 
-Keep old samples' evidence and original scoring version. A new research recipe may examine retained evidence under a newly recorded interpretation, subject to lifecycle rules; it must not retroactively overwrite points, generate a second spendable sample or reroll an existing specimen. An unsupported required feature remains unsupported. Console-only research remains available with honest lab/simulated provenance.
+Keep old samples' evidence and original scoring version. A new research recipe may examine retained evidence under a newly recorded interpretation, subject to lifecycle rules; it must not retroactively overwrite points, generate a second spendable sample or reroll an existing specimen. An unsupported required feature remains unsupported. The Companion owns gathering; Lab-only acquisition is removed. Retained laboratory interpretation never fabricates field evidence.
 
 ## Evidence needed before freezing the probe
 

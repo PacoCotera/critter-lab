@@ -573,7 +573,8 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                           "SAMPLES",   "RESEARCH",          "DISCOVERY",
                           "INCUBATE",  "INCUBATOR",         "HELLO, BEECHO",
                           "HABITAT",   "RESEARCH PLAN",     "DISCARD PACK",
-                          "CRITTERS",  "RECORDED FINDINGS", "SAMPLE FINDING"};
+                          "RESIDENTS",  "RECORDED FINDINGS", "SAMPLE FINDING",
+                          "START INCUBATION?"};
   static const char *home_headings[] = {
       "Overview - Lab", "Overview - Explore", "Overview - Research",
       "Overview - Incubator", "Overview - Habitat"};
@@ -729,21 +730,36 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     label(&row, 420, 310, "Research topics to record findings here.", 22,
           MUTED);
     label(&row, 420, 366, "Select a finding to inspect it freely.", 22, INK);
-  } else if (lab->page == V1_CREATE) {
+  } else if (lab->page == V1_CREATE || lab->page == V1_CREATE_REVIEW) {
+    int review = lab->page == V1_CREATE_REVIEW;
+    unsigned preference = review ? lab->creation_preference : lab->focus;
     sprite(&row, SPRITE_SAMPLE, 448, 240, 128, 128);
-    label(&row, 605, 235, "Genome decoded", 28, SAGE);
-    label(&row, 605, 282, "Choose a supported form", 22, INK);
-    label(&row, 410, 414, "1 sample + 5 units of each resource", 24, INK);
+    label(&row, 605, 235, game->samples[lab->sample].id, 22, SAGE);
+    label(&row, 605, 282, review ? "Selected supported form" : "Supported form draft",
+          22, INK);
+    label(&row, 605, 317, preference ? "Pale markings" : "Plain coat / carries pale",
+          18, INK);
+    label(&row, 410, 394, review ? "Start spends: 5 Data / 5 Energy / 5 Essence"
+                               : "Confirm selects this form for review.",
+          22, INK);
+    label(&row, 410, 431, "Source sample stays recorded; used for one founder.",
+          18, MUTED);
     unsigned shortage = 0;
     for (unsigned i = 0; i < 3; i++)
       if (stock[i] < 500) {
         snprintf(text, sizeof(text), "%s: %u / 5 units", names[i],
                  stock[i] / 100);
-        label(&row, 410, 454 + (int)shortage * 23, text, 18, WARM);
+        label(&row, 410, 456 + (int)shortage * 23, text, 18, WARM);
         shortage++;
       }
     if (!shortage)
-      label(&row, 410, 464, "Confirm starts one incubation.", 22, WARM);
+      label(&row, 410, 476,
+            game->incubation_active ? "Incubator busy. Finish the active incubation."
+            : game->samples[lab->sample].incubated ? "This sample already has a founder."
+            : game->individual_count >= GAME_MAX_INDIVIDUALS ? "All 8 resident spaces occupied."
+            : review ? "Fresh Confirm: start / Back: change form"
+                     : "Drafting spends nothing.",
+            18, WARM);
   } else if (lab->page == V1_INCUBATION) {
     sprite(&row, SPRITE_SAMPLE, 602, 244, 128, 128);
     if (game->incubation_active) {

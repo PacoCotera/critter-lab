@@ -11,12 +11,17 @@ enum {
   KIT_ACK_PENDING,
   KIT_COMPLETE
 };
-enum { COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW };
+enum {
+  COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW,
+  COMP_DISCARD_CLASS, COMP_DISCARD_QUANTITY, COMP_DISCARD_REVIEW,
+  COMP_FINISH_REVIEW
+};
 
 typedef struct {
   unsigned revision, acknowledged, epoch, acknowledged_epoch, focus, page;
   unsigned minimum_action_revision;
-  unsigned mode, action_focus[3], task_page[2], task_focus[2], task_depth;
+  unsigned mode, action_focus[3], task_page[4], task_focus[4], task_depth;
+  unsigned discard_resource, discard_quantity;
   int suspended;
   SelectedGesture gestures[10];
   char message[96];

@@ -43,7 +43,7 @@ function send(event, requestedFrame = visibleRevision) {
 function receive(state) {
   revision = state.revision;
   ['research', 'critters', 'library', 'habitat'].forEach((name, index) => {
-    document.querySelector(`#${name}`).setAttribute('aria-pressed', String(state.workspace === index));
+    document.querySelector(`#${name}`).setAttribute('aria-pressed', String(name === 'critters' ? state.page === 'home' : state.workspace === index));
   });
   status.textContent = `Native page: ${state.page} · focus: ${state.focus} · ${state.ready ? 'frame ready' : 'waiting for frame'} · ${state.boundary}`;
   if (visibleRevision !== revision && requestedRevision !== revision) draw(revision);

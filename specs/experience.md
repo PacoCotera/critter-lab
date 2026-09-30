@@ -24,8 +24,8 @@ Expedition selection reinforces these roles: compare investigation theme, tier e
 
 Owner playtest, 30 September 2026: one existing Lab color shortcut must become
 **Home**, returning to the global **Overview · Lab** without spending, sending,
-revealing or ending an ongoing activity. The key to replace and its final mapping
-are pending the three-device audit; no extra hardware button is added. Every
+revealing or ending an ongoing activity. The owner selected the yellow Critters key as Home, preserving the full resident
+list under Habitat. No extra hardware button is added. Every
 Companion mode, including Cargo after accepted unloading, must retain a visible,
 usable route back to its mode selector and another task. The reported post-haul
 Cargo trap is pending isolated reproduction; it is not claimed repaired.
@@ -38,8 +38,8 @@ The simulator must make both device roles and their transfer visible.
 Display resources as integer counts with explicit units; gathering progress is
 separate from usable stock. Do not round away saved quantities or imply that a
 rounded count is spendable. The stock header must reflect a saved haul receipt
-immediately. Current fractional prototype recipes need an explicit representation
-or migration decision before changing accounting.
+immediately. The current native release already stores whole awarded supplies separately
+from gathering preparation; legacy encoding is preserved through its documented conversion.
 
 Research uses one persistent workbench: pending samples on the left, each retaining
 its own discoveries; the selected sample shows established findings, unresolved
@@ -148,7 +148,7 @@ research resolves on commitment and has no background research queue.
 
 ### Simulated console controls — accepted
 
-The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Research/Critters/Library/Habitat workspace keys in the middle, Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Critters shows revealed residents; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
+The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Research/Home/Library/Habitat workspace keys in the middle, Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Home opens Overview · Lab; Habitat includes the full revealed-resident list; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
 
 Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 

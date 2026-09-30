@@ -86,6 +86,10 @@ static GameResult apply(DeviceKit *kit, GameCommand command,
   if (result == GAME_OK) {
     ++kit->lab->revision;
     refresh(&kit->companion, 1);
+  } else if (result != GAME_STORAGE && result != GAME_COMMITTED_UNCERTAIN &&
+             result != GAME_DUPLICATE) {
+    strcpy(kit->companion.message, "Action unavailable. No change saved.");
+    refresh(&kit->companion, 1);
   }
   return result;
 }
@@ -337,6 +341,12 @@ static unsigned probe_option_count(const DeviceKit *kit) {
     return 2;
   return kit->lab->game.expedition_id[0] || pending(kit) ? 1 : 3;
 }
+static unsigned carried_units(const DeviceKit *kit, unsigned resource) {
+  const GameState *game = &kit->lab->game;
+  const unsigned quantities[] = {game->expedition_data, game->expedition_energy,
+                                 game->expedition_essence};
+  return quantities[resource % 3] / GAME_SUPPLY_UNIT;
+}
 unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
   if (device == KIT_DOCK)
     return kit->dock.page == 2 ? 2 : 3;
@@ -344,9 +354,16 @@ unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
   case COMP_MODES:
     return 3;
   case COMP_SEND_REVIEW:
+  case COMP_DISCARD_REVIEW:
+  case COMP_FINISH_REVIEW:
     return 2;
+  case COMP_DISCARD_CLASS:
+    return 4;
+  case COMP_DISCARD_QUANTITY:
+    return carried_units(kit, kit->companion.discard_resource) + 1;
   case COMP_CARGO:
-    return 1;
+    return !pending(kit) && kit->lab->game.expedition_id[0] &&
+                   game_transfer_available(&kit->lab->game) ? 2 : 1;
   case COMP_FRIENDS:
     return 0;
   default:
@@ -367,9 +384,30 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
   }
   case COMP_SEND_REVIEW:
     return index ? "Keep cargo" : "Send to Lab";
+  case COMP_DISCARD_CLASS: {
+    static const char *resources[] = {"Data", "Energy", "Essence", "Keep cargo"};
+    return resources[index % 4];
+  }
+  case COMP_DISCARD_QUANTITY: {
+    if (index >= carried_units(kit, kit->companion.discard_resource))
+      return "Keep cargo";
+    static char quantity[40];
+    snprintf(quantity, sizeof(quantity), "%u whole %s", index + 1,
+             index ? "items" : "item");
+    return quantity;
+  }
+  case COMP_DISCARD_REVIEW:
+    return index ? "Keep these items" : "Discard selected items";
+  case COMP_FINISH_REVIEW:
+    return index ? "Keep exploring" : "End expedition";
   case COMP_CARGO:
-    return pending(kit)                               ? "View expedition"
+    if (index)
+      return "Discard items";
+    return pending(kit)                               ? "Return to Probe"
            : game_transfer_available(&kit->lab->game) ? "Send to Lab"
+           : !kit->lab->game.expedition_id[0] &&
+                     kit->journal.phase >= KIT_ACK_PENDING
+               ? "Choose a new expedition"
                                                       : "Return to Probe";
   case COMP_FRIENDS:
     return "Modes";
@@ -393,7 +431,7 @@ static void companion_page(DeviceKit *kit, unsigned page) {
 }
 static void companion_task(DeviceKit *kit, unsigned page) {
   KitView *view = &kit->companion;
-  if (view->task_depth < 2) {
+  if (view->task_depth < 4) {
     view->task_page[view->task_depth] = view->page;
     view->task_focus[view->task_depth] = view->focus;
     ++view->task_depth;
@@ -417,6 +455,10 @@ static void companion_back(DeviceKit *kit) {
     view->focus = view->mode;
     refresh(view, 1);
   }
+  /* Results can remove rows (for example discarding the final item). */
+  unsigned count = kit_option_count(kit, KIT_COMPANION);
+  if (view->focus >= count)
+    view->focus = 0;
 }
 static void companion_enter_actions(DeviceKit *kit) {
   KitView *view = &kit->companion;
@@ -468,6 +510,65 @@ static void activate_companion(DeviceKit *kit) {
     else
       seal(kit);
     break;
+  case COMP_DISCARD_CLASS:
+    if (focus == 3) {
+      companion_back(kit);
+    } else if (pending(kit)) {
+      strcpy(kit->companion.message, "Haul sealed. Discard is unavailable.");
+      refresh(&kit->companion, 1);
+    } else if (!carried_units(kit, focus)) {
+      strcpy(kit->companion.message, "No whole items of this kind in Cargo.");
+      refresh(&kit->companion, 1);
+    } else {
+      kit->companion.discard_resource = focus;
+      companion_task(kit, COMP_DISCARD_QUANTITY);
+    }
+    break;
+  case COMP_DISCARD_QUANTITY:
+    if (focus >= carried_units(kit, kit->companion.discard_resource))
+      companion_back(kit);
+    else {
+      kit->companion.discard_quantity = (focus + 1) * GAME_SUPPLY_UNIT;
+      companion_task(kit, COMP_DISCARD_REVIEW);
+    }
+    break;
+  case COMP_DISCARD_REVIEW:
+    if (focus)
+      companion_back(kit);
+    else if (pending(kit)) {
+      strcpy(kit->companion.message, "Haul sealed. Items preserved.");
+      refresh(&kit->companion, 1);
+    } else {
+      GameCommand command = {0};
+      command.type = GAME_COMMAND_EXPEDITION_DISCARD;
+      command.data.discard.resource = (GameResource)kit->companion.discard_resource;
+      command.data.discard.quantity = kit->companion.discard_quantity;
+      command.data.discard.confirm = 1;
+      if (apply(kit, command, NULL) == GAME_OK) {
+        while (kit->companion.task_depth &&
+               kit->companion.page != COMP_CARGO)
+          companion_back(kit);
+        snprintf(kit->companion.message, sizeof(kit->companion.message),
+                 "Discarded %u whole items. Cargo space freed.",
+                 command.data.discard.quantity / GAME_SUPPLY_UNIT);
+        refresh_all(kit);
+      }
+    }
+    break;
+  case COMP_FINISH_REVIEW:
+    if (focus)
+      companion_back(kit);
+    else if (!pending(kit)) {
+      GameCommand command = {0};
+      command.type = GAME_COMMAND_EXPEDITION_FINISH;
+      if (apply(kit, command, NULL) == GAME_OK) {
+        companion_back(kit);
+        kit->companion.focus = 0;
+        strcpy(kit->companion.message, "Expedition ended. No sample earned.");
+        refresh_all(kit);
+      }
+    }
+    break;
   case COMP_CARGO:
     if (pending(kit)) {
       if (kit->companion.task_depth)
@@ -475,7 +576,7 @@ static void activate_companion(DeviceKit *kit) {
       else
         companion_page(kit, COMP_PROBE);
     } else if (game_transfer_available(&kit->lab->game))
-      companion_task(kit, COMP_SEND_REVIEW);
+      companion_task(kit, focus ? COMP_DISCARD_CLASS : COMP_SEND_REVIEW);
     else {
       companion_page(kit, COMP_PROBE);
       strcpy(kit->companion.message, "Ready to gather. Choose an expedition.");
@@ -488,12 +589,7 @@ static void activate_companion(DeviceKit *kit) {
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
         focus == 1 &&
         !game_transfer_available(&kit->lab->game)) {
-      GameCommand command = {0};
-      command.type = GAME_COMMAND_EXPEDITION_FINISH;
-      if (apply(kit, command, NULL) == GAME_OK) {
-        strcpy(kit->companion.message, "Expedition ended. Choose a new route.");
-        refresh_all(kit);
-      }
+      companion_task(kit, COMP_FINISH_REVIEW);
       break;
     }
     if (kit->lab->game.expedition_id[0] || pending(kit))
@@ -554,8 +650,13 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
         else
           return_to_caller(kit);
       }
-    } else
+    } else {
+      unsigned before = kit->lab->revision;
       selected_lab_input(kit->lab, input, 0, revision);
+      if (input == SELECTED_HOME_UP && kit->lab->revision != before &&
+          kit->lab->page == V1_HOME)
+        kit->caller_valid = 0;
+    }
     return;
   }
   KitView *view = device == KIT_COMPANION ? &kit->companion : &kit->dock;
@@ -695,7 +796,11 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
   int portable_held = held(&kit->companion);
   int expedition = !pending(kit) && !portable_held &&
                    !kit->companion.suspended &&
-                   kit->companion.page != COMP_SEND_REVIEW;
+                   kit->companion.page != COMP_SEND_REVIEW &&
+                   kit->companion.page != COMP_FINISH_REVIEW &&
+                   kit->companion.page != COMP_DISCARD_CLASS &&
+                   kit->companion.page != COMP_DISCARD_QUANTITY &&
+                   kit->companion.page != COMP_DISCARD_REVIEW;
   if (!expedition)
     kit->lab->game.expedition_last_tick = clock;
   selected_lab_tick_devices(kit->lab, clock, expedition, 1);
@@ -785,6 +890,10 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                      : view->page == COMP_CARGO ? "cargo"
                      : view->page == COMP_MODES ? "modes"
                      : view->page == COMP_SEND_REVIEW ? "send-review"
+                     : view->page == COMP_DISCARD_CLASS ? "discard-class"
+                     : view->page == COMP_DISCARD_QUANTITY ? "discard-quantity"
+                     : view->page == COMP_DISCARD_REVIEW ? "discard-review"
+                     : view->page == COMP_FINISH_REVIEW ? "finish-review"
                                                       : "companions";
   int online = device == KIT_COMPANION ? kit->journal.companion_online
                : device == KIT_DOCK    ? kit->journal.dock_online

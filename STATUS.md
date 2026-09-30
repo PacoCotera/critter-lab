@@ -1,5 +1,8 @@
 # Product status
 
+**Active:** owner-authorized [Polished Core V1](ROADMAP.md). Yellow Home with resident access through Habitat is selected; console-only acquisition is removed. Interaction repairs and shared native art production are underway. No new release or art acceptance is claimed yet.
+
+
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
 combined Companion, home Lab and shared printer/summary Caddy.

@@ -10,6 +10,64 @@ static void press(SelectedLab *lab) {
   selected_lab_input(lab, SELECTED_CONFIRM_DOWN, 0, lab->revision);
   selected_lab_input(lab, SELECTED_CONFIRM_UP, 0, lab->revision);
 }
+static void button(SelectedLab *lab, SelectedInput down) {
+  ready(lab);
+  unsigned revision = lab->revision;
+  selected_lab_input(lab, down, 0, revision);
+  selected_lab_input(lab, (SelectedInput)(down + 1), 0, revision);
+}
+static void creation_review(void) {
+  char path[128];
+  snprintf(path, sizeof(path), "/tmp/beecho-creation-review-%ld.save", (long)getpid());
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  lab.game.data = lab.game.energy = lab.game.essence = 1000;
+  lab.game.sample_count = 2;
+  for (unsigned i = 0; i < 2; ++i) {
+    GameSample *sample = &lab.game.samples[i];
+    snprintf(sample->id, sizeof(sample->id), "sample-review-%u", i);
+    snprintf(sample->origin_expedition_id, sizeof(sample->origin_expedition_id), "expedition-review-%u", i);
+    sample->decoded_studies = 31;
+    sample->decoded_facts = PIP_REQUIRED_FACTS_MASK;
+    sample->supported_candidates = PIP_SAMPLE_CANDIDATE_MASK;
+  }
+  assert(game_state_save(path, &lab.game) == 0);
+  GameState before = lab.game;
+  lab.page = V1_CREATE;
+  lab.focus = 1;
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_CREATE_REVIEW && lab.creation_preference == 1);
+  assert(memcmp(&before, &lab.game, sizeof(before)) == 0);
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(memcmp(&before, &lab.game, sizeof(before)) == 0);
+  button(&lab, SELECTED_BACK_DOWN);
+  assert(lab.page == V1_CREATE && lab.focus == 1);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  unsigned old_frame = lab.revision;
+  button(&lab, SELECTED_HOME_DOWN);
+  assert(lab.page == V1_HOME && lab.focus == 0);
+  selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, old_frame);
+  assert(memcmp(&before, &lab.game, sizeof(before)) == 0);
+  button(&lab, SELECTED_RESEARCH_DOWN);
+  assert(lab.page == V1_CREATE_REVIEW && lab.creation_preference == 1);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_INCUBATION && lab.game.incubation_choice == 1);
+  assert(lab.game.data == 500 && lab.game.energy == 500 && lab.game.essence == 500);
+  assert(lab.game.samples[0].incubated && lab.game.sample_count == 2);
+  assert(lab.game.individual_count == 1 && !lab.game.individuals[0].revealed);
+  GameState persisted;
+  assert(game_state_load(path, &persisted) > 0 && persisted.incubation_choice == 1);
+  uint64_t sequence = lab.game.last_operation_sequence;
+  lab.sample = 1;
+  lab.page = V1_CREATE;
+  lab.focus = 0;
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_CREATE_REVIEW && lab.game.last_operation_sequence == sequence);
+  assert(strstr(lab.message, "already active") && lab.game.data == 500);
+  unlink(path);
+}
 static void frame(SelectedLab *lab) {
   FILE *output = tmpfile();
   assert(output);
@@ -18,6 +76,7 @@ static void frame(SelectedLab *lab) {
   assert(fclose(output) == 0);
 }
 int main(void) {
+  creation_review();
   SelectedLab lab;
   selected_lab_init(&lab);
   press(&lab);
@@ -217,7 +276,7 @@ int main(void) {
   ready(&lab);
   selected_lab_input(&lab, SELECTED_CRITTERS_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_CRITTERS_UP, 0, lab.revision);
-  assert(lab.page == V1_CRITTERS && lab.game.last_operation_sequence == 0);
+  assert(lab.page == V1_HOME && lab.game.last_operation_sequence == 0);
   ready(&lab);
   selected_lab_input(&lab, SELECTED_LIBRARY_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_LIBRARY_UP, 0, lab.revision);
@@ -271,7 +330,7 @@ int main(void) {
   snprintf(lockpath, sizeof(lockpath), "%s.lock", path);
   unlink(lockpath);
   uint8_t pixels[SELECTED_LAB_WIDTH * 3];
-  for (unsigned page = V1_HOME; page <= V1_LIBRARY_FINDING; page++) {
+  for (unsigned page = V1_HOME; page <= V1_CREATE_REVIEW; page++) {
     lab.page = (SelectedPage)page;
     for (unsigned row = 0; row < SELECTED_LAB_HEIGHT; row++)
       selected_lab_row(&lab, row, pixels);
@@ -303,18 +362,25 @@ int main(void) {
   frame(&lab);
   lab.page = V1_HOME;
   lab.workspace = 4;
-  lab.workspace_focus[1] = 1;
-  lab.workspace_resident[1] = 0;
+  lab.workspace_resident[3] = 2;
   ready(&lab);
   selected_lab_input(&lab, SELECTED_CRITTERS_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_CRITTERS_UP, 0, lab.revision);
-  assert(lab.page == V1_CRITTERS && lab.focus == 1 && lab.resident == 2);
+  assert(lab.page == V1_HOME && lab.focus == 0);
   frame(&lab);
   ready(&lab);
   selected_lab_input(&lab, SELECTED_HABITAT_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_HABITAT_UP, 0, lab.revision);
   assert(lab.page == V1_HABITAT && lab.resident == 2);
   frame(&lab);
+  lab.focus = 2;
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_CRITTERS && lab.focus == 1 && lab.resident == 2);
+  button(&lab, SELECTED_UP_DOWN);
+  assert(lab.focus == 0 && lab.resident == 1);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_HABITAT && lab.resident == 1);
+  lab.resident = 2;
   lab.focus = 1;
   ready(&lab);
   unsigned resident_frame = lab.revision;

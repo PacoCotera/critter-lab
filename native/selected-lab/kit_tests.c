@@ -175,6 +175,8 @@ static void reserved_whole_intent_recovery(const char *directory) {
     assert(!strcmp(kit_option(&kit, KIT_COMPANION, 1), "Finish expedition"));
     press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    assert(kit.companion.page == COMP_FINISH_REVIEW && lab.game.expedition_id[0]);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     assert(!lab.game.expedition_id[0] && lab.game.sample_count == 0 &&
            lab.game.gather_progress_ms[0] == 1000);
     char marker[580];
@@ -254,6 +256,8 @@ static void early_unload_journey(const char *directory) {
   press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
   assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus),
                  "Finish expedition"));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_FINISH_REVIEW && lab.game.expedition_id[0]);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_IDLE &&
          lab.game.sample_count == 0 && lab.game.gather_random_state == random_state);
@@ -336,6 +340,103 @@ static void cargo_action_threshold(const char *directory) {
   unlink(kit.journal_path);
   unlink(path);
 }
+static void discard_and_home_reception(const char *directory) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/discard-and-home", directory);
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  DeviceKit kit;
+  assert(kit_init(&kit, &lab, 100));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  lab.game.expedition_data = 300;
+  lab.game.expedition_energy = lab.game.expedition_essence = 100;
+  lab.game.expedition_elapsed = 5;
+  assert(game_state_save(path, &lab.game) == 0);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_DISCARD_CLASS);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_DISCARD_QUANTITY);
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  uint64_t before_review = lab.game.last_operation_sequence;
+  uint32_t before_random = lab.game.gather_random_state;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_DISCARD_REVIEW &&
+         kit.companion.discard_quantity == 200);
+  kit_tick(&kit, 110);
+  assert(lab.game.last_operation_sequence == before_review &&
+         lab.game.expedition_data == 300 && lab.game.expedition_elapsed == 5);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit.companion.page == COMP_DISCARD_QUANTITY && kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_CARGO && lab.game.expedition_data == 100 &&
+         lab.game.last_operation_sequence == before_review + 1);
+  assert(lab.game.data == 0 && lab.game.gather_random_state == before_random &&
+         strstr(kit.companion.message, "Discarded 2"));
+  /* Send review/Keep also leaves inventory, outing and sequence unchanged. */
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_SEND_REVIEW);
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_CARGO && lab.game.expedition_data == 100 &&
+         kit.journal.phase == KIT_IDLE);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit_link(&kit, KIT_COMPANION, 0));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_WAITING && kit_option_count(&kit, KIT_COMPANION) == 1);
+  uint32_t sealed_data = kit.journal.cargo[0];
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit.companion.page == COMP_MODES && kit.journal.cargo[0] == sealed_data);
+  press(&kit, KIT_LAB, SELECTED_LIBRARY_DOWN);
+  assert(lab.page == V1_LIBRARY);
+  assert(kit_link(&kit, KIT_COMPANION, 1));
+  kit_tick(&kit, 112);
+  assert(lab.page == V1_CARGO && kit.caller_valid);
+  uint64_t sealed_sequence = lab.game.last_operation_sequence;
+  unsigned reception_frame = lab.revision;
+  kit_input(&kit, KIT_LAB, SELECTED_READY, reception_frame);
+  kit_input(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN, reception_frame);
+  kit_input(&kit, KIT_LAB, SELECTED_HOME_DOWN, reception_frame);
+  kit_input(&kit, KIT_LAB, SELECTED_HOME_UP, reception_frame);
+  kit_input(&kit, KIT_LAB, SELECTED_CONFIRM_UP, reception_frame);
+  assert(lab.page == V1_CARGO && kit.journal.phase == KIT_ARRIVED);
+  press(&kit, KIT_LAB, SELECTED_HOME_DOWN);
+  assert(lab.page == V1_HOME && !kit.caller_valid && kit.journal.phase == KIT_ARRIVED);
+  kit_input(&kit, KIT_LAB, SELECTED_CONFIRM_UP, reception_frame);
+  assert(lab.game.last_operation_sequence == sealed_sequence && lab.game.data == 0);
+  press(&kit, KIT_LAB, SELECTED_BACK_DOWN);
+  assert(lab.page == V1_HOME); /* Home does not restore the obsolete Library caller. */
+  press(&kit, KIT_LAB, SELECTED_DOWN_DOWN);
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_EXPEDITION); /* Pending reception remains reachable. */
+  assert(kit_link(&kit, KIT_COMPANION, 0));
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.data == 100 &&
+         !lab.game.expedition_id[0]);
+  press(&kit, KIT_LAB, SELECTED_HOME_DOWN);
+  assert(lab.page == V1_HOME && kit.journal.phase == KIT_ACK_PENDING);
+  /* Empty accepted Cargo has a truthful exit through Probe and modes. */
+  kit.companion.mode = kit.companion.focus = COMP_CARGO;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_CARGO &&
+         strcmp(kit_option(&kit, KIT_COMPANION, 0), "View expedition"));
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit.companion.page == COMP_MODES);
+  assert(kit_link(&kit, KIT_COMPANION, 1));
+  kit_tick(&kit, 114);
+  assert(kit.journal.phase == KIT_COMPLETE && lab.game.data == 100);
+  char marker[580];
+  snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
+  unlink(marker);
+  unlink(kit.journal_path);
+  unlink(path);
+}
 int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
@@ -344,6 +445,7 @@ int main(void) {
   early_unload_journey(directory);
   empty_finish_focus_after_award(directory);
   cargo_action_threshold(directory);
+  discard_and_home_reception(directory);
   char path[512];
   snprintf(path, sizeof(path), "%s/game", directory);
   SelectedLab lab;

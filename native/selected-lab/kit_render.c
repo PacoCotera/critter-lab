@@ -145,6 +145,9 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   int receipt = kit->journal.phase == KIT_ACK_PENDING;
   int details = page == COMP_CARGO || page == COMP_SEND_REVIEW;
   int review = page == COMP_SEND_REVIEW;
+  int discard = page == COMP_DISCARD_CLASS || page == COMP_DISCARD_QUANTITY ||
+                page == COMP_DISCARD_REVIEW;
+  int finish = page == COMP_FINISH_REVIEW;
   char value[128];
   uint32_t cargo[] = {game->expedition_data, game->expedition_energy,
                       game->expedition_essence};
@@ -157,7 +160,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   panel(row, 12, 12, 426, 576);
   text(row, 28, 26, "BEECHO / COMPANION", 18, SECONDARY);
   text(row, 28, 55,
-       details                ? "CARGO"
+         details || discard     ? "CARGO"
        : page == COMP_FRIENDS ? "COMPANIONS"
                               : "PROBE",
        26, TEXT);
@@ -181,7 +184,37 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   }
   fill(row, 28, 112, 394, 2, EDGE);
   int action_top = 502;
-  if (page == COMP_FRIENDS) {
+  if (discard || finish) {
+    static const char *names[] = {"Data", "Energy", "Essence"};
+    text(row, 28, 134,
+         finish ? "End this expedition?"
+         : page == COMP_DISCARD_CLASS ? "Choose item kind"
+         : page == COMP_DISCARD_QUANTITY ? "Choose whole items"
+                                         : "Discard these items?",
+         22, TEXT);
+    if (finish) {
+      wrapped(row, 28, 204, "This ends the outing without a sample. No items are sent.",
+              390, 22, TEXT);
+      wrapped(row, 28, 320, "Saved gathering preparation stays for your next outing.",
+              390, 18, SECONDARY);
+    } else {
+      unsigned resource_index = page == COMP_DISCARD_CLASS ? view->focus % 3
+                                                          : view->discard_resource;
+      resource(row, resource_index, 40, 206, 2);
+      text(row, 187, 220, names[resource_index], 22, TEXT);
+      snprintf(value, sizeof(value), "%u whole items carried", cargo[resource_index] / GAME_SUPPLY_UNIT);
+      text(row, 28, 346, value, 18, SECONDARY);
+      if (page == COMP_DISCARD_REVIEW) {
+        snprintf(value, sizeof(value), "Discard %u %s items?",
+                 view->discard_quantity / GAME_SUPPLY_UNIT, names[resource_index]);
+        text(row, 28, 384, value, 22, TEXT);
+        text(row, 28, 417, "These items cannot be recovered.", 18, SECONDARY);
+      } else {
+        text(row, 28, 384, "Only fresh review confirmation discards.", 18, SECONDARY);
+      }
+    }
+    action_top = 470;
+  } else if (page == COMP_FRIENDS) {
     fill(row, 28, 126, 394, 172, FIELD);
     art(row, OVERVIEW_HABITAT, 40, 140);
     text(row, 191, 159, "Travel party", 22, TEXT);
@@ -194,7 +227,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
          : reserved ? "Reserved for transfer"
                     : "Collected items",
          22, TEXT);
-    if (has_run) {
+    if (has_run || receipt || kit->journal.phase == KIT_COMPLETE) {
       text(row, 28, 158, kit_route(kit), 18, SECONDARY);
       text(row, 28, 182, kit_expedition_status(kit), 18, SECONDARY);
       snprintf(value, sizeof(value), "%u / %u sec", elapsed,
@@ -219,13 +252,13 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                : "Sample shelf full / supplies only",
            18, SECONDARY);
       if (has_run && elapsed < GAME_EXPEDITION_SECONDS)
-        text(row, 28, 456, "Gathering progress stays on Companion", 18,
+        text(row, 28, 456, "Return ends this outing / no sample", 18,
              SECONDARY);
     } else {
       snprintf(value, sizeof(value), "Free space: %u / 40 units",
                (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
       text(row, 28, 412, value, 18, SECONDARY);
-      if (reserved || receipt || kit->journal.phase == KIT_COMPLETE)
+      if (reserved || receipt || (kit->journal.phase == KIT_COMPLETE && !has_run))
         wrapped(row, 28, 440, kit_stage(kit), 390, 18, SECONDARY);
       else if (!game_transfer_available(game))
         text(row, 28, 440, "No items to send", 18, SECONDARY);
@@ -267,7 +300,11 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
           game->expedition_active && !game_gather_capacity_blocked(game);
       text(row, 28, 395, preparing ? "Next attempt" : "Saved attempt", 18,
            SECONDARY);
-      if (!preparing)
+      if (game->expedition_active && game_gather_capacity_blocked(game)) {
+        unsigned needed = game_gather_required_slots(game);
+        snprintf(value, sizeof(value), "Need %u free units", needed ? needed : 1);
+      }
+      else if (!preparing)
         strcpy(value, "Paused");
       else if (remaining)
         snprintf(value, sizeof(value), "in %u sec", (remaining + 999) / 1000);
@@ -298,8 +335,10 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   }
   unsigned count =
       selector || kit->failed ? 0 : kit_option_count(kit, KIT_COMPANION);
-  for (unsigned i = 0; i < count; ++i) {
-    int y = action_top + (int)i * (has_run ? 32 : 38);
+  unsigned first = discard && view->focus >= 2 ? view->focus - 1 : 0;
+  unsigned visible_count = discard ? 2 : count;
+  for (unsigned i = first; i < count && i < first + visible_count; ++i) {
+    int y = action_top + (int)(i - first) * (has_run || discard || finish ? 32 : 38);
     if (view->focus == i) {
       fill(row, 24, y - 4, 402, 31,
            view->gestures[8].held && view->gestures[8].allowed ? FIELD : GLOW);
@@ -318,9 +357,15 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
          page == COMP_FRIENDS ? "Party controls are not ready yet"
                               : "Down / Confirm: choose an action",
          18, SECONDARY);
+  } else if (view->message[0]) {
+    int result_y = discard || finish ? 413 : has_run || details ? 439 : 386;
+    fill(row, 24, result_y, 402, 46, FIELD);
+    wrapped(row, 28, result_y + 3, view->message, 390, 18, TEXT);
   }
   text(row, 28, 565,
        selector           ? "Browsing never sends or spends"
+       : discard          ? "Up/Down: choose / Back: keep items"
+       : finish           ? "Confirm: end / Back: keep exploring"
        : review           ? "Confirm: send  /  Back: keep cargo"
        : view->task_depth ? "Back: return to the previous view"
                           : "Up / Down: choose  /  Back: modes",
@@ -374,7 +419,9 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
   snprintf(value, sizeof(value), "%sSnapshot %s%s",
            view->page == 1 ? "OK: Back / " : "", stamp,
            journal->dock_online ? "" : " / stale");
-  text(row, 24, 185, view->message[0] ? view->message : value, 18, TEXT);
+  text(row, 24, 178, value, 18, TEXT);
+  if (view->message[0])
+    text(row, 24, 201, view->message, 18, TEXT);
   unsigned count = view->page == 2 ? 2 : 3;
   for (unsigned i = 0; i < count; ++i) {
     int x = 24 + (int)i * (view->page == 2 ? 450 : 248);

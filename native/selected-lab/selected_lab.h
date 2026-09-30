@@ -21,7 +21,8 @@ typedef enum {
   V1_DISCARD_REVIEW,
   V1_CRITTERS,
   V1_LIBRARY,
-  V1_LIBRARY_FINDING
+  V1_LIBRARY_FINDING,
+  V1_CREATE_REVIEW
 } SelectedPage;
 typedef enum {
   SELECTED_UP_DOWN,
@@ -49,6 +50,9 @@ typedef enum {
   SELECTED_RESUME,
   SELECTED_READY
 } SelectedInput;
+/* The yellow key keeps its old wire values for existing presenters. */
+#define SELECTED_HOME_DOWN SELECTED_CRITTERS_DOWN
+#define SELECTED_HOME_UP SELECTED_CRITTERS_UP
 typedef struct {
   int held, allowed;
   unsigned revision, interaction_epoch;
@@ -60,7 +64,7 @@ typedef struct {
       acknowledged_revision, acknowledged_interaction_epoch;
   int ready, suspended, storage_error, kit_mode;
   SelectedGesture gestures[10];
-  unsigned workspace, library_index;
+  unsigned workspace, library_index, creation_preference;
   SelectedPage workspace_page[4];
   unsigned workspace_focus[4], workspace_sample[4], workspace_study[4],
       workspace_resident[4];
@@ -72,7 +76,7 @@ typedef struct {
 typedef struct {
   SelectedPage page;
   unsigned focus, sample, study, resident, discard_resource, workspace,
-      library_index;
+      library_index, creation_preference;
   SelectedPage workspace_page[4];
   unsigned workspace_focus[4], workspace_sample[4], workspace_study[4],
       workspace_resident[4];

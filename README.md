@@ -12,6 +12,8 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 *Selected family appearance, not a manufactured kit or measured hardware design.
 [Concept details and earlier studies](design/lab-controls/concepts.md) preserve provenance.*
 
+[Polished Core V1 roadmap](ROADMAP.md) tracks the current implementation round.
+
 ## Playable software today
 
 The [three-device native simulator](native/selected-lab/README.md#three-device-mode)
@@ -41,7 +43,7 @@ supply and connection summaries. Probe is a mode, not a separate current device.
 
 [Gameplay](specs/gameplay.md) owns research, creation and expedition rules;
 [devices](specs/devices.md) owns physical roles and open electronics choices.
-Standalone core play, nearby-kit interaction and optional Cloud Pass services
+Local core-kit play, nearby-kit interaction and optional Cloud Pass services
 are product direction. Cloud, capture/training, ecology, sensors, charging and
 physical printing are not delivered by the host simulator.
 
