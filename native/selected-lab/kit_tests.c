@@ -617,7 +617,7 @@ int main(void) {
   /* Init already populates the cache. Model a missing timestamp so the next
    * tick has an actual passive cache update to publish. */
   kit.journal.dock_updated_at = 0;
-  kit_tick(&kit, 101);
+  kit_tick(&kit, 100);
   /* A passive cache repaint may occur while an already decoded frame is
    * being acknowledged. It does not change the action meaning. */
   assert(kit_revision(&kit, KIT_DOCK) > painted_dock);
