@@ -135,3 +135,13 @@ overlap or suspension discards unsent releases; native interaction epochs decide
 are consumed instead of replayed. Readiness follows actual decode/paint, never status alone.
 Rejected POSTs with unread bodies close their connection. No kernel pool,
 WebSocket dependency or production radio transport is implied by this host bridge.
+
+
+Companion/Dock frame readiness accepts an actually painted revision within the
+current interaction's minimum/current range, matching Lab. A time-only repaint
+between frame download and ready acknowledgement does not invalidate the action;
+a semantic change advances the minimum and rejects the earlier frame. Physical
+down requests reassert painted readiness atomically before down under the same
+native pipe lock. Release remains a separate request after acknowledged down.
+This prevents another ready acknowledgement from interleaving that prefix/down;
+it does not establish independent clients' concurrent hold ownership.

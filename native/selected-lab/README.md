@@ -83,3 +83,11 @@ to bypass recovery. The simulator runs one host process and logical wireless
 exchange, with no claim of independent endpoint stores or physical radio tests.
 `three_device_kit_checks` covers ownership, interruption, duplicate acceptance,
 restart at commit intent, required-journal loss and monochrome/native dimensions.
+
+
+Device-input POST may include `ready: true` only on a physical down carrying
+its painted revision. Python validates the whole request, executes READY/down
+under one bounded native lock and returns the down result. Up is never part of
+that sequence. Kit READY uses the same minimum/current interaction range as Lab;
+semantic refresh still invalidates earlier frames. Native kit tests cover delayed
+acknowledgement after a time-only repaint and rejection after navigation.

@@ -48,7 +48,11 @@ async function connectDevice(deviceId, controls) {
     if (activation) ++pendingActivations;
     commands = commands.then(async () => {
       if (inputBlocked || generation !== transportGeneration || (activation && gesture !== gestureGeneration)) return;
-      const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event, revision: requestedFrame }) });
+      const command = { device: deviceId, event, revision: requestedFrame };
+      // Reassert the actually painted frame atomically with the physical down.
+      // Native semantic bounds still reject obsolete frames; up stays separate.
+      if (event.endsWith('-down')) command.ready = true;
+      const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify(command) });
       if (!response.ok) throw new Error('Native input transport unavailable.');
       const state = await response.json();
       if (event.endsWith('-up') && inputStartedAt) {

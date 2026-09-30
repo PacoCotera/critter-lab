@@ -38,6 +38,11 @@ class AdapterStub:
     def close(self):
         pass
 
+    def command_sequence(self, lines):
+        for line in lines:
+            result, pixels = self.command(line)
+        return result, pixels
+
 
 class SelectedPresenter(unittest.TestCase):
     def setUp(self):
@@ -107,6 +112,15 @@ class SelectedPresenter(unittest.TestCase):
             self.assertEqual(self.input(event, revision, extra)[0], 400)
         for query in ('revision=0', 'revision=4294967296', 'revision=1&revision=2', 'device=lab&revision=1'):
             self.assertEqual(self.request('/api/frame?' + query)[0], 400)
+
+    def test_painted_ready_prefix_is_down_only_and_validated_before_native_calls(self):
+        for event, value in [('confirm-up', True), ('ready', True), ('confirm-down', False), ('confirm-down', 1)]:
+            self.assertEqual(self.input(event, extra={'ready': value})[0], 400)
+        if not BINARY:
+            self.assertEqual(self.server.native.calls, [])
+        self.assertEqual(self.input('confirm-down', extra={'ready': True})[0], 200)
+        if not BINARY:
+            self.assertEqual(self.server.native.calls, ['ready 1', 'confirm-down 1'])
 
     def test_status_and_stale_frame_keep_existing_health_contract(self):
         code, body, _ = self.request('/api/status')
@@ -213,6 +227,47 @@ class SelectedPresenter(unittest.TestCase):
 
 
 class NativeFraming(unittest.TestCase):
+    def test_ready_and_down_sequence_prevents_interleaved_native_command(self):
+        writes = []
+        prefix_written = threading.Event()
+        release_prefix = threading.Event()
+        errors = []
+        class Input:
+            def write(self, body):
+                writes.append(body.decode().strip())
+                if body.startswith(b'ready '):
+                    prefix_written.set()
+                    if not release_prefix.wait(2):
+                        raise OSError('Prefix test deadline')
+            def flush(self): pass
+            def close(self): pass
+        class Output:
+            def readline(self): return b'{"revision":1}\n'
+        class Process:
+            stdin = Input()
+            stdout = Output()
+            def kill(self): release_prefix.set()
+            def wait(self, timeout=None): return 0
+        with patch.object(PRESENTER.subprocess, 'Popen', return_value=Process()):
+            native = PRESENTER.NativeProcess('/selected-native')
+            def run(sequence):
+                try:
+                    if sequence: native.command_sequence(['ready 1', 'confirm-down 1'])
+                    else: native.command('status')
+                except Exception as error: errors.append(error)
+            first = threading.Thread(target=run, args=(True,))
+            other = threading.Thread(target=run, args=(False,))
+            first.start()
+            self.assertTrue(prefix_written.wait(1))
+            other.start()
+            release_prefix.set()
+            first.join(2)
+            other.join(2)
+            self.assertFalse(first.is_alive() or other.is_alive())
+            self.assertEqual(errors, [])
+            self.assertEqual(writes, ['ready 1', 'confirm-down 1', 'status'])
+            native.close()
+
     def test_hung_native_command_deadline_fails_closed(self):
         stopped = threading.Event()
         class HungOutput:

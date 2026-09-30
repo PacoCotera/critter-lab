@@ -33,7 +33,23 @@ int main(void) {
   assert(selected_lab_load(&lab, path, 100));
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
+  unsigned painted_dock = kit_revision(&kit, KIT_DOCK);
   kit_tick(&kit, 100);
+  /* A timestamp/cache repaint may occur while an already decoded frame is
+   * being acknowledged. It does not change the action meaning. */
+  assert(kit_revision(&kit, KIT_DOCK) > painted_dock);
+  kit_input(&kit, KIT_DOCK, SELECTED_READY, painted_dock);
+  kit_input(&kit, KIT_DOCK, SELECTED_DOWN_DOWN, painted_dock);
+  kit_input(&kit, KIT_DOCK, SELECTED_DOWN_UP, painted_dock);
+  assert(kit.dock.focus == 1);
+  /* Navigation changes the interaction: the previous frame cannot be made
+   * eligible again by a late READY or by a fresh down/up pair. */
+  kit_input(&kit, KIT_DOCK, SELECTED_READY, painted_dock);
+  kit_input(&kit, KIT_DOCK, SELECTED_DOWN_DOWN, painted_dock);
+  kit_input(&kit, KIT_DOCK, SELECTED_DOWN_UP, painted_dock);
+  assert(kit.dock.focus == 1);
+  press(&kit, KIT_DOCK, SELECTED_UP_DOWN);
+  assert(kit.dock.focus == 0);
   /* Separate native sizes and true binary monochrome, including padded BMP
    * rows. */
   for (unsigned device = 0; device < 3; ++device) {
@@ -60,6 +76,17 @@ int main(void) {
    */
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(lab.game.expedition_active);
+  kit_tick(&kit, 110);
+  unsigned painted_companion = kit_revision(&kit, KIT_COMPANION);
+  unsigned painted_epoch = kit.companion.epoch;
+  kit_tick(&kit, 111);
+  assert(kit_revision(&kit, KIT_COMPANION) > painted_companion &&
+         kit.companion.epoch == painted_epoch);
+  kit_input(&kit, KIT_COMPANION, SELECTED_READY, painted_companion);
+  kit_input(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN, painted_companion);
+  kit_input(&kit, KIT_COMPANION, SELECTED_DOWN_UP, painted_companion);
+  assert(kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   kit_tick(&kit, 160);
   assert(lab.game.expedition_elapsed == 60 && lab.game.data == 0);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);

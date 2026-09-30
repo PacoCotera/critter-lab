@@ -205,3 +205,20 @@ test('time-only repaint permits a fresh painted gesture and fetches only the lat
     }
   });
 });
+
+test('painted readiness is prefixed only to a real down, never its release', async () => {
+  const inputs = [];
+  await withTransport(false, async ({ elements, pointer, requests, until }) => {
+    elements['#down'].dispatchEvent(pointer('pointerdown'));
+    elements['#down'].dispatchEvent(pointer('pointerup'));
+    await until(() => requests.includes('down-up'));
+    const down = inputs.find(input => input.event === 'down-down');
+    const up = inputs.find(input => input.event === 'down-up');
+    assert.equal(down.ready, true);
+    assert.equal(down.revision, 2);
+    assert.equal(up.revision, down.revision);
+    assert(!Object.hasOwn(up, 'ready'));
+  }, (url, options) => {
+    if (options) inputs.push(JSON.parse(options.body));
+  });
+});
