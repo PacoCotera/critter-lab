@@ -22,10 +22,14 @@ Dock together. Use the buttons depicted around each screen. Choose a Companion
 mode, enter its actions, then make a fresh deliberate selection. Screen pictures
 are not clickable controls.
 
-Gather on Companion, inspect Cargo, review Send, then accept the arrival in Lab.
+Start an outing on Companion Probe. Steer along the map with the directional pad;
+Confirm at a named place opens its actions. Choose a resource to gather, inspect
+traces to uncover paths, and collect a sealed sample when you find one.
+Inspect Cargo, review Send, then accept the arrival in Lab.
 Supplies count as whole items; the next-attempt activity track is separate from
 what you carry. Sending stops collection. Accepting stores the haul once and ends
-that outing; the next expedition starts anew. Follow the [Pip play guide](../../native/selected-lab/V1.md)
+that outing; the next expedition starts anew. Lab Explore records received outings
+rather than watching live field activity. Follow the [Pip play guide](../../native/selected-lab/V1.md)
 for paid studies, complete-genome selection, incubation, deliberate opening and
 a visit to the same resident. [Actual native screens](../../design/connected-device-review/native/README.md)
 show what you can inspect today.

@@ -5,8 +5,9 @@ focus and scanline pixels, presented as Lab, combined Companion and Dock through
 the browser transport. [Target interfaces](selected-lab/README.md),
 [Pip play guide](selected-lab/V1.md) and the
 [actual native gallery](../design/connected-device-review/native/README.md)
-describe the integrated loop. Current connected presentation remains art
-scaffolding pending the reviewed Gemini asset/composition implementation.
+describe the integrated loop. The connected renderer uses retained Gemini resource
+and creature sprites with native map/site presentation derived from the approved
+expedition study. The broader catalogue remains unfinished.
 
 | Program | Current compiler target | Evidence boundary |
 | --- | --- | --- |

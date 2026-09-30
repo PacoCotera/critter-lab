@@ -504,7 +504,10 @@ static void early_unload_journey(const char *directory) {
   assert(kit.companion.focus == 1);
   press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_IDLE &&
+  /* This injected legacy start bypasses Companion FIELD_START, so the prior
+   * completed receipt remains intact when its empty route finishes. */
+  assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_COMPLETE &&
+         !strcmp(kit.journal.haul_id, source_id) &&
          lab.game.sample_count == 0 && lab.game.gather_random_state == random_state);
   char marker[580];
   snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
@@ -854,6 +857,7 @@ static void field_control_and_receipt(const char *directory) {
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(lab.game.field.version && lab.game.field.sample_budget == GAME_MAX_SAMPLES - 1u);
+  assert(kit.journal.phase == KIT_IDLE);
   assert(lab.game.field.active_source == GAME_FIELD_NONE && lab.game.sample_count == 1);
   press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
