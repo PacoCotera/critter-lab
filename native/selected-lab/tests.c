@@ -392,7 +392,11 @@ int main(void) {
          timed.game.gather_random_state == random_before_unload &&
          timed.game.gather_attempt_count == 0);
   ready(&timed);
-  press(&timed); /* Empty samples view returns to route selection. */
+  press(&timed); /* Collection Overview previews without starting a route. */
+  assert(timed.page == V1_SAMPLES && timed.focus == 0);
+  button(&timed, SELECTED_HOME_DOWN);
+  button(&timed, SELECTED_DOWN_DOWN);
+  button(&timed, SELECTED_CONFIRM_DOWN);
   assert(timed.page == V1_EXPEDITION &&
          !strcmp(selected_lab_focus(&timed), "Field survey"));
   ready(&timed);
