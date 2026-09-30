@@ -173,7 +173,9 @@ class Handler(BaseHTTPRequestHandler):
                 if len(parts) != 5 or parts[3] not in devices or parts[4] not in {"status", "frame"}:
                     raise ValueError()
                 prefix = "device " + devices[parts[3]]
-                if parts[4] == "status" and not url.query:
+                if parts[4] == "status" and url.query:
+                    raise ValueError()
+                if parts[4] == "status":
                     result, _ = self.server.native.command(prefix + " status")
                     self.reply(200, result)
                 else:

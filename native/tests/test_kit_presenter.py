@@ -85,6 +85,9 @@ def run(binary, proof=None):
             assert state("lab")["stock"] == [0, 0, 0]
             press("companion", "confirm")  # Cargo
             press("companion", "confirm")  # Review
+            reviewed = state("companion")["cargo"]
+            time.sleep(2.1)
+            assert state("companion")["cargo"] == reviewed
             link("companion", False)
             sealed = press("companion", "confirm")
             assert sealed["phase"] == 1

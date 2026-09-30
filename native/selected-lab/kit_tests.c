@@ -66,6 +66,9 @@ int main(void) {
   assert(kit.companion.page == COMP_CARGO);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_SEND_REVIEW);
+  uint32_t review_cargo = lab.game.expedition_data;
+  kit_tick(&kit, 170);
+  assert(lab.game.expedition_data == review_cargo);
   assert(kit_link(&kit, KIT_COMPANION, 0));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING);

@@ -179,13 +179,21 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
       fail(kit);
       return 0;
     }
+    int found = 0;
     for (unsigned i = 0; i < GAME_OPERATION_SLOTS; ++i) {
       const GameOperation *operation = &lab->game.operations[i];
+      if (operation->sequence == kit->journal.accept_sequence)
+        found = 1;
       if (operation->sequence == kit->journal.accept_sequence &&
           strcmp(operation->id, kit->journal.haul_id)) {
         fail(kit);
         return 0;
       }
+    }
+    if (lab->game.last_operation_sequence == kit->journal.accept_sequence &&
+        !found) {
+      fail(kit);
+      return 0;
     }
   }
   if (kit->journal.phase == KIT_ACK_PENDING && lab->game.expedition_id[0]) {
