@@ -113,9 +113,13 @@ provisional time/chance values belong in [V1](V1.md).
 
 The [Gemini connected screen references](../../design/companion-connected-art/README.md)
 preserve the reviewed Probe/Cargo/reception compositions and production constraints.
-Reception07 is the lighter concept with concise Returning copy. These concepts
-are not currently native assets; functional screen output remains scaffolding
-pending faithful shared-asset derivation and native inspection.
+Reception07 is the lighter concept with concise Returning copy. Core V1
+uses shared source-preserving material assets and a separate Gemini landscape;
+actual Cargo/offline screens and retained portraits passed focused inspection.
+The concept screens themselves are references, not executable layouts. Illustrated
+research findings also passed focused actual review; exact evidence and the
+release boundary are tracked in
+[the Core V1 evidence](../../docs/evidence/polished-core-v1/README.md).
 
 ## Resetting the simulator sandbox
 

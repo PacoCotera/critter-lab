@@ -1,5 +1,16 @@
 # Product status
 
+**Software:** [Polished Core V1](ROADMAP.md), internally accepted. This revision
+contains Home, safe return/review controls, a collection Overview, sample-specific
+A/B discovery, explicit supported-form creation, incubation and retained residents.
+The complete timed Lab journey and restart passed on a clean pushed VM revision.
+Shared frame/resource art and the Gemini expedition scene are integrated; actual
+screen review has accepted Probe clearance, retained portraits and bounded
+research semantics. The same residents and saved visits are available on Lab and
+Companion; disconnected snapshots survive restart. Local retained-art generation
+and read-only replay are validated. Saved trait labels and changed Companion screens passed focused actual review.
+Illustrated research findings passed focused actual art, UX and game review. The sandbox release endpoint identifies its activated source.
+
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
 combined Companion, home Lab and shared printer/summary Caddy.
@@ -17,21 +28,30 @@ Accept credits once and ends that outing. Receipt confirms transport metadata;
 a new outing has a new identity. [Gameplay](specs/gameplay.md#expedition-continuity-and-return--accepted)
 and [architecture](specs/architecture.md#three-device-host-simulator) own those rules and recovery limits.
 
-The local [Pip loop](native/selected-lab/V1.md) continues through five paid
-research findings, explicit complete-genome selection, incubation, deliberate
-reveal and habitat visits. Saves retain supplies, discoveries, individual
+The delivered local [Pip loop](native/selected-lab/V1.md) continues through its
+legacy research, supported selection, incubation, deliberate reveal and habitat
+visits. Core V1 adds two samples with different retained discovery
+paths and reversible supported-form drafts before a separate creation commitment.
+Saves retain supplies, discoveries, individual
 identity and transfer state across restart. The browser presents native pixels
 and the accepted physical-control panel; screen artwork is not clickable.
-The sandbox reset is outside device shells and preserves the matching saved
-world and sidecars in a recoverable backup.
+The manual sandbox reset is outside device shells and retains a recovery backup.
+Every newly deployed sandbox release starts a fresh shared game, as defined in
+[Experience](specs/experience.md); unchanged-release checks preserve current play.
 
-The validated source checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
+The earlier delivered-loop validation checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
 three native CTest suites, HTTP presenter checks and the full timed
 research/incubation/restart journey passed. [CI run 36673219813](https://github.com/PacoCotera/critter-lab/actions/runs/36673219813)
 passed for that revision. The [live sandbox](https://critterlab.basicberry.com)
 reports its running release revision and activation time; source validation alone
 does not establish that live activation. Only the existing Git/CI release path
 publishes accepted source.
+
+The illustrated Core V1 source `168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6` passed
+[CI run36762029145](https://github.com/PacoCotera/critter-lab/actions/runs/36762029145).
+Its connected journey and focused changed-screen evidence are in
+[the Core V1 packet](docs/evidence/polished-core-v1/README.md). Activation is a separate release gate; the sandbox reports its running revision
+and deployment time.
 
 Inspect the [actual native gallery](design/connected-device-review/native/README.md)
 for the current functional presentation. The [Gemini Probe03, Cargo04 and reception07 references](design/companion-connected-art/README.md)
@@ -40,27 +60,28 @@ native visual fidelity as final; behavioral checks do not approve art quality.
 
 ## Remaining proof
 
-The owner-reported post-accept Cargo exit remains open; isolated native Back/Confirm
-paths worked, so no repair is claimed. One existing Lab shortcut must become Home.
-The [three-device defect packet](design/three-device-playability-audit/README.md)
-prioritizes later repairs, with native/source/visual evidence distinguished.
-[Research](design/research-and-creation.md#discovery-proposal--30-september-2026)
-now has a joined A/B discovery proposal and
-[backend generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
-are bounded design only. No service or new canonical traits were introduced.
+The owner-reported post-accept Cargo exit remains open: fresh native escape and
+Home paths pass, but these do not establish the original failure's cause. The
+[three-device defect packet](design/three-device-playability-audit/README.md)
+retains the broader gaps. Yellow Home is implemented; resident
+selection belongs to Habitat. Collection Overview and each sample workbench are
+separate. [A/B discovery](design/research-and-creation.md#discovery-proposal--30-september-2026)
+uses retained evidence and supported alternatives; legacy samples keep their
+five-study content. This authored Pip fixture is not a complete catalogue.
 
-The next named screen outcome is faithful shared-asset derivation from the
-approved C18 and connected Gemini concepts, followed by native-size inspection.
-The retained Home hierarchy continues. Research still needs its collection-wide
-Overview separated from each sample workbench; its current five-study Pip
-fixture is not a complete research content system. [Experience](specs/experience.md)
-and the [screen standard](design/screen-design-standard.md) own these requirements.
+[Generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
+remain bounded to local validated jobs and retained art. No deployed service,
+paid provider or new canonical trait is introduced. See [Experience](specs/experience.md)
+and the [screen standard](design/screen-design-standard.md) for the craft and
+interaction requirements. Actual final changed-screen acceptance and connected playthrough are linked
+above; they remain distinct from human playtest and physical evidence.
 
 The Lab reference is Raspberry Pi4; current execution is Linux x86-64 C17 host
 simulation. One process owns three logical devices and simulated radio exchange.
 ARM builds, independent endpoint storage, radio, display/input drivers, printer,
-charging, power and physical performance remain unverified. Companions marks
-party assignment as unavailable; capture/training, distinct authored route
+charging, power and physical performance remain unverified. Core V1's
+Companions mode supports viewing and recording a visit with an already revealed
+resident; capture/training, distinct authored route
 events, cloud services and habitat ecology remain outside this slice. Timings,
 chance, capacities and content limits remain provisional in the play guide.
 
@@ -78,4 +99,4 @@ open under [architecture](specs/architecture.md) and [cloud/local records](specs
 No complete V1, physical kit, human-playtest acceptance, production BOM or hardware
 feasibility is claimed. [Build coverage](BUILD.md) identifies available sources.
 
-The [full-family promise assessment](design/three-device-playability-audit/promise-gap.md) and preserved owner references are part of the current audit packet. No native repair or art rollout accompanies it.
+The [full-family promise assessment](design/three-device-playability-audit/promise-gap.md) and preserved owner references are part of the current audit packet. The audit remains the baseline gap record; the active draft implements its bounded Core V1 repairs and is not yet a delivered replacement.

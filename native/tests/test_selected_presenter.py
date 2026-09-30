@@ -88,6 +88,7 @@ class SelectedPresenter(unittest.TestCase):
         self.assertEqual(self.request('/api/input', b'{}', authenticated=False)[0], 401)
         self.assertEqual(self.request('/')[0], 200)
         self.assertIn(b'type="module" src="/app.js"', self.request('/')[1])
+        self.assertIn(b'id="lab-critters" type="button" tabindex="-1" aria-label="Home"', self.request('/')[1])
 
     def test_production_https_proxy_origin_and_request_marker(self):
         self.assertEqual(self.input('cancel', headers={'Origin': 'https://preview.example', 'Host': 'preview.example', 'X-Forwarded-Proto': 'https'})[0], 200)
@@ -223,6 +224,11 @@ class SelectedPresenter(unittest.TestCase):
         self.input('back-down', result['revision'])
         returned = json.loads(self.input('back-up', result['revision'])[1])
         self.assertEqual((returned['page'], returned['focus']), ('home', 'Explore'))
+        self.input('ready', returned['revision'])
+        self.input('critters-down', returned['revision'])
+        home = json.loads(self.input('critters-up', returned['revision'])[1])
+        self.assertEqual((home['page'], home['focus']), ('home', 'Overview'))
+        self.assertEqual(home['stock'], [0, 0, 0])
         self.assertEqual(hashlib.sha256(self.save.read_bytes()).hexdigest(), self.save_hash)
 
 

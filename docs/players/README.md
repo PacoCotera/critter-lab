@@ -32,9 +32,12 @@ show what you can inspect today.
 
 This is a local playable prototype with provisional content and pacing. Companion
 training/capture, living habitat ecology, cloud play and physical printing/charging
-remain unfinished. The [reviewed connected screen concepts](../../design/companion-connected-art/README.md)
-are the next native art implementation; current functional output is scaffolding.
-The sandbox reset sits above the device shells and keeps a recoverable backup.
+remain unfinished. Shared Gemini art and illustrated discovery now have an
+[actual Core V1 walkthrough](../evidence/polished-core-v1/README.md). Research shows
+recorded findings and useful remaining investigations; a supported form is a draft
+until you separately start incubation.
+The manual sandbox reset sits above the device shells and keeps a recoverable
+backup. New sandbox deployments start fresh across all three devices.
 
 ## The game being designed
 

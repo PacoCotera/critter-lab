@@ -22,6 +22,13 @@ static uint64_t hash_u32(uint64_t value, uint32_t input) {
   return value;
 }
 
+static uint64_t hash_text(uint64_t value, const char *input) {
+  value = hash_u32(value, (uint32_t)strlen(input));
+  while (*input)
+    value = hash_byte(value, (unsigned char)*input++);
+  return value;
+}
+
 static uint64_t command_fingerprint(const GameCommand *command) {
   uint64_t value = 14695981039346656037ULL;
   const unsigned char *text = (const unsigned char *)command->operation_id;
@@ -66,6 +73,19 @@ static uint64_t command_fingerprint(const GameCommand *command) {
   case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
   case GAME_COMMAND_EXPEDITION_FINISH:
   case GAME_COMMAND_EXPEDITION_UNLOAD:
+    break;
+  case GAME_COMMAND_INVESTIGATE:
+    value = hash_u32(value, command->data.investigation.sample);
+    value = hash_text(value, command->data.investigation.sample_id);
+    value = hash_text(value, command->data.investigation.content_version);
+    value = hash_text(value, command->data.investigation.method_id);
+    break;
+  case GAME_COMMAND_SUPPORTED_CREATION:
+    value = hash_u32(value, command->data.supported_creation.sample);
+    value = hash_text(value, command->data.supported_creation.sample_id);
+    value = hash_text(value, command->data.supported_creation.content_version);
+    value = hash_text(value, command->data.supported_creation.candidate_id);
+    value = hash_u32(value, command->data.supported_creation.monotonic_seconds);
     break;
   default:
     break;
@@ -213,7 +233,7 @@ static int make_id(char *destination, size_t capacity, const char *prefix,
   return count >= 0 && (size_t)count < capacity;
 }
 
-static GameResult record_expedition_sample(GameState *state) {
+static GameResult record_expedition_sample(GameState *state, int discovery) {
   if (expedition_sample_ready(state)) {
     GameSample *sample = &state->samples[state->sample_count];
     memset(sample, 0, sizeof(*sample));
@@ -222,6 +242,8 @@ static GameResult record_expedition_sample(GameState *state) {
     strcpy(sample->origin_expedition_id, state->expedition_id);
     sample->origin_expedition_kind = (uint8_t)state->expedition_kind;
     sample->supported_candidates = PIP_SAMPLE_CANDIDATE_MASK;
+    if (discovery)
+      pip_pin_sample_profile(state, state->sample_count);
     ++state->sample_count;
   }
   return GAME_OK;
@@ -246,7 +268,7 @@ static GameResult transfer_expedition(GameState *state) {
   for (unsigned i = 0; i < 3; ++i)
     if (!add_stock(stock[i], complete[i]))
       return GAME_UNAVAILABLE;
-  GameResult sample_result = record_expedition_sample(state);
+  GameResult sample_result = record_expedition_sample(state, 0);
   if (sample_result != GAME_OK)
     return sample_result;
   state->expedition_active = 0;
@@ -257,7 +279,7 @@ static GameResult transfer_expedition(GameState *state) {
   return GAME_OK;
 }
 
-static GameResult transfer_whole_expedition(GameState *state) {
+static GameResult transfer_whole_expedition(GameState *state, int discovery) {
   int legacy_haul = state->legacy_supply_encoding && cargo_total(state);
   if (state->legacy_supply_encoding) {
     GameResult converted = convert_supply_encoding(state);
@@ -270,7 +292,7 @@ static GameResult transfer_whole_expedition(GameState *state) {
       !add_stock(&state->energy, state->expedition_energy) ||
       !add_stock(&state->essence, state->expedition_essence))
     return GAME_UNAVAILABLE;
-  GameResult sample_result = record_expedition_sample(state);
+  GameResult sample_result = record_expedition_sample(state, discovery);
   if (sample_result != GAME_OK)
     return sample_result;
   state->expedition_data = 0;
@@ -403,9 +425,12 @@ static GameResult apply_domain_command(GameState *state,
   case GAME_COMMAND_STOCK_NORMALIZE:
     return convert_supply_encoding(state);
   case GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER:
-    return transfer_whole_expedition(state);
+    return transfer_whole_expedition(state, 0);
   case GAME_COMMAND_EXPEDITION_UNLOAD: {
-    GameResult result = transfer_whole_expedition(state);
+    /* A first acceptance after upgrade uses current content, including an
+     * uncommitted older arrival. Already committed records remain legacy; the
+     * immutable haul, command 16 fingerprint and duplicate receipt stay intact. */
+    GameResult result = transfer_whole_expedition(state, 1);
     if (result != GAME_OK)
       return result;
     /* Unloading ends even an early outing. Preparation and committed chance
@@ -430,7 +455,7 @@ static GameResult apply_domain_command(GameState *state,
         !add_stock(&state->energy, state->expedition_energy) ||
         !add_stock(&state->essence, state->expedition_essence))
       return GAME_UNAVAILABLE;
-    GameResult sample_result = record_expedition_sample(state);
+    GameResult sample_result = record_expedition_sample(state, 0);
     if (sample_result != GAME_OK)
       return sample_result;
     state->expedition_data = 0;
@@ -467,6 +492,8 @@ static GameResult apply_domain_command(GameState *state,
     uint8_t bit;
     if (!study || index >= state->sample_count)
       return GAME_INVALID;
+    if (state->sample_metadata[index].profile != GAME_SAMPLE_LEGACY_FIVE)
+      return GAME_UNAVAILABLE;
     sample = &state->samples[index];
     bit = (uint8_t)(1u << command->data.study.study);
     if (sample->decoded_studies & bit)
@@ -492,6 +519,8 @@ static GameResult apply_domain_command(GameState *state,
         state->incubation_active ||
         state->individual_count >= GAME_MAX_INDIVIDUALS)
       return GAME_INVALID;
+    if (state->sample_metadata[sample_index].profile != GAME_SAMPLE_LEGACY_FIVE)
+      return GAME_UNAVAILABLE;
     sample = &state->samples[sample_index];
     if (sample->decoded_studies != GAME_STUDY_BITS || sample->incubated)
       return GAME_UNAVAILABLE;
@@ -511,6 +540,8 @@ static GameResult apply_domain_command(GameState *state,
     strcpy(individual->art_id, pip_art_id(&individual->genome));
     strcpy(individual->art_version, PIP_ART_VERSION);
     pip_express(&individual->genome, &individual->expression);
+    pip_pin_individual_art(state, state->individual_count,
+                           preference ? "legacy-marked" : "legacy-carried");
     state->data -= 500u;
     state->energy -= 500u;
     state->essence -= 500u;
@@ -523,6 +554,88 @@ static GameResult apply_domain_command(GameState *state,
     state->incubation_choice = (uint8_t)preference;
     state->incubation_elapsed = 0;
     state->incubation_last_tick = command->data.creation.monotonic_seconds;
+    return GAME_OK;
+  }
+  case GAME_COMMAND_INVESTIGATE: {
+    unsigned sample = command->data.investigation.sample;
+    if (sample >= state->sample_count)
+      return GAME_INVALID;
+    if (strcmp(command->data.investigation.sample_id, state->samples[sample].id) ||
+        strcmp(command->data.investigation.content_version,
+               pip_sample_content_version(state, sample)))
+      return GAME_CONFLICT;
+    if (state->samples[sample].incubated || !game_stock_normalized(state))
+      return GAME_UNAVAILABLE;
+    for (unsigned method = 0; method < PIP_DISCOVERY_METHOD_COUNT; ++method) {
+      const PipInvestigation *entry = pip_investigation(state, sample, method);
+      if (!entry || strcmp(entry->id, command->data.investigation.method_id))
+        continue;
+      if (!pip_investigation_useful(state, sample, method))
+        return GAME_DUPLICATE;
+      if (state->data < entry->cost_data || state->energy < entry->cost_energy ||
+          state->essence < entry->cost_essence)
+        return GAME_UNAVAILABLE;
+      if (!pip_record_investigation(state, sample, method))
+        return GAME_INVALID;
+      state->data -= entry->cost_data;
+      state->energy -= entry->cost_energy;
+      state->essence -= entry->cost_essence;
+      return GAME_OK;
+    }
+    return GAME_INVALID;
+  }
+  case GAME_COMMAND_SUPPORTED_CREATION: {
+    unsigned sample = command->data.supported_creation.sample;
+    if (sample >= state->sample_count)
+      return GAME_INVALID;
+    if (strcmp(command->data.supported_creation.sample_id, state->samples[sample].id) ||
+        strcmp(command->data.supported_creation.content_version,
+               pip_sample_content_version(state, sample)))
+      return GAME_CONFLICT;
+    if (state->sample_metadata[sample].profile == GAME_SAMPLE_LEGACY_FIVE)
+      return GAME_UNAVAILABLE;
+    PipResearchProjection research;
+    if (!pip_research_projection(state, sample, &research))
+      return GAME_INVALID;
+    if (!research.complete || state->samples[sample].incubated ||
+        !game_stock_normalized(state) || state->incubation_active ||
+        state->individual_count >= GAME_MAX_INDIVIDUALS ||
+        state->data < 500 || state->energy < 500 || state->essence < 500)
+      return GAME_UNAVAILABLE;
+    PipSupportedCandidate selected;
+    unsigned preference;
+    for (preference = 0; preference < pip_candidate_count(state, sample); ++preference) {
+      if (!pip_supported_candidate(state, sample, preference, &selected))
+        return GAME_INVALID;
+      if (!strcmp(selected.id, command->data.supported_creation.candidate_id))
+        break;
+    }
+    if (preference == pip_candidate_count(state, sample))
+      return GAME_INVALID;
+    GameIndividual *individual = &state->individuals[state->individual_count];
+    memset(individual, 0, sizeof(*individual));
+    if (!make_id(individual->id, sizeof(individual->id), "P", state->next_identity++))
+      return GAME_INVALID;
+    strcpy(individual->source_sample_id, state->samples[sample].id);
+    strcpy(individual->origin_kind, "parentless-founder");
+    individual->origin_founder = 1;
+    individual->genome = selected.genome;
+    individual->expression = selected.expression;
+    strcpy(individual->art_id, pip_content_art_id(&selected.genome));
+    strcpy(individual->art_version, PIP_ART_VERSION);
+    pip_pin_individual_art(state, state->individual_count, selected.id);
+    state->data -= 500;
+    state->energy -= 500;
+    state->essence -= 500;
+    ++state->individual_count;
+    state->samples[sample].incubated = 1;
+    state->incubation_active = 1;
+    state->incubation_ready = 0;
+    state->incubation_sample = (uint8_t)sample;
+    state->incubation_individual = (uint8_t)(state->individual_count - 1);
+    state->incubation_choice = (uint8_t)preference;
+    state->incubation_elapsed = 0;
+    state->incubation_last_tick = command->data.supported_creation.monotonic_seconds;
     return GAME_OK;
   }
   case GAME_COMMAND_INCUBATION_TICK:
@@ -598,6 +711,22 @@ GameResult game_apply(const char *path, GameState *state,
     return GAME_INVALID;
   operation_length = strlen(command->operation_id);
   if (operation_length >= sizeof(state->operations[0].id))
+    return GAME_INVALID;
+  if (command->type == GAME_COMMAND_INVESTIGATE &&
+      (!command->data.investigation.sample_id ||
+       !command->data.investigation.content_version ||
+       !command->data.investigation.method_id ||
+       strlen(command->data.investigation.sample_id) >= sizeof(state->samples[0].id) ||
+       strlen(command->data.investigation.content_version) >= 24 ||
+       strlen(command->data.investigation.method_id) >= 32))
+    return GAME_INVALID;
+  if (command->type == GAME_COMMAND_SUPPORTED_CREATION &&
+      (!command->data.supported_creation.sample_id ||
+       !command->data.supported_creation.content_version ||
+       !command->data.supported_creation.candidate_id ||
+       strlen(command->data.supported_creation.sample_id) >= sizeof(state->samples[0].id) ||
+       strlen(command->data.supported_creation.content_version) >= 24 ||
+       strlen(command->data.supported_creation.candidate_id) >= 32))
     return GAME_INVALID;
   fingerprint = command_fingerprint(command);
   if (command->sequence <= state->last_operation_sequence) {

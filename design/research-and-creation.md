@@ -120,7 +120,7 @@ Probe mode carries out that expedition → Companion retains cargo → Lab accep
 one receipt → saved Lab stock updates → the player resumes the same sample,
 chooses a study and keeps the finding → supported complete research permits
 separate creation/incubation. Selecting another screen or docking transfers nothing.
-The caddy and console-only acquisition remain part of the wider product; this
+The caddy remains part of the product; console-only acquisition is removed by owner direction; this
 proof does not claim their implementation.
 
 | Surface | What must be visible and actionable |
@@ -199,11 +199,11 @@ Current player accounting uses whole **items**, **samples** and capacity counts.
 | Research record | Retained knowledge about that sample | Preparation establishes the record; studies discover genomic information. The record is not the sample and cannot substitute for it at incubation |
 | Special find | An expedition object with an authored use outside routine supplies and samples | A rare reference may enable a research method; finding it does not itself decode a genome |
 
-The older pack-named examples below are retained provisional design, not active quantity rules. Current player copy counts Data cards, Energy crystals and Essence items directly, with **unit** reserved for explaining storage/accounting. Example: **“3 packs ready”**, **“Storage 3 / 4”**, **“Next attempt in 3 sec”**, and a separate **“1 sample capsule”**. A study costs **“2 Data card packs”**; compact inventory rows can use **“Data cards ×2”** under a clearly labeled pack count. Existing illustrative resource recipes count packs, not an additional contents-per-pack economy.
+Resources are whole Data cards, Energy crystals and Essence items. Player inventory and prices count those items directly: Data ×2, Cargo 3 /40, Next try in3 sec, and a separate identified sample. Gathering preparation is not an item or an additional contents-per-pack economy.
 
 Collected resources are whole items, fungible within their own class. Time-and-chance preparation toward another award attempt is separate from inventory; it consumes no cargo space and cannot pay research costs or transfer to Lab. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this accounting rule; [gathering](probe-sampling.md#typed-gathering-pack-thresholds-and-manual-discard) describes its field presentation. Completing an attempt need not award an item. Checking the screen reveals state rather than causing collection. Preserve illustrated resource identity, whole counts and concise activity feedback; expedition time, battery charge, sample discovery and resource attempts must remain distinguishable. Exact rates, probabilities, event boosts, cadence and artwork remain to refine.
 
-Whole journey: **gather → prepare resource packs and sometimes collect sample capsules → transfer to the Lab → spend packs researching a sample → retain discoveries in its research record → incubate a fully decoded, selected genome**. A special find can expand available research methods along that journey.
+Whole journey: **gather whole resources and sometimes collect sample capsules → transfer to the Lab → spend whole items researching a sample → retain discoveries in its research record → incubate a fully decoded, selected genome**. A special find can expand available research methods along that journey.
 
 ## Entity and relationship map
 

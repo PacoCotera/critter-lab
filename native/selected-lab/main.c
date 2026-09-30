@@ -49,6 +49,10 @@ static void status(SelectedLab *lab) {
 }
 
 static int event(const char *name, SelectedInput *input) {
+  if (!strcmp(name, "home-down") || !strcmp(name, "home-up")) {
+    *input = !strcmp(name, "home-down") ? SELECTED_HOME_DOWN : SELECTED_HOME_UP;
+    return 1;
+  }
   static const char *const names[] = {
       "up-down",       "up-up",       "down-down",     "down-up",
       "left-down",     "left-up",     "right-down",    "right-up",

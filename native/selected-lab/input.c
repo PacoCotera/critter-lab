@@ -16,10 +16,11 @@ static unsigned page_workspace(SelectedPage page) {
   case V1_STUDIES:
   case V1_FINDING:
   case V1_CREATE:
+  case V1_CREATE_REVIEW:
   case V1_STUDY_REVIEW:
     return 0;
   case V1_CRITTERS:
-    return 1;
+    return 3;
   case V1_LIBRARY:
   case V1_LIBRARY_FINDING:
     return 2;
@@ -61,6 +62,8 @@ void selected_lab_capture_context(const SelectedLab *lab,
   context->discard_resource = lab->discard_resource;
   context->workspace = lab->workspace;
   context->library_index = lab->library_index;
+  context->creation_preference = lab->creation_preference;
+  context->creation_draft = lab->creation_draft;
   memcpy(context->workspace_page, lab->workspace_page,
          sizeof(lab->workspace_page));
   memcpy(context->workspace_focus, lab->workspace_focus,
@@ -88,6 +91,8 @@ void selected_lab_restore_context(SelectedLab *lab,
   lab->discard_resource = context->discard_resource;
   lab->workspace = context->workspace;
   lab->library_index = context->library_index;
+  lab->creation_preference = context->creation_preference;
+  lab->creation_draft = context->creation_draft;
   memcpy(lab->workspace_page, context->workspace_page,
          sizeof(lab->workspace_page));
   memcpy(lab->workspace_focus, context->workspace_focus,
@@ -103,11 +108,108 @@ void selected_lab_restore_context(SelectedLab *lab,
   interaction_changed(lab);
   lab->page_revision = lab->revision;
 }
+static unsigned bit_count(uint32_t mask) {
+  unsigned count = 0;
+  while (mask) {
+    count += mask & 1u;
+    mask >>= 1;
+  }
+  return count;
+}
+int selected_lab_research_view(const SelectedLab *lab, unsigned sample,
+                               SelectedResearchView *view) {
+  if (!view || !pip_research_projection(&lab->game, sample, &view->knowledge))
+    return 0;
+  PipResearchProjection knowledge = view->knowledge;
+  memset(view, 0, sizeof(*view));
+  view->knowledge = knowledge;
+  view->legacy = knowledge.profile == GAME_SAMPLE_LEGACY_FIVE;
+  view->complete = knowledge.complete;
+  view->partial_p = knowledge.partial_p;
+  view->method_count = view->legacy ? PIP_STUDY_COUNT : PIP_DISCOVERY_METHOD_COUNT;
+  view->required_references = view->legacy ? PIP_STUDY_COUNT : PIP_DISCOVERY_REFERENCE_COUNT;
+  view->known_references = bit_count(view->legacy
+      ? lab->game.samples[sample].decoded_facts : knowledge.established_references);
+  view->candidate_count = pip_candidate_count(&lab->game, sample);
+  for (unsigned method = 0; method < view->method_count; ++method) {
+    SelectedResearchMethod entry;
+    if (selected_lab_research_method(lab, sample, method, &entry) && entry.known)
+      ++view->completed_methods;
+  }
+  return 1;
+}
+int selected_lab_research_method(const SelectedLab *lab, unsigned sample,
+                                 unsigned method, SelectedResearchMethod *view) {
+  if (!view || sample >= lab->game.sample_count)
+    return 0;
+  memset(view, 0, sizeof(*view));
+  if (lab->game.sample_metadata[sample].profile == GAME_SAMPLE_LEGACY_FIVE) {
+    const PipStudy *entry = pip_study(method);
+    if (!entry)
+      return 0;
+    view->id = entry->locus_id;
+    view->title = entry->title;
+    view->known = (lab->game.samples[sample].decoded_studies & (1u << method)) != 0;
+    view->finding = view->known ? entry->finding : NULL;
+    view->cost_data = entry->cost_data;
+    view->cost_energy = entry->cost_energy;
+    view->cost_essence = entry->cost_essence;
+    view->useful = !view->known && !lab->game.samples[sample].incubated;
+  } else {
+    const PipInvestigation *entry = pip_investigation(&lab->game, sample, method);
+    if (!entry)
+      return 0;
+    view->id = entry->id;
+    view->title = entry->title;
+    view->finding = entry->finding;
+    view->known = entry->finding != NULL;
+    view->useful = pip_investigation_useful(&lab->game, sample, method);
+    view->cost_data = entry->cost_data;
+    view->cost_energy = entry->cost_energy;
+    view->cost_essence = entry->cost_essence;
+  }
+  return 1;
+}
+int selected_lab_candidate(const SelectedLab *lab, unsigned sample,
+                            unsigned candidate, PipSupportedCandidate *view) {
+  return pip_supported_candidate(&lab->game, sample, candidate, view);
+}
+int selected_lab_creation_draft(const SelectedLab *lab,
+                                PipSupportedCandidate *view) {
+  const SelectedCreationDraft *draft = &lab->creation_draft;
+  if (!draft->valid || draft->sample != lab->sample ||
+      draft->sample >= lab->game.sample_count ||
+      strcmp(draft->sample_id, lab->game.samples[draft->sample].id) ||
+      strcmp(draft->content_version, pip_sample_content_version(&lab->game, draft->sample)) ||
+      !selected_lab_candidate(lab, draft->sample, draft->preference, view))
+    return 0;
+  return !strcmp(draft->candidate_id, view->id);
+}
+static unsigned research_methods(const SelectedLab *lab, unsigned sample) {
+  return sample < lab->game.sample_count &&
+         lab->game.sample_metadata[sample].profile != GAME_SAMPLE_LEGACY_FIVE
+             ? PIP_DISCOVERY_METHOD_COUNT : PIP_STUDY_COUNT;
+}
+static int finding_known(const SelectedLab *lab, unsigned sample, unsigned method) {
+  SelectedResearchMethod entry;
+  return selected_lab_research_method(lab, sample, method, &entry) && entry.known;
+}
+static void report_shortage(SelectedLab *lab, unsigned data, unsigned energy,
+                             unsigned essence) {
+  unsigned missing_data = data > lab->game.data ? data - lab->game.data : 0;
+  unsigned missing_energy = energy > lab->game.energy ? energy - lab->game.energy : 0;
+  unsigned missing_essence = essence > lab->game.essence ? essence - lab->game.essence : 0;
+  if (missing_data || missing_energy || missing_essence)
+    snprintf(lab->message, sizeof(lab->message),
+             "Need %u Data, %u Energy, %u Essence more. Findings are kept.",
+             missing_data / GAME_SUPPLY_UNIT, missing_energy / GAME_SUPPLY_UNIT,
+             missing_essence / GAME_SUPPLY_UNIT);
+}
 static unsigned discovered_findings(const SelectedLab *lab) {
   unsigned count = 0;
-  for (unsigned i = 0; i < lab->game.sample_count; ++i)
-    for (unsigned study = 0; study < 5; ++study)
-      count += (lab->game.samples[i].decoded_studies >> study) & 1u;
+  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
+    for (unsigned method = 0; method < research_methods(lab, sample); ++method)
+      count += finding_known(lab, sample, method);
   return count;
 }
 int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
@@ -115,8 +217,8 @@ int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
                                unsigned *study_result) {
   unsigned index = 0;
   for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
-    for (unsigned study = 0; study < 5; ++study)
-      if (lab->game.samples[sample].decoded_studies & (1u << study)) {
+    for (unsigned study = 0; study < research_methods(lab, sample); ++study)
+      if (finding_known(lab, sample, study)) {
         if (index++ == option) {
           *sample_result = sample;
           *study_result = study;
@@ -143,7 +245,7 @@ void selected_lab_init(SelectedLab *lab) {
   memset(lab, 0, sizeof(*lab));
   game_state_init(&lab->game);
   lab->workspace_page[0] = V1_SAMPLES;
-  lab->workspace_page[1] = V1_CRITTERS;
+  lab->workspace_page[1] = V1_HOME;
   lab->workspace_page[2] = V1_LIBRARY;
   lab->workspace_page[3] = V1_HABITAT;
   lab->workspace = 4;
@@ -176,7 +278,8 @@ const char *selected_lab_page(const SelectedLab *lab) {
                                 "samples",  "research",     "finding",
                                 "creation", "incubation",   "reveal",
                                 "habitat",  "study-review", "discard-review",
-                                "critters", "library",      "library-finding"};
+                                "residents", "library",      "library-finding",
+                                "creation-review"};
   return names[lab->page];
 }
 unsigned selected_lab_options(const SelectedLab *lab) {
@@ -189,6 +292,7 @@ unsigned selected_lab_options(const SelectedLab *lab) {
     return 1;
   case V1_STUDY_REVIEW:
   case V1_DISCARD_REVIEW:
+  case V1_CREATE_REVIEW:
     return 2;
   case V1_HOME:
     return 5;
@@ -197,19 +301,19 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   case V1_CARGO:
     return 4;
   case V1_SAMPLES:
-    return lab->game.sample_count ? lab->game.sample_count : 1;
+    return lab->game.sample_count + 1;
   case V1_STUDIES:
-    return 6;
+    return research_methods(lab, lab->sample) + 1;
   case V1_FINDING:
     return 1;
   case V1_CREATE:
-    return 2;
+    return pip_candidate_count(&lab->game, lab->sample) ? 2 : 1;
   case V1_INCUBATION:
     return 1;
   case V1_REVEAL:
     return 1;
   case V1_HABITAT:
-    return visible_residents(lab) ? 3 : 1;
+    return visible_residents(lab) ? 4 : 1;
   }
   return 1;
 }
@@ -218,10 +322,10 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
                                "Habitat"};
   static const char *routes[] = {"Field survey", "Garden forage",
                                  "Weather watch"};
-  static const char *cargo[] = {"Return + store haul", "Discard data pack",
-                                "Discard energy pack", "Discard essence pack"};
+  static const char *cargo[] = {"Return + store haul", "Discard 10 Data",
+                                "Discard 10 Energy", "Discard 10 Essence"};
   static const char *care[] = {"Spend time together", "Next resident",
-                               "Explore again"};
+                               "Residents", "Explore again"};
   switch (lab->page) {
   case V1_CRITTERS: {
     unsigned index = 0;
@@ -233,12 +337,14 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_LIBRARY: {
     unsigned index = 0;
     for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
-      for (unsigned study = 0; study < 5; ++study)
-        if (lab->game.samples[sample].decoded_studies & (1u << study)) {
+      for (unsigned study = 0; study < research_methods(lab, sample); ++study)
+        if (finding_known(lab, sample, study)) {
           if (index++ == option) {
             static char label[96];
+            SelectedResearchMethod entry;
+            selected_lab_research_method(lab, sample, study, &entry);
             snprintf(label, sizeof(label), "%s / %s",
-                     lab->game.samples[sample].id, pip_study(study)->title);
+                     lab->game.samples[sample].id, entry.title);
             return label;
           }
         }
@@ -249,7 +355,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_STUDY_REVIEW:
     return option ? "Return to topics" : "Start research";
   case V1_DISCARD_REVIEW:
-    return option ? "Keep this pack" : "Discard 1 pack";
+    return option ? "Keep these items" : "Discard 10 items";
   case V1_HOME:
     return home[option % 5];
   case V1_EXPEDITION:
@@ -264,22 +370,29 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_CARGO:
     return cargo[option % 4];
   case V1_SAMPLES:
-    return lab->game.sample_count
-               ? lab->game.samples[option % lab->game.sample_count].id
-               : "Find a sample outdoors";
-  case V1_STUDIES:
-    return option < 5 ? pip_study(option)->title : "Prepare incubation";
+    return option && option <= lab->game.sample_count
+               ? lab->game.samples[option - 1].id : "Overview";
+  case V1_STUDIES: {
+    SelectedResearchMethod entry;
+    return selected_lab_research_method(lab, lab->sample, option, &entry)
+               ? entry.title : "Prepare incubation";
+  }
   case V1_FINDING:
     return "Back to research";
-  case V1_CREATE:
-    return option ? "Pale markings" : "Plain coat / carries pale";
+  case V1_CREATE: {
+    PipSupportedCandidate candidate;
+    return selected_lab_candidate(lab, lab->sample, option, &candidate)
+               ? candidate.title : "Complete this sample's research first";
+  }
+  case V1_CREATE_REVIEW:
+    return option ? "Change supported form" : "Start incubation";
   case V1_INCUBATION:
     return lab->game.incubation_ready ? "Open incubation"
                                       : "Return to workbench";
   case V1_REVEAL:
     return "Meet in the habitat";
   case V1_HABITAT:
-    return visible_residents(lab) ? care[option % 3]
+    return visible_residents(lab) ? care[option % 4]
                                   : "Explore for your first sample";
   }
   return "Return";
@@ -383,7 +496,11 @@ static void activate(SelectedLab *lab) {
   switch (lab->page) {
   case V1_CRITTERS:
     if (!visible_residents(lab))
-      enter(lab, V1_HOME);
+      enter(lab, V1_HABITAT);
+    else {
+      focus_resident(lab);
+      enter(lab, V1_HABITAT);
+    }
     return;
   case V1_LIBRARY:
     if (discovered_findings(lab)) {
@@ -453,15 +570,15 @@ static void activate(SelectedLab *lab) {
     }
     break;
   case V1_SAMPLES:
-    if (lab->game.sample_count) {
-      lab->sample = focus;
+    if (focus && focus <= lab->game.sample_count) {
+      lab->sample = focus - 1;
       enter(lab, V1_STUDIES);
-    } else
-      enter(lab, V1_EXPEDITION);
+    }
     break;
   case V1_STUDIES:
-    if (focus == 5) {
-      if (lab->game.samples[lab->sample].decoded_studies == 31)
+    if (focus == research_methods(lab, lab->sample)) {
+      SelectedResearchView research;
+      if (selected_lab_research_view(lab, lab->sample, &research) && research.complete)
         enter(lab, V1_CREATE);
       else {
         strcpy(lab->message, "Discover every region before incubation.");
@@ -469,7 +586,7 @@ static void activate(SelectedLab *lab) {
       }
     } else {
       lab->study = focus;
-      if (lab->game.samples[lab->sample].decoded_studies & (1u << focus))
+      if (finding_known(lab, lab->sample, focus))
         enter(lab, V1_FINDING);
       else
         enter(lab, V1_STUDY_REVIEW);
@@ -480,11 +597,29 @@ static void activate(SelectedLab *lab) {
       enter(lab, V1_STUDIES);
       lab->focus = lab->study;
     } else {
-      command.type = GAME_COMMAND_STUDY;
-      command.data.study.sample = lab->sample;
-      command.data.study.study = lab->study;
-      if (commit(lab, command) == GAME_OK)
+      SelectedResearchMethod method;
+      if (!selected_lab_research_method(lab, lab->sample, lab->study, &method))
+        break;
+      if (method.known && !method.useful) {
         enter(lab, V1_FINDING);
+        break;
+      }
+      if (lab->game.sample_metadata[lab->sample].profile == GAME_SAMPLE_LEGACY_FIVE) {
+        command.type = GAME_COMMAND_STUDY;
+        command.data.study.sample = lab->sample;
+        command.data.study.study = lab->study;
+      } else {
+        command.type = GAME_COMMAND_INVESTIGATE;
+        command.data.investigation.sample = lab->sample;
+        command.data.investigation.sample_id = lab->game.samples[lab->sample].id;
+        command.data.investigation.content_version = pip_sample_content_version(&lab->game, lab->sample);
+        command.data.investigation.method_id = method.id;
+      }
+      GameResult result = commit(lab, command);
+      if (result == GAME_OK)
+        enter(lab, V1_FINDING);
+      else if (result == GAME_UNAVAILABLE && game_stock_normalized(&lab->game))
+        report_shortage(lab, method.cost_data, method.cost_energy, method.cost_essence);
     }
     break;
   case V1_DISCARD_REVIEW:
@@ -506,7 +641,36 @@ static void activate(SelectedLab *lab) {
     enter(lab, V1_STUDIES);
     lab->focus = lab->study;
     break;
-  case V1_CREATE:
+  case V1_CREATE: {
+    PipSupportedCandidate candidate;
+    if (!selected_lab_candidate(lab, lab->sample, focus, &candidate)) {
+      strcpy(lab->message, "Discover every region before incubation.");
+      interaction_changed(lab);
+      break;
+    }
+    lab->creation_preference = focus;
+    SelectedCreationDraft *draft = &lab->creation_draft;
+    draft->valid = 1;
+    draft->sample = lab->sample;
+    draft->preference = focus;
+    strcpy(draft->sample_id, lab->game.samples[lab->sample].id);
+    strcpy(draft->content_version, pip_sample_content_version(&lab->game, lab->sample));
+    strcpy(draft->candidate_id, candidate.id);
+    enter(lab, V1_CREATE_REVIEW);
+    break;
+  }
+  case V1_CREATE_REVIEW: {
+    if (focus) {
+      enter(lab, V1_CREATE);
+      lab->focus = lab->creation_preference;
+      break;
+    }
+    PipSupportedCandidate candidate;
+    if (!selected_lab_creation_draft(lab, &candidate)) {
+      strcpy(lab->message, "This review no longer matches the sample. Choose a form again.");
+      interaction_changed(lab);
+      break;
+    }
     if (lab->game.samples[lab->sample].incubated) {
       strcpy(lab->message,
              "This sample already has a Beecho. Choose another sample.");
@@ -519,15 +683,32 @@ static void activate(SelectedLab *lab) {
       interaction_changed(lab);
       break;
     }
-    command.type = GAME_COMMAND_INCUBATION_START;
-    command.data.creation.sample = lab->sample;
-    command.data.creation.preference = focus;
-    command.data.creation.monotonic_seconds = lab->clock;
-    if (commit(lab, command) == GAME_OK) {
+    if (lab->game.incubation_active) {
+      strcpy(lab->message, "An incubation is already active. Visit Incubator.");
+      interaction_changed(lab);
+      break;
+    }
+    if (lab->game.sample_metadata[lab->sample].profile == GAME_SAMPLE_LEGACY_FIVE) {
+      command.type = GAME_COMMAND_INCUBATION_START;
+      command.data.creation.sample = lab->creation_draft.sample;
+      command.data.creation.preference = lab->creation_draft.preference;
+      command.data.creation.monotonic_seconds = lab->clock;
+    } else {
+      command.type = GAME_COMMAND_SUPPORTED_CREATION;
+      command.data.supported_creation.sample = lab->creation_draft.sample;
+      command.data.supported_creation.sample_id = lab->creation_draft.sample_id;
+      command.data.supported_creation.content_version = lab->creation_draft.content_version;
+      command.data.supported_creation.candidate_id = lab->creation_draft.candidate_id;
+      command.data.supported_creation.monotonic_seconds = lab->clock;
+    }
+    GameResult result = commit(lab, command);
+    if (result == GAME_OK) {
       enter(lab, V1_INCUBATION);
       game_rules_resume_runtime(&lab->game, lab->clock);
-    }
+    } else if (result == GAME_UNAVAILABLE && game_stock_normalized(&lab->game))
+      report_shortage(lab, 500, 500, 500);
     break;
+  }
   case V1_INCUBATION:
     if (lab->game.incubation_ready) {
       command.type = GAME_COMMAND_INCUBATION_OPEN;
@@ -546,9 +727,20 @@ static void activate(SelectedLab *lab) {
       enter(lab, V1_HABITAT);
     break;
   case V1_HABITAT:
-    if (!visible_residents(lab) || focus == 2)
+    if (!visible_residents(lab) || focus == 3)
       enter(lab, V1_EXPEDITION);
-    else if (focus == 1) {
+    else if (focus == 2) {
+      enter(lab, V1_CRITTERS);
+      unsigned index = 0;
+      for (unsigned i = 0; i < lab->game.individual_count; ++i)
+        if (lab->game.individuals[i].revealed) {
+          if (i == lab->resident) {
+            lab->focus = index;
+            break;
+          }
+          ++index;
+        }
+    } else if (focus == 1) {
       do {
         lab->resident = (lab->resident + 1) % lab->game.individual_count;
       } while (!lab->game.individuals[lab->resident].revealed);
@@ -622,21 +814,24 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     lab->focus = (lab->focus + (button == 1 ? 1 : count - 1)) % count;
     if (lab->page == V1_CRITTERS)
       focus_resident(lab);
+    else if (lab->page == V1_SAMPLES && lab->focus)
+      lab->sample = lab->focus - 1;
     interaction_changed(lab);
     return;
   }
   if (button >= 4 && button <= 7) {
-    unsigned current_resident = lab->resident;
-    int from_critters = lab->workspace == 1;
+    if (button == 5) {
+      enter(lab, V1_HOME);
+      memset(lab->gestures, 0, sizeof(lab->gestures));
+      return;
+    }
     remember_workspace(lab);
     unsigned workspace = button - 4;
     enter(lab, lab->workspace_page[workspace]);
     lab->focus = lab->workspace_focus[workspace];
     lab->sample = lab->workspace_sample[workspace];
     lab->study = lab->workspace_study[workspace];
-    lab->resident = workspace == 3 && from_critters
-                        ? current_resident
-                        : lab->workspace_resident[workspace];
+    lab->resident = lab->workspace_resident[workspace];
     if (lab->focus >= selected_lab_options(lab))
       lab->focus = 0;
     if (lab->page == V1_CRITTERS)
@@ -652,10 +847,10 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
   }
   if (button == 3) {
     int safe = (lab->page == V1_HOME ||
-                (lab->page == V1_SAMPLES && lab->game.sample_count) ||
-                (lab->page == V1_STUDIES && lab->focus < 5 &&
-                 (lab->game.samples[lab->sample].decoded_studies &
-                  (1u << lab->focus))) ||
+                (lab->page == V1_SAMPLES && lab->focus &&
+                 lab->focus <= lab->game.sample_count) ||
+                (lab->page == V1_STUDIES &&
+                 finding_known(lab, lab->sample, lab->focus)) ||
                 (lab->page == V1_EXPEDITION && lab->game.expedition_id[0] &&
                  (lab->focus ||
                   (!lab->game.expedition_active &&
@@ -671,13 +866,19 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     if (previous == V1_LIBRARY_FINDING) {
       enter(lab, V1_LIBRARY);
       lab->focus = lab->library_index;
+    } else if (previous == V1_CREATE_REVIEW) {
+      enter(lab, V1_CREATE);
+      lab->focus = lab->creation_preference;
+    } else if (previous == V1_CRITTERS) {
+      enter(lab, V1_HABITAT);
+      lab->focus = visible_residents(lab) ? 2 : 0;
     } else if (previous == V1_FINDING || previous == V1_STUDY_REVIEW ||
                previous == V1_CREATE) {
       enter(lab, V1_STUDIES);
-      lab->focus = previous == V1_CREATE ? 5 : lab->study;
+      lab->focus = previous == V1_CREATE ? research_methods(lab, lab->sample) : lab->study;
     } else if (previous == V1_STUDIES) {
       enter(lab, V1_SAMPLES);
-      lab->focus = lab->sample;
+      lab->focus = lab->sample + 1;
     } else if (previous == V1_DISCARD_REVIEW) {
       enter(lab, V1_CARGO);
       lab->focus = lab->discard_resource + 1;

@@ -12,6 +12,8 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 *Selected family appearance, not a manufactured kit or measured hardware design.
 [Concept details and earlier studies](design/lab-controls/concepts.md) preserve provenance.*
 
+[Polished Core V1 roadmap](ROADMAP.md) tracks the current implementation round.
+
 ## Playable software today
 
 The [three-device native simulator](native/selected-lab/README.md#three-device-mode)
@@ -26,10 +28,12 @@ Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the
 The [live sandbox](https://critterlab.basicberry.com) reports its running revision.
 Its reset control preserves a recoverable saved-world backup.
 
-This is a bounded playable prototype. Current connected screens are functional
-scaffolding; the [reviewed Gemini Probe, Cargo and reception concepts](design/companion-connected-art/README.md)
-remain the next native art implementation. Timing, chance and content are
-provisional. [Status](STATUS.md) records evidence and remaining work.
+This is a bounded playable Core V1 prototype. Shared retained Gemini resource and
+resident art, expedition scenery and illustrated A/B research are integrated and
+passed focused actual review. [The native walkthrough](docs/evidence/polished-core-v1/README.md)
+shows the connected loop and corrected screens. Timing, chance and content remain
+provisional. [Status](STATUS.md) records evidence and remaining work. Each newly
+deployed sandbox version starts a fresh shared game.
 
 ## The whole product
 
@@ -41,7 +45,7 @@ supply and connection summaries. Probe is a mode, not a separate current device.
 
 [Gameplay](specs/gameplay.md) owns research, creation and expedition rules;
 [devices](specs/devices.md) owns physical roles and open electronics choices.
-Standalone core play, nearby-kit interaction and optional Cloud Pass services
+Local core-kit play, nearby-kit interaction and optional Cloud Pass services
 are product direction. Cloud, capture/training, ecology, sensors, charging and
 physical printing are not delivered by the host simulator.
 

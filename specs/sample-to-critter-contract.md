@@ -10,13 +10,13 @@ Research incrementally decodes genome regions; a fully decoded genome is a prere
 
 Creation requires a **fully decoded, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
 
-The core kit must perform this journey standalone from the box, including supported nearby-kit interaction. Local research and creation cannot require Cloud Pass acceptance or remote generation. The optional Cloud Pass adds global trading/breeding, lineage, certificates and minigames. Local authority placement, generation execution and local/global reconciliation remain OPEN. Routine play needs no phone; a console-only path remains required. Neither an attractive preview nor a completed animation proves a saved creation.
+The core kit must perform this journey standalone from the box, including supported nearby-kit interaction. Local research and creation cannot require Cloud Pass acceptance or remote generation. The optional Cloud Pass adds global trading/breeding, lineage, certificates and minigames. Local authority placement, generation execution and local/global reconciliation remain OPEN. Routine core-kit play needs no phone; Companion gathering supplies the Lab. Console-only acquisition is removed by owner direction. Neither an attractive preview nor a completed animation proves a saved creation.
 
 ```mermaid
 flowchart TD
   Companion[Companion Probe / Cargo: attributed evidence] --> Receipt[Kit: retained accepted receipt]
-  Console[Console-only investigation] --> Knowledge[Research: findings and unresolved regions]
-  Receipt --> Knowledge
+  Receipt --> Sample[Retained sample and its provenance]
+  Sample --> Knowledge[Research: findings and unresolved regions]
   Knowledge --> Selected[Fully decoded selected genome]
   Selected --> Validate[Validate request, rights, versions and costs]
   Validate --> Expression[Resolve and validate initial expression]
@@ -68,7 +68,7 @@ Companion activity remains attributed to its player and does not itself transfer
 
 ## Three decisions still required
 
-1. **Research content mapping:** the V1 investigation/completeness structure is accepted in [gameplay](gameplay.md#research-and-creation); exact evidence-to-candidate mappings, resource requirements and equivalent console-only acquisition still need definition.
+1. **Research content mapping:** the V1 investigation/completeness structure is accepted in [gameplay](gameplay.md#research-and-creation); the approved core V1 round implements the reviewed A/B evidence-to-candidate mappings with explicitly provisional costs. Console-only acquisition is removed.
 2. **Creation implementation:** [gameplay](gameplay.md#creation-inputs-and-retained-discoveries) now defines accepted one-use material, retained knowledge and spending/retry semantics. Reservations, competing-request conflicts and remedies for permanent acceptance/content failure still need design.
 3. **Temporary activity:** local and nearby-kit identity/acceptance, temporary activity, handover retention and optional global reconciliation rules, including when local offload data may safely be discarded.
 

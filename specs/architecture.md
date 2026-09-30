@@ -128,6 +128,15 @@ provider migration, subscription or deployment is needed before this proof.
 Final automatic visual acceptance bounds and catalogue/publication choices remain
 for owner steering. See [discovery proposal](../design/research-and-creation.md#discovery-proposal--30-september-2026).
 
+The [local retained-Pip proof](../prototype/generation/README.md) now consumes a
+revealed native resident projection and two controlled claims. It saves the exact
+original Gemini portrait, description, immutable input fingerprint and provenance;
+duplicate resolution and read-only replay verify the same retained result. An
+actual connected B1 resident is recorded in the [integration evidence](../docs/evidence/polished-core-v1/retention-evidence.json).
+This is a fixed original/phrase resolver with no model call, service deployment
+or novel creature generation. Unsupported claims and missing/corrupt retained
+artifacts fail instead of silently generating replacements.
+
 ## App, website and backend
 
 The mobile fallback shares core rules, identity and preserved content; supporting app/website surfaces access the local or optional global records their role permits. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.
@@ -203,6 +212,18 @@ cargo capacity or pays a cost. New inventory is multiples of the internal100
 encoding for each indivisible item; [V1](../native/selected-lab/V1.md) owns fixture
 timing, chances and costs. Saved chance outcomes prevent restart/retry rerolls.
 
+Core V1 version3 appends parallel research and individual-art metadata after
+the complete frozen version2 payload, including its original tail padding.
+Version1/2 lengths and checksums are validated before read-only conversion;
+committed old samples retain their five-study content. First-ever acceptance
+through command16 after upgrade pins current A/B content, including a still
+uncommitted older arrival. Its haul fingerprint and receipt retry remain unchanged.
+New commands17/18 bind sample identity, content version and method/candidate;
+required evidence and disclosed support authorize creation. The domain owns
+stock, unused material, exact genome/expression and retained original-art hashes.
+The Lab input/view integration is in development; domain source alone does not
+establish a playable new research screen. Old binaries cannot read version3.
+
 Restart reconciles the exact intent before allowing another mutation. A matching
 operation ID alone is insufficient: the command fingerprint must also match.
 Missing required sidecar, corruption, mismatched cargo or durability uncertainty
@@ -213,6 +234,25 @@ production radio format, endpoint migration framework or rollback-save promise.
 Wireless controls outside the shells independently interrupt Companion and Dock
 links. Dock retains a timestamped accepted-world projection while offline and
 catches up after reconnect; it never owns a second inventory or awards rewards.
+The Kit sidecar now stores a version1 envelope around the unchanged 160-byte
+transfer journal and a bounded revealed-resident cache. Bare journal versions1–4
+must pass their original exact-size/checksum/policy checks before migration;
+the wrapper independently checks its version, length, checksum and cache records.
+Transfer command IDs, fingerprints, intent reconciliation and required-file marker
+retain their existing semantics. Keep this envelope with its matching world save.
+
+The resident cache records saved individual/source IDs, genome/expression,
+original art metadata and visit count, with snapshot time/world revision. It
+contains no unborn resident. Companion reads only this accepted projection and
+resolves a connected visit by exact ID through existing `CARE_VISIT`; pending
+transfer states block visits. Offline inspection is stale and read-only, with
+no queued mutation. Lab and Companion share the accepted count; Dock's accepted
+visit total and freshness are also persisted in the envelope. Projection writes
+publish only after successful save. Failure retains the older in-memory snapshot
+as stale; a successfully accepted world visit is not repeated to repair it.
+Restart reads the snapshot actually retained on disk; reconnect refreshes without
+issuing another visit. This is a host cache boundary, not separate endpoint/radio
+persistence or a new care/needs mechanic.
 Cloud/charging are unavailable, and Print/Feed are explicitly simulated feedback.
 Production distributed receipts still need independent endpoint persistence,
 authentication, pairing, delivery ordering and radio failure validation.

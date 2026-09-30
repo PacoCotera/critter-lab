@@ -3,7 +3,7 @@ project(critter_selected_lab VERSION 0.1.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED YES)
 
-add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c assets.c overview_assets.c pip_art.c
+add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c assets.c overview_assets.c pip_art.c core_art.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
