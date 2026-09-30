@@ -1,43 +1,66 @@
-# Meet Critter Lab
+# Meet Beecho Lab
 
-*An introduction to the game being designed. The available software is an early experiment, not the complete game.*
+Explore, investigate and get to know unusual creatures. Pursue a beautiful
+combination, a rare discovery or a useful ability: there is no single ideal
+Beecho everyone must create. Formerly Critter Lab; earlier references keep that name.
 
-![Current Lab, combined Companion and shared habitat/printer caddy.](../../design/lab-controls/combined-family-materials.png)
+![Current Lab, combined Companion and shared printer/summary Caddy.](../../design/lab-controls/combined-family-materials.png)
 
-Critter Lab is a sandbox about discovering, creating and getting to know unusual creatures. You can pursue beautiful combinations, rare discoveries or useful abilities. There is no single ideal critter everyone must build.
+## One kit, one shared world
 
-## Three objects, one shared world
+The **Companion** goes exploring with you. Probe gathers and investigates;
+Cargo holds earned supplies and findings; Companions is the intended place for
+travelling critters. The **Lab** is your home research workbench and window into
+habitats, creatures and incubations. The **Caddy** is their charging/printing
+home, with quiet world, supply and connection summaries. These are product roles;
+the current software simulates them before physical hardware is built.
 
-The **Companion** goes exploring with you. Switch between Probe for gathering and encounters, Cargo for supplies and temporary captures, and Companions for time with your travelling critters.
+## Try the current journey
 
-The **Lab** is the home research workbench and your visual window into habitats, creatures and incubations. Research gradually decodes genomes; a complete genome is needed for parentless incubation.
+The [live sandbox](https://critterlab.basicberry.com) shows Lab, Companion and
+Dock together. Use the buttons depicted around each screen. Choose a Companion
+mode, enter its actions, then make a fresh deliberate selection. Screen pictures
+are not clickable controls.
 
-The **Caddy** charges both devices, prints records and summarizes your habitats, stored supplies and device status. Habitats contain populations interacting with environmental resources. Freezing/restoring habitats from the cloud is a desired feature; exact limits and rules remain open.
+Gather on Companion, inspect Cargo, review Send, then accept the arrival in Lab.
+Supplies count as whole items; the next-attempt activity track is separate from
+what you carry. Sending stops collection. Accepting stores the haul once and ends
+that outing; the next expedition starts anew. Follow the [Pip play guide](../../native/selected-lab/V1.md)
+for paid studies, complete-genome selection, incubation, deliberate opening and
+a visit to the same resident. [Actual native screens](../../design/connected-device-review/native/README.md)
+show what you can inspect today.
 
-The game is being validated in software before building hardware. A mobile app is the fallback if dedicated devices do not add enough value.
+This is a local playable prototype with provisional content and pacing. Companion
+training/capture, living habitat ecology, cloud play and physical printing/charging
+remain unfinished. The [reviewed connected screen concepts](../../design/companion-connected-art/README.md)
+are the next native art implementation; current functional output is scaffolding.
+The sandbox reset sits above the device shells and keeps a recoverable backup.
 
-## Standalone and connected play
+## The game being designed
 
-The core kit is designed to work standalone from the box, including nearby-kit interaction. An optional Cloud Pass adds global trading and breeding, lineage, certificates and minigames. Local core progress must be durable without cloud acceptance; global operations need their own validation and recovery. Exact local/global authority, reconciliation and entitlement protocols remain open. This is product direction, not delivered functionality or approved pricing.
+Research preserves discoveries across trips. A complete genome is needed for
+parentless creation; knowledge does not automatically create a critter. Individual
+identity and history remain distinct from inherited appearance. The
+[first-discovery story](../../design/sample-to-critter-walkthrough.md) explains the
+wider intended experience; [gameplay](../../specs/gameplay.md) owns accepted rules
+and open choices for crafting, breeding, care and progression.
 
-## Your first discovery
-
-Bring something home, investigate it, find what the next study needs, and eventually meet the critter you chose to create. The Lab waits for you to press OPEN when it is ready. Follow [one player's first discovery](../../design/sample-to-critter-walkthrough.md).
-
-Crafting lets you experiment with supplies and learn useful combinations. Clues help you make informed attempts; failed attempts can consume supplies or return only a fraction. Your encyclopedia records discoveries for later reference. Exact recipes, costs and timing remain in development.
+Standalone core play, nearby-kit interaction and optional global Cloud Pass
+services are product direction, with contracts still being designed. Shared
+household equipment must preserve separate players' collections. Scanning another
+player's critter grants neither ownership nor breeding permission. See
+[player/social rules](../../specs/players-social.md).
 
 ## A few useful words
 
 | Word | Meaning |
 | --- | --- |
 | Sample | Something to investigate; it is not yet a critter |
-| Genome | A critter's inherited instructions; required parts must be understood before creation |
-| Trait | A characteristic, such as a marking or capability; some inherited variants can be carried without showing |
-| Individual | One particular critter with its own identity and history, even if another looks identical |
-| Family | A grouping of related creature forms, not a substitute for an individual's identity |
+| Genome | Inherited instructions; required parts must be understood before creation |
+| Trait | A characteristic; an inherited variant may be carried without showing |
+| Individual | One critter with its own identity and history, even if another looks identical |
+| Family | Related creature forms, not a substitute for individual identity |
 
-## One kit, separate collections
-
-A household can share the Lab, combined Companion and caddy while players keep separate profiles, progress and critters. Using the same device does not merge collections. Meeting or scanning another player's critter does not make it yours or grant breeding permission; taking a social sample requires its owner's agreement.
-
-The final rules for care, lending and long absences are still open. See [product status](../../STATUS.md) for what exists today rather than treating this introduction as a finished manual.
+[Product status](../../STATUS.md) distinguishes delivered software from desired
+features. Hardware follows software proof and human playtest; a mobile app is
+the fallback if dedicated devices do not add enough value.

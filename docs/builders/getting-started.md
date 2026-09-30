@@ -1,79 +1,109 @@
-# Development sequence
+# Run Beecho Lab locally
 
-Read the [electronics-first reference](../../specs/devices.md#electronics-first-v1-reference-specification) before new device work. Validate the connected game through existing host/native tools; do not infer complete firmware from MCU fixture builds. New physical profiles remain proposals; the mobile fallback shares domain contracts and records. The commands below run existing experiments, not the proposed full family.
+The current playable target is the [native three-device simulator](../../native/selected-lab/README.md):
+Lab, combined Companion and Dock share one saved world in a C17 host process.
+The browser transports physical-control events and displays native frames.
+[Build coverage](../../BUILD.md) distinguishes that software from unfinished
+firmware, hardware, cloud and mobile work.
 
-# Run the local experiments
+## Current native simulator
 
-For builders and developers. These instructions run the existing host software; there is no complete kit to assemble or production service to deploy yet. See [build coverage](../../BUILD.md).
-
-For native Lab/MCU development, use the [native build guide](../../native/README.md). The browser experiments below are separate historical studies, not hardware simulators.
-
-## Install and start
-
-You need Git, Node.js 22 or later with npm, and a current browser. No hardware, account or private tooling is required.
+Use Git, GCC, CMake 3.28 or later, Ninja and Python 3.12 on the established Linux
+build host. The [native guide](../../native/README.md) records toolchains and
+legacy MCU builds. Retrieve a clean committed source revision through Git; source,
+executable and presenter must match. This does not require Node/browser-game
+installation or an ESP-IDF Lab build.
 
 ```sh
 git clone https://github.com/PacoCotera/critter-lab.git
 cd critter-lab
+cmake -S native/lab -B native/build/lab -G Ninja \
+  -DCRITTER_BUILD_SELECTED_LAB=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build native/build/lab
+ctest --test-dir native/build/lab --output-on-failure
+python3 native/tests/test_selected_presenter.py native/build/lab/selected-lab/selected_lab
+```
+
+From the repository root, select an absolute writable save path outside release
+bundles. The save and its `.kit` / `.kit.required` sidecars form one world.
+Preserve and back them up together; see [recovery boundaries](../../specs/architecture.md#three-device-host-simulator).
+
+```sh
+export CRITTER_DEMO_BINARY="$PWD/native/build/lab/selected-lab/selected_lab"
+export BEECHO_V1_SAVE="$HOME/beecho-saves/play-world"
+mkdir -p "$(dirname "$BEECHO_V1_SAVE")"
+python3 native/presenter/server.py
+```
+
+Open `http://127.0.0.1:4180`. Stop with Ctrl+C. The default presenter uses
+`kit-serve`; legacy single-Lab `serve` remains a regression fixture. The older
+`native/build/lab/critter_lab` domain CLI is a separate protocol, even though the
+release bundle uses `bin/critter_lab` as the selected executable's packaged name.
+
+Follow the [Pip play guide](../../native/selected-lab/V1.md). Only Companion starts
+expeditions; Lab accepts returns and researches/creates. Device buttons drive
+native focus and actions. External link switches and Reset sandbox are simulator
+administration, not additional device controls. Reset keeps the matching world
+and sidecars in a uniquely named backup; it has no browser restore endpoint.
+
+For a changed connected journey, use the focused
+`python3 native/tests/test_kit_presenter.py BINARY` check and the full timed
+`python3 native/tests/test_v1_journey.py BINARY FRAME_DIRECTORY` journey as
+appropriate. Reset behavior has
+`python3 native/tests/test_sandbox_reset.py BINARY`. The target's
+[guide](../../native/selected-lab/README.md) records current interfaces and limits.
+Documentation-only changes need link/command inspection, not another game run.
+
+## Historical browser and domain studies
+
+These are separate experiments with separate persistence. They do not form an
+alternative integrated game or a physical hardware simulator. Read each component
+boundary before changing it. Node.js 22 or later and npm run the browser studies:
+
+```sh
 npm ci
 npm start
 ```
 
-Open `http://127.0.0.1:4173`. Stop the server with Ctrl+C. There is no compilation step; dependencies are pinned in `package-lock.json`.
+Open `http://127.0.0.1:4173`. Dependencies are pinned in `package-lock.json`.
 
-| Route | What to expect | Details |
-| --- | --- | --- |
-| `/` | Older breeding, research and share-card experiment | [Prototype](../../prototype/README.md) |
-| `/lab/` | Authored sample-to-founder pixel fixture | [Lab](../../prototype/lab/README.md) |
-| `/transfer/` | Transfer-status screens using supplied observations | [Transfer browser study](../../prototype/transfer/browser/README.md) |
-| `/review.html` | Color/monochrome/six-color and idle studies | [Prototype](../../prototype/README.md) |
-
-These experiments are separate. An action in one does not form an integrated game progression across the others.
-
-## Pip genetic-content proof
-
-The approved bounded [Pip proof](../../prototype/genetics/README.md) runs separately from these older browser experiments. Its [generated report](../../prototype/genetics/report.md) connects inherited baseline and allele contributions, partial research knowledge and one compatible child. Run `node prototype/genetics/report.mjs` to regenerate it and `node --test prototype/tests/pip-genetics.test.mjs` for its acceptance checks. It creates no living individual and is not wired into the demo.
-
-## Saved data
-
-The older breeding experiment uses browser local storage. The Lab uses a separate IndexedDB database and preserves prior isolated runs. Transfer-status screens have no live transfer or persistence. Published share snapshots are local JSON files in ignored `prototype/.data/`; headless demos write to the new directory you supply. Browser data belongs to that browser and origin, not a cloud account. Changing ports or browsers can therefore show a different local collection.
-
-Use a demo's explicit reset/new-run controls when needed. Do not delete an unfamiliar data directory to fix an error. Corrupt or unsupported saves are rejected rather than automatically replaced.
-
-## Checks and exports
-
-Run the host suite when changing behavior:
-
-```sh
-npm test
-```
-
-For documentation-only changes, inspect links and commands instead. Component READMEs list focused checks. Optional browser harnesses need Playwright and Chromium installed separately; they are not needed to play these local experiments or run the normal host suite.
-
-| Command from repository root | Output |
+| Route | Historical study |
 | --- | --- |
-| `node prototype/lab/export.mjs` | Lab PNG frames in `prototype/lab/artifacts/` |
-| `node prototype/pixel/export.mjs` | Static pixel studies in `design/reviews/pixel-01/` |
-| `node prototype/transfer/demo.mjs <new-directory>` | Two saved replicas and interrupted-transfer trace |
-| `node prototype/compatibility/demo.mjs <new-directory>` | Four byte-preserving saved-record copies |
+| `/` | [Breeding, research and share-card experiment](../../prototype/README.md) |
+| `/lab/` | [Authored sample-to-founder fixture](../../prototype/lab/README.md) |
+| `/transfer/` | [Transfer-status supplied observations](../../prototype/transfer/browser/README.md) |
+| `/review.html` | [Display and idle studies](../../prototype/README.md) |
 
-Replace `<new-directory>` with an unused path. Exports can update generated artifacts; inspect Git changes before committing them.
+The [Pip genetic-content proof](../../prototype/genetics/README.md) has a
+[generated report](../../prototype/genetics/report.md). Run
+`node prototype/genetics/report.mjs` to regenerate it; its focused check is
+`node --test prototype/tests/pip-genetics.test.mjs`. The report creates no living
+individual.
 
-## Troubleshooting
+The [headless expedition study](../../prototype/expedition/README.md) uses fixed
+inputs and historical whole-pack/retained-partial arithmetic. Current accepted
+inventory is whole indivisible items; old study values are not current gameplay.
+Its guide owns demo commands, simulated observation comparisons and scoped tests.
 
-| Symptom | Check |
-| --- | --- |
-| `node` or `npm` not found | Install Node.js with npm and reopen the terminal; check `node --version` and `npm --version` |
-| Missing package | Run `npm ci` at the repository root |
-| Port already in use | Stop your earlier server, or set `CRITTER_PORT` to an unused port |
-| Browser cannot connect | Keep the server running and use its printed URL; check the port |
-| A finding never arrives | The Lab is an authored fixture; use its external supply-finding control |
-| QR will not open on a phone | Loopback is local to each device; the optional LAN setup is below |
+Older breeding data lives in browser local storage; the Lab study uses separate
+IndexedDB storage; transfer-status screens have no live transfer persistence.
+Headless demos and share snapshots write to ignored `prototype/.data/` paths.
+A changed browser/origin can show another collection. Do not delete unfamiliar
+save data to repair an error; corrupt/unsupported saves are rejected.
 
-Alternate port in PowerShell: `$env:CRITTER_PORT='4174'` followed by `npm start`. In a POSIX shell: `CRITTER_PORT=4174 npm start`. The environment override lasts for the shell/session as defined by your shell.
+Run `npm test` for changed host behavior, or the component's focused checks.
+Optional Playwright/Chromium harnesses are separate from normal local play.
 
-## Optional local-network inspection
+## Connection and access
 
-Only for a trusted LAN: set `CRITTER_HOST` to `0.0.0.0` and `CRITTER_PUBLIC_ORIGIN` to `http://<computer-LAN-IP>:4173`, then restart the server. Use that same origin on both devices when creating and opening share cards. The configured origin must contain only scheme, hostname and optional port. Firewall access may be required; the app does not configure it.
+The native presenter uses `CRITTER_DEMO_BIND` and `CRITTER_DEMO_PORT` for binding,
+with loopback and port 4180 as defaults. Optional `CRITTER_DEMO_PASSWORD` enables
+HTTP Basic access as username `lab`; use HTTPS for access beyond local inspection.
+All visitors share the same simulator world. The existing
+[CI bundle guide](../../native/UPDATER.md) records release provenance.
 
-The prototype has writable share endpoints and no player authentication. Do not expose it as a public game server or port-forward it. Phone scanning and physical printing remain unvalidated; a browser preview is not printer calibration. No cloud deployment or firmware-flashing instructions exist yet.
+The historical Node server uses `CRITTER_HOST` / `CRITTER_PORT`, with loopback and
+4173 as defaults. An explicitly configured trusted-LAN
+`CRITTER_PUBLIC_ORIGIN` may support share-card inspection. Its share endpoints
+have no player authentication; do not port-forward that study as a public game
+service. Phone scanning and physical printing remain unvalidated.

@@ -1,27 +1,36 @@
-# Current build boundary
-
-Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
-
-
-The new electronics-first specification is [here](specs/devices.md#electronics-first-v1-reference-specification). Current product: combined Companion, home Lab and caddy. Existing separate-Probe targets below are legacy build fixtures; they are not a second current portable. New recommended MCU/display profiles are not yet integrated. Software proof and human playtest precede hardware development; mobile fallback is explicit. No physical kit, power budget or production electronics freeze is claimed.
-
-## Existing build evidence
-
 # What can be built today
 
-Start with [the local setup guide](docs/builders/getting-started.md) to run the available software. This repository is intended to supply the whole product, but a complete physical kit cannot yet be built from it.
+Start with [builder getting started](docs/builders/getting-started.md) for the
+current native simulator. This repository supplies product specifications,
+source and art, but cannot yet produce a complete physical kit.
 
-| Component | Available | Missing for a complete build |
+| Component | Available evidence/source | Remaining boundary |
 | --- | --- | --- |
-| Game and genetics | Specifications and small executable fixtures | Balanced content and complete research/expression/behavior contracts |
-| Art and animation | Original concepts, pixel masks/font, renderer and static exports | Production asset pipeline, animation and automated content tools |
-| Local experiments | Node server, browser applications, pinned dependencies and tests | Integrated game client and production authentication |
-| Cloud services | Architecture and synchronization contracts | Backend, generation jobs, migrations, deployment and recovery tooling |
-| App and website | Responsibilities and product boundaries | Implementations and reproducible builds |
-| Console, Probe and Companion | Device requirements and [native build scaffolds](native/README.md) for Linux, nRF52840 and ESP32-S3 | Functional firmware, peripheral profiles, board validation and flashing instructions |
-| Electronics and caddy | Hardware concepts and constraints | Schematics, PCB sources, BOM and measured electrical/charging validation |
-| Enclosures | Concept images | Editable CAD, fabrication files and assembly instructions |
+| Connected game | Native C17 Lab/Companion/Dock host simulation; gathering, reception, research, genome selection, incubation, reveal, habitat visits and durable saves | Provisional Pip content/balance; broader studies, capture/training, ecology and independent device authority |
+| Native presentation | State-driven native frames and physical-control transport; [actual gallery](design/connected-device-review/native/README.md) | Faithful shared-asset derivation from reviewed Gemini concepts; final art and human usability acceptance |
+| Lab platform | Linux x86-64 executable built with GCC/CMake/Ninja; Raspberry Pi4 development reference | ARM build, HDMI/input integration, board performance and physical evidence |
+| Portable firmware | Legacy nRF52840 Probe and ESP32-S3 Companion compiler scaffolds | Current combined Companion drivers, sensors, radio, storage, board validation and flashing instructions |
+| Caddy | Logical monochrome summary/cache, simulated Print/Feed and link interruption | Display/printer drivers, charging, electronics and bench measurements |
+| Earlier experiments | Pinned Node/browser studies and genetic/transfer fixtures | Separate studies do not form another integrated product |
+| Cloud and mobile | Product roles, contracts and explicit fallback direction | Production services, authentication, synchronization and mobile game implementation |
+| Website | Public website source under `website/` | A website is not the game client or physical-kit proof |
+| Electronics/enclosures | [Reference profiles](specs/devices.md) and preserved concept art | Schematics, PCB sources, measured power/thermal/RF budgets, editable case CAD, fabrication and assembly instructions |
 
-A concept image is not a wiring diagram or case model. Schematics, pin assignments, charging limits and part selections must accompany validated hardware designs before an assembly guide can be written. No purchase list or substitute build recipe is implied here.
+The current product is one combined Companion, one home Lab and one shared Caddy.
+Probe is a mode. The caddy development reference is 5.79-inch monochrome,
+792×272; older separate-Probe/3.7-inch builds and renders remain historical evidence.
+Lab is Linux C17, not ESP-IDF; that framework belongs to the separate Companion
+scaffold. Native host checks establish software behavior, not flashed-device or
+physical-display performance.
 
-Product-required build and content tools belong in this public source. Credentials and player data do not. See the [specifications](specs/README.md) for requirements and the [experiment index](prototype/README.md) for implementation boundaries.
+The [native guide](native/README.md) contains build commands and the existing
+CI bundle path. The [play guide](native/selected-lab/V1.md) owns fixture limits,
+and [status](STATUS.md) identifies tested source and delivery evidence. Source,
+executable and presenter must come from the same committed revision; keep saved
+worlds and their sidecars outside release bundles and backed up together.
+
+The [electronics-first gate](specs/devices.md#electronics-first-v1-reference-specification)
+requires software proof and human playtest before hardware investment. Reference
+parts are not a purchase list; renders are not wiring diagrams or mechanical
+models. No complete kit, production electronics freeze or measured hardware
+feasibility is claimed.

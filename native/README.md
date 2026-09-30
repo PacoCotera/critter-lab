@@ -1,23 +1,84 @@
-# Native builds and Lab simulation
+# Native builds and three-device simulation
 
-[CI release delivery](UPDATER.md) defines artifact provenance and the staging service boundary.
+The current playable target is `selected_lab`: native C17 rules, saved world,
+focus and scanline pixels, presented as Lab, combined Companion and Dock through
+the browser transport. [Target interfaces](selected-lab/README.md),
+[Pip play guide](selected-lab/V1.md) and the
+[actual native gallery](../design/connected-device-review/native/README.md)
+describe the integrated loop. Current connected presentation remains art
+scaffolding pending the reviewed Gemini asset/composition implementation.
 
-The playable Lab target is `selected_lab`: native C17 rules, durable local records
-and a scanline renderer, displayed through the browser transport. See its
-[current contract](selected-lab/README.md) and [playable loop](selected-lab/V1.md).
-The earlier `critter_lab` fixture and portable MCU scaffolds remain separate build
-targets; compiling them does not establish the complete game on those devices.
-
-| Program | Current compiler target | Toolchain / evidence |
+| Program | Current compiler target | Evidence boundary |
 | --- | --- | --- |
-| Lab | Linux x86-64 host; Raspberry Pi4 Model B is the selected device reference | GCC + CMake + Ninja, C17. Not ESP-IDF. ARM build, physical display/input and Pi performance unverified. |
-| Legacy Probe scaffold | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr4.4.0 + Zephyr GNU SDK1.0.1; no panel driver or physical boot evidence. |
-| Companion scaffold | `esp32s3` (Xtensa) | ESP-IDF5.5.5; separate from Lab; no panel driver or physical boot evidence. |
+| Lab / selected game | Linux x86-64; Raspberry Pi4 Model B device reference | GCC, CMake, Ninja and C17; ARM build, HDMI/input drivers and Pi performance unverified. Not ESP-IDF. |
+| Legacy Probe scaffold | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0 / GNU SDK 1.0.1; no physical boot or panel driver proof. Not a separate current portable. |
+| Companion scaffold | `esp32s3` (Xtensa) | ESP-IDF 5.5.5; separate from Lab; current combined-device drivers/radio/sensors remain unfinished. |
 
-Current product roles and selected electronics are in [devices](../specs/devices.md).
-Legacy portable build targets do not freeze the consolidated kit's final electronics.
-The simulator panel represents the Lab directional cross, four workspace keys,
-Back and Confirm. It does not emulate a Pi4 CPU or GPIO.
+[Devices](../specs/devices.md) owns physical roles and selected development
+references. The simulator has one host authority and three logical contexts,
+not independent endpoint stores or physical radio. Lab uses its accepted
+cross/workspace/Back/Confirm panel; Companion uses directions/Back/Confirm;
+Dock uses its depicted summary/print controls. No screen-click or touch shortcuts
+are implied. [Experience](../specs/experience.md) owns action mappings.
+
+## Current Lab build and checks
+
+Use the installed toolchain on the established Linux build host. Fetch a clean,
+committed revision through Git and verify the source revision before building;
+executable and presenter must match. CMake 3.28 or later is required.
+
+```bash
+cmake -S native/lab -B native/build/lab -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DCRITTER_BUILD_SELECTED_LAB=ON
+cmake --build native/build/lab
+ctest --test-dir native/build/lab --output-on-failure
+python3 native/tests/test_selected_presenter.py native/build/lab/selected-lab/selected_lab
+```
+
+CTest covers game domain, native input and three-device kit behavior. For changes
+to the connected journey, use `python3 native/tests/test_kit_presenter.py BINARY` and
+`python3 native/tests/test_v1_journey.py BINARY FRAME_DIRECTORY` as appropriate; the latter
+plays the timed research/incubation/restart loop and captures native output.
+Reset has `python3 native/tests/test_sandbox_reset.py BINARY`. Check results against the
+actual revision; commands alone are not completed evidence. Current validation
+is recorded in [status](../STATUS.md).
+
+## Play through the browser presenter
+
+```bash
+export CRITTER_DEMO_BINARY="$PWD/native/build/lab/selected-lab/selected_lab"
+export BEECHO_V1_SAVE="$HOME/beecho-saves/play-world"
+mkdir -p "$(dirname "$BEECHO_V1_SAVE")"
+python3 native/presenter/server.py
+```
+
+Open `http://127.0.0.1:4180`. The presenter runs `kit-serve`. Native code owns
+focus, gathering, transfer acceptance, research, incubation and persistence;
+Python/JavaScript bridge controls and frames. Mode preview and action entry are
+separate; fresh Accept unloads once and ends the expedition. The receipt only
+closes transport metadata. [Architecture](../specs/architecture.md#three-device-host-simulator)
+owns recovery and exact authority; [V1](selected-lab/V1.md) owns provisional fixture
+values. Historical resource fractions are not current inventory.
+
+The configured save and `.kit` / `.kit.required` sidecars form one durable world.
+Keep them outside release bundles and back them up together. Reset sandbox is
+above the shells, preserves a recoverable world backup and rejects old input;
+[target reset documentation](selected-lab/README.md#resetting-the-simulator-sandbox)
+owns operator recovery. The default save derives from `CRITTER_DEMO_SAVE` plus
+`.beecho-v1` if `BEECHO_V1_SAVE` is unset. Set an absolute path deliberately.
+
+The bridge retains optional HTTP Basic authentication (`CRITTER_DEMO_PASSWORD`,
+username `lab`), same-origin input validation and loopback binding. Use HTTPS
+for external access. All visitors share the same simulated world. Native BMP
+frames are losslessly gzip-compressed when negotiated; host scaling and transport
+do not establish physical readability, display refresh or radio latency.
+
+## Existing toolchain setup and legacy build fixtures
+
+The commands below preserve the release-pinned setup and older compiler evidence.
+They are not a requirement to rebuild unchanged MCU scaffolds for Lab work.
+Legacy `critter_lab` is a separate domain CLI; `selected_lab serve` is the older
+single-Lab regression fixture. The deployed current presenter uses kit mode.
 
 ## Ubuntu build environment
 
@@ -36,18 +97,17 @@ mkdir -p "$CRITTER_TOOLS"
 source native/toolchains.env
 ```
 
-### Lab
+### Legacy Lab fixture
 
 ```bash
-cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release -DCRITTER_BUILD_SELECTED_LAB=ON
-cmake --build native/build/lab
 native/build/lab/critter_lab --save /tmp/critter-demo-state.txt status
 python3 native/tests/test_native.py native/build/lab/critter_lab
-python3 native/tests/test_selected_presenter.py native/build/lab/selected-lab/selected_lab
 size native/build/lab/critter_lab
 ```
 
-Expected initial status has revision 0 and Select available. The ELF executable and map are in `native/build/lab/`.
+This earlier fixture starts at revision 0 with Select available. Its ELF and map
+are separate from `native/build/lab/selected-lab/selected_lab`; do not substitute
+its command protocol for the current game.
 
 ### Staging bundle
 
@@ -92,22 +152,11 @@ archive, install or update software, or touch save state. Until then, the existi
 footer continues to say release metadata is unavailable; once supplied, it formats
 the actual activation time for Mexico City.
 
-### Play through the browser presenter
-
-The public presenter serves the [selected native Lab preview](selected-lab/README.md). Knob, Confirm and Back drive C-owned focus and frames. Start is a preview; resource stock remains unchanged. Research execution and persistence are not connected. The previous legacy CLI remains available for domain experiments, but is not the public screen.
-
-The standard-library bridge retains optional HTTP Basic authentication (`CRITTER_DEMO_PASSWORD`, username `lab`), same-origin input validation and loopback binding. Use HTTPS for public access. The selected process is shared by visitors and holds only transient preview state. The existing `CRITTER_DEMO_SAVE` file is unused and untouched.
-
-```bash
-export CRITTER_DEMO_BINARY="$PWD/native/build/lab/selected-lab/selected_lab"
-python3 native/presenter/server.py
-```
-
-The existing CI staging bundle packages this executable in its stable `bin/critter_lab` slot. Release metadata, service environment, package member names and deployment health endpoints remain compatible. No new deployment service is needed. Native host execution does not prove physical-panel behavior or flashed firmware.
-
 ### Legacy domain CLI
 
-`native/build/lab/critter_lab --save /absolute/path status` retains the earlier saved expedition/research fixture. Its `command NAME EXPECTED_REVISION OPERATION_ID` and `frame lab|probe REVISION` interfaces remain available for domain tests. The selected screen does not yet connect to that saved game; do not treat the two executables as interchangeable protocols.
+`native/build/lab/critter_lab --save /absolute/path status` retains the earlier
+saved expedition/research fixture. Its `command NAME EXPECTED_REVISION OPERATION_ID`
+and `frame lab|probe REVISION` interfaces are separate from the current kit target.
 
 ### Probe
 
@@ -164,10 +213,9 @@ The application ELF/bin/map, bootloader and partition binary are under `native/b
 
 ## What the evidence means
 
-Successful target builds establish compiler/linker compatibility and the scaffold's static allocations. The Linux checks exercise the fixture's transitions, saved state, retry handling, native frames and authenticated HTTP boundary. Boot logs for the two MCU targets remain unobserved until run on physical boards. Static size reports do not measure stack/heap peaks, peripheral timing, radio behavior, display refresh, energy or thermal performance. This setup implements no simulator and makes no claim of ESP32-S3 or nRF52840 emulation.
+Successful target builds establish compiler/linker compatibility and the scaffold's static allocations. The Linux checks exercise the fixture's transitions, saved state, retry handling, native frames and authenticated HTTP boundary. Boot logs for the two MCU targets remain unobserved until run on physical boards. Static size reports do not measure stack/heap peaks, peripheral timing, radio behavior, display refresh, energy or thermal performance. The MCU scaffold builds do not emulate ESP32-S3 or nRF52840 hardware; the current game simulator is the separate Linux host target described above.
 
 See the [hardware-native development requirement](../docs/builders/foundation-demo.md#execution-and-module-boundaries) and [device constraints](../specs/devices.md). Framework references: [Zephyr SDK setup](https://docs.zephyrproject.org/latest/develop/toolchains/zephyr_sdk.html), [XIAO BLE board](https://docs.zephyrproject.org/latest/boards/seeed/xiao_ble/doc/index.html), and [ESP-IDF ESP32-S3 setup](https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/get-started/linux-macos-setup.html).
-
 
 ## Verified prototype
 
@@ -175,15 +223,22 @@ On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 buil
 
 Probe linked with 105,228 bytes flash and 13,496 bytes RAM reported; Companion produced a 222,736-byte ESP32-S3 image. Both entry points execute a domain review transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
 
-## Native display contract
+## Current display and release contracts
 
-Profiles declare native dimensions, encoding and row size: Lab RGB888 3,072 bytes; Probe packed 1-bpp 16 bytes; Companion RGB888 1,104 bytes. The Linux BMP adapter expands monochrome only for presentation. MCU entry points use their own profiles. Row bounds, capacity and padding are checked by `native/tests/test_pixels.c`, compiled and run in CI.
+The current kit frames are Lab 1024×600 RGB, Companion 450×600 RGB and Dock
+792×272 monochrome. Native scanline rendering and BMP transport are defined in
+[the selected target](selected-lab/README.md). Earlier Probe/Companion profile
+sizes belong to legacy MCU fixtures; they do not describe the current simulator.
+[Font provenance](shared/fonts/README.md) retains licensing and source hashes.
 
-The revised sample/finding views use conceptual research regions, not a production genome bitmap. Older saved page values remain usable. The browser fits each complete native raster to the available view without changing its aspect ratio. It does not require panning inside a device screen. Selected device is remembered; Companion shows an honest empty state. Physical drivers/readiness and final interaction acceptance remain separate.
+The presenter reads validated adjacent `release.json` metadata at startup and
+exposes it through `/api/release`. The footer shows the revision and activation
+time in `America/Mexico_City`; missing metadata is a development build. The
+[CI release guide](UPDATER.md) owns packaging/provenance. No saved world,
+credential or private deployment detail belongs in a release bundle or metadata.
 
-
-Color Lab scenes use separately rasterized Bitstream Vera glyphs and a Lab-only scene/font module. Portable builds retain their own smaller atlas and profile-specific scenes. [Font provenance and regeneration](shared/fonts/README.md) records the license and source hash. These UI assets add read-only flash; row RAM remains bounded by the display profiles.
-
-The presenter accepts an optional deployment-injected `release.json` beside `server.py`: `commit` (full lowercase SHA), `subject` (optional single-line commit title), and `deployed_at` (ISO 8601 with timezone). It snapshots validated metadata at startup and exposes only those fields through `/api/release`. The footer shows the first seven SHA characters and release time in `America/Mexico_City` as plain text. Missing metadata is shown as a development build. Never put credentials or private deployment details in this file.
-
-The expedition's simulated-time action is always visible when available, below the device housing. Native screen action labels refer to the housing controls; they are not touchscreen hit regions. Transport requests time out after 15 seconds and retain the same pending operation for explicit retry. If browser storage is denied, retries remain available in memory while the page stays open; a warning explains that limitation. Full-frame fit preserves all pixels but does not establish comfortable phone-size readability.
+Screen action labels refer to physical-control focus, not touch regions. Only
+painted frames become ready for input; semantic changes reject obsolete actions,
+while time-only refresh preserves an eligible gesture. Browser suspension,
+overlap and uncertain acknowledgement cannot replay a stale release. These are
+host transport checks, not production device/radio validation.

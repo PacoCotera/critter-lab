@@ -1,0 +1,160 @@
+{
+  "nativeSource": "f4a6c5b2b0ef78e53eb0a892eb4db2ff6219dcdd",
+  "verifiedReleaseSource": "d097a1ee8027cfbe4501c08bb47a01cc942b25b8",
+  "provenance": "Screens rendered by the native C Lab/Kit kernels in isolated saved worlds. Final tested source has identical native rendering code. Family sheet only places unmodified captures together.",
+  "boundary": "Functional prototype output; provisional artwork, not implemented Gemini concepts or physical display evidence.",
+  "frames": [
+    {
+      "path": "05-reveal.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "82acc8bba42c468f78080b9535c62229adf6d003a10c2b3b10dc9f333a4236cc"
+    },
+    {
+      "path": "06-habitat.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "102fe4735283e21dedb98261eceb8cedd8913ea45b2cdc95487170c184765b8b"
+    },
+    {
+      "path": "accepted-offline-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "57ddd3a4d6384e2601bbe84818f203a62f1592d733a250d9b970a0570585cbfb"
+    },
+    {
+      "path": "accepted-offline-lab.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "c49a04a3b1833b8fa5b80f0053e11ebc788074bafbd61d1d312f4432d9a0ab92"
+    },
+    {
+      "path": "cargo-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "b7ebb8a73ea16e099ab358118ef37abc333fe5f6e923ed6387cef3e075ac0864"
+    },
+    {
+      "path": "complete-dock.png",
+      "dimensions": [
+        792,
+        272
+      ],
+      "sha256": "84f9c5c400cf08cca6789c39e68aa3af39c50b66b2e755d6e96796db2c088ca4"
+    },
+    {
+      "path": "family-native.png",
+      "dimensions": [
+        1510,
+        960
+      ],
+      "sha256": "8f0d7e0f229c40b696df8426b300a7e7169195f91a987cfc9336ce8c02434775"
+    },
+    {
+      "path": "gathering-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "4208127638a5ac739519cdc86dd0ef4f5a49afac6527b16183ea77730ca81515"
+    },
+    {
+      "path": "incoming-lab.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "ddc71b5cead0a6d2a98e6c6095ec824f823a9caeecc92d1c6d7d3c9dedc6cd6f"
+    },
+    {
+      "path": "incubation-active-home-3-incubator.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "b861f2028122845a8d3dad86498a9155c3f8aa9a06497c57d7e6a65dc788cb61"
+    },
+    {
+      "path": "initial-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "e89626cfb0a069b5e04405004686f4927d40c0c46215664fdf45a6278e8689c9"
+    },
+    {
+      "path": "initial-dock.png",
+      "dimensions": [
+        792,
+        272
+      ],
+      "sha256": "f5a03ad6aaeb3d86bdda11ead9aeacf6722296d875e654c11d8ded8a3bc3a1c3"
+    },
+    {
+      "path": "initial-lab.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "9859814336a67ca507072d67b51915fb2915eee75a23330e3b8b1ca7e17520e0"
+    },
+    {
+      "path": "mode-cargo-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "9c4170831bbff4f1197e969264ee7e5f72f3bbbe9c5e78ab0af355ea473103ab"
+    },
+    {
+      "path": "mode-companions-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "e5bfd4ae5e642cc5a9db7158224783e8e9f85dcdea23054bc948831ef42d9ba5"
+    },
+    {
+      "path": "new-expedition-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "2c93d16633c9b2080e9a13d7dc146bc4f12965d9f9f7fe0e1f63d7db1b22bb24"
+    },
+    {
+      "path": "researched-home-2-research.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "146594be9e8abc3ccbbd3dc7b9a5fb4d24bdfe0626630f43de4e7f91f7cab9d5"
+    },
+    {
+      "path": "revealed-resident-home-0-overview.png",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "sha256": "21acde53d0a01ed781e4da55e576996078375fc4c91f1827167df870f1282d51"
+    },
+    {
+      "path": "send-review-companion.png",
+      "dimensions": [
+        450,
+        600
+      ],
+      "sha256": "5bb749ab884f9291eaf4556420bf1d64ae2d689acca713e352c60f0aa851acbf"
+    }
+  ]
+}
