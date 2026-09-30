@@ -39,6 +39,18 @@ the haul. Deliberate Send, Lab acceptance and Back reach Home. These captures al
 exposed a review-status/progress overlap and a saved-form lookup dependency; their
 corrections require separate actual-frame evidence and are not approved here.
 
+The [corrected Companion trace](companion-corrected/trace.json), source
+`4475b913c8bab901d69b0bae64faae1d812c88c1`, repeats only those affected interactions.
+Saved movement/effort remains visible before and after a visit and while offline.
+Cargo review separates status from its elapsed time, keeps Keep cargo focused and
+uses a neutral Confirm instruction. Focused actual UX and art review accepted
+these corrections. The retained-form helper reads a revealed saved record under
+a supported mapping/context; unknown metadata is not guessed. Its focused Kit
+regression passed at `623124a71dec10a435b958ee768bb4ba852da51b`, whose production
+code is unchanged from4475. Missing/incomplete live source research, visits,
+offline operation and restart cannot change the retained title. No new schema,
+queued offline action or genome reexpression was introduced.
+
 ## Inspect the journey
 
 | Step | Actual native frame |

@@ -24,6 +24,7 @@ const references = {
   materials: 'design/lab-controls/combined-family-materials.png',
   pipSource: 'design/v1-pip/gemini-source-capture.png',
   probeScene: 'design/core-v1-art/source/gemini-probe-scene-original.png',
+  researchVignettes: 'design/core-v1-art/source/gemini-research-vignettes-original.png',
 };
 const manifest = {
   status: 'Nine retained material masks passed focused art-direction critique; other candidates and actual native compositions await review',
@@ -195,6 +196,47 @@ async function createSources() {
   await exportAsset('focus-frame', await frame(320, 64, true), path.join(directory, 'source/interface.svg'), 'c18/arrival07', 'Quiet action with restrained warm corners; label remains live.');
 }
 
+async function createResearchSources() {
+  const cropSource = path.join(directory, 'source/research-vignette-crops.json');
+  const recipe = JSON.parse(fs.readFileSync(cropSource, 'utf8'));
+  const source = path.join(productRoot, recipe.source);
+  if (hash(fs.readFileSync(source)) !== recipe.sourceSha256)
+    throw new Error('Research original differs from the recorded source');
+  const names = recipe.assets.map(asset => asset.name);
+  manifest.assets = manifest.assets.filter(asset => !names.includes(asset.name));
+  manifest.references = manifest.references.filter(reference => reference.id !== 'researchVignettes');
+  manifest.references.push({id: 'researchVignettes', path: recipe.source, sha256: recipe.sourceSha256});
+  for (const asset of recipe.assets) {
+    if (asset.rectangle.width / 2 !== asset.width || asset.rectangle.height / 2 !== asset.height)
+      throw new Error(`Research aspect/half-scale mismatch: ${asset.name}`);
+    const png = await sharp(source).extract(asset.rectangle)
+      .resize(asset.width, asset.height, {kernel: 'nearest'}).png().toBuffer();
+    await exportAsset(asset.name, png, source, 'researchVignettes', asset.meaning);
+    Object.assign(manifest.assets[manifest.assets.length - 1], {
+      rectangle: asset.rectangle,
+      production: {kernel: 'nearest', scaleNumerator: 1, scaleDenominator: 2,
+        originalWidth: 1024, originalHeight: 572,
+        recipe: relative(cropSource), recipeSha256: hash(fs.readFileSync(cropSource)),
+        alpha: recipe.alpha, status: 'Contextual source suitable; final derivative/native composition awaiting actual review'},
+    });
+  }
+}
+
+async function researchContactSheet() {
+  const names = ['research-inheritance', 'research-movement', 'research-effort'];
+  const layers = [await textLayer('Research context · actual1× derivatives · nearest half scale', 24, 18, 18, palette.ink, true)];
+  for (let index = 0; index < names.length; ++index) {
+    const image = images.get(names[index]);
+    const info = await sharp(image).metadata();
+    const left = 24 + index * 240;
+    layers.push(await textLayer(names[index].replace('research-', ''), left, 58, 18));
+    layers.push({input: image, left: left + Math.floor((196 - info.width) / 2), top: 91});
+    layers.push(await textLayer(`${info.width}×${info.height} · opaque source field`, left, 302, 14, palette.secondary));
+  }
+  fs.writeFileSync(path.join(directory, 'research-contact-1x.png'),
+    await sharp({create: {width: 760, height: 350, channels: 4, background: palette.graphite}}).composite(layers).png().toBuffer());
+}
+
 async function contactSheet() {
   const layers = [];
   layers.push(await textLayer('Core V1 master family · actual native 1× footprints', 24, 18, 22, palette.ink, true));
@@ -276,8 +318,18 @@ async function alphaProof() {
 }
 
 async function main() {
+  if (process.argv.includes('--research-only')) {
+    Object.assign(manifest, JSON.parse(fs.readFileSync(path.join(directory, 'manifest.json'), 'utf8')));
+    await createResearchSources();
+    await researchContactSheet();
+    fs.writeFileSync(path.join(directory, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+    console.log('Exported only three research context derivatives and their1× proof; existing materials/Pip untouched.');
+    return;
+  }
   await createSources();
+  await createResearchSources();
   await contactSheet();
+  await researchContactSheet();
   await referenceComparison();
   await alphaProof();
   for (const [role, filename] of Object.entries(manifest.typography).filter(([, value]) => typeof value === 'string' && value.endsWith('.ttf'))) {

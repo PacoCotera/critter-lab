@@ -8,8 +8,8 @@ Shared frame/resource art and the Gemini expedition scene are integrated; actual
 screen review has accepted Probe clearance, retained portraits and bounded
 research semantics. The same residents and saved visits are available on Lab and
 Companion; disconnected snapshots survive restart. Local retained-art generation
-and read-only replay are validated. Illustrated research findings, stable saved
-trait labels, final changed-screen acceptance and connected delivery remain.
+and read-only replay are validated. Saved trait labels and changed Companion screens passed focused actual review.
+Illustrated research findings, their acceptance and connected delivery remain.
 
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
@@ -38,13 +38,19 @@ and the accepted physical-control panel; screen artwork is not clickable.
 The sandbox reset is outside device shells and preserves the matching saved
 world and sidecars in a recoverable backup.
 
-The validated source checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
+The earlier delivered-loop validation checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
 three native CTest suites, HTTP presenter checks and the full timed
 research/incubation/restart journey passed. [CI run 36673219813](https://github.com/PacoCotera/critter-lab/actions/runs/36673219813)
 passed for that revision. The [live sandbox](https://critterlab.basicberry.com)
 reports its running release revision and activation time; source validation alone
 does not establish that live activation. Only the existing Git/CI release path
 publishes accepted source.
+
+The active Core V1 source `623124a71dec10a435b958ee768bb4ba852da51b` passed
+[CI run36756721600](https://github.com/PacoCotera/critter-lab/actions/runs/36756721600).
+Its connected journey and focused changed-screen evidence are in
+[the Core V1 packet](docs/evidence/polished-core-v1/README.md). It is still a draft;
+the current live sandbox has not received that release.
 
 Inspect the [actual native gallery](design/connected-device-review/native/README.md)
 for the current functional presentation. The [Gemini Probe03, Cargo04 and reception07 references](design/companion-connected-art/README.md)

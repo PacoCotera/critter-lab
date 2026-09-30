@@ -1,6 +1,6 @@
 {
-  "scope": "Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories and one separately reviewed resampled Gemini setting; no screen/family/runtime approval",
-  "rgbaBytes": 1196036,
+  "scope": "Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories, one separately reviewed resampled Gemini setting and three contextual research derivatives; no screen/family/runtime approval",
+  "rgbaBytes": 1451692,
   "assets": [
     {
       "id": "CORE_ART_DATA_COMPACT",
@@ -504,6 +504,108 @@
         "meaning": "Authored fictional setting; no location/weather/telemetry/creature/encounter assertion"
       },
       "nativeRgbaBytes": 358400
+    },
+    {
+      "id": "CORE_ART_RESEARCH_INHERITANCE",
+      "name": "research-inheritance",
+      "file": "design/core-v1-art/exports/research-inheritance.png",
+      "width": 109,
+      "height": 195,
+      "drawWidth": 109,
+      "drawHeight": 195,
+      "channels": 4,
+      "source": "design/core-v1-art/source/gemini-research-vignettes-original.png",
+      "sourceId": "researchVignettes",
+      "sourceSha256": "9ce1bbf618cb8dd78b062564f0efc93d5fc7aff6859ff39048a6b438f6ef9ada",
+      "pngSha256": "24ade51bef1327e8d7525ff8c6fb14272697231e2eaaf4a1d69da7edae3314aa",
+      "rgbaSha256": "53abc240dde80e1dfd7d3e4dc4de1d9ac2a5e1ce49c5fc3d11084eddeb52cada",
+      "note": "Contextual sample/reference comparison; tubes are tool staging, not inventory or specimen results.",
+      "rectangle": {
+        "left": 44,
+        "top": 78,
+        "width": 218,
+        "height": 390
+      },
+      "production": {
+        "kernel": "nearest",
+        "scaleNumerator": 1,
+        "scaleDenominator": 2,
+        "originalWidth": 1024,
+        "originalHeight": 572,
+        "recipe": "design/core-v1-art/source/research-vignette-crops.json",
+        "recipeSha256": "0e11e409446ce84c88d6734680d41869de792062d853fa6e6a0d42314bc76782",
+        "alpha": "Original opaque rectangle retained; no color-key, flood matte or background removal.",
+        "status": "Contextual source suitable; final derivative/native composition awaiting actual review"
+      },
+      "nativeRgbaBytes": 85020
+    },
+    {
+      "id": "CORE_ART_RESEARCH_MOVEMENT",
+      "name": "research-movement",
+      "file": "design/core-v1-art/exports/research-movement.png",
+      "width": 151,
+      "height": 133,
+      "drawWidth": 151,
+      "drawHeight": 133,
+      "channels": 4,
+      "source": "design/core-v1-art/source/gemini-research-vignettes-original.png",
+      "sourceId": "researchVignettes",
+      "sourceSha256": "9ce1bbf618cb8dd78b062564f0efc93d5fc7aff6859ff39048a6b438f6ef9ada",
+      "pngSha256": "3444490da9f5e4723b9d228603c8f43b3c5a9d4ca52f2e3af66771d526c4376b",
+      "rgbaSha256": "d60ed1a8639e7836afbf0871dd6c567da45510b16499e6e1e014e42aae6936c9",
+      "note": "Contextual movement observation instrument and generic blank evidence board; no specimen trace or measurements.",
+      "rectangle": {
+        "left": 330,
+        "top": 154,
+        "width": 302,
+        "height": 266
+      },
+      "production": {
+        "kernel": "nearest",
+        "scaleNumerator": 1,
+        "scaleDenominator": 2,
+        "originalWidth": 1024,
+        "originalHeight": 572,
+        "recipe": "design/core-v1-art/source/research-vignette-crops.json",
+        "recipeSha256": "0e11e409446ce84c88d6734680d41869de792062d853fa6e6a0d42314bc76782",
+        "alpha": "Original opaque rectangle retained; no color-key, flood matte or background removal.",
+        "status": "Contextual source suitable; final derivative/native composition awaiting actual review"
+      },
+      "nativeRgbaBytes": 80332
+    },
+    {
+      "id": "CORE_ART_RESEARCH_EFFORT",
+      "name": "research-effort",
+      "file": "design/core-v1-art/exports/research-effort.png",
+      "width": 166,
+      "height": 136,
+      "drawWidth": 166,
+      "drawHeight": 136,
+      "channels": 4,
+      "source": "design/core-v1-art/source/gemini-research-vignettes-original.png",
+      "sourceId": "researchVignettes",
+      "sourceSha256": "9ce1bbf618cb8dd78b062564f0efc93d5fc7aff6859ff39048a6b438f6ef9ada",
+      "pngSha256": "a1b05d3f7d4e2f5f16c981b21368e47944380e89e0a354db591bafb040e48cc4",
+      "rgbaSha256": "005aa690a465c5aa21ed2ba6584cf4abe09a9b7bd1aee3605fa2f850a956543f",
+      "note": "Contextual effort comparison; same observation setup, equal blank evidence boards, no winner, bar, factor or resource quantity.",
+      "rectangle": {
+        "left": 670,
+        "top": 150,
+        "width": 332,
+        "height": 272
+      },
+      "production": {
+        "kernel": "nearest",
+        "scaleNumerator": 1,
+        "scaleDenominator": 2,
+        "originalWidth": 1024,
+        "originalHeight": 572,
+        "recipe": "design/core-v1-art/source/research-vignette-crops.json",
+        "recipeSha256": "0e11e409446ce84c88d6734680d41869de792062d853fa6e6a0d42314bc76782",
+        "alpha": "Original opaque rectangle retained; no color-key, flood matte or background removal.",
+        "status": "Contextual source suitable; final derivative/native composition awaiting actual review"
+      },
+      "nativeRgbaBytes": 90304
     }
   ]
 }

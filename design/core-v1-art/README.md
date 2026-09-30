@@ -45,6 +45,30 @@ edges or substitute a new resident. The separate still visit-acknowledgement
 layer leaves anatomy/markings untouched. It depicts only the actual visit result,
 with no training, needs or friendship progression.
 
+The contextual research sheet is preserved as
+`source/gemini-research-vignettes-original.png`, delivered1024×572 by Gemini3.6
+Flash through Copy image. Its prompt and provenance retain the original hash and
+an immutable copy of the attached family reference. The source includes unwanted
+header/footer labels; explicit rectangles in `source/research-vignette-crops.json`
+exclude them. Nearest half-scale derivatives retain aspect and opaque source
+fields: inheritance109×195, movement151×133 and effort166×136. These are measured
+production derivatives, not native generated masters or independently editable
+internal drawing layers.
+
+The instrument subjects depict contextual research activity. Three tubes are
+tool staging, not inventory. Blank evidence boards remain blank and do not claim
+functional device screens, observed specimen traces, rankings or energy factors.
+Actual findings and reference conditions stay in live domain-owned text. Complete
+coat comparison uses the two permitted original portraits only after the complete
+candidate projection; incomplete comparisons reveal no full phenotype.
+
+Run `node build.cjs --research-only` to update only the three research exports,
+manifest entries and `research-contact-1x.png`, then run
+`node ../../native/selected-lab/convert-core-art.cjs` from this directory for native
+arrays. The resource masks, Pip PNGs and original family contact sheet remain
+unchanged in that selective export. Actual composed finding acceptance is a
+separate review from contextual source suitability.
+
 Run `node build.cjs` with the existing Node/Sharp dependency. It exports candidates,
 the manifest, actual1× contact sheet, reference comparison
 and graphite/pale alpha proof with an integer diagnostic. Generated labels are

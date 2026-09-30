@@ -23,6 +23,9 @@ const accepted = [
   ['samples-mono', 'SAMPLES_MONO'], ['incubating-mono', 'INCUBATING_MONO'],
   ['link-mono', 'LINK_MONO'],
   ['probe-place', 'PROBE_PLACE'],
+  ['research-inheritance', 'RESEARCH_INHERITANCE'],
+  ['research-movement', 'RESEARCH_MOVEMENT'],
+  ['research-effort', 'RESEARCH_EFFORT'],
 ];
 
 async function main() {
@@ -99,7 +102,7 @@ async function main() {
   fs.writeFileSync(path.join(__dirname, 'core_art.h'), header.join('\n'));
   fs.writeFileSync(path.join(__dirname, 'core_art.c'), definitions.join('\n\n'));
   fs.writeFileSync(path.join(artRoot, 'native-export-manifest.json'), JSON.stringify({
-    scope: 'Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories and one separately reviewed resampled Gemini setting; no screen/family/runtime approval',
+    scope: 'Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories, one separately reviewed resampled Gemini setting and three contextual research derivatives; no screen/family/runtime approval',
     rgbaBytes, assets: records,
   }, null, 2) + '\n');
   console.log(`Generated ${accepted.length} native RGBA tables: ${rgbaBytes} bytes. No native compilation or renderer edits.`);

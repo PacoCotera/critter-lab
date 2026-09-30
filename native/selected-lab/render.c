@@ -747,26 +747,65 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     SelectedResearchView view;
     if (selected_lab_research_method(lab, lab->sample, method, &entry) &&
         selected_lab_research_view(lab, lab->sample, &view)) {
-      label(&row, 402, 203, game->samples[lab->sample].id, 18, MUTED);
+      PipSupportedCandidate carried, marked;
+      int illustrated_forms = finding_page && !strcmp(entry.id, "coat-comparison") &&
+          view.complete && selected_lab_candidate(lab, lab->sample, 0, &carried) &&
+          selected_lab_candidate(lab, lab->sample, 1, &marked);
+      label(&row, 402, illustrated_forms ? 195 : 203,
+            game->samples[lab->sample].id, 18, MUTED);
       if (lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING) {
-        label(&row, 416, 249, "RECORDED FINDING", 22, SAGE);
         if (view.legacy && method < 2) {
+          label(&row, 416, 249, "RECORDED FINDING", 22, SAGE);
           sprite(&row, method == 1 ? SPRITE_EYE_RING : SPRITE_CROWN, 421, 300, 115, 115);
           label(&row, 421, 425, "Reference feature", 18, MUTED);
           wrapped_label(&row, 578, 293, entry.finding ? entry.finding : "No finding disclosed.", 22, INK, 374);
+          research_summary(&row, lab, lab->sample, 421, 449, 535);
         } else {
-          sprite(&row, SPRITE_SAMPLE, 904, 203, 54, 54);
-          wrapped_label(&row, 416, 292, entry.finding ? entry.finding : "No finding disclosed.", 22, INK, 535);
-          if (!strcmp(entry.id, "coat-comparison") && entry.finding) {
-            rectangle(&row, 416, 358, 250, 65, ART_FIELD);
-            rectangle(&row, 690, 358, 266, 65, ART_FIELD);
-            label(&row, 430, 367, "Plain coat", 22, INK);
-            label(&row, 430, 398, "Pale variation carried", 18, MUTED);
-            label(&row, 704, 367, "Pale markings", 22, INK);
-            label(&row, 704, 398, "Appearance expressed", 18, MUTED);
+          label(&row, 53, 217, "RECORDED FINDING", 18, SAGE);
+          if (illustrated_forms) {
+            /* Complete supported alternatives, never an early founder reveal. */
+            label(&row, 405, 217, "Plain coat / pale carried", 18, INK);
+            label(&row, 699, 217, "Pale markings / expressed", 18, INK);
+            sprite(&row, SELECTED_SPRITE_COUNT + carried.expression.pale_markings,
+                   405, 239, 261, 289);
+            sprite(&row, SELECTED_SPRITE_COUNT + marked.expression.pale_markings,
+                   699, 239, 261, 289);
+            wrapped_label(&row, 53, 246, "Known: complete supported form", 18, SAGE, 273);
+            wrapped_label(&row, 53, 311, "No unresolved reference knowledge.", 18, MUTED, 273);
+            wrapped_label(&row, 53, 375,
+                          game->samples[lab->sample].incubated
+                              ? "Sample used / research record stays."
+                              : "Choose a supported form.",
+                          18, INK, 273);
+            wrapped_label(&row, 53, 425,
+                          entry.finding ? entry.finding : "No finding disclosed.",
+                          22, INK, 273);
+          } else {
+            CoreArtId context = (!strcmp(entry.id, "movement") ||
+                                 !strcmp(entry.id, "movement.drive")) ? CORE_ART_RESEARCH_MOVEMENT
+                : (!strcmp(entry.id, "effort-comparison") ||
+                   !strcmp(entry.id, "movement.efficiency")) ? CORE_ART_RESEARCH_EFFORT
+                                                        : CORE_ART_RESEARCH_INHERITANCE;
+            const CoreArtSprite *illustration = core_art_sprite(context);
+            /* Blank evidence boards depict tools, not this sample's results. */
+            label(&row, 421, 225, "Research context", 18, MUTED);
+            core_art_row(context, 416 + (184 - (int)illustration->width) / 2,
+                         249 + (195 - (int)illustration->height) / 2,
+                         row.y, SELECTED_LAB_WIDTH, row.pixels);
+            wrapped_label(&row, 615, 249,
+                          entry.finding ? entry.finding : "No finding disclosed.",
+                          22, INK, 342);
+            if (!strcmp(entry.id, "coat-comparison") && entry.finding) {
+              rectangle(&row, 615, 337, 160, 93, ART_FIELD);
+              rectangle(&row, 794, 337, 166, 93, ART_FIELD);
+              label(&row, 626, 345, "Plain coat", 18, INK);
+              wrapped_label(&row, 626, 374, "Pale variation carried", 18, MUTED, 137);
+              label(&row, 805, 345, "Pale markings", 18, INK);
+              wrapped_label(&row, 805, 374, "Appearance expressed", 18, MUTED, 143);
+            }
+            research_summary(&row, lab, lab->sample, 421, 449, 535);
           }
         }
-        research_summary(&row, lab, lab->sample, 421, 449, 535);
       } else {
         heading(&row, 416, 243, entry.title, 26, INK);
         label(&row, 416, 283, entry.known ? "Recorded / inspect freely"
