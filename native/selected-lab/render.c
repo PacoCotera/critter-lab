@@ -176,10 +176,11 @@ static void resident_portrait(SelectedRow *row, const GameState *game,
     label(row, x, y + 110, "Portrait pending", 22, MUTED);
 }
 
-static const char *resident_form_title(const SelectedLab *lab,
-                                       const GameIndividual *individual,
-                                       const GameIndividualMetadata *metadata) {
-  if (!individual->revealed || !metadata->candidate_id[0])
+const char *selected_lab_resident_form_title(
+    const SelectedLab *lab, const GameIndividual *individual,
+    const GameIndividualMetadata *metadata) {
+  if (!lab || !individual || !metadata || !individual->revealed ||
+      !metadata->candidate_id[0])
     return NULL;
   for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
     if (strcmp(lab->game.samples[sample].id, individual->source_sample_id))
@@ -701,7 +702,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       label(&row, 588, 354, text, 22, INK);
       snprintf(text, sizeof(text), "%u used / records retained", used);
       label(&row, 588, 394, text, 22, INK);
-      label(&row, 420, 478, "Select a sample to inspect its own knowledge.", 18, MUTED);
+      label(&row, 420, 478, "Select a sample to see its findings.", 18, MUTED);
     } else {
       unsigned sample = lab->focus - 1;
       SelectedResearchView view;
@@ -850,7 +851,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
                                                  : "Plain coat",
             28, WARM);
       label(&row, 686, 297, "Crown frill / pale eye rings", 18, INK);
-      const char *form_title = resident_form_title(
+      const char *form_title = selected_lab_resident_form_title(
           lab, individual, &game->individual_metadata[lab->resident]);
       label(&row, 686, 327, "Selected form", 18, MUTED);
       wrapped_label(&row, 686, 349,

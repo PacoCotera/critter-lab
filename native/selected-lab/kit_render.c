@@ -237,15 +237,19 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     struct tm *snapshot = gmtime(&updated);
     char stamp[16] = "unknown";
     if (kit_residents_updated_at(kit) && snapshot)
-      strftime(stamp, sizeof(stamp), "%H:%M:%S", snapshot);
-    snprintf(value, sizeof(value), "%s / snapshot %s",
-             kit_resident_cache_current(kit) ? "Live"
-             : kit->journal.companion_online ? "Cached / stale" : "Offline / cached", stamp);
+      strftime(stamp, sizeof(stamp), "%H:%M", snapshot);
+    snprintf(value, sizeof(value), "%s / %s %s",
+             kit->journal.companion_online ? "Lab connected" : "Offline",
+             kit_resident_cache_current(kit) ? "Updated" : "Last Lab update",
+             stamp);
     text(row, 28, 128, value, 18, SECONDARY);
     if (record && count) {
       if (!selector && !friend_visit)
         action_focus(row, 26, 154, 398, 35);
-      heading(row, 39, 160, record->individual.id, 26, TEXT);
+      heading(row, 39, 160,
+              record->individual.expression.pale_markings ? "Pale markings" : "Plain coat",
+              26, TEXT);
+      text(row, 280, 165, record->individual.id, 18, SECONDARY);
       unsigned asset;
       if (selected_lab_original_art(&record->individual, &record->metadata, &asset))
         core_art_row((CoreArtId)asset, 28, 194, row->y, row->width, row->pixels);
@@ -254,21 +258,34 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       text(row, 303, 195, "Visits", 18, SECONDARY);
       snprintf(value, sizeof(value), "%u", record->individual.care_visits);
       heading(row, 303, 223, value, 32, TEXT);
-      wrapped(row, 303, 278, "From your Lab", 116, 18, SECONDARY);
-      if (view->message[0])
-        wrapped(row, 303, 323, view->message, 116, 18, TEXT);
-      else if (!kit_resident_visit_available(kit))
-        wrapped(row, 303, 323,
-                reserved || receipt ? "Finish the pending transfer before visiting."
-                : kit_resident_cache_current(kit) ? "Visit unavailable for this resident."
-                                                 : "Visits unavailable. Reconnect to the Lab.",
-                116, 18, SECONDARY);
+      const char *form_title = selected_lab_resident_form_title(
+          kit->lab, &record->individual, &record->metadata);
+      const char *property = NULL;
+      if (form_title && !strcmp(record->metadata.candidate_id, "B1"))
+        property = "Burst capable / Baseline walking energy";
+      else if (form_title && !strcmp(record->metadata.candidate_id, "B0"))
+        property = "Steady / Lower walking energy";
+      if (property)
+        wrapped(row, 303, 267, property, 116, 18, TEXT);
+      int feedback_y = property ? 386 : 278;
+      int visit_available = kit_resident_visit_available(kit);
+      int saved_message = !strncmp(view->message, "Visit saved", 11);
+      const char *feedback;
+      if (!visit_available) {
+        feedback = reserved || receipt ? "Finish transfer before visiting."
+                   : kit_resident_cache_current(kit) ? "Visit unavailable for this resident."
+                   : saved_message ? "Previous visit saved in Lab. Reconnect."
+                                   : "Reconnect to the Lab to spend time together.";
+      } else if (saved_message)
+        feedback = "You spent time together. Visit saved.";
       else
-        wrapped(row, 303, 323, "Spend time together.", 116, 18, SECONDARY);
+        feedback = view->message[0] ? view->message : "Spend time together.";
+      wrapped(row, 303, feedback_y, feedback, 116, 18,
+              visit_available ? TEXT : SECONDARY);
       if (!friend_visit && !selector) {
         snprintf(value, sizeof(value), "%u / %u residents", view->focus + 1, count);
         text(row, 28, 489, value, 18, SECONDARY);
-        heading(row, 28, 516, "Confirm: meet this resident", 26, TEXT);
+        heading(row, 28, 516, "Confirm: view this critter", 26, TEXT);
       }
     } else {
       heading(row, 28, 177, "NO REVEALED RESIDENTS", 26, TEXT);
@@ -285,7 +302,12 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
          26, TEXT);
     if (has_run || receipt || kit->journal.phase == KIT_COMPLETE) {
       text(row, 28, 158, ended ? "Expedition ended" : kit_route(kit), 18, SECONDARY);
-      text(row, 28, 182, ended ? "Supplies stored at the Lab" : kit_expedition_status(kit), 18, SECONDARY);
+      const char *status = ended ? "Supplies stored at the Lab" : kit_expedition_status(kit);
+      if (review)
+        status = elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
+                 : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
+                                                        : "Sample shelf full / supplies only";
+      text(row, 28, 182, status, 18, SECONDARY);
       if (!ended) {
         snprintf(value, sizeof(value), "%u / %u sec", elapsed,
                  GAME_EXPEDITION_SECONDS);
@@ -305,15 +327,9 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       heading(row, x + 81, 220, value, 32, TEXT);
     }
     if (review) {
-      text(row, 28, 425,
-           elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only"
-           : game->sample_count < GAME_MAX_SAMPLES
-               ? "Sample ready to record"
-               : "Sample shelf full / supplies only",
-           18, SECONDARY);
-      if (has_run && elapsed < GAME_EXPEDITION_SECONDS)
-        text(row, 28, 456, "Return ends this outing / no sample", 18,
-             SECONDARY);
+      wrapped(row, 28, 420,
+              "Send stops gathering. Lab acceptance stores the haul and ends the expedition.",
+              390, 18, SECONDARY);
     } else {
       snprintf(value, sizeof(value), "Free space: %u / 40 units",
                (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
@@ -355,9 +371,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
         } else if (!game->expedition_active) {
           strcpy(value, "Paused / next supply attempt saved");
         } else {
-          resource_names(value, sizeof(value), "Next: ", game_gather_due_mask(game));
-          size_t used = strlen(value);
-          snprintf(value + used, sizeof(value) - used, " / %u sec", (remaining + 999) / 1000);
+          snprintf(value, sizeof(value), "Next try in %u sec / may find supplies",
+                   (remaining + 999) / 1000);
         }
         text(row, 28, 439, value, 18, SECONDARY);
         if (game->gather_last_attempted_mask) {

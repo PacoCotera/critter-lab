@@ -152,5 +152,9 @@ void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
 int selected_lab_original_art(const GameIndividual *individual,
                               const GameIndividualMetadata *metadata,
                               unsigned *asset);
+/* Read the disclosed form only when its saved source and candidate IDs match. */
+const char *selected_lab_resident_form_title(
+    const SelectedLab *lab, const GameIndividual *individual,
+    const GameIndividualMetadata *metadata);
 int selected_lab_bmp(const SelectedLab *lab, FILE *output);
 #endif
