@@ -140,8 +140,8 @@ def run(binary, proof=None):
                 frame(device, "complete")
             assert press("companion", "confirm")["page"] == "probe"
             assert state("companion")["focus"] == "Field survey"
-            press("companion", "confirm")
-            assert state("companion")["expedition_seconds"] == 0
+            started = press("companion", "confirm")
+            assert started["expedition_seconds"] == 0
             frame("companion", "new-expedition")
             print("Three-device HTTP/native frame, handoff, link recovery and endpoint guards passed", flush=True)
         finally:
