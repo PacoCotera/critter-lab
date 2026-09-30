@@ -28,6 +28,7 @@ jobs:
           cmake -S native/lab -B native/build/lab -G Ninja -DCMAKE_BUILD_TYPE=Release -DCRITTER_BUILD_SELECTED_LAB=ON
           cmake --build native/build/lab
           node --test native/selected-lab/bridge.test.mjs
+          node --test native/presenter/reset.test.mjs
           ctest --test-dir native/build/lab -R "selected_lab_native_checks|game_domain_checks|three_device_kit_checks" --output-on-failure
           native/build/lab/selected-lab/selected_lab frame native/build/lab/selected-lab.bmp
           git rev-parse HEAD > native/build/lab/source-revision.log
@@ -38,6 +39,7 @@ jobs:
           python3 native/tests/test_native.py "$PWD/native/build/lab/critter_lab"
           python3 native/tests/test_selected_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
           python3 native/tests/test_kit_presenter.py "$PWD/native/build/lab/selected-lab/selected_lab"
+          python3 native/tests/test_sandbox_reset.py "$PWD/native/build/lab/selected-lab/selected_lab"
           python3 native/tests/test_v1_journey.py "$PWD/native/build/lab/selected-lab/selected_lab" native/build/lab/journey
           python3 native/tests/test_updater.py
           python3 native/tests/test_delivery.py

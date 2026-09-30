@@ -1,3 +1,31 @@
+let sandbox;
+let replacingSandbox = false;
+const stopDeviceTransports = [];
+
+function stopSandboxTransports() {
+  replacingSandbox = true;
+  for (const stop of stopDeviceTransports) stop();
+}
+
+function reconnectSandbox() {
+  if (replacingSandbox) return;
+  stopSandboxTransports();
+  const label = document.querySelector('#sandbox-status');
+  if (label) label.textContent = 'Sandbox changed. Reconnecting all three devices…';
+  window.location.reload();
+}
+
+function acceptSandbox(value) {
+  if (replacingSandbox) return false;
+  if (value === undefined || value === null) return true; // Legacy transport fixture.
+  if (sandbox === undefined) sandbox = value;
+  if (sandbox !== value) {
+    reconnectSandbox();
+    return false;
+  }
+  return true;
+}
+
 async function connectDevice(deviceId, controls) {
   const buttons = controls.map(name => document.querySelector(`#${deviceId}-${name}`));
   // Fixed physical-actuator transport only. Page/focus decisions and pixels live in C.
@@ -20,6 +48,17 @@ async function connectDevice(deviceId, controls) {
   let frameInFlight = false;
   let pollInFlight = false;
 
+  stopDeviceTransports.push(() => {
+    inputBlocked = true;
+    ++transportGeneration;
+    ++gestureGeneration;
+    ++drawGeneration;
+    held.clear();
+    inputStartedAt = 0;
+    buttons.forEach(button => button.classList.remove('held'));
+    status.textContent = 'Sandbox reconnecting; previous input discarded.';
+  });
+
   async function stopAfterTransportFailure() {
     if (inputBlocked) return;
     inputBlocked = true;
@@ -31,7 +70,7 @@ async function connectDevice(deviceId, controls) {
     status.textContent = 'Transport interrupted; activation stopped. Reload to reconnect with a fresh gesture.';
     // A down may have reached C even when its response was lost. Never send a queued up.
     try {
-      const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event: 'cancel', revision: visibleRevision }) });
+      const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event: 'cancel', revision: visibleRevision, sandbox }) });
       if (!response.ok) return;
       await response.json();
     } catch {
@@ -43,16 +82,18 @@ async function connectDevice(deviceId, controls) {
     if (inputBlocked) return;
     const generation = transportGeneration;
     const gesture = gestureGeneration;
+    const requestedSandbox = sandbox;
     const activation = /-(down|up)$/.test(event);
     ++pendingCommands;
     if (activation) ++pendingActivations;
     commands = commands.then(async () => {
       if (inputBlocked || generation !== transportGeneration || (activation && gesture !== gestureGeneration)) return;
-      const command = { device: deviceId, event, revision: requestedFrame };
+      const command = { device: deviceId, event, revision: requestedFrame, sandbox: requestedSandbox };
       // Reassert the actually painted frame atomically with the physical down.
       // Native semantic bounds still reject obsolete frames; up stays separate.
       if (event.endsWith('-down')) command.ready = true;
       const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify(command) });
+      if (response.status === 409) { reconnectSandbox(); return; }
       if (!response.ok) throw new Error('Native input transport unavailable.');
       const state = await response.json();
       if (event.endsWith('-up') && inputStartedAt) {
@@ -69,7 +110,7 @@ async function connectDevice(deviceId, controls) {
 
   function receive(state) {
     // A background status response can arrive after a newer input response.
-    if (inputBlocked || state.revision < revision) return;
+    if (!acceptSandbox(state.sandbox) || inputBlocked || state.revision < revision) return;
     revision = state.revision;
     (deviceId === 'lab' ? ['research', 'critters', 'library', 'habitat'] : []).forEach((name, index) => {
       document.querySelector(`#${deviceId}-${name}`).setAttribute('aria-pressed', String(state.workspace === index));
@@ -84,14 +125,17 @@ async function connectDevice(deviceId, controls) {
     frameInFlight = true;
     requestedRevision = frame;
     const generation = ++drawGeneration;
+    const requestedSandbox = sandbox;
     let url;
     try {
-      const response = await fetch(`/api/devices/${deviceId}/frame?revision=${frame}`);
+      const query = requestedSandbox === undefined ? '' : `&sandbox=${requestedSandbox}`;
+      const response = await fetch(`/api/devices/${deviceId}/frame?revision=${frame}${query}`);
       if (response.status === 409) {
         requestedRevision = 0; // The next status can retry even if its revision is unchanged.
         return;
       }
       if (!response.ok) throw new Error('Native frame unavailable.');
+      if (!acceptSandbox(response.headers?.get('X-Critter-Sandbox'))) return;
       url = URL.createObjectURL(await response.blob());
       const decoded = new Image();
       decoded.src = url;
@@ -227,15 +271,38 @@ await Promise.all(Object.entries(profiles).map(([device, buttons]) => connectDev
 for (const device of ['companion','dock']) {
   document.querySelector(`#${device}-link`).addEventListener('change', async event => {
     const label = document.querySelector('#link-status');
+    if (replacingSandbox) return;
     try {
-      const response = await fetch('/api/link', {method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'CritterLab'},body:JSON.stringify({device,online:event.target.checked})});
+      const response = await fetch('/api/link', {method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'CritterLab'},body:JSON.stringify({device,online:event.target.checked,sandbox})});
+      if (response.status === 409) { reconnectSandbox(); return; }
       if (!response.ok) throw new Error();
       const state = await response.json();
+      if (!acceptSandbox(state.sandbox)) return;
       event.target.checked = state.online;
       label.textContent = `${device}: ${state.online ? 'link available' : 'link interrupted'} (simulated).`;
     } catch { label.textContent = 'Simulation link control unavailable. Reload to verify state.'; }
   });
 }
+document.querySelector('#reset-sandbox')?.addEventListener('click', async () => {
+  if (replacingSandbox || sandbox === undefined) return;
+  if (!window.confirm('Reset Lab, Companion and Dock to a fresh game? Current progress will be preserved in a server backup.')) return;
+  const button = document.querySelector('#reset-sandbox');
+  const label = document.querySelector('#sandbox-status');
+  button.disabled = true;
+  stopSandboxTransports();
+  label.textContent = 'Resetting all three devices…';
+  try {
+    const response = await fetch('/api/reset', { method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' },
+      body: JSON.stringify({ confirm: true, sandbox }) });
+    if (!response.ok) throw new Error();
+    const result = await response.json();
+    label.textContent = `Sandbox reset. Previous progress preserved in ${result.backup}. Reconnecting…`;
+    window.location.reload();
+  } catch {
+    label.textContent = 'Reset could not be confirmed. Saved progress is retained; reload to verify the sandbox before playing.';
+  }
+});
 async function showRelease() {
   const label = document.querySelector('#release');
   try {
