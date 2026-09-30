@@ -12,11 +12,13 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 *Selected family appearance, not a manufactured kit or measured hardware design.
 [Concept details and earlier studies](design/lab-controls/concepts.md) preserve provenance.*
 
-[Roadmap](ROADMAP.md) connects the delivered Core V1 with the current exploration
-implementation. The [generated-map study](design/expedition-map-study/README.md)
-guides the approved steerable Companion loop and received-only Lab expedition
-log. Native production and actual acceptance are underway; its illustrated
-screens remain design proofs, rather than deployed gameplay evidence.
+[Roadmap](ROADMAP.md) connects the delivered Core V1 with playable exploration.
+Steer the Companion, gather at finite sources, investigate traces and collect a
+sealed sample. Lab Explore shows received expedition records. The
+[actual native walkthrough](docs/evidence/playable-expeditions/README.md) passed
+the connected journey and independent game/UX review; the original
+[map study](design/expedition-map-study/README.md) remains its design reference.
+The sandbox release endpoint identifies the currently activated version.
 
 ## Playable software today
 

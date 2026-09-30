@@ -31,7 +31,7 @@ what you carry. Sending stops collection. Accepting stores the haul once and end
 that outing; the next expedition starts anew. Lab Explore records received outings
 rather than watching live field activity. Follow the [Pip play guide](../../native/selected-lab/V1.md)
 for paid studies, complete-genome selection, incubation, deliberate opening and
-a visit to the same resident. [Actual native screens](../../design/connected-device-review/native/README.md)
+a visit to the same resident. [Actual expedition screens](../evidence/playable-expeditions/README.md)
 show what you can inspect today.
 
 This is a local playable prototype with provisional content and pacing. Companion

@@ -10,9 +10,11 @@ bounded native implementation with game/UX/art acceptance. The
 [gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
 holds the owner-approved map loop and one active source with retained preparation.
 Independent trace discovery and received-only Lab records complete the journey.
-Pacing, chance and finite budgets remain provisional. Verify the actual connected
-native sequence and reference-derived screens before release; the delivered timed
-V1 remains running meanwhile. No new map service, radio/backend or hardware work.
+Pacing, chance and finite budgets remain provisional. The
+[actual connected native sequence](docs/evidence/playable-expeditions/README.md)
+and reference-derived screens passed independent game/UX and root craft checks.
+Publish through existing Git/CI and activate a fresh sandbox; verify its exact
+release before claiming delivery. No new map service, radio/backend or hardware work.
 
 ## Delivered checkpoint: Polished Core V1
 

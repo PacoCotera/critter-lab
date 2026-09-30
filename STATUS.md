@@ -1,6 +1,7 @@
 # Product status
 
-**Active implementation:** [Companion exploration overhaul](https://github.com/PacoCotera/critter-lab/issues/49).
+**Native implementation accepted; release activation tracked separately:**
+[Companion exploration overhaul](https://github.com/PacoCotera/critter-lab/issues/49).
 Owner review of V1 identified passive field play and misleading Lab expedition
 ownership. The new direction is a generated steerable Companion map, deliberate
 investigation/acquisition and a received-only Lab expedition log. The
@@ -9,9 +10,15 @@ records the approved local map loop and one active finite source, retaining
 preparation when switching and using independent trace/sample discovery. The
 [nine-screen map study](design/expedition-map-study/README.md) is the reviewed
 composition reference. Two authored topology fixtures use seeded terrain.
-Native implementation is underway; actual behavior, control and craft acceptance
-are pending. Numeric pacing, chance and budgets remain provisional. The checkpoint
-below stays live until the changed release passes.
+The [actual native journey](docs/evidence/playable-expeditions/README.md) passed:
+steering, source switching, independent trace/capsule discovery, cancelled return,
+restart, once-only Lab acceptance, retained research/creation/shared visits and a
+second supplies-only outing. Independent game/UX and actual composition checks
+passed, including the corrected trace inset and selected-mode label. Domain/input,
+Kit recovery and changed HTTP projection checks passed on clean pushed revisions.
+Numeric pacing, chance and budgets remain provisional. GitHub Actions and sandbox
+activation remain separate delivery gates; the public release endpoint reports
+the running revision rather than inferring deployment from source acceptance.
 
 **Software:** [Polished Core V1](ROADMAP.md), internally accepted. This revision
 contains Home, safe return/review controls, a collection Overview, sample-specific
