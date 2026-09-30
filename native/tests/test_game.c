@@ -32,6 +32,9 @@ static GameResult apply(GameState *state, const char *path,
   (void)snprintf(operation_id, sizeof(operation_id), "test-op-%llu",
                  (unsigned long long)command.sequence);
   command.operation_id = operation_id;
+  if (command.type >= GAME_COMMAND_FIELD_MOVE && command.type <= GAME_COMMAND_FIELD_COLLECT &&
+      !command.data.field.expedition_id)
+    command.data.field.expedition_id = state->expedition_id;
   return game_apply(path, state, &command);
 }
 
@@ -530,6 +533,8 @@ static void test_field_loop(const char *path) {
   action.data.field.monotonic_seconds = 100;
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.field.version && state.field.active_source == GAME_FIELD_NONE);
+  char first_outing_id[64];
+  strcpy(first_outing_id, state.expedition_id);
   assert(!game_transfer_available(&state) && state.sample_count == 0);
   action = command(GAME_COMMAND_EXPEDITION_TICK);
   action.data.monotonic_seconds = 200;
@@ -633,6 +638,30 @@ static void test_field_loop(const char *path) {
   action.data.field.sample_budget = 0;
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.field.site_x[0] == 9 && state.field.active_source == GAME_FIELD_NONE);
+  unsigned connector_contacts = 0;
+  for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile) {
+    if (!state.field.hidden_paths[tile] || state.field.paths[tile]) continue;
+    int x = (int)(tile % 20u);
+    int y = (int)(tile / 20u);
+    const int dx[4] = {0, 0, -1, 1};
+    const int dy[4] = {-1, 1, 0, 0};
+    for (unsigned direction = 0; direction < 4; ++direction) {
+      int adjacent_x = x + dx[direction];
+      int adjacent_y = y + dy[direction];
+      if (adjacent_x >= 0 && adjacent_x < 20 && adjacent_y >= 0 && adjacent_y < 11)
+        connector_contacts += state.field.paths[(unsigned)adjacent_y * 20u + (unsigned)adjacent_x];
+    }
+  }
+  assert(connector_contacts == 1); /* The revealed branch joins only at Brook. */
+  GameState malformed = state;
+  malformed.field.paths[malformed.field.y * 20u + malformed.field.x] = 0;
+  assert(!game_state_valid(&malformed));
+  action = command(GAME_COMMAND_FIELD_INSPECT);
+  action.data.field.site = 0;
+  action.data.field.expedition_id = first_outing_id;
+  GameState before_conflict = state;
+  assert(apply(&state, path, action) == GAME_CONFLICT);
+  assert(!memcmp(&before_conflict, &state, sizeof(state)));
   action = command(GAME_COMMAND_FIELD_INSPECT);
   action.data.field.site = 0;
   assert(apply(&state, path, action) == GAME_OK);

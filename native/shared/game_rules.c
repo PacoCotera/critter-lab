@@ -44,14 +44,17 @@ static uint64_t command_fingerprint(const GameCommand *command) {
     value = hash_u32(value, command->data.field.monotonic_seconds);
     break;
   case GAME_COMMAND_FIELD_MOVE:
+    value = hash_text(value, command->data.field.expedition_id);
     value = hash_u32(value, command->data.field.direction);
     break;
   case GAME_COMMAND_FIELD_INSPECT:
   case GAME_COMMAND_FIELD_TRACE:
   case GAME_COMMAND_FIELD_COLLECT:
+    value = hash_text(value, command->data.field.expedition_id);
     value = hash_u32(value, command->data.field.site);
     break;
   case GAME_COMMAND_FIELD_SOURCE:
+    value = hash_text(value, command->data.field.expedition_id);
     value = hash_u32(value, command->data.field.site);
     value = hash_u32(value, command->data.field.source);
     value = hash_u32(value, command->data.field.monotonic_seconds);
@@ -762,6 +765,12 @@ GameResult game_apply(const char *path, GameState *state,
   if (command->type == GAME_COMMAND_FIELD_UNLOAD &&
       (!command->data.field.record ||
        !game_received_valid(command->data.field.record))) return GAME_INVALID;
+  if (command->type >= GAME_COMMAND_FIELD_MOVE &&
+      command->type <= GAME_COMMAND_FIELD_COLLECT &&
+      (!command->data.field.expedition_id ||
+       !command->data.field.expedition_id[0] ||
+       strlen(command->data.field.expedition_id) >= sizeof(state->expedition_id)))
+    return GAME_INVALID;
   if (command->type == GAME_COMMAND_INVESTIGATE &&
       (!command->data.investigation.sample_id ||
        !command->data.investigation.content_version ||

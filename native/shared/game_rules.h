@@ -59,6 +59,7 @@ typedef struct {
     struct {
       uint32_t kind, seed, monotonic_seconds, sample_budget;
       unsigned direction, site, source;
+      const char *expedition_id;
       const GameReceivedExpedition *record;
     } field;
     struct {

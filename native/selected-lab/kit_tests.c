@@ -758,6 +758,11 @@ static void field_control_and_receipt(const char *directory) {
   assert(lab.game.field.active_source == GAME_FIELD_NONE);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  unsigned stable_frame = kit_revision(&kit, KIT_COMPANION);
+  kit_tick(&kit, 100);
+  kit_tick(&kit, 100);
+  assert(kit_revision(&kit, KIT_COMPANION) == stable_frame);
+  assert(lab.game.field.attempts[0] == 0);
   unsigned lab_frame = kit_revision(&kit,KIT_LAB);
   kit_input(&kit,KIT_LAB,SELECTED_READY,lab_frame);
   kit_input(&kit,KIT_LAB,SELECTED_DOWN_DOWN,lab_frame);
@@ -807,6 +812,19 @@ static void field_control_and_receipt(const char *directory) {
   press(&kit,KIT_LAB,SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.sample_count == 1 && lab.game.received_count == 1);
   assert(!lab.game.field.version && !lab.game.expedition_id[0]);
+  assert(kit.caller_valid);
+  press(&kit, KIT_LAB, SELECTED_BACK_DOWN);
+  assert(!kit.caller_valid && lab.page == V1_HOME);
+  /* Re-entering Explore after acceptance opens the received log, preserving
+   * the accepted haul while navigation returns to the remembered Home focus. */
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_EXPEDITION && !kit.caller_valid);
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(kit.received_detail);
+  press(&kit, KIT_LAB, SELECTED_BACK_DOWN);
+  assert(!kit.received_detail && lab.page == V1_EXPEDITION);
+  press(&kit, KIT_LAB, SELECTED_HOME_DOWN);
+  assert(lab.page == V1_HOME && !kit.caller_valid);
   GameState accepted = lab.game;
   kit.journal.phase = KIT_COMMITTING;
   assert(kit_link(&kit,KIT_COMPANION,0)); /* Persist actual envelope crash fixture. */
@@ -822,18 +840,96 @@ static void field_control_and_receipt(const char *directory) {
   ExpeditionReceivedView received;
   assert(kit_received_projection(&kit,0,&received));
   assert(received.record_count == 1 && !received.map.avatar_visible && received.sample_collected);
-  assert(!received.map.site_visible[2] && !received.map.site_visible[3]);
+  assert(received.map.site_visible[2] && !received.map.site_visible[3]);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.version && lab.game.field.sample_budget == GAME_MAX_SAMPLES - 1u);
+  assert(lab.game.field.active_source == GAME_FIELD_NONE && lab.game.sample_count == 1);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_FINISH_REVIEW && kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(!lab.game.expedition_id[0] && lab.game.sample_count == 1 && lab.game.received_count == 1);
   char marker[580];
   snprintf(marker,sizeof(marker),"%s.required",kit.journal_path);
   unlink(marker);
   unlink(kit.journal_path);
   unlink(path);
 }
+static void legacy_capsule_limit(const char *directory) {
+  for (unsigned format = 0; format < 2; ++format) {
+    char path[512];
+    snprintf(path, sizeof(path), "%s/legacy-capacity-%u", directory, format);
+    SelectedLab lab;
+    selected_lab_init(&lab);
+    assert(selected_lab_load(&lab, path, 100));
+    for (unsigned sample = 0; sample < GAME_MAX_SAMPLES; ++sample) {
+      snprintf(lab.game.expedition_id, sizeof(lab.game.expedition_id),
+               "BEE-E-LEGACY-%u", sample);
+      lab.game.expedition_elapsed = GAME_EXPEDITION_SECONDS;
+      GameCommand intake = {0};
+      char operation[64];
+      snprintf(operation, sizeof(operation), "old-intake-%u", sample);
+      intake.operation_id = operation;
+      intake.sequence = lab.game.last_operation_sequence + 1;
+      intake.type = GAME_COMMAND_EXPEDITION_UNLOAD;
+      assert(game_apply(path, &lab.game, &intake) == GAME_OK);
+    }
+    DeviceKit legacy = {0};
+    legacy.lab = &lab;
+    legacy.journal.version = 4;
+    legacy.journal.companion_online = legacy.journal.dock_online = 1;
+    snprintf(legacy.journal_path, sizeof(legacy.journal_path), "%s.kit", path);
+    persist_fixture(&legacy);
+    if (format) {
+      /* Frozen envelope V1: original exact size, header and checksum policy. */
+      struct {
+        char magic[8];
+        uint32_t version, size, checksum;
+        KitJournal journal;
+        KitResidentCache residents;
+        uint32_t dock_visits;
+      } old = {0};
+      assert(sizeof(old) == 4224);
+      memcpy(old.magic, "CLKITV1", 8);
+      old.version = 1;
+      old.size = sizeof(old);
+      old.journal = legacy.journal;
+      const unsigned char *bytes = (const unsigned char *)&old;
+      uint32_t checksum = 2166136261u;
+      for (size_t byte = 0; byte < sizeof(old); ++byte)
+        if (byte < 16 || byte >= 20)
+          checksum = (checksum ^ bytes[byte]) * 16777619u;
+      old.checksum = checksum;
+      assert(save_bytes_write(legacy.journal_path, &old, sizeof(old)) == 0);
+    }
+    DeviceKit kit;
+    assert(kit_init(&kit, &lab, 100));
+    assert(kit.acknowledged_capsules == GAME_MAX_SAMPLES);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    assert(lab.game.field.sample_budget == 0);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+    kit_tick(&kit, 104);
+    assert(lab.game.field.active_source == 0 && lab.game.field.attempts[0] == 1);
+    assert(lab.game.sample_count == GAME_MAX_SAMPLES && !lab.game.field.collected);
+    char marker[580];
+    snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
+    unlink(marker);
+    unlink(kit.journal_path);
+    unlink(path);
+  }
+}
 
 int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
   field_control_and_receipt(directory);
+  legacy_capsule_limit(directory);
   resident_cache_and_visits(directory);
   legacy_intent_recovery(directory);
   reserved_whole_intent_recovery(directory);

@@ -148,6 +148,8 @@ static GameResult apply(DeviceKit *kit, GameCommand command,
   snprintf(generated, sizeof(generated), "kit-%llu",
            (unsigned long long)command.sequence);
   command.operation_id = identity ? identity : generated;
+  if (command.type >= GAME_COMMAND_FIELD_MOVE && command.type <= GAME_COMMAND_FIELD_COLLECT)
+    command.data.field.expedition_id = kit->lab->game.expedition_id;
   GameResult result =
       game_apply(kit->lab->save_path, &kit->lab->game, &command);
   if (result == GAME_STORAGE || result == GAME_COMMITTED_UNCERTAIN)
@@ -452,6 +454,21 @@ static int normalize_stock(DeviceKit *kit) {
     kit->normalization_pending = 0;
   return result == GAME_OK || result == GAME_UNAVAILABLE;
 }
+static unsigned legacy_acknowledged_capsules(const DeviceKit *kit) {
+  unsigned count = 0;
+  const GameState *game = &kit->lab->game;
+  for (unsigned sample = 0; sample < game->sample_count; ++sample) {
+    const char *origin = game->samples[sample].origin_expedition_id;
+    if (strncmp(origin, "BEE-E-", 6))
+      continue;
+    if ((kit->journal.phase == KIT_ACK_PENDING || kit->journal.phase == KIT_COMMITTING) &&
+        !strcmp(origin, source_expedition(&kit->journal)))
+      continue;
+    ++count;
+  }
+  return count;
+}
+
 int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
   memset(kit, 0, sizeof(*kit));
   kit->lab = lab;
@@ -484,6 +501,7 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
         fail(kit);
         return 0;
       }
+      kit->acknowledged_capsules = legacy_acknowledged_capsules(kit);
     } else {
       const SavedKitEnvelopeV1 *original = &saved.original;
       int old = read == sizeof(SavedKitEnvelopeV1) && original->version == 1;
@@ -508,11 +526,7 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
       if (old) {
         /* Migrate only actual accepted own-capsule provenance; the current
          * unacknowledged source remains excluded until its matching receipt. */
-        for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
-          if (!strncmp(lab->game.samples[sample].origin_expedition_id, "BEE-E-", 6) &&
-              !(kit->journal.phase == KIT_ACK_PENDING &&
-                !strcmp(lab->game.samples[sample].origin_expedition_id,
-                        source_expedition(&kit->journal)))) ++kit->acknowledged_capsules;
+        kit->acknowledged_capsules = legacy_acknowledged_capsules(kit);
       }
     }
   } else {
@@ -532,6 +546,7 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
     }
     kit->journal.version = 4;
     kit->journal.companion_online = kit->journal.dock_online = 1;
+    kit->acknowledged_capsules = legacy_acknowledged_capsules(kit);
     if (!persist(kit))
       return 0;
   }
@@ -1079,8 +1094,8 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
         ++kit->lab->revision; ++kit->lab->interaction_epoch;
         kit->lab->minimum_action_revision = kit->lab->revision; kit->lab->ready = 0;
       }
-    } else if (kit_lab_explore(kit) && kit->journal.phase == KIT_ARRIVED &&
-        (input == SELECTED_CONFIRM_UP ||
+    } else if (kit_lab_explore(kit) &&
+        ((input == SELECTED_CONFIRM_UP && kit->journal.phase == KIT_ARRIVED) ||
          ((input == SELECTED_BACK_UP || input == SELECTED_LEFT_UP) &&
           kit->caller_valid))) {
       unsigned button = (unsigned)input / 2;
@@ -1268,7 +1283,8 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
   if (kit->lab->game.field.version) {
     unsigned source = kit->lab->game.field.active_source;
     if (expedition && kit->lab->game.expedition_active && source < GAME_FIELD_SOURCES &&
-        kit->lab->game.field.remaining[source] && !game_gather_capacity_blocked(&kit->lab->game)) {
+        kit->lab->game.field.remaining[source] && !game_gather_capacity_blocked(&kit->lab->game) &&
+        clock > kit->lab->game.expedition_last_tick) {
       GameCommand tick = {0}; tick.type = GAME_COMMAND_EXPEDITION_TICK;
       tick.data.monotonic_seconds = clock;
       (void)apply(kit, tick, NULL);

@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define FIELD_ATTEMPTS 12u
-static unsigned cell(unsigned x, unsigned y) { return y * 20u + x;
+static unsigned cell(unsigned x, unsigned y) { return y * GAME_FIELD_COLUMNS + x;
 }
 unsigned game_field_source_resource(unsigned source) {
   static const unsigned resources[GAME_FIELD_SOURCES] = {0, 1, 2, 2, 0, 1};
@@ -46,8 +46,8 @@ static void corridor(uint8_t *paths, unsigned x, unsigned y, unsigned end_x,
 }
 static void generate_geometry(GameExpeditionField *field) {
   int second = (field->seed & 1u) != 0;
-  const uint8_t first_x[5] = {2, 7, 2, 7, 16}, first_y[5] = {8, 8, 2, 2, 5};
-  const uint8_t second_x[5] = {9, 9, 3, 15, 17}, second_y[5] = {8, 2, 5, 5, 0};
+  const uint8_t first_x[GAME_FIELD_SITES] = {2, 7, 2, 7, 16}, first_y[GAME_FIELD_SITES] = {8, 8, 2, 2, 5};
+  const uint8_t second_x[GAME_FIELD_SITES] = {9, 9, 3, 15, 17}, second_y[GAME_FIELD_SITES] = {8, 2, 5, 5, 0};
   memcpy(field->site_x, second ? second_x : first_x, 5);
   memcpy(field->site_y, second ? second_y : first_y, 5);
   const unsigned routes_a[4][2] = {{0,1},{0,2},{2,3},{3,1}};
@@ -65,7 +65,7 @@ static void generate_geometry(GameExpeditionField *field) {
   for (unsigned index = 0; index < GAME_FIELD_CELLS; ++index) {
     unsigned value = random_next(&terrain_random) % 20u;
     field->terrain[index] = value < 2 ? 2 : value < 4 ? 3 : 1;
-    if (index % 20u == (second ? 11u : 10u)) field->terrain[index] = 4;
+    if (index % GAME_FIELD_COLUMNS == (second ? 11u : 10u)) field->terrain[index] = 4;
   }
 }
 GameResult game_field_start(GameState *state, const GameCommand *command) {
@@ -99,6 +99,8 @@ GameResult game_field_action(GameState *state, const GameCommand *command) {
   GameExpeditionField *field = &state->field;
   unsigned site = game_field_site(state);
   if (!field->version || !state->expedition_id[0]) return GAME_UNAVAILABLE;
+  if (strcmp(state->expedition_id, command->data.field.expedition_id))
+    return GAME_CONFLICT;
   if (command->type == GAME_COMMAND_FIELD_MOVE) {
     int x = field->x, y = field->y;
     switch (command->data.field.direction) {
@@ -112,7 +114,7 @@ GameResult game_field_action(GameState *state, const GameCommand *command) {
     break;
     default: return GAME_INVALID;
     }
-    if (x < 0 || x >= 20 || y < 0 || y >= 11 ||
+    if (x < 0 || x >= (int)GAME_FIELD_COLUMNS || y < 0 || y >= (int)GAME_FIELD_ROWS ||
         !(field->paths[cell((unsigned)x,(unsigned)y)] ||
           (field->trace && field->hidden_paths[cell((unsigned)x,(unsigned)y)])))
       return GAME_UNAVAILABLE;
@@ -270,7 +272,7 @@ int game_received_valid(const GameReceivedExpedition *record) {
   for (unsigned i = 0; i < GAME_FIELD_SOURCES; ++i)
     if (record->attempts[i] > FIELD_ATTEMPTS || record->awards[i] > record->attempts[i]) return 0;
   for (unsigned i = 0; i < GAME_FIELD_SITES; ++i)
-    if (record->site_x[i] >= 20 || record->site_y[i] >= 11 ||
+    if (record->site_x[i] >= GAME_FIELD_COLUMNS || record->site_y[i] >= GAME_FIELD_ROWS ||
         (!(record->visited & (1u << i)) && (record->site_x[i] || record->site_y[i]))) return 0;
   return 1;
 }
@@ -281,8 +283,8 @@ int game_field_valid(const GameState *state) {
     return !memcmp(field,&empty,sizeof(empty));
   }
   if (field->version != GAME_FIELD_CONTENT_VERSION || !field->seed ||
-      !state->expedition_id[0] || state->expedition_elapsed || field->x >= 20 ||
-      field->y >= 11 || field->visited > 31 || (field->inspected & ~field->visited) ||
+      !state->expedition_id[0] || state->expedition_elapsed || field->x >= (int)GAME_FIELD_COLUMNS ||
+      field->y >= (int)GAME_FIELD_ROWS || field->visited > 31 || (field->inspected & ~field->visited) ||
       field->trace > 1 || field->collected > 1 || field->sample_budget > 8 ||
       (field->trace && !field->sample_budget) ||
       (field->active_source >= GAME_FIELD_SOURCES && field->active_source != GAME_FIELD_NONE) ||
@@ -311,6 +313,6 @@ int game_field_valid(const GameState *state) {
     if (field->last_source[i] != GAME_FIELD_NONE &&
         game_field_source_resource(field->last_source[i]) != i) return 0;
   for (unsigned i = 0; i < GAME_FIELD_SITES; ++i)
-    if (field->site_x[i] >= 20 || field->site_y[i] >= 11) return 0;
+    if (field->site_x[i] >= GAME_FIELD_COLUMNS || field->site_y[i] >= GAME_FIELD_ROWS) return 0;
   return 1;
 }

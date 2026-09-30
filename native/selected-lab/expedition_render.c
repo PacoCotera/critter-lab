@@ -15,6 +15,20 @@ typedef struct {
 
 static const char *site_names[] = {"Camp", "Moss bend", "Relay", "Stone shelf", "Old cache"};
 static const char *resource_names[] = {"Data", "Energy", "Essence"};
+
+static void expedition_name(const char *identity, char *value, size_t capacity) {
+  const char *number = strrchr(identity, '-');
+  if (number && number[1]) {
+    ++number;
+    const char *end = number;
+    while (*end >= '0' && *end <= '9') ++end;
+    if (!*end) {
+      snprintf(value, capacity, "Expedition %02lu", strtoul(number, NULL, 10));
+      return;
+    }
+  }
+  snprintf(value, capacity, "Expedition");
+}
 enum { GRAPHITE = 0x1e282f, FIELD = 0x202b32, INK = 0xe3edef,
        MUTED = 0xa5b6bd, CYAN = 0x67cef5, WARM = 0xf1cd79,
        SAVED = 0xa3cda8, TRACK = 0x0b181f };
@@ -243,7 +257,7 @@ static void active_source(RenderRow *row,const ExpeditionFieldView *view,int y) 
   for (unsigned i=0;i<3;++i)
     if (view->preparation_status[i]==EXPEDITION_PREP_ACTIVE || view->preparation_status[i]==EXPEDITION_PREP_CAPACITY_FULL) {active=i;break;}
   if (active<3) snprintf(value,sizeof(value),"%s / %s / %u attempts left",resource_names[active],view->source_name[active],view->remaining_chances[active]);
-  else snprintf(value,sizeof(value),"%s",view->message[0]?view->message:"Choose a gathering opportunity");
+  else snprintf(value,sizeof(value),"No gathering active");
   label(row,30,y,value,16,1,active<3?SAVED:MUTED,390);
 }
 void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pixels) {
@@ -252,7 +266,7 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
   panel(&row,12,12,426,576);
   label(&row,29,28,view->route[0]?view->route:"Expedition",24,1,INK,392);
   char value[128];
-  snprintf(value,sizeof(value),"Outing: %s",view->outing_id);
+  expedition_name(view->outing_id,value,sizeof(value));
   label(&row,30,59,value,15,0,MUTED,390);
   const char *modes[]={"Probe","Cargo","Companions"};
   const int mode_x[]={28,151,275};
@@ -283,7 +297,7 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
     const char *caption = view->message[0] ? view->message
       : current==4 ? "Contents unknown / collect to take it"
       : current==1 ? "Inspect markings to learn their direction."
-                   : "Choose a finite gathering opportunity.";
+                   : "Choose supplies to gather.";
     message_lines(&row,43,300-shift,caption,362,14);
   }
   active_source(&row,view,346-shift);
@@ -342,10 +356,14 @@ void expedition_received_row(const ExpeditionReceivedView *view,unsigned y,uint8
         *contents=0;
         contents+=3;
       }
-      label(&row,62,top+14,record_id,20,i==view->selected,i==view->selected?WARM:INK,288);
+      char record_name[64];
+      expedition_name(record_id,record_name,sizeof(record_name));
+      label(&row,62,top+14,record_name,20,i==view->selected,i==view->selected?WARM:INK,288);
       if (contents) label(&row,62,top+43,contents,14,0,MUTED,288);
     }
-    snprintf(value,sizeof(value),"Recorded route / %s",view->outing_id);
+    char record_name[64];
+    expedition_name(view->outing_id,record_name,sizeof(record_name));
+    snprintf(value,sizeof(value),"Recorded route / %s",record_name);
     label(&row,425,140,value,27,1,INK,545);
     label(&row,426,178,view->received_label,19,0,SAVED,545);
     map_scene(&row,&view->map,426,212,400,220,1,0,0,1,0);
@@ -360,7 +378,7 @@ void expedition_received_row(const ExpeditionReceivedView *view,unsigned y,uint8
   } else {
     panel(&row,30,116,582,418);
     panel(&row,632,116,362,418);
-    snprintf(value,sizeof(value),"Expedition / %s",view->outing_id);
+    expedition_name(view->outing_id,value,sizeof(value));
     label(&row,50,139,value,27,1,INK,540);
     label(&row,51,179,view->received_label,19,0,SAVED,540);
     map_scene(&row,&view->map,100,220,400,220,1,0,0,1,0);

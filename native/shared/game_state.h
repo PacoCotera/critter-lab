@@ -98,7 +98,9 @@ typedef struct {
   char original_art_sha256[65];
 } GameIndividualMetadata;
 
-#define GAME_FIELD_CELLS 220u
+#define GAME_FIELD_COLUMNS 20u
+#define GAME_FIELD_ROWS 11u
+#define GAME_FIELD_CELLS (GAME_FIELD_COLUMNS * GAME_FIELD_ROWS)
 #define GAME_FIELD_SITES 5u
 #define GAME_FIELD_SOURCES 6u
 #define GAME_FIELD_HISTORY 16u
