@@ -91,3 +91,11 @@ under one bounded native lock and returns the down result. Up is never part of
 that sequence. Kit READY uses the same minimum/current interaction range as Lab;
 semantic refresh still invalidates earlier frames. Native kit tests cover delayed
 acknowledgement after a time-only repaint and rejection after navigation.
+
+## Resetting the simulator sandbox
+
+Use **Reset sandbox** above the device shells and confirm to start a fresh Lab, Companion and Dock game. This is a simulator control, not a hardware button. All device views reconnect; input from the old game is discarded.
+
+The previous save and matching device records are retained together in a uniquely named backup beside the save. If a reset fails, reload to check the restored state before playing. A failed restoration stops the sandbox and requires restoring the matching backup files together.
+
+The existing CI runs the focused reset checks, including a real native fresh-game and persistence check. No reset service, restore UI or arbitrary file-management endpoint is added.

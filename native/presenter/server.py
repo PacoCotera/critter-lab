@@ -11,6 +11,7 @@ import re
 import socket
 import subprocess
 import threading
+import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
@@ -19,13 +20,109 @@ BUTTONS = {'up', 'down', 'left', 'right', 'research', 'critters', 'library', 'ha
 EVENTS = {f'{button}-{edge}' for button in BUTTONS for edge in ('down', 'up')} | {'cancel', 'suspend', 'resume', 'ready'}
 
 
+class StaleSandbox(RuntimeError):
+    """The request belongs to a sandbox that has already been replaced."""
+
+
 class NativeProcess:
     """One selected native process; serialized status/input and binary frame reads."""
     def __init__(self, executable, timeout=10, kit=False):
-        self.process = subprocess.Popen([str(executable), "kit-serve" if kit else "serve"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self.executable = str(executable)
+        self.kit = kit
+        self.environment = os.environ.copy()
+        configured = self.environment.get("BEECHO_V1_SAVE")
+        self.save_path = Path(configured if configured is not None else
+                              self.environment.get("CRITTER_DEMO_SAVE", "./beecho") + ".beecho-v1").absolute()
+        self.sandbox = uuid.uuid4().hex
+        self.reset_count = 0
         self.lock = threading.RLock()
         self.timeout = timeout
         self.unavailable = False
+        self.process = self.start()
+
+    def start(self):
+        if not hasattr(self, "process"):
+            return subprocess.Popen([self.executable, "kit-serve" if self.kit else "serve"],
+                                    stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        return subprocess.Popen([self.executable, "kit-serve" if self.kit else "serve"],
+                                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                env=self.environment)
+
+    def check_sandbox(self, sandbox):
+        # Pre-reset legacy callers remain compatible; after reset every mutation
+        # must identify its world, even if a new game's revision repeats an old one.
+        if sandbox != self.sandbox and (sandbox is not None or self.reset_count):
+            raise StaleSandbox("Sandbox changed; discard pending input")
+
+    def guarded_command(self, lines, sandbox=None, frame=False):
+        if not self.lock.acquire(timeout=self.timeout):
+            raise RuntimeError("Native transport busy or unavailable")
+        try:
+            self.check_sandbox(sandbox)
+            return self.command_sequence(lines) if len(lines) > 1 else self.command(lines[0], frame)
+        finally:
+            self.lock.release()
+
+    def reset(self, sandbox):
+        """Replace only this configured host game's persistence, retaining backup."""
+        if not self.lock.acquire(timeout=self.timeout):
+            raise RuntimeError("Native transport busy or unavailable")
+        try:
+            self.check_sandbox(sandbox)
+            if not self.kit:
+                raise RuntimeError("Sandbox reset requires three-device mode")
+            backup = self.save_path.parent / (self.save_path.name + ".reset-" + uuid.uuid4().hex)
+            # Preflight every fixed path before stopping native. Lock files remain
+            # at their original paths so another process cannot bypass their inode.
+            paths = [Path(str(self.save_path) + suffix) for suffix in
+                     ("", ".tmp", ".kit", ".kit.tmp", ".kit.required", ".kit.required.tmp")]
+            for path in paths:
+                if path.is_symlink() or (path.exists() and not path.is_file()):
+                    raise RuntimeError("Sandbox persistence must be regular files")
+            backup.mkdir(mode=0o700)
+            moved = []
+            fresh_started = False
+            self.close()
+            self.unavailable = True
+            # Invalidate all clients even on a failed reset; old native holds died.
+            self.sandbox = uuid.uuid4().hex
+            self.reset_count += 1
+            try:
+                for path in paths:
+                    if path.exists():
+                        path.rename(backup / path.name)
+                        moved.append(path)
+                fresh_started = True
+                self.process = self.start()
+                self.unavailable = False
+                states = self.check_devices()
+                return {"sandbox": self.sandbox, "backup": backup.name, "devices": states}
+            except (OSError, RuntimeError):
+                self.close()
+                self.unavailable = True
+                try:
+                    # Retain any failed new-world writes too; never destroy files
+                    # to hide a failed startup or overwrite the old backup.
+                    for path in paths:
+                        if fresh_started and path.exists():
+                            path.rename(backup / (path.name + ".failed-new"))
+                    for path in moved:
+                        (backup / path.name).replace(path)
+                    self.process = self.start()
+                    self.unavailable = False
+                    self.check_devices()
+                except (OSError, RuntimeError):
+                    self.unavailable = True
+                raise RuntimeError("Sandbox reset failed; saved world retained for recovery")
+        finally:
+            self.lock.release()
+
+    def check_devices(self):
+        states = [self.command(f"device {device} status")[0] for device in range(3)]
+        if any("error" in state or state.get("failed") or
+               state.get("transfer") == "Storage unavailable" for state in states):
+            raise RuntimeError("Native sandbox storage unavailable")
+        return states
 
     def command(self, line, frame=False):
         if not self.lock.acquire(timeout=self.timeout):
@@ -53,6 +150,7 @@ class NativeProcess:
                 raise RuntimeError("Invalid native response") from error
             if not isinstance(result, dict):
                 raise RuntimeError("Invalid native response")
+            result["sandbox"] = self.sandbox
             if not frame or "error" in result:
                 return result, None
             parts = line.split()
@@ -80,12 +178,16 @@ class NativeProcess:
             self.lock.release()
 
     def close(self):
-        self.process.stdin.close()
-        try:
-            self.process.wait(timeout=2)
-        except subprocess.TimeoutExpired:
-            self.process.terminate()
-            self.process.wait()
+        with self.lock:
+            self.process.stdin.close()
+            try:
+                self.process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait(timeout=2)
+            close_output = getattr(self.process.stdout, "close", None)
+            if close_output:
+                close_output()
 
     def command_sequence(self, lines):
         """A painted READY/down prefix cannot interleave with another client."""
@@ -163,7 +265,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass  # Never record authorization, query strings or request bodies.
 
-    def reply(self, code, body, content_type="application/json"):
+    def reply(self, code, body, content_type="application/json", sandbox=None):
         if isinstance(body, dict):
             body = json.dumps(body).encode()
         encoded = False
@@ -176,6 +278,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
+        if sandbox is not None:
+            self.send_header("X-Critter-Sandbox", sandbox)
         if content_type == "image/bmp":
             self.send_header("Vary", "Accept-Encoding")
         if encoded:
@@ -205,6 +309,13 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(401, {"error": "Authentication required"})
         return valid
 
+    def native_command(self, lines, sandbox=None, frame=False):
+        if hasattr(self.server.native, "guarded_command"):
+            return self.server.native.guarded_command(lines, sandbox, frame)
+        # Small existing HTTP fixtures expose only the original native interface.
+        return (self.server.native.command_sequence(lines) if len(lines) > 1 else
+                self.server.native.command(lines[0], frame))
+
     def do_GET(self):
         if not self.authorized():
             return
@@ -229,27 +340,29 @@ class Handler(BaseHTTPRequestHandler):
                     self.reply(200, result)
                 else:
                     query = parse_qs(url.query, strict_parsing=True)
-                    if set(query) != {"revision"} or len(query["revision"]) != 1:
+                    if set(query) not in ({"revision"}, {"revision", "sandbox"}) or any(len(value) != 1 for value in query.values()):
                         raise ValueError()
                     revision = query["revision"][0]
                     if not re.fullmatch(r"[0-9]{1,10}", revision) or not 0 < int(revision) <= 4294967295:
                         raise ValueError()
-                    result, pixels = self.server.native.command(prefix + " frame " + revision, frame=True)
-                    self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp")
+                    result, pixels = self.native_command([prefix + " frame " + revision], query.get("sandbox", [None])[0], frame=True)
+                    self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp", result.get("sandbox"))
             elif url.path == "/api/status" and not url.query:
                 result, _ = self.server.native.command("status")
                 self.reply(200, result)
             elif url.path == "/api/frame":
                 query = parse_qs(url.query, strict_parsing=True)
-                if set(query) != {"revision"} or any(len(v) != 1 for v in query.values()):
+                if set(query) not in ({"revision"}, {"revision", "sandbox"}) or any(len(v) != 1 for v in query.values()):
                     raise ValueError()
                 revision = query["revision"][0]
                 if not re.fullmatch(r"[0-9]{1,10}", revision) or not 0 < int(revision) <= 4294967295:
                     raise ValueError()
-                result, pixels = self.server.native.command("frame " + revision, frame=True)
-                self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp")
+                result, pixels = self.native_command(["frame " + revision], query.get("sandbox", [None])[0], frame=True)
+                self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp", result.get("sandbox"))
             else:
                 self.reply(404, {"error": "Unknown route"})
+        except StaleSandbox:
+            self.reply(409, {"error": "Sandbox changed; discard pending input"})
         except ValueError:
             self.reply(400, {"error": "Invalid frame query"})
         except (OSError, RuntimeError):
@@ -269,7 +382,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(403, {"error": "Invalid origin"})
             return
         scheme = self.headers.get("X-Forwarded-Proto", "http")
-        if (self.path not in {"/api/input", "/api/device-input", "/api/link"} or scheme not in {"http", "https"}
+        if (self.path not in {"/api/input", "/api/device-input", "/api/link", "/api/reset"} or scheme not in {"http", "https"}
                 or origin.scheme != scheme
                 or origin.netloc != self.headers.get("Host") or origin.path
                 or origin.query or origin.fragment
@@ -291,12 +404,20 @@ class Handler(BaseHTTPRequestHandler):
             self.close_connection = requested_close
             if not isinstance(command, dict):
                 raise ValueError()
+            sandbox = command.pop("sandbox", None)
+            if sandbox is not None and (not isinstance(sandbox, str) or not re.fullmatch(r"[0-9a-f]{32}", sandbox)):
+                raise ValueError()
+            if self.path == "/api/reset":
+                if command != {"confirm": True} or type(command["confirm"]) is not bool or sandbox is None:
+                    raise ValueError()
+                self.reply(200, self.server.native.reset(sandbox))
+                return
             devices = {"lab": "0", "companion": "1", "dock": "2"}
             if self.path == "/api/link":
                 device, online = command.get("device"), command.get("online")
                 if set(command) != {"device", "online"} or device not in {"companion", "dock"} or type(online) is not bool:
                     raise ValueError()
-                result, _ = self.server.native.command(f"device {devices[device]} link {int(online)}")
+                result, _ = self.native_command([f"device {devices[device]} link {int(online)}"], sandbox)
                 self.reply(400 if "error" in result else 200, result)
                 return
             name, revision = command.get("event"), command.get("revision")
@@ -322,14 +443,16 @@ class Handler(BaseHTTPRequestHandler):
             line = (f"device {devices[device]} " if self.path == "/api/device-input" else "") + f"{name} {revision}"
             if painted_ready:
                 prefix = (f"device {devices[device]} " if self.path == "/api/device-input" else "") + f"ready {revision}"
-                result, _ = self.server.native.command_sequence([prefix, line])
+                result, _ = self.native_command([prefix, line], sandbox)
             else:
-                result, _ = self.server.native.command(line)
+                result, _ = self.native_command([line], sandbox)
             self.reply(400 if "error" in result else 200, result)
+        except StaleSandbox:
+            self.reply(409, {"error": "Sandbox changed; discard pending input"})
         except (ValueError, UnicodeError):
             self.reply(400, {"error": "Invalid command body"})
         except (OSError, RuntimeError):
-            self.reply(503, {"error": "Native transport interrupted; activation stopped"})
+            self.reply(503, {"error": "Sandbox reset failed; saved world retained for recovery"} if self.path == "/api/reset" else {"error": "Native transport interrupted; activation stopped"})
 
 
 def main():
