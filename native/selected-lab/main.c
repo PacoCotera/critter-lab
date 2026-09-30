@@ -168,15 +168,21 @@ int main(int argc, char **argv) {
     int count = sscanf(line, "%31s %31s %31s %1s", name, argument,
                        frame_argument, extra);
     unsigned frame = 0;
-    if (count == 1 && !strcmp(name, "status"))
-      status(&lab);
+    if (count == 1 && !strcmp(name, "status")) {
+      if (kit_mode)
+        kit_status(&kit, KIT_LAB, stdout);
+      else
+        status(&lab);
+    }
     else if (count == 2 && !strcmp(name, "frame") && number(argument, &frame)) {
       if (frame != lab.revision)
         puts("{\"error\":\"Stale frame request\"}");
       else {
         printf("{\"revision\":%u,\"bytes\":%u}\n", lab.revision,
                54u + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3u);
-        if (!selected_lab_bmp(&lab, stdout))
+        int rendered = kit_mode ? kit_bmp(&kit, KIT_LAB, stdout)
+                                : selected_lab_bmp(&lab, stdout);
+        if (!rendered)
           return 2;
       }
     } else {

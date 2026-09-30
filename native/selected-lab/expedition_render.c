@@ -289,7 +289,7 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
     if (crop_x+crop_width>400) crop_x=400-crop_width;
     if (crop_y<0) crop_y=0;
     if (crop_y+57>220) crop_y=163;
-    map_scene(&row,&view->map,43,172,crop_width*2,114-shift,2,crop_x,crop_y,0,0);
+    map_scene(&row,&view->map,43,160,crop_width*2,114-shift,2,crop_x,crop_y,0,0);
     if (current==4) {
       asset(&row,CORE_ART_SAMPLE_NEUTRAL,332,185);
       label(&row,326,253-shift,"Sealed",17,1,INK,80);
@@ -298,7 +298,7 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
       : current==4 ? "Contents unknown / collect to take it"
       : current==1 ? "Inspect markings to learn their direction."
                    : "Choose supplies to gather.";
-    message_lines(&row,43,300-shift,caption,362,14);
+    message_lines(&row,43,279-shift,caption,362,14);
   }
   active_source(&row,view,346-shift);
   resource_band(&row,view,369-shift);

@@ -128,6 +128,17 @@ def run(binary, proof=None):
             assert state("lab")["stock"] == [0, 0, 0]
             assert state("lab")["cargo"] == [0, 0, 0]
             assert "field" not in state("lab")
+            code, generic_bytes = request("/api/status")
+            assert code == 200
+            generic = json.loads(generic_bytes)
+            assert generic["cargo"] == [0, 0, 0]
+            assert generic["gather_progress_ms"] == [0, 0, 0]
+            assert "field" not in generic
+            current_lab = frame("lab")
+            code, generic_frame = request(f"/api/frame?revision={current_lab['revision']}")
+            assert code == 200
+            code, explicit_frame = request(f"/api/devices/lab/frame?revision={current_lab['revision']}")
+            assert code == 200 and generic_frame == explicit_frame
             walk_to(1)
             press("companion", "confirm")  # Inspect Moss bend.
             press("companion", "down")

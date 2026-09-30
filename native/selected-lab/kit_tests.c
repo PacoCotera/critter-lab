@@ -78,7 +78,7 @@ static size_t read_saved_bytes(const char *path, unsigned char *bytes, size_t ca
   FILE *file = fopen(path, "rb");
   assert(file);
   size_t length = fread(bytes, 1, capacity, file);
-  assert(feof(file) && fclose(file) == 0);
+  assert(!ferror(file) && fgetc(file) == EOF && fclose(file) == 0);
   return length;
 }
 /* Compare the actual property pixels, excluding visits and link feedback. */
@@ -231,7 +231,11 @@ static void resident_cache_and_visits(const char *directory) {
   strcpy(kit.journal_path, actual_journal);
   assert(kit_link(&kit, KIT_COMPANION, 0) && kit_link(&kit, KIT_DOCK, 0));
   assert(companion_property_pixels(&kit) == property_pixels);
-  unsigned char cache_bytes[9000], world_bytes[9000], after[9000];
+  /* The current native world envelope is a 24-byte header plus GameState.
+   * It also bounds the smaller Kit projection envelope used in this check. */
+  unsigned char cache_bytes[sizeof(GameState) + 24];
+  unsigned char world_bytes[sizeof(GameState) + 24];
+  unsigned char after[sizeof(GameState) + 24];
   size_t cache_length = read_saved_bytes(kit.journal_path, cache_bytes, sizeof(cache_bytes));
   size_t world_length = read_saved_bytes(path, world_bytes, sizeof(world_bytes));
   assert(cache_length > sizeof(KitJournal));
