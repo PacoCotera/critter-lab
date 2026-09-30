@@ -94,7 +94,9 @@ def run(binary, proof=None):
             assert state("lab")["stock"] == [0, 0, 0]
             press("companion", "confirm")  # Cargo
             frame("companion", "cargo")
-            press("companion", "confirm")  # Review
+            review = press("companion", "confirm")
+            assert review["page"] == "send-review" and review["focus"] == "Keep cargo"
+            assert review["phase"] == 0
             frame("companion", "send-review")
             reviewed = state("companion")["cargo"]
             preparation = state("companion")["gather_progress_ms"]
@@ -102,6 +104,8 @@ def run(binary, proof=None):
             assert state("companion")["cargo"] == reviewed
             assert state("companion")["gather_progress_ms"] == preparation
             link("companion", False)
+            sending = press("companion", "up")  # Deliberately choose Send.
+            assert sending["focus"] == "Send to Lab" and sending["phase"] == 0
             sealed = press("companion", "confirm")
             assert sealed["phase"] == 1
             frame("companion", "sending-offline")

@@ -1,0 +1,89 @@
+# Polished Core V1: connected native evidence
+
+This packet follows one connected player journey through the Companion, Lab and
+Dock. It is actual C17 host rendering and depicted-control input, with isolated
+saved worlds and real timers. It is not concept art, ARM firmware, radio, physical
+display or human enjoyment evidence. Presentation corrections remain active until
+the final changed exports are accepted; the live release has not yet changed.
+
+## What the connected journey establishes
+
+- Companion completes a Field survey, reviews Cargo and returns it. Lab reception
+  can be left through Home without losing the pending haul. Acceptance credits
+  whole items once, empties Cargo and ends the expedition; Back returns Home.
+- Sample A records inheritance, movement and coat findings. Selecting a supported
+  form is a reversible draft; a separate Start incubation spends five of each
+  supply and consumes the material while retaining its research record.
+- Deliberate opening reveals the saved A0 resident. A Lab visit and Companion
+  visit produce the same saved count on Lab, Companion and Dock.
+- Disconnected Companion and Dock preserve their accepted snapshots across
+  process restart. An unavailable visit does not spend or queue a later visit;
+  reconnect keeps the same identity, original portrait hash and visit count.
+- A Garden outing produces sample B. Effort-first reveals its coupled movement/
+  energy alternatives; revisiting Movement costs nothing. Inheritance completes
+  the supported forms. B1 becomes a distinct resident sharing the legitimate
+  carried original portrait with A0, without conflating their saved identities.
+
+The [actual control trace](connected-trace.json) records source
+`26eda6478af3b88a61f105775e6a5bbdbc3ca30d`, painted revisions, inputs, captures,
+world states and restart. Unchanged timer status polling is omitted. Its successful
+assertions cover creation costs, free inspection, same saved visits and distinct
+resident IDs sharing the exact permitted original. Later frame-only corrections
+must be attributed to their own source and do not imply a repeated whole journey.
+
+## Inspect the journey
+
+| Step | Actual native frame |
+| --- | --- |
+| Gather; supplies and the next attempt are separate | [Companion Probe](A-gathering.png) |
+| Review the return | [Cargo review](A-send-review.png) |
+| Receive, then leave safely before accepting | [Incoming](A-incoming.png), [Home with pending haul](A-home-pending.png) |
+| Accept once and return Home | [Back after acceptance](A-back-after-accept.png) |
+| Collection versus one sample | [Research Overview](A-collection.png), [sample workbench](A-workbench.png) |
+| Partial inheritance versus disclosed coat alternatives | [Pattern](A-pattern-finding.png), [Coat](A-coat-finding.png) |
+| Review a supported form before spending | [Creation review](A-creation-review.png) |
+| Reveal and visit the saved resident | [Reveal](A-reveal.png), [Habitat](A-habitat.png) |
+| The same resident at Companion and Dock | [Companion](A-companion.png), [visit saved](A-companion-visit-saved.png), [Dock](A-dock-shared-visit.png) |
+| Cached snapshots survive restart | [Companion offline](A-companion-offline-restart.png), [Dock offline](A-dock-offline-restart.png) |
+| B uses a different useful path | [Effort first](B-effort-first-finding.png), [free Movement inspection](B-free-movement.png) |
+| A second resident keeps its own identity | [B review](B-creation-review.png), [B Habitat](B-habitat.png), [B Companion](B-companion.png) |
+
+The current finding frames establish truthful knowledge; they do not pass the
+illustrated-discovery craft bar yet. The selected movement/effort property also
+requires its corrected resident export. These are internal acceptance gaps, not
+owner taste decisions or finished visual claims.
+
+## Retained portrait and controlled text
+
+The [actual native resident request](retained-request.json) was taken after B1
+reveal. The [local resolver](../../../prototype/generation/README.md) retained its
+original Gemini portrait and controlled description, and duplicate resolution plus
+read-only replay returned the exact accepted result. The
+[retention evidence](retention-evidence.json) records identity and original hash.
+The job folder keeps the original bytes, description, immutable input/provenance
+and integrity metadata. Scoped Git attributes prevent newline rewriting of those
+byte-checked artifacts.
+
+Eight focused Node checks cover both approved portraits, distinct identities,
+duplicate reuse, changed-input refusal, unsupported claims, offline source absence,
+corrupt/missing artifacts and CLI failure. Independent genomic claim review accepted
+the carried/expressed distinction, reference context, hidden-field exclusion and
+retention boundaries. This fixed original/phrase proof makes no model call, novel
+image, authentication, ownership or deployed-service claim.
+
+## Validation and remaining boundary
+
+Game and Lab native suites passed at26eda647. The changed Kit suite passed at
+8189773bb90101fcb9ba7cecc72f5167c14a6944 after correcting a passive-repaint test
+fixture; production behavior was unchanged. The exact saved-form title repair was
+built at4e6105f3cf54be4ec69ec5176e7a00bd82198e61. A subsequent safe Send-review
+default passed the Kit suite at1dfb19ee9a7fab481134e95026630fcb3f73d344.
+
+The historical post-accept Cargo trap remains unconfirmed. Fresh connected exits
+pass, and an isolated matching clone of the current sandbox world also loads and
+escapes through Home/Explore/Back. The historical failure was not reproduced;
+owner-state evidence stays private and the live world was not changed by checks.
+
+No capture, training, needs, ecology, deployed cloud generation, actual radios,
+hardware refresh/power/thermal performance or human playtest is certified here.
+The existing Git/CI release process remains the delivery gate.
