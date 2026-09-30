@@ -128,6 +128,15 @@ provider migration, subscription or deployment is needed before this proof.
 Final automatic visual acceptance bounds and catalogue/publication choices remain
 for owner steering. See [discovery proposal](../design/research-and-creation.md#discovery-proposal--30-september-2026).
 
+The [local retained-Pip proof](../prototype/generation/README.md) now consumes a
+revealed native resident projection and two controlled claims. It saves the exact
+original Gemini portrait, description, immutable input fingerprint and provenance;
+duplicate resolution and read-only replay verify the same retained result. An
+actual connected B1 resident is recorded in the [integration evidence](../docs/evidence/polished-core-v1/retention-evidence.json).
+This is a fixed original/phrase resolver with no model call, service deployment
+or novel creature generation. Unsupported claims and missing/corrupt retained
+artifacts fail instead of silently generating replacements.
+
 ## App, website and backend
 
 The mobile fallback shares core rules, identity and preserved content; supporting app/website surfaces access the local or optional global records their role permits. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.
