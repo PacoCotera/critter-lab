@@ -176,6 +176,26 @@ static void resident_portrait(SelectedRow *row, const GameState *game,
     label(row, x, y + 110, "Portrait pending", 22, MUTED);
 }
 
+static const char *resident_form_title(const SelectedLab *lab,
+                                       const GameIndividual *individual,
+                                       const GameIndividualMetadata *metadata) {
+  if (!individual->revealed || !metadata->candidate_id[0])
+    return NULL;
+  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
+    if (strcmp(lab->game.samples[sample].id, individual->source_sample_id))
+      continue;
+    unsigned count = pip_candidate_count(&lab->game, sample);
+    for (unsigned candidate = 0; candidate < count; ++candidate) {
+      PipSupportedCandidate supported;
+      if (selected_lab_candidate(lab, sample, candidate, &supported) &&
+          !strcmp(metadata->candidate_id, supported.id))
+        return supported.title;
+    }
+    return NULL;
+  }
+  return NULL;
+}
+
 static void focus(SelectedRow *row, int x, int y, int width, int height) {
   core_art_focus_row(x, y, width, height, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
@@ -829,16 +849,21 @@ void selected_lab_row_with_context(const SelectedLab *lab,
             individual->expression.pale_markings ? "Pale markings"
                                                  : "Plain coat",
             28, WARM);
-      label(&row, 686, 297, "Crown frill", 22, INK);
-      label(&row, 686, 332, "Pale eye rings", 22, INK);
-      label(&row, 686, 379, "Source sample", 18, MUTED);
-      label(&row, 686, 404, individual->source_sample_id, 18, INK);
+      label(&row, 686, 297, "Crown frill / pale eye rings", 18, INK);
+      const char *form_title = resident_form_title(
+          lab, individual, &game->individual_metadata[lab->resident]);
+      label(&row, 686, 327, "Selected form", 18, MUTED);
+      wrapped_label(&row, 686, 349,
+                    form_title ? form_title : "Form reference unavailable",
+                    22, INK, 278);
+      label(&row, 686, 412, "Source sample", 18, MUTED);
+      label(&row, 686, 436, individual->source_sample_id, 18, INK);
       if (lab->page == V1_HABITAT) {
         snprintf(text, sizeof(text), "Visits together: %u",
                  individual->care_visits);
-        label(&row, 686, 465, text, 18, SAGE);
+        label(&row, 686, 487, text, 18, SAGE);
       } else if (lab->page == V1_REVEAL)
-        label(&row, 686, 465, "Ready to meet you.", 18, SAGE);
+        label(&row, 686, 487, "Ready to meet you.", 18, SAGE);
     } else
       label(&row, 414, 439, "Research your first sample to begin.", 22, INK);
   }
