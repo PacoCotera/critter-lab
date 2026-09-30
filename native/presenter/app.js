@@ -11,6 +11,8 @@ async function connectDevice(deviceId, controls) {
   let commands = Promise.resolve();
   let transportGeneration = 0;
   let inputBlocked = false;
+  let inputStartedAt = 0;
+  let inputStartRevision = 0;
 
   async function stopAfterTransportFailure() {
     if (inputBlocked) return;
@@ -76,6 +78,11 @@ async function connectDevice(deviceId, controls) {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (generation === drawGeneration && frame === revision && !document.hidden) {
           visibleRevision = frame;
+          image.setAttribute('data-visible-revision', String(frame));
+          if (inputStartedAt && frame !== inputStartRevision) {
+            image.setAttribute('data-input-to-paint-ms', String(Math.round(performance.now() - inputStartedAt)));
+            inputStartedAt = 0;
+          }
           send('ready', frame);
         }
       }));
@@ -112,7 +119,10 @@ async function connectDevice(deviceId, controls) {
       button.classList.remove('held');
       const bounds = button.getBoundingClientRect();
       const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-      if (!gesture.cancelled) send(inside ? `${name}-up` : 'cancel', gesture.frame);
+      if (!gesture.cancelled) {
+        if (inside) { inputStartedAt = performance.now(); inputStartRevision = gesture.frame; }
+        send(inside ? `${name}-up` : 'cancel', gesture.frame);
+      }
     });
     for (const type of ['pointercancel', 'lostpointercapture']) button.addEventListener(type, () => {
       if (held.delete(name)) {
