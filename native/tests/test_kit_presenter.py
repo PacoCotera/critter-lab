@@ -115,6 +115,13 @@ def run(binary, proof=None):
             assert state("companion")["phase"] == 2
             assert state("lab")["page"] == "cargo"  # Immediate reception.
             frame("lab", "incoming")
+            home = press("lab", "critters")  # Legacy yellow-key wire name now means Home.
+            assert home["page"] == "home" and home["focus"] == "Overview"
+            assert home["phase"] == 2 and home["stock"] == [0, 0, 0]
+            frame("lab", "pending-home")
+            press("lab", "down")
+            pending = press("lab", "confirm")
+            assert pending["page"] == "expedition" and pending["phase"] == 2
             link("dock", False)
             link("companion", False)
             accepted = press("lab", "confirm")
@@ -133,7 +140,7 @@ def run(binary, proof=None):
             assert state("companion")["cargo"] == retained
             assert state("companion")["gather_progress_ms"] == preparation
             frame("companion", "receipt")
-            assert state("companion")["focus"] == "Return to Probe"
+            assert state("companion")["focus"] == "Choose a new expedition"
             assert state("dock")["dock_stock"] == credited
             press("lab", "back")
             for device in ("lab", "companion", "dock"):

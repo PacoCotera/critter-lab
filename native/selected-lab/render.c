@@ -572,7 +572,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   const char *titles[] = {"WORKBENCH", "EXPEDITION",        "CARGO",
                           "SAMPLES",   "RESEARCH",          "DISCOVERY",
                           "INCUBATE",  "INCUBATOR",         "HELLO, BEECHO",
-                          "HABITAT",   "RESEARCH PLAN",     "DISCARD PACK",
+                          "HABITAT",   "RESEARCH PLAN",     "DISCARD ITEMS",
                           "RESIDENTS",  "RECORDED FINDINGS", "SAMPLE FINDING",
                           "START INCUBATION?"};
   static const char *home_headings[] = {
@@ -667,13 +667,13 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
     unsigned values[] = {game->expedition_data, game->expedition_energy,
                          game->expedition_essence};
     sprite(&row, lab->discard_resource, 600, 250, 96, 128);
-    snprintf(text, sizeof(text), "Discard 1 %s pack (10 units)?",
+    snprintf(text, sizeof(text), "Discard 10 %s items?",
              names[lab->discard_resource]);
     label(&row, 420, 412, text, 24, WARM);
     label(&row, 420, 462,
           values[lab->discard_resource] >= 1000
               ? "This frees 10 cargo units. It cannot be recovered."
-              : "No complete pack of this resource yet.",
+              : "Fewer than 10 whole items of this kind.",
           18, INK);
   } else if (lab->page == V1_STUDIES || lab->page == V1_FINDING ||
              lab->page == V1_LIBRARY_FINDING || lab->page == V1_STUDY_REVIEW) {

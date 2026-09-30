@@ -57,7 +57,11 @@ static void creation_review(void) {
   assert(lab.game.samples[0].incubated && lab.game.sample_count == 2);
   assert(lab.game.individual_count == 1 && !lab.game.individuals[0].revealed);
   GameState persisted;
-  assert(game_state_load(path, &persisted) > 0 && persisted.incubation_choice == 1);
+  assert(game_state_load(path, &persisted) == 0 && persisted.incubation_choice == 1);
+  assert(persisted.individual_count == 1 &&
+         persisted.individuals[0].expression.pale_markings &&
+         !strcmp(persisted.individuals[0].source_sample_id, "sample-review-0") &&
+         !strcmp(persisted.individuals[0].art_id, lab.game.individuals[0].art_id));
   uint64_t sequence = lab.game.last_operation_sequence;
   lab.sample = 1;
   lab.page = V1_CREATE;

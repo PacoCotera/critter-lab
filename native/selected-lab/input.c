@@ -223,8 +223,8 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
                                "Habitat"};
   static const char *routes[] = {"Field survey", "Garden forage",
                                  "Weather watch"};
-  static const char *cargo[] = {"Return + store haul", "Discard data pack",
-                                "Discard energy pack", "Discard essence pack"};
+  static const char *cargo[] = {"Return + store haul", "Discard 10 Data",
+                                "Discard 10 Energy", "Discard 10 Essence"};
   static const char *care[] = {"Spend time together", "Next resident",
                                "Residents", "Explore again"};
   switch (lab->page) {
@@ -254,7 +254,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_STUDY_REVIEW:
     return option ? "Return to topics" : "Start research";
   case V1_DISCARD_REVIEW:
-    return option ? "Keep this pack" : "Discard 1 pack";
+    return option ? "Keep these items" : "Discard 10 items";
   case V1_HOME:
     return home[option % 5];
   case V1_EXPEDITION:
