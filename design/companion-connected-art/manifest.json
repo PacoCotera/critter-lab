@@ -122,6 +122,24 @@
       "path": "07-frame-color-brief.txt",
       "sha256": "c2dceafbae2ca0215448abbbdead7e058553b456d426cfe4ed92d6908efa512b",
       "kind": "submitted brief"
+    },
+    {
+      "path": "07-gemini-lab-arrival-blue.png",
+      "sha256": "ad46c0bbc063d3be60d07ffdd56e50f8e82fcd9ffb4308191ccff75c4b590ffb",
+      "dimensions": [
+        1024,
+        597
+      ],
+      "kind": "Gemini copied source image"
+    },
+    {
+      "path": "07-usage-preview-1024x600.png",
+      "sha256": "73ec9f833c9e28d4d9894929ed3834290a97b462fd7f57cea2f249df3f29c979",
+      "dimensions": [
+        1024,
+        600
+      ],
+      "kind": "display-size preview"
     }
   ]
 }

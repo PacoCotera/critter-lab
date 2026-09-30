@@ -111,6 +111,12 @@ chance outcomes across restart and transfer. Versioned recovery boundaries are
 in [architecture](../../specs/architecture.md#three-device-host-simulator);
 provisional time/chance values belong in [V1](V1.md).
 
+The [Gemini connected screen references](../../design/companion-connected-art/README.md)
+preserve the reviewed Probe/Cargo/reception compositions and production constraints.
+Reception07 is the lighter concept with concise Returning copy. These concepts
+are not currently native assets; functional screen output remains scaffolding
+pending faithful shared-asset derivation and native inspection.
+
 ## Resetting the simulator sandbox
 
 The presenter has one **Reset sandbox** control above the device shells. Confirming
