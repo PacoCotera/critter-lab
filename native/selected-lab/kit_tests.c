@@ -176,6 +176,8 @@ static void reserved_whole_intent_recovery(const char *directory) {
     press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     assert(kit.companion.page == COMP_FINISH_REVIEW && lab.game.expedition_id[0]);
+    assert(kit.companion.focus == 1);
+    press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     assert(!lab.game.expedition_id[0] && lab.game.sample_count == 0 &&
            lab.game.gather_progress_ms[0] == 1000);
@@ -258,6 +260,8 @@ static void early_unload_journey(const char *directory) {
                  "Finish expedition"));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_FINISH_REVIEW && lab.game.expedition_id[0]);
+  assert(kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_IDLE &&
          lab.game.sample_count == 0 && lab.game.gather_random_state == random_state);
@@ -365,13 +369,15 @@ static void discard_and_home_reception(const char *directory) {
   uint32_t before_random = lab.game.gather_random_state;
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_DISCARD_REVIEW &&
-         kit.companion.discard_quantity == 200);
+         kit.companion.discard_quantity == 200 && kit.companion.focus == 1);
   kit_tick(&kit, 110);
   assert(lab.game.last_operation_sequence == before_review &&
          lab.game.expedition_data == 300 && lab.game.expedition_elapsed == 5);
   press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   assert(kit.companion.page == COMP_DISCARD_QUANTITY && kit.companion.focus == 1);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_CARGO && lab.game.expedition_data == 100 &&
          lab.game.last_operation_sequence == before_review + 1);
