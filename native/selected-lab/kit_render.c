@@ -284,6 +284,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     expedition_field_row(&field, row->y, row->pixels);
     if (selector) {
       action_focus(row, 24, 78, 98, 27);
+      field_heading(row, 28, 82, "Probe", 18, FOCUS);
       fill(row, 24, 474, 402, 103, BACKGROUND);
       text(row, 28, 490, "Left / Right: change mode", 22, TEXT);
       text(row, 28, 525, "Down / Confirm: enter Probe", 18, SECONDARY);

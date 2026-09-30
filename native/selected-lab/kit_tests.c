@@ -455,6 +455,8 @@ static void early_unload_journey(const char *directory) {
   press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING && kit.journal.version == 4);
+  char sealed_haul_id[64];
+  strcpy(sealed_haul_id, kit.journal.haul_id);
   assert(!strcmp(kit_expedition_status(&kit), "Returning"));
   kit_tick(&kit, 200);
   assert(lab.game.expedition_elapsed == 5);
@@ -506,9 +508,20 @@ static void early_unload_journey(const char *directory) {
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   /* This injected legacy start bypasses Companion FIELD_START, so the prior
    * completed receipt remains intact when its empty route finishes. */
-  assert(!lab.game.expedition_id[0] && kit.journal.phase == KIT_COMPLETE &&
-         !strcmp(kit.journal.haul_id, source_id) &&
-         lab.game.sample_count == 0 && lab.game.gather_random_state == random_state);
+  if (lab.game.expedition_id[0] || kit.journal.phase != KIT_COMPLETE ||
+      strcmp(kit.journal.haul_id, sealed_haul_id) || lab.game.sample_count ||
+      lab.game.gather_random_state != random_state) {
+    fprintf(stderr, "Legacy empty Finish: expedition='%s' phase=%u "
+            "haul='%s' expected_haul='%s' samples=%u random=%u expected_random=%u\n",
+            lab.game.expedition_id, kit.journal.phase, kit.journal.haul_id,
+            sealed_haul_id, lab.game.sample_count, lab.game.gather_random_state,
+            random_state);
+  }
+  assert(!lab.game.expedition_id[0]);
+  assert(kit.journal.phase == KIT_COMPLETE);
+  assert(!strcmp(kit.journal.haul_id, sealed_haul_id));
+  assert(lab.game.sample_count == 0);
+  assert(lab.game.gather_random_state == random_state);
   char marker[580];
   snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
   unlink(marker);
