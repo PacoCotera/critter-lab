@@ -14,6 +14,7 @@ async function connectDevice(deviceId, controls) {
   let inputBlocked = false;
   let inputStartedAt = 0;
   let inputStartRevision = 0;
+  let inputResultRevision = 0;
   let pendingCommands = 0;
   let pendingActivations = 0;
   let frameInFlight = false;
@@ -25,6 +26,7 @@ async function connectDevice(deviceId, controls) {
     ++transportGeneration;
     ++drawGeneration;
     held.clear();
+    inputStartedAt = 0;
     buttons.forEach(button => button.classList.remove('held'));
     status.textContent = 'Transport interrupted; activation stopped. Reload to reconnect with a fresh gesture.';
     // A down may have reached C even when its response was lost. Never send a queued up.
@@ -49,6 +51,10 @@ async function connectDevice(deviceId, controls) {
       const response = await fetch('/api/device-input', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'CritterLab' }, body: JSON.stringify({ device: deviceId, event, revision: requestedFrame }) });
       if (!response.ok) throw new Error('Native input transport unavailable.');
       const state = await response.json();
+      if (event.endsWith('-up') && inputStartedAt) {
+        inputResultRevision = state.revision;
+        if (inputResultRevision === inputStartRevision) inputStartedAt = 0;
+      }
       if (generation === transportGeneration && !inputBlocked) receive(state);
     }).catch(() => generation === transportGeneration ? stopAfterTransportFailure() : undefined)
       .finally(() => {
@@ -98,7 +104,7 @@ async function connectDevice(deviceId, controls) {
         if (generation === drawGeneration && frame === revision && !document.hidden) {
           visibleRevision = frame;
           image.setAttribute('data-visible-revision', String(frame));
-          if (inputStartedAt && frame !== inputStartRevision) {
+          if (inputStartedAt && inputResultRevision && frame >= inputResultRevision) {
             image.setAttribute('data-input-to-paint-ms', String(Math.round(performance.now() - inputStartedAt)));
             inputStartedAt = 0;
           }
@@ -131,8 +137,9 @@ async function connectDevice(deviceId, controls) {
         send('cancel');
         return;
       }
-      if (pendingActivations || frameInFlight || visibleRevision !== revision) {
-        // Consume a press during refresh; never replay a stale action later.
+      if (pendingActivations || !visibleRevision) {
+        // Bound action backlog. C decides whether the painted interaction still
+        // means the same thing while time-only pixels are being refreshed.
         held.set(name, { pointer: event.pointerId, frame: visibleRevision, cancelled: true });
         button.setPointerCapture(event.pointerId);
         return;
@@ -150,7 +157,11 @@ async function connectDevice(deviceId, controls) {
       const bounds = button.getBoundingClientRect();
       const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
       if (!gesture.cancelled) {
-        if (inside) { inputStartedAt = performance.now(); inputStartRevision = gesture.frame; }
+        if (inside) {
+          inputStartedAt = performance.now();
+          inputStartRevision = gesture.frame;
+          inputResultRevision = 0;
+        }
         else ++gestureGeneration;
         send(inside ? `${name}-up` : 'cancel', gesture.frame);
       }
@@ -168,6 +179,7 @@ async function connectDevice(deviceId, controls) {
 
   function suspend() {
     ++gestureGeneration;
+    inputStartedAt = 0;
     held.clear();
     buttons.forEach(button => button.classList.remove('held'));
     send('suspend');

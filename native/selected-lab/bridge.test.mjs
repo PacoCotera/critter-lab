@@ -66,7 +66,8 @@ async function withTransport(failDown, scenario, hook = () => undefined) {
   try {
     await import(`../presenter/app.js?scenario=${++scenarioId}`);
     await until(() => requests.includes('ready'));
-    await scenario({ elements, pointer, requests, until, poll: () => timers[0](), heldInNative: () => heldInNative });
+    await scenario({ elements, pointer, requests, until, poll: () => timers[0](),
+      advanceRevision: () => ++nativeRevision, heldInNative: () => heldInNative });
   } finally {
     for (const [key, value] of Object.entries(originals)) {
       if (value === undefined) delete globalThis[key]; else globalThis[key] = value;
@@ -171,6 +172,36 @@ test('blur discards an unsent release behind a delayed down acknowledgement', as
   }, (url, options, state) => {
     if (options && JSON.parse(options.body).event === 'confirm-down') {
       return new Promise(resolve => { resolveDown = () => resolve({ ok: true, json: async () => state }); });
+    }
+  });
+});
+
+test('time-only repaint permits a fresh painted gesture and fetches only the latest result', async () => {
+  let delayFrame = false;
+  let resolveFrame;
+  let inputFrame;
+  let frameRequests = [];
+  await withTransport(false, async ({ elements, pointer, requests, until, poll, advanceRevision }) => {
+    advanceRevision();
+    delayFrame = true;
+    poll();
+    await until(() => resolveFrame);
+    elements['#down'].dispatchEvent(pointer('pointerdown'));
+    elements['#down'].dispatchEvent(pointer('pointerup'));
+    await until(() => requests.includes('down-up'));
+    assert.equal(inputFrame, 2, 'Gesture must carry painted revision, never status-only revision');
+    assert.deepEqual(frameRequests, [3], 'Obsolete native view fetches must not overlap');
+    delayFrame = false;
+    resolveFrame({ ok: true, status: 200, blob: async () => new Blob() });
+    await until(() => elements['#frame']['data-visible-revision'] === '4');
+    assert.deepEqual(frameRequests, [3, 4]);
+  }, (url, options) => {
+    if (delayFrame && options && JSON.parse(options.body).event === 'down-down') {
+      inputFrame = JSON.parse(options.body).revision;
+    }
+    if (url.includes('/frame') && (delayFrame || resolveFrame)) {
+      frameRequests.push(Number(new URL(url, 'http://fixture').searchParams.get('revision')));
+      if (delayFrame) return new Promise(resolve => { resolveFrame = resolve; });
     }
   });
 });

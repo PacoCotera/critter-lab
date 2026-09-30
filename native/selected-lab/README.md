@@ -70,8 +70,8 @@ The presenter negotiates lossless gzip for native BMP responses and keeps raw BM
 available. HTTP/1.1 connections are reused; compression and response transfer run
 outside the native command lock. Background polling is bounded and cannot queue
 ahead of physical input. One frame fetch per device resolves to the latest native
-revision; stale-frame rejection is retryable. A press during refresh is consumed,
-never replayed. Down acknowledgement still precedes a separate release request,
+revision; stale-frame rejection is retryable. Native interaction epochs retain valid time-only
+repaint gestures and reject obsolete action meanings; stale input is never replayed. Down acknowledgement still precedes a separate release request,
 and decoded/painted frames alone receive readiness acknowledgement. Transport,
 overlap and blur checks live in `bridge.test.mjs`; HTTP encoding/reuse checks live
 in `test_selected_presenter.py`. These changes do not establish radio latency.

@@ -131,7 +131,7 @@ latest desired revision, and at most one disposable background status poll.
 Polling never joins the ordered input queue. Older status responses cannot regress
 the current revision; stale-frame rejection permits a later retry. Fresh physical
 down/up edges remain separate acknowledged requests. Lost down acknowledgement,
-overlap or suspension discards unsent releases; actions during refresh are consumed
-instead of replayed. Readiness follows actual decode/paint, never status alone.
+overlap or suspension discards unsent releases; native interaction epochs decide eligibility during refresh; stale actions
+are consumed instead of replayed. Readiness follows actual decode/paint, never status alone.
 Rejected POSTs with unread bodies close their connection. No kernel pool,
 WebSocket dependency or production radio transport is implied by this host bridge.
