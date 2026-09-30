@@ -177,22 +177,28 @@ static void resident_portrait(SelectedRow *row, const GameState *game,
 }
 
 const char *selected_lab_resident_form_title(
-    const SelectedLab *lab, const GameIndividual *individual,
+    const GameIndividual *individual,
     const GameIndividualMetadata *metadata) {
-  if (!lab || !individual || !metadata || !individual->revealed ||
-      !metadata->candidate_id[0])
+  if (!individual || !metadata || !individual->revealed ||
+      !individual->id[0] || !individual->source_sample_id[0] ||
+      strcmp(metadata->reference_context, "pip:adult-rested-firm-ground-mild-v1"))
     return NULL;
-  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
-    if (strcmp(lab->game.samples[sample].id, individual->source_sample_id))
-      continue;
-    unsigned count = pip_candidate_count(&lab->game, sample);
-    for (unsigned candidate = 0; candidate < count; ++candidate) {
-      PipSupportedCandidate supported;
-      if (selected_lab_candidate(lab, sample, candidate, &supported) &&
-          !strcmp(metadata->candidate_id, supported.id))
-        return supported.title;
-    }
-    return NULL;
+  /* Creation saved the selected form under this mapping and context. Resident
+   * views must not reconstruct candidates from mutable source research. */
+  if (!strcmp(metadata->mapping_version, "pip-discovery-map-v1")) {
+    static const struct { const char *id, *title; } forms[] = {
+        {"A0", "Plain coat / pale variation carried"},
+        {"A1", "Pale markings"},
+        {"B0", "Steady / lower walking cost"},
+        {"B1", "Burst-capable / baseline walking cost"}};
+    for (unsigned form = 0; form < sizeof(forms) / sizeof(forms[0]); ++form)
+      if (!strcmp(metadata->candidate_id, forms[form].id))
+        return forms[form].title;
+  } else if (!strcmp(metadata->mapping_version, "pip-proof-map-v1")) {
+    if (!strcmp(metadata->candidate_id, "legacy-carried"))
+      return "Plain coat / pale variation carried";
+    if (!strcmp(metadata->candidate_id, "legacy-marked"))
+      return "Pale markings";
   }
   return NULL;
 }
@@ -852,7 +858,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
             28, WARM);
       label(&row, 686, 297, "Crown frill / pale eye rings", 18, INK);
       const char *form_title = selected_lab_resident_form_title(
-          lab, individual, &game->individual_metadata[lab->resident]);
+          individual, &game->individual_metadata[lab->resident]);
       label(&row, 686, 327, "Selected form", 18, MUTED);
       wrapped_label(&row, 686, 349,
                     form_title ? form_title : "Form reference unavailable",

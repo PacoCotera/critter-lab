@@ -259,7 +259,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       snprintf(value, sizeof(value), "%u", record->individual.care_visits);
       heading(row, 303, 223, value, 32, TEXT);
       const char *form_title = selected_lab_resident_form_title(
-          kit->lab, &record->individual, &record->metadata);
+          &record->individual, &record->metadata);
       const char *property = NULL;
       if (form_title && !strcmp(record->metadata.candidate_id, "B1"))
         property = "Burst capable / Baseline walking energy";
@@ -312,7 +312,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
         snprintf(value, sizeof(value), "%u / %u sec", elapsed,
                  GAME_EXPEDITION_SECONDS);
         text(row, 300, 158, value, 18, SECONDARY);
-        progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
+        if (!review)
+          progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
       }
     }
     panel(row, 26, 215, 398, 190);
@@ -439,7 +440,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
        : friend_visit     ? "Confirm: choose / Back: residents"
        : discard          ? "Up/Down: choose / Back: keep items"
        : finish           ? "Confirm: choose / Back: keep exploring"
-       : review           ? "Confirm: send  /  Back: keep cargo"
+       : review           ? "Confirm: choose / Back: keep cargo"
        : view->task_depth ? "Back: return to the previous view"
                           : "Up / Down: choose  /  Back: modes",
        18, SECONDARY);

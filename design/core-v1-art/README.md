@@ -27,7 +27,8 @@ Art direction inspected nearest versus Lanczos at actual size and accepted
 nearest as a bounded scene candidate. Internal drawing/occluded content are
 not independently editable layers. It has no UI, creature/encounter target,
 location/weather/telemetry assertion or implied award. It replaces the rejected
-flat constructed scene. Actual composed Probe still requires review.
+flat constructed scene. Actual composed Probe clearance and scene placement passed focused native review;
+this is not full-family or physical-display approval.
 
 Resource primary candidates retain exact07 source rectangles: Data90×100,
 Energy90×100 and Essence90×90, including transparent padding. Compact C18
@@ -108,6 +109,9 @@ is disclosed only through those adapters. Unknown sample views use a neutral
 capsule or reference apparatus, with actual recorded knowledge and next useful
 investigation separate from the illustration. Research is immediate.
 
-This source integration awaits clean-revision compilation and actual native-frame
-inspection on the established VM. No hardware or full-family
-or runtime approval follows from table export or the nine-material mask pass.
+The source integration has compiled from pushed clean revisions on the established
+VM. Actual native review accepted retained portraits, Probe clearance and bounded
+form/creation-review craft. Research finding pages still fail illustrated-discovery
+acceptance; a contextual vignette sheet and its actual composition remain pending.
+The material mask pass and these narrow checks do not establish hardware or
+full-family art approval.

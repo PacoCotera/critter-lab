@@ -5,9 +5,11 @@ contains Home, safe return/review controls, a collection Overview, sample-specif
 A/B discovery, explicit supported-form creation, incubation and retained residents.
 The complete timed Lab journey and restart passed on a clean pushed VM revision.
 Shared frame/resource art and the Gemini expedition scene are integrated; actual
-screen review is correcting the Probe feedback/footer clearance and assessing
-research comprehension. Companion access to the same resident and offline cache
-is in progress. Local generation replay and final connected delivery remain.
+screen review has accepted Probe clearance, retained portraits and bounded
+research semantics. The same residents and saved visits are available on Lab and
+Companion; disconnected snapshots survive restart. Local retained-art generation
+and read-only replay are validated. Illustrated research findings, stable saved
+trait labels, final changed-screen acceptance and connected delivery remain.
 
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
@@ -26,9 +28,11 @@ Accept credits once and ends that outing. Receipt confirms transport metadata;
 a new outing has a new identity. [Gameplay](specs/gameplay.md#expedition-continuity-and-return--accepted)
 and [architecture](specs/architecture.md#three-device-host-simulator) own those rules and recovery limits.
 
-The local [Pip loop](native/selected-lab/V1.md) continues through five paid
-research findings, explicit complete-genome selection, incubation, deliberate
-reveal and habitat visits. Saves retain supplies, discoveries, individual
+The delivered local [Pip loop](native/selected-lab/V1.md) continues through its
+legacy research, supported selection, incubation, deliberate reveal and habitat
+visits. The active Core V1 draft adds two samples with different retained discovery
+paths and reversible supported-form drafts before a separate creation commitment.
+Saves retain supplies, discoveries, individual
 identity and transfer state across restart. The browser presents native pixels
 and the accepted physical-control panel; screen artwork is not clickable.
 The sandbox reset is outside device shells and preserves the matching saved
@@ -68,8 +72,9 @@ acceptance, connected playthrough or a published release.
 The Lab reference is Raspberry Pi4; current execution is Linux x86-64 C17 host
 simulation. One process owns three logical devices and simulated radio exchange.
 ARM builds, independent endpoint storage, radio, display/input drivers, printer,
-charging, power and physical performance remain unverified. Companions marks
-party assignment as unavailable; capture/training, distinct authored route
+charging, power and physical performance remain unverified. The active draft's
+Companions mode supports viewing and recording a visit with an already revealed
+resident; capture/training, distinct authored route
 events, cloud services and habitat ecology remain outside this slice. Timings,
 chance, capacities and content limits remain provisional in the play guide.
 

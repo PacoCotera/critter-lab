@@ -31,6 +31,14 @@ assertions cover creation costs, free inspection, same saved visits and distinct
 resident IDs sharing the exact permitted original. Later frame-only corrections
 must be attributed to their own source and do not imply a repeated whole journey.
 
+The [focused Companion trace](companion-clarity/trace.json) records the changed
+presentation at `5a9e07fe05917a981e6147c11ec296091113ab9f`. Viewing leaves the visit
+count unchanged; a fresh visit increments it once; offline activation and reconnect
+do not queue another visit. Keep cargo is the default review choice and preserves
+the haul. Deliberate Send, Lab acceptance and Back reach Home. These captures also
+exposed a review-status/progress overlap and a saved-form lookup dependency; their
+corrections require separate actual-frame evidence and are not approved here.
+
 ## Inspect the journey
 
 | Step | Actual native frame |

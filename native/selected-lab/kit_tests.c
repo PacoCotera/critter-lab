@@ -66,6 +66,24 @@ static size_t read_saved_bytes(const char *path, unsigned char *bytes, size_t ca
   assert(feof(file) && fclose(file) == 0);
   return length;
 }
+/* Compare the actual property pixels, excluding visits and link feedback. */
+static uint32_t companion_property_pixels(const DeviceKit *kit) {
+  FILE *frame = tmpfile();
+  assert(frame && kit_bmp(kit, KIT_COMPANION, frame));
+  unsigned stride = (kit_width(KIT_COMPANION) * 3 + 3) & ~3u;
+  uint32_t hash = 2166136261u;
+  for (unsigned y = 267; y < 380; ++y) {
+    long offset = 54 + (long)(kit_height(KIT_COMPANION) - y - 1) * stride + 303 * 3;
+    assert(fseek(frame, offset, SEEK_SET) == 0);
+    for (unsigned byte = 0; byte < 116 * 3; ++byte) {
+      int value = fgetc(frame);
+      assert(value != EOF);
+      hash = (hash ^ (unsigned)value) * 16777619u;
+    }
+  }
+  assert(fclose(frame) == 0);
+  return hash;
+}
 static void resident_cache_and_visits(const char *directory) {
   char path[512];
   snprintf(path, sizeof(path), "%s/resident-cache", directory);
@@ -93,6 +111,16 @@ static void resident_cache_and_visits(const char *directory) {
     strcpy(resident->art_version, PIP_ART_VERSION);
     pip_pin_individual_art(&lab.game, i, "legacy-carried");
   }
+  /* A saved B resident retains the selected movement/effort relationship. */
+  lab.game.samples[1].decoded_studies = lab.game.samples[1].decoded_facts = 0;
+  pip_pin_sample_profile(&lab.game, 1);
+  assert(pip_record_investigation(&lab.game, 1, 0));
+  assert(pip_record_investigation(&lab.game, 1, 2));
+  PipSupportedCandidate candidate;
+  assert(pip_supported_candidate(&lab.game, 1, 1, &candidate));
+  lab.game.individuals[1].genome = candidate.genome;
+  lab.game.individuals[1].expression = candidate.expression;
+  pip_pin_individual_art(&lab.game, 1, candidate.id);
   assert(game_state_save(path, &lab.game) == 0);
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
@@ -101,6 +129,8 @@ static void resident_cache_and_visits(const char *directory) {
   assert(strcmp(first->individual.id, second->individual.id) &&
          !strcmp(first->individual.art_id, second->individual.art_id));
   assert(!memcmp(&first->metadata, &lab.game.individual_metadata[0], sizeof(first->metadata)));
+  assert(!strcmp(selected_lab_resident_form_title(&first->individual, &first->metadata),
+                 "Plain coat / pale variation carried"));
   assert(kit_resident_cache_current(&kit) && kit_dock_cache_current(&kit) &&
          kit_dock_visits(&kit) == 10);
   /* Existing mode controls select a recorded ID, then a separate visit action. */
@@ -110,6 +140,36 @@ static void resident_cache_and_visits(const char *directory) {
   assert(kit.companion.page == COMP_FRIEND_LIST && kit_option_count(&kit, KIT_COMPANION) == 2);
   press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
   assert(!strcmp(kit_selected_resident(&kit)->individual.id, "resident-1"));
+  const KitResidentProjection *saved = kit_selected_resident(&kit);
+  assert(!strcmp(selected_lab_resident_form_title(&saved->individual, &saved->metadata),
+                 "Burst-capable / baseline walking cost"));
+  uint32_t property_pixels = companion_property_pixels(&kit);
+  /* Missing/incomplete live source research cannot change saved resident facts. */
+  GameState live_world = lab.game;
+  lab.game.sample_count = 0;
+  assert(companion_property_pixels(&kit) == property_pixels);
+  lab.game = live_world;
+  memset(&lab.game.sample_metadata[1], 0, sizeof(lab.game.sample_metadata[1]));
+  assert(companion_property_pixels(&kit) == property_pixels);
+  lab.game = live_world;
+  GameIndividualMetadata unsupported = saved->metadata;
+  strcpy(unsupported.mapping_version, "future-map");
+  assert(!selected_lab_resident_form_title(&saved->individual, &unsupported));
+  unsupported = saved->metadata;
+  strcpy(unsupported.reference_context, "future-context");
+  assert(!selected_lab_resident_form_title(&saved->individual, &unsupported));
+  unsupported = saved->metadata;
+  strcpy(unsupported.candidate_id, "unknown-form");
+  assert(!selected_lab_resident_form_title(&saved->individual, &unsupported));
+  unsupported = saved->metadata;
+  strcpy(unsupported.mapping_version, "pip-proof-map-v1");
+  assert(!selected_lab_resident_form_title(&saved->individual, &unsupported));
+  unsupported = first->metadata;
+  strcpy(unsupported.candidate_id, "unknown-legacy-form");
+  assert(!selected_lab_resident_form_title(&first->individual, &unsupported));
+  GameIndividual unrevealed = saved->individual;
+  unrevealed.revealed = 0;
+  assert(!selected_lab_resident_form_title(&unrevealed, &saved->metadata));
   uint64_t sequence = lab.game.last_operation_sequence;
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_FRIEND_VISIT &&
@@ -117,6 +177,7 @@ static void resident_cache_and_visits(const char *directory) {
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(lab.game.individuals[1].care_visits == 8 && lab.game.individuals[0].care_visits == 3 &&
          kit_selected_resident(&kit)->individual.care_visits == 8 && kit_dock_visits(&kit) == 11);
+  assert(companion_property_pixels(&kit) == property_pixels);
   press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   assert(kit.companion.page == COMP_FRIEND_LIST && kit.companion.focus == 1);
   /* A Lab visit updates the same accepted count visible on Companion and Dock. */
@@ -150,6 +211,7 @@ static void resident_cache_and_visits(const char *directory) {
   assert(lab.game.last_operation_sequence == sequence && lab.game.individuals[1].care_visits == 9);
   strcpy(kit.journal_path, actual_journal);
   assert(kit_link(&kit, KIT_COMPANION, 0) && kit_link(&kit, KIT_DOCK, 0));
+  assert(companion_property_pixels(&kit) == property_pixels);
   unsigned char cache_bytes[9000], world_bytes[9000], after[9000];
   size_t cache_length = read_saved_bytes(kit.journal_path, cache_bytes, sizeof(cache_bytes));
   size_t world_length = read_saved_bytes(path, world_bytes, sizeof(world_bytes));
@@ -170,6 +232,9 @@ static void resident_cache_and_visits(const char *directory) {
   assert(kit_init(&recovered, &restarted, 200));
   assert(!memcmp(&recovered.residents, &accepted_cache, sizeof(accepted_cache)) &&
          kit_resident_count(&recovered) == 2 && !kit_resident_cache_current(&recovered));
+  const KitResidentProjection *retained = kit_resident(&recovered, 1);
+  assert(!strcmp(selected_lab_resident_form_title(&retained->individual, &retained->metadata),
+                 "Burst-capable / baseline walking cost"));
   assert(read_saved_bytes(recovered.journal_path, after, sizeof(after)) == cache_length &&
          !memcmp(cache_bytes, after, cache_length));
   sequence = restarted.game.last_operation_sequence;
