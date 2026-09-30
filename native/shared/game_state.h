@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define GAME_STATE_VERSION 3u
+#define GAME_STATE_VERSION 4u
 #define GAME_MAX_SAMPLES 8u
 #define GAME_MAX_INDIVIDUALS 8u
 #define GAME_OPERATION_SLOTS 32u
@@ -98,6 +98,37 @@ typedef struct {
   char original_art_sha256[65];
 } GameIndividualMetadata;
 
+#define GAME_FIELD_CELLS 220u
+#define GAME_FIELD_SITES 5u
+#define GAME_FIELD_SOURCES 6u
+#define GAME_FIELD_HISTORY 16u
+#define GAME_FIELD_NONE 255u
+#define GAME_FIELD_CONTENT_VERSION 1u
+
+/* Companion field state is distinct from Lab-accepted expedition records. */
+typedef struct {
+  uint32_t version, seed;
+  uint8_t terrain[GAME_FIELD_CELLS], paths[GAME_FIELD_CELLS];
+  uint8_t hidden_paths[GAME_FIELD_CELLS], walked[GAME_FIELD_CELLS];
+  uint8_t site_x[GAME_FIELD_SITES], site_y[GAME_FIELD_SITES];
+  uint8_t x, y, visited, inspected, trace, collected, active_source;
+  uint8_t remaining[GAME_FIELD_SOURCES], attempts[GAME_FIELD_SOURCES];
+  uint8_t awards[GAME_FIELD_SOURCES], last_source[3], sample_budget;
+  uint8_t capsule_profile;
+  char capsule_id[40];
+} GameExpeditionField;
+
+typedef struct {
+  uint32_t version, seed, kind;
+  char expedition_id[64], sample_id[40];
+  uint64_t accepted_at, accept_sequence;
+  uint32_t cargo[3];
+  uint8_t terrain[GAME_FIELD_CELLS], walked[GAME_FIELD_CELLS];
+  uint8_t site_x[GAME_FIELD_SITES], site_y[GAME_FIELD_SITES];
+  uint8_t visited, inspected, trace, collected;
+  uint8_t attempts[GAME_FIELD_SOURCES], awards[GAME_FIELD_SOURCES];
+} GameReceivedExpedition;
+
 typedef struct {
   uint32_t version;
   char balance_version[40];
@@ -146,6 +177,10 @@ typedef struct {
   uint8_t legacy_v2_padding[5];
   GameSampleMetadata sample_metadata[GAME_MAX_SAMPLES];
   GameIndividualMetadata individual_metadata[GAME_MAX_INDIVIDUALS];
+  /* V4 appends after all 8040 bytes of the frozen V3 payload. */
+  GameExpeditionField field;
+  uint32_t received_count, received_cursor;
+  GameReceivedExpedition received[GAME_FIELD_HISTORY];
 } GameState;
 
 void game_state_init(GameState *state);

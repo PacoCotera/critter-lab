@@ -13,9 +13,10 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 [Concept details and earlier studies](design/lab-controls/concepts.md) preserve provenance.*
 
 [Roadmap](ROADMAP.md) connects the delivered Core V1 with the current exploration
-design round. The [generated-map study](design/expedition-map-study/README.md)
-proposes steerable Companion field play and a received-only Lab expedition log;
-its screens are design proofs, not the deployed simulator.
+implementation. The [generated-map study](design/expedition-map-study/README.md)
+guides the approved steerable Companion loop and received-only Lab expedition
+log. Native production and actual acceptance are underway; its illustrated
+screens remain design proofs, rather than deployed gameplay evidence.
 
 ## Playable software today
 

@@ -1,4 +1,5 @@
 #include "game_rules.h"
+#include "expedition.h"
 
 #include "pip_genetics.h"
 #include "save_bytes.h"
@@ -36,6 +37,31 @@ static uint64_t command_fingerprint(const GameCommand *command) {
     value = hash_byte(value, *text++);
   value = hash_u32(value, (uint32_t)command->type);
   switch (command->type) {
+  case GAME_COMMAND_FIELD_START:
+    value = hash_u32(value, command->data.field.kind);
+    value = hash_u32(value, command->data.field.seed);
+    value = hash_u32(value, command->data.field.sample_budget);
+    value = hash_u32(value, command->data.field.monotonic_seconds);
+    break;
+  case GAME_COMMAND_FIELD_MOVE:
+    value = hash_u32(value, command->data.field.direction);
+    break;
+  case GAME_COMMAND_FIELD_INSPECT:
+  case GAME_COMMAND_FIELD_TRACE:
+  case GAME_COMMAND_FIELD_COLLECT:
+    value = hash_u32(value, command->data.field.site);
+    break;
+  case GAME_COMMAND_FIELD_SOURCE:
+    value = hash_u32(value, command->data.field.site);
+    value = hash_u32(value, command->data.field.source);
+    value = hash_u32(value, command->data.field.monotonic_seconds);
+    break;
+  case GAME_COMMAND_FIELD_UNLOAD: {
+    const unsigned char *bytes = (const unsigned char *)command->data.field.record;
+    for (size_t i = 0; i < sizeof(GameReceivedExpedition); ++i)
+      value = hash_byte(value, bytes[i]);
+    break;
+  }
   case GAME_COMMAND_EXPEDITION_START:
     value = hash_u32(value, (uint32_t)command->data.expedition.kind);
     value = hash_u32(value, command->data.expedition.monotonic_seconds);
@@ -126,6 +152,9 @@ static int expedition_sample_ready(const GameState *state) {
 }
 
 int game_transfer_available(const GameState *state) {
+  if (state && state->field.version)
+    return state->expedition_data || state->expedition_energy ||
+           state->expedition_essence || state->field.collected;
   return state &&
          (state->expedition_data >= GAME_SUPPLY_UNIT ||
           state->expedition_energy >= GAME_SUPPLY_UNIT ||
@@ -214,6 +243,12 @@ unsigned game_gather_required_slots(const GameState *state) {
   unsigned count = 0;
   if (!state || state->legacy_supply_encoding)
     return 0;
+  if (state->field.version) {
+    unsigned source = state->field.active_source;
+    if (source >= GAME_FIELD_SOURCES || !state->field.remaining[source]) return 0;
+    unsigned resource = game_field_source_resource(source);
+    return state->gather_progress_ms[resource] + 1000u >= GAME_GATHER_ATTEMPT_MS;
+  }
   for (unsigned i = 0; i < 3; ++i)
     if (state->gather_progress_ms[i] + 1000u >= GAME_GATHER_ATTEMPT_MS)
       ++count;
@@ -316,6 +351,7 @@ static uint32_t next_gather_random(GameState *state) {
 }
 
 static int apply_expedition_tick(GameState *state, uint32_t now) {
+  if (state->field.version) return game_field_tick(state, now);
   uint32_t elapsed;
   uint32_t index;
   if (!state->expedition_active || state->legacy_supply_encoding)
@@ -389,6 +425,16 @@ static int apply_incubation_tick(GameState *state, uint32_t now) {
 static GameResult apply_domain_command(GameState *state,
                                        const GameCommand *command) {
   switch (command->type) {
+  case GAME_COMMAND_FIELD_START:
+    return game_field_start(state, command);
+  case GAME_COMMAND_FIELD_MOVE:
+  case GAME_COMMAND_FIELD_INSPECT:
+  case GAME_COMMAND_FIELD_SOURCE:
+  case GAME_COMMAND_FIELD_TRACE:
+  case GAME_COMMAND_FIELD_COLLECT:
+    return game_field_action(state, command);
+  case GAME_COMMAND_FIELD_UNLOAD:
+    return game_field_unload(state, command);
   case GAME_COMMAND_EXPEDITION_START: {
     if (command->data.expedition.kind > GAME_EXPEDITION_RESONANCE ||
         state->expedition_active || state->expedition_id[0] ||
@@ -446,6 +492,7 @@ static GameResult apply_domain_command(GameState *state,
     state->expedition_active = 0;
     state->expedition_id[0] = '\0';
     state->expedition_elapsed = 0;
+    memset(&state->field, 0, sizeof(state->field));
     return GAME_OK;
   case GAME_COMMAND_EXPEDITION_OFFLOAD: {
     uint32_t total = cargo_total(state);
@@ -712,6 +759,9 @@ GameResult game_apply(const char *path, GameState *state,
   operation_length = strlen(command->operation_id);
   if (operation_length >= sizeof(state->operations[0].id))
     return GAME_INVALID;
+  if (command->type == GAME_COMMAND_FIELD_UNLOAD &&
+      (!command->data.field.record ||
+       !game_received_valid(command->data.field.record))) return GAME_INVALID;
   if (command->type == GAME_COMMAND_INVESTIGATE &&
       (!command->data.investigation.sample_id ||
        !command->data.investigation.content_version ||

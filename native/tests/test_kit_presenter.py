@@ -8,6 +8,7 @@ import sys
 import tempfile
 import threading
 import time
+from collections import deque
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
@@ -72,6 +73,32 @@ def run(binary, proof=None):
         def link(device, online):
             assert request("/api/link", {"device": device, "online": online})[0] == 200
 
+        def walk_to(site):
+            current = state("companion")["field"]
+            target = next(place["tile"] for place in current["sites"] if place["id"] == site)
+            start = tuple(current["position"])
+            target = tuple(target)
+            paths = set(current["paths"])
+            queue = deque([start])
+            previous = {start: None}
+            directions = ((0, -1, "up"), (0, 1, "down"), (-1, 0, "left"), (1, 0, "right"))
+            while queue and target not in previous:
+                x, y = queue.popleft()
+                for dx, dy, button in directions:
+                    tile = (x + dx, y + dy)
+                    if 0 <= tile[0] < 20 and 0 <= tile[1] < 11 and tile[1] * 20 + tile[0] in paths and tile not in previous:
+                        previous[tile] = ((x, y), button)
+                        queue.append(tile)
+            assert target in previous, (start, target, current)
+            buttons = []
+            tile = target
+            while previous[tile] is not None:
+                tile, button = previous[tile]
+                buttons.append(button)
+            for button in reversed(buttons):
+                press("companion", button)
+            assert state("companion")["field"]["site"] == site
+
         try:
             for device in ("lab", "companion", "dock"):
                 frame(device, "initial")
@@ -88,11 +115,36 @@ def run(binary, proof=None):
             assert press("companion", "confirm")["page"] == "probe"
             assert state("companion")["cargo"] == [0, 0, 0]
             press("companion", "confirm")
-            time.sleep(5.1)
+            assert state("companion")["field"]["active_source"] == 255
+            press("companion", "confirm")  # Inspect Camp, no automatic award/start.
+            assert state("companion")["page"] == "field-site"
+            press("companion", "confirm")  # Explicitly start Camp Data.
+            press("companion", "back")
+            deadline = time.monotonic() + 20
+            while not sum(state("companion")["cargo"]) and time.monotonic() < deadline:
+                time.sleep(1)
             assert sum(state("companion")["cargo"]) > 0
             frame("companion", "gathering")
             assert state("lab")["stock"] == [0, 0, 0]
-            press("companion", "confirm")  # Cargo
+            assert state("lab")["cargo"] == [0, 0, 0]
+            assert "field" not in state("lab")
+            walk_to(1)
+            press("companion", "confirm")  # Inspect Moss bend.
+            press("companion", "down")
+            press("companion", "confirm")  # Independent trace reveals connector.
+            assert state("companion")["field"]["trace"]
+            assert state("companion")["field"]["capsules"] == 0
+            press("companion", "up")
+            press("companion", "confirm")  # Switch source; retain Data preparation.
+            press("companion", "back")
+            walk_to(4)
+            press("companion", "confirm")
+            press("companion", "confirm")  # Deliberately collect sealed sample.
+            assert state("companion")["field"]["capsules"] == 1
+            press("companion", "back")
+            press("companion", "back")  # Modes.
+            press("companion", "right")
+            press("companion", "confirm")  # Cargo.
             frame("companion", "cargo")
             review = press("companion", "confirm")
             assert review["page"] == "send-review" and review["focus"] == "Keep cargo"
@@ -132,7 +184,8 @@ def run(binary, proof=None):
             credited = [amount // 100 * 100 for amount in cargo]
             retained = [amount % 100 for amount in cargo]
             assert accepted["phase"] == 4 and accepted["stock"] == credited
-            assert accepted["expedition_seconds"] == 0 and accepted["samples"] == 0
+            assert accepted["expedition_seconds"] == 0 and accepted["samples"] == 1
+            assert accepted["received_count"] == 1
             for device in ("lab", "companion", "dock"):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]

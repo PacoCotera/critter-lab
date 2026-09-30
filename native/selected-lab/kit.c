@@ -1,4 +1,6 @@
 #include "kit.h"
+#include "expedition.h"
+#include "expedition_render.h"
 #include "save_bytes.h"
 #include <errno.h>
 #include <stddef.h>
@@ -7,7 +9,7 @@
 #include <time.h>
 
 #define KIT_ENVELOPE_MAGIC "CLKITV1"
-#define KIT_ENVELOPE_VERSION 1u
+#define KIT_ENVELOPE_VERSION 2u
 #define KIT_RESIDENT_CACHE_VERSION 1u
 
 /* The transfer journal remains the exact old record. The envelope owns only
@@ -18,6 +20,12 @@ typedef struct {
   KitJournal journal;
   KitResidentCache residents;
   uint32_t dock_visits;
+} SavedKitEnvelopeV1;
+typedef struct {
+  SavedKitEnvelopeV1 original;
+  GameReceivedExpedition sealed_field;
+  uint32_t acknowledged_capsules;
+  char counted_capsule_haul[64];
 } SavedKitEnvelope;
 
 _Static_assert(sizeof(KitJournal) == 160, "Frozen Kit journal size changed");
@@ -26,8 +34,8 @@ _Static_assert(offsetof(KitJournal, haul_id) == 32, "Frozen haul offset");
 _Static_assert(offsetof(KitJournal, dock_world_revision) == 144, "Frozen Dock offset");
 _Static_assert(sizeof(KitResidentProjection) == 501, "Resident envelope record ABI changed");
 _Static_assert(sizeof(KitResidentCache) == 4032, "Resident cache schema needs a new version");
-_Static_assert(offsetof(SavedKitEnvelope, journal) == 24, "Envelope journal offset changed");
-_Static_assert(sizeof(SavedKitEnvelope) == 4224, "Kit envelope schema needs a new version");
+_Static_assert(offsetof(SavedKitEnvelopeV1, journal) == 24, "Envelope journal offset changed");
+_Static_assert(sizeof(SavedKitEnvelopeV1) == 4224, "Kit envelope schema needs a new version");
 
 static int sync_projections(DeviceKit *kit, int force_companion, int force_dock);
 
@@ -63,27 +71,33 @@ static uint32_t checksum(const KitJournal *journal) {
     hash = (hash ^ bytes[i]) * 16777619u;
   return hash;
 }
-static uint32_t envelope_checksum(const SavedKitEnvelope *saved) {
+static uint32_t envelope_checksum_length(const SavedKitEnvelope *saved, size_t length) {
   const unsigned char *bytes = (const unsigned char *)saved;
   uint32_t hash = 2166136261u;
-  for (size_t i = 0; i < sizeof(*saved); ++i)
-    if (i < offsetof(SavedKitEnvelope, checksum) ||
-        i >= offsetof(SavedKitEnvelope, checksum) + sizeof(saved->checksum))
+  for (size_t i = 0; i < length; ++i)
+    if (i < offsetof(SavedKitEnvelopeV1, checksum) ||
+        i >= offsetof(SavedKitEnvelopeV1, checksum) + sizeof(saved->original.checksum))
       hash = (hash ^ bytes[i]) * 16777619u;
   return hash;
+}
+static uint32_t envelope_checksum(const SavedKitEnvelope *saved) {
+  return envelope_checksum_length(saved, sizeof(*saved));
 }
 static int write_envelope(const DeviceKit *kit, const KitJournal *journal,
                           const KitResidentCache *residents, unsigned dock_visits) {
   SavedKitEnvelope saved;
   memset(&saved, 0, sizeof(saved));
-  memcpy(saved.magic, KIT_ENVELOPE_MAGIC, sizeof(saved.magic));
-  saved.version = KIT_ENVELOPE_VERSION;
-  saved.file_size = sizeof(saved);
-  saved.journal = *journal;
-  saved.journal.checksum = checksum(&saved.journal);
-  saved.residents = *residents;
-  saved.dock_visits = dock_visits;
-  saved.checksum = envelope_checksum(&saved);
+  memcpy(saved.original.magic, KIT_ENVELOPE_MAGIC, sizeof(saved.original.magic));
+  saved.original.version = KIT_ENVELOPE_VERSION;
+  saved.original.file_size = sizeof(saved);
+  saved.original.journal = *journal;
+  saved.original.journal.checksum = checksum(&saved.original.journal);
+  saved.original.residents = *residents;
+  saved.original.dock_visits = dock_visits;
+  saved.sealed_field = kit->sealed_field;
+  saved.acknowledged_capsules = kit->acknowledged_capsules;
+  strcpy(saved.counted_capsule_haul, kit->counted_capsule_haul);
+  saved.original.checksum = envelope_checksum(&saved);
   return save_bytes_write_status(kit->journal_path, &saved, sizeof(saved));
 }
 static int persist(DeviceKit *kit) {
@@ -110,6 +124,13 @@ static const char *source_expedition(const KitJournal *journal) {
 static int same_cargo(const DeviceKit *kit) {
   const GameState *game = &kit->lab->game;
   const KitJournal *journal = &kit->journal;
+  if (journal->version == 5) {
+    GameReceivedExpedition field;
+    game_field_record(game, &field);
+    field.accepted_at = kit->sealed_field.accepted_at;
+    field.accept_sequence = kit->sealed_field.accept_sequence;
+    if (!game->field.version || memcmp(&field,&kit->sealed_field,sizeof(field))) return 0;
+  }
   return !strcmp(game->expedition_id, source_expedition(journal)) &&
          game->expedition_data == journal->cargo[0] &&
          game->expedition_energy == journal->cargo[1] &&
@@ -132,8 +153,9 @@ static GameResult apply(DeviceKit *kit, GameCommand command,
   if (result == GAME_STORAGE || result == GAME_COMMITTED_UNCERTAIN)
     fail(kit);
   if (result == GAME_OK) {
-    ++kit->lab->revision;
-    refresh(&kit->companion, 1);
+    int field_tick = command.type == GAME_COMMAND_EXPEDITION_TICK && kit->lab->game.field.version;
+    if (!field_tick) ++kit->lab->revision;
+    refresh(&kit->companion, !field_tick);
   } else if (result != GAME_STORAGE && result != GAME_COMMITTED_UNCERTAIN &&
              result != GAME_DUPLICATE) {
     strcpy(kit->companion.message, "Action unavailable. No change saved.");
@@ -154,7 +176,10 @@ static int reconcile(DeviceKit *kit) {
                      ? GAME_COMMAND_EXPEDITION_TRANSFER
                  : kit->journal.version == 3
                      ? GAME_COMMAND_EXPEDITION_WHOLE_TRANSFER
+                 : kit->journal.version == 5 ? GAME_COMMAND_FIELD_UNLOAD
                      : GAME_COMMAND_EXPEDITION_UNLOAD;
+  if (command.type == GAME_COMMAND_FIELD_UNLOAD)
+    command.data.field.record = &kit->sealed_field;
   command.sequence = kit->journal.accept_sequence;
   int committed = 0;
   if (game->last_operation_sequence == kit->journal.accept_sequence) {
@@ -192,7 +217,7 @@ static int valid_journal(const KitJournal *journal) {
         !separator[1] || strchr(separator + 1, '/'))
       return 0;
   }
-  return journal->version >= 1 && journal->version <= 4 &&
+  return journal->version >= 1 && journal->version <= 5 &&
          journal->checksum == checksum(journal) &&
          journal->phase <= KIT_COMPLETE && journal->companion_online <= 1 &&
          journal->dock_online <= 1 &&
@@ -460,18 +485,35 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
         return 0;
       }
     } else {
-      if (read != sizeof(saved) ||
-          memcmp(saved.magic, KIT_ENVELOPE_MAGIC, sizeof(saved.magic)) ||
-          saved.version != KIT_ENVELOPE_VERSION || saved.file_size != sizeof(saved) ||
-          saved.checksum != envelope_checksum(&saved) ||
-          !valid_journal(&saved.journal) || !valid_residents(&saved.residents) ||
-          saved.dock_visits > GAME_MAX_INDIVIDUALS * GAME_MAX_CARE_VISITS) {
+      const SavedKitEnvelopeV1 *original = &saved.original;
+      int old = read == sizeof(SavedKitEnvelopeV1) && original->version == 1;
+      if ((!old && (read != sizeof(saved) || original->version != KIT_ENVELOPE_VERSION)) ||
+          memcmp(original->magic, KIT_ENVELOPE_MAGIC, sizeof(original->magic)) ||
+          original->file_size != read ||
+          original->checksum != envelope_checksum_length(&saved, read) ||
+          !valid_journal(&original->journal) || !valid_residents(&original->residents) ||
+          original->dock_visits > GAME_MAX_INDIVIDUALS * GAME_MAX_CARE_VISITS ||
+          saved.acknowledged_capsules > GAME_MAX_SAMPLES ||
+          !memchr(saved.counted_capsule_haul, 0, sizeof(saved.counted_capsule_haul)) ||
+          (original->journal.version == 5 && !game_received_valid(&saved.sealed_field))) {
         fail(kit);
         return 0;
       }
-      kit->journal = saved.journal;
-      kit->residents = saved.residents;
-      kit->dock_visits = saved.dock_visits;
+      kit->journal = original->journal;
+      kit->residents = original->residents;
+      kit->dock_visits = original->dock_visits;
+      kit->sealed_field = saved.sealed_field;
+      kit->acknowledged_capsules = saved.acknowledged_capsules;
+      strcpy(kit->counted_capsule_haul, saved.counted_capsule_haul);
+      if (old) {
+        /* Migrate only actual accepted own-capsule provenance; the current
+         * unacknowledged source remains excluded until its matching receipt. */
+        for (unsigned sample = 0; sample < lab->game.sample_count; ++sample)
+          if (!strncmp(lab->game.samples[sample].origin_expedition_id, "BEE-E-", 6) &&
+              !(kit->journal.phase == KIT_ACK_PENDING &&
+                !strcmp(lab->game.samples[sample].origin_expedition_id,
+                        source_expedition(&kit->journal)))) ++kit->acknowledged_capsules;
+      }
     }
   } else {
     if (errno != ENOENT) {
@@ -603,6 +645,7 @@ int kit_lab_explore(const DeviceKit *kit) {
   return kit->lab->page == V1_EXPEDITION || kit->lab->page == V1_CARGO;
 }
 static unsigned probe_option_count(const DeviceKit *kit) {
+  if (kit->lab->game.field.version) return 1;
   if (!pending(kit) && kit->lab->game.expedition_id[0] &&
       !game_transfer_available(&kit->lab->game))
     return 2;
@@ -618,6 +661,10 @@ unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
   if (device == KIT_DOCK)
     return kit->dock.page == 2 ? 2 : 3;
   switch (kit->companion.page) {
+  case COMP_FIELD_SITE: {
+    unsigned site = game_field_site(&kit->lab->game);
+    return site == 0 ? 3 : site == 1 ? 2 : 1;
+  }
   case COMP_MODES:
     return 3;
   case COMP_SEND_REVIEW:
@@ -647,6 +694,17 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
     return pages[index % 3];
   }
   switch (kit->companion.page) {
+  case COMP_FIELD_SITE: {
+    unsigned site = game_field_site(&kit->lab->game);
+    if (site == 0) {
+      static const char *actions[] = {"Gather Data", "Gather Energy", "Gather Essence"};
+      return actions[index % 3];
+    }
+    if (site == 1) return index ? "Inspect trace" : "Gather Essence";
+    if (site == 2) return "Gather Data";
+    if (site == 3) return "Gather Energy";
+    return kit->lab->game.field.collected ? "Sample collected" : "Collect sealed sample";
+  }
   case COMP_MODES: {
     static const char *modes[] = {"Probe", "Cargo", "Companions"};
     return modes[index % 3];
@@ -674,6 +732,7 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
       return "Discard items";
     return pending(kit)                               ? "Return to Probe"
            : game_transfer_available(&kit->lab->game) ? "Send to Lab"
+           : kit->lab->game.field.version ? "Finish expedition"
            : !kit->lab->game.expedition_id[0] &&
                      kit->journal.phase >= KIT_ACK_PENDING
                ? "Choose a new expedition"
@@ -791,7 +850,9 @@ static void seal(DeviceKit *kit) {
     refresh(&kit->companion, 1);
     return;
   }
-  kit->journal.version = 4;
+  kit->journal.version = game->field.version ? 5 : 4;
+  memset(&kit->sealed_field, 0, sizeof(kit->sealed_field));
+  if (game->field.version) game_field_record(game, &kit->sealed_field);
   strcpy(kit->journal.haul_id, identity);
   kit->journal.cargo[0] = game->expedition_data;
   kit->journal.cargo[1] = game->expedition_energy;
@@ -809,6 +870,31 @@ static void seal(DeviceKit *kit) {
 static void activate_companion(DeviceKit *kit) {
   unsigned focus = kit->companion.focus;
   switch (kit->companion.page) {
+  case COMP_FIELD_SITE: {
+    unsigned site = game_field_site(&kit->lab->game);
+    GameCommand command = {0};
+    command.data.field.site = site;
+    if (site == 1 && focus == 1) command.type = GAME_COMMAND_FIELD_TRACE;
+    else if (site == 4) command.type = GAME_COMMAND_FIELD_COLLECT;
+    else {
+      command.type = GAME_COMMAND_FIELD_SOURCE;
+      command.data.field.source = site == 0 ? focus : site == 1 ? 3 : site == 2 ? 4 : 5;
+      command.data.field.monotonic_seconds = kit->clock;
+    }
+    if (apply(kit, command, NULL) == GAME_OK) {
+      strcpy(kit->companion.message, command.type == GAME_COMMAND_FIELD_TRACE
+        ? "Sealed-container trace continues east. Route revealed."
+        : command.type == GAME_COMMAND_FIELD_COLLECT ? "Sealed sample collected."
+        : "Gathering source selected. Preparation kept.");
+    } else if (command.type == GAME_COMMAND_FIELD_COLLECT)
+      strcpy(kit->companion.message, "Sample store full or prototype sample limit reached. Cache kept.");
+    else if (command.type == GAME_COMMAND_FIELD_TRACE && !kit->lab->game.field.sample_budget)
+      strcpy(kit->companion.message, "Prototype sample limit reached. Supplies remain available.");
+    else if (command.type == GAME_COMMAND_FIELD_SOURCE)
+      strcpy(kit->companion.message, "Source finished. Explore another opportunity.");
+    refresh(&kit->companion, 1);
+    break;
+  }
   case COMP_MODES:
     companion_enter_actions(kit);
     break;
@@ -885,6 +971,8 @@ static void activate_companion(DeviceKit *kit) {
         companion_page(kit, COMP_PROBE);
     } else if (game_transfer_available(&kit->lab->game))
       companion_task(kit, focus ? COMP_DISCARD_CLASS : COMP_SEND_REVIEW);
+    else if (kit->lab->game.field.version)
+      companion_task(kit, COMP_FINISH_REVIEW);
     else {
       companion_page(kit, COMP_PROBE);
       strcpy(kit->companion.message, "Ready to gather. Choose an expedition.");
@@ -905,6 +993,19 @@ static void activate_companion(DeviceKit *kit) {
       visit_resident(kit);
     break;
   default:
+    if (kit->lab->game.field.version && !pending(kit)) {
+      unsigned site = game_field_site(&kit->lab->game);
+      if (site >= GAME_FIELD_SITES) {
+        strcpy(kit->companion.message, "Inspect at a named place.");
+        refresh(&kit->companion, 1);
+      } else {
+        GameCommand inspect = {0};
+        inspect.type = GAME_COMMAND_FIELD_INSPECT;
+        inspect.data.field.site = site;
+        if (apply(kit, inspect, NULL) == GAME_OK) companion_task(kit, COMP_FIELD_SITE);
+      }
+      break;
+    }
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
         focus == 1 &&
         !game_transfer_available(&kit->lab->game)) {
@@ -915,12 +1016,16 @@ static void activate_companion(DeviceKit *kit) {
       companion_task(kit, COMP_CARGO);
     else {
       GameCommand command = {0};
-      command.type = GAME_COMMAND_EXPEDITION_START;
-      command.data.expedition.kind = (GameExpeditionKind)focus;
-      command.data.expedition.monotonic_seconds = kit->clock;
+      command.type = GAME_COMMAND_FIELD_START;
+      command.data.field.kind = focus;
+      command.data.field.monotonic_seconds = kit->clock;
+      command.data.field.seed = 1428u + kit->lab->game.next_identity * 5755u;
+      command.data.field.sample_budget = GAME_MAX_SAMPLES - kit->acknowledged_capsules;
       if (apply(kit, command, NULL) == GAME_OK) {
         if (kit->journal.phase == KIT_COMPLETE) {
           kit->journal.phase = KIT_IDLE;
+          kit->journal.version = 4;
+          memset(&kit->sealed_field, 0, sizeof(kit->sealed_field));
           persist(kit);
         }
         kit->companion.focus = 0;
@@ -935,7 +1040,10 @@ static void accept(DeviceKit *kit) {
   kit->journal.accept_sequence = kit->lab->game.last_operation_sequence + 1;
   /* A preacceptance snapshot stays intact; only this fresh intent adopts the
    * ending policy. Already reserved v1/v2/v3 intents keep their exact command. */
-  kit->journal.version = 4;
+  if (kit->journal.version == 5) {
+    kit->sealed_field.accepted_at = (uint64_t)time(NULL);
+    kit->sealed_field.accept_sequence = kit->journal.accept_sequence;
+  } else kit->journal.version = 4;
   kit->journal.phase = KIT_COMMITTING;
   if (persist(kit) && reconcile(kit))
     normalize_stock(kit);
@@ -951,7 +1059,27 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
   if (device == KIT_LAB) {
     if (kit->failed || kit->journal.phase == KIT_COMMITTING)
       return;
-    if (kit_lab_explore(kit) &&
+    int log = kit_lab_explore(kit) && kit->journal.phase != KIT_ARRIVED &&
+              kit->journal.phase != KIT_COMMITTING && !kit->caller_valid;
+    if (log && ((input == SELECTED_UP_UP || input == SELECTED_DOWN_UP ||
+                 input == SELECTED_CONFIRM_UP) ||
+                 (input == SELECTED_BACK_UP && kit->received_detail))) {
+      unsigned button = (unsigned)input / 2;
+      SelectedGesture gesture = kit->lab->gestures[button];
+      memset(&kit->lab->gestures[button],0,sizeof(SelectedGesture));
+      if (gesture.held && gesture.allowed && gesture.revision == revision &&
+          gesture.interaction_epoch == kit->lab->interaction_epoch && !kit->lab->suspended) {
+        unsigned count = kit_received_count(kit);
+        if (input == SELECTED_CONFIRM_UP && count) kit->received_detail = 1;
+        else if (input == SELECTED_BACK_UP) kit->received_detail = 0;
+        else if (!kit->received_detail && count) {
+          if (input == SELECTED_UP_UP && kit->received_selected) --kit->received_selected;
+          if (input == SELECTED_DOWN_UP && kit->received_selected + 1 < count) ++kit->received_selected;
+        }
+        ++kit->lab->revision; ++kit->lab->interaction_epoch;
+        kit->lab->minimum_action_revision = kit->lab->revision; kit->lab->ready = 0;
+      }
+    } else if (kit_lab_explore(kit) && kit->journal.phase == KIT_ARRIVED &&
         (input == SELECTED_CONFIRM_UP ||
          ((input == SELECTED_BACK_UP || input == SELECTED_LEFT_UP) &&
           kit->caller_valid))) {
@@ -1027,6 +1155,15 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
     return;
   refresh(view, 0);
   view->message[0] = 0;
+  if (device == KIT_COMPANION && view->page == COMP_PROBE &&
+      kit->lab->game.field.version && !pending(kit) && button < 4) {
+    GameCommand command = {0};
+    command.type = GAME_COMMAND_FIELD_MOVE;
+    command.data.field.direction = button;
+    if (apply(kit, command, NULL) != GAME_OK)
+      strcpy(view->message, "Follow a visible path.");
+    return;
+  }
   if (device == KIT_COMPANION && view->page == COMP_MODES) {
     if (button == 2 || button == 3) {
       unsigned mode = view->mode;
@@ -1128,7 +1265,16 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
                    kit->companion.page != COMP_DISCARD_REVIEW;
   if (!expedition)
     kit->lab->game.expedition_last_tick = clock;
-  selected_lab_tick_devices(kit->lab, clock, expedition, 1);
+  if (kit->lab->game.field.version) {
+    unsigned source = kit->lab->game.field.active_source;
+    if (expedition && kit->lab->game.expedition_active && source < GAME_FIELD_SOURCES &&
+        kit->lab->game.field.remaining[source] && !game_gather_capacity_blocked(&kit->lab->game)) {
+      GameCommand tick = {0}; tick.type = GAME_COMMAND_EXPEDITION_TICK;
+      tick.data.monotonic_seconds = clock;
+      (void)apply(kit, tick, NULL);
+    } else kit->lab->game.expedition_last_tick = clock;
+    selected_lab_tick_devices(kit->lab, clock, 0, 1);
+  } else selected_lab_tick_devices(kit->lab, clock, expedition, 1);
   if (kit->lab->game.revision != before) {
     unsigned count = kit_option_count(kit, KIT_COMPANION);
     int focus_changed = kit->companion.focus >= count &&
@@ -1154,6 +1300,12 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
         return;
       open_reception(kit);
     } else if (kit->journal.phase == KIT_ACK_PENDING) {
+      const GameSample *sample = kit_received_sample(kit);
+      if (sample && strcmp(kit->counted_capsule_haul,kit->journal.haul_id)) {
+        if (kit->acknowledged_capsules >= GAME_MAX_SAMPLES) { fail(kit); return; }
+        ++kit->acknowledged_capsules;
+        strcpy(kit->counted_capsule_haul,kit->journal.haul_id);
+      }
       kit->journal.phase = KIT_COMPLETE;
       if (!persist(kit))
         return;
@@ -1174,6 +1326,107 @@ unsigned kit_width(unsigned device) {
   return device == KIT_LAB ? 1024 : device == KIT_COMPANION ? 450 : 792;
 }
 unsigned kit_height(unsigned device) { return device == KIT_DOCK ? 272 : 600; }
+unsigned kit_received_count(const DeviceKit *kit) { return kit->lab->game.received_count; }
+static const GameReceivedExpedition *received_record(const DeviceKit *kit, unsigned index) {
+  const GameState *game = &kit->lab->game;
+  if (index >= game->received_count) return NULL;
+  unsigned position = (game->received_cursor + GAME_FIELD_HISTORY - 1u - index) % GAME_FIELD_HISTORY;
+  return &game->received[position];
+}
+int kit_received_projection(const DeviceKit *kit, unsigned index, ExpeditionReceivedView *out) {
+  memset(out,0,sizeof(*out));
+  out->record_count = kit_received_count(kit);
+  out->selected = out->record_count && index < out->record_count ? index : 0;
+  out->detail = kit->received_detail;
+  for (unsigned row = 0; row < out->record_count; ++row) {
+    const GameReceivedExpedition *record = received_record(kit,row);
+    snprintf(out->record_labels[row],sizeof(out->record_labels[row]),"%s / %u supplies%s",
+             record->expedition_id,
+             (record->cargo[0]+record->cargo[1]+record->cargo[2])/GAME_SUPPLY_UNIT,
+             record->collected ? " / sample" : "");
+  }
+  const GameReceivedExpedition *record = received_record(kit,out->selected);
+  if (!record) { strcpy(out->message,"No expedition records received yet."); return 1; }
+  memcpy(out->map.terrain,record->terrain,sizeof(out->map.terrain));
+  memcpy(out->map.paths,record->walked,sizeof(out->map.paths));
+  memcpy(out->map.walked,record->walked,sizeof(out->map.walked));
+  memcpy(out->map.site_x,record->site_x,5); memcpy(out->map.site_y,record->site_y,5);
+  for (unsigned site = 0; site < 5; ++site) {
+    out->map.site_visible[site] = out->map.site_visited[site] = !!(record->visited & (1u << site));
+    out->map.site_inspected[site] = !!(record->inspected & (1u << site));
+  }
+  out->map.site_collected[4] = record->collected;
+  strcpy(out->outing_id,record->expedition_id);
+  strcpy(out->sample_id,record->sample_id);
+  out->accepted_at = record->accepted_at;
+  time_t received_at = (time_t)record->accepted_at;
+  struct tm *date = gmtime(&received_at);
+  if (date) strftime(out->received_label,sizeof(out->received_label),"Received %d %b / %H:%M UTC",date);
+  else strcpy(out->received_label,"Received at Lab");
+  for (unsigned resource = 0; resource < 3; ++resource) out->accepted[resource] = record->cargo[resource]/GAME_SUPPLY_UNIT;
+  out->trace_inspected = record->trace; out->sample_collected = record->collected;
+  return 1;
+}
+int kit_field_projection(const DeviceKit *kit, ExpeditionFieldView *out) {
+  memset(out,0,sizeof(*out));
+  const GameState *game = &kit->lab->game;
+  const GameExpeditionField *field = &game->field;
+  if (!field->version) {
+    if (!kit->sealed_field.version || kit->journal.phase < KIT_WAITING) return 0;
+    const GameReceivedExpedition *sealed = &kit->sealed_field;
+    strcpy(out->outing_id,sealed->expedition_id);
+    out->capsule_count = sealed->collected; out->capsule_capacity = 1;
+    for (unsigned resource = 0; resource < 3; ++resource) {
+      out->earned[resource] = sealed->cargo[resource]/GAME_SUPPLY_UNIT;
+      out->preparation_status[resource] = EXPEDITION_PREP_PAUSED;
+    }
+    return 1;
+  }
+  out->page = kit->companion.page == COMP_FIELD_SITE ? EXPEDITION_PAGE_SITE : EXPEDITION_PAGE_MAP;
+  out->current_site = game_field_site(game);
+  strcpy(out->location,game_field_site_name(out->current_site));
+  strcpy(out->outing_id,game->expedition_id);
+  strcpy(out->route,kit_route(kit));
+  memcpy(out->map.terrain,field->terrain,sizeof(out->map.terrain));
+  memcpy(out->map.walked,field->walked,sizeof(out->map.walked));
+  for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile)
+    out->map.paths[tile] = field->paths[tile] || (field->trace && field->hidden_paths[tile]);
+  memcpy(out->map.site_x,field->site_x,5); memcpy(out->map.site_y,field->site_y,5);
+  for (unsigned site = 0; site < 5; ++site) {
+    out->map.site_visible[site] = site != 4 || field->trace;
+    out->map.site_visited[site] = !!(field->visited & (1u << site));
+    out->map.site_inspected[site] = !!(field->inspected & (1u << site));
+    out->map.site_active[site] = game_field_source_site(field->active_source) == site;
+  }
+  out->map.site_collected[4] = field->collected;
+  out->map.avatar_visible = 1; out->map.avatar_x = field->x; out->map.avatar_y = field->y;
+  const uint32_t cargo[] = {game->expedition_data,game->expedition_energy,game->expedition_essence};
+  for (unsigned resource = 0; resource < 3; ++resource) {
+    out->earned[resource] = cargo[resource]/GAME_SUPPLY_UNIT;
+    out->preparation_ms[resource] = game->gather_progress_ms[resource];
+    unsigned source = field->last_source[resource];
+    if (source >= GAME_FIELD_SOURCES) {
+      strcpy(out->source_name[resource],"Not started");
+      out->preparation_status[resource] = EXPEDITION_PREP_NOT_STARTED;
+    } else {
+      strcpy(out->source_name[resource],game_field_site_name(game_field_source_site(source)));
+      out->remaining_chances[resource] = field->remaining[source];
+      out->preparation_status[resource] = !field->remaining[source] ? EXPEDITION_PREP_FINISHED
+        : source != field->active_source || pending(kit) || kit->companion.page == COMP_SEND_REVIEW
+          ? EXPEDITION_PREP_PAUSED
+        : game_gather_capacity_blocked(game) ? EXPEDITION_PREP_CAPACITY_FULL : EXPEDITION_PREP_ACTIVE;
+    }
+  }
+  out->capsule_count = field->collected; out->capsule_capacity = 1;
+  if (out->page == EXPEDITION_PAGE_SITE) {
+    out->action_count = kit_option_count(kit,KIT_COMPANION);
+    out->focus = kit->companion.focus;
+    for (unsigned action = 0; action < out->action_count; ++action)
+      snprintf(out->actions[action],sizeof(out->actions[action]),"%s",kit_option(kit,KIT_COMPANION,action));
+  }
+  strcpy(out->message,kit->companion.message);
+  return 1;
+}
 static void json_string(FILE *output, const char *text) {
   fputc('"', output);
   for (const unsigned char *byte = (const unsigned char *)text; *byte; ++byte) {
@@ -1247,6 +1500,7 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                      : view->page == COMP_DISCARD_REVIEW ? "discard-review"
                      : view->page == COMP_FINISH_REVIEW ? "finish-review"
                      : view->page == COMP_FRIEND_VISIT ? "resident-visit"
+                     : view->page == COMP_FIELD_SITE ? "field-site"
                                                       : "companions";
   int online = device == KIT_COMPANION ? kit->journal.companion_online
                : device == KIT_DOCK    ? kit->journal.dock_online
@@ -1255,6 +1509,16 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
       kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING
           ? kit->journal.cargo
           : NULL;
+  uint32_t visible_cargo[3] = {0};
+  uint32_t visible_preparation[3] = {0};
+  if (device == KIT_COMPANION) {
+    visible_cargo[0] = cargo ? cargo[0] : game->expedition_data;
+    visible_cargo[1] = cargo ? cargo[1] : game->expedition_energy;
+    visible_cargo[2] = cargo ? cargo[2] : game->expedition_essence;
+    memcpy(visible_preparation, game->gather_progress_ms, sizeof(visible_preparation));
+  } else if (device == KIT_LAB && kit->journal.phase >= KIT_ARRIVED) {
+    memcpy(visible_cargo, kit->journal.cargo, sizeof(visible_cargo));
+  }
   fprintf(
       output,
       "{\"device\":%u,\"revision\":%u,\"width\":%u,\"height\":%u,\"page\":",
@@ -1276,19 +1540,50 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
       "u,"
       "\"boundary\":\"Simulated wireless; "
       "radio not selected\"",
-      stock[0], stock[1], stock[2], cargo ? cargo[0] : game->expedition_data,
-      cargo ? cargo[1] : game->expedition_energy,
-      cargo ? cargo[2] : game->expedition_essence,
+      stock[0], stock[1], stock[2], visible_cargo[0], visible_cargo[1], visible_cargo[2],
       device == KIT_DOCK ? kit->journal.dock_samples : game->sample_count, resident_count,
       kit->journal.dock_stock[0],
       kit->journal.dock_stock[1], kit->journal.dock_stock[2],
       kit_dock_cache_current(kit) ? "false" : "true",
       kit->failed ? "true" : "false",
-      kit->normalization_pending ? "true" : "false", kit->companion.mode,
-      game->expedition_elapsed, game->gather_progress_ms[0],
-      game->gather_progress_ms[1], game->gather_progress_ms[2],
-      game_gather_remaining_ms(game), game->gather_last_attempted_mask,
-      game->gather_last_awarded_mask);
+      kit->normalization_pending ? "true" : "false", device == KIT_COMPANION ? kit->companion.mode : 0,
+      device == KIT_COMPANION ? game->expedition_elapsed : 0, visible_preparation[0],
+      visible_preparation[1], visible_preparation[2],
+      device == KIT_COMPANION ? game_gather_remaining_ms(game) : 0,
+      device == KIT_COMPANION ? game->gather_last_attempted_mask : 0,
+      device == KIT_COMPANION ? game->gather_last_awarded_mask : 0);
+  fprintf(output, ",\"received_count\":%u,\"received_selected\":%u,\"received_detail\":%s",
+          device == KIT_LAB ? game->received_count : 0, kit->received_selected,
+          kit->received_detail ? "true" : "false");
+  if (device == KIT_COMPANION && game->field.version) {
+    ExpeditionFieldView field;
+    kit_field_projection(kit, &field);
+    fprintf(output, ",\"field\":{\"position\":[%u,%u],\"site\":%u,\"trace\":%s,"
+            "\"capsules\":%u,\"active_source\":%u,\"sample_budget\":%u,\"paths\":[",
+            field.map.avatar_x, field.map.avatar_y, field.current_site,
+            game->field.trace ? "true" : "false", field.capsule_count,
+            game->field.active_source, game->field.sample_budget);
+    int separator = 0;
+    for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile)
+      if (field.map.paths[tile]) {
+        fprintf(output, "%s%u", separator ? "," : "", tile);
+        separator = 1;
+      }
+    fputs("],\"sites\":[", output);
+    separator = 0;
+    for (unsigned site = 0; site < GAME_FIELD_SITES; ++site)
+      if (field.map.site_visible[site]) {
+        fprintf(output,"%s{\"id\":%u,\"tile\":[%u,%u],\"name\":",separator ? "," : "",
+                site,field.map.site_x[site],field.map.site_y[site]);
+        json_string(output,game_field_site_name(site));
+        fputc('}',output);
+        separator = 1;
+      }
+    fputs("],\"remaining\":[",output);
+    for (unsigned source = 0; source < GAME_FIELD_SOURCES; ++source)
+      fprintf(output,"%s%u",source ? "," : "",game->field.remaining[source]);
+    fputs("]}",output);
+  }
   fprintf(output, ",\"dock_visits\":%u,\"dock_updated_at\":%llu,"
           "\"dock_world_revision\":%llu,\"message\":", kit_dock_visits(kit),
           (unsigned long long)kit->journal.dock_updated_at,

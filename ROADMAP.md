@@ -6,11 +6,13 @@ Owner feedback on30September requests a steerable generated Companion map,
 interactive findings and visible per-resource preparation. Lab Explore becomes
 a log of expedition records actually received; it cannot imply live away-device
 knowledge. [Issue49](https://github.com/PacoCotera/critter-lab/issues/49) tracks one
-bounded game/UX/art design round and native-size study. The
+bounded native implementation with game/UX/art acceptance. The
 [gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
-holds the proposed connected journey and open rule choices. Review the actual
-sequence before dependent live implementation; the delivered timed V1 remains
-running meanwhile. No new map service, radio/backend or hardware work is implied.
+holds the owner-approved map loop and one active source with retained preparation.
+Independent trace discovery and received-only Lab records complete the journey.
+Pacing, chance and finite budgets remain provisional. Verify the actual connected
+native sequence and reference-derived screens before release; the delivered timed
+V1 remains running meanwhile. No new map service, radio/backend or hardware work.
 
 ## Delivered checkpoint: Polished Core V1
 

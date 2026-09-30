@@ -4,9 +4,31 @@ Unmodified Bitstream Vera Sans (`Vera.ttf`) and Vera Sans Bold (`VeraBd.ttf`) is
 
 Bold font SHA-256: `cc037385e4d55bfde89b13e03091ee93bf40c0c52ddd391ff031ab276f13b8e9`. The Bold source is copied unmodified from the same ReportLab distribution and covered by the same [license](LICENSE.txt).
 
-Regenerate from this directory with `python generate.py` and Pillow 12.3.0. Pass `--heading` to regenerate only the bold Lab heading atlases, or `--heading-narrow` for the condensed variant alone. Glyphs cover ASCII 32-126; unsupported bytes display a question mark. Copy deliberately uses ASCII punctuation. Each intended pixel size is independently rasterized with bearing, advance and baseline metrics; no runtime scaling or rasterization occurs. Generated coverage uses unsigned 8-bit alpha.
+Regenerate from this directory with `python generate.py` and Pillow 12.3.0. Pass
+`--lab` for regular and bold Lab atlases, `--heading` for both bold atlases, or
+`--heading-narrow` for the condensed variant alone. Glyphs cover ASCII 32-126;
+unsupported bytes display a question mark. Copy deliberately uses ASCII
+punctuation. Each intended pixel size is independently rasterized with bearing,
+advance and baseline metrics; no runtime scaling or rasterization occurs.
+Generated coverage uses unsigned 8-bit alpha.
 
-`portable_font_data.c` contains 9, 11, 20 and 24px masks (47,932 coverage bytes). `lab_font_data.c` contains 18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44 and 48px masks (514,815 coverage bytes); its declared count is `LAB_FONT_COUNT`. `lab_heading_font_data.c` contains separately rasterized 26, 32, 34 and 40px bold heading masks; its count is `LAB_HEADING_FONT_COUNT`. `lab_heading_narrow_font_data.c` is a second Vera Bold atlas at the same four pixel heights, with glyph coverage, bearing and advance scaled to 80% width using Lanczos resampling. The original bold atlas remains available for comparison and whole-number readouts. The regular and portable atlases retain their existing data and ownership. The original six sizes retain their glyph data and order. The additional intended sizes support the initial expedition and saved finding layouts; other Lab scenes retain their existing sizes. Missing Lab sizes assert rather than silently substitute smaller text. Glyph records add 24 bytes per glyph on these targets. The Lab atlas and scene link only into the Linux Lab target behind `CRITTER_LAB_SCENE`; portable targets link only portable assets. Actual linker size reports remain build evidence.
+`portable_font_data.c` retains 9, 11, 20 and 24px masks (47,932 coverage bytes).
+`lab_font_data.c` retains its original thirteen sizes in order and appends 14,
+15, 16, 17, 20, 23, 25 and 27px for the reviewed expedition composition. Its
+21 sizes contain 645,309 coverage bytes and use `LAB_FONT_COUNT`.
+
+Both bold atlases retain 26, 32, 34 and 40px, then append 20, 23, 24, 25 and
+27px, followed by compact 14, 16, 17 and 18px; `LAB_HEADING_FONT_COUNT` is
+thirteen. The normal bold coverage is 371,140 bytes. The narrow atlas has 296,727
+bytes with coverage, bearing and advance at
+80% width using Lanczos resampling. Whole-number readouts can use normal bold.
+Existing coverage and glyph records remain byte-identical prefixes; unchanged
+regeneration was verified. Other scenes retain their existing sizes.
+
+Missing Lab sizes assert rather than silently substituting smaller text. Glyph
+records add 24 bytes per glyph on these targets. Lab atlases and scenes link into
+the Linux Lab target; portable targets retain their separate portable assets.
+Actual linker size reports remain build evidence.
 
 Coverage blends into RGB with integer alpha; Probe thresholds coverage into its independent packed 1bpp scanline. All coordinates clip as signed values before indexing. No font module knows game state, filesystem or transport.
 

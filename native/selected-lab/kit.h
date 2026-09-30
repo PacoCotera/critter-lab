@@ -14,7 +14,7 @@ enum {
 enum {
   COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW,
   COMP_DISCARD_CLASS, COMP_DISCARD_QUANTITY, COMP_DISCARD_REVIEW,
-  COMP_FINISH_REVIEW, COMP_FRIEND_VISIT
+  COMP_FINISH_REVIEW, COMP_FRIEND_VISIT, COMP_FIELD_SITE
 };
 #define COMP_FRIEND_LIST COMP_FRIENDS
 
@@ -55,6 +55,10 @@ typedef struct {
   KitJournal journal;
   KitResidentCache residents;
   uint32_t dock_visits;
+  GameReceivedExpedition sealed_field;
+  uint32_t acknowledged_capsules;
+  char counted_capsule_haul[64];
+  unsigned received_selected, received_detail;
   int resident_cache_failed, dock_cache_failed;
   char selected_resident_id[40];
   char journal_path[560];

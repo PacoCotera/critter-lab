@@ -1,4 +1,5 @@
 #include "core_art.h"
+#include "expedition_render.h"
 #include "kit.h"
 #include "native_font.h"
 #include "overview_assets.h"
@@ -148,6 +149,115 @@ static void resource_names(char *value, size_t capacity, const char *prefix,
     first = 0;
   }
 }
+/* Expedition layouts use top-of-ink coordinates like the reviewed study.
+ * Keep the existing legacy screen anchor unchanged. */
+static void field_label(KitRow *row, int x, int y, const char *value,
+                         unsigned size, unsigned color, int bold) {
+  const NativeFont *fonts = bold ? lab_heading_fonts : lab_fonts;
+  unsigned count = bold ? LAB_HEADING_FONT_COUNT : LAB_FONT_COUNT;
+  const NativeFont *font = &fonts[0];
+  for (unsigned i = 0; i < count; ++i)
+    if ((unsigned)fonts[i].size == size) font = &fonts[i];
+  int ink_top = font->size;
+  for (const unsigned char *at = (const unsigned char *)value; *at; ++at) {
+    unsigned index = *at >= 32 && *at <= 126 ? *at - 32 : '?' - 32;
+    const NativeGlyph *glyph = &font->glyphs[index];
+    if (glyph->height && glyph->top < ink_top) ink_top = glyph->top;
+  }
+  native_text_row(font, value, x, y - ink_top, row->y, row->width,
+                  row->pixels, 0, palette[color]);
+}
+static void field_text(KitRow *row, int x, int y, const char *value,
+                        unsigned size, unsigned color) {
+  field_label(row, x, y, value, size, color, 0);
+}
+static void field_heading(KitRow *row, int x, int y, const char *value,
+                           unsigned size, unsigned color) {
+  field_label(row, x, y, value, size, color, 1);
+}
+static void field_cargo_row(const DeviceKit *kit, KitRow *row,
+                            const ExpeditionFieldView *field, unsigned page,
+                            int selector, int ended) {
+  const KitView *view = &kit->companion;
+  int review = page == COMP_SEND_REVIEW;
+  int sealed = kit->journal.phase >= KIT_WAITING &&
+               kit->journal.phase <= KIT_ACK_PENDING;
+  int acknowledged = ended && kit->journal.phase == KIT_COMPLETE;
+  char value[128];
+  fill(row, 0, 0, 450, 600, BACKGROUND);
+  panel(row, 12, 12, 426, 576);
+  field_heading(row, 29, 28, review ? "Return to Lab" : sealed ? "Expedition sent"
+                                                   : acknowledged ? "Cargo empty"
+                                                                  : "Cargo", 24, TEXT);
+  field_text(row, 30, 59, review ? "Review freezes gathering"
+                  : acknowledged ? "Expedition ended / choose a new outing"
+                                  : kit_stage(kit), 15, SECONDARY);
+  static const char *modes[] = {"Probe", "Cargo", "Companions"};
+  static const int positions[] = {28, 151, 275};
+  for (unsigned i = 0; i < 3; ++i) {
+    int selected = view->mode == i;
+    if (selector && selected)
+      action_focus(row, positions[i] - 4, 78, i == 2 ? 143 : 98, 27);
+    field_heading(row, positions[i], 82, modes[i], 18, selected ? TEXT : SECONDARY);
+    if (selected) fill(row, positions[i], 98, i == 2 ? 138 : 90, 2, BORDER);
+  }
+  panel(row, 24, 113, 402, 281);
+  field_heading(row, 42, 135, sealed ? "Sealed contents" : "Earned this expedition", 23, TEXT);
+  unsigned total = 0;
+  for (unsigned i = 0; i < 3; ++i) {
+    int x = 49 + (int)i * 126;
+    unsigned count = acknowledged ? 0 : field->earned[i];
+    total += count;
+    resource(row, i, x, 175, 0);
+    snprintf(value, sizeof(value), "%u", count);
+    field_heading(row, x + 57, 177, value, 27, TEXT);
+    field_text(row, x, 237, i == 0 ? "Data" : i == 1 ? "Energy" : "Essence", 18, SECONDARY);
+  }
+  fill(row, 42, 270, 364, 1, EDGE);
+  unsigned capsules = acknowledged ? 0 : field->capsule_count;
+  if (capsules) {
+    category(row, CORE_ART_SAMPLE_NEUTRAL, 49, 283);
+    field_heading(row, 120, 289, "1 sealed sample", 22, TEXT);
+    field_text(row, 120, 321, "Contents unknown", 18, SECONDARY);
+  } else {
+    field_heading(row, 49, 294, "No sample collected", 22, TEXT);
+  }
+  snprintf(value, sizeof(value), "Supplies %u / %u / Capsules %u / %u", total,
+           GAME_CARGO_CAPACITY / GAME_SUPPLY_UNIT, capsules, field->capsule_capacity);
+  field_text(row, 42, 363, value, 16, SECONDARY);
+  if (review) {
+    field_text(row, 28, 414, capsules ? "Send earned items and the sample."
+                              : "Send earned items to the Lab.", 18, TEXT);
+    field_text(row, 28, 442, "Seals the outing / gathering stops.", 18, SECONDARY);
+  } else if (sealed) {
+    wrapped(row, 28, 414, kit_stage(kit), 390, 18, TEXT);
+    field_text(row, 28, 464, "This expedition cannot resume.", 18, SECONDARY);
+  } else if (acknowledged) {
+    field_text(row, 28, 414, "Supplies stored at the Lab.", 18, TEXT);
+    field_text(row, 28, 443, "Choose a new outing on Probe.", 18, SECONDARY);
+  } else {
+    const char *message = view->message[0] ? view->message : "Whole items only / preparation stays here.";
+    wrapped(row, 28, 414, message, 390, 18, SECONDARY);
+  }
+  unsigned count = selector || kit->failed ? 0 : kit_option_count(kit, KIT_COMPANION);
+  for (unsigned i = 0; i < count && i < 2; ++i) {
+    int top = 479 + (int)i * 32;
+    if (i == view->focus) action_focus(row, 29, top, 392, 30);
+    field_heading(row, 45, top + 8, kit_option(kit, KIT_COMPANION, i), 20,
+            i == view->focus ? FOCUS : TEXT);
+  }
+  if (selector) {
+    field_text(row, 28, 491, "Left / Right: change mode", 22, TEXT);
+    field_text(row, 28, 525, "Down / Confirm: enter Cargo", 18, SECONDARY);
+  }
+  field_text(row, 28, 556, selector ? "Browsing never sends or spends"
+                    : review ? "Confirm: choose / Back: keep exploring"
+                             : "Up/Down: choose / Back: modes", 16, SECONDARY);
+  if (kit->failed) {
+    fill(row, 24, 493, 402, 64, FIELD);
+    wrapped(row, 28, 505, "Storage unavailable. Cargo preserved.", 390, 18, FOCUS);
+  }
+}
 static void companion_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   const KitView *view = &kit->companion;
@@ -167,6 +277,28 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   char value[128];
   uint32_t cargo[] = {game->expedition_data, game->expedition_energy,
                       game->expedition_essence};
+  ExpeditionFieldView field;
+  int map_outing = kit_field_projection(kit, &field);
+  if (map_outing && game->expedition_id[0] && !reserved && !receipt &&
+      (page == COMP_PROBE || page == COMP_FIELD_SITE)) {
+    expedition_field_row(&field, row->y, row->pixels);
+    if (selector) {
+      action_focus(row, 24, 78, 98, 27);
+      fill(row, 24, 474, 402, 103, BACKGROUND);
+      text(row, 28, 490, "Left / Right: change mode", 22, TEXT);
+      text(row, 28, 525, "Down / Confirm: enter Probe", 18, SECONDARY);
+      text(row, 28, 557, "Confirm: enter selected mode", 16, SECONDARY);
+    }
+    if (kit->failed) {
+      fill(row, 24, 500, 402, 76, FIELD);
+      wrapped(row, 28, 507, "Storage unavailable. Progress preserved.", 390, 18, FOCUS);
+    }
+    return;
+  }
+  if (map_outing && (details || reserved || receipt) && !discard && !finish && !friends) {
+    field_cargo_row(kit, row, &field, page, selector, ended);
+    return;
+  }
   if (reserved)
     memcpy(cargo, kit->journal.cargo, sizeof(cargo));
   unsigned total = cargo[0] + cargo[1] + cargo[2];
@@ -303,12 +435,15 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     if (has_run || receipt || kit->journal.phase == KIT_COMPLETE) {
       text(row, 28, 158, ended ? "Expedition ended" : kit_route(kit), 18, SECONDARY);
       const char *status = ended ? "Supplies stored at the Lab" : kit_expedition_status(kit);
-      if (review)
+      if (map_outing && !ended)
+        status = field.capsule_count ? "Sealed sample / contents unknown"
+                                    : "Supplies only / no sample collected";
+      else if (review)
         status = elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
                  : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
                                                         : "Sample shelf full / supplies only";
       text(row, 28, 182, status, 18, SECONDARY);
-      if (!ended) {
+      if (!ended && !map_outing) {
         snprintf(value, sizeof(value), "%u / %u sec", elapsed,
                  GAME_EXPEDITION_SECONDS);
         text(row, 300, 158, value, 18, SECONDARY);
@@ -517,6 +652,19 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
 static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   unsigned phase = kit->journal.phase;
+  if (phase != KIT_ARRIVED && phase != KIT_COMMITTING &&
+      !(kit->caller_valid && (phase == KIT_ACK_PENDING || phase == KIT_COMPLETE))) {
+    ExpeditionReceivedView received = {0};
+    kit_received_projection(kit, kit->received_selected, &received);
+    expedition_received_row(&received, row->y, row->pixels);
+    if (kit->failed) {
+      fill(row, 24, 544, 976, 38, FIELD);
+      text(row, 36, 552, "Storage unavailable. Received records preserved.", 18, FOCUS);
+    }
+    return;
+  }
+  ExpeditionFieldView field;
+  int map_outing = kit_field_projection(kit, &field);
   char value[128];
   fill(row, 0, 0, 1024, 600, BACKGROUND);
   if (row->y < 112) {
@@ -555,41 +703,16 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
       snprintf(value, sizeof(value), "Sample recorded: %s", sample->id);
     else if (accepted)
       snprintf(value, sizeof(value), "Supplies saved / no sample recorded");
+    else if (map_outing)
+      snprintf(value, sizeof(value), "%s",
+               field.capsule_count ? "Sealed sample waiting / contents unknown"
+                                   : "Supplies only / no sample collected");
     else
       snprintf(value, sizeof(value), "%s",
                kit->journal.elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
                : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
                                                        : "Sample shelf full / supplies only");
     text(row, 48, 537, value, 18, SECONDARY);
-  } else {
-    panel(row, 24, 134, 976, 412);
-    text(row, 48, 158, "EXPEDITIONS", 34, TEXT);
-    text(row, 48, 204, "Gather with your Companion", 22, SECONDARY);
-    fill(row, 48, 250, 156, 156, FIELD);
-    art(row, OVERVIEW_EXPLORE, 58, 256);
-    text(row, 236, 255,
-         game->expedition_id[0] ? kit_route(kit) : "No expedition", 32, TEXT);
-    text(row, 236, 302,
-         game->expedition_id[0] ? kit_expedition_status(kit)
-                                : "Choose a route on Companion",
-         22, SECONDARY);
-    if (game->expedition_id[0]) {
-      progress(row, 236, 347, 690, 16, game->expedition_elapsed,
-               GAME_EXPEDITION_SECONDS);
-      snprintf(value, sizeof(value), "%u / %u active seconds",
-               game->expedition_elapsed, GAME_EXPEDITION_SECONDS);
-      text(row, 236, 375, value, 18, SECONDARY);
-    }
-    text(row, 48, 423, "On Companion", 22, SECONDARY);
-    uint32_t cargo[] = {game->expedition_data, game->expedition_energy,
-                        game->expedition_essence};
-    static const char *names[] = {"Data", "Energy", "Essence"};
-    for (unsigned i = 0; i < 3; ++i) {
-      snprintf(value, sizeof(value), "%s %u %s", names[i],
-               cargo[i] / GAME_SUPPLY_UNIT,
-               cargo[i] == GAME_SUPPLY_UNIT ? "unit" : "units");
-      text(row, 48 + (int)i * 308, 461, value, 22, TEXT);
-    }
   }
   if (phase == KIT_ARRIVED) {
     fill(row, 371, 312, 282, 60, FIELD);

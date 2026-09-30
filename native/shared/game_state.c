@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "game_state.h"
+#include "expedition.h"
 
 #include "pip_genetics.h"
 #include "save_bytes.h"
@@ -82,6 +83,7 @@ _Static_assert(offsetof(GameStateV2, gather_random_state) == 5740, "Frozen chanc
 _Static_assert(offsetof(GameStateV2, gather_attempt_count) == 5744, "Frozen attempt offset");
 _Static_assert(offsetof(GameStateV2, historical_tail_padding) == 5755, "Frozen V2 padding offset");
 _Static_assert(offsetof(GameState, sample_metadata) == sizeof(GameStateV2), "V3 must append after the entire V2 payload");
+_Static_assert(offsetof(GameState, field) == 8040, "Frozen V3 payload size changed");
 _Static_assert(offsetof(SavedGame, state) == 24, "Legacy save header ABI changed");
 
 static uint32_t checksum_bytes(const unsigned char *bytes, size_t length) {
@@ -129,6 +131,19 @@ int game_state_valid(const GameState *state) {
       (state->gather_last_attempted_mask & ~7u) ||
       (state->gather_last_awarded_mask & ~state->gather_last_attempted_mask))
     return 0;
+  if (!game_field_valid(state) || state->received_count > GAME_FIELD_HISTORY ||
+      state->received_cursor >= GAME_FIELD_HISTORY) return 0;
+  for (unsigned record = 0; record < GAME_FIELD_HISTORY; ++record) {
+    if (state->received[record].version) {
+      if (!game_received_valid(&state->received[record]) ||
+          !state->received[record].accepted_at ||
+          !state->received[record].accept_sequence ||
+          state->received[record].accept_sequence > state->last_operation_sequence) return 0;
+    } else {
+      const GameReceivedExpedition empty = {0};
+      if (memcmp(&state->received[record], &empty, sizeof(empty))) return 0;
+    }
+  }
   for (index = 0; index < 3; ++index)
     if (state->gather_progress_ms[index] >
             2u * (GAME_SUPPLY_UNIT - 1u) * GAME_GATHER_ATTEMPT_MS /
@@ -331,6 +346,13 @@ int game_state_load(const char *path, GameState *state) {
                                          sizeof(GameStateV2)))
       return -1;
     saved.state.version = GAME_STATE_VERSION;
+  } else if (saved.version == 3u) {
+    const size_t payload = offsetof(GameState, field);
+    if (read_count != offsetof(SavedGame, state) + payload ||
+        saved.payload_size != payload || saved.state.version != 3u ||
+        saved.checksum != checksum_bytes((const unsigned char *)&saved.state, payload))
+      return -1;
+    saved.state.version = GAME_STATE_VERSION;
   } else if (saved.version != GAME_STATE_VERSION ||
              read_count != sizeof(saved) ||
              saved.payload_size != sizeof(saved.state) ||
@@ -340,7 +362,7 @@ int game_state_load(const char *path, GameState *state) {
   }
   if (!game_state_valid(&saved.state))
     return -1;
-  if (saved.version < GAME_STATE_VERSION)
+  if (saved.version < 3u)
     for (unsigned individual = 0; individual < saved.state.individual_count;
          ++individual)
       pip_pin_individual_art(&saved.state, individual,

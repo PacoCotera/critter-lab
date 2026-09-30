@@ -1,5 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "kit.h"
+#include "expedition.h"
+#include "expedition_render.h"
 #include "save_bytes.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -11,6 +13,19 @@ static void press(DeviceKit *kit, unsigned device, SelectedInput down) {
   kit_input(kit, device, SELECTED_READY, revision);
   kit_input(kit, device, down, revision);
   kit_input(kit, device, (SelectedInput)(down + 1), revision);
+}
+/* Legacy transport regressions deliberately start the frozen timed command.
+ * The new map/control journey has its own checks below. */
+static void start_legacy_route(DeviceKit *kit) {
+  GameCommand start = {0};
+  char identity[64];
+  start.type = GAME_COMMAND_EXPEDITION_START;
+  start.sequence = kit->lab->game.last_operation_sequence + 1;
+  snprintf(identity, sizeof(identity), "legacy-test-%llu", (unsigned long long)start.sequence);
+  start.operation_id = identity;
+  start.data.expedition.kind = GAME_EXPEDITION_SURVEY;
+  start.data.expedition.monotonic_seconds = kit->clock;
+  assert(game_apply(kit->lab->save_path, &kit->lab->game, &start) == GAME_OK);
 }
 /* Write a crash-boundary fixture from a real sealed journal. This does not
  * execute a parallel transfer implementation. */
@@ -417,7 +432,7 @@ static void early_unload_journey(const char *directory) {
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   kit_tick(&kit, 105);
   char source_id[64];
   strcpy(source_id, lab.game.expedition_id);
@@ -471,7 +486,7 @@ static void early_unload_journey(const char *directory) {
          lab.game.gather_attempt_count == attempts);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(!strcmp(kit_option(&kit, KIT_COMPANION, 0), "Field survey"));
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   assert(strcmp(lab.game.expedition_id, source_id) != 0 &&
          lab.game.expedition_elapsed == 0 && lab.game.expedition_active);
   assert(lab.game.gather_random_state == random_state &&
@@ -502,7 +517,7 @@ static void empty_finish_focus_after_award(const char *directory) {
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
   assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus),
                  "Finish expedition"));
@@ -544,7 +559,7 @@ static void cargo_action_threshold(const char *directory) {
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_CARGO &&
          !game_transfer_available(&lab.game));
@@ -598,7 +613,7 @@ static void discard_and_home_reception(const char *directory) {
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 100));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   lab.game.expedition_data = 300;
   lab.game.expedition_energy = lab.game.expedition_essence = 100;
   lab.game.expedition_elapsed = 5;
@@ -688,9 +703,137 @@ static void discard_and_home_reception(const char *directory) {
   unlink(kit.journal_path);
   unlink(path);
 }
+static void walk_field_site(DeviceKit *kit, unsigned site) {
+  ExpeditionFieldView view;
+  assert(kit_field_projection(kit, &view));
+  unsigned start = view.map.avatar_y * 20u + view.map.avatar_x;
+  unsigned target = view.map.site_y[site] * 20u + view.map.site_x[site];
+  int previous[GAME_FIELD_CELLS];
+  unsigned direction[GAME_FIELD_CELLS], queue[GAME_FIELD_CELLS];
+  for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile) previous[tile] = -1;
+  unsigned head = 0, tail = 0;
+  previous[start] = (int)start;
+  queue[tail++] = start;
+  while (head < tail && previous[target] < 0) {
+    unsigned current = queue[head++];
+    for (unsigned move = 0; move < 4; ++move) {
+      int x = (int)(current % 20u), y = (int)(current / 20u);
+      if (move == 0) --y;
+      if (move == 1) ++y;
+      if (move == 2) --x;
+      if (move == 3) ++x;
+      if (x < 0 || x >= 20 || y < 0 || y >= 11) continue;
+      unsigned next = (unsigned)y * 20u + (unsigned)x;
+      if (view.map.paths[next] && previous[next] < 0) {
+        previous[next] = (int)current;
+        direction[next] = move;
+        queue[tail++] = next;
+      }
+    }
+  }
+  assert(previous[target] >= 0);
+  unsigned route[GAME_FIELD_CELLS], count = 0;
+  for (unsigned tile = target; tile != start; tile = (unsigned)previous[tile])
+    route[count++] = direction[tile];
+  while (count) press(kit, KIT_COMPANION, (SelectedInput)(route[--count] * 2));
+  assert(game_field_site(&kit->lab->game) == site);
+}
+static void field_control_and_receipt(const char *directory) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/field-world", directory);
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab,path,100));
+  DeviceKit kit;
+  assert(kit_init(&kit,&lab,100));
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.version && lab.game.field.active_source == GAME_FIELD_NONE);
+  unsigned map_frame = kit_revision(&kit,KIT_COMPANION);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_FIELD_SITE && lab.game.field.active_source == GAME_FIELD_NONE);
+  kit_input(&kit,KIT_COMPANION,SELECTED_READY,map_frame);
+  kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN,map_frame);
+  kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_UP,map_frame);
+  assert(lab.game.field.active_source == GAME_FIELD_NONE);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  unsigned lab_frame = kit_revision(&kit,KIT_LAB);
+  kit_input(&kit,KIT_LAB,SELECTED_READY,lab_frame);
+  kit_input(&kit,KIT_LAB,SELECTED_DOWN_DOWN,lab_frame);
+  kit_tick(&kit,104);
+  assert(lab.game.field.attempts[0] == 1); /* Lab gesture does not pause field. */
+  kit_input(&kit,KIT_LAB,SELECTED_DOWN_UP,lab_frame);
+  walk_field_site(&kit,1);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_DOWN_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.trace && !lab.game.field.collected && lab.game.sample_count == 0);
+  press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.active_source == 3);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  walk_field_site(&kit,4);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.collected && lab.game.sample_count == 0);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_RIGHT_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  GameExpeditionField reviewed = lab.game.field;
+  uint32_t preparation[3];
+  memcpy(preparation,lab.game.gather_progress_ms,sizeof(preparation));
+  kit_tick(&kit,200);
+  assert(!memcmp(&reviewed,&lab.game.field,sizeof(reviewed)));
+  assert(!memcmp(preparation,lab.game.gather_progress_ms,sizeof(preparation)));
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Keep. */
+  assert(lab.game.field.x == reviewed.x && lab.game.field.active_source == reviewed.active_source);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(kit_link(&kit,KIT_COMPANION,0));
+  press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.version == 5 && kit.journal.phase == KIT_WAITING);
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab,path,300));
+  assert(kit_init(&kit,&lab,300));
+  assert(kit.journal.phase == KIT_WAITING && !kit.journal.companion_online);
+  assert(kit_link(&kit,KIT_COMPANION,1));
+  kit_tick(&kit,302);
+  assert(kit.journal.phase == KIT_ARRIVED);
+  assert(kit_link(&kit,KIT_COMPANION,0));
+  press(&kit,KIT_LAB,SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.sample_count == 1 && lab.game.received_count == 1);
+  assert(!lab.game.field.version && !lab.game.expedition_id[0]);
+  GameState accepted = lab.game;
+  kit.journal.phase = KIT_COMMITTING;
+  assert(kit_link(&kit,KIT_COMPANION,0)); /* Persist actual envelope crash fixture. */
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab,path,400));
+  assert(kit_init(&kit,&lab,400));
+  assert(lab.game.data == accepted.data && lab.game.sample_count == 1 && lab.game.received_count == 1);
+  assert(kit_link(&kit,KIT_COMPANION,1));
+  kit_tick(&kit,402);
+  assert(kit.journal.phase == KIT_COMPLETE && kit.acknowledged_capsules == 1);
+  kit_tick(&kit,403);
+  assert(kit.acknowledged_capsules == 1);
+  ExpeditionReceivedView received;
+  assert(kit_received_projection(&kit,0,&received));
+  assert(received.record_count == 1 && !received.map.avatar_visible && received.sample_collected);
+  assert(!received.map.site_visible[2] && !received.map.site_visible[3]);
+  char marker[580];
+  snprintf(marker,sizeof(marker),"%s.required",kit.journal_path);
+  unlink(marker);
+  unlink(kit.journal_path);
+  unlink(path);
+}
+
 int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
+  field_control_and_receipt(directory);
   resident_cache_and_visits(directory);
   legacy_intent_recovery(directory);
   reserved_whole_intent_recovery(directory);
@@ -755,7 +898,7 @@ int main(void) {
   press(&kit, KIT_COMPANION,
         SELECTED_CONFIRM_DOWN); /* Enter actions, no start. */
   assert(!lab.game.expedition_active && kit.companion.page == COMP_PROBE);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  start_legacy_route(&kit);
   assert(lab.game.expedition_active);
   kit_tick(&kit, 110);
   unsigned painted_companion = kit_revision(&kit, KIT_COMPANION);
