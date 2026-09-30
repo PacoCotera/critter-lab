@@ -77,3 +77,5 @@ capabilities. Their authority, reconciliation and entitlement contracts remain
 open under [architecture](specs/architecture.md) and [cloud/local records](specs/cloud-sync.md).
 No complete V1, physical kit, human-playtest acceptance, production BOM or hardware
 feasibility is claimed. [Build coverage](BUILD.md) identifies available sources.
+
+The [full-family promise assessment](design/three-device-playability-audit/promise-gap.md) and preserved owner references are part of the current audit packet. No native repair or art rollout accompanies it.
