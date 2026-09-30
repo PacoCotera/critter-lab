@@ -16,6 +16,156 @@ static void button(SelectedLab *lab, SelectedInput down) {
   selected_lab_input(lab, down, 0, revision);
   selected_lab_input(lab, (SelectedInput)(down + 1), 0, revision);
 }
+static void choose(SelectedLab *lab, const char *label) {
+  unsigned options = selected_lab_options(lab);
+  for (unsigned i = 0; i < options; ++i) {
+    if (!strcmp(selected_lab_focus(lab), label)) {
+      button(lab, SELECTED_CONFIRM_DOWN);
+      return;
+    }
+    button(lab, SELECTED_DOWN_DOWN);
+  }
+  assert(!"Option not found");
+}
+static void accept_test_haul(SelectedLab *lab, const char *id, int sample,
+                              unsigned data, unsigned energy, unsigned essence) {
+  strcpy(lab->game.expedition_id, id);
+  lab->game.expedition_elapsed = sample ? GAME_EXPEDITION_SECONDS : 1;
+  lab->game.expedition_data = data;
+  lab->game.expedition_energy = energy;
+  lab->game.expedition_essence = essence;
+  GameCommand action = {0};
+  action.type = GAME_COMMAND_EXPEDITION_UNLOAD;
+  action.operation_id = id;
+  action.sequence = lab->game.last_operation_sequence + 1;
+  assert(game_apply(lab->save_path, &lab->game, &action) == GAME_OK);
+}
+static void discovery_workbench(void) {
+  char path[128];
+  snprintf(path, sizeof(path), "/tmp/beecho-discovery-ui-%ld.save", (long)getpid());
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  lab.game.data = lab.game.essence = 2000;
+  lab.game.energy = 300;
+  accept_test_haul(&lab, "intake-A", 1, 0, 0, 0);
+  accept_test_haul(&lab, "intake-B", 1, 0, 0, 0);
+  button(&lab, SELECTED_RESEARCH_DOWN);
+  assert(lab.page == V1_SAMPLES && lab.focus == 0 && selected_lab_options(&lab) == 3);
+  GameState before = lab.game;
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.page == V1_SAMPLES && !memcmp(&before, &lab.game, sizeof(before)));
+  button(&lab, SELECTED_DOWN_DOWN);
+  assert(lab.sample == 0 && lab.focus == 1);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDIES && selected_lab_options(&lab) == 4);
+  SelectedResearchView research;
+  SelectedResearchMethod method;
+  PipSupportedCandidate candidate;
+  assert(selected_lab_research_view(&lab, 0, &research) &&
+         !research.legacy && !research.known_references && !research.candidate_count);
+  assert(selected_lab_research_method(&lab, 0, 0, &method) &&
+         !method.finding && method.useful && method.cost_data == 400);
+  assert(!selected_lab_candidate(&lab, 0, 0, &candidate));
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.page == V1_STUDIES && !memcmp(&before, &lab.game, sizeof(before)));
+  choose(&lab, "Read the pattern");
+  assert(lab.page == V1_STUDY_REVIEW && !memcmp(&before, &lab.game, sizeof(before)));
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_FINDING && lab.game.data == before.data - 400);
+  assert(selected_lab_research_view(&lab, 0, &research) &&
+         research.known_references == 14 && research.partial_p && !research.complete);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  before = lab.game;
+  choose(&lab, "Read the pattern");
+  assert(lab.page == V1_FINDING && !memcmp(&before, &lab.game, sizeof(before)));
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  choose(&lab, "Prepare incubation");
+  assert(lab.page == V1_STUDIES && !memcmp(&before, &lab.game, sizeof(before)));
+  choose(&lab, "Trace movement");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDY_REVIEW && !memcmp(&before, &lab.game, sizeof(before)));
+  assert(strstr(lab.message, "Need 0 Data, 1 Energy, 0 Essence more"));
+  /* Resupply may replace the view, but preserves this exact sample/method. */
+  SelectedLabContext caller;
+  selected_lab_capture_context(&lab, &caller);
+  selected_lab_open_reception(&lab);
+  accept_test_haul(&lab, "movement-resupply", 0, 600, 1200, 600);
+  selected_lab_restore_context(&lab, &caller);
+  assert(lab.page == V1_STUDY_REVIEW && lab.sample == 0 && lab.study == 1);
+  button(&lab, SELECTED_HOME_DOWN);
+  button(&lab, SELECTED_RESEARCH_DOWN);
+  assert(lab.page == V1_STUDY_REVIEW && lab.sample == 0 && lab.study == 1);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_FINDING &&
+         selected_lab_research_view(&lab, 0, &research) && research.known_references == 16);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  choose(&lab, "Compare the coat");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(selected_lab_research_view(&lab, 0, &research) && research.complete &&
+         research.known_references == 17 && research.candidate_count == 2);
+  /* B's coupled comparison before Movement removes the redundant purchase. */
+  button(&lab, SELECTED_BACK_DOWN);
+  assert(lab.page == V1_SAMPLES && lab.focus == 1);
+  button(&lab, SELECTED_DOWN_DOWN);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDIES && lab.sample == 1);
+  choose(&lab, "Compare movement effort");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  before = lab.game;
+  assert(selected_lab_research_method(&lab, 1, 1, &method) && method.known &&
+         !method.useful && !method.cost_energy);
+  choose(&lab, "Trace movement");
+  assert(lab.page == V1_FINDING && !memcmp(&before, &lab.game, sizeof(before)));
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.page == V1_FINDING && !memcmp(&before, &lab.game, sizeof(before)));
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  choose(&lab, "Read the pattern");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  choose(&lab, "Prepare incubation");
+  assert(lab.page == V1_CREATE && selected_lab_candidate(&lab, 1, 1, &candidate) &&
+         !strcmp(candidate.id, "B1") && !candidate.expression.efficient_movement);
+  before = lab.game;
+  choose(&lab, candidate.title);
+  assert(lab.page == V1_CREATE_REVIEW && selected_lab_creation_draft(&lab, &candidate) &&
+         !strcmp(candidate.id, "B1") && !memcmp(&before, &lab.game, sizeof(before)));
+  selected_lab_capture_context(&lab, &caller);
+  selected_lab_open_reception(&lab);
+  selected_lab_restore_context(&lab, &caller);
+  button(&lab, SELECTED_HOME_DOWN);
+  button(&lab, SELECTED_RESEARCH_DOWN);
+  assert(lab.page == V1_CREATE_REVIEW && selected_lab_creation_draft(&lab, &candidate));
+  strcpy(lab.creation_draft.candidate_id, "A0");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_CREATE_REVIEW && !memcmp(&before, &lab.game, sizeof(before)));
+  strcpy(lab.creation_draft.candidate_id, "B1");
+  button(&lab, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_INCUBATION && lab.game.individual_count == 1 &&
+         !strcmp(lab.game.individual_metadata[0].candidate_id, "B1") &&
+         lab.game.individuals[0].genome.loci[4][0] == 'e' &&
+         lab.game.data == before.data - 500 && lab.game.energy == before.energy - 500 &&
+         lab.game.essence == before.essence - 500);
+  SelectedLab restarted;
+  selected_lab_init(&restarted);
+  assert(selected_lab_load(&restarted, path, 200));
+  assert(!restarted.creation_draft.valid && restarted.page == V1_HOME);
+  button(&restarted, SELECTED_RESEARCH_DOWN);
+  assert(restarted.page == V1_SAMPLES && restarted.focus == 0);
+  assert(selected_lab_research_view(&restarted, 0, &research) && research.complete);
+  assert(selected_lab_research_view(&restarted, 1, &research) && research.complete);
+  before = restarted.game;
+  button(&restarted, SELECTED_CONFIRM_DOWN);
+  assert(!memcmp(&before, &restarted.game, sizeof(before)));
+  unlink(path);
+  char lockpath[140];
+  snprintf(lockpath, sizeof(lockpath), "%s.lock", path);
+  unlink(lockpath);
+}
 static void creation_review(void) {
   char path[128];
   snprintf(path, sizeof(path), "/tmp/beecho-creation-review-%ld.save", (long)getpid());
@@ -33,6 +183,12 @@ static void creation_review(void) {
     sample->supported_candidates = PIP_SAMPLE_CANDIDATE_MASK;
   }
   assert(game_state_save(path, &lab.game) == 0);
+  SelectedResearchView research;
+  SelectedResearchMethod method;
+  assert(selected_lab_research_view(&lab, 0, &research) && research.legacy &&
+         research.method_count == 5 && research.complete && research.known_references == 5);
+  assert(selected_lab_research_method(&lab, 0, 0, &method) && method.known &&
+         !method.useful && method.cost_data == 500);
   GameState before = lab.game;
   lab.page = V1_CREATE;
   lab.focus = 1;
@@ -80,6 +236,7 @@ static void frame(SelectedLab *lab) {
   assert(fclose(output) == 0);
 }
 int main(void) {
+  discovery_workbench();
   creation_review();
   SelectedLab lab;
   selected_lab_init(&lab);

@@ -13,16 +13,21 @@ features that must survive. These are editable selection/layer boundaries, not
 editable internal native drawing. C18 was captured as JPEG; its retained
 compression is explicitly preserved, not represented as clean native pixel art.
 
-The remaining sources are provisional authored derivatives: five separable
-fictional landscape layers, markings/movement reference glyphs, process art,
+The remaining authored sources are provisional derivatives: markings/movement
+reference glyphs, process art,
 monochrome category symbols and restrained frame/focus/result pieces. They have
 not passed material fidelity or full composed-screen acceptance.
-The landscape is fictional gathering setting, not a location/weather/sensor
-observation. It has no encounter target, captured critter or implied reward.
-Its current flat construction failed the intended craft bar and is excluded
-from native tables. The retained compass is an interim activity subject;
-a separately sourced clean setting master remains needed for the living-place
-proof. The selected03 and04 landscape regions are occluded by their emblems.
+The fictional gathering setting now comes from a clean Gemini master,
+preserved byte-for-byte as `source/gemini-probe-scene-original.png`. Delivered
+dimensions are1024×572, retrieved through Gemini Copy image and clipboard PNG;
+no larger download is claimed. The exact prompt and conversation/retrieval
+provenance sit beside it. `build.cjs` makes a400×224 nearest derivative; this
+is an explicit noninteger production resample, not native generated pixels.
+Art direction inspected nearest versus Lanczos at actual size and accepted
+nearest as a bounded scene candidate. Internal drawing/occluded content are
+not independently editable layers. It has no UI, creature/encounter target,
+location/weather/telemetry assertion or implied award. It replaces the rejected
+flat constructed scene. Actual composed Probe still requires review.
 
 Resource primary candidates retain exact07 source rectangles: Data90×100,
 Energy90×100 and Essence90×90, including transparent padding. Compact C18
@@ -40,7 +45,7 @@ layer leaves anatomy/markings untouched. It depicts only the actual visit result
 with no training, needs or friendship progression.
 
 Run `node build.cjs` with the existing Node/Sharp dependency. It exports candidates,
-isolated scene layers, the manifest, actual1× contact sheet, reference comparison
+the manifest, actual1× contact sheet, reference comparison
 and graphite/pale alpha proof with an integer diagnostic. Generated labels are
 inspection material and never baked
 into native masters. `manifest.json` records reference/source/export/RGBA hashes,
@@ -80,10 +85,10 @@ After this visual checkpoint, run
 The converter checks PNG/decoded-RGBA hashes and emits `core_art.c/h` plus a
 native export manifest. The API exposes ID, width/height, straight RGBA, source
 identity/hash and optical center only; it computes no game data/view state.
-Nine reviewed material candidates, two exact retained Pip originals and seven
-deliberately authored monochrome categories enter native tables. The monochrome
-categories remain provisional for actual Dock inspection. The rejected flat
-landscape and other unreviewed artwork stay out. `core_art_row` composites straight
+Nine reviewed material candidates, two exact retained Pip originals, seven
+deliberately authored monochrome categories and the separately reviewed Gemini
+setting derivative enter native tables. Monochrome categories remain provisional
+for actual Dock inspection. Other unreviewed artwork stays out. `core_art_row` composites straight
 RGBA at the exact source footprint; no corner-matte search or resampling occurs.
 
 Current composition source in `render.c` and `kit_render.c` uses C18 compact
@@ -95,6 +100,14 @@ meter. Dock categories project only cached counts, beside persistent timestamp
 and a separate result. Existing saved Pip originals remain the shared identity;
 the retained136×144 incubator apparatus projects process without a hidden founder.
 
+The shared shoulder/bevel and dark amber inset primitives are authored in
+`source/native-composition.c` and appended by the converter. Existing heading
+atlases provide the explicit title/quantity hierarchy. Live findings and previews
+consume the read-only research/draft adapters; complete supported-form artwork
+is disclosed only through those adapters. Unknown sample views use a neutral
+capsule or reference apparatus, with actual recorded knowledge and next useful
+investigation separate from the illustration. Research is immediate.
+
 This source integration awaits clean-revision compilation and actual native-frame
-inspection on the established VM. No hardware, complete living-scene, full-family
+inspection on the established VM. No hardware or full-family
 or runtime approval follows from table export or the nine-material mask pass.

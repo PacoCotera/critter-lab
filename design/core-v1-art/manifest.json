@@ -1,6 +1,6 @@
 {
   "status": "Nine retained material masks passed focused art-direction critique; other candidates and actual native compositions await review",
-  "method": "Retained material RGB plus hand-authored alpha/layer selection; exact retained Pip pixels; authored interface/scene/mono candidates. No color-key, flood matte, material redraw, resampling or baked text.",
+  "method": "Retained material RGB with hand-authored alpha; exact Pip originals; separately documented nearest-resampled Gemini setting; authored interface/mono candidates. No color-key, flood matte, retained-material redraw/resampling or baked text.",
   "palette": {
     "graphite": "#1e282f",
     "field": "#202b32",
@@ -42,6 +42,11 @@
       "id": "pipSource",
       "path": "design/v1-pip/gemini-source-capture.png",
       "sha256": "ba058589e9e69d72e3c62ec88ec31b84759e6f9e0621f089b21d3a44f76d9467"
+    },
+    {
+      "id": "probeScene",
+      "path": "design/core-v1-art/source/gemini-probe-scene-original.png",
+      "sha256": "7da64f0113f90858abc3037d01e557b6ad845a3c3aaab1cdbf01f07941f33457"
     }
   ],
   "typography": {
@@ -622,12 +627,24 @@
       "drawWidth": 400,
       "drawHeight": 224,
       "channels": 4,
-      "source": "design/core-v1-art/source/probe-place.svg",
-      "sourceId": "materials/probe03",
-      "sourceSha256": "b1922cf6172686cb0873a0a38436ea4734642217d823786166206b2ccee50be4",
-      "pngSha256": "09b350f480813ab445a632658916c4da2475809494c5257dee15cdc6bd94d5b3",
-      "rgbaSha256": "c7884f32450b873ce2f2eb536a05984cbea17c477eb50282a08ea0f8c341dcfa",
-      "note": "Editable fictional setting; no critter/encounter/sensor target. Native400x224, no scaling."
+      "source": "design/core-v1-art/source/gemini-probe-scene-original.png",
+      "sourceId": "probeScene",
+      "sourceSha256": "7da64f0113f90858abc3037d01e557b6ad845a3c3aaab1cdbf01f07941f33457",
+      "pngSha256": "9624c1c14c79d50608891ac62dfca0e585cca451ceaad9ee44ee58c542ce0548",
+      "rgbaSha256": "4ef9176e4d157942c0d2ead27c8a4e83f1c9f317fb785fc06fdb5442016f5cea",
+      "note": "Fictional setting. Noninteger nearest400x224 derivative of preserved Gemini1024x572 delivered original; not original native pixels or independent editable drawing layers.",
+      "production": {
+        "originalWidth": 1024,
+        "originalHeight": 572,
+        "derivativeWidth": 400,
+        "derivativeHeight": 224,
+        "kernel": "nearest",
+        "fit": "fill",
+        "conversation": "https://gemini.google.com/app/ebc52519d5f5f3fb",
+        "retrieval": "Gemini Copy image to clipboard PNG; full-size download event did not resolve",
+        "prompt": "design/core-v1-art/source/gemini-probe-scene-prompt.txt",
+        "meaning": "Authored fictional setting; no location/weather/telemetry/creature/encounter assertion"
+      }
     },
     {
       "name": "pip-carried",

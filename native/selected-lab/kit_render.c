@@ -56,6 +56,18 @@ static void text(KitRow *row, int x, int y, const char *value, unsigned size,
   native_text_row(font, value, x, y, row->y, row->width, row->pixels, 0,
                   row->mono ? black : palette[color]);
 }
+static void heading(KitRow *row, int x, int y, const char *value,
+                    unsigned size, unsigned color) {
+  const NativeFont *selected = NULL;
+  for (unsigned i = 0; i < LAB_HEADING_FONT_COUNT; ++i)
+    if ((unsigned)lab_heading_narrow_fonts[i].size == size)
+      selected = &lab_heading_narrow_fonts[i];
+  if (!selected)
+    return;
+  const uint8_t black[] = {0, 0, 0};
+  native_text_row(selected, value, x, y, row->y, row->width, row->pixels, 0,
+                  row->mono ? black : palette[color]);
+}
 static void art(KitRow *row, unsigned icon, int x, int y) {
   int at = (int)row->y - y;
   if (at < 0 || at >= OVERVIEW_SPRITE_HEIGHT)
@@ -77,16 +89,10 @@ static void category(KitRow *row, CoreArtId id, int x, int y) {
   core_art_row(id, x, y, row->y, row->width, row->pixels);
 }
 static void panel(KitRow *row, int x, int y, int width, int height) {
-  fill(row, x + 3, y + 5, width, height, DEEP);
-  fill(row, x, y, width, height, PANEL);
-  border(row, x, y, width, height, BORDER);
-  border(row, x + 4, y + 4, width - 8, height - 8, EDGE);
-  fill(row, x + 9, y + 2, width - 18, 1, SECONDARY);
+  core_art_panel_row(x, y, width, height, row->y, row->width, row->pixels);
 }
 static void action_focus(KitRow *row, int x, int y, int width, int height) {
-  border(row, x - 3, y - 3, width + 6, height + 6, GLOW);
-  border(row, x, y, width, height, DEEP);
-  border(row, x + 2, y + 2, width - 4, height - 4, FOCUS);
+  core_art_focus_row(x, y, width, height, row->y, row->width, row->pixels);
 }
 static void progress(KitRow *row, int x, int y, int width, int height,
                      unsigned amount, unsigned total) {
@@ -167,11 +173,11 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   fill(row, 0, 0, 450, 600, BACKGROUND);
   panel(row, 12, 12, 426, 576);
   text(row, 28, 26, "BEECHO / COMPANION", 18, SECONDARY);
-  text(row, 28, 55,
+  heading(row, 28, 48,
          details || discard     ? "CARGO"
        : page == COMP_FRIENDS ? "COMPANIONS"
                               : "PROBE",
-       26, TEXT);
+       34, TEXT);
   static const char *modes[] = {"Probe", "Cargo", "Companions"};
   for (unsigned i = 0; i < 3; ++i) {
     int x = 28 + (int)i * 132;
@@ -230,15 +236,15 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     wrapped(row, 28, 318, "Party assignment is not simulated yet.", 390, 18,
             SECONDARY);
   } else if (details) {
-    text(row, 28, 125,
-         ended      ? "Supplies stored at the Lab"
+    heading(row, 28, 125,
+         ended      ? "Cargo empty"
          : review     ? "To Lab"
          : reserved ? "Reserved for transfer"
                     : "Collected items",
-         22, TEXT);
+         26, TEXT);
     if (has_run || receipt || kit->journal.phase == KIT_COMPLETE) {
-      text(row, 28, 158, kit_route(kit), 18, SECONDARY);
-      text(row, 28, 182, kit_expedition_status(kit), 18, SECONDARY);
+      text(row, 28, 158, ended ? "Expedition ended" : kit_route(kit), 18, SECONDARY);
+      text(row, 28, 182, ended ? "Supplies stored at the Lab" : kit_expedition_status(kit), 18, SECONDARY);
       if (!ended) {
         snprintf(value, sizeof(value), "%u / %u sec", elapsed,
                  GAME_EXPEDITION_SECONDS);
@@ -246,13 +252,16 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
         progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
       }
     }
+    panel(row, 26, 215, 398, 190);
     static const char *names[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
       int x = 28 + (int)i * 132;
-      resource(row, i, x + 20, 226, 1);
-      text(row, x + 13, 343, names[i], 18, SECONDARY);
+      if (i)
+        fill(row, x, 231, 1, 155, EDGE);
+      resource(row, i, x + 12, 249, 1);
+      text(row, x + 13, 363, names[i], 18, SECONDARY);
       snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
-      text(row, x + 47, 373, value, 26, TEXT);
+      heading(row, x + 81, 220, value, 32, TEXT);
     }
     if (review) {
       text(row, 28, 425,
@@ -279,68 +288,53 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
              18, SECONDARY);
     }
   } else {
-    fill(row, 28, 125, 394, 148, FIELD);
-    art(row, OVERVIEW_EXPLORE, 29, 127);
-    wrapped(row, 181, 133, has_run ? kit_route(kit) : "Ready to explore", 229,
-            22, TEXT);
-    text(row, 181, 195, kit_expedition_status(kit), 18, SECONDARY);
+    /* Authored fictional setting; facts remain in separate live zones. */
+    core_art_row(CORE_ART_PROBE_PLACE, 25, 124, row->y, row->width, row->pixels);
     if (has_run) {
-      snprintf(value, sizeof(value), "%u / %u sec", elapsed,
-               GAME_EXPEDITION_SECONDS);
-      text(row, 181, 223, value, 18, SECONDARY);
-      progress(row, 181, 255, 229, 12, elapsed, GAME_EXPEDITION_SECONDS);
-    }
-    text(row, 28, 281, reserved ? "Reserved for transfer" : "Collected", 18,
-         SECONDARY);
-    static const char *names[] = {"Data", "Energy", "Essence"};
-    for (unsigned i = 0; i < 3; ++i) {
-      int x = 28 + (int)i * 132;
-      const CoreArtSprite *asset = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + i));
-      resource(row, i, x + (51 - (int)asset->width) / 2, 306, 0);
-      snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
-      text(row, x + 61, 318, value, 26, TEXT);
-      text(row, x + 4, 361, names[i], 18, SECONDARY);
-    }
-    if (reserved || receipt) {
-      wrapped(row, 28, 413, kit_stage(kit), 390, 18, SECONDARY);
-    } else if (game->expedition_id[0] &&
-               game->expedition_elapsed < GAME_EXPEDITION_SECONDS) {
-      unsigned remaining = game_gather_remaining_ms(game);
-      int preparing =
-          game->expedition_active && !game_gather_capacity_blocked(game);
-      text(row, 28, 395, preparing ? "Next attempt" : "Saved attempt", 18,
-           SECONDARY);
-      if (game->expedition_active && game_gather_capacity_blocked(game)) {
-        unsigned needed = game_gather_required_slots(game);
-        snprintf(value, sizeof(value), "Need %u free units", needed ? needed : 1);
+      text(row, 28, 352, kit_route(kit), 18, TEXT);
+      snprintf(value, sizeof(value), "%u / %u sec", elapsed, GAME_EXPEDITION_SECONDS);
+      text(row, 302, 352, value, 18, SECONDARY);
+      progress(row, 28, 372, 394, 2, elapsed, GAME_EXPEDITION_SECONDS);
+      static const char *names[] = {"Data", "Energy", "Essence"};
+      for (unsigned i = 0; i < 3; ++i) {
+        int x = 28 + (int)i * 132;
+        const CoreArtSprite *asset = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + i));
+        resource(row, i, x + (51 - (int)asset->width) / 2, 377, 0);
+        snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
+        heading(row, x + 64, 395, value, 32, TEXT);
+        text(row, x + 4, 431, names[i], 18, SECONDARY);
       }
-      else if (!preparing)
-        strcpy(value, "Paused");
-      else if (remaining)
-        snprintf(value, sizeof(value), "in %u sec", (remaining + 999) / 1000);
-      else
-        strcpy(value, "Ready");
-      text(row, 300, 395, value, 18, TEXT);
-      progress(row, 28, 426, 386, 8, GAME_GATHER_ATTEMPT_MS - remaining,
-               GAME_GATHER_ATTEMPT_MS);
-      unsigned due = game_gather_due_mask(game);
-      if (due != 7) {
-        resource_names(value, sizeof(value), "Next: ", due);
-        text(row, 28, 440, value, 18, SECONDARY);
+      if (reserved || receipt) {
+        wrapped(row, 28, 456, kit_stage(kit), 390, 18, SECONDARY);
+      } else if (game->expedition_elapsed < GAME_EXPEDITION_SECONDS) {
+        unsigned remaining = game_gather_remaining_ms(game);
+        if (game->expedition_active && game_gather_capacity_blocked(game)) {
+          unsigned needed = game_gather_required_slots(game);
+          snprintf(value, sizeof(value), "Need %u free cargo units", needed ? needed : 1);
+        } else if (!game->expedition_active) {
+          strcpy(value, "Paused / next supply attempt saved");
+        } else {
+          resource_names(value, sizeof(value), "Next: ", game_gather_due_mask(game));
+          size_t used = strlen(value);
+          snprintf(value + used, sizeof(value) - used, " / %u sec", (remaining + 999) / 1000);
+        }
+        text(row, 28, 449, value, 18, SECONDARY);
+        if (game->gather_last_attempted_mask) {
+          if (game->gather_last_awarded_mask)
+            resource_names(value, sizeof(value), "Last: ", game->gather_last_awarded_mask);
+          else
+            strcpy(value, "Last attempt: no items found");
+          text(row, 28, 474, value, 18, TEXT);
+        }
+      } else {
+        text(row, 28, 457, kit_expedition_status(kit), 18, SECONDARY);
       }
-      if (game->gather_last_attempted_mask) {
-        if (game->gather_last_awarded_mask)
-          resource_names(value, sizeof(value),
-                         "Last attempt: ", game->gather_last_awarded_mask);
-        else
-          strcpy(value, "Last attempt: no items found");
-        text(row, 28, due == 7 ? 440 : 464, value, 18, TEXT);
-      }
+      action_top = 498;
     } else {
-      text(row, 28, 405,
-           kit->journal.companion_online ? "Lab link available" : "Lab offline",
-           18, SECONDARY);
-      action_top = has_run ? 482 : 440;
+      heading(row, 28, 360, ended ? "EXPEDITION ENDED" : "READY TO EXPLORE", 26, TEXT);
+      text(row, 28, 402, ended ? "Cargo empty / supplies stored at the Lab"
+                              : "Choose an expedition to begin.", 18, SECONDARY);
+      action_top = 445;
     }
   }
   unsigned count =
@@ -351,7 +345,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     int y = action_top + (int)(i - first) * (has_run || discard || finish ? 32 : 38);
     if (view->focus == i) {
       fill(row, 24, y - 4, 402, 31,
-           view->gestures[8].held && view->gestures[8].allowed ? FIELD : GLOW);
+           FIELD);
       action_focus(row, 26, y - 2, 398, 27);
       text(row, 34, y, ">", 18, FOCUS);
     }
@@ -363,7 +357,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                names[view->discard_resource]);
       option = value;
     }
-    text(row, 58, y, option, 18, TEXT);
+    heading(row, 58, y - 3, option, 26, TEXT);
   }
   if (kit->failed) {
     fill(row, 24, 496, 402, 57, FIELD);
@@ -470,26 +464,26 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
     /*07's ownership comparison: incoming is never rendered as accepted stock. */
     panel(row, 32, 142, 302, 386);
     panel(row, 686, 142, 306, 386);
-    text(row, 50, 160, "FROM COMPANION", 22, TEXT);
-    text(row, 710, 160, "LAB STOCK", 22, TEXT);
+    heading(row, 50, 157, "FROM COMPANION", 26, TEXT);
+    heading(row, 710, 157, "LAB STOCK", 26, TEXT);
     static const char *names[] = {"Data", "Energy", "Essence"};
     const unsigned stock[] = {game->data, game->energy, game->essence};
     for (unsigned i = 0; i < 3; ++i) {
       int y = 204 + (int)i * 101;
       resource(row, i, 49, y, 1);
-      text(row, 161, y + 15, names[i], 22, SECONDARY);
+      text(row, 161, y + 54, names[i], 22, SECONDARY);
       snprintf(value, sizeof(value), "%u", kit->journal.cargo[i] / GAME_SUPPLY_UNIT);
-      text(row, 161, y + 50, value, 32, TEXT);
+      heading(row, 161, y + 8, value, 32, TEXT);
       resource(row, i, 700, y, 1);
-      text(row, 812, y + 15, names[i], 22, SECONDARY);
+      text(row, 812, y + 54, names[i], 22, SECONDARY);
       snprintf(value, sizeof(value), "%u", stock[i] / GAME_SUPPLY_UNIT);
-      text(row, 812, y + 50, value, 32, TEXT);
+      heading(row, 812, y + 8, value, 32, TEXT);
     }
     wrapped(row, 365, 204, accepted ? "Supplies stored at the Lab"
                                       : "Supplies waiting at the Lab",
             286, 26, TEXT);
     wrapped(row, 365, 400, accepted ? "The haul is included in Lab stock."
-                                     : "Incoming supplies are not in stock yet.",
+                                     : "Store haul / End expedition",
             286, 18, SECONDARY);
     const GameSample *sample = kit_received_sample(kit);
     if (accepted && sample)
@@ -533,9 +527,9 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
     }
   }
   if (phase == KIT_ARRIVED) {
-    fill(row, 371, 312, 282, 60, GLOW);
+    fill(row, 371, 312, 282, 60, FIELD);
     action_focus(row, 376, 316, 272, 52);
-    text(row, 391, 330, "Confirm: accept haul", 22, FOCUS);
+    heading(row, 391, 326, "Confirm: accept haul", 26, FOCUS);
   } else {
     wrapped(row, manifest ? 365 : 48, manifest ? 314 : 509,
          phase == KIT_ACK_PENDING        ? "Waiting for Companion receipt"

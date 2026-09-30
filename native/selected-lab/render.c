@@ -46,24 +46,8 @@ static void outline(SelectedRow *row, int x, int y, int width, int height,
   rectangle(row, x + width - weight, y, weight, height, color);
 }
 
-static void stepped(SelectedRow *row, int x, int y, int width, int height,
-                    int corner, unsigned color) {
-  int position = (int)row->y - y;
-  if (position < 0 || position >= height)
-    return;
-  int edge = position < height / 2 ? position : height - position - 1;
-  int inset = edge < corner ? ((corner - edge + 3) / 4) * 4 : 0;
-  rectangle(row, x + inset, y, width - 2 * inset, height, color);
-}
-
 static void panel(SelectedRow *row, int x, int y, int width, int height) {
-  stepped(row, x + 4, y + 6, width, height, 16, DEEP);
-  stepped(row, x - 4, y - 4, width + 8, height + 8, 16, DEEP);
-  stepped(row, x, y, width, height, 12, BLUE);
-  stepped(row, x + 5, y + 5, width - 10, height - 10, 8, PANEL);
-  rectangle(row, x + 13, y + 5, width - 26, 2, EDGE);
-  rectangle(row, x + 9, y + 15, 2, height - 30, BLUE);
-  outline(row, x + 15, y + 15, width - 30, height - 30, 2, EDGE);
+  core_art_panel_row(x, y, width, height, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
 
 static const NativeFont *font(int size) {
@@ -162,30 +146,62 @@ void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
 }
 
 static void focus(SelectedRow *row, int x, int y, int width, int height) {
-  const int weight = 4, length = 22;
-  rectangle(row, x, y, length, weight, WARM);
-  rectangle(row, x, y, weight, length, WARM);
-  rectangle(row, x + width - length, y, length, weight, WARM);
-  rectangle(row, x + width - weight, y, weight, length, WARM);
-  rectangle(row, x, y + height - weight, length, weight, WARM);
-  rectangle(row, x, y + height - length, weight, length, WARM);
-  rectangle(row, x + width - length, y + height - weight, length, weight, WARM);
-  rectangle(row, x + width - weight, y + height - length, weight, length, WARM);
+  core_art_focus_row(x, y, width, height, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
 
-static unsigned study_count(unsigned mask) {
+static unsigned known_topics(const SelectedLab *lab) {
   unsigned count = 0;
-  for (unsigned study = 0; study < 5; ++study)
-    count += (mask >> study) & 1u;
+  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
+    SelectedResearchView view;
+    if (selected_lab_research_view(lab, sample, &view))
+      count += view.completed_methods;
+  }
   return count;
 }
 
-static unsigned known_topics(const GameState *game) {
-  unsigned count = 0;
-  for (unsigned sample = 0; sample < game->sample_count; ++sample)
-    for (unsigned study = 0; study < 5; ++study)
-      count += (game->samples[sample].decoded_studies >> study) & 1u;
-  return count;
+static void research_summary(SelectedRow *row, const SelectedLab *lab,
+                              unsigned sample, int x, int y, int width) {
+  SelectedResearchView view;
+  if (!selected_lab_research_view(lab, sample, &view))
+    return;
+  char text[96];
+  snprintf(text, sizeof(text), "%u / %u %s recorded", view.known_references,
+           view.required_references, view.legacy ? "facts" : "references");
+  label(row, x, y, text, 18, SAGE);
+  const char *next = view.complete ? "Choose a supported form." : "Choose an investigation.";
+  for (unsigned method = 0; method < view.method_count && !view.complete; ++method) {
+    SelectedResearchMethod entry;
+    if (selected_lab_research_method(lab, sample, method, &entry) && entry.useful && !entry.known) {
+      snprintf(text, sizeof(text), "Next: %s", entry.title);
+      next = text;
+      break;
+    }
+  }
+  wrapped_label(row, x, y + 30, next, 18, INK, width);
+}
+
+static void knowledge_rows(SelectedRow *row, const SelectedResearchView *view,
+                            int x, int y) {
+  static const char *names[] = {"Crown", "Eye rings", "Markings", "Movement", "Effort"};
+  if (view->legacy)
+    return;
+  for (unsigned locus = 0; locus < GAME_GENETIC_LOCI; ++locus) {
+    int yy = y + (int)locus * 31;
+    rectangle(row, x, yy, 3, 23,
+              view->knowledge.common_loci[locus][0] ||
+              (view->knowledge.alternative_loci & (1u << locus)) ? SAGE : EDGE);
+    label(row, x + 13, yy, names[locus], 18, MUTED);
+    char pair[32];
+    if (view->knowledge.alternative_loci & (1u << locus))
+      strcpy(pair, "Alternatives recorded");
+    else if (!view->knowledge.common_loci[locus][0])
+      strcpy(pair, "Unknown");
+    else
+      snprintf(pair, sizeof(pair), "%c / %c",
+               view->knowledge.common_loci[locus][0],
+               view->knowledge.common_loci[locus][1] ? view->knowledge.common_loci[locus][1] : '?');
+    label(row, x + 149, yy, pair, 18, INK);
+  }
 }
 
 static unsigned revealed_residents(const GameState *game) {
@@ -242,7 +258,7 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab,
                           const SelectedLabRenderContext *context) {
   const GameState *game = &lab->game;
   char text[96];
-  unsigned topics = known_topics(game);
+  unsigned topics = known_topics(lab);
   unsigned residents = revealed_residents(game);
   overview_sprite(row, OVERVIEW_EXPLORE, 272, 207);
   overview_sprite(row, OVERVIEW_RESEARCH, 642, 207);
@@ -398,39 +414,15 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab,
       landing_strip(row, "No cargo loaded");
 
   } else if (lab->focus == 2) {
-    unsigned topics = known_topics(game);
-    sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
+    overview_sprite(row, OVERVIEW_RESEARCH, 326, 247);
     snprintf(text, sizeof(text), "%u retained sample%s", game->sample_count,
              game->sample_count == 1 ? "" : "s");
     heading(row, 505, 255, text, 32, INK);
-    snprintf(text, sizeof(text), "%u findings recorded", topics);
+    snprintf(text, sizeof(text), "%u findings recorded", known_topics(lab));
     label(row, 505, 306, text, 22, INK);
-    if (game->sample_count && lab->sample < game->sample_count) {
-      label(row, 505, 360, game->samples[lab->sample].id, 18, MUTED);
-      snprintf(text, sizeof(text), "%u / 5 topics discovered",
-               study_count(game->samples[lab->sample].decoded_studies));
-      label(row, 505, 390, text, 18, INK);
-    } else
-      label(row, 505, 360, "No sample retained yet", 18, MUTED);
-    if (game->sample_count && lab->sample < game->sample_count) {
-      unsigned known = game->samples[lab->sample].decoded_studies;
-      for (unsigned study = 0; study < 5; ++study) {
-        int x = 505 + (int)study * 82;
-        rectangle(row, x, 420, 70, 12, DEEP);
-        outline(row, x, 420, 70, 12, 2, EDGE);
-        if (known & (1u << study))
-          rectangle(row, x + 3, 423, 64, 6, SAGE);
-      }
-    }
-    if (!game->sample_count)
-      landing_strip(row, "Bring a sample to the lab to begin.");
-    else if (lab->sample < game->sample_count &&
-             study_count(game->samples[lab->sample].decoded_studies) == 5)
-      landing_strip(row, game->samples[lab->sample].incubated
-                             ? "This sample already has a Beecho."
-                             : "All topics known. Prepare incubation.");
-    else
-      landing_strip(row, "Choose a sample to inspect topics.");
+    label(row, 505, 360, "Choose a sample in Research.", 18, MUTED);
+    landing_strip(row, game->sample_count ? "Each sample has its own evidence and next investigations."
+                                          : "Bring a sample to the Lab to begin.");
   } else if (lab->focus == 3) {
     if (game->incubation_active || game->incubation_ready)
       sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
@@ -454,11 +446,14 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab,
     } else {
       int prepared = 0;
       for (unsigned sample = 0; sample < game->sample_count; ++sample)
-        prepared |= game->samples[sample].decoded_studies == 31 &&
-                    !game->samples[sample].incubated;
+        {
+          SelectedResearchView view;
+          prepared |= selected_lab_research_view(lab, sample, &view) &&
+                      view.complete && !game->samples[sample].incubated;
+        }
       label(row, 320, 303,
             prepared ? "A researched sample is ready to prepare."
-                     : "Research all five topics in a sample first.",
+                     : "Complete the supported reference knowledge first.",
             22, INK);
       landing_strip(
           row, prepared
@@ -538,25 +533,28 @@ void selected_lab_row_with_context(const SelectedLab *lab,
   static const char *home_headings[] = {
       "Overview - Lab", "Overview - Explore", "Overview - Research",
       "Overview - Incubator", "Overview - Habitat"};
+  SelectedResearchMethod current_method;
+  int finding_page = lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING;
+  const char *page_title = finding_page &&
+      selected_lab_research_method(lab, lab->sample, lab->study, &current_method)
+          ? current_method.title : titles[lab->page];
   heading(&row, home ? 276 : 396, home ? 164 : 152,
           home ? home_headings[lab->focus % 5]
-          : lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING
-              ? pip_study(lab->study)->title
-              : titles[lab->page],
+          : page_title,
           34, INK);
   unsigned count = selected_lab_options(lab);
   unsigned first = lab->focus >= 6 ? lab->focus - 5 : 0;
   for (unsigned i = first; i < count && i < first + 6; i++) {
-    int yy = home ? 185 + (int)i * 68 : 159 + (int)(i - first) * 58;
+    int yy = home ? 185 + (int)i * 68
+             : lab->page == V1_CREATE ? 159 + (int)(i - first) * 110
+                                      : 159 + (int)(i - first) * 58;
     if (i == lab->focus) {
       int x = home ? 36 : 39;
       int width = home ? 184 : 299;
-      int height = home ? 54 : 46;
+      int height = home ? 54 : lab->page == V1_CREATE ? 98 : 46;
       if (home)
         outline(&row, x - 4, yy - 8, width + 8, height + 8, 3, FOCUS_GLOW);
-      rectangle(&row, x, yy - 4, width, height, ACTION);
-      if (!home)
-        outline(&row, x, yy - 4, width, height, 2, WARM);
+      rectangle(&row, x, yy - 4, width, height, PANEL);
       focus(&row, x - 2, yy - 6, width + 4, height + 4);
     }
     unsigned sample, study;
@@ -564,8 +562,13 @@ void selected_lab_row_with_context(const SelectedLab *lab,
         selected_lab_library_entry(lab, i, &sample, &study)) {
       label(&row, 53, yy, game->samples[sample].id, 18,
             i == lab->focus ? WARM : MUTED);
-      label(&row, 53, yy + 23, pip_study(study)->title, 18,
+      SelectedResearchMethod entry;
+      selected_lab_research_method(lab, sample, study, &entry);
+      label(&row, 53, yy + 23, entry.title, 18,
             i == lab->focus ? WARM : INK);
+    } else if (lab->page == V1_CREATE) {
+      wrapped_label(&row, 53, yy + 10, selected_lab_option(lab, i), 18,
+                    i == lab->focus ? WARM : INK, 273);
     } else {
       label(&row, home ? 56 : 53, yy + (home ? 10 : 7),
             selected_lab_option(lab, i), home ? 22 : 18,
@@ -606,23 +609,32 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     rectangle(&row, 415, 474, (int)(542 * (total > 4000 ? 4000 : total) / 4000),
               12, BLUE);
   } else if (lab->page == V1_SAMPLES) {
-    sprite(&row, SPRITE_SAMPLE, 602, 235, 155, 155);
-    snprintf(text, sizeof(text), "%u sample%s retained", game->sample_count,
-             game->sample_count == 1 ? "" : "s");
-    label(&row, 452, 432, text, 28, INK);
-  } else if (lab->page == V1_STUDIES && lab->focus == 5) {
-    unsigned discovered = 0;
-    for (unsigned i = 0; i < 5; i++)
-      discovered += (game->samples[lab->sample].decoded_studies >> i) & 1u;
-    sprite(&row, SPRITE_SAMPLE, 597, 240, 150, 150);
-    snprintf(text, sizeof(text), "%u / 5 discoveries", discovered);
-    label(&row, 483, 407, text, 28, WARM);
-    label(&row, 414, 465,
-          game->samples[lab->sample].incubated
-              ? "This sample already has a Beecho."
-          : discovered == 5 ? "Ready to choose a complete form."
-                            : "Research every topic to prepare a form.",
-          22, INK);
+    if (lab->focus == 0 || lab->focus > game->sample_count) {
+      overview_sprite(&row, OVERVIEW_RESEARCH, 420, 247);
+      snprintf(text, sizeof(text), "%u sample%s retained", game->sample_count,
+               game->sample_count == 1 ? "" : "s");
+      heading(&row, 588, 256, text, 32, INK);
+      wrapped_label(&row, 588, 310, "Select a sample to inspect its evidence and useful next investigations.",
+                    22, INK, 365);
+    } else {
+      unsigned sample = lab->focus - 1;
+      SelectedResearchView view;
+      sprite(&row, SPRITE_SAMPLE, 424, 223, 54, 54);
+      label(&row, 500, 230, game->samples[sample].id, 22, INK);
+      if (selected_lab_research_view(lab, sample, &view)) {
+        knowledge_rows(&row, &view, 421, 300);
+        research_summary(&row, lab, sample, 421, 465, 535);
+      }
+    }
+  } else if (lab->page == V1_STUDIES && lab->focus >= selected_lab_options(lab) - 1) {
+    SelectedResearchView view;
+    overview_sprite(&row, OVERVIEW_RESEARCH, 423, 252);
+    label(&row, 588, 241, game->samples[lab->sample].id, 22, INK);
+    if (selected_lab_research_view(lab, lab->sample, &view)) {
+      wrapped_label(&row, 588, 300, view.complete ? "Complete supported forms are ready to compare."
+                                                 : "Some reference knowledge is still unresolved.", 22, INK, 360);
+      research_summary(&row, lab, lab->sample, 421, 463, 535);
+    }
   } else if (lab->page == V1_DISCARD_REVIEW) {
     unsigned values[] = {game->expedition_data, game->expedition_energy,
                          game->expedition_essence};
@@ -637,50 +649,40 @@ void selected_lab_row_with_context(const SelectedLab *lab,
           18, INK);
   } else if (lab->page == V1_STUDIES || lab->page == V1_FINDING ||
              lab->page == V1_LIBRARY_FINDING || lab->page == V1_STUDY_REVIEW) {
-    unsigned study = lab->page == V1_STUDIES ? lab->focus : lab->study;
-    const PipStudy *entry = pip_study(study);
-    int known =
-        (game->samples[lab->sample].decoded_studies & (1u << study)) != 0;
-    label(&row, 402, 203, game->samples[lab->sample].id, 18, MUTED);
-    if (lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING) {
-      label(&row, 416, 252, "SAMPLE FINDING", 22, SAGE);
-      if (study < 2)
-        sprite(&row, study == 0 ? SPRITE_CROWN : SPRITE_EYE_RING, 437, 300, 115,
-               115);
-      wrapped_label(&row, study < 2 ? 585 : 421, study < 2 ? 300 : 311,
-                    entry->finding, 24, INK, study < 2 ? 360 : 525);
-      unsigned found = 0;
-      for (unsigned i = 0; i < 5; i++)
-        found += (game->samples[lab->sample].decoded_studies >> i) & 1u;
-      snprintf(text, sizeof(text), "%u / 5 topics discovered", found);
-      label(&row, 421, 476, text, 22, SAGE);
-    } else {
-      label(&row, 416, 248, entry->title, 28, WARM);
-      label(&row, 416, 292,
-            known ? "Recorded / inspect freely"
-                  : "Unknown / ready to investigate",
-            22, INK);
-      unsigned costs[] = {entry->cost_data, entry->cost_energy,
-                          entry->cost_essence};
-      for (unsigned i = 0; i < 3; i++) {
-        int x = 418 + (int)i * 181;
-        label(&row, x, 317, "Cost / in Lab", 18, MUTED);
-        sprite(&row, i, x, 343, 48, 53);
-        snprintf(text, sizeof(text), "%u / %u", known ? 0 : costs[i] / 100,
-                 stock[i] / 100);
-        label(&row, x + 56, 355, text, 18,
-              known || stock[i] >= costs[i] ? INK : WARM);
-        if (!known && stock[i] < costs[i]) {
-          snprintf(text, sizeof(text), "Short of cost");
-          label(&row, x, 409, text, 18, WARM);
+    unsigned method = lab->page == V1_STUDIES ? lab->focus : lab->study;
+    SelectedResearchMethod entry;
+    SelectedResearchView view;
+    if (selected_lab_research_method(lab, lab->sample, method, &entry) &&
+        selected_lab_research_view(lab, lab->sample, &view)) {
+      label(&row, 402, 203, game->samples[lab->sample].id, 18, MUTED);
+      if (lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING) {
+        label(&row, 416, 249, "RECORDED FINDING", 22, SAGE);
+        if (!strcmp(entry.id, "heritage") || (view.legacy && method < 2)) {
+          sprite(&row, method == 1 ? SPRITE_EYE_RING : SPRITE_CROWN, 421, 300, 115, 115);
+          label(&row, 421, 425, "Reference feature", 18, MUTED);
+        } else {
+          overview_sprite(&row, OVERVIEW_RESEARCH, 416, 293);
         }
+        wrapped_label(&row, 578, 293, entry.finding ? entry.finding : "No finding disclosed.", 22, INK, 374);
+        research_summary(&row, lab, lab->sample, 421, 469, 535);
+      } else {
+        heading(&row, 416, 243, entry.title, 26, INK);
+        label(&row, 416, 283, entry.known ? "Recorded / inspect freely"
+                            : entry.useful ? "Useful investigation" : "No new reference knowledge", 22, MUTED);
+        overview_sprite(&row, OVERVIEW_RESEARCH, 416, 317);
+        const unsigned costs[] = {entry.cost_data, entry.cost_energy, entry.cost_essence};
+        for (unsigned i = 0; i < 3; ++i) {
+          int yy = 315 + (int)i * 53;
+          sprite(&row, i, 589, yy, 48, 53);
+          snprintf(text, sizeof(text), "%u / %u", entry.known || !entry.useful ? 0 : costs[i] / GAME_SUPPLY_UNIT,
+                   stock[i] / GAME_SUPPLY_UNIT);
+          label(&row, 655, yy + 15, text, 22, INK);
+        }
+        label(&row, 791, 321, "Cost / Lab stock", 18, MUTED);
+        wrapped_label(&row, 421, 485, entry.known || !entry.useful ? "Confirm inspects recorded knowledge."
+            : lab->page == V1_STUDY_REVIEW ? "Start research spends the listed resources."
+                                          : "Confirm reviews this investigation.", 18, INK, 535);
       }
-      label(&row, 419, 485,
-            known ? "Confirm inspects this finding."
-            : lab->page == V1_STUDY_REVIEW
-                ? "Start research spends the listed resources."
-                : "Confirm reviews the research plan.",
-            18, INK);
     }
   } else if (lab->page == V1_LIBRARY) {
     label(&row, 420, 252,
@@ -692,34 +694,32 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     label(&row, 420, 366, "Select a finding to inspect it freely.", 22, INK);
   } else if (lab->page == V1_CREATE || lab->page == V1_CREATE_REVIEW) {
     int review = lab->page == V1_CREATE_REVIEW;
-    unsigned preference = review ? lab->creation_preference : lab->focus;
-    sprite(&row, SPRITE_SAMPLE, 448, 240, 128, 128);
-    label(&row, 605, 235, game->samples[lab->sample].id, 22, SAGE);
-    label(&row, 605, 282, review ? "Selected supported form" : "Supported form draft",
-          22, INK);
-    label(&row, 605, 317, preference ? "Pale markings" : "Plain coat / carries pale",
-          18, INK);
-    label(&row, 410, 394, review ? "Start spends: 5 Data / 5 Energy / 5 Essence"
-                               : "Confirm selects this form for review.",
-          22, INK);
-    label(&row, 410, 431, "Source sample stays recorded; used for one founder.",
-          18, MUTED);
-    unsigned shortage = 0;
-    for (unsigned i = 0; i < 3; i++)
-      if (stock[i] < 500) {
-        snprintf(text, sizeof(text), "%s: %u / 5 units", names[i],
-                 stock[i] / 100);
-        label(&row, 410, 456 + (int)shortage * 23, text, 18, WARM);
-        shortage++;
-      }
-    if (!shortage)
-      label(&row, 410, 476,
-            game->incubation_active ? "Incubator busy. Finish the active incubation."
-            : game->samples[lab->sample].incubated ? "This sample already has a founder."
-            : game->individual_count >= GAME_MAX_INDIVIDUALS ? "All 8 resident spaces occupied."
-            : review ? "Fresh Confirm: start / Back: change form"
-                     : "Drafting spends nothing.",
-            18, WARM);
+    PipSupportedCandidate candidate;
+    int disclosed = review ? selected_lab_creation_draft(lab, &candidate)
+                            : selected_lab_candidate(lab, lab->sample, lab->focus, &candidate);
+    label(&row, 412, 208, game->samples[lab->sample].id, 18, MUTED);
+    if (disclosed) {
+      sprite(&row, SELECTED_SPRITE_COUNT + candidate.expression.pale_markings,
+             405, 235, 261, 289);
+      label(&row, 689, 238, review ? "SELECTED FORM" : "SUPPORTED PREVIEW", 18, SAGE);
+      wrapped_label(&row, 689, 275, candidate.title, 22, INK, 278);
+      snprintf(text, sizeof(text), "Reference: %s", candidate.id);
+      label(&row, 689, 358, text, 18, MUTED);
+      label(&row, 689, 389, "Start: 5 of each supply", 18, INK);
+      wrapped_label(&row, 689, 420, review ? "Start incubation allocates this resident."
+                                          : "Drafting spends nothing.", 18, INK, 278);
+      unsigned shortage = 0;
+      for (unsigned i = 0; i < 3; ++i)
+        if (stock[i] < 500) {
+          snprintf(text, sizeof(text), "%s: %u / 5", names[i], stock[i] / GAME_SUPPLY_UNIT);
+          label(&row, 689, 467 + (int)shortage * 22, text, 18, WARM);
+          ++shortage;
+        }
+    } else {
+      overview_sprite(&row, OVERVIEW_RESEARCH, 423, 260);
+      wrapped_label(&row, 588, 281, "Complete this sample's reference knowledge before choosing a form.", 22, INK, 360);
+      research_summary(&row, lab, lab->sample, 421, 469, 535);
+    }
   } else if (lab->page == V1_INCUBATION) {
     overview_sprite(&row, OVERVIEW_INCUBATOR, 597, 236);
     if (game->incubation_active) {

@@ -33,6 +33,7 @@ typedef enum {
   CORE_ART_SAMPLES_MONO,
   CORE_ART_INCUBATING_MONO,
   CORE_ART_LINK_MONO,
+  CORE_ART_PROBE_PLACE,
   CORE_ART_COUNT
 } CoreArtId;
 
@@ -51,5 +52,9 @@ extern const CoreArtSprite core_art_sprites[CORE_ART_COUNT];
 const CoreArtSprite *core_art_sprite(CoreArtId id);
 void core_art_row(CoreArtId id, int x, int y, unsigned row,
                   unsigned width, uint8_t *pixels);
+void core_art_panel_row(int x, int y, int width, int height, unsigned row,
+                        unsigned canvas_width, uint8_t *pixels);
+void core_art_focus_row(int x, int y, int width, int height, unsigned row,
+                        unsigned canvas_width, uint8_t *pixels);
 
 #endif

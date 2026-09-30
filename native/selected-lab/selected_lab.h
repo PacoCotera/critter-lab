@@ -58,6 +58,25 @@ typedef struct {
   unsigned revision, interaction_epoch;
 } SelectedGesture;
 typedef struct {
+  unsigned sample, preference;
+  int valid;
+  char sample_id[40], content_version[24], candidate_id[32];
+} SelectedCreationDraft;
+
+/* Read-only presentation adapters. Findings and complete candidates are exposed
+ * only when the content authority permits them for this particular sample. */
+typedef struct {
+  int legacy, complete;
+  unsigned method_count, completed_methods, known_references,
+      required_references, candidate_count, partial_p;
+  PipResearchProjection knowledge;
+} SelectedResearchView;
+typedef struct {
+  const char *id, *title, *finding;
+  unsigned cost_data, cost_energy, cost_essence;
+  int known, useful;
+} SelectedResearchMethod;
+typedef struct {
   SelectedPage page;
   unsigned focus, sample, study, resident, discard_resource, revision,
       page_revision, interaction_epoch, minimum_action_revision,
@@ -65,6 +84,7 @@ typedef struct {
   int ready, suspended, storage_error, kit_mode;
   SelectedGesture gestures[10];
   unsigned workspace, library_index, creation_preference;
+  SelectedCreationDraft creation_draft;
   SelectedPage workspace_page[4];
   unsigned workspace_focus[4], workspace_sample[4], workspace_study[4],
       workspace_resident[4];
@@ -81,6 +101,7 @@ typedef struct {
   unsigned workspace_focus[4], workspace_sample[4], workspace_study[4],
       workspace_resident[4];
   char message[96];
+  SelectedCreationDraft creation_draft;
 } SelectedLabContext;
 
 void selected_lab_capture_context(const SelectedLab *lab,
@@ -99,6 +120,14 @@ const char *selected_lab_page(const SelectedLab *lab);
 const char *selected_lab_focus(const SelectedLab *lab);
 unsigned selected_lab_options(const SelectedLab *lab);
 const char *selected_lab_option(const SelectedLab *lab, unsigned option);
+int selected_lab_research_view(const SelectedLab *lab, unsigned sample,
+                               SelectedResearchView *view);
+int selected_lab_research_method(const SelectedLab *lab, unsigned sample,
+                                 unsigned method, SelectedResearchMethod *view);
+int selected_lab_candidate(const SelectedLab *lab, unsigned sample,
+                            unsigned candidate, PipSupportedCandidate *view);
+int selected_lab_creation_draft(const SelectedLab *lab,
+                                PipSupportedCandidate *view);
 int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
                                unsigned *sample_result, unsigned *study_result);
 void selected_lab_row(const SelectedLab *lab, unsigned row,

@@ -56,6 +56,12 @@ class Player:
             return content
         raise AssertionError("Could not capture a stable native frame")
 
+    def first_sample(self):
+        assert self.state["page"] == "samples", self.state
+        self.choose("Overview")
+        self.press("down")
+        return self.press()
+
     def home_views(self, label):
         assert self.state["page"] == "home", self.state
         for attempt in range(5):
@@ -125,12 +131,16 @@ def journey(binary, frames):
         assert player.state["stock"] == [before_stock[index] + carried[index] // 100 * 100
                                           for index in range(3)]
         player.choose("Research")
-        player.press()
-        costs = {"Crown form": [500, 0, 0], "Eye rings": [0, 500, 0],
-                 "Body markings": [0, 0, 500], "Movement": [400, 400, 0],
-                 "Energy use": [0, 400, 400]}
+        assert player.state["focus"] == "Overview"
+        player.capture("collection-overview")
+        player.first_sample()
+        costs = {"Read the pattern": [400, 0, 0],
+                 "Trace movement": [0, 400, 0],
+                 "Compare the coat": [0, 0, 400]}
         for label, required in costs.items():
+            before_preview = player.state["stock"]
             player.choose(label)
+            assert player.state["stock"] == before_preview
             if any(player.state["stock"][i] < required[i] for i in range(3)):
                 # A miss is real: return to the same research after gathering,
                 # rather than assuming a fixed first-expedition reward.
@@ -142,14 +152,24 @@ def journey(binary, frames):
                                                      for i in range(3)), 65)
                 player.choose("Cargo")
                 player.choose("Return + store haul")
-                player.press()
+                player.first_sample()
                 player.choose(label)
             player.capture("review-" + label.replace(" ", "-"))
+            before_research = player.state["stock"]
             player.choose("Start research")
             assert player.state["page"] == "finding", player.state
+            assert player.state["stock"] == [before_research[i] - required[i]
+                                              for i in range(3)]
             player.capture("03-" + label.replace(" ", "-"))
             player.press()
-        assert player.state["decoded"] == 31
+            before_inspection = player.state["stock"]
+            player.choose(label)
+            assert player.state["page"] == "finding"
+            assert player.state["stock"] == before_inspection
+            player.press()
+        player.choose("Prepare incubation")
+        assert player.state["page"] == "creation"
+        player.press("back")
         player.press("back")
         player.press("back")
         player.home_views("researched")
@@ -170,7 +190,7 @@ def journey(binary, frames):
             raise AssertionError(("No completed outing within three fresh routes", player.state))
         player.choose("Cargo")
         player.choose("Return + store haul")
-        player.press()
+        player.first_sample()
         player.choose("Prepare incubation")
         player.capture("candidate-selection")
         before_creation = player.state["stock"]

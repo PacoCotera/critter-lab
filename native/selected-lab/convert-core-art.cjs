@@ -22,6 +22,7 @@ const accepted = [
   ['essence-mono', 'ESSENCE_MONO'], ['residents-mono', 'RESIDENTS_MONO'],
   ['samples-mono', 'SAMPLES_MONO'], ['incubating-mono', 'INCUBATING_MONO'],
   ['link-mono', 'LINK_MONO'],
+  ['probe-place', 'PROBE_PLACE'],
 ];
 
 async function main() {
@@ -69,6 +70,7 @@ async function main() {
           target[channel] * (255u - alpha) + 127u) / 255u);
   }
 }\n`);
+  definitions.push(fs.readFileSync(path.join(artRoot, 'source/native-composition.c'), 'utf8'));
   const header = [
     '#ifndef CRITTER_LAB_CORE_ART_H', '#define CRITTER_LAB_CORE_ART_H', '#include <stdint.h>', '',
     '/* Straight RGBA, exact native footprint; no view/domain computation. */',
@@ -88,12 +90,16 @@ async function main() {
     'extern const CoreArtSprite core_art_sprites[CORE_ART_COUNT];',
     'const CoreArtSprite *core_art_sprite(CoreArtId id);',
     'void core_art_row(CoreArtId id, int x, int y, unsigned row,',
-    '                  unsigned width, uint8_t *pixels);', '', '#endif', '',
+    '                  unsigned width, uint8_t *pixels);',
+    'void core_art_panel_row(int x, int y, int width, int height, unsigned row,',
+    '                        unsigned canvas_width, uint8_t *pixels);',
+    'void core_art_focus_row(int x, int y, int width, int height, unsigned row,',
+    '                        unsigned canvas_width, uint8_t *pixels);', '', '#endif', '',
   ];
   fs.writeFileSync(path.join(__dirname, 'core_art.h'), header.join('\n'));
   fs.writeFileSync(path.join(__dirname, 'core_art.c'), definitions.join('\n\n'));
   fs.writeFileSync(path.join(artRoot, 'native-export-manifest.json'), JSON.stringify({
-    scope: 'Nine alpha-reviewed materials, two retained Pip originals and seven provisional authored mono categories for native inspection; no screen/family/runtime approval',
+    scope: 'Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories and one separately reviewed resampled Gemini setting; no screen/family/runtime approval',
     rgbaBytes, assets: records,
   }, null, 2) + '\n');
   console.log(`Generated ${accepted.length} native RGBA tables: ${rgbaBytes} bytes. No native compilation or renderer edits.`);

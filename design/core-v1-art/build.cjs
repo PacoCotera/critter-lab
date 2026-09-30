@@ -23,10 +23,11 @@ const references = {
   arrival07: 'design/companion-connected-art/07-gemini-lab-arrival-blue.png',
   materials: 'design/lab-controls/combined-family-materials.png',
   pipSource: 'design/v1-pip/gemini-source-capture.png',
+  probeScene: 'design/core-v1-art/source/gemini-probe-scene-original.png',
 };
 const manifest = {
   status: 'Nine retained material masks passed focused art-direction critique; other candidates and actual native compositions await review',
-  method: 'Retained material RGB plus hand-authored alpha/layer selection; exact retained Pip pixels; authored interface/scene/mono candidates. No color-key, flood matte, material redraw, resampling or baked text.',
+  method: 'Retained material RGB with hand-authored alpha; exact Pip originals; separately documented nearest-resampled Gemini setting; authored interface/mono candidates. No color-key, flood matte, retained-material redraw/resampling or baked text.',
   palette,
   references: Object.entries(references).map(([id, filename]) => ({
     id, path: filename, sha256: hash(fs.readFileSync(path.join(productRoot, filename))),
@@ -171,14 +172,17 @@ async function createSources() {
     const size = name === 'frame-corner' ? 20 : name === 'focus-corner' ? 14 : 24;
     await exportSymbol('interface.svg', name, name, size, size, 'c18/arrival07', 'Quiet structure, input focus and outcome remain separate from object knowledge.');
   }
-  const sceneSource = path.join(directory, 'source/probe-place.svg');
-  const scene = fs.readFileSync(sceneSource, 'utf8').replace('<svg ', '<svg shape-rendering="crispEdges" ');
-  await exportAsset('probe-place', await sharp(Buffer.from(scene)).png().toBuffer(), sceneSource, 'materials/probe03', 'Editable fictional setting; no critter/encounter/sensor target. Native400x224, no scaling.');
-  for (const layer of ['sky', 'distance', 'water', 'near-land', 'foreground-life']) {
-    const hide = ['sky', 'distance', 'water', 'near-land', 'foreground-life'].filter(name => name !== layer).map(name => `#${name}{display:none}`).join('');
-    const isolated = scene.replace('</defs>', `</defs><style>${hide}</style>`);
-    fs.writeFileSync(path.join(output, `probe-layer-${layer}.png`), await sharp(Buffer.from(isolated)).png().toBuffer());
-  }
+  const sceneSource = path.join(directory, 'source/gemini-probe-scene-original.png');
+  const scene = await sharp(sceneSource).resize(400, 224, {fit: 'fill', kernel: 'nearest'}).png().toBuffer();
+  await exportAsset('probe-place', scene, sceneSource, 'probeScene',
+    'Fictional setting. Noninteger nearest400x224 derivative of preserved Gemini1024x572 delivered original; not original native pixels or independent editable drawing layers.');
+  manifest.assets[manifest.assets.length - 1].production = {
+    originalWidth: 1024, originalHeight: 572, derivativeWidth: 400, derivativeHeight: 224,
+    kernel: 'nearest', fit: 'fill', conversation: 'https://gemini.google.com/app/ebc52519d5f5f3fb',
+    retrieval: 'Gemini Copy image to clipboard PNG; full-size download event did not resolve',
+    prompt: 'design/core-v1-art/source/gemini-probe-scene-prompt.txt',
+    meaning: 'Authored fictional setting; no location/weather/telemetry/creature/encounter assertion',
+  };
   for (const name of ['pip-carried', 'pip-marked']) {
     const source = path.join(productRoot, 'design/v1-pip', `${name}.png`);
     // Preserve exact approved pixels, including the retained opaque backing.
@@ -219,7 +223,7 @@ async function contactSheet() {
     x += 108;
   }
   layers.push(assetLayer('probe-place', 24, 541));
-  layers.push(await textLayer('400×224 · five editable setting layers', 24, 780, 16));
+  layers.push(await textLayer('400×224 · resampled Gemini setting', 24, 780, 16));
   layers.push(assetLayer('pip-carried', 465, 533));
   layers.push(assetLayer('pip-marked', 753, 533));
   layers.push(await textLayer('Exact originals261×289 · no redraw/matte', 465, 839, 16));

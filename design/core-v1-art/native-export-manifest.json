@@ -1,6 +1,6 @@
 {
-  "scope": "Nine alpha-reviewed materials, two retained Pip originals and seven provisional authored mono categories for native inspection; no screen/family/runtime approval",
-  "rgbaBytes": 837636,
+  "scope": "Nine alpha-reviewed materials, two retained Pip originals, seven provisional mono categories and one separately reviewed resampled Gemini setting; no screen/family/runtime approval",
+  "rgbaBytes": 1196036,
   "assets": [
     {
       "id": "CORE_ART_DATA_COMPACT",
@@ -475,6 +475,35 @@
       "rgbaSha256": "52c8c97465c0537f3f842c86a10acf4ea13c25544b5a19c6bdd81365e472e455",
       "note": "Authored monochrome contour/negative space; category metaphor, not individual identity.",
       "nativeRgbaBytes": 5120
+    },
+    {
+      "id": "CORE_ART_PROBE_PLACE",
+      "name": "probe-place",
+      "file": "design/core-v1-art/exports/probe-place.png",
+      "width": 400,
+      "height": 224,
+      "drawWidth": 400,
+      "drawHeight": 224,
+      "channels": 4,
+      "source": "design/core-v1-art/source/gemini-probe-scene-original.png",
+      "sourceId": "probeScene",
+      "sourceSha256": "7da64f0113f90858abc3037d01e557b6ad845a3c3aaab1cdbf01f07941f33457",
+      "pngSha256": "9624c1c14c79d50608891ac62dfca0e585cca451ceaad9ee44ee58c542ce0548",
+      "rgbaSha256": "4ef9176e4d157942c0d2ead27c8a4e83f1c9f317fb785fc06fdb5442016f5cea",
+      "note": "Fictional setting. Noninteger nearest400x224 derivative of preserved Gemini1024x572 delivered original; not original native pixels or independent editable drawing layers.",
+      "production": {
+        "originalWidth": 1024,
+        "originalHeight": 572,
+        "derivativeWidth": 400,
+        "derivativeHeight": 224,
+        "kernel": "nearest",
+        "fit": "fill",
+        "conversation": "https://gemini.google.com/app/ebc52519d5f5f3fb",
+        "retrieval": "Gemini Copy image to clipboard PNG; full-size download event did not resolve",
+        "prompt": "design/core-v1-art/source/gemini-probe-scene-prompt.txt",
+        "meaning": "Authored fictional setting; no location/weather/telemetry/creature/encounter assertion"
+      },
+      "nativeRgbaBytes": 358400
     }
   ]
 }
