@@ -38,7 +38,16 @@ The devices provide distinct physical experiences; see the [experience principle
 
 The Companion’s **Probe mode** offers real-world sampling, fictional encounters, collection progress and resources without requiring a phone. Samples carry research evidence; resources are consumable inventory quantities. Evidence points do not automatically become food or materials. [Probe evidence](probe.md) defines sensed versus generated inputs, proposed scoring and measurement limits.
 
-Accepted: the Lab offers expedition profiles with duration, difficulty, yield and event characteristics. Choosing one sets the Probe expedition's gathering focus and possible events; [Probe profiles](probe.md#lab-selected-expedition-profiles--accepted-direction) define the boundary. Exact balance and difficulty consequences remain open.
+Owner correction,30September2026: the Companion selects and executes expeditions.
+The Lab does not choose a field expedition or assume live knowledge of an away
+Companion. Its field-related view is a log of expedition records actually received,
+linked to accepted resources, samples and subsequent research. Any status must state
+its received/cached provenance; shared simulator memory is not wireless receipt.
+[Companion profiles](probe.md#companion-selected-expedition-profiles--accepted-direction)
+define the boundary. Generated-map movement, encounters and interactive acquisition
+are now being designed; exact rules, balance and difficulty consequences remain
+proposed. The deployed Core V1 still uses its earlier timed field fixture until the
+new design is reviewed and implemented.
 
 The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, inventory changes, research progress, developmental changes or resources running low, suggesting interventions and the next expedition. Major discoveries and individual reveals punctuate that process. Frequent interest does not establish a neglect penalty; timers, notifications and setbacks remain open.
 

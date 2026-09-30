@@ -1,0 +1,15 @@
+{
+  "kind": "One unchanged regeneration of the static design artifact",
+  "status": "PASS",
+  "generatedFilesCompared": 22,
+  "changedFiles": 0,
+  "nativeScreens": 9,
+  "screenDimensions": [
+    "7 Companion at 450x600",
+    "2 Lab at 1024x600"
+  ],
+  "proofSheets": 3,
+  "method": "SHA256 of all exported PNGs, editable screen SVGs and manifest before/after running unchanged build source",
+  "fontCacheWarning": "Existing font cache directory unavailable; rendering and glyph measurements completed",
+  "review": "Corrected actual exports passed bounded game/experience/coordinator inspection; no owner mechanics or runtime acceptance implied"
+}

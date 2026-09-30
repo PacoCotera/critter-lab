@@ -20,7 +20,12 @@ Player language must reflect discovery rather than cargo transport. Use expediti
 
 The current accepted model separates whole collected resources from time-and-chance progress toward another award attempt. Items are fungible within their resource class and indivisible. Only awarded items occupy cargo space; activity progress stays on the Companion and cannot be transferred or spent. [Gameplay](gameplay.md#research-collection-and-gathering--accepted) owns this accounting rule. Collection-work accounting is distinct from spendable resources; do not introduce another player currency or cosmetic progress counter. Progress must come from the expedition state, and observed context must distinguish measured inputs from fictional events and simulator inputs. Show relevant changes rather than animation for its own sake. Refresh cadence and power behavior require physical e-ink validation.
 
-The connected native fixture simulates timed chance attempts, whole supplies and an optional sample encounter. Its intervals, probabilities, capacity and expedition duration are provisional test values. It does not establish real sensing, physical radio behavior or a complete field economy. Screens must distinguish actual simulated state from proposed mechanics.
+The connected native fixture simulates timed chance attempts, whole supplies and an optional sample encounter. Its intervals, probabilities, capacity and expedition duration are provisional test values. It does not establish real sensing, physical radio behavior or a complete field economy. Screens must distinguish actual simulated state from proposed mechanics. Owner
+30September correction: propose a generated exploration map with steerable movement,
+interesting locations and deliberate interactions that unlock resources and samples.
+Display separate per-resource preparation toward an attempt beside accumulated whole
+units. A decorative landscape and seconds alone are not an expedition experience.
+This new interaction/map design is not yet implemented in the deployed fixture.
 
 ## Straightforward sampling — accepted direction
 
@@ -28,15 +33,15 @@ Sampling must stay easy to operate with a limited sensor set. Fictional events c
 
 The [sensor-to-mechanics proposal](../design/probe-sampling.md#sensors-connect-ordinary-surroundings-to-expedition-mechanics) connects valid observation windows, broad context, expedition event opportunities and their resource/research consequences. Its defaults are not approved algorithms or final UI.
 
-## Lab-selected expedition profiles — accepted direction
+## Companion-selected expedition profiles — accepted direction
 
-The Lab offers a set of expeditions for the player to choose before taking the Probe out. Profiles define investigation themes and eligible events, gated by Probe tier. Baseline per-resource gathering rates are shared; optional events can temporarily boost them. Sensed context can influence eligible encounters without directly becoming a resource or genetic trait. Return is player-directed, capacity-limited or required by simulated damage, not an automatic expedition countdown. A small sensor set can therefore serve different fictional gathering objectives without changing hardware.
+The Companion offers expedition selection in Probe mode; the Lab receives expedition records when they are actually transferred. Profiles define investigation themes and eligible events, gated by Probe tier. Baseline per-resource gathering rates are shared; optional events can temporarily boost them. Sensed context can influence eligible encounters without directly becoming a resource or genetic trait. Return is player-directed, capacity-limited or required by simulated damage, not an automatic expedition countdown. A small sensor set can therefore serve different fictional gathering objectives without changing hardware.
 
 The profile provides a bounded context for variation, not necessarily a fixed event sequence. Actual measurements remain distinct from fictional interpretation and generated events. Choosing a profile does not predetermine a complete critter genome or bypass later research. Resource quantities and research evidence remain separate records.
 
-Selection and comparison belong at the Lab; execution must preserve the Probe's straightforward standalone experience. Exact durations, difficulty meaning, event probabilities, yield ranges, eligibility and expiry rules remain open. Return-and-unload ending and retained research follow the [accepted expedition flow](gameplay.md#expedition-continuity-and-return--accepted). Difficulty does not yet authorize physical hazards, mandatory reflexes, sample loss or neglect penalties.
+Selection, comparison and field execution belong on the Companion. The Lab has no live away-expedition status by default; its expedition log contains received records only. Execution must preserve the Probe's standalone experience. Exact durations, difficulty meaning, event probabilities, yield ranges, eligibility and expiry rules remain open. Return-and-unload ending and retained research follow the [accepted expedition flow](gameplay.md#expedition-continuity-and-return--accepted). Difficulty does not yet authorize physical hazards, mandatory reflexes, sample loss or neglect penalties.
 
-Proposed engineering consequence: carry the selected compatible profile/content version and sufficient execution data onto the Probe before departure; retain expedition/player identity and resolved events through interruption. Rules must fit the installed firmware's storage and capabilities. Profile packaging, scheduling, clock trust, validation and synchronization are not selected by this direction.
+Proposed engineering consequence: retain a compatible local profile/content version and sufficient execution data on the Companion; retain expedition/player identity and resolved events through interruption. Rules must fit the installed firmware's storage and capabilities. Profile packaging, scheduling, clock trust, validation and synchronization are not selected by this direction.
 
 ## Durable boundary
 

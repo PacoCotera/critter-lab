@@ -1,0 +1,10 @@
+{
+  "kind": "Provisional issue 49 authored states, not executable gameplay or approved balance",
+  "maps": [
+    {"seed":1429,"streamX":10,"nodes":[{"id":"camp","name":"Camp","x":2,"y":8,"type":"camp"},{"id":"brook","name":"Moss bend","x":7,"y":8,"type":"brook"},{"id":"relay","name":"Relay","x":2,"y":2,"type":"relay"},{"id":"stone","name":"Stone shelf","x":7,"y":2,"type":"ridge"},{"id":"cache","name":"Old cache","x":16,"y":5,"type":"cache"}],"routes":[["camp","brook"],["camp","relay"],["relay","stone"],["stone","brook"]],"leadRoute":["brook","cache"]},
+    {"seed":7183,"streamX":9,"nodes":[{"id":"camp","name":"Camp","x":9,"y":8,"type":"camp"},{"id":"brook","name":"Moss bend","x":9,"y":2,"type":"brook"},{"id":"relay","name":"Relay","x":3,"y":5,"type":"relay"},{"id":"stone","name":"Stone shelf","x":15,"y":5,"type":"ridge"},{"id":"cache","name":"Old cache","x":17,"y":1,"type":"cache"}],"routes":[["camp","relay"],["camp","stone"],["relay","brook"],["stone","brook"]],"leadRoute":["brook","cache"]}
+  ],
+  "initial":{"subtitle":"Goal: Essence resupply · expedition 014","position":"camp","lead":false,"status":{"camp":"active"},"activity":"Data · Camp · 2 attempts left","counts":[1,0,0],"prep":[30,0,0],"prepStatus":["Active","Not started","Not started"],"place":"Camp · ordinary opportunities","purpose":"Inspect: supplies here, or explore the branches."},
+  "active":{"subtitle":"Goal: Essence resupply · expedition 014","position":"trail","tile":[12,8],"lead":true,"status":{"camp":"inspected","brook":"active","cache":"unvisited"},"activity":"Essence · Moss bend · 2 attempts left","counts":[1,0,1],"prep":[30,0,60],"prepStatus":["Paused","Not started","Active"],"place":"On the east trail · travelling","purpose":"Finding: sealed-container trace continues east."},
+  "result":{"expedition":"014","counts":[1,0,1],"capsules":1,"capsuleId":"cache-A-01","resourceCapacity":4,"capsuleCapacity":1,"acceptedAt":"Today · 14:20"}
+}

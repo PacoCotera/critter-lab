@@ -93,7 +93,7 @@ flowchart LR
 
 This diagram specifies separation, not a claim that all production joins are implemented. Sample opening, research B commitment and creation remain governed by their own domain rules.
 
-The proposed Probe [Observations and expedition log](../design/probe-sampling.md#observations-and-expedition-log--requested-destination) makes sensed context and its connection to encounters inspectable. It is read-only, uses existing Next/Confirm, distinguishes measured observations from game events and does not create collection rewards. Layout remains part of the full UI revisit.
+The proposed Probe [Observations and expedition log](../design/probe-sampling.md#observations-and-expedition-log--requested-destination) makes sensed context and its connection to encounters inspectable. It is read-only, uses existing directions/Confirm/Back, distinguishes measured observations from game events and does not create collection rewards. Layout remains part of the full UI revisit.
 
 ## Input and visibility
 
@@ -259,3 +259,19 @@ The [Companion experience proposal](../design/companion-experience.md) records
 the owner-requested tactile full-device overhaul: immediate mode overviews,
 clear Home/Back orientation, game language and visible results. Its detailed
 interaction map and resident extension are proposals, not released behavior.
+
+### Expedition ownership and exploration revision — owner direction
+
+Companion owns expedition selection and field play. Lab's field view shows received
+expedition records and accepted outcomes; it does not mirror the away Companion's
+live map, timer, position or gathering state. A pending incoming transfer remains
+an actual reception event, distinct from knowledge of the field journey. The current
+host simulation's live field overview is superseded direction, pending implementation.
+
+The active [field design](../design/probe-sampling.md) must provide a generated map,
+movement toward interesting locations, deliberate acquisition and visible progress
+for each resource class. Keep earned whole units, time/chance preparation, sample
+finds and discovery coverage distinct. Cargo remains accessible without permanently
+occupying focus or replacing the field task. Existing physical controls only; no
+clickable map/touch shortcuts or mandatory reflex/constant-attention test. Layout,
+interaction rules, timing and sample conditions are proposals for the next review.

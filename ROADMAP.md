@@ -1,4 +1,18 @@
-# Polished Core V1
+# Critter Lab roadmap
+
+## Current outcome: meaningful field exploration
+
+Owner feedback on30September requests a steerable generated Companion map,
+interactive findings and visible per-resource preparation. Lab Explore becomes
+a log of expedition records actually received; it cannot imply live away-device
+knowledge. [Issue49](https://github.com/PacoCotera/critter-lab/issues/49) tracks one
+bounded game/UX/art design round and native-size study. The
+[gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
+holds the proposed connected journey and open rule choices. Review the actual
+sequence before dependent live implementation; the delivered timed V1 remains
+running meanwhile. No new map service, radio/backend or hardware work is implied.
+
+## Delivered checkpoint: Polished Core V1
 
 Owner-authorized implementation round, 30 September 2026. Parent outcome
 [issue25](https://github.com/PacoCotera/critter-lab/issues/25); concrete repair
