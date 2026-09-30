@@ -19,8 +19,8 @@ EVENTS = {f'{button}-{edge}' for button in BUTTONS for edge in ('down', 'up')} |
 
 class NativeProcess:
     """One selected native process; serialized status/input and binary frame reads."""
-    def __init__(self, executable, timeout=10):
-        self.process = subprocess.Popen([str(executable), "serve"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    def __init__(self, executable, timeout=10, kit=False):
+        self.process = subprocess.Popen([str(executable), "kit-serve" if kit else "serve"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         self.lock = threading.Lock()
         self.timeout = timeout
         self.unavailable = False
@@ -53,7 +53,11 @@ class NativeProcess:
                 raise RuntimeError("Invalid native response")
             if not frame or "error" in result:
                 return result, None
-            if result.get("bytes") != 54 + 1024 * 600 * 3:
+            parts = line.split()
+            dimensions = {"0": (1024, 600), "1": (450, 600), "2": (792, 272)}
+            width, height = dimensions.get(parts[1], (1024, 600)) if parts[0] == "device" else (1024, 600)
+            expected = 54 + ((width * 3 + 3) & ~3) * height
+            if result.get("bytes") != expected:
                 raise RuntimeError("Unexpected native frame length")
             pixels = bytearray()
             while len(pixels) < result["bytes"]:
@@ -163,6 +167,26 @@ class Handler(BaseHTTPRequestHandler):
                 self.reply(200, (ROOT / name).read_bytes(), mime)
             elif url.path == "/api/release" and not url.query:
                 self.reply(200, self.server.release)
+            elif url.path.startswith("/api/devices/"):
+                parts = url.path.split("/")
+                devices = {"lab": "0", "companion": "1", "dock": "2"}
+                if len(parts) != 5 or parts[3] not in devices or parts[4] not in {"status", "frame"}:
+                    raise ValueError()
+                prefix = "device " + devices[parts[3]]
+                if parts[4] == "status" and url.query:
+                    raise ValueError()
+                if parts[4] == "status":
+                    result, _ = self.server.native.command(prefix + " status")
+                    self.reply(200, result)
+                else:
+                    query = parse_qs(url.query, strict_parsing=True)
+                    if set(query) != {"revision"} or len(query["revision"]) != 1:
+                        raise ValueError()
+                    revision = query["revision"][0]
+                    if not re.fullmatch(r"[0-9]{1,10}", revision) or not 0 < int(revision) <= 4294967295:
+                        raise ValueError()
+                    result, pixels = self.server.native.command(prefix + " frame " + revision, frame=True)
+                    self.reply(409 if pixels is None else 200, result if pixels is None else pixels, "application/json" if pixels is None else "image/bmp")
             elif url.path == "/api/status" and not url.query:
                 result, _ = self.server.native.command("status")
                 self.reply(200, result)
@@ -193,7 +217,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(403, {"error": "Invalid origin"})
             return
         scheme = self.headers.get("X-Forwarded-Proto", "http")
-        if (self.path != "/api/input" or scheme not in {"http", "https"}
+        if (self.path not in {"/api/input", "/api/device-input", "/api/link"} or scheme not in {"http", "https"}
                 or origin.scheme != scheme
                 or origin.netloc != self.headers.get("Host") or origin.path
                 or origin.query or origin.fragment
@@ -208,13 +232,30 @@ class Handler(BaseHTTPRequestHandler):
             command = json.loads(self.rfile.read(size))
             if not isinstance(command, dict):
                 raise ValueError()
+            devices = {"lab": "0", "companion": "1", "dock": "2"}
+            if self.path == "/api/link":
+                device, online = command.get("device"), command.get("online")
+                if set(command) != {"device", "online"} or device not in {"companion", "dock"} or type(online) is not bool:
+                    raise ValueError()
+                result, _ = self.server.native.command(f"device {devices[device]} link {int(online)}")
+                self.reply(400 if "error" in result else 200, result)
+                return
             name, revision = command.get("event"), command.get("revision")
             expected_keys = {"event", "revision"}
+            device = command.get("device")
+            if self.path == "/api/device-input":
+                expected_keys.add("device")
+                if device not in devices:
+                    raise ValueError()
+                allowed_buttons = BUTTONS if device == "lab" else ({"up", "down", "left", "right", "back", "confirm"} if device == "companion" else {"up", "down", "confirm", "research", "critters"})
+                allowed = {f"{button}-{edge}" for button in allowed_buttons for edge in ("down", "up")} | {"cancel", "suspend", "resume", "ready"}
+                if name not in allowed:
+                    raise ValueError()
             if set(command) != expected_keys or not isinstance(name, str) or name not in EVENTS:
                 raise ValueError()
             if type(revision) is not int or not 0 <= revision <= 4294967295:
                 raise ValueError()
-            line = f"{name} {revision}"
+            line = (f"device {devices[device]} " if self.path == "/api/device-input" else "") + f"{name} {revision}"
             result, _ = self.server.native.command(line)
             self.reply(400 if "error" in result else 200, result)
         except (ValueError, UnicodeError):
@@ -230,7 +271,7 @@ def main():
     server.release = load_release(ROOT / "release.json")
     server.password = password
     server.binary = str(Path(os.environ["CRITTER_DEMO_BINARY"]).resolve(strict=True))
-    server.native = NativeProcess(server.binary)
+    server.native = NativeProcess(server.binary, kit=True)
     access = "authentication required" if password else "anonymous shared staging access"
     print(f"Critter native presenter listening; {access}", flush=True)
     try:

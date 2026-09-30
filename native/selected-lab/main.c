@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "kit.h"
 #include "save_bytes.h"
 #include "selected_lab.h"
 #include <limits.h>
@@ -22,7 +23,8 @@ static uint32_t now_seconds(void) {
   return (uint32_t)time.tv_sec;
 }
 static void status(SelectedLab *lab) {
-  selected_lab_tick(lab, now_seconds());
+  if (!lab->kit_mode)
+    selected_lab_tick(lab, now_seconds());
   printf(
       "{\"revision\":%u,\"page\":\"%s\",\"focus\":\"%s\",\"ready\":%s,"
       "\"workspace\":%u,\"suspended\":%s,\"width\":1024,\"height\":600,"
@@ -71,7 +73,8 @@ int main(int argc, char **argv) {
       success = 0;
     return success ? 0 : 2;
   }
-  if (argc != 2 || strcmp(argv[1], "serve")) {
+  int kit_mode = argc == 2 && !strcmp(argv[1], "kit-serve");
+  if (argc != 2 || (strcmp(argv[1], "serve") && !kit_mode)) {
     fprintf(stderr,
             "Usage: selected_lab frame OUTPUT.bmp | selected_lab serve\n");
     return 2;
@@ -91,8 +94,53 @@ int main(int argc, char **argv) {
     return 2;
   }
   selected_lab_load(&lab, save, now_seconds());
+  DeviceKit kit;
+  if (kit_mode)
+    kit_init(&kit, &lab, now_seconds());
   char line[128];
   while (fgets(line, sizeof(line), stdin)) {
+    if (kit_mode && !strncmp(line, "device ", 7)) {
+      char action[32], token[32], extra_token[2];
+      unsigned device = KIT_DEVICE_COUNT, revision;
+      int fields = sscanf(line, "device %u %31s %31s %1s", &device, action,
+                          token, extra_token);
+      if (device >= KIT_DEVICE_COUNT || fields < 2)
+        puts("{\"error\":\"Invalid device command\"}");
+      else {
+        kit_tick(&kit, now_seconds());
+        if (fields == 2 && !strcmp(action, "status"))
+          kit_status(&kit, device, stdout);
+        else if (fields == 3 && number(token, &revision) &&
+                 !strcmp(action, "frame")) {
+          if (revision != kit_revision(&kit, device))
+            puts("{\"error\":\"Stale frame request\"}");
+          else {
+            unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
+            printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
+                   54 + stride * kit_height(device));
+            if (!kit_bmp(&kit, device, stdout))
+              return 2;
+          }
+        } else if (fields == 3 && number(token, &revision) &&
+                   !strcmp(action, "link") && revision <= 1 &&
+                   device != KIT_LAB) {
+          kit_link(&kit, device, (int)revision);
+          kit_status(&kit, device, stdout);
+        } else {
+          SelectedInput input;
+          if (fields != 3 || !number(token, &revision) ||
+              !event(action, &input))
+            puts("{\"error\":\"Invalid device input\"}");
+          else {
+            kit_input(&kit, device, input, revision);
+            kit_status(&kit, device, stdout);
+          }
+        }
+      }
+      if (fflush(stdout))
+        return 2;
+      continue;
+    }
     char name[32], argument[32], frame_argument[32], extra[2];
     int count = sscanf(line, "%31s %31s %31s %1s", name, argument,
                        frame_argument, extra);
@@ -110,7 +158,7 @@ int main(int argc, char **argv) {
       }
     } else {
       SelectedInput input;
-      int valid = count >= 2 && event(name, &input);
+      int valid = !kit_mode && count >= 2 && event(name, &input);
       valid = valid && count == 2 && number(argument, &frame);
       if (!valid)
         puts("{\"error\":\"Unsupported input\"}");

@@ -27,17 +27,48 @@ button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 .workspace button { width: 100%; max-width: 62px; aspect-ratio: 1; border-radius: 10px; }
 .workspace svg { width: 58%; height: 58%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .workspace span, .actions span { font-size: 10px; text-transform: uppercase; color: #f0f2de; font-weight: 650; letter-spacing: .015em; }
-#research { background: linear-gradient(#ff9c37, #ec691c); }
-#critters { background: linear-gradient(#f6d269, #dcae29); color: #334b3a; }
-#library { background: linear-gradient(#b6d986, #81ac5d); color: #283f2f; }
-#habitat { background: linear-gradient(#73c6ff, #308fe0); }
+#lab-research { background: linear-gradient(#ff9c37, #ec691c); }
+#lab-critters { background: linear-gradient(#f6d269, #dcae29); color: #334b3a; }
+#lab-library { background: linear-gradient(#b6d986, #81ac5d); color: #283f2f; }
+#lab-habitat { background: linear-gradient(#73c6ff, #308fe0); }
 .workspace button[aria-pressed="true"] { outline: 2px solid #f3f7d7; outline-offset: 3px; }
 .actions { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
-#back { width: 60px; height: 60px; border-radius: 50%; font-size: 35px; }
-#confirm { width: 78px; height: 78px; border-radius: 50%; background: linear-gradient(#ffad38, #f2771a); font-size: 48px; font-weight: 750; }
+#lab-back { width: 60px; height: 60px; border-radius: 50%; font-size: 35px; }
+#lab-confirm { width: 78px; height: 78px; border-radius: 50%; background: linear-gradient(#ffad38, #f2771a); font-size: 48px; font-weight: 750; }
 .actions > div:first-child { padding-top: 9px; }
 p { font-size: 13px; margin: 14px 0 8px; color: #b9c9c0; }
 #status { font-size: 12px; color: #aac2b7; }
 footer { font-size: 11px; line-height: 1.6; color: #8ba398; }
-@media (max-width: 850px) { .controls { gap: 14px; grid-template-columns: 90px minmax(0, 1fr) 130px; } .dpad { grid-template: repeat(3, 30px) / repeat(3, 30px); } .direction { width: 30px; height: 30px; } .workspaces { gap: 8px; } #back { width: 52px; height: 52px; } #confirm { width: 64px; height: 64px; font-size: 40px; } .actions { gap: 8px; } }
-@media (max-width: 600px) { main { padding: 12px 6px; } header { padding: 0 6px; } .housing { width: 100%; padding: 12px 10px 16px; border-radius: 24px; } .screen { border-width: 6px; } .controls { gap: 7px; grid-template-columns: 72px minmax(0, 1fr) 90px; margin-top: 14px; } .dpad { grid-template: repeat(3, 24px) / repeat(3, 24px); } .direction { width: 24px; height: 24px; font-size: 10px; } .workspaces { gap: 5px; } .workspace button { border-radius: 7px; } .workspace span, .actions span { font-size: 7px; letter-spacing: -.02em; } .workspace, .actions > div { gap: 6px; } #back { width: 36px; height: 36px; font-size: 25px; } #confirm { width: 46px; height: 46px; font-size: 29px; } .actions { gap: 5px; } .actions > div:first-child { padding-top: 5px; } .brand { font-size: 12px; } }
+@media (max-width: 850px) { .controls { gap: 14px; grid-template-columns: 90px minmax(0, 1fr) 130px; } .dpad { grid-template: repeat(3, 30px) / repeat(3, 30px); } .direction { width: 30px; height: 30px; } .workspaces { gap: 8px; } #lab-back { width: 52px; height: 52px; } #lab-confirm { width: 64px; height: 64px; font-size: 40px; } .actions { gap: 8px; } }
+@media (max-width: 600px) { main { padding: 12px 6px; } header { padding: 0 6px; } .housing { width: 100%; padding: 12px 10px 16px; border-radius: 24px; } .screen { border-width: 6px; } .controls { gap: 7px; grid-template-columns: 72px minmax(0, 1fr) 90px; margin-top: 14px; } .dpad { grid-template: repeat(3, 24px) / repeat(3, 24px); } .direction { width: 24px; height: 24px; font-size: 10px; } .workspaces { gap: 5px; } .workspace button { border-radius: 7px; } .workspace span, .actions span { font-size: 7px; letter-spacing: -.02em; } .workspace, .actions > div { gap: 6px; } #lab-back { width: 36px; height: 36px; font-size: 25px; } #lab-confirm { width: 46px; height: 46px; font-size: 29px; } .actions { gap: 5px; } .actions > div:first-child { padding-top: 5px; } .brand { font-size: 12px; } }
+
+/* Whole devices stay visible. Narrow screens stack the family. */
+main { max-width:1640px; }
+.device-family { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:28px; align-items:start; }
+.housing.lab { width:100%; min-width:0; }
+.housing.companion { width:100%; min-width:0; padding:14px; background:linear-gradient(120deg,#9caa93,#788b76); }
+.companion .screen { aspect-ratio:450/600; }
+.companion .controls { grid-template-columns:90px 1fr; gap:16px; }
+.companion .dpad { grid-template:repeat(3,30px)/repeat(3,30px); }
+.companion .direction { width:30px;height:30px; }
+.back-button { width:48px;height:48px;border-radius:50%;font-size:28px; }
+.confirm-button { width:60px;height:60px;border-radius:50%;font-size:36px;background:linear-gradient(#ffad38,#f2771a); }
+.device-status { margin:12px 0 0;font-size:11px;color:#f1f2e3;min-height:28px; }
+.housing.dock { grid-column:1/-1;width:min(100%,1100px);min-width:0;display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:20px;background:linear-gradient(120deg,#a9b19f,#858f7e); }
+.dock .screen { aspect-ratio:792/272;background:white; }
+.dock-controls { display:flex;justify-content:center;gap:16px;margin:16px 0; }
+.dock-controls button { width:54px;height:36px;border-radius:8px; }
+#dock-confirm { background:#88918c; }
+.printer { border-left:2px solid #566252;padding:22px 0 0 20px;display:flex;flex-direction:column;gap:12px;align-items:center; }
+.printer button { width:84px;height:42px;border-radius:10px;font-size:15px; }
+#dock-critters { width:65px;height:28px;background:#89928b;font-size:12px; }
+.paper-slot { height:8px;width:100%;background:#202722;border-radius:5px;margin-top:16px;box-shadow:0 2px #c6cbbe; }
+.printer span { font-size:9px;color:#243429; }
+.dock .device-status { grid-column:1/-1;margin:0; }
+.simulation-tools { border-top:1px solid #3f5148;margin:28px 0 18px;padding-top:14px;font-size:12px; }
+.simulation-tools label { display:inline-flex;align-items:center;gap:6px;margin:0 24px 10px 0; }
+#link-status { display:block;color:#9eb6a9; }
+@media(max-width:1100px) { .device-family { grid-template-columns:minmax(0,1fr) 270px;gap:16px; } .lab .controls { gap:10px;grid-template-columns:90px minmax(0,1fr) 130px; } .companion .controls { grid-template-columns:80px 1fr;gap:8px; } .companion .dpad { grid-template:repeat(3,26px)/repeat(3,26px); } .companion .direction { width:26px;height:26px; } .companion .back-button{width:38px;height:38px;} .companion .confirm-button{width:48px;height:48px;} }
+@media(max-width:850px) { .device-family { display:flex;flex-direction:column;align-items:center; } .housing.companion { max-width:360px; } .housing.dock { width:100%;grid-template-columns:minmax(0,1fr) 100px;gap:12px; } .printer{padding-left:10px;} }
+
+@media(max-width:600px) { .lab .controls { grid-template-columns:72px minmax(0,1fr) 90px; } .lab .workspace span { font-size:6px; letter-spacing:-.03em; } }

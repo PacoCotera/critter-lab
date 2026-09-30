@@ -204,3 +204,27 @@ Preserve fresh-gesture, frame-readiness and cancellation rules above. Engineerin
 Before expanding into additional game phases, the existing slice must establish a coherent experience accepted by the owner: layout, color, interaction, pixel art and concise player-facing copy. Review these together through a representative playable sequence. Successful command execution, readable text or static screen approval alone does not establish experience acceptance. Design refinements and implementation needed to meet this gate remain in scope.
 
 The current phase is design iteration. Compare and review visual directions, then connected physical-control sequences, before resuming screen implementation. Rejected proposals are not a basis for incremental styling patches.
+
+## Playable three-device simulator boundary
+
+Lab, Companion and Dock are visible together. Lab retains its approved Overview
+art and controls. Companion uses directions, Back and Confirm across Probe,
+Cargo and Companions; Back opens mode selection. Probe gathers into carried cargo;
+Cargo opens a manifest review, freezes gathering during review, then a fresh
+Confirm seals and sends. Mode changes alone never transfer or discard cargo.
+Companions currently marks party assignment as unimplemented rather than assigning
+a resident or fabricating training effects.
+
+Lab Explore shows the incoming manifest and explicitly accepts it with Confirm;
+Back leaves it pending. Only accepted supplies fund research. Link loss before
+send retains the sealed haul; loss after acceptance retains the receipt until
+Companion receives it. Duplicate acceptance cannot award another haul. The
+Companion can start another expedition after receipt clears the matching cargo.
+Existing provisional route yields and completed-route sample rules are unchanged.
+
+Dock Previous/OK/Next browses world, supplies and connections; detail views use
+OK to return. Print opens a simulated preview with Confirm/Cancel; Feed reports
+simulation only. No physical printing, charging or cloud status is inferred.
+The display is a timestamped cache of accepted state, marked stale when offline.
+Developer link switches sit outside device shells; screen pixels are not inputs.
+The host aggregate and recovery limits are defined in [architecture](architecture.md#three-device-host-simulator).

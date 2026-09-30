@@ -139,7 +139,7 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   case V1_HOME:
     return 5;
   case V1_EXPEDITION:
-    return lab->game.expedition_id[0] ? 2 : 3;
+    return lab->kit_mode ? 1 : lab->game.expedition_id[0] ? 2 : 3;
   case V1_CARGO:
     return 4;
   case V1_SAMPLES:
@@ -266,6 +266,10 @@ static int selected_lab_held(const SelectedLab *lab) {
   return 0;
 }
 void selected_lab_tick(SelectedLab *lab, uint32_t clock) {
+  selected_lab_tick_devices(lab, clock, 1, 1);
+}
+void selected_lab_tick_devices(SelectedLab *lab, uint32_t clock, int expedition,
+                               int incubation) {
   if (clock <= lab->clock)
     return;
   lab->clock = clock;
@@ -275,7 +279,7 @@ void selected_lab_tick(SelectedLab *lab, uint32_t clock) {
   }
   GameCommand command = {0};
   command.data.monotonic_seconds = clock;
-  if (lab->game.expedition_active) {
+  if (expedition && lab->game.expedition_active) {
     unsigned before_cargo = lab->game.expedition_data +
                             lab->game.expedition_energy +
                             lab->game.expedition_essence;
@@ -304,7 +308,8 @@ void selected_lab_tick(SelectedLab *lab, uint32_t clock) {
       lab->minimum_action_revision = before_minimum;
     }
   }
-  if (lab->game.incubation_active && !lab->game.incubation_ready) {
+  if (incubation && lab->game.incubation_active &&
+      !lab->game.incubation_ready) {
     unsigned before_epoch = lab->interaction_epoch;
     unsigned before_minimum = lab->minimum_action_revision;
     command.type = GAME_COMMAND_INCUBATION_TICK;
@@ -350,6 +355,8 @@ static void activate(SelectedLab *lab) {
     break;
   }
   case V1_EXPEDITION:
+    if (lab->kit_mode)
+      return;
     if (lab->game.expedition_id[0]) {
       if (focus || !lab->game.expedition_active)
         enter(lab, V1_CARGO);
@@ -368,6 +375,8 @@ static void activate(SelectedLab *lab) {
     }
     break;
   case V1_CARGO:
+    if (lab->kit_mode)
+      return;
     if (!focus) {
       command.type = GAME_COMMAND_EXPEDITION_OFFLOAD;
       if (commit(lab, command) == GAME_OK) {

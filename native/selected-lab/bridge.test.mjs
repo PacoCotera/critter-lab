@@ -11,6 +11,12 @@ async function withTransport(failDown, scenario) {
     decode() { return Promise.resolve(); }
   }
   const elements = Object.fromEntries(['frame', 'status', 'release', 'up', 'down', 'left', 'right', 'research', 'critters', 'library', 'habitat', 'confirm', 'back'].map(name => [`#${name}`, new Element()]));
+  for (const device of ['lab','companion','dock']) {
+    for (const name of ['frame','status','up','down','left','right','research','critters','library','habitat','confirm','back']) {
+      elements[`#${device}-${name}`] = device === 'lab' ? elements[`#${name}`] : new Element();
+    }
+  }
+  for (const name of ['companion-link','dock-link','link-status']) elements[`#${name}`] = new Element();
   const document = new EventTarget();
   document.hidden = false;
   document.querySelector = selector => elements[selector];
@@ -26,9 +32,10 @@ async function withTransport(failDown, scenario) {
     Image: Element,
     requestAnimationFrame: callback => queueMicrotask(callback),
     fetch: async (url, options) => {
-      if (url === '/api/status') return { ok: true, json: async () => state() };
-      if (url.startsWith('/api/frame')) return { ok: true, status: 200, blob: async () => new Blob() };
+      if (url.endsWith('/status')) return { ok: true, json: async () => state() };
+      if (url.includes('/frame')) return { ok: true, status: 200, blob: async () => new Blob() };
       const input = JSON.parse(options.body);
+      if (input.device !== 'lab') return { ok: true, json: async () => state() };
       requests.push(input.event);
       if (input.event === 'resume') ++nativeRevision;
       if (input.event === 'confirm-down' && failDown) {
@@ -49,7 +56,7 @@ async function withTransport(failDown, scenario) {
     return event;
   };
   try {
-    await import(`./bridge.mjs?scenario=${failDown ? 'failure' : 'overlap'}`);
+    await import(`../presenter/app.js?scenario=${failDown ? 'failure' : 'overlap'}`);
     await until(() => requests.includes('ready'));
     await scenario({ elements, pointer, requests, until, heldInNative: () => heldInNative });
   } finally {

@@ -3,7 +3,7 @@ project(critter_selected_lab VERSION 0.1.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED YES)
 
-add_library(selected_lab_core STATIC input.c render.c assets.c overview_assets.c pip_art.c
+add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c assets.c overview_assets.c pip_art.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
@@ -30,4 +30,11 @@ if(BUILD_TESTING)
   target_compile_options(selected_lab_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
   set_target_properties(selected_lab_checks PROPERTIES C_EXTENSIONS NO)
   add_test(NAME selected_lab_native_checks COMMAND selected_lab_checks)
+endif()
+
+if(BUILD_TESTING)
+ add_executable(kit_checks kit_tests.c)
+ target_link_libraries(kit_checks PRIVATE selected_lab_core)
+ target_compile_options(kit_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+ add_test(NAME three_device_kit_checks COMMAND kit_checks)
 endif()
