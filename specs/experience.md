@@ -198,7 +198,7 @@ Player language explains actions without requiring chemistry knowledge. The prot
 
 Hardware-shaped presenter housings follow the original references but remain provisional appearance studies. Actual screen profiles are enforced; housing dimensions, controls, sensor behavior and physical refresh are not validated by a browser. Engineering time controls and release information stay outside the device face. Release identity uses the first seven commit SHA characters as plain text and fixed deployment timestamp displayed in Mexico City time.
 
-The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab expedition; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action.
+The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab expedition; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action. Every newly deployed sandbox version starts a fresh shared game across Lab, Companion and Dock; saved progress, transfer state and device caches are cleared together. Checks of the unchanged running version preserve play. This is the owner-approved sandbox policy, not a production save policy.
 
 
 ### Physical navigation design

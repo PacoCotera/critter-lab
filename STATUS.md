@@ -9,7 +9,7 @@ screen review has accepted Probe clearance, retained portraits and bounded
 research semantics. The same residents and saved visits are available on Lab and
 Companion; disconnected snapshots survive restart. Local retained-art generation
 and read-only replay are validated. Saved trait labels and changed Companion screens passed focused actual review.
-Illustrated research findings, their acceptance and connected delivery remain.
+Illustrated research findings passed focused actual art, UX and game review. Final release and connected delivery remain.
 
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
@@ -35,8 +35,9 @@ paths and reversible supported-form drafts before a separate creation commitment
 Saves retain supplies, discoveries, individual
 identity and transfer state across restart. The browser presents native pixels
 and the accepted physical-control panel; screen artwork is not clickable.
-The sandbox reset is outside device shells and preserves the matching saved
-world and sidecars in a recoverable backup.
+The manual sandbox reset is outside device shells and retains a recovery backup.
+Every newly deployed sandbox release starts a fresh shared game, as defined in
+[Experience](specs/experience.md); unchanged-release checks preserve current play.
 
 The earlier delivered-loop validation checkpoint is `d097a1ee8027cfbe4501c08bb47a01cc942b25b8`:
 three native CTest suites, HTTP presenter checks and the full timed
@@ -46,8 +47,8 @@ reports its running release revision and activation time; source validation alon
 does not establish that live activation. Only the existing Git/CI release path
 publishes accepted source.
 
-The active Core V1 source `623124a71dec10a435b958ee768bb4ba852da51b` passed
-[CI run36756721600](https://github.com/PacoCotera/critter-lab/actions/runs/36756721600).
+The illustrated Core V1 source `168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6` passed
+[CI run36762029145](https://github.com/PacoCotera/critter-lab/actions/runs/36762029145).
 Its connected journey and focused changed-screen evidence are in
 [the Core V1 packet](docs/evidence/polished-core-v1/README.md). It is still a draft;
 the current live sandbox has not received that release.

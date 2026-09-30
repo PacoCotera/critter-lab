@@ -3,8 +3,8 @@
 This packet follows one connected player journey through the Companion, Lab and
 Dock. It is actual C17 host rendering and depicted-control input, with isolated
 saved worlds and real timers. It is not concept art, ARM firmware, radio, physical
-display or human enjoyment evidence. Presentation corrections remain active until
-the final changed exports are accepted; the live release has not yet changed.
+display or human enjoyment evidence. The changed findings and Companion screens passed focused actual art, UX and game
+review. The live release has not yet changed; release acceptance remains separate.
 
 ## What the connected journey establishes
 
@@ -68,10 +68,32 @@ queued offline action or genome reexpression was introduced.
 | B uses a different useful path | [Effort first](B-effort-first-finding.png), [free Movement inspection](B-free-movement.png) |
 | A second resident keeps its own identity | [B review](B-creation-review.png), [B Habitat](B-habitat.png), [B Companion](B-companion.png) |
 
-The current finding frames establish truthful knowledge; they do not pass the
-illustrated-discovery craft bar yet. The selected movement/effort property also
-requires its corrected resident export. These are internal acceptance gaps, not
-owner taste decisions or finished visual claims.
+The earlier journey frames retain their exact source attribution. The current
+[illustrated-finding trace](research-illustrated/trace.json) identifies
+`168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6`: a fresh isolated world, real Field/Garden
+timers, different A/B research paths, partial disclosure, completion and free B
+Movement inspection. All three native suites and
+[exact CI](https://github.com/PacoCotera/critter-lab/actions/runs/36762029145) passed.
+The art director, game designer and UX designer inspected these same actual outputs
+and exchanged constraints; each accepted its scoped composition, meaning or
+comprehension. Coordinator inspected the exports and unchanged asset provenance.
+This closes the inspected findings' former presentation hold, not human enjoyment.
+
+| Revised discovery | Actual native frame |
+| --- | --- |
+| Partial inheritance | [A pattern](research-illustrated/A-pattern-finding.png) |
+| Movement with reference conditions | [A movement](research-illustrated/A-movement-finding.png) |
+| Complete carried versus expressed coat | [A coat](research-illustrated/A-coat-finding.png) |
+| Read-only supported draft | [Supported forms](research-illustrated/A-supported-forms.png) |
+| Coupled B alternatives | [B effort](research-illustrated/B-effort-first-finding.png) |
+| Free known inspection | [B movement](research-illustrated/B-free-movement.png) |
+
+The original Gemini sheet, exact attached family reference, explicit half-scale
+crops and provenance remain in [source art](../../../design/core-v1-art/README.md).
+An unchanged regeneration retained all four research image hashes. Instruments
+are contextual research tools; blank boards are not specimen measurements or new
+device controls. Exact original portraits appear only when the domain supplies
+complete supported alternatives. Changed Companion exports are separately above.
 
 ## Retained portrait and controlled text
 
