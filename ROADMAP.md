@@ -20,6 +20,11 @@ interaction acceptance, not functional commands alone.
 | 4 | Incubation/reveal and actual shared resident inspection/visits with retained art | One ID/descriptor/genome/art lineage, same saved visit, timestamped offline read-only and no fabricated care |
 | 5 | Bounded local generation pipeline and connected V1 delivery | Permitted description and validated descriptor/art output, exact replay/offline reuse, full native/control walkthrough and updated docs |
 
+All five implementation increments have native evidence in
+[the Core V1 walkthrough](docs/evidence/polished-core-v1/README.md). Changed actual
+art/game/UX checks passed; the running release is identified by the sandbox's
+release endpoint. Human playtest and physical validation remain later gates.
+
 ## Locked requirements and provisional defaults
 
 Yellow Critters becomes **Home**; resident selection remains under **Habitat**.
@@ -43,7 +48,8 @@ bytes/hashes/versions. Offline novelty/art failure cannot reroll creation.
 
 One coherent source/asset/spec increment at a time, Git history and existing CI.
 Native builds use the existing VM/toolchains at a clean exact pushed revision.
-Updates preserve the saved world and matching sidecars. Complete actual affected
+New sandbox deployments start fresh across the Lab, Companion and Dock, clearing
+world, transfer and cache state together. Unchanged-version checks preserve play. Complete actual affected
 visual/game/UX/domain/technical review before claiming delivery. The original Cargo
 trap remains open until relevant cause/regression evidence supports closure.
 

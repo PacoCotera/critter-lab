@@ -135,7 +135,8 @@ investigation separate from the illustration. Research is immediate.
 
 The source integration has compiled from pushed clean revisions on the established
 VM. Actual native review accepted retained portraits, Probe clearance and bounded
-form/creation-review craft. Research finding pages still fail illustrated-discovery
-acceptance; a contextual vignette sheet and its actual composition remain pending.
+form/creation-review craft. Actual168edb3 A/B research findings passed scoped art, game and UX acceptance:
+contextual instruments, live knowledge and complete equal-footprint original
+portrait comparison. See the exact [native evidence](../../docs/evidence/polished-core-v1/README.md).
 The material mask pass and these narrow checks do not establish hardware or
 full-family art approval.

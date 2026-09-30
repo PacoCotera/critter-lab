@@ -28,10 +28,12 @@ Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the
 The [live sandbox](https://critterlab.basicberry.com) reports its running revision.
 Its reset control preserves a recoverable saved-world backup.
 
-This is a bounded playable prototype. Current connected screens are functional
-scaffolding; the [reviewed Gemini Probe, Cargo and reception concepts](design/companion-connected-art/README.md)
-remain the next native art implementation. Timing, chance and content are
-provisional. [Status](STATUS.md) records evidence and remaining work.
+This is a bounded playable Core V1 prototype. Shared retained Gemini resource and
+resident art, expedition scenery and illustrated A/B research are integrated and
+passed focused actual review. [The native walkthrough](docs/evidence/polished-core-v1/README.md)
+shows the connected loop and corrected screens. Timing, chance and content remain
+provisional. [Status](STATUS.md) records evidence and remaining work. Each newly
+deployed sandbox version starts a fresh shared game.
 
 ## The whole product
 
