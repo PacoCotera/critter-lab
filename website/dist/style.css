@@ -1080,3 +1080,5 @@ footer {
 
 .future-world { margin-top:55px; }
 .future-world .play-features { margin-top:25px; }
+
+.native-portrait img { max-width:360px; margin:0 auto; }

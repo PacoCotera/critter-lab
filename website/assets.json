@@ -1,0 +1,53 @@
+{
+  "boundary": "Unchanged actual native C17 host captures from isolated saved worlds. Internally reviewed prototype; no physical or human-playtest evidence.",
+  "assets": [
+    {
+      "asset": "dist/assets/native-home.png",
+      "source": "docs/evidence/polished-core-v1/A-back-after-accept.png",
+      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
+      "sha256": "9a837d933a338e4f4a764d4d8eccc28f792ae16087016be04022e979d162edfe"
+    },
+    {
+      "asset": "dist/assets/native-collection.png",
+      "source": "docs/evidence/polished-core-v1/A-collection.png",
+      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
+      "sha256": "c811758522ce1ff1722ce00e8ad47b74f3636292e6ea66c624ee14f14f4f8c98"
+    },
+    {
+      "asset": "dist/assets/native-workbench.png",
+      "source": "docs/evidence/polished-core-v1/A-workbench.png",
+      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
+      "sha256": "e38b65e5d6f335c33355462b6267a5bacb91cb3a14ae6793d00cfcd1720b06ef"
+    },
+    {
+      "asset": "dist/assets/native-coat.png",
+      "source": "docs/evidence/polished-core-v1/research-illustrated/A-coat-finding.png",
+      "sourceRevision": "168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6",
+      "sha256": "370d1035a18a683a01d297a9cec1ee5509dd18c62e35fb3f258776686807d109"
+    },
+    {
+      "asset": "dist/assets/native-forms.png",
+      "source": "docs/evidence/polished-core-v1/research-illustrated/A-supported-forms.png",
+      "sourceRevision": "168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6",
+      "sha256": "7ed036ab397d0a745a32c4b7cc545c951143165c373e6a427c323454946ac9ee"
+    },
+    {
+      "asset": "dist/assets/native-creation-review.png",
+      "source": "docs/evidence/polished-core-v1/A-creation-review.png",
+      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
+      "sha256": "75be0baad638614819cdf83118bca5ddc49543ca21043cd61d313ac6d1f1fbdf"
+    },
+    {
+      "asset": "dist/assets/native-companion.png",
+      "source": "docs/evidence/polished-core-v1/companion-corrected/B-visit-saved.png",
+      "sourceRevision": "4475b913c8bab901d69b0bae64faae1d812c88c1",
+      "sha256": "8d9e7f7eeed865456e8e14298632bc968bca74a1dec274047462d81060b66259"
+    },
+    {
+      "asset": "dist/assets/native-dock-cache.png",
+      "source": "docs/evidence/polished-core-v1/A-dock-offline-restart.png",
+      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
+      "sha256": "bc6940a77855d265704273f1648bd29e91696ac616c86ec107658f4b5d651f8f"
+    }
+  ]
+}
