@@ -103,6 +103,18 @@ int selected_lab_library_entry(const SelectedLab *lab, unsigned option,
                                unsigned *sample_result, unsigned *study_result);
 void selected_lab_row(const SelectedLab *lab, unsigned row,
                       uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
+/* Optional presentation input: Kit owns haul authority, never GameState art. */
+typedef enum {
+  SELECTED_HAUL_NONE, SELECTED_HAUL_WAITING, SELECTED_HAUL_STORED
+} SelectedHaulPresentation;
+typedef struct {
+  SelectedHaulPresentation haul;
+  unsigned incoming[3];
+} SelectedLabRenderContext;
+void selected_lab_row_with_context(const SelectedLab *lab,
+                                  const SelectedLabRenderContext *context,
+                                  unsigned row,
+                                  uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
 /* Shared existing asset treatment for the connected native device views. */
 void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
                              unsigned height, unsigned row,

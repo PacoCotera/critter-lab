@@ -1,10 +1,9 @@
 #include "assets.h"
+#include "core_art.h"
 #include "native_font.h"
 #include "overview_assets.h"
-#include "pip_art.h"
 #include "selected_lab.h"
 #include <assert.h>
-#include <stdlib.h>
 #include <string.h>
 
 typedef struct {
@@ -137,94 +136,22 @@ static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
     label(row, x, y, line, size, color);
 }
 
-/* Source PNGs remain untouched. The renderer removes only matte pixels
- * connected to the perimeter and close to that source's corner color. */
-static const uint8_t *sprite_matte(unsigned asset,
-                                   const SelectedSprite *source) {
-  static uint8_t *masks[SELECTED_SPRITE_COUNT + 2];
-  static int prepared[SELECTED_SPRITE_COUNT + 2];
-  if (prepared[asset])
-    return masks[asset];
-  prepared[asset] = 1;
-  size_t count = (size_t)source->width * source->height;
-  uint8_t *mask = calloc(count, 1);
-  unsigned *queue = malloc(count * sizeof(*queue));
-  if (!mask || !queue) {
-    free(mask);
-    free(queue);
-    return NULL;
-  }
-  size_t head = 0, tail = 0;
-  for (unsigned y = 0; y < source->height; ++y) {
-    for (unsigned x = 0; x < source->width; ++x) {
-      if (x && y && x + 1 < source->width && y + 1 < source->height)
-        continue;
-      unsigned pixel = y * source->width + x;
-      int matte = 1;
-      for (unsigned c = 0; c < 3; ++c)
-        if (abs((int)source->pixels[pixel * 3 + c] - source->pixels[c]) > 14)
-          matte = 0;
-      if (matte && !mask[pixel]) {
-        mask[pixel] = 1;
-        queue[tail++] = pixel;
-      }
-    }
-  }
-  while (head < tail) {
-    unsigned pixel = queue[head++], x = pixel % source->width,
-             y = pixel / source->width;
-    unsigned neighbors[4] = {
-        x ? pixel - 1 : pixel, x + 1 < source->width ? pixel + 1 : pixel,
-        y ? pixel - source->width : pixel,
-        y + 1 < source->height ? pixel + source->width : pixel};
-    for (unsigned n = 0; n < 4; ++n) {
-      unsigned next = neighbors[n];
-      if (mask[next])
-        continue;
-      int matte = 1;
-      for (unsigned c = 0; c < 3; ++c)
-        if (abs((int)source->pixels[next * 3 + c] - source->pixels[c]) > 14)
-          matte = 0;
-      if (matte) {
-        mask[next] = 1;
-        queue[tail++] = next;
-      }
-    }
-  }
-  free(queue);
-  masks[asset] = mask;
-  return mask;
-}
-
+/* Exact retained source pixels. Boxes position artwork; they never resample it. */
 static void sprite(SelectedRow *row, unsigned asset, int x, int y,
                    unsigned width, unsigned height) {
-  const SelectedSprite *source =
-      asset < SELECTED_SPRITE_COUNT
-          ? &selected_sprites[asset]
-          : &pip_sprites[asset - SELECTED_SPRITE_COUNT];
-  const uint8_t *matte = sprite_matte(asset, source);
-  unsigned fitted_width = width;
-  unsigned fitted_height = width * source->height / source->width;
-  if (fitted_height > height) {
-    fitted_height = height;
-    fitted_width = height * source->width / source->height;
-  }
-  x += (int)(width - fitted_width) / 2;
-  y += (int)(height - fitted_height) / 2;
-  if ((int)row->y < y || (int)row->y >= y + (int)fitted_height)
-    return;
-  unsigned source_y =
-      (unsigned)((int)row->y - y) * source->height / fitted_height;
-  for (unsigned column = 0; column < fitted_width; ++column) {
-    int destination = x + (int)column;
-    if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH)
-      continue;
-    unsigned source_x = column * source->width / fitted_width;
-    if (matte && matte[source_y * source->width + source_x])
-      continue;
-    memcpy(row->pixels + destination * 3,
-           source->pixels + (source_y * source->width + source_x) * 3, 3);
-  }
+  static const CoreArtId materials[] = {
+      CORE_ART_DATA_COMPACT, CORE_ART_ENERGY_COMPACT, CORE_ART_ESSENCE_COMPACT,
+      CORE_ART_SAMPLE_NEUTRAL, CORE_ART_CROWN_REFERENCE,
+      CORE_ART_EYE_RING_REFERENCE, CORE_ART_SAMPLE_NEUTRAL};
+  CoreArtId id = asset < SELECTED_SPRITE_COUNT ? materials[asset]
+                 : asset == SELECTED_SPRITE_COUNT ? CORE_ART_PIP_PLAIN
+                                                  : CORE_ART_PIP_MARKED;
+  if (asset < 3 && width >= 65 && height >= 86)
+    id = (CoreArtId)(CORE_ART_DATA_PRIMARY + asset);
+  const CoreArtSprite *image = core_art_sprite(id);
+  x += ((int)width - (int)image->width) / 2;
+  y += ((int)height - (int)image->height) / 2;
+  core_art_row(id, x, y, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
 
 void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
@@ -311,7 +238,8 @@ static void overview_sprite(SelectedRow *row, unsigned asset, int x, int y) {
   }
 }
 
-static void home_overview(SelectedRow *row, const SelectedLab *lab) {
+static void home_overview(SelectedRow *row, const SelectedLab *lab,
+                          const SelectedLabRenderContext *context) {
   const GameState *game = &lab->game;
   char text[96];
   unsigned topics = known_topics(game);
@@ -323,12 +251,22 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
 
   label(row, 422, 223, "EXPLORE", 18, MUTED);
   heading(row, 422, 255,
-          game->expedition_active ? "Gathering"
+          context && context->haul == SELECTED_HAUL_WAITING ? "Supplies waiting"
+          : context && context->haul == SELECTED_HAUL_STORED ? "Supplies stored"
+          : game->expedition_active ? "Gathering"
           : game->expedition_id[0]
               ? (game_transfer_available(game) ? "Haul ready" : "Paused")
               : "At the Lab",
           26, INK);
-  if (game->expedition_id[0]) {
+  if (context && context->haul != SELECTED_HAUL_NONE) {
+    label(row, 422, 292, context->haul == SELECTED_HAUL_WAITING
+              ? "Open Explore to accept" : "Expedition ended", 18, MUTED);
+    unsigned total = context->incoming[0] + context->incoming[1] + context->incoming[2];
+    snprintf(text, sizeof(text), "%u incoming unit%s", total / GAME_SUPPLY_UNIT,
+             total == GAME_SUPPLY_UNIT ? "" : "s");
+    label(row, 422, 318, context->haul == SELECTED_HAUL_WAITING
+              ? text : "Stored in Lab stock", 18, MUTED);
+  } else if (game->expedition_id[0]) {
     snprintf(text, sizeof(text), "%u / 60 seconds", game->expedition_elapsed);
     label(row, 422, 292, text, 18, MUTED);
     label(row, 422, 318,
@@ -391,11 +329,31 @@ static void landing_strip(SelectedRow *row, const char *text) {
   label(row, 334, 469, text, 18, MUTED);
 }
 
-static void home_landing(SelectedRow *row, const SelectedLab *lab) {
+static void home_landing(SelectedRow *row, const SelectedLab *lab,
+                         const SelectedLabRenderContext *context) {
   const GameState *game = &lab->game;
   char text[96];
   if (lab->focus == 0) {
-    home_overview(row, lab);
+    home_overview(row, lab, context);
+    return;
+  }
+  if (lab->focus == 1 && context && context->haul != SELECTED_HAUL_NONE) {
+    heading(row, 320, 218, context->haul == SELECTED_HAUL_WAITING
+                ? "SUPPLIES WAITING AT THE LAB" : "SUPPLIES STORED AT THE LAB",
+            32, INK);
+    label(row, 320, 272, context->haul == SELECTED_HAUL_WAITING
+              ? "Open Explore to accept this haul." : "Expedition ended.", 22, INK);
+    const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
+    for (unsigned i = 0; i < 3; ++i) {
+      int x = 324 + (int)i * 215;
+      sprite(row, i, x, 327, 90, 100);
+      label(row, x + 101, 345, names[i], 18, MUTED);
+      snprintf(text, sizeof(text), "%u", context->incoming[i] / GAME_SUPPLY_UNIT);
+      heading(row, x + 101, 375, text, 26, INK);
+    }
+    landing_strip(row, context->haul == SELECTED_HAUL_WAITING
+                   ? "Incoming supplies are separate from Lab stock."
+                   : "The accepted haul is included in Lab stock.");
     return;
   }
   if (lab->focus == 1) {
@@ -534,8 +492,10 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab) {
   }
 }
 
-void selected_lab_row(const SelectedLab *lab, unsigned y,
-                      uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
+void selected_lab_row_with_context(const SelectedLab *lab,
+                                  const SelectedLabRenderContext *context,
+                                  unsigned y,
+                                  uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
   SelectedRow row = {y, pixels};
   const GameState *game = &lab->game;
   int home = lab->page == V1_HOME;
@@ -553,7 +513,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
   for (unsigned i = 0; i < 3; i++) {
     int x = home ? 402 + (int)i * 196 : 420 + (int)i * 180;
-    sprite(&row, i, x, home ? 41 : 35, home ? 56 : 40, home ? 68 : 53);
+    sprite(&row, i, x, home ? 41 : 35, 50, 58);
     label(&row, x + (home ? 62 : 53), home ? 45 : 32, names[i], 18, MUTED);
     if (home) {
       char amount[32];
@@ -614,7 +574,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
   }
   char text[100];
   if (lab->page == V1_HOME) {
-    home_landing(&row, lab);
+    home_landing(&row, lab, context);
   } else if (lab->page == V1_EXPEDITION || lab->page == V1_CARGO) {
     label(&row, 402, 205,
           game->expedition_active ? "PROBE / GATHERING"
@@ -705,10 +665,10 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
       for (unsigned i = 0; i < 3; i++) {
         int x = 418 + (int)i * 181;
         label(&row, x, 317, "Cost / in Lab", 18, MUTED);
-        sprite(&row, i, x, 343, 36, 48);
+        sprite(&row, i, x, 343, 48, 53);
         snprintf(text, sizeof(text), "%u / %u", known ? 0 : costs[i] / 100,
                  stock[i] / 100);
-        label(&row, x + 44, 355, text, 18,
+        label(&row, x + 56, 355, text, 18,
               known || stock[i] >= costs[i] ? INK : WARM);
         if (!known && stock[i] < costs[i]) {
           snprintf(text, sizeof(text), "Short of cost");
@@ -761,7 +721,7 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
                      : "Drafting spends nothing.",
             18, WARM);
   } else if (lab->page == V1_INCUBATION) {
-    sprite(&row, SPRITE_SAMPLE, 602, 244, 128, 128);
+    overview_sprite(&row, OVERVIEW_INCUBATOR, 597, 236);
     if (game->incubation_active) {
       label(&row, 417, 209, game->samples[game->incubation_sample].id, 18,
             MUTED);
@@ -820,6 +780,11 @@ void selected_lab_row(const SelectedLab *lab, unsigned y,
               : "Up/down: focus | Right: inspect | Confirm: act | Back: return",
           18, lab->storage_error ? WARM : MUTED);
   }
+}
+
+void selected_lab_row(const SelectedLab *lab, unsigned y,
+                      uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
+  selected_lab_row_with_context(lab, NULL, y, pixels);
 }
 
 static int word(FILE *output, unsigned value, unsigned bytes) {

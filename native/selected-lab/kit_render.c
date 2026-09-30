@@ -1,4 +1,4 @@
-#include "assets.h"
+#include "core_art.h"
 #include "kit.h"
 #include "native_font.h"
 #include "overview_assets.h"
@@ -68,18 +68,25 @@ static void art(KitRow *row, unsigned icon, int x, int y) {
     memcpy(row->pixels + (x + col) * 3, pixel, 3);
   }
 }
-static void resource(KitRow *row, unsigned icon, int x, int y, unsigned scale) {
-  const SelectedSprite *source = &selected_sprites[icon];
-  /* Integer source scale preserves the approved pixels across device views. */
-  selected_lab_sprite_row(icon, x, y, source->width * scale,
-                          source->height * scale, row->y, row->pixels);
+static void resource(KitRow *row, unsigned icon, int x, int y, int primary) {
+  CoreArtId id = (CoreArtId)((primary ? CORE_ART_DATA_PRIMARY
+                                    : CORE_ART_DATA_COMPACT) + icon);
+  core_art_row(id, x, y, row->y, row->width, row->pixels);
+}
+static void category(KitRow *row, CoreArtId id, int x, int y) {
+  core_art_row(id, x, y, row->y, row->width, row->pixels);
 }
 static void panel(KitRow *row, int x, int y, int width, int height) {
-  fill(row, x + 4, y + 6, width, height, DEEP);
+  fill(row, x + 3, y + 5, width, height, DEEP);
   fill(row, x, y, width, height, PANEL);
   border(row, x, y, width, height, BORDER);
-  fill(row, x + 8, y + 4, width - 16, 2, EDGE);
-  fill(row, x + 4, y + 10, 2, height - 20, EDGE);
+  border(row, x + 4, y + 4, width - 8, height - 8, EDGE);
+  fill(row, x + 9, y + 2, width - 18, 1, SECONDARY);
+}
+static void action_focus(KitRow *row, int x, int y, int width, int height) {
+  border(row, x - 3, y - 3, width + 6, height + 6, GLOW);
+  border(row, x, y, width, height, DEEP);
+  border(row, x + 2, y + 2, width - 4, height - 4, FOCUS);
 }
 static void progress(KitRow *row, int x, int y, int width, int height,
                      unsigned amount, unsigned total) {
@@ -143,6 +150,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   int reserved =
       kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING;
   int receipt = kit->journal.phase == KIT_ACK_PENDING;
+  int ended = (receipt || kit->journal.phase == KIT_COMPLETE) && !game->expedition_id[0];
   int details = page == COMP_CARGO || page == COMP_SEND_REVIEW;
   int review = page == COMP_SEND_REVIEW;
   int discard = page == COMP_DISCARD_CLASS || page == COMP_DISCARD_QUANTITY ||
@@ -177,7 +185,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
               view->gestures[button].held && view->gestures[button].allowed;
         if (pressed)
           fill(row, x - 3, 83, 126, 27, GLOW);
-        border(row, x - 4, 82, 128, 30, pressed ? FOCUS : EDGE);
+        action_focus(row, x - 4, 82, 128, 30);
       }
     }
     text(row, x + 4, 88, modes[i], 18, view->mode == i ? TEXT : SECONDARY);
@@ -193,24 +201,24 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                                          : "Discard these items?",
          22, TEXT);
     if (finish) {
-      wrapped(row, 28, 204, "This ends the outing without a sample. No items are sent.",
+      wrapped(row, 28, 204, "This ends the expedition without a sample. Nothing is sent to the Lab.",
               390, 22, TEXT);
-      wrapped(row, 28, 320, "Saved gathering preparation stays for your next outing.",
+      wrapped(row, 28, 320, "Your next supply attempts keep their progress.",
               390, 18, SECONDARY);
     } else {
       unsigned resource_index = page == COMP_DISCARD_CLASS ? view->focus % 3
                                                           : view->discard_resource;
-      resource(row, resource_index, 40, 206, 2);
+      resource(row, resource_index, 50, 208, 1);
       text(row, 187, 220, names[resource_index], 22, TEXT);
-      snprintf(value, sizeof(value), "%u whole items carried", cargo[resource_index] / GAME_SUPPLY_UNIT);
+      snprintf(value, sizeof(value), "Carried: %u %s", cargo[resource_index] / GAME_SUPPLY_UNIT, names[resource_index]);
       text(row, 28, 346, value, 18, SECONDARY);
       if (page == COMP_DISCARD_REVIEW) {
-        snprintf(value, sizeof(value), "Discard %u %s items?",
+        snprintf(value, sizeof(value), "Discard %u %s?",
                  view->discard_quantity / GAME_SUPPLY_UNIT, names[resource_index]);
         text(row, 28, 384, value, 22, TEXT);
         text(row, 28, 417, "These items cannot be recovered.", 18, SECONDARY);
       } else {
-        text(row, 28, 384, "Only fresh review confirmation discards.", 18, SECONDARY);
+        text(row, 28, 384, "Choose how many to keep or discard.", 18, SECONDARY);
       }
     }
     action_top = 470;
@@ -223,29 +231,31 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
             SECONDARY);
   } else if (details) {
     text(row, 28, 125,
-         review     ? "To Lab"
+         ended      ? "Supplies stored at the Lab"
+         : review     ? "To Lab"
          : reserved ? "Reserved for transfer"
                     : "Collected items",
          22, TEXT);
     if (has_run || receipt || kit->journal.phase == KIT_COMPLETE) {
       text(row, 28, 158, kit_route(kit), 18, SECONDARY);
       text(row, 28, 182, kit_expedition_status(kit), 18, SECONDARY);
-      snprintf(value, sizeof(value), "%u / %u sec", elapsed,
-               GAME_EXPEDITION_SECONDS);
-      text(row, 300, 158, value, 18, SECONDARY);
-      progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
+      if (!ended) {
+        snprintf(value, sizeof(value), "%u / %u sec", elapsed,
+                 GAME_EXPEDITION_SECONDS);
+        text(row, 300, 158, value, 18, SECONDARY);
+        progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
+      }
     }
     static const char *names[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      int y = (review ? 240 : 224) + (int)i * 62;
-      const SelectedSprite *asset = &selected_sprites[i];
-      resource(row, i, 37 + (54 - (int)asset->width) / 2, y, 1);
-      text(row, 111, y + 13, names[i], 22, TEXT);
+      int x = 28 + (int)i * 132;
+      resource(row, i, x + 20, 226, 1);
+      text(row, x + 13, 343, names[i], 18, SECONDARY);
       snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
-      text(row, 337, y + 11, value, 26, TEXT);
+      text(row, x + 47, 373, value, 26, TEXT);
     }
     if (review) {
-      text(row, 28, 429,
+      text(row, 28, 425,
            elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only"
            : game->sample_count < GAME_MAX_SAMPLES
                ? "Sample ready to record"
@@ -257,7 +267,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     } else {
       snprintf(value, sizeof(value), "Free space: %u / 40 units",
                (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
-      text(row, 28, 412, value, 18, SECONDARY);
+      text(row, 28, 414, value, 18, SECONDARY);
       if (reserved || receipt || (kit->journal.phase == KIT_COMPLETE && !has_run))
         wrapped(row, 28, 440, kit_stage(kit), 390, 18, SECONDARY);
       else if (!game_transfer_available(game))
@@ -285,8 +295,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     static const char *names[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
       int x = 28 + (int)i * 132;
-      const SelectedSprite *asset = &selected_sprites[i];
-      resource(row, i, x + (51 - (int)asset->width) / 2, 306, 1);
+      const CoreArtSprite *asset = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + i));
+      resource(row, i, x + (51 - (int)asset->width) / 2, 306, 0);
       snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
       text(row, x + 61, 318, value, 26, TEXT);
       text(row, x + 4, 361, names[i], 18, SECONDARY);
@@ -342,10 +352,18 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     if (view->focus == i) {
       fill(row, 24, y - 4, 402, 31,
            view->gestures[8].held && view->gestures[8].allowed ? FIELD : GLOW);
-      border(row, 26, y - 2, 398, 27, FOCUS);
+      action_focus(row, 26, y - 2, 398, 27);
       text(row, 34, y, ">", 18, FOCUS);
     }
-    text(row, 58, y, kit_option(kit, KIT_COMPANION, i), 18, TEXT);
+    const char *option = kit_option(kit, KIT_COMPANION, i);
+    if (page == COMP_DISCARD_REVIEW && i == 0) {
+      static const char *names[] = {"Data", "Energy", "Essence"};
+      snprintf(value, sizeof(value), "Discard %u %s",
+               view->discard_quantity / GAME_SUPPLY_UNIT,
+               names[view->discard_resource]);
+      option = value;
+    }
+    text(row, 58, y, option, 18, TEXT);
   }
   if (kit->failed) {
     fill(row, 24, 496, 402, 57, FIELD);
@@ -365,7 +383,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   text(row, 28, 565,
        selector           ? "Browsing never sends or spends"
        : discard          ? "Up/Down: choose / Back: keep items"
-       : finish           ? "Confirm: end / Back: keep exploring"
+       : finish           ? "Confirm: choose / Back: keep exploring"
        : review           ? "Confirm: send  /  Back: keep cargo"
        : view->task_depth ? "Back: return to the previous view"
                           : "Up / Down: choose  /  Back: modes",
@@ -387,20 +405,27 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
     text(row, 24, 133, "No physical printer or paper output is connected.", 22,
          TEXT);
   } else if (view->focus == 0) {
-    snprintf(value, sizeof(value), "%u residents", journal->dock_residents);
-    text(row, 24, 88, value, 32, TEXT);
-    snprintf(value, sizeof(value), "%u samples", journal->dock_samples);
-    text(row, 284, 88, value, 32, TEXT);
-    snprintf(value, sizeof(value), "%u incubating", journal->dock_incubations);
-    text(row, 530, 88, value, 32, TEXT);
-    text(row, 24, 143, "Shared world summary / charging unavailable", 22, TEXT);
+    const CoreArtId icons[] = {CORE_ART_RESIDENTS_MONO, CORE_ART_SAMPLES_MONO,
+                               CORE_ART_INCUBATING_MONO};
+    const unsigned amounts[] = {journal->dock_residents, journal->dock_samples,
+                                 journal->dock_incubations};
+    const char *names[] = {"Residents", "Samples", "Incubating"};
+    for (unsigned i = 0; i < 3; ++i) {
+      int x = 24 + (int)i * 248;
+      category(row, icons[i], x, 89);
+      text(row, x + 47, 87, names[i], 22, TEXT);
+      snprintf(value, sizeof(value), "%u", amounts[i]);
+      text(row, x + 47, 117, value, 32, TEXT);
+    }
   } else if (view->focus == 1) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      text(row, 24 + (int)i * 248, 85, labels[i], 22, TEXT);
+      int x = 24 + (int)i * 248;
+      category(row, (CoreArtId)(CORE_ART_DATA_MONO + i), x, 89);
+      text(row, x + 47, 85, labels[i], 22, TEXT);
       snprintf(value, sizeof(value), "%u %s", journal->dock_stock[i] / 100,
                journal->dock_stock[i] == 100 ? "unit" : "units");
-      text(row, 24 + (int)i * 248, 122, value, 22, TEXT);
+      text(row, x + 47, 122, value, 22, TEXT);
     }
   } else {
     text(row, 24, 88,
@@ -441,42 +466,46 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
   }
   int manifest = phase >= KIT_ARRIVED;
   int accepted = phase >= KIT_ACK_PENDING;
-  panel(row, 24, 134, 976, 412);
-  text(row, 48, 158,
-       manifest ? (accepted ? "Haul saved in Lab" : "Haul arrived")
-                : "Expeditions",
-       34, TEXT);
-  text(row, 48, 204, manifest ? "From Companion" : "Gather with your Companion",
-       22, SECONDARY);
   if (manifest) {
-    text(row, 48, 246, accepted ? "Added to Lab" : "To Lab - not in stock yet",
-         22, TEXT);
+    /*07's ownership comparison: incoming is never rendered as accepted stock. */
+    panel(row, 32, 142, 302, 386);
+    panel(row, 686, 142, 306, 386);
+    text(row, 50, 160, "FROM COMPANION", 22, TEXT);
+    text(row, 710, 160, "LAB STOCK", 22, TEXT);
     static const char *names[] = {"Data", "Energy", "Essence"};
+    const unsigned stock[] = {game->data, game->energy, game->essence};
     for (unsigned i = 0; i < 3; ++i) {
-      int x = 60 + (int)i * 308;
-      const SelectedSprite *asset = &selected_sprites[i];
-      resource(row, i, x + (108 - (int)asset->width * 2) / 2, 289, 2);
-      text(row, x + 123, 298, names[i], 22, SECONDARY);
-      snprintf(value, sizeof(value), "%u %s",
-               kit->journal.cargo[i] / GAME_SUPPLY_UNIT,
-               kit->journal.cargo[i] == GAME_SUPPLY_UNIT ? "unit" : "units");
-      text(row, x + 123, 337, value, 26, TEXT);
+      int y = 204 + (int)i * 101;
+      resource(row, i, 49, y, 1);
+      text(row, 161, y + 15, names[i], 22, SECONDARY);
+      snprintf(value, sizeof(value), "%u", kit->journal.cargo[i] / GAME_SUPPLY_UNIT);
+      text(row, 161, y + 50, value, 32, TEXT);
+      resource(row, i, 700, y, 1);
+      text(row, 812, y + 15, names[i], 22, SECONDARY);
+      snprintf(value, sizeof(value), "%u", stock[i] / GAME_SUPPLY_UNIT);
+      text(row, 812, y + 50, value, 32, TEXT);
     }
-    text(row, 48, 416, kit_expedition_status(kit), 22, SECONDARY);
+    wrapped(row, 365, 204, accepted ? "Supplies stored at the Lab"
+                                      : "Supplies waiting at the Lab",
+            286, 26, TEXT);
+    wrapped(row, 365, 400, accepted ? "The haul is included in Lab stock."
+                                     : "Incoming supplies are not in stock yet.",
+            286, 18, SECONDARY);
     const GameSample *sample = kit_received_sample(kit);
-    if (accepted && sample) {
+    if (accepted && sample)
       snprintf(value, sizeof(value), "Sample recorded: %s", sample->id);
-    } else if (accepted) {
+    else if (accepted)
       snprintf(value, sizeof(value), "Supplies saved / no sample recorded");
-    } else {
+    else
       snprintf(value, sizeof(value), "%s",
-               kit->journal.elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only"
-               : game->sample_count < GAME_MAX_SAMPLES
-                   ? "Sample ready to record"
-                   : "Sample shelf full / supplies only");
-    }
-    text(row, 48, 467, value, 22, TEXT);
+               kit->journal.elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
+               : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
+                                                       : "Sample shelf full / supplies only");
+    text(row, 48, 537, value, 18, SECONDARY);
   } else {
+    panel(row, 24, 134, 976, 412);
+    text(row, 48, 158, "EXPEDITIONS", 34, TEXT);
+    text(row, 48, 204, "Gather with your Companion", 22, SECONDARY);
     fill(row, 48, 250, 156, 156, FIELD);
     art(row, OVERVIEW_EXPLORE, 58, 256);
     text(row, 236, 255,
@@ -504,16 +533,16 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
     }
   }
   if (phase == KIT_ARRIVED) {
-    fill(row, 45, 502, 382, 35, GLOW);
-    border(row, 48, 504, 376, 31, FOCUS);
-    text(row, 64, 509, "Confirm: accept haul", 22, FOCUS);
+    fill(row, 371, 312, 282, 60, GLOW);
+    action_focus(row, 376, 316, 272, 52);
+    text(row, 391, 330, "Confirm: accept haul", 22, FOCUS);
   } else {
-    text(row, 48, 509,
+    wrapped(row, manifest ? 365 : 48, manifest ? 314 : 509,
          phase == KIT_ACK_PENDING        ? "Waiting for Companion receipt"
          : phase == KIT_COMPLETE         ? "Companion receipt confirmed"
          : kit->journal.companion_online ? "Lab link available (simulation)"
                                          : "Companion offline",
-         22, SECONDARY);
+         manifest ? 286 : 920, manifest ? 18 : 22, SECONDARY);
   }
   text(row, 48, 565,
        kit->caller_valid ? "Back: return to your previous screen"
@@ -525,7 +554,13 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
 static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
                        uint8_t *pixels) {
   if (device == KIT_LAB && !kit_lab_explore(kit)) {
-    selected_lab_row(kit->lab, y, pixels);
+    SelectedLabRenderContext context = {SELECTED_HAUL_NONE, {0, 0, 0}};
+    if (kit->journal.phase == KIT_ARRIVED || kit->journal.phase == KIT_COMMITTING)
+      context.haul = SELECTED_HAUL_WAITING;
+    else if (kit->journal.phase == KIT_ACK_PENDING || kit->journal.phase == KIT_COMPLETE)
+      context.haul = SELECTED_HAUL_STORED;
+    memcpy(context.incoming, kit->journal.cargo, sizeof(context.incoming));
+    selected_lab_row_with_context(kit->lab, &context, y, pixels);
     if (kit->normalization_pending) {
       KitRow row = {y, kit_width(device), pixels, 0};
       fill(&row, 24, 548, 976, 38, FIELD);
