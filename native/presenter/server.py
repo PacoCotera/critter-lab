@@ -2,11 +2,13 @@
 from datetime import datetime
 import base64
 import binascii
+import gzip
 import hmac
 import json
 import os
 from pathlib import Path
 import re
+import socket
 import subprocess
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -123,6 +125,27 @@ def load_release(path):
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "CritterPresentation/1"
+    protocol_version = "HTTP/1.1"
+
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(10)
+        self.connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+
+    def accepts_gzip(self):
+        """Explicit gzip preference overrides a wildcard, including q=0."""
+        preferences = {}
+        for entry in self.headers.get("Accept-Encoding", "").split(","):
+            parts = entry.strip().lower().split(";")
+            quality = 1.0
+            for parameter in parts[1:]:
+                if parameter.strip().startswith("q="):
+                    try:
+                        quality = float(parameter.strip()[2:])
+                    except ValueError:
+                        quality = 0.0
+            preferences[parts[0].strip()] = quality if 0 <= quality <= 1 else 0.0
+        return preferences.get("gzip", preferences.get("*", 0)) > 0
 
     def log_message(self, *args):
         pass  # Never record authorization, query strings or request bodies.
@@ -130,9 +153,22 @@ class Handler(BaseHTTPRequestHandler):
     def reply(self, code, body, content_type="application/json"):
         if isinstance(body, dict):
             body = json.dumps(body).encode()
+        encoded = False
+        if content_type == "image/bmp" and self.accepts_gzip():
+            # Native command/pipe locking has ended before compression or network I/O.
+            compressed = gzip.compress(body, compresslevel=1, mtime=0)
+            if len(compressed) < len(body):
+                body = compressed
+                encoded = True
         self.send_response(code)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
+        if content_type == "image/bmp":
+            self.send_header("Vary", "Accept-Encoding")
+        if encoded:
+            self.send_header("Content-Encoding", "gzip")
+        if self.close_connection:
+            self.send_header("Connection", "close")
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
@@ -207,6 +243,9 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(503, {"error": "Unable to load native screen"})
 
     def do_POST(self):
+        # A rejected unread body must never become a request on a reused socket.
+        requested_close = self.close_connection
+        self.close_connection = True
         if not self.authorized():
             return
         # The local TLS tunnel supplies X-Forwarded-Proto. Never use a forwarded
@@ -226,10 +265,17 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(403, {"error": "Same-origin command required"})
             return
         try:
-            size = int(self.headers.get("Content-Length", "0"))
+            lengths = self.headers.get_all("Content-Length", [])
+            if len(lengths) != 1 or self.headers.get("Transfer-Encoding"):
+                raise ValueError()
+            size = int(lengths[0])
             if not 1 <= size <= 1024:
                 raise ValueError()
-            command = json.loads(self.rfile.read(size))
+            body = self.rfile.read(size)
+            if len(body) != size:
+                raise ValueError()
+            command = json.loads(body)
+            self.close_connection = requested_close
             if not isinstance(command, dict):
                 raise ValueError()
             devices = {"lab": "0", "companion": "1", "dock": "2"}

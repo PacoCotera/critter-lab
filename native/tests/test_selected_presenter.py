@@ -1,6 +1,8 @@
 """Selected presenter security/transport checks; optional real selected binary argument."""
 import base64
+import gzip
 import hashlib
+import http.client
 import importlib.util
 import io
 import json
@@ -117,6 +119,51 @@ class SelectedPresenter(unittest.TestCase):
         self.assertEqual(pixels[:2], b'BM')
         self.assertEqual(len(pixels), 54 + 1024 * 600 * 3)
         self.assertEqual(self.request(f'/api/frame?revision={revision + 1}')[0], 409)
+
+    def test_negotiated_frames_are_lossless_and_keep_raw_fallback(self):
+        revision = json.loads(self.request('/api/status')[1])['revision']
+        route = f'/api/frame?revision={revision}'
+        _, raw, _ = self.request(route)
+        for encoding in ('gzip', 'br, gzip;q=0.5', '*'):
+            code, encoded, headers = self.request(route, headers={'Accept-Encoding': encoding})
+            self.assertEqual(code, 200)
+            self.assertEqual(headers['Content-Encoding'], 'gzip')
+            self.assertEqual(headers['Vary'], 'Accept-Encoding')
+            self.assertEqual(int(headers['Content-Length']), len(encoded))
+            self.assertLess(len(encoded), len(raw))
+            self.assertEqual(gzip.decompress(encoded), raw)
+        for encoding in ('identity', 'br', '*;q=1,gzip;q=0', 'gzip;q=invalid', 'gzip;q=2'):
+            _, body, headers = self.request(route, headers={'Accept-Encoding': encoding})
+            self.assertIsNone(headers.get('Content-Encoding'))
+            self.assertEqual(body, raw)
+
+    def test_persistent_connection_reuses_valid_requests_and_closes_unread_rejection(self):
+        connection = http.client.HTTPConnection('127.0.0.1', self.server.server_port, timeout=5)
+        self.addCleanup(connection.close)
+        auth = 'Basic ' + base64.b64encode(b'lab:test-only-password').decode()
+        headers = {'Authorization': auth, 'Content-Type': 'application/json',
+                   'X-Requested-With': 'CritterLab', 'Origin': self.origin}
+        connection.request('GET', '/api/status', headers=headers)
+        response = connection.getresponse()
+        self.assertEqual(response.status, 200)
+        response.read()
+        first_socket = connection.sock
+        connection.request('POST', '/api/input', json.dumps({'event': 'cancel', 'revision': 1}), headers)
+        response = connection.getresponse()
+        self.assertEqual(response.status, 200)
+        response.read()
+        self.assertIs(connection.sock, first_socket)
+        connection.request('POST', '/api/input', b'{"unread":"body"}', {'Authorization': auth})
+        response = connection.getresponse()
+        self.assertEqual(response.status, 403)
+        self.assertEqual(response.getheader('Connection'), 'close')
+        response.read()
+        self.assertIsNone(connection.sock)
+        connection.request('GET', '/api/status', headers=headers)
+        response = connection.getresponse()
+        self.assertEqual(response.status, 200)
+        response.read()
+        self.assertIsNot(connection.sock, first_socket)
 
     def test_release_contract_and_subject_validation_unchanged(self):
         code, body, _ = self.request('/api/release')

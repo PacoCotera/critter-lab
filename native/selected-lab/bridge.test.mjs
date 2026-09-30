@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-async function withTransport(failDown, scenario) {
+let scenarioId = 0;
+async function withTransport(failDown, scenario, hook = () => undefined) {
   class Element extends EventTarget {
     constructor() { super(); this.textContent = ''; this.classList = { add() {}, remove() {} }; this.style = {}; }
     getBoundingClientRect() { return { left: 0, right: 100, top: 0, bottom: 100, width: 100, height: 100 }; }
@@ -25,19 +26,26 @@ async function withTransport(failDown, scenario) {
   let heldInNative = false;
   let nativeRevision = 1;
   const state = () => ({ revision: nativeRevision, page: 'study', focus: 'start', ready: true, boundary: 'test transport' });
-  const originals = Object.fromEntries(['document', 'window', 'Image', 'fetch', 'requestAnimationFrame'].map(key => [key, globalThis[key]]));
+  const timers = [];
+  const originals = Object.fromEntries(['document', 'window', 'Image', 'fetch', 'requestAnimationFrame', 'setInterval'].map(key => [key, globalThis[key]]));
   Object.assign(globalThis, {
     document,
     window: new EventTarget(),
     Image: Element,
     requestAnimationFrame: callback => queueMicrotask(callback),
+    setInterval: callback => { timers.push(callback); return { unref() {} }; },
     fetch: async (url, options) => {
+      if (url.includes('/lab/') || (options && JSON.parse(options.body).device === 'lab')) {
+        const replacement = hook(url, options, state());
+        if (replacement !== undefined) return replacement;
+      }
       if (url.endsWith('/status')) return { ok: true, json: async () => state() };
       if (url.includes('/frame')) return { ok: true, status: 200, blob: async () => new Blob() };
       const input = JSON.parse(options.body);
       if (input.device !== 'lab') return { ok: true, json: async () => state() };
       requests.push(input.event);
       if (input.event === 'resume') ++nativeRevision;
+      if (input.event === 'down-up' || input.event === 'up-up') ++nativeRevision;
       if (input.event === 'confirm-down' && failDown) {
         heldInNative = true;
         throw new Error('Response lost after native down');
@@ -56,9 +64,9 @@ async function withTransport(failDown, scenario) {
     return event;
   };
   try {
-    await import(`../presenter/app.js?scenario=${failDown ? 'failure' : 'overlap'}`);
+    await import(`../presenter/app.js?scenario=${++scenarioId}`);
     await until(() => requests.includes('ready'));
-    await scenario({ elements, pointer, requests, until, heldInNative: () => heldInNative });
+    await scenario({ elements, pointer, requests, until, poll: () => timers[0](), heldInNative: () => heldInNative });
   } finally {
     for (const [key, value] of Object.entries(originals)) {
       if (value === undefined) delete globalThis[key]; else globalThis[key] = value;
@@ -100,5 +108,69 @@ test('overlapping panel presses cancel every gesture until all pointers release'
     elements['#down'].dispatchEvent(pointer('pointerdown', 4));
     elements['#down'].dispatchEvent(pointer('pointerup', 4));
     await until(() => requests.includes('down-up'));
+  });
+});
+
+test('one delayed background poll cannot queue ahead of inputs or regress the frame', async () => {
+  let delayPoll = false;
+  let resolvePoll;
+  let pollCount = 0;
+  await withTransport(false, async ({ elements, pointer, requests, until, poll }) => {
+    delayPoll = true;
+    poll();
+    await until(() => resolvePoll);
+    for (let index = 0; index < 10; ++index) poll();
+    elements['#down'].dispatchEvent(pointer('pointerdown'));
+    elements['#down'].dispatchEvent(pointer('pointerup'));
+    await until(() => requests.includes('down-up'));
+    await until(() => elements['#frame']['data-visible-revision'] === '3');
+    assert.equal(pollCount, 1);
+    resolvePoll({ ok: true, json: async () => ({ revision: 2, focus: 'obsolete', transfer: '' }) });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(elements['#frame']['data-visible-revision'], '3');
+    assert(!elements['#status'].textContent.includes('obsolete'));
+  }, (url, options, state) => {
+    if (delayPoll && url.endsWith('/status')) {
+      ++pollCount;
+      return new Promise(resolve => { resolvePoll = resolve; });
+    }
+  });
+});
+
+test('a stale frame rejection clears the sentinel and permits same-revision retry', async () => {
+  let rejectNext = false;
+  let rejected = false;
+  await withTransport(false, async ({ elements, pointer, requests, until, poll }) => {
+    rejectNext = true;
+    elements['#down'].dispatchEvent(pointer('pointerdown'));
+    elements['#down'].dispatchEvent(pointer('pointerup'));
+    await until(() => rejected);
+    await new Promise(resolve => setImmediate(resolve));
+    poll();
+    await until(() => elements['#frame']['data-visible-revision'] === '3');
+    assert(requests.includes('ready'));
+  }, url => {
+    if (rejectNext && url.includes('/frame')) {
+      rejectNext = false;
+      rejected = true;
+      return { ok: false, status: 409 };
+    }
+  });
+});
+
+test('blur discards an unsent release behind a delayed down acknowledgement', async () => {
+  let resolveDown;
+  await withTransport(false, async ({ elements, pointer, requests, until }) => {
+    elements['#confirm'].dispatchEvent(pointer('pointerdown'));
+    await until(() => resolveDown);
+    elements['#confirm'].dispatchEvent(pointer('pointerup'));
+    window.dispatchEvent(new Event('blur'));
+    resolveDown();
+    await until(() => requests.includes('suspend'));
+    assert(!requests.includes('confirm-up'));
+  }, (url, options, state) => {
+    if (options && JSON.parse(options.body).event === 'confirm-down') {
+      return new Promise(resolve => { resolveDown = () => resolve({ ok: true, json: async () => state }); });
+    }
   });
 });

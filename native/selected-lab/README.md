@@ -66,6 +66,16 @@ Lab executable. The production path is the one exercised by HTTP tests and CI.
 Legacy `serve` remains the single-device regression fixture; its old mutation
 commands are unavailable in kit mode. Health/release routes remain compatible.
 
+The presenter negotiates lossless gzip for native BMP responses and keeps raw BMP
+available. HTTP/1.1 connections are reused; compression and response transfer run
+outside the native command lock. Background polling is bounded and cannot queue
+ahead of physical input. One frame fetch per device resolves to the latest native
+revision; stale-frame rejection is retryable. A press during refresh is consumed,
+never replayed. Down acknowledgement still precedes a separate release request,
+and decoded/painted frames alone receive readiness acknowledgement. Transport,
+overlap and blur checks live in `bridge.test.mjs`; HTTP encoding/reuse checks live
+in `test_selected_presenter.py`. These changes do not establish radio latency.
+
 The same game save gains `.kit` and `.kit.required` sidecars. Preserve all files
 together: the first is the atomic transfer/cache journal; the marker prevents
 silently replacing a missing journal after a transfer. Do not delete a sidecar
