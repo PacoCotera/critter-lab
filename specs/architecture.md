@@ -101,15 +101,36 @@ Lab-accepted world. Only Companion controls start expeditions. This does not
 claim separate MCU processes, endpoint storage or radio firmware.
 
 The native kit adapter seals an immutable haul snapshot in an atomic sidecar.
-Simulated delivery makes it available for explicit Lab acceptance in Explore.
-Acceptance first persists its exact command sequence and haul ID, then uses the
-existing atomic offload rule to credit stock/sample and clear canonical cargo.
-A durable receipt keeps the Companion's sealed, unspendable display pending until
-acknowledgement; only then may another expedition start. Restart at the split
-write boundary reconciles the exact journal operation before permitting another
-mutation. Missing required sidecar, corruption, mismatched cargo or durability
-uncertainty fails closed, preserving the game save. GameState format is unchanged.
-The sidecar is a host fixture, not a production wire format or migration policy.
+New seals contain only whole awarded supplies; gathering preparation and chance
+state are separate Companion activity. Simulated arrival opens Lab reception once,
+never acceptance. The input module captures/restores navigation only, without
+restoring world state, clocks or armed gestures. A fresh Confirm accepts the haul.
+
+Acceptance first persists its exact game sequence and haul ID. Journal version3
+reserves whole-transfer command14. Versions1/2 remain readable; already reserved
+COMMITTING intents replay original commands3/11 with their exact fingerprints.
+An unreserved legacy snapshot stays immutable through WAITING/ARRIVED; fresh
+acceptance may reserve command14, which converts its raw legacy encoding and
+transfers earned whole portions atomically. Source expedition ID is distinct from
+each haul ID, permitting several offloads of one paused route without duplicate
+credits. Matching receipt unlocks Continue for that same unfinished expedition.
+
+Version2 game saves append separately persisted gathering preparation, chance
+state, attempted/awarded classes and a legacy-encoding flag. The decoder checks
+the original version1 payload/checksum and retains its raw semantics until an
+existing receipt intent is resolved or new acceptance converts atomically.
+Conversion preserves whole Lab/carried portions and translates historical
+residues into preparation time, without awarding an item. Progress never occupies
+cargo capacity or pays a cost. New inventory is multiples of the internal100
+encoding for each indivisible item; [V1](../native/selected-lab/V1.md) owns fixture
+timing, chances and costs. Saved chance outcomes prevent restart/retry rerolls.
+
+Restart reconciles the exact intent before allowing another mutation. A matching
+operation ID alone is insufficient: the command fingerprint must also match.
+Missing required sidecar, corruption, mismatched cargo or durability uncertainty
+fails closed, preserving files. Keep backups of save and sidecars together before
+conversion; old binaries cannot read the new layout. This host fixture is not a
+production radio format, endpoint migration framework or rollback-save promise.
 
 Wireless controls outside the shells independently interrupt Companion and Dock
 links. Dock retains a timestamped accepted-world projection while offline and

@@ -209,18 +209,29 @@ The current phase is design iteration. Compare and review visual directions, the
 
 Lab, Companion and Dock are visible together. Lab retains its approved Overview
 art and controls. Companion uses directions, Back and Confirm across Probe,
-Cargo and Companions; Back opens mode selection. Probe gathers into carried cargo;
-Cargo opens a manifest review, freezes gathering during review, then a fresh
-Confirm seals and sends. Mode changes alone never transfer or discard cargo.
+Cargo and Companions. Left/Right at the three-position selector preview a mode
+immediately, clamped at either end. Down or Confirm enters its remembered valid
+action without invoking it; a fresh Confirm acts. Up/Down moves action focus,
+clamped; Up from the first action or Back returns to the same-mode selector.
+Task Back restores its caller and row. Left/Right inside tasks never aliases
+commit or Back. Probe keeps earned whole supplies visible separately from
+time/chance gathering activity. Cargo expands inventory and opens a whole-item
+manifest; review pauses gathering and a fresh Confirm seals/sends. Mode browsing
+never transfers, discards or rerolls activity. Gathering progress is not cargo.
 Companions currently marks party assignment as unimplemented rather than assigning
 a resident or fabricating training effects.
 
-Lab Explore shows the incoming manifest and explicitly accepts it with Confirm;
-Back leaves it pending. Only accepted supplies fund research. Link loss before
+Lab automatically opens reception once when a haul arrives, invalidating held
+inputs. A fresh Confirm explicitly accepts the whole-item manifest. Back leaves
+it pending and restores the caller's navigation with the current world retained.
+Only accepted whole supplies fund research. Link loss before
 send retains the sealed haul; loss after acceptance retains the receipt until
 Companion receives it. Duplicate acceptance cannot award another haul. The
-Companion can start another expedition after receipt clears the matching cargo.
-Existing provisional route yields and completed-route sample rules are unchanged.
+Companion can continue the same unfinished expedition after the matching receipt,
+with identity/activity preserved, or start a new route after completion.
+Gathering progress remains an activity state on Companion and is never presented
+as an unfinished inventory item in either manifest. Timing/chance fixtures are
+provisional under [gameplay](gameplay.md#research-collection-and-gathering--accepted).
 
 Dock Previous/OK/Next browses world, supplies and connections; detail views use
 OK to return. Print opens a simulated preview with Confirm/Cancel; Feed reports

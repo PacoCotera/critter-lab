@@ -31,7 +31,8 @@ static void status(SelectedLab *lab) {
       "\"stock\":[%u,%u,%u],"
       "\"cargo\":[%u,%u,%u],\"message\":\"%s\","
       "\"samples\":%u,\"individuals\":%u,\"decoded\":%u,\"expedition_seconds\":"
-      "%u,\"incubation_seconds\":%u,\"incubation_ready\":%s,\"boundary\":"
+      "%u,\"gather_capacity_blocked\":%s,\"incubation_seconds\":%u,"
+      "\"incubation_ready\":%s,\"boundary\":"
       "\"Standalone V1; authored sensor simulation; local save\"}\n",
       lab->revision, selected_lab_page(lab), selected_lab_focus(lab),
       lab->ready ? "true" : "false", lab->workspace,
@@ -41,7 +42,9 @@ static void status(SelectedLab *lab) {
       lab->game.individual_count,
       lab->game.sample_count ? lab->game.samples[lab->sample].decoded_studies
                              : 0,
-      lab->game.expedition_elapsed, lab->game.incubation_elapsed,
+      lab->game.expedition_elapsed,
+      game_gather_capacity_blocked(&lab->game) ? "true" : "false",
+      lab->game.incubation_elapsed,
       lab->game.incubation_ready ? "true" : "false");
 }
 
@@ -94,6 +97,22 @@ int main(int argc, char **argv) {
     return 2;
   }
   selected_lab_load(&lab, save, now_seconds());
+  /* Kit must reconcile reserved receipts before conversion. The standalone
+   * regression fixture has no device sidecar and can convert immediately. */
+  if (!kit_mode && !lab.storage_error &&
+      game_supply_conversion_pending(&lab.game)) {
+    GameCommand command = {0};
+    char identity[64];
+    command.type = GAME_COMMAND_STOCK_NORMALIZE;
+    command.sequence = lab.game.last_operation_sequence + 1;
+    snprintf(identity, sizeof(identity), "convert-%llu",
+             (unsigned long long)command.sequence);
+    command.operation_id = identity;
+    if (game_apply(lab.save_path, &lab.game, &command) != GAME_OK) {
+      lab.storage_error = 1;
+      strcpy(lab.message, "Save conversion unavailable. Preserve files.");
+    }
+  }
   DeviceKit kit;
   if (kit_mode)
     kit_init(&kit, &lab, now_seconds());

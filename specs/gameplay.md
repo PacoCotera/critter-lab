@@ -54,6 +54,15 @@ Owner approved the connected expedition flow on 27 September 2026. Early return 
 
 ### Research collection and gathering — accepted
 
+Supplies are fungible within their own class and indivisible. A Data card can
+substitute for another Data card, but not for an Energy crystal or Essence drop.
+Inventory records whole awarded items. Gathering activity toward the next award
+attempt is separate from inventory, based on time and chance; it is not a fraction
+of a resource. Activity progress consumes no cargo space, is never transferred to
+Lab and cannot pay a study or incubation cost. Completing an attempt does not
+guarantee an item. Exact intervals, chances and yields remain provisional until
+playtested; mode switching and restarting must not reroll a committed outcome.
+
 Genome information is **unknown**, not locked. Research discovers and decodes it; missing knowledge is distinct from lacking resources to perform a study. Players keep a collection of partially decoded genomes and choose which to research according to their interests, complexity and the resource types available in their Lab inventory. Switching the active research preserves each record's discoveries. This does not create multiple copies of a sample or confer extra incubation uses.
 
 The Probe gathers resources of different types for Lab research and can also gather samples containing genomes to discover and research. These are distinct expedition outputs. Expedition types shape which resources are gathered; a gathering expedition need not be bound to one sample or yield a new sample every time. Signals/collection points, awarded resource quantities, sample capsules and decoded genome knowledge are distinct concepts. Their detailed conversion and capsule preparation are proposed in the [connected research design](../design/research-and-creation.md), not selected hardware or balance rules.

@@ -91,3 +91,19 @@ under one bounded native lock and returns the down result. Up is never part of
 that sequence. Kit READY uses the same minimum/current interaction range as Lab;
 semantic refresh still invalidates earlier frames. Native kit tests cover delayed
 acknowledgement after a time-only repaint and rejection after navigation.
+
+## Companion gathering and receipt interaction
+
+The mode selector previews Probe/Cargo/Companions immediately with clamped
+Left/Right. Down/Confirm enters actions, with a separate fresh Confirm required
+to invoke one. Back restores task callers before returning to the selector.
+Probe separates earned integer inventory, expedition elapsed progress and actual
+Next attempt preparation. Cargo/Send use the same source resource sprites and
+whole counts; no item fractions or preparation appear in their manifest.
+
+Lab reception opens automatically once on arrival and cancels held input. Back
+restores its previous navigation; world state remains current. Acceptance and
+receipt are distinct durable states. The shared domain retains preparation and
+chance outcomes across restart and transfer. Versioned recovery boundaries are
+in [architecture](../../specs/architecture.md#three-device-host-simulator);
+provisional time/chance values belong in [V1](V1.md).

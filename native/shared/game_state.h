@@ -4,13 +4,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define GAME_STATE_VERSION 1u
+#define GAME_STATE_VERSION 2u
 #define GAME_MAX_SAMPLES 8u
 #define GAME_MAX_INDIVIDUALS 8u
 #define GAME_OPERATION_SLOTS 32u
 #define GAME_GENETIC_LOCI 5u
 #define GAME_CARGO_CAPACITY 4000u
 #define GAME_PACK_SIZE 1000u
+#define GAME_SUPPLY_UNIT 100u
+#define GAME_GATHER_ATTEMPT_MS 4000u
+#define GAME_GATHER_INITIAL_RANDOM_STATE 0x6d2b79f5u
 #define GAME_BALANCE_VERSION "beecho-play-v1-provisional"
 #define GAME_EXPEDITION_SECONDS 60u
 #define GAME_INCUBATION_SECONDS 20u
@@ -103,6 +106,15 @@ typedef struct {
   GameSample samples[GAME_MAX_SAMPLES];
   GameIndividual individuals[GAME_MAX_INDIVIDUALS];
   GameOperation operations[GAME_OPERATION_SLOTS];
+  /* Append-only: the preceding bytes are the version-one save payload.
+   * Inventory retains its historical scale of 100 per indivisible item.
+   * Preparation time is not inventory and does not occupy cargo capacity. */
+  uint32_t gather_progress_ms[3];
+  uint32_t gather_random_state;
+  uint64_t gather_attempt_count;
+  uint8_t legacy_supply_encoding;
+  uint8_t gather_last_attempted_mask;
+  uint8_t gather_last_awarded_mask;
 } GameState;
 
 void game_state_init(GameState *state);

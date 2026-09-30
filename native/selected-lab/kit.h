@@ -16,6 +16,7 @@ enum { COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW };
 typedef struct {
   unsigned revision, acknowledged, epoch, acknowledged_epoch, focus, page;
   unsigned minimum_action_revision;
+  unsigned mode, action_focus[3], task_page[2], task_focus[2], task_depth;
   int suspended;
   SelectedGesture gestures[10];
   char message[96];
@@ -38,6 +39,9 @@ typedef struct {
   char journal_path[560];
   int failed;
   uint32_t clock, next_delivery, dock_updated;
+  SelectedLabContext caller;
+  int caller_valid, normalization_pending;
+  char opened_haul[64];
 } DeviceKit;
 
 int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock);
@@ -51,6 +55,10 @@ unsigned kit_revision(const DeviceKit *kit, unsigned device);
 unsigned kit_width(unsigned device);
 unsigned kit_height(unsigned device);
 const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index);
+unsigned kit_option_count(const DeviceKit *kit, unsigned device);
 const char *kit_stage(const DeviceKit *kit);
+const char *kit_route(const DeviceKit *kit);
+const char *kit_expedition_status(const DeviceKit *kit);
+const GameSample *kit_received_sample(const DeviceKit *kit);
 int kit_lab_explore(const DeviceKit *kit);
 #endif

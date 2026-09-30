@@ -77,6 +77,8 @@ int main(void) {
   strcpy(timed.save_path, timed_path);
   timed.game.expedition_active = 1;
   strcpy(timed.game.expedition_id, "first-cargo");
+  timed.game.gather_progress_ms[0] = GAME_GATHER_ATTEMPT_MS - 1000;
+  timed.game.gather_random_state = 1;
   timed.clock = 10;
   game_rules_resume_runtime(&timed.game, timed.clock);
   assert(game_state_save(timed_path, &timed.game) == 0);
@@ -114,23 +116,41 @@ int main(void) {
   timed.discard_resource = 0;
   timed.game.expedition_active = 1;
   strcpy(timed.game.expedition_id, "pack-threshold");
-  timed.game.expedition_data = 990;
+  timed.game.expedition_data = 900;
+  timed.game.gather_progress_ms[0] = GAME_GATHER_ATTEMPT_MS - 1000;
+  timed.game.gather_random_state = 1;
   timed.clock = 10;
   game_rules_resume_runtime(&timed.game, timed.clock);
   assert(game_state_save(timed_path, &timed.game) == 0);
   ready(&timed);
   displayed = timed.revision;
   selected_lab_tick(&timed, 11);
-  assert(timed.game.expedition_data == 1012);
+  assert(timed.game.expedition_data == 1000);
   unsigned tick_sequence = timed.game.last_operation_sequence;
   selected_lab_input(&timed, SELECTED_CONFIRM_DOWN, 0, displayed);
   selected_lab_input(&timed, SELECTED_CONFIRM_UP, 0, displayed);
-  assert(timed.game.expedition_data == 1012 &&
+  assert(timed.game.expedition_data == 1000 &&
          timed.game.last_operation_sequence == tick_sequence);
   ready(&timed);
   press(&timed);
-  assert(timed.game.expedition_data == 12 &&
+  assert(timed.game.expedition_data == 0 &&
          timed.game.last_operation_sequence == tick_sequence + 1);
+  /* Right remains read-only even when the focused label is Continue. */
+  selected_lab_init(&timed);
+  strcpy(timed.save_path, timed_path);
+  timed.page = V1_EXPEDITION;
+  strcpy(timed.game.expedition_id, "paused");
+  timed.game.expedition_elapsed = 5;
+  timed.clock = 10;
+  game_rules_resume_runtime(&timed.game, timed.clock);
+  assert(game_state_save(timed_path, &timed.game) == 0);
+  ready(&timed);
+  selected_lab_input(&timed, SELECTED_RIGHT_DOWN, 0, timed.revision);
+  selected_lab_input(&timed, SELECTED_RIGHT_UP, 0, timed.revision);
+  assert(!timed.game.expedition_active && !timed.game.last_operation_sequence);
+  ready(&timed);
+  press(&timed);
+  assert(timed.game.expedition_active && timed.game.expedition_elapsed == 5);
   unlink(timed_path);
   press(&lab);
   assert(lab.page == V1_HOME);

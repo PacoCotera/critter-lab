@@ -75,22 +75,36 @@ def run(binary, proof=None):
         try:
             for device in ("lab", "companion", "dock"):
                 frame(device, "initial")
+            assert press("companion", "right")["mode"] == 1
+            frame("companion", "mode-cargo")
+            assert press("companion", "right")["mode"] == 2
+            frame("companion", "mode-companions")
+            press("companion", "left")
+            press("companion", "left")
             assert request("/api/link", {"device": "companion", "online": False}, False)[0] == 403
             assert request("/api/device-input", {"device": "companion", "event": "research-down", "revision": 1})[0] == 400
             assert request("/api/devices/probe/status")[0] == 400
             assert request("/api/input", {"event": "confirm-down", "revision": 1})[0] == 400
+            assert press("companion", "confirm")["page"] == "probe"
+            assert state("companion")["cargo"] == [0, 0, 0]
             press("companion", "confirm")
-            time.sleep(2.1)
-            assert state("companion")["cargo"][0] > 0
+            time.sleep(5.1)
+            assert sum(state("companion")["cargo"]) > 0
+            frame("companion", "gathering")
             assert state("lab")["stock"] == [0, 0, 0]
             press("companion", "confirm")  # Cargo
+            frame("companion", "cargo")
             press("companion", "confirm")  # Review
+            frame("companion", "send-review")
             reviewed = state("companion")["cargo"]
+            preparation = state("companion")["gather_progress_ms"]
             time.sleep(2.1)
             assert state("companion")["cargo"] == reviewed
+            assert state("companion")["gather_progress_ms"] == preparation
             link("companion", False)
             sealed = press("companion", "confirm")
             assert sealed["phase"] == 1
+            frame("companion", "sending-offline")
             time.sleep(2.1)
             assert state("companion")["phase"] == 1
             cargo = sealed["cargo"]
@@ -99,28 +113,34 @@ def run(binary, proof=None):
             link("companion", True)
             time.sleep(2.1)
             assert state("companion")["phase"] == 2
-            press("lab", "down")
-            press("lab", "confirm")
+            assert state("lab")["page"] == "cargo"  # Immediate reception.
             frame("lab", "incoming")
             link("dock", False)
             link("companion", False)
             accepted = press("lab", "confirm")
-            assert accepted["phase"] == 4 and accepted["stock"] == cargo
+            credited = [amount // 100 * 100 for amount in cargo]
+            retained = [amount % 100 for amount in cargo]
+            assert accepted["phase"] == 4 and accepted["stock"] == credited
             for device in ("lab", "companion", "dock"):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]
-            assert press("lab", "confirm")["stock"] == cargo
+            assert press("lab", "confirm")["stock"] == credited
             link("companion", True)
             link("dock", True)
             time.sleep(2.1)
             assert state("companion")["phase"] == 5
-            assert state("companion")["cargo"] == [0, 0, 0]
+            assert state("companion")["cargo"] == retained
+            assert state("companion")["gather_progress_ms"] == preparation
+            frame("companion", "receipt")
             assert state("companion")["focus"] == "Return to Probe"
-            assert state("dock")["dock_stock"] == cargo
+            assert state("dock")["dock_stock"] == credited
             press("lab", "back")
             for device in ("lab", "companion", "dock"):
                 frame(device, "complete")
             assert press("companion", "confirm")["page"] == "probe"
+            assert state("companion")["focus"] == "Continue expedition"
+            press("companion", "confirm")
+            frame("companion", "continued")
             print("Three-device HTTP/native frame, handoff, link recovery and endpoint guards passed", flush=True)
         finally:
             server.shutdown()
