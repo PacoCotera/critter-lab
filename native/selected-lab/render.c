@@ -351,6 +351,7 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab,
   heading(row, 422, 255,
           context && context->haul == SELECTED_HAUL_WAITING ? "Supplies waiting"
           : context && context->haul == SELECTED_HAUL_STORED ? "Supplies stored"
+          : lab->kit_mode ? "Received records"
           : game->expedition_active ? "Gathering"
           : game->expedition_id[0]
               ? (game_transfer_available(game) ? "Haul ready" : "Paused")
@@ -364,6 +365,11 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab,
              total == GAME_SUPPLY_UNIT ? "" : "s");
     label(row, 422, 318, context->haul == SELECTED_HAUL_WAITING
               ? text : "Stored in Lab stock", 18, MUTED);
+  } else if (lab->kit_mode) {
+    snprintf(text, sizeof(text), "%u received outing%s", game->received_count,
+             game->received_count == 1 ? "" : "s");
+    label(row, 422, 292, text, 18, MUTED);
+    label(row, 422, 318, "Open the expedition log", 18, MUTED);
   } else if (game->expedition_id[0]) {
     snprintf(text, sizeof(text), "%u / 60 seconds", game->expedition_elapsed);
     label(row, 422, 292, text, 18, MUTED);
@@ -455,6 +461,17 @@ static void home_landing(SelectedRow *row, const SelectedLab *lab,
     return;
   }
   if (lab->focus == 1) {
+    if (lab->kit_mode) {
+      heading(row, 320, 218, "RECEIVED EXPEDITIONS", 32, INK);
+      snprintf(text, sizeof(text), "%u expedition record%s received", game->received_count,
+               game->received_count == 1 ? "" : "s");
+      label(row, 320, 285, text, 22, INK);
+      overview_sprite(row, OVERVIEW_EXPLORE, 330, 335);
+      label(row, 500, 360, "Recorded routes and findings", 22, INK);
+      label(row, 500, 400, "Accepted supplies and samples", 18, MUTED);
+      landing_strip(row, "Confirm: open the received expedition log");
+      return;
+    }
     heading(row, 320, 218,
             game->expedition_active  ? "EXPEDITION GATHERING"
             : game->expedition_id[0] ? "HAUL READY TO RETURN"

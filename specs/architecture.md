@@ -186,12 +186,14 @@ state are separate Companion activity. Simulated arrival opens Lab reception onc
 never acceptance. The input module captures/restores navigation only, without
 restoring world state, clocks or armed gestures. A fresh Confirm accepts the haul.
 
-Acceptance first persists its exact game sequence and haul ID. Fresh acceptance
-uses journal version4 and command16 (EXPEDITION_UNLOAD): credit the immutable haul
-once and end its source expedition in the same durable game commit. An early
-return does not earn a completion sample. Independent preparation and committed
-chance state remain on Companion for a later new outing; neither is cargo.
-Matching receipt closes transport metadata, not a second award or a continuation.
+Acceptance first persists its exact game sequence and haul ID. Map acceptance
+uses journal version5 and command25 (FIELD_UNLOAD), storing whole supplies, an
+explicitly collected capsule and the sanitized received record atomically, then
+ending the source expedition. Legacy timed outings retain command16 and their
+original recovery branches. An early return never earns a completion sample.
+Preparation and committed chance state remain on Companion for a later outing;
+neither is cargo. Matching receipt closes transport metadata, not a second award
+or continuation.
 
 Journal versions1/2/3 remain readable. Reserved COMMITTING intents replay their
 original commands3/11/14 and exact fingerprints before any newer mutation. Version3
@@ -221,8 +223,23 @@ uncommitted older arrival. Its haul fingerprint and receipt retry remain unchang
 New commands17/18 bind sample identity, content version and method/candidate;
 required evidence and disclosed support authorize creation. The domain owns
 stock, unused material, exact genome/expression and retained original-art hashes.
-The Lab input/view integration is in development; domain source alone does not
-establish a playable new research screen. Old binaries cannot read version3.
+The connected research/creation view is implemented in Core V1. Old binaries
+cannot read version3 or the appended current version4 layout.
+
+Version4 appends local field state and a sixteen-record received-log ring after
+the frozen 8040-byte V3 payload. Exact V1/V2/V3 lengths and checksums are checked
+before zero-extension. Field state pins geometry/content, legal and hidden paths,
+position, visited/inspected places, trace/capsule identity, finite source budgets
+and results. Commands19–24 bind deliberate field actions; actions after Start
+also bind the expected expedition ID. Only one source ticks. Companion eligibility
+drives field time independently of Lab browsing; review/suspension reanchors time
+without catch-up. Ordinary read/paint requests cannot mutate zero-time activity.
+
+Received records contain walked paths, visited places, accomplishments, whole
+accepted contents and acceptance time/identity. The Lab projection excludes the
+away avatar, preparation, active source and unrevealed sites. The ring is bounded
+host retention, not a permanent cloud archive; receipt idempotency remains
+independent of whether a history row has rotated out.
 
 Restart reconciles the exact intent before allowing another mutation. A matching
 operation ID alone is insufficient: the command fingerprint must also match.
@@ -234,12 +251,19 @@ production radio format, endpoint migration framework or rollback-save promise.
 Wireless controls outside the shells independently interrupt Companion and Dock
 links. Dock retains a timestamped accepted-world projection while offline and
 catches up after reconnect; it never owns a second inventory or awards rewards.
-The Kit sidecar now stores a version1 envelope around the unchanged 160-byte
-transfer journal and a bounded revealed-resident cache. Bare journal versions1–4
+The Kit sidecar stores a version2 envelope around the unchanged 160-byte
+transfer journal, bounded revealed-resident cache, sealed field record and
+Companion's own acknowledged capsule count. Bare journal versions1–4 and the
+original version1 envelope
 must pass their original exact-size/checksum/policy checks before migration;
 the wrapper independently checks its version, length, checksum and cache records.
 Transfer command IDs, fingerprints, intent reconciliation and required-file marker
 retain their existing semantics. Keep this envelope with its matching world save.
+The prototype supports eight accepted own capsules; that local receipt history
+pins sample eligibility at outing start, rather than querying live Lab capacity.
+Later trips can gather supplies only. Acceptance independently rejects a full
+sample shelf atomically, preserving sealed results. This host limit is not final
+capacity, a field sensor, or an inventory disposal mechanic.
 
 The resident cache records saved individual/source IDs, genome/expression,
 original art metadata and visit count, with snapshot time/world revision. It

@@ -97,8 +97,11 @@ acknowledgement after a time-only repaint and rejection after navigation.
 The mode selector previews Probe/Cargo/Companions immediately with clamped
 Left/Right. Down/Confirm enters actions, with a separate fresh Confirm required
 to invoke one. Back restores task callers before returning to the selector.
-Probe separates earned integer inventory, expedition elapsed progress and actual
-Next attempt preparation. Cargo/Send use the same source resource sprites and
+Probe shows the generated local map, named sites, one active finite source and
+per-resource preparation separately from earned integer inventory. Directions
+steer; Confirm at a site opens deliberate gathering/investigation actions.
+Trace discovery reveals a route; a sealed sample requires explicit collection.
+Cargo/Send use the same source resource sprites and
 whole counts; no item fractions or preparation appear in their manifest.
 
 Lab reception opens automatically once on arrival and cancels held input. Back
@@ -120,6 +123,9 @@ The concept screens themselves are references, not executable layouts. Illustrat
 research findings also passed focused actual review; exact evidence and the
 release boundary are tracked in
 [the Core V1 evidence](../../docs/evidence/polished-core-v1/README.md).
+The playable map/site screens and received-only Lab log have an
+[actual native journey](../../docs/evidence/playable-expeditions/README.md),
+including cancellation/restart, sample collection, research and repeat resupply.
 
 ## Resetting the simulator sandbox
 

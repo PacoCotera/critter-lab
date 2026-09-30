@@ -41,7 +41,14 @@ typedef enum {
   /* Fresh unload ends its source outing; command14 remains replayable. */
   GAME_COMMAND_EXPEDITION_UNLOAD,
   GAME_COMMAND_INVESTIGATE,
-  GAME_COMMAND_SUPPORTED_CREATION
+  GAME_COMMAND_SUPPORTED_CREATION,
+  GAME_COMMAND_FIELD_START,
+  GAME_COMMAND_FIELD_MOVE,
+  GAME_COMMAND_FIELD_INSPECT,
+  GAME_COMMAND_FIELD_SOURCE,
+  GAME_COMMAND_FIELD_TRACE,
+  GAME_COMMAND_FIELD_COLLECT,
+  GAME_COMMAND_FIELD_UNLOAD
 } GameCommandType;
 
 typedef struct {
@@ -49,6 +56,12 @@ typedef struct {
   uint64_t sequence;
   GameCommandType type;
   union {
+    struct {
+      uint32_t kind, seed, monotonic_seconds, sample_budget;
+      unsigned direction, site, source;
+      const char *expedition_id;
+      const GameReceivedExpedition *record;
+    } field;
     struct {
       GameExpeditionKind kind;
       uint32_t monotonic_seconds;

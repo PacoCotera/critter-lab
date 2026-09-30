@@ -8,16 +8,21 @@ from PIL import Image, ImageDraw, ImageFont
 root = Path(__file__).resolve().parent
 profiles = [
     ('portable', 'Vera.ttf', [9, 11, 20, 24], 1.0),
-    ('lab', 'Vera.ttf', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48], 1.0),
-    ('lab_heading', 'VeraBd.ttf', [26, 32, 34, 40], 1.0),
-    ('lab_heading_narrow', 'VeraBd.ttf', [26, 32, 34, 40], 0.8),
+    ('lab', 'Vera.ttf', [18, 19, 21, 22, 26, 34, 24, 28, 32, 36, 40, 44, 48,
+                         14, 15, 16, 17, 20, 23, 25, 27], 1.0),
+    ('lab_heading', 'VeraBd.ttf', [26, 32, 34, 40, 20, 23, 24, 25, 27,
+                                  14, 16, 17, 18], 1.0),
+    ('lab_heading_narrow', 'VeraBd.ttf', [26, 32, 34, 40, 20, 23, 24, 25, 27,
+                                         14, 16, 17, 18], 0.8),
 ]
-if sys.argv[1:] == ['--heading']:
+if sys.argv[1:] == ['--lab']:
+    profiles = profiles[1:]
+elif sys.argv[1:] == ['--heading']:
     profiles = profiles[-2:]
 elif sys.argv[1:] == ['--heading-narrow']:
     profiles = profiles[-1:]
 elif sys.argv[1:]:
-    raise SystemExit('Usage: python generate.py [--heading|--heading-narrow]')
+    raise SystemExit('Usage: python generate.py [--lab|--heading|--heading-narrow]')
 for name, font_file, sizes, horizontal_scale in profiles:
     data=[]; glyphs=[]; records=[]
     for size in sizes:

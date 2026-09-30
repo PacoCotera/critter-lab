@@ -1,6 +1,6 @@
 # Gathering and exploration: from field context to Lab discovery
 
-**Current gathering design, 30 September 2026.** Accepted foundations: Companion-selected expeditions and standalone field play; Lab knows only expedition records it actually receives; expeditions end when returned resources are accepted at Lab; optional encounters without missed-check-in punishment; whole typed resources and sealed capsules; no genetic disclosure on the Probe. The [generated field-loop proposal](#generated-field-loop--owner-review-proposal) addresses the owner's request for steerable exploration, deliberate acquisition and per-resource progress. Its interaction rules, resource roles, event catalogue and worked quantities remain proposals for owner steering, not implemented mechanics, final balance or hardware selection.
+**Current gathering design, 30 September 2026.** Accepted foundations: Companion-selected expeditions and standalone field play; Lab knows only expedition records it actually receives; expeditions end when returned resources are accepted at Lab; optional encounters without missed-check-in punishment; whole typed resources and sealed capsules; no genetic disclosure on the Probe. The owner approved implementation of the [generated field loop](#generated-field-loop--owner-review-proposal) with local map movement and one active gathering source. Numerical pacing, source budgets/chances and the wider location/event catalogue remain provisional; approval does not select hardware or prove live behavior.
 
 The approved [Lab workbench](genome-workbench/README.md) gives gathering its purpose: replenish useful studies, choose among partial genomes and discover new ones. [Probe specification](../specs/probe.md) owns measured-evidence boundaries; [research and creation](research-and-creation.md) owns inventory and sample lifecycle. The [Pip proof](../prototype/genetics/report.md) supplies valid content, not the field-award algorithm.
 
@@ -117,7 +117,7 @@ The [simulated observation adapter](../prototype/expedition/README.md#simulated-
 
 ## V1 expeditions, events and risk
 
-**Accepted direction:** all three resources have accessible baseline opportunities and per-type rates shared across expedition profiles; expedition-specific events can temporarily boost a resource and offer optional risk, including simulated damage requiring Lab return. This does not approve concurrency for the new map design: one active focus is proposed below, while deployed Core V1 still uses its simultaneous timed fixture. No filters, automatic discard or new hardware controls. **Broader future proposal below:** four expedition types, ten reusable event types, one shared interaction pattern and binary Probe condition. Names, exact event membership, boosts, odds and recovery action remain proposals for owner review, outside the five-place map proof.
+**Accepted direction:** all three resources have accessible baseline opportunities and per-type rates shared across expedition profiles; expedition-specific events can temporarily boost a resource and offer optional risk, including simulated damage requiring Lab return. The approved map implementation uses one active gathering focus. Delivered Core V1 uses the earlier simultaneous timed fixture until that implementation replaces it; its concurrency is not the new requirement. No filters, automatic discard or new hardware controls. **Broader future proposal below:** four expedition types, ten reusable event types, one shared interaction pattern and binary Probe condition. Names, exact event membership, boosts, odds and recovery action remain proposals for owner review, outside the five-place map proof.
 
 Whole loop: choose an investigation on Companion → explore and activate useful gathering → inspect an optional event → choose whether to participate → retain supplies/finds or return with damage → offload and research at the Lab. Expedition choice changes discovery opportunities, not the ordinary per-type yield rates. Stable does not mean all three resources have identical rates; their separate baseline rates remain to balance. The risk/event catalogue remains broader future design context; the current five-location map study introduces no damage mechanic.
 
@@ -321,7 +321,7 @@ Whole-item storage accounting is accepted; unfinished gathering preparation is s
 
 ## Owner review boundary
 
-Current review concerns the [generated field loop](#generated-field-loop--owner-review-proposal), one-focus opportunity handling and actual map/interaction study. The four themes, ten shared event types and binary damage/free-service model remain broader proposals, not dependencies for this proof. Whole-item capacity and explicit discard are accepted; preparation, event rates/odds and numerical economy remain separate and open. No live mechanics or hardware changes are delivered by this design round.
+The owner approved implementing the [generated field loop](#generated-field-loop--owner-review-proposal) and one-focus opportunity handling on 30 September 2026. Its actual native journey is the next acceptance evidence. The four themes, ten shared event types and binary damage/free-service model remain broader proposals, not dependencies. Whole-item capacity and explicit discard are accepted; preparation timing, event rates/odds and numerical economy remain open. This approval authorizes the bounded playable loop, not hardware changes or additional progression systems.
 
 ## Executable slice and limits
 
@@ -329,14 +329,15 @@ The [host experiment](../prototype/expedition/README.md) implements the accepted
 
 ## Generated field loop — owner-review proposal
 
-**Design round, 30 September 2026; not live mechanics.** The delivered native
-Core V1 remains the implementation checkpoint. This proposal replaces its passive
-seconds-counter/decorative field view with useful movement, local investigation
-and retained accomplishments. It serves the player replenishing research supplies
-or seeking a new sample. Completion of this round is one native-size map/interaction
-packet with two generated map examples and a truthful received Lab log, ready for
-owner steering. No code, balance, sensor, creature or hardware decision is approved
-by the paper flow.
+**Implementation approved by the owner on 30 September 2026.** The heading retains
+the design packet's stable link. Local map movement, deliberate location actions,
+one active finite gathering source, retained preparation, independent trace/cache
+discovery and safe return are now implementation requirements. The delivered
+native Core V1 remains the checkpoint until the changed native journey is checked.
+The approved loop serves replenishing research supplies or seeking a new sample;
+its illustrated quantities, numerical pacing and place catalogue remain fixtures.
+The paper packet is design evidence, not evidence of runtime behavior, hardware
+capability or human enjoyment.
 
 ### Whole journey and choices
 
@@ -422,7 +423,7 @@ target and its immediate feedback stay visible in every illustrated step.
 
 ### Finite opportunities and truthful per-resource progress
 
-**Proposed for owner steering:** one active gathering opportunity, not three
+**Approved interaction:** one active gathering opportunity, not three
 invisible concurrent sources or a background queue. Activating a site unlocks
 its chosen work for this outing; it does not permanently unlock a resource class,
 new sensor, method or allele. Camp keeps every essential class accessible. Typed
@@ -443,8 +444,10 @@ its next time-and-chance attempt, with the active source and Active/Paused/Not
 started/Finished/Capacity full status. Partial preparation is not a fractional
 item, cargo, spendable currency or probability of success. A full preparation
 bar resolves an attempt which may award a whole item or nothing; show the retained
-result. Exact durations, chances and yields remain owner/balance choices.
-The deployed simultaneous timed fixture is not silently changed by this proposal.
+result. Exact durations, chances and yields remain provisional balance choices.
+The new map implementation replaces simultaneous timed gathering for new outings;
+an existing saved legacy outing retains its original completion/receipt behavior
+without a fabricated map or newly imposed discovery steps.
 
 The shared resource hold contains only whole Data/Energy/Essence items. Full
 storage pauses resource work before overflow and explains why; map exploration
@@ -471,7 +474,7 @@ hold and one separate capsule slot for this example.
 
 The cache sequence is **Brook place inspection → deliberate Inspect trace →
 revealed navigable connector → Cache inspection → deliberate Collect**. It is
-a proposed bounded field discovery, not a genome permission lock, a timer or
+the approved bounded field discovery, not a genome permission lock, a timer or
 three mandatory station purchases. A resource work result and a trace finding
 remain separate events even if a static example later shows both.
 
@@ -515,8 +518,9 @@ stations because Camp offers all three classes; per-type state beside whole item
 capacity and return/retry boundaries; received-only Lab knowledge. The native-size
 study shows those decisions together. Brief agreement was followed by game-design
 inspection of the actual nine exports and direct UX/production exchange. The
-current corrected packet is accepted for **game meaning and owner-review design
-readiness**, not canonical rules, runtime behavior or human enjoyment.
+current corrected packet is accepted for **game meaning and design readiness**.
+The subsequent owner approval authorizes implementation of this loop; it does not
+approve its arithmetic fixtures or establish runtime behavior or human enjoyment.
 
 Actual review must additionally show the before/after connector and retained
 observation, finite source bounds, and a legible supply-versus-sample route choice.
@@ -551,12 +555,50 @@ No game-meaning objection remains in these final exports. Two authored graph
 examples with deterministic terrain variation demonstrate the design contrast;
 they do not deliver a world generator or interactive expedition engine. Visual
 craft, input usability and integration retain their own review evidence. The
-owner still steers whether these choices supply enough depth, which interactions
-to develop and their pacing before dependent live implementation.
+owner still steers pacing and future content after the approved loop becomes
+playable. Actual inspection must test whether its choices remain legible and useful.
 
-Owner choices after the concrete packet: whether this one-focus/finite-opportunity
-loop provides the desired depth; the effort/pacing of site work and directed sample
-discovery; which locations and repeat-play variation to develop. No live mechanics,
-GPS/cloud/backend, new sensors/controls, physical hazard, traits, capture, training
-or habitat ecology belongs to this design round. Stop after the integrated visual
-review and meaningful owner steering; do not build dependent live rules yet.
+### Bounded playable implementation contract
+
+The approved five-place loop is the smallest connected implementation, with the
+two map examples establishing variable topology. Location names and numerical
+values remain provisional. Reuse the existing resources, supported sample content,
+research costs and device inputs; add no minigame, sensor interpretation, creature
+rule, infrastructure or additional progression system.
+
+| Boundary | Required playable behavior |
+| --- | --- |
+| Begin and move | A new outing starts with no active gathering source. Directions move one legal visible path tile; arrival, map entry and plain-path Confirm award nothing. A fresh Confirm at a place opens its actions, and another deliberate action starts work, investigates or collects. |
+| Source and preparation | Camp offers Data, Energy and Essence; optional stations provide additional finite work. One source is active. Retain one preparation ledger per resource class and a separate remaining attempt budget per source. Switching sources, including the same class, preserves class preparation without copying it; a resolved attempt debits only the active source once. No queue, automatic rotation, refresh on revisit or extra draw on switching. |
+| Work and feedback | Eligible local elapsed activity advances only the selected source. Every resolved attempt may award one whole item or nothing under the existing provisional chance model. Show whole cargo, preparation, named source, finite attempts and a truthful active/paused/exhausted/full reason; an empty percentage cannot stand for an unexplained pause. |
+| Directed sample | Brook's deliberate trace action records the fictional direction and reveals the connector independently of gathering. Cache inspection followed by explicit Collect saves one stable neutral capsule. No elapsed 60-second award, arrival award, resource prerequisite, genotype disclosure or second award on revisit/restart. Capacity failure retains the lead and makes its reason visible without discarding anything. |
+| Resupply | Supply-only outings are legal, including early return without visiting the lead. Every resource remains attainable through current-capability play over repeated outings. For the current supported fixtures, complete A research plus creation needs 9 of each resource; B's efficient Heritage/Effort route plus creation needs Data 9 / Energy 5 / Essence 9. These are existing fixture costs to serve, not new balance or a reason to grant stock or change research prices. |
+| Capacity | Reuse the current whole-resource capacity; the paper example's four-unit hold is not a replacement. A full hold pauses resource work without overflow or hidden deferred items while map/lead play remains independent. Finite source budgets must make legitimate resupply and full/exhausted states attainable without developer grants; potential attempts are chances, not promised stock. Sample shelf limits must not be presented as Companion knowledge of live Lab inventory. |
+| Return and recovery | Return review freezes local work. Keep restores the exact tile, active source, preparation and remaining budgets with a fresh clock anchor and no paused-time catch-up. Send seals actual whole contents and stops field play. Matching Lab acceptance credits once, archives only received route/findings and ends the outing; retry cannot duplicate supplies or capsules. Supply-only receipt permits a fresh outing. |
+| Save and knowledge | Persist seed/content version, position, discovered connector, source budgets, class preparation, resolved draws, cache identity, cargo and transfer state. Offline local play works; restart cannot reroll or invent powered-off activity. Lab shows received records only; neither device invents the other's live state. Preserve old saved outings under their legacy lifecycle. |
+
+The initial source budget and timing are implementation fixtures. Check their
+maximum possible whole output against carrying capacity and the existing research
+costs, then verify legitimate repeated resupply with the actual chosen values.
+Do not silently adopt the static packet's two remaining attempts or one-capsule
+example as final world balance.
+
+The bounded native prototype supports eight incoming capsules and has no sample
+disposal/archive interaction. Companion uses only its own durable acknowledged
+capsule history, incremented once by the matching completed receipt, to pin a
+remaining discovery budget at the next outing's start. At eight own acknowledged
+capsules, new outings remain supply-only and explain **Sample capacity reached**
+as a prototype support limit; they do not generate another collectible capsule.
+This is not final capacity balance, live Lab shelf knowledge or a reservation.
+Legacy provenance must come from accepted own-capsule records, never a query of
+the Lab's current shelf. A conflicting full-shelf manifest is rejected atomically
+and its sealed contents retained. No automatic discard, new sample-disposal system
+or fictional live shelf query is authorized by this contract.
+
+Acceptance requires the actual native journey: movement and before/after trace
+route; explicit source switch preserving preparation; explicit capsule collection;
+safe cancelled return; restart; supply-only repeat outing; send and one Lab receipt;
+and continued existing research. Focused full/exhausted/held-input or receipt-failure
+branches should use legitimate actions or a clearly identified bounded fixture,
+without being reported as a human playthrough. Game design assesses these changed
+screens and outcomes after implementation; static approval alone cannot pass them.

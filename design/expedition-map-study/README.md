@@ -52,10 +52,16 @@ finite opportunities. Waiting cannot renew an exhausted source. The new sample
 route is discovered through inspection, independently of gathering awards.
 
 These are **two authored topology fixtures with seeded terrain**, not a general
-playable procedural-world generator. The generator draws their orthogonal
-corridors without creating intersections outside the named graph nodes. The
+procedural-world generator. The paper generator draws orthogonal corridors; it
+does not validate the extra movement edges created by adjacent path tiles. The
 cache connector is omitted before trace inspection and added afterward. Seeds
 1429 and 7183 also change terrain clusters and stream placement reproducibly.
+
+Native translation keeps the reviewed topology but moves seed B's cache branch
+one row upward, leaving a blank row beside the ordinary upper arm. This prevents
+unmarked shortcuts under actual four-way tile movement. The original illustrated
+reference remains preserved; runtime path legality and restart behavior require
+the separate native acceptance evidence.
 
 ## Visual grammar and editable source
 
