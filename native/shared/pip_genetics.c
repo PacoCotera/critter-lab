@@ -146,7 +146,8 @@ static const PipInvestigation DISCOVERY_METHODS[2][3] = {
     {{"heritage", "Read the pattern",
       "Pale variation found. How it shows is still unknown.", 400, 0, 0},
      {"movement", "Trace movement",
-      "Short bursts supported; lower cost for the same supported action.", 0, 400, 0},
+      "Short bursts supported. Less energy for the same movement, for a "
+      "healthy/rested adult on firm ground in mild conditions.", 0, 400, 0},
      {"coat-comparison", "Compare the coat",
       "Plain coat: pale variation carried. Or pale markings.", 0, 0, 400}},
     {{"heritage", "Read the pattern",
@@ -154,7 +155,8 @@ static const PipInvestigation DISCOVERY_METHODS[2][3] = {
      {"movement", "Trace movement",
       "Steady and burst-capable patterns found. Their energy relationship is unresolved.", 0, 400, 0},
      {"effort-comparison", "Compare movement effort",
-      "Steady: lower cost for the same walking action. Burst-capable: baseline walking cost.", 0, 0, 400}}};
+      "Steady: less energy for the same walking action. Burst-capable: baseline "
+      "walking energy. Healthy/rested adult, firm ground, mild conditions.", 0, 0, 400}}};
 
 static const char *const CANDIDATE_IDS[] = {"A0", "A1", "B0", "B1"};
 static const char *const CANDIDATE_TITLES[] = {

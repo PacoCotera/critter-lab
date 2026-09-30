@@ -162,6 +162,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   int discard = page == COMP_DISCARD_CLASS || page == COMP_DISCARD_QUANTITY ||
                 page == COMP_DISCARD_REVIEW;
   int finish = page == COMP_FINISH_REVIEW;
+  int friends = page == COMP_FRIENDS || page == COMP_FRIEND_VISIT;
+  int friend_visit = page == COMP_FRIEND_VISIT;
   char value[128];
   uint32_t cargo[] = {game->expedition_data, game->expedition_energy,
                       game->expedition_essence};
@@ -175,7 +177,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   text(row, 28, 26, "BEECHO / COMPANION", 18, SECONDARY);
   heading(row, 28, 48,
          details || discard     ? "CARGO"
-       : page == COMP_FRIENDS ? "COMPANIONS"
+       : friends ? "COMPANIONS"
                               : "PROBE",
        34, TEXT);
   static const char *modes[] = {"Probe", "Cargo", "Companions"};
@@ -197,7 +199,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     text(row, x + 4, 88, modes[i], 18, view->mode == i ? TEXT : SECONDARY);
   }
   fill(row, 28, 112, 394, 2, EDGE);
-  int action_top = 502;
+  int action_top = 490;
   if (discard || finish) {
     static const char *names[] = {"Data", "Energy", "Essence"};
     text(row, 28, 134,
@@ -228,13 +230,52 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       }
     }
     action_top = 470;
-  } else if (page == COMP_FRIENDS) {
-    fill(row, 28, 126, 394, 172, FIELD);
-    art(row, OVERVIEW_HABITAT, 40, 140);
-    text(row, 191, 159, "Travel party", 22, TEXT);
-    text(row, 191, 198, "Not assigned", 18, SECONDARY);
-    wrapped(row, 28, 318, "Party assignment is not simulated yet.", 390, 18,
-            SECONDARY);
+  } else if (friends) {
+    const KitResidentProjection *record = kit_selected_resident(kit);
+    unsigned count = kit_resident_count(kit);
+    time_t updated = (time_t)kit_residents_updated_at(kit) - 6 * 3600;
+    struct tm *snapshot = gmtime(&updated);
+    char stamp[16] = "unknown";
+    if (kit_residents_updated_at(kit) && snapshot)
+      strftime(stamp, sizeof(stamp), "%H:%M:%S", snapshot);
+    snprintf(value, sizeof(value), "%s / snapshot %s",
+             kit_resident_cache_current(kit) ? "Live"
+             : kit->journal.companion_online ? "Cached / stale" : "Offline / cached", stamp);
+    text(row, 28, 128, value, 18, SECONDARY);
+    if (record && count) {
+      if (!selector && !friend_visit)
+        action_focus(row, 26, 154, 398, 35);
+      heading(row, 39, 160, record->individual.id, 26, TEXT);
+      unsigned asset;
+      if (selected_lab_original_art(&record->individual, &record->metadata, &asset))
+        core_art_row((CoreArtId)asset, 28, 194, row->y, row->width, row->pixels);
+      else
+        wrapped(row, 45, 282, "Portrait pending", 235, 22, SECONDARY);
+      text(row, 303, 195, "Visits", 18, SECONDARY);
+      snprintf(value, sizeof(value), "%u", record->individual.care_visits);
+      heading(row, 303, 223, value, 32, TEXT);
+      wrapped(row, 303, 278, "From your Lab", 116, 18, SECONDARY);
+      if (view->message[0])
+        wrapped(row, 303, 323, view->message, 116, 18, TEXT);
+      else if (!kit_resident_visit_available(kit))
+        wrapped(row, 303, 323,
+                reserved || receipt ? "Finish the pending transfer before visiting."
+                : kit_resident_cache_current(kit) ? "Visit unavailable for this resident."
+                                                 : "Visits unavailable. Reconnect to the Lab.",
+                116, 18, SECONDARY);
+      else
+        wrapped(row, 303, 323, "Spend time together.", 116, 18, SECONDARY);
+      if (!friend_visit && !selector) {
+        snprintf(value, sizeof(value), "%u / %u residents", view->focus + 1, count);
+        text(row, 28, 489, value, 18, SECONDARY);
+        heading(row, 28, 516, "Confirm: meet this resident", 26, TEXT);
+      }
+    } else {
+      heading(row, 28, 177, "NO REVEALED RESIDENTS", 26, TEXT);
+      art(row, OVERVIEW_HABITAT, 37, 251);
+      wrapped(row, 203, 251, "Reveal a resident at the Lab to meet here.", 215, 22, TEXT);
+    }
+    action_top = 490;
   } else if (details) {
     heading(row, 28, 125,
          ended      ? "Cargo empty"
@@ -289,20 +330,20 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     }
   } else {
     /* Authored fictional setting; facts remain in separate live zones. */
-    core_art_row(CORE_ART_PROBE_PLACE, 25, 124, row->y, row->width, row->pixels);
+    core_art_row(CORE_ART_PROBE_PLACE, 25, 116, row->y, row->width, row->pixels);
     if (has_run) {
-      text(row, 28, 352, kit_route(kit), 18, TEXT);
+      text(row, 28, 344, kit_route(kit), 18, TEXT);
       snprintf(value, sizeof(value), "%u / %u sec", elapsed, GAME_EXPEDITION_SECONDS);
-      text(row, 302, 352, value, 18, SECONDARY);
-      progress(row, 28, 372, 394, 2, elapsed, GAME_EXPEDITION_SECONDS);
+      text(row, 302, 344, value, 18, SECONDARY);
+      progress(row, 28, 366, 394, 2, elapsed, GAME_EXPEDITION_SECONDS);
       static const char *names[] = {"Data", "Energy", "Essence"};
       for (unsigned i = 0; i < 3; ++i) {
         int x = 28 + (int)i * 132;
         const CoreArtSprite *asset = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + i));
-        resource(row, i, x + (51 - (int)asset->width) / 2, 377, 0);
+        resource(row, i, x + (51 - (int)asset->width) / 2, 368, 0);
         snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
-        heading(row, x + 64, 395, value, 32, TEXT);
-        text(row, x + 4, 431, names[i], 18, SECONDARY);
+        heading(row, x + 64, 386, value, 32, TEXT);
+        text(row, x + 4, 417, names[i], 18, SECONDARY);
       }
       if (reserved || receipt) {
         wrapped(row, 28, 456, kit_stage(kit), 390, 18, SECONDARY);
@@ -318,18 +359,18 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
           size_t used = strlen(value);
           snprintf(value + used, sizeof(value) - used, " / %u sec", (remaining + 999) / 1000);
         }
-        text(row, 28, 449, value, 18, SECONDARY);
+        text(row, 28, 439, value, 18, SECONDARY);
         if (game->gather_last_attempted_mask) {
           if (game->gather_last_awarded_mask)
             resource_names(value, sizeof(value), "Last: ", game->gather_last_awarded_mask);
           else
             strcpy(value, "Last attempt: no items found");
-          text(row, 28, 474, value, 18, TEXT);
+          text(row, 28, 463, value, 18, TEXT);
         }
       } else {
         text(row, 28, 457, kit_expedition_status(kit), 18, SECONDARY);
       }
-      action_top = 498;
+      action_top = 490;
     } else {
       heading(row, 28, 360, ended ? "EXPEDITION ENDED" : "READY TO EXPLORE", 26, TEXT);
       text(row, 28, 402, ended ? "Cargo empty / supplies stored at the Lab"
@@ -338,11 +379,12 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     }
   }
   unsigned count =
-      selector || kit->failed ? 0 : kit_option_count(kit, KIT_COMPANION);
+      selector || kit->failed || (page == COMP_FRIENDS && kit_resident_count(kit))
+          ? 0 : kit_option_count(kit, KIT_COMPANION);
   unsigned first = discard && view->focus >= 2 ? view->focus - 1 : 0;
   unsigned visible_count = discard ? 2 : count;
   for (unsigned i = first; i < count && i < first + visible_count; ++i) {
-    int y = action_top + (int)(i - first) * (has_run || discard || finish ? 32 : 38);
+    int y = action_top + (int)(i - first) * (has_run || discard || finish || friend_visit ? 32 : 38);
     if (view->focus == i) {
       fill(row, 24, y - 4, 402, 31,
            FIELD);
@@ -357,25 +399,29 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                names[view->discard_resource]);
       option = value;
     }
-    heading(row, 58, y - 3, option, 26, TEXT);
+    heading(row, 58, y - 3, option, 26,
+            friend_visit && i == 0 && !kit_resident_visit_available(kit) ? SECONDARY : TEXT);
   }
   if (kit->failed) {
     fill(row, 24, 496, 402, 57, FIELD);
     wrapped(row, 28, 502, "Storage unavailable. Cargo preserved.", 390, 18,
             FOCUS);
   } else if (selector) {
-    text(row, 28, 503, "Left / Right: change mode", 22, TEXT);
-    text(row, 28, 538,
-         page == COMP_FRIENDS ? "Party controls are not ready yet"
-                              : "Down / Confirm: choose an action",
+    text(row, 28, 490, "Left / Right: change mode", 22, TEXT);
+    text(row, 28, 524,
+         "Down / Confirm: choose an action",
          18, SECONDARY);
-  } else if (view->message[0]) {
-    int result_y = discard || finish ? 413 : has_run || details ? 439 : 386;
-    fill(row, 24, result_y, 402, 46, FIELD);
+  } else if (view->message[0] && !friends) {
+    int result_y = discard || finish ? 413 : details ? 439 : 276;
+    fill(row, 24, result_y, 402, discard || finish || details ? 46 : 64, FIELD);
     wrapped(row, 28, result_y + 3, view->message, 390, 18, TEXT);
   }
-  text(row, 28, 565,
+  text(row, 28, 553,
        selector           ? "Browsing never sends or spends"
+       : page == COMP_FRIENDS ? kit_resident_count(kit)
+                                   ? "Up/Down: resident / Back: modes"
+                                   : "Confirm: Probe / Back: modes"
+       : friend_visit     ? "Confirm: choose / Back: residents"
        : discard          ? "Up/Down: choose / Back: keep items"
        : finish           ? "Confirm: choose / Back: keep exploring"
        : review           ? "Confirm: send  /  Back: keep cargo"
@@ -391,7 +437,8 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
   border(row, 8, 8, 776, 256, TEXT);
   text(row, 24, 23, "BEECHO LAB / DOCK", 26, TEXT);
   text(row, 485, 28,
-       journal->dock_online ? "Synced (simulation)" : "Offline / cached", 22,
+       kit_dock_cache_current(kit) ? "Synced (simulation)"
+       : journal->dock_online ? "Cached / stale" : "Offline / cached", 22,
        TEXT);
   fill(row, 24, 66, 744, 2, TEXT);
   if (view->page == 2) {
@@ -411,6 +458,8 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
       snprintf(value, sizeof(value), "%u", amounts[i]);
       text(row, x + 47, 117, value, 32, TEXT);
     }
+    snprintf(value, sizeof(value), "Visits together: %u", kit_dock_visits(kit));
+    text(row, 24, 153, value, 18, TEXT);
   } else if (view->focus == 1) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
@@ -437,7 +486,7 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
     strftime(stamp, sizeof(stamp), "%H:%M:%S Mexico City", local_time);
   snprintf(value, sizeof(value), "%sSnapshot %s%s",
            view->page == 1 ? "OK: Back / " : "", stamp,
-           journal->dock_online ? "" : " / stale");
+           kit_dock_cache_current(kit) ? "" : " / stale");
   text(row, 24, 178, value, 18, TEXT);
   if (view->message[0])
     text(row, 24, 201, view->message, 18, TEXT);

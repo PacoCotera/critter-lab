@@ -6,6 +6,31 @@
 #include <string.h>
 #include <time.h>
 
+#define KIT_ENVELOPE_MAGIC "CLKITV1"
+#define KIT_ENVELOPE_VERSION 1u
+#define KIT_RESIDENT_CACHE_VERSION 1u
+
+/* The transfer journal remains the exact old record. The envelope owns only
+ * accepted read-only projections and has its own independent checksum. */
+typedef struct {
+  char magic[8];
+  uint32_t version, file_size, checksum;
+  KitJournal journal;
+  KitResidentCache residents;
+  uint32_t dock_visits;
+} SavedKitEnvelope;
+
+_Static_assert(sizeof(KitJournal) == 160, "Frozen Kit journal size changed");
+_Static_assert(offsetof(KitJournal, accept_sequence) == 24, "Frozen sequence offset");
+_Static_assert(offsetof(KitJournal, haul_id) == 32, "Frozen haul offset");
+_Static_assert(offsetof(KitJournal, dock_world_revision) == 144, "Frozen Dock offset");
+_Static_assert(sizeof(KitResidentProjection) == 501, "Resident envelope record ABI changed");
+_Static_assert(sizeof(KitResidentCache) == 4032, "Resident cache schema needs a new version");
+_Static_assert(offsetof(SavedKitEnvelope, journal) == 24, "Envelope journal offset changed");
+_Static_assert(sizeof(SavedKitEnvelope) == 4224, "Kit envelope schema needs a new version");
+
+static int sync_projections(DeviceKit *kit, int force_companion, int force_dock);
+
 static void refresh(KitView *view, int interaction) {
   ++view->revision;
   if (interaction) {
@@ -38,10 +63,33 @@ static uint32_t checksum(const KitJournal *journal) {
     hash = (hash ^ bytes[i]) * 16777619u;
   return hash;
 }
+static uint32_t envelope_checksum(const SavedKitEnvelope *saved) {
+  const unsigned char *bytes = (const unsigned char *)saved;
+  uint32_t hash = 2166136261u;
+  for (size_t i = 0; i < sizeof(*saved); ++i)
+    if (i < offsetof(SavedKitEnvelope, checksum) ||
+        i >= offsetof(SavedKitEnvelope, checksum) + sizeof(saved->checksum))
+      hash = (hash ^ bytes[i]) * 16777619u;
+  return hash;
+}
+static int write_envelope(const DeviceKit *kit, const KitJournal *journal,
+                          const KitResidentCache *residents, unsigned dock_visits) {
+  SavedKitEnvelope saved;
+  memset(&saved, 0, sizeof(saved));
+  memcpy(saved.magic, KIT_ENVELOPE_MAGIC, sizeof(saved.magic));
+  saved.version = KIT_ENVELOPE_VERSION;
+  saved.file_size = sizeof(saved);
+  saved.journal = *journal;
+  saved.journal.checksum = checksum(&saved.journal);
+  saved.residents = *residents;
+  saved.dock_visits = dock_visits;
+  saved.checksum = envelope_checksum(&saved);
+  return save_bytes_write_status(kit->journal_path, &saved, sizeof(saved));
+}
 static int persist(DeviceKit *kit) {
   kit->journal.checksum = checksum(&kit->journal);
-  if (save_bytes_write_status(kit->journal_path, &kit->journal,
-                              sizeof(kit->journal)) != SAVE_BYTES_COMMITTED) {
+  if (write_envelope(kit, &kit->journal, &kit->residents, kit->dock_visits) !=
+      SAVE_BYTES_COMMITTED) {
     fail(kit);
     return 0;
   }
@@ -154,6 +202,200 @@ static int valid_journal(const KitJournal *journal) {
          journal->elapsed <= GAME_EXPEDITION_SECONDS &&
          journal->kind <= GAME_EXPEDITION_RESONANCE;
 }
+static int cache_text(const char *text, size_t size) {
+  return text[0] && memchr(text, 0, size);
+}
+static int valid_residents(const KitResidentCache *cache) {
+  if (!cache->version) {
+    const KitResidentCache empty = {0};
+    return !memcmp(cache, &empty, sizeof(empty));
+  }
+  if (cache->version != KIT_RESIDENT_CACHE_VERSION ||
+      cache->count > GAME_MAX_INDIVIDUALS || !cache->updated_at)
+    return 0;
+  for (unsigned i = 0; i < cache->count; ++i) {
+    const KitResidentProjection *record = &cache->residents[i];
+    const GameIndividual *resident = &record->individual;
+    const GameIndividualMetadata *metadata = &record->metadata;
+    if (!cache_text(resident->id, sizeof(resident->id)) ||
+        !cache_text(resident->source_sample_id, sizeof(resident->source_sample_id)) ||
+        !cache_text(resident->origin_kind, sizeof(resident->origin_kind)) ||
+        !cache_text(resident->art_id, sizeof(resident->art_id)) ||
+        !cache_text(resident->art_version, sizeof(resident->art_version)) ||
+        resident->revealed != 1 || resident->origin_founder != 1 ||
+        resident->art_pending || resident->habitat >= GAME_HABITAT_COUNT ||
+        !pip_content_genome_valid(&resident->genome) ||
+        !pip_content_expression_valid(&resident->genome, &resident->expression) ||
+        !cache_text(metadata->candidate_id, sizeof(metadata->candidate_id)) ||
+        !cache_text(metadata->reference_context, sizeof(metadata->reference_context)) ||
+        !cache_text(metadata->mapping_version, sizeof(metadata->mapping_version)) ||
+        !cache_text(metadata->appearance_descriptor, sizeof(metadata->appearance_descriptor)) ||
+        !cache_text(metadata->original_art_version, sizeof(metadata->original_art_version)) ||
+        !cache_text(metadata->original_art_sha256, sizeof(metadata->original_art_sha256)) ||
+        strlen(metadata->original_art_sha256) != 64)
+      return 0;
+    for (unsigned digit = 0; digit < 64; ++digit) {
+      char value = metadata->original_art_sha256[digit];
+      if (!((value >= '0' && value <= '9') || (value >= 'a' && value <= 'f')))
+        return 0;
+    }
+    for (unsigned earlier = 0; earlier < i; ++earlier)
+      if (!strcmp(resident->id, cache->residents[earlier].individual.id))
+        return 0;
+  }
+  const KitResidentProjection empty = {0};
+  for (unsigned i = cache->count; i < GAME_MAX_INDIVIDUALS; ++i)
+    if (memcmp(&cache->residents[i], &empty, sizeof(empty)))
+      return 0;
+  return 1;
+}
+static void project_residents(const GameState *game, KitResidentCache *cache) {
+  memset(cache, 0, sizeof(*cache));
+  cache->version = KIT_RESIDENT_CACHE_VERSION;
+  for (unsigned i = 0; i < game->individual_count; ++i) {
+    if (!game->individuals[i].revealed)
+      continue;
+    KitResidentProjection *record = &cache->residents[cache->count++];
+    record->individual = game->individuals[i];
+    record->metadata = game->individual_metadata[i];
+  }
+}
+static int same_residents(const KitResidentCache *left, const KitResidentCache *right) {
+  return left->version == right->version && left->count == right->count &&
+         !memcmp(left->residents, right->residents, sizeof(left->residents));
+}
+unsigned kit_resident_count(const DeviceKit *kit) { return kit->residents.count; }
+const KitResidentProjection *kit_resident(const DeviceKit *kit, unsigned index) {
+  return index < kit->residents.count ? &kit->residents.residents[index] : NULL;
+}
+const KitResidentProjection *kit_selected_resident(const DeviceKit *kit) {
+  for (unsigned i = 0; i < kit->residents.count; ++i)
+    if (!strcmp(kit->selected_resident_id, kit->residents.residents[i].individual.id))
+      return &kit->residents.residents[i];
+  return NULL;
+}
+int kit_resident_cache_current(const DeviceKit *kit) {
+  if (!kit->journal.companion_online || kit->resident_cache_failed ||
+      kit->failed || kit->lab->storage_error)
+    return 0;
+  KitResidentCache current;
+  project_residents(&kit->lab->game, &current);
+  return same_residents(&kit->residents, &current);
+}
+int kit_resident_visit_available(const DeviceKit *kit) {
+  const KitResidentProjection *resident = kit_selected_resident(kit);
+  return resident && kit_resident_cache_current(kit) && !pending(kit) &&
+         resident->individual.care_visits < GAME_MAX_CARE_VISITS;
+}
+uint64_t kit_residents_updated_at(const DeviceKit *kit) { return kit->residents.updated_at; }
+uint64_t kit_residents_world_revision(const DeviceKit *kit) { return kit->residents.world_revision; }
+unsigned kit_dock_visits(const DeviceKit *kit) { return kit->dock_visits; }
+int kit_dock_cache_current(const DeviceKit *kit) {
+  if (!kit->journal.dock_online || kit->dock_cache_failed ||
+      kit->failed || kit->lab->storage_error || !kit->journal.dock_updated_at)
+    return 0;
+  const GameState *game = &kit->lab->game;
+  unsigned residents = 0, visits = 0;
+  for (unsigned i = 0; i < game->individual_count; ++i)
+    if (game->individuals[i].revealed) {
+      ++residents;
+      visits += game->individuals[i].care_visits;
+    }
+  return kit->journal.dock_stock[0] == game->data &&
+         kit->journal.dock_stock[1] == game->energy &&
+         kit->journal.dock_stock[2] == game->essence &&
+         kit->journal.dock_samples == game->sample_count &&
+         kit->journal.dock_residents == residents &&
+         kit->journal.dock_incubations == game->incubation_active && kit->dock_visits == visits;
+}
+static void retain_resident_selection(DeviceKit *kit) {
+  unsigned selected = 0;
+  for (unsigned i = 0; i < kit->residents.count; ++i)
+    if (!strcmp(kit->selected_resident_id, kit->residents.residents[i].individual.id))
+      selected = i;
+  if (kit->residents.count)
+    strcpy(kit->selected_resident_id, kit->residents.residents[selected].individual.id);
+  else
+    kit->selected_resident_id[0] = 0;
+  kit->companion.action_focus[COMP_FRIENDS] = selected;
+  if (kit->companion.page == COMP_FRIENDS)
+    kit->companion.focus = selected;
+  for (unsigned depth = 0; depth < kit->companion.task_depth; ++depth)
+    if (kit->companion.task_page[depth] == COMP_FRIENDS)
+      kit->companion.task_focus[depth] = selected;
+}
+static int sync_projections(DeviceKit *kit, int force_companion, int force_dock) {
+  KitResidentCache residents = kit->residents;
+  KitJournal journal = kit->journal;
+  unsigned dock_visits = kit->dock_visits;
+  int companion_changed = 0, dock_changed = 0;
+  const GameState *game = &kit->lab->game;
+  if (journal.companion_online && (!kit->resident_cache_failed || force_companion)) {
+    KitResidentCache current;
+    project_residents(game, &current);
+    companion_changed = force_companion || kit->resident_cache_failed ||
+                        !same_residents(&residents, &current);
+    if (companion_changed) {
+      current.world_revision = game->revision;
+      current.updated_at = (uint64_t)time(NULL);
+      residents = current;
+    }
+  }
+  if (journal.dock_online && (!kit->dock_cache_failed || force_dock)) {
+    unsigned count = 0, visits = 0;
+    for (unsigned i = 0; i < game->individual_count; ++i)
+      if (game->individuals[i].revealed) {
+        ++count;
+        visits += game->individuals[i].care_visits;
+      }
+    dock_changed = force_dock || kit->dock_cache_failed ||
+        journal.dock_stock[0] != game->data || journal.dock_stock[1] != game->energy ||
+        journal.dock_stock[2] != game->essence || journal.dock_samples != game->sample_count ||
+        journal.dock_residents != count || journal.dock_incubations != game->incubation_active ||
+        dock_visits != visits || !journal.dock_updated_at;
+    if (dock_changed) {
+      journal.dock_stock[0] = game->data;
+      journal.dock_stock[1] = game->energy;
+      journal.dock_stock[2] = game->essence;
+      journal.dock_samples = game->sample_count;
+      journal.dock_residents = count;
+      journal.dock_incubations = game->incubation_active;
+      journal.dock_world_revision = game->revision;
+      journal.dock_updated_at = (uint64_t)time(NULL);
+      dock_visits = visits;
+    }
+  }
+  if (!companion_changed && !dock_changed)
+    return 1;
+  int result = write_envelope(kit, &journal, &residents, dock_visits);
+  if (result != SAVE_BYTES_COMMITTED) {
+    /* World acceptance is independent. Keep last accepted projection bytes;
+     * a later sync retries only this envelope, never the CARE_VISIT command. */
+    kit->resident_cache_failed |= companion_changed;
+    kit->dock_cache_failed |= dock_changed;
+    if (companion_changed)
+      strcpy(kit->companion.message, "Snapshot not saved. Cached record is stale; reconnect to refresh.");
+    refresh(&kit->companion, 1);
+    refresh(&kit->dock, 0);
+    return 0;
+  }
+  journal.checksum = checksum(&journal);
+  kit->journal = journal;
+  kit->residents = residents;
+  kit->dock_visits = dock_visits;
+  if (companion_changed)
+    kit->resident_cache_failed = 0;
+  if (dock_changed)
+    kit->dock_cache_failed = 0;
+  retain_resident_selection(kit);
+  if (companion_changed)
+    refresh(&kit->companion, 1);
+  if (dock_changed) {
+    kit->dock_updated = kit->clock;
+    refresh(&kit->dock, 0);
+  }
+  return 1;
+}
 static void open_reception(DeviceKit *kit) {
   if (kit->journal.phase != KIT_ARRIVED ||
       !strcmp(kit->opened_haul, kit->journal.haul_id))
@@ -201,13 +443,35 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
   snprintf(marker, sizeof(marker), "%s.required", kit->journal_path);
   FILE *file = fopen(kit->journal_path, "rb");
   if (file) {
-    size_t read = fread(&kit->journal, 1, sizeof(kit->journal), file);
+    SavedKitEnvelope saved;
+    memset(&saved, 0, sizeof(saved));
+    size_t read = fread(&saved, 1, sizeof(saved), file);
     int extra = fgetc(file);
     int closed = fclose(file);
-    if (read != sizeof(kit->journal) || extra != EOF || closed ||
-        !valid_journal(&kit->journal)) {
+    if (extra != EOF || closed) {
       fail(kit);
       return 0;
+    }
+    if (read == sizeof(KitJournal)) {
+      /* Validate the exact old bytes before wrapping any version1-4 intent. */
+      memcpy(&kit->journal, &saved, sizeof(kit->journal));
+      if (!valid_journal(&kit->journal)) {
+        fail(kit);
+        return 0;
+      }
+    } else {
+      if (read != sizeof(saved) ||
+          memcmp(saved.magic, KIT_ENVELOPE_MAGIC, sizeof(saved.magic)) ||
+          saved.version != KIT_ENVELOPE_VERSION || saved.file_size != sizeof(saved) ||
+          saved.checksum != envelope_checksum(&saved) ||
+          !valid_journal(&saved.journal) || !valid_residents(&saved.residents) ||
+          saved.dock_visits > GAME_MAX_INDIVIDUALS * GAME_MAX_CARE_VISITS) {
+        fail(kit);
+        return 0;
+      }
+      kit->journal = saved.journal;
+      kit->residents = saved.residents;
+      kit->dock_visits = saved.dock_visits;
     }
   } else {
     if (errno != ENOENT) {
@@ -281,6 +545,9 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
   if (!reconcile(kit) || !normalize_stock(kit))
     return 0;
   open_reception(kit);
+  retain_resident_selection(kit);
+  (void)sync_projections(kit, kit->journal.companion_online,
+                        kit->journal.dock_online);
   return 1;
 }
 const char *kit_stage(const DeviceKit *kit) {
@@ -365,7 +632,9 @@ unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
     return !pending(kit) && kit->lab->game.expedition_id[0] &&
                    game_transfer_available(&kit->lab->game) ? 2 : 1;
   case COMP_FRIENDS:
-    return 0;
+    return kit->residents.count ? kit->residents.count : 1;
+  case COMP_FRIEND_VISIT:
+    return 2;
   default:
     return probe_option_count(kit);
   }
@@ -410,7 +679,10 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
                ? "Choose a new expedition"
                                                       : "Return to Probe";
   case COMP_FRIENDS:
-    return "Modes";
+    return index < kit->residents.count ? kit->residents.residents[index].individual.id
+                                        : "Return to Probe";
+  case COMP_FRIEND_VISIT:
+    return index ? "Choose resident" : "Spend time together";
   default: {
     static const char *routes[] = {"Field survey", "Garden forage",
                                    "Weather watch"};
@@ -464,12 +736,45 @@ static void companion_back(DeviceKit *kit) {
 }
 static void companion_enter_actions(DeviceKit *kit) {
   KitView *view = &kit->companion;
-  if (view->mode == COMP_FRIENDS)
-    return;
   companion_page(kit, view->mode);
   unsigned count = kit_option_count(kit, KIT_COMPANION);
   unsigned remembered = view->action_focus[view->mode];
   view->focus = count && remembered < count ? remembered : 0;
+  if (view->mode == COMP_FRIENDS)
+    retain_resident_selection(kit);
+}
+static void visit_resident(DeviceKit *kit) {
+  if (!kit_resident_visit_available(kit)) {
+    const char *reason = !kit->journal.companion_online
+        ? "Offline snapshot. Reconnect before visiting."
+        : pending(kit) ? "Finish the pending transfer before visiting."
+        : !kit_resident_cache_current(kit)
+            ? "Cached record is stale. Reconnect before visiting."
+            : "Visit unavailable for this resident.";
+    snprintf(kit->companion.message, sizeof(kit->companion.message), "%s", reason);
+    refresh(&kit->companion, 1);
+    return;
+  }
+  const KitResidentProjection *selected = kit_selected_resident(kit);
+  unsigned index = 0;
+  while (index < kit->lab->game.individual_count &&
+         strcmp(kit->lab->game.individuals[index].id, selected->individual.id))
+    ++index;
+  if (index == kit->lab->game.individual_count)
+    return;
+  GameCommand command = {0};
+  command.type = GAME_COMMAND_CARE_VISIT;
+  command.data.individual = index;
+  if (apply(kit, command, NULL) != GAME_OK)
+    return;
+  unsigned visits = kit->lab->game.individuals[index].care_visits;
+  snprintf(kit->lab->message, sizeof(kit->lab->message), "Visit saved for %s (%u).",
+           kit->lab->game.individuals[index].id, visits);
+  int cached = sync_projections(kit, 0, 0);
+  snprintf(kit->companion.message, sizeof(kit->companion.message),
+           cached ? "Visit saved (%u). Pip settles beside you."
+                  : "Visit saved in Lab (%u). Snapshot stale; reconnect to refresh.", visits);
+  refresh_all(kit);
 }
 static void seal(DeviceKit *kit) {
   GameState *game = &kit->lab->game;
@@ -585,7 +890,18 @@ static void activate_companion(DeviceKit *kit) {
     }
     break;
   case COMP_FRIENDS:
-    companion_page(kit, COMP_MODES);
+    if (!kit->residents.count)
+      companion_page(kit, COMP_PROBE);
+    else if (focus < kit->residents.count) {
+      strcpy(kit->selected_resident_id, kit->residents.residents[focus].individual.id);
+      companion_task(kit, COMP_FRIEND_VISIT);
+    }
+    break;
+  case COMP_FRIEND_VISIT:
+    if (focus)
+      companion_back(kit);
+    else
+      visit_resident(kit);
     break;
   default:
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
@@ -607,8 +923,7 @@ static void activate_companion(DeviceKit *kit) {
           persist(kit);
         }
         kit->companion.focus = 0;
-        strcpy(kit->companion.message,
-               "Gathering on Companion. Cargo stays here.");
+        kit->companion.message[0] = 0; /* Route and activity already show success. */
       }
     }
   }
@@ -654,10 +969,13 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
       }
     } else {
       unsigned before = kit->lab->revision;
+      uint64_t before_world = kit->lab->game.revision;
       selected_lab_input(kit->lab, input, 0, revision);
       if (input == SELECTED_HOME_UP && kit->lab->revision != before &&
           kit->lab->page == V1_HOME)
         kit->caller_valid = 0;
+      if (kit->lab->game.revision != before_world)
+        (void)sync_projections(kit, 0, 0);
     }
     return;
   }
@@ -741,6 +1059,8 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
         view->focus = focus;
         if (view->page < COMP_MODES)
           view->action_focus[view->page] = focus;
+        if (view->page == COMP_FRIENDS && focus < kit->residents.count)
+          strcpy(kit->selected_resident_id, kit->residents.residents[focus].individual.id);
         refresh(view, 1);
       }
     } else {
@@ -780,6 +1100,8 @@ int kit_link(DeviceKit *kit, unsigned device, int online) {
     kit->journal.dock_online = online != 0;
   if (!persist(kit))
     return 0;
+  if (online)
+    (void)sync_projections(kit, device == KIT_COMPANION, device == KIT_DOCK);
   kit->next_delivery = kit->clock + 2;
   refresh_all(kit);
   return 1;
@@ -840,32 +1162,7 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
       refresh_all(kit);
     }
   }
-  if (kit->journal.dock_online) {
-    const GameState *game = &kit->lab->game;
-    unsigned residents = 0;
-    for (unsigned i = 0; i < game->individual_count; ++i)
-      residents += game->individuals[i].revealed;
-    int changed = kit->journal.dock_stock[0] != game->data ||
-                  kit->journal.dock_stock[1] != game->energy ||
-                  kit->journal.dock_stock[2] != game->essence ||
-                  kit->journal.dock_samples != game->sample_count ||
-                  kit->journal.dock_residents != residents ||
-                  kit->journal.dock_incubations != game->incubation_active;
-    if (changed || !kit->dock_updated) {
-      kit->journal.dock_stock[0] = game->data;
-      kit->journal.dock_stock[1] = game->energy;
-      kit->journal.dock_stock[2] = game->essence;
-      kit->journal.dock_samples = game->sample_count;
-      kit->journal.dock_residents = residents;
-      kit->journal.dock_incubations = game->incubation_active;
-      kit->journal.dock_world_revision = game->revision;
-      kit->dock_updated = clock;
-      kit->journal.dock_updated_at = (uint64_t)time(NULL);
-      if (!persist(kit))
-        return;
-      refresh(&kit->dock, 0);
-    }
-  }
+  (void)sync_projections(kit, 0, 0);
 }
 unsigned kit_revision(const DeviceKit *kit, unsigned device) {
   return device == KIT_LAB         ? kit->lab->revision
@@ -876,9 +1173,61 @@ unsigned kit_width(unsigned device) {
   return device == KIT_LAB ? 1024 : device == KIT_COMPANION ? 450 : 792;
 }
 unsigned kit_height(unsigned device) { return device == KIT_DOCK ? 272 : 600; }
+static void json_string(FILE *output, const char *text) {
+  fputc('"', output);
+  for (const unsigned char *byte = (const unsigned char *)text; *byte; ++byte) {
+    if (*byte == '"' || *byte == '\\') {
+      fputc('\\', output);
+      fputc(*byte, output);
+    } else if (*byte < 0x20)
+      fprintf(output, "\\u%04x", *byte);
+    else
+      fputc(*byte, output);
+  }
+  fputc('"', output);
+}
+static void resident_status(const DeviceKit *kit, FILE *output) {
+  fprintf(output, ",\"resident_snapshot\":{\"count\":%u,\"current\":%s,"
+          "\"visit_available\":%s,\"world_revision\":%llu,\"updated_at\":%llu,\"selected\":",
+          kit_resident_count(kit), kit_resident_cache_current(kit) ? "true" : "false",
+          kit_resident_visit_available(kit) ? "true" : "false",
+          (unsigned long long)kit_residents_world_revision(kit),
+          (unsigned long long)kit_residents_updated_at(kit));
+  const KitResidentProjection *record = kit_selected_resident(kit);
+  if (!record) {
+    fputs("null}", output);
+    return;
+  }
+  const char *keys[] = {"id", "source_sample_id", "art_id", "art_version",
+                       "original_art_sha256", "appearance_descriptor", "reference_context",
+                       "mapping_version", "original_art_version"};
+  const char *values[] = {record->individual.id, record->individual.source_sample_id,
+      record->individual.art_id, record->individual.art_version,
+      record->metadata.original_art_sha256, record->metadata.appearance_descriptor,
+      record->metadata.reference_context, record->metadata.mapping_version,
+      record->metadata.original_art_version};
+  fputc('{', output);
+  for (unsigned field = 0; field < sizeof(keys) / sizeof(keys[0]); ++field) {
+    if (field)
+      fputc(',', output);
+    json_string(output, keys[field]);
+    fputc(':', output);
+    json_string(output, values[field]);
+  }
+  fprintf(output, ",\"visits\":%u}}", record->individual.care_visits);
+}
 void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
   const KitView *view = device == KIT_COMPANION ? &kit->companion : &kit->dock;
   const GameState *game = &kit->lab->game;
+  unsigned visible_residents = 0;
+  for (unsigned i = 0; i < game->individual_count; ++i)
+    visible_residents += game->individuals[i].revealed;
+  unsigned resident_count = device == KIT_COMPANION ? kit_resident_count(kit)
+      : device == KIT_DOCK ? kit->journal.dock_residents : visible_residents;
+  const unsigned stock[] = {
+      device == KIT_DOCK ? kit->journal.dock_stock[0] : game->data,
+      device == KIT_DOCK ? kit->journal.dock_stock[1] : game->energy,
+      device == KIT_DOCK ? kit->journal.dock_stock[2] : game->essence};
   const char *focus =
       device == KIT_LAB
           ? (kit_lab_explore(kit)
@@ -896,6 +1245,7 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                      : view->page == COMP_DISCARD_QUANTITY ? "discard-quantity"
                      : view->page == COMP_DISCARD_REVIEW ? "discard-review"
                      : view->page == COMP_FINISH_REVIEW ? "finish-review"
+                     : view->page == COMP_FRIEND_VISIT ? "resident-visit"
                                                       : "companions";
   int online = device == KIT_COMPANION ? kit->journal.companion_online
                : device == KIT_DOCK    ? kit->journal.dock_online
@@ -906,32 +1256,43 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
           : NULL;
   fprintf(
       output,
-      "{\"device\":%u,\"revision\":%u,\"width\":%u,\"height\":%u,\"page\":"
-      "\"%s\",\"focus\":\"%s\",\"workspace\":%u,\"online\":%s,\"transfer\":"
-      "\"%s\",\"phase\":%u,\"haul\":\"%s\",\"stock\":[%u,%u,%u],\"cargo\":["
+      "{\"device\":%u,\"revision\":%u,\"width\":%u,\"height\":%u,\"page\":",
+      device, kit_revision(kit, device), kit_width(device), kit_height(device));
+  json_string(output, page);
+  fputs(",\"focus\":", output);
+  json_string(output, focus);
+  fprintf(output, ",\"workspace\":%u,\"online\":%s,\"transfer\":",
+          kit->lab->workspace, online ? "true" : "false");
+  json_string(output, device == KIT_LAB && kit->journal.phase == KIT_ACK_PENDING
+                         ? "Haul accepted; Companion receipt pending" : kit_stage(kit));
+  fprintf(output, ",\"phase\":%u,\"haul\":", kit->journal.phase);
+  json_string(output, kit->journal.haul_id);
+  fprintf(output, ",\"stock\":[%u,%u,%u],\"cargo\":["
       "%u,%u,%u],\"samples\":%u,\"residents\":%u,\"dock_stock\":[%u,%u,%u],"
       "\"dock_cached\":%s,\"failed\":%s,\"stock_conversion_pending\":%s,"
       "\"mode\":%u,\"expedition_seconds\":%u,\"gather_progress_ms\":[%u,%u,%u],"
       "\"gather_remaining_ms\":%u,\"gather_attempted\":%u,\"gather_awarded\":%"
       "u,"
       "\"boundary\":\"Simulated wireless; "
-      "radio not selected\"}\n",
-      device, kit_revision(kit, device), kit_width(device), kit_height(device),
-      page, focus, kit->lab->workspace, online ? "true" : "false",
-      device == KIT_LAB && kit->journal.phase == KIT_ACK_PENDING
-          ? "Haul accepted; Companion receipt pending"
-          : kit_stage(kit),
-      kit->journal.phase, kit->journal.haul_id, game->data, game->energy,
-      game->essence, cargo ? cargo[0] : game->expedition_data,
+      "radio not selected\"",
+      stock[0], stock[1], stock[2], cargo ? cargo[0] : game->expedition_data,
       cargo ? cargo[1] : game->expedition_energy,
-      cargo ? cargo[2] : game->expedition_essence, game->sample_count,
-      kit->journal.dock_residents, kit->journal.dock_stock[0],
+      cargo ? cargo[2] : game->expedition_essence,
+      device == KIT_DOCK ? kit->journal.dock_samples : game->sample_count, resident_count,
+      kit->journal.dock_stock[0],
       kit->journal.dock_stock[1], kit->journal.dock_stock[2],
-      kit->journal.dock_online ? "false" : "true",
+      kit_dock_cache_current(kit) ? "false" : "true",
       kit->failed ? "true" : "false",
       kit->normalization_pending ? "true" : "false", kit->companion.mode,
       game->expedition_elapsed, game->gather_progress_ms[0],
       game->gather_progress_ms[1], game->gather_progress_ms[2],
       game_gather_remaining_ms(game), game->gather_last_attempted_mask,
       game->gather_last_awarded_mask);
+  fprintf(output, ",\"dock_visits\":%u,\"dock_updated_at\":%llu,"
+          "\"dock_world_revision\":%llu,\"message\":", kit_dock_visits(kit),
+          (unsigned long long)kit->journal.dock_updated_at,
+          (unsigned long long)kit->journal.dock_world_revision);
+  json_string(output, device == KIT_LAB ? kit->lab->message : view->message);
+  resident_status(kit, output);
+  fputs("}\n", output);
 }

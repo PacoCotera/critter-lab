@@ -43,8 +43,10 @@ static void mode_navigation(DeviceKit *kit) {
   press(kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
   assert(kit->companion.mode == COMP_FRIENDS);
   press(kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit->companion.page == COMP_MODES &&
-         kit->companion.mode == COMP_FRIENDS);
+  assert(kit->companion.page == COMP_FRIENDS &&
+         kit->companion.mode == COMP_FRIENDS && kit_option_count(kit, KIT_COMPANION) == 1);
+  press(kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit->companion.page == COMP_MODES);
   press(kit, KIT_COMPANION, SELECTED_LEFT_DOWN);
   press(kit, KIT_COMPANION, SELECTED_LEFT_DOWN);
   assert(kit->companion.mode == COMP_PROBE);
@@ -56,6 +58,155 @@ static void mode_navigation(DeviceKit *kit) {
   kit_input(kit, KIT_COMPANION, SELECTED_CONFIRM_UP, frame);
   assert(kit->companion.page == COMP_MODES);
   assert(kit->lab->game.last_operation_sequence == sequence);
+}
+static size_t read_saved_bytes(const char *path, unsigned char *bytes, size_t capacity) {
+  FILE *file = fopen(path, "rb");
+  assert(file);
+  size_t length = fread(bytes, 1, capacity, file);
+  assert(feof(file) && fclose(file) == 0);
+  return length;
+}
+static void resident_cache_and_visits(const char *directory) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/resident-cache", directory);
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 100));
+  lab.game.sample_count = lab.game.individual_count = 3;
+  for (unsigned i = 0; i < 3; ++i) {
+    GameSample *sample = &lab.game.samples[i];
+    GameIndividual *resident = &lab.game.individuals[i];
+    snprintf(sample->id, sizeof(sample->id), "resident-source-%u", i);
+    strcpy(sample->origin_expedition_id, "retained-resident-fixture");
+    sample->decoded_studies = sample->decoded_facts = 31;
+    sample->supported_candidates = 3;
+    sample->incubated = 1;
+    snprintf(resident->id, sizeof(resident->id), "resident-%u", i);
+    strcpy(resident->source_sample_id, sample->id);
+    strcpy(resident->origin_kind, "parentless-founder");
+    resident->origin_founder = 1;
+    resident->revealed = i < 2;
+    resident->care_visits = i ? 7 : 3;
+    assert(pip_genome_for_sample(0, &resident->genome) == 0);
+    pip_express(&resident->genome, &resident->expression);
+    strcpy(resident->art_id, pip_art_id(&resident->genome));
+    strcpy(resident->art_version, PIP_ART_VERSION);
+    pip_pin_individual_art(&lab.game, i, "legacy-carried");
+  }
+  assert(game_state_save(path, &lab.game) == 0);
+  DeviceKit kit;
+  assert(kit_init(&kit, &lab, 100));
+  assert(kit_resident_count(&kit) == 2 && !kit_resident(&kit, 2));
+  const KitResidentProjection *first = kit_resident(&kit, 0), *second = kit_resident(&kit, 1);
+  assert(strcmp(first->individual.id, second->individual.id) &&
+         !strcmp(first->individual.art_id, second->individual.art_id));
+  assert(!memcmp(&first->metadata, &lab.game.individual_metadata[0], sizeof(first->metadata)));
+  assert(kit_resident_cache_current(&kit) && kit_dock_cache_current(&kit) &&
+         kit_dock_visits(&kit) == 10);
+  /* Existing mode controls select a recorded ID, then a separate visit action. */
+  press(&kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_FRIEND_LIST && kit_option_count(&kit, KIT_COMPANION) == 2);
+  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(!strcmp(kit_selected_resident(&kit)->individual.id, "resident-1"));
+  uint64_t sequence = lab.game.last_operation_sequence;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_FRIEND_VISIT &&
+         lab.game.last_operation_sequence == sequence && kit_resident_visit_available(&kit));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.individuals[1].care_visits == 8 && lab.game.individuals[0].care_visits == 3 &&
+         kit_selected_resident(&kit)->individual.care_visits == 8 && kit_dock_visits(&kit) == 11);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
+  assert(kit.companion.page == COMP_FRIEND_LIST && kit.companion.focus == 1);
+  /* A Lab visit updates the same accepted count visible on Companion and Dock. */
+  lab.page = V1_HABITAT;
+  lab.resident = lab.focus = 0;
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.individuals[0].care_visits == 4 &&
+         kit_resident(&kit, 0)->individual.care_visits == 4 && kit_dock_visits(&kit) == 12);
+  assert(!strcmp(kit_selected_resident(&kit)->individual.id, "resident-1"));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  /* Pending transfers reserve domain authority; no visit can consume a slot. */
+  KitJournal previous_journal = kit.journal;
+  kit.journal.phase = KIT_WAITING;
+  GameState before = lab.game;
+  assert(!kit_resident_visit_available(&kit));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(!memcmp(&before, &lab.game, sizeof(before)));
+  kit.journal = previous_journal;
+  /* Failure of cache persistence cannot repeat a successful world visit. */
+  KitResidentCache accepted_cache = kit.residents;
+  char actual_journal[560];
+  strcpy(actual_journal, kit.journal_path);
+  snprintf(kit.journal_path, sizeof(kit.journal_path), "%s/missing/cache", directory);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.individuals[1].care_visits == 9 && !kit.failed && !lab.storage_error &&
+         kit.resident_cache_failed && kit.dock_cache_failed &&
+         !memcmp(&accepted_cache, &kit.residents, sizeof(accepted_cache)));
+  assert(strstr(kit.companion.message, "Visit saved in Lab (9)") && !kit_resident_visit_available(&kit));
+  sequence = lab.game.last_operation_sequence;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.last_operation_sequence == sequence && lab.game.individuals[1].care_visits == 9);
+  strcpy(kit.journal_path, actual_journal);
+  assert(kit_link(&kit, KIT_COMPANION, 0) && kit_link(&kit, KIT_DOCK, 0));
+  unsigned char cache_bytes[9000], world_bytes[9000], after[9000];
+  size_t cache_length = read_saved_bytes(kit.journal_path, cache_bytes, sizeof(cache_bytes));
+  size_t world_length = read_saved_bytes(path, world_bytes, sizeof(world_bytes));
+  assert(cache_length > sizeof(KitJournal));
+  assert(!kit_resident_cache_current(&kit) && !kit_dock_cache_current(&kit));
+  before = lab.game;
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(!memcmp(&before, &lab.game, sizeof(before)));
+  assert(read_saved_bytes(kit.journal_path, after, sizeof(after)) == cache_length &&
+         !memcmp(cache_bytes, after, cache_length));
+  assert(read_saved_bytes(path, after, sizeof(after)) == world_length &&
+         !memcmp(world_bytes, after, world_length));
+  /* Restart offline keeps the older accepted snapshot, including its timestamp. */
+  SelectedLab restarted;
+  selected_lab_init(&restarted);
+  assert(selected_lab_load(&restarted, path, 200));
+  DeviceKit recovered;
+  assert(kit_init(&recovered, &restarted, 200));
+  assert(!memcmp(&recovered.residents, &accepted_cache, sizeof(accepted_cache)) &&
+         kit_resident_count(&recovered) == 2 && !kit_resident_cache_current(&recovered));
+  assert(read_saved_bytes(recovered.journal_path, after, sizeof(after)) == cache_length &&
+         !memcmp(cache_bytes, after, cache_length));
+  sequence = restarted.game.last_operation_sequence;
+  assert(kit_link(&recovered, KIT_COMPANION, 1));
+  assert(kit_resident(&recovered, 1)->individual.care_visits == 9 &&
+         restarted.game.last_operation_sequence == sequence && kit_resident_cache_current(&recovered));
+  assert(kit_dock_visits(&recovered) == 12 && !kit_dock_cache_current(&recovered));
+  assert(kit_link(&recovered, KIT_DOCK, 1));
+  assert(kit_dock_visits(&recovered) == 13 && kit_dock_cache_current(&recovered));
+  FILE *status = tmpfile();
+  assert(status);
+  kit_status(&recovered, KIT_COMPANION, status);
+  rewind(status);
+  char output[4096];
+  size_t status_length = fread(output, 1, sizeof(output) - 1, status);
+  output[status_length] = 0;
+  assert(fclose(status) == 0);
+  assert(strstr(output, "\"resident_snapshot\"") &&
+         strstr(output, "\"original_art_sha256\":\"38b0fa7f") &&
+         !strstr(output, "resident-2") && !strstr(output, "\"genome\""));
+  /* Corruption in the wrapper (including padding) cannot authorize a cache. */
+  cache_length = read_saved_bytes(recovered.journal_path, cache_bytes, sizeof(cache_bytes));
+  cache_bytes[cache_length - 1] ^= 1;
+  assert(save_bytes_write(recovered.journal_path, cache_bytes, cache_length) == 0);
+  SelectedLab corrupt_lab;
+  selected_lab_init(&corrupt_lab);
+  assert(selected_lab_load(&corrupt_lab, path, 300));
+  DeviceKit corrupt;
+  assert(!kit_init(&corrupt, &corrupt_lab, 300) && corrupt.failed);
+  char marker[580];
+  snprintf(marker, sizeof(marker), "%s.required", recovered.journal_path);
+  unlink(marker);
+  unlink(recovered.journal_path);
+  unlink(path);
+  char lockpath[560];
+  snprintf(lockpath, sizeof(lockpath), "%s.lock", path);
+  unlink(lockpath);
 }
 static void legacy_intent_recovery(const char *directory) {
   for (unsigned version = 1; version <= 2; ++version) {
@@ -446,6 +597,7 @@ static void discard_and_home_reception(const char *directory) {
 int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
+  resident_cache_and_visits(directory);
   legacy_intent_recovery(directory);
   reserved_whole_intent_recovery(directory);
   early_unload_journey(directory);

@@ -1,7 +1,13 @@
 # Product status
 
-**Active:** owner-authorized [Polished Core V1](ROADMAP.md). Yellow Home with resident access through Habitat is selected; console-only acquisition is removed. Interaction repairs and shared native art production are underway. No new release or art acceptance is claimed yet.
-
+**Active:** [Polished Core V1](ROADMAP.md), not yet delivered. The public draft
+contains Home, safe return/review controls, a collection Overview, sample-specific
+A/B discovery, explicit supported-form creation, incubation and retained residents.
+The complete timed Lab journey and restart passed on a clean pushed VM revision.
+Shared frame/resource art and the Gemini expedition scene are integrated; actual
+screen review is correcting the Probe feedback/footer clearance and assessing
+research comprehension. Companion access to the same resident and offline cache
+is in progress. Local generation replay and final connected delivery remain.
 
 Current outcome: Companion gathering → Cargo return → Lab acceptance → research
 and creation in the same durable local world. The current family remains a
@@ -43,21 +49,21 @@ native visual fidelity as final; behavioral checks do not approve art quality.
 
 ## Remaining proof
 
-The owner-reported post-accept Cargo exit remains open; isolated native Back/Confirm
-paths worked, so no repair is claimed. One existing Lab shortcut must become Home.
-The [three-device defect packet](design/three-device-playability-audit/README.md)
-prioritizes later repairs, with native/source/visual evidence distinguished.
-[Research](design/research-and-creation.md#discovery-proposal--30-september-2026)
-now has a joined A/B discovery proposal and
-[backend generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
-are bounded design only. No service or new canonical traits were introduced.
+The owner-reported post-accept Cargo exit remains open: fresh native escape and
+Home paths pass, but these do not establish the original failure's cause. The
+[three-device defect packet](design/three-device-playability-audit/README.md)
+retains the broader gaps. Yellow Home is implemented in the draft; resident
+selection belongs to Habitat. Collection Overview and each sample workbench are
+separate. [A/B discovery](design/research-and-creation.md#discovery-proposal--30-september-2026)
+uses retained evidence and supported alternatives; legacy samples keep their
+five-study content. This authored Pip fixture is not a complete catalogue.
 
-The next named screen outcome is faithful shared-asset derivation from the
-approved C18 and connected Gemini concepts, followed by native-size inspection.
-The retained Home hierarchy continues. Research still needs its collection-wide
-Overview separated from each sample workbench; its current five-study Pip
-fixture is not a complete research content system. [Experience](specs/experience.md)
-and the [screen standard](design/screen-design-standard.md) own these requirements.
+[Generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
+remain bounded to local validated jobs and retained art. No deployed service,
+paid provider or new canonical trait is introduced. See [Experience](specs/experience.md)
+and the [screen standard](design/screen-design-standard.md) for the craft and
+interaction requirements. The draft is not a substitute for actual final screen
+acceptance, connected playthrough or a published release.
 
 The Lab reference is Raspberry Pi4; current execution is Linux x86-64 C17 host
 simulation. One process owns three logical devices and simulated radio exchange.
@@ -81,4 +87,4 @@ open under [architecture](specs/architecture.md) and [cloud/local records](specs
 No complete V1, physical kit, human-playtest acceptance, production BOM or hardware
 feasibility is claimed. [Build coverage](BUILD.md) identifies available sources.
 
-The [full-family promise assessment](design/three-device-playability-audit/promise-gap.md) and preserved owner references are part of the current audit packet. No native repair or art rollout accompanies it.
+The [full-family promise assessment](design/three-device-playability-audit/promise-gap.md) and preserved owner references are part of the current audit packet. The audit remains the baseline gap record; the active draft implements its bounded Core V1 repairs and is not yet a delivered replacement.

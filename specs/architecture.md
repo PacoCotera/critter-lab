@@ -225,6 +225,25 @@ production radio format, endpoint migration framework or rollback-save promise.
 Wireless controls outside the shells independently interrupt Companion and Dock
 links. Dock retains a timestamped accepted-world projection while offline and
 catches up after reconnect; it never owns a second inventory or awards rewards.
+The Kit sidecar now stores a version1 envelope around the unchanged 160-byte
+transfer journal and a bounded revealed-resident cache. Bare journal versions1–4
+must pass their original exact-size/checksum/policy checks before migration;
+the wrapper independently checks its version, length, checksum and cache records.
+Transfer command IDs, fingerprints, intent reconciliation and required-file marker
+retain their existing semantics. Keep this envelope with its matching world save.
+
+The resident cache records saved individual/source IDs, genome/expression,
+original art metadata and visit count, with snapshot time/world revision. It
+contains no unborn resident. Companion reads only this accepted projection and
+resolves a connected visit by exact ID through existing `CARE_VISIT`; pending
+transfer states block visits. Offline inspection is stale and read-only, with
+no queued mutation. Lab and Companion share the accepted count; Dock's accepted
+visit total and freshness are also persisted in the envelope. Projection writes
+publish only after successful save. Failure retains the older in-memory snapshot
+as stale; a successfully accepted world visit is not repeated to repair it.
+Restart reads the snapshot actually retained on disk; reconnect refreshes without
+issuing another visit. This is a host cache boundary, not separate endpoint/radio
+persistence or a new care/needs mechanic.
 Cloud/charging are unavailable, and Print/Feed are explicitly simulated feedback.
 Production distributed receipts still need independent endpoint persistence,
 authentication, pairing, delivery ordering and radio failure validation.

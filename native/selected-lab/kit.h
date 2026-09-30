@@ -14,8 +14,9 @@ enum {
 enum {
   COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW,
   COMP_DISCARD_CLASS, COMP_DISCARD_QUANTITY, COMP_DISCARD_REVIEW,
-  COMP_FINISH_REVIEW
+  COMP_FINISH_REVIEW, COMP_FRIEND_VISIT
 };
+#define COMP_FRIEND_LIST COMP_FRIENDS
 
 typedef struct {
   unsigned revision, acknowledged, epoch, acknowledged_epoch, focus, page;
@@ -38,9 +39,24 @@ typedef struct {
 } KitJournal;
 
 typedef struct {
+  GameIndividual individual;
+  GameIndividualMetadata metadata;
+} KitResidentProjection;
+
+typedef struct {
+  uint32_t version, count;
+  uint64_t world_revision, updated_at;
+  KitResidentProjection residents[GAME_MAX_INDIVIDUALS];
+} KitResidentCache;
+
+typedef struct {
   SelectedLab *lab;
   KitView companion, dock;
   KitJournal journal;
+  KitResidentCache residents;
+  uint32_t dock_visits;
+  int resident_cache_failed, dock_cache_failed;
+  char selected_resident_id[40];
   char journal_path[560];
   int failed;
   uint32_t clock, next_delivery, dock_updated;
@@ -66,4 +82,13 @@ const char *kit_route(const DeviceKit *kit);
 const char *kit_expedition_status(const DeviceKit *kit);
 const GameSample *kit_received_sample(const DeviceKit *kit);
 int kit_lab_explore(const DeviceKit *kit);
+unsigned kit_resident_count(const DeviceKit *kit);
+const KitResidentProjection *kit_resident(const DeviceKit *kit, unsigned index);
+const KitResidentProjection *kit_selected_resident(const DeviceKit *kit);
+int kit_resident_cache_current(const DeviceKit *kit);
+int kit_resident_visit_available(const DeviceKit *kit);
+uint64_t kit_residents_updated_at(const DeviceKit *kit);
+uint64_t kit_residents_world_revision(const DeviceKit *kit);
+unsigned kit_dock_visits(const DeviceKit *kit);
+int kit_dock_cache_current(const DeviceKit *kit);
 #endif

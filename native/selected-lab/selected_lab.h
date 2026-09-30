@@ -148,5 +148,9 @@ void selected_lab_row_with_context(const SelectedLab *lab,
 void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
                              unsigned height, unsigned row,
                              uint8_t pixels[SELECTED_LAB_WIDTH * 3]);
+/* Resolve only a recorded, supported original; never invent a replacement. */
+int selected_lab_original_art(const GameIndividual *individual,
+                              const GameIndividualMetadata *metadata,
+                              unsigned *asset);
 int selected_lab_bmp(const SelectedLab *lab, FILE *output);
 #endif
