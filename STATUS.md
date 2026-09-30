@@ -5,8 +5,10 @@ Owner review of V1 identified passive field play and misleading Lab expedition
 ownership. The new direction is a generated steerable Companion map, deliberate
 investigation/acquisition and a received-only Lab expedition log. The
 [gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
-contains proposed rules; native-size visuals and actual game/UX/art review are in
-progress. This is a design study, not a deployed mechanic. The checkpoint below
+contains proposed rules; the [nine-screen map study](design/expedition-map-study/README.md)
+is ready for owner steering after corrected actual game/UX/craft review. Two
+authored topology fixtures use seeded terrain; one unchanged regeneration passed.
+This is a design study, not a deployed mechanic. The checkpoint below
 remains live while the owner reviews the rest of the loop.
 
 **Software:** [Polished Core V1](ROADMAP.md), internally accepted. This revision
