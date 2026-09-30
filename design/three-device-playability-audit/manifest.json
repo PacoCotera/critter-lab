@@ -1,0 +1,2358 @@
+{
+  "nativeRevision": "fd08ff1f3cdd88c9a03bcc388c1326546b5dba38",
+  "kind": "Unmodified native frames from isolated saved worlds; no owner sandbox mutation",
+  "captures": [
+    {
+      "file": "connected-initial-0.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 1,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Overview",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "9859814336a67ca507072d67b51915fb2915eee75a23330e3b8b1ca7e17520e0"
+    },
+    {
+      "file": "connected-initial-1.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 1,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Probe",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "e89626cfb0a069b5e04405004686f4927d40c0c46215664fdf45a6278e8689c9"
+    },
+    {
+      "file": "connected-initial-2.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 2,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "World",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "51a601b99b51c8173dff0293c2a87638386feb09c1c78af3a5198072f808c3be"
+    },
+    {
+      "file": "connected-route-choice.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 4,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Field survey",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "b02f7809e9a828afbaec78aaf5cc7b6babe41defb4c4ee7345e350e8c4cf44f8"
+    },
+    {
+      "file": "connected-gathering-empty.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 7,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "View cargo",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "6a1a463939d38376cc656bc8dc1523589acbc43948706ddb1c730b09260a6807"
+    },
+    {
+      "file": "connected-companion-cargo.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 14,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Send to Lab",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "e9e07ef50cb456d0c6746aa21d4d63c88b2de91113e1592c7d45f4110c3816aa"
+    },
+    {
+      "file": "connected-send-review.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 17,
+        "width": 450,
+        "height": 600,
+        "page": "send-review",
+        "focus": "Send to Lab",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "6c1fc9b3e2c01755bf4489c86003f0930fe2434b483d4ccd09716f4e9e118b12"
+    },
+    {
+      "file": "connected-send-waiting.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 21,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "View expedition",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Sending to Lab",
+        "phase": 1,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "20361cb8395528ab48f0bf75bfeba2d833931caf19300402f274274e017565a1"
+    },
+    {
+      "file": "connected-lab-arrived.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 8,
+        "width": 1024,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Accept haul",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Received at Lab - accept there",
+        "phase": 2,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ddc71b5cead0a6d2a98e6c6095ec824f823a9caeecc92d1c6d7d3c9dedc6cd6f"
+    },
+    {
+      "file": "connected-lab-accepted.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 10,
+        "width": 1024,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Companion expeditions",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "c49a04a3b1833b8fa5b80f0053e11ebc788074bafbd61d1d312f4432d9a0ab92"
+    },
+    {
+      "file": "connected-companion-accepted.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 24,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "View expedition",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Accepted in Lab - receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "57ddd3a4d6384e2601bbe84818f203a62f1592d733a250d9b970a0570585cbfb"
+    },
+    {
+      "file": "connected-lab-back-after-accept.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 11,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Overview",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "d0b7e1436cdcabf5198ec9664e4b99a979bb4a803a47ab30061366b61d630c1f"
+    },
+    {
+      "file": "connected-lab-back-again.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 12,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Overview",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "d0b7e1436cdcabf5198ec9664e4b99a979bb4a803a47ab30061366b61d630c1f"
+    },
+    {
+      "file": "connected-lab-research-shortcut.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 13,
+        "width": 1024,
+        "height": 600,
+        "page": "samples",
+        "focus": "Find a sample outdoors",
+        "workspace": 0,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "fa84134f6fed815be038a271b07524594ee0738509f6fdcf45286c127d1e9519"
+    },
+    {
+      "file": "connected-lab-home-through-back.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 14,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Research",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "c4013c3033d45d15ebe70ecde331af4d8c248f61bc25822e04167584ff2bf0dc"
+    },
+    {
+      "file": "connected-receipt-complete.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 26,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Return to Probe",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "e9fade837b5145836b897c294b2242ef4fb90e561b9ef886230e9d0282e38d83"
+    },
+    {
+      "file": "connected-companion-back-after-accept.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 29,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Field survey",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "1de0b1c19a7cb9b546de33a644ef50178a1f8d3f1c562e758535859ca5e1a477"
+    },
+    {
+      "file": "connected-companion-modes-after-accept.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 32,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Probe",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "2a6cf10329d1f2ea05f3e3397f9966a24e219d196dd81feb583f33a3bbc4bd03"
+    },
+    {
+      "file": "connected-empty-cargo-direct.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 38,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Return to Probe",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "64500c1e2e15708b23d89c6b06e9e7ac9773ed82d1342720998ad0c16c21d32c"
+    },
+    {
+      "file": "connected-return-probe-from-cargo.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 41,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Field survey",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "1de0b1c19a7cb9b546de33a644ef50178a1f8d3f1c562e758535859ca5e1a477"
+    },
+    {
+      "file": "connected-modes-after-return-probe.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 44,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Probe",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "2a6cf10329d1f2ea05f3e3397f9966a24e219d196dd81feb583f33a3bbc4bd03"
+    },
+    {
+      "file": "connected-probe-routes-again.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 47,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Field survey",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "1de0b1c19a7cb9b546de33a644ef50178a1f8d3f1c562e758535859ca5e1a477"
+    },
+    {
+      "file": "connected-new-outing.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 50,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "View cargo",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "b7b1157047be672f078a0fa18aefa837e9a00d5732d3010b4c0013c60107feb9"
+    },
+    {
+      "file": "connected-early-finish-focus.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 53,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Finish expedition",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "6454ee81620cda551eb8b3bcf3ab32d4eaab782219844875a04c532ad70471be"
+    },
+    {
+      "file": "connected-early-finish-result.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 57,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Garden forage",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "87ea7fd2a9c5ef6c88f4f3afc9ad16bb8102c657f862f4f23242a12fe53597ae"
+    },
+    {
+      "file": "connected-final-0.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 18,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Research",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "c4013c3033d45d15ebe70ecde331af4d8c248f61bc25822e04167584ff2bf0dc"
+    },
+    {
+      "file": "connected-final-1.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 57,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "Garden forage",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "87ea7fd2a9c5ef6c88f4f3afc9ad16bb8102c657f862f4f23242a12fe53597ae"
+    },
+    {
+      "file": "connected-final-2.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 9,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "World",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "90e513f040a55be10be9fa458394aea389d1a1d22df009052ed0c16ebc50d0af"
+    },
+    {
+      "file": "connected-dock-supplies-focus.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 12,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Supplies",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ed08f3be0c5ca0d15997f79aa6cdede7a93bf033ca1524c3cf23d567c8e4df0a"
+    },
+    {
+      "file": "connected-dock-supplies-open.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 15,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Supplies",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "9e35b93f055281799208db0a62143c75a23a5343a440edd8a5f7151563892f7e"
+    },
+    {
+      "file": "connected-dock-connections-focus.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 18,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Connections",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "6cb736f19acb35f725063b89b8b2bce3f312590d3efa195286ef42f19e6bb30c"
+    },
+    {
+      "file": "connected-dock-connections-open.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 21,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Connections",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "82825309a70d1b00aa4275153de578e6ef4664e66e28dc4008ca1ac79f3842f7"
+    },
+    {
+      "file": "connected-dock-print-preview.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 24,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Print preview (simulation)",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "33929be930d52c82b57e86ba677ceb72506d8f87bde6c4fb6f3ca220101744c8"
+    },
+    {
+      "file": "connected-dock-back-print-preview.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 26,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Print preview (simulation)",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "33929be930d52c82b57e86ba677ceb72506d8f87bde6c4fb6f3ca220101744c8"
+    },
+    {
+      "file": "connected-dock-feed-feedback.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 29,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "Print preview (simulation)",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "027a72b08995b722d9abd04cdbe8c28385784d02afde4fd5f0af1cec08d9e576"
+    },
+    {
+      "file": "delayed-lab-explore-caller.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 3,
+        "width": 1024,
+        "height": 600,
+        "page": "expedition",
+        "focus": "Companion expeditions",
+        "workspace": 4,
+        "online": true,
+        "transfer": "",
+        "phase": 0,
+        "haul": "",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 0,
+        "gather_awarded": 0,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "34e98bb05c367a57948a3d13245e541ab6f86c13ec5df78c7178cbcd73db54c6"
+    },
+    {
+      "file": "delayed-sealed-offline.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 22,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "View expedition",
+        "workspace": 4,
+        "online": false,
+        "transfer": "Waiting for Lab link",
+        "phase": 1,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "aaba3d54f9a99e590c550904d76694c85ce1035feee7aab11f291260953b4343"
+    },
+    {
+      "file": "delayed-sealed-cargo-back.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 25,
+        "width": 450,
+        "height": 600,
+        "page": "probe",
+        "focus": "View cargo",
+        "workspace": 4,
+        "online": false,
+        "transfer": "Waiting for Lab link",
+        "phase": 1,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "9790c8258604a117b63f5977084557f845f5c624d22aee75edcc4c56fe8613c4"
+    },
+    {
+      "file": "delayed-sealed-mode-back.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 28,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Probe",
+        "workspace": 4,
+        "online": false,
+        "transfer": "Waiting for Lab link",
+        "phase": 1,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "869a268937815b67deed16ff934ae5e6f7e1ac50f5619c6ed8c316206e3ccb23"
+    },
+    {
+      "file": "delayed-delayed-arrival.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 12,
+        "width": 1024,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Accept haul",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Received at Lab - accept there",
+        "phase": 2,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          0,
+          100,
+          100
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          0,
+          0
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 4,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ddc71b5cead0a6d2a98e6c6095ec824f823a9caeecc92d1c6d7d3c9dedc6cd6f"
+    },
+    {
+      "file": "delayed-accepted-offline.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 15,
+        "width": 1024,
+        "height": 600,
+        "page": "cargo",
+        "focus": "Companion expeditions",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "c49a04a3b1833b8fa5b80f0053e11ebc788074bafbd61d1d312f4432d9a0ab92"
+    },
+    {
+      "file": "delayed-return-explore-after-accept.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 16,
+        "width": 1024,
+        "height": 600,
+        "page": "expedition",
+        "focus": "Companion expeditions",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "075d1fd6689eb57ee2a1967b5cc4bca479cfce3a28f5f57a173fe90551d55a90"
+    },
+    {
+      "file": "delayed-return-home-after-explore.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 17,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Explore",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Haul accepted; Companion receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 0,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ff6950e5a4330ec02143ffb984be865573d5d298634522ef4dd55774e163fd60"
+    },
+    {
+      "file": "delayed-offline-cargo-after-accept.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 40,
+        "width": 450,
+        "height": 600,
+        "page": "cargo",
+        "focus": "View expedition",
+        "workspace": 4,
+        "online": false,
+        "transfer": "Accepted in Lab - receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "4ab0518558f1f0df1865c750c915be2708d86d12ffa11b3f326c6bf814cdbabb"
+    },
+    {
+      "file": "delayed-offline-cargo-exit.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 43,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Cargo",
+        "workspace": 4,
+        "online": false,
+        "transfer": "Accepted in Lab - receipt pending",
+        "phase": 4,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "958225a225299a1da689dfd9a74f9a3e407087bbad6809764060c8e5fd5d64ba"
+    },
+    {
+      "file": "delayed-reconnected-0.png",
+      "device": 0,
+      "state": {
+        "device": 0,
+        "revision": 19,
+        "width": 1024,
+        "height": 600,
+        "page": "home",
+        "focus": "Explore",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ff6950e5a4330ec02143ffb984be865573d5d298634522ef4dd55774e163fd60"
+    },
+    {
+      "file": "delayed-reconnected-1.png",
+      "device": 1,
+      "state": {
+        "device": 1,
+        "revision": 45,
+        "width": 450,
+        "height": 600,
+        "page": "modes",
+        "focus": "Cargo",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "ab78d9d591627c4cca8cd48e7fba0b9ef27d8c189ef5b4719d4287402e83f346"
+    },
+    {
+      "file": "delayed-reconnected-2.png",
+      "device": 2,
+      "state": {
+        "device": 2,
+        "revision": 12,
+        "width": 792,
+        "height": 272,
+        "page": "dock",
+        "focus": "World",
+        "workspace": 4,
+        "online": true,
+        "transfer": "Receipt confirmed",
+        "phase": 5,
+        "haul": "haul-6/BEE-E-00001",
+        "stock": [
+          0,
+          100,
+          100
+        ],
+        "cargo": [
+          0,
+          0,
+          0
+        ],
+        "samples": 0,
+        "residents": 0,
+        "dock_stock": [
+          0,
+          100,
+          100
+        ],
+        "dock_cached": false,
+        "failed": false,
+        "stock_conversion_pending": false,
+        "mode": 1,
+        "expedition_seconds": 0,
+        "gather_progress_ms": [
+          0,
+          0,
+          0
+        ],
+        "gather_remaining_ms": 4000,
+        "gather_attempted": 7,
+        "gather_awarded": 6,
+        "boundary": "Simulated wireless; radio not selected"
+      },
+      "sha256": "f74bda6cfac3b625d8241efb255629f2aaba15bba223c9af63a3334c520f1ea4"
+    }
+  ]
+}

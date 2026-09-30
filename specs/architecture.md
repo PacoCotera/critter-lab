@@ -57,6 +57,77 @@ Logical job, validation, storage and publication responsibilities do not require
 
 Proposed tool contract: import or author family constraints and assets; record source/provenance; generate a batch; inspect genetic and visual consistency; validate applicability, references and device budgets; publish an immutable content version. Draft content is not eligible for gameplay until validation and publication succeed. Rejected candidates remain distinct from accepted individuals. Distribution must declare supported rules, interpreter and asset profiles; retiring content must not erase saved specimens or their retained art. Exact tool UX, licence checks, publication permissions and content delivery remain to be designed.
 
+## Generation backend proposal — 30 September 2026
+
+Owner requests backend exploration for generated traits, descriptions and critter
+illustrations using algorithms and LLMs. This is a logical service contract;
+deployment topology, providers, paid API access and production infrastructure are
+unselected. It extends the existing creature pipeline, preserving standalone
+play and the optional global boundary. Separate responsibilities can initially
+be modules/jobs in the existing backend; a service per step is not required.
+
+```mermaid
+flowchart LR
+  Author[LLM-assisted catalogue drafts] --> Validate[Schema, genetics and craft validation]
+  Validate --> Catalogue[Approved immutable content bundle]
+  Catalogue --> Engine[Algorithmic sample, inheritance and expression]
+  Engine --> Knowledge[Evidence-backed permitted knowledge]
+  Knowledge --> Copy[Descriptions from allowed facts]
+  Engine --> Appearance[Validated appearance descriptor]
+  Appearance --> Art[Composition or constrained illustration job]
+  Art --> Assets[Retained originals and profile derivatives]
+  Copy --> Views[Lab, Companion, Dock and paper projections]
+  Assets --> Views
+```
+
+| Logical responsibility | Input/output boundary | Acceptance and failure |
+| --- | --- | --- |
+| Catalogue authoring | Approved domain constraints/reference assets → candidate trait definitions, study bundles, descriptions and art masters | LLM suggests reusable content; schema/reference/expression and visual review precede immutable publication. It cannot approve new canonical genes or balance |
+| Genetic resolution | Pinned catalogue, support policy, actual parent inputs or founder rules, context and recorded randomness → valid genomes, phenotype and reasons | Explicit algorithms own truth. Constrained sampling may vary supported combinations; record actual output. No LLM chooses inherited alleles, fixes invalid ancestry or changes a saved individual |
+| Research knowledge | Stable sample support + accepted method/evidence → justified scoped facts, unresolved questions and completeness | Validate evidence, candidate scope and disclosed roster; no caller-supplied complete flag, portrait inference or paid-row count |
+| Description jobs | Permitted fact IDs/parameters, subject, context and template version → concise attributed text draft | Default to controlled claims and approved phrases. LLM never receives hidden whole support merely with instructions not to disclose it; unsupported claims fail validation, existing text remains |
+| Illustration jobs | Validated visible descriptor + approved grammar/reference assets/profile → accepted original and derivatives | Reuse approved layered art offline; Gemini-style generation can produce candidate masters/variants. Validate anatomy, trait expression and pixel craft. Art failure leaves individual intact, with existing asset or honest pending state |
+
+**Trait generation:** LLMs can propose catalogue definitions and worked content
+cases; approved algorithms then sample/derive legal trait combinations and resolve
+expression. They cannot improvise a new rule for each birth. The A/B research
+proposal varies existing Pip support without adding canonical alleles.
+
+**Stable request/result contract:** request ID and subject identity; purpose
+(catalogue draft, research description, supported-form preview or individual
+art); permitted input projection; catalogue/rule/context/mapping/template/profile
+versions; explicit constraints and source-reference provenance. An accepted result
+retains exact genomic output/reason trace or attributed claim IDs, finished asset
+bytes and hashes, plus generator/model provenance where used. PRNG seed/version
+supports traceability but is not a substitute for saved results. Repeating a
+resolved request returns its recorded result, including after model updates.
+
+**Identity and disclosure:** before research, show neutral sample identity and
+known references, never a blurred/hidden full creature. Known topics may depict
+established features only. Complete supported configuration previews remain
+distinct from the actual individual saved on accepted creation. Individual art
+must retain body plan, crown/rings/markings and palette across screens, animation
+and paper. A carried/unexpressed variant is annotation, not visible markings.
+Equal genomes do not collapse different individual identities. Record origins,
+parent-copy traces where applicable, support/evidence/content and art versions.
+
+**Recovery/offline:** bundled validated rules, studies, phrase templates and
+approved reusable art sustain local supported play. Optional remote novelty and
+image latency cannot block basic research/creation or require a phone. A failed
+art job retries the same descriptor, never birth or resource spend. Keep cached
+accepted art/description versions; new profile derivatives do not overwrite
+originals. Unsupported content is reported rather than manufacturing genes.
+Catalogue retirement preserves existing individuals and their assets. Global
+rights/authentication remain governed by the existing synchronization boundary.
+
+Smallest next proof is one supported A/B content bundle, one knowledge-limited
+description draft checked against controlled claims, and one retained descriptor/
+illustration pair using approved art. Validate duplicate-result recovery and
+offline reuse with existing tools. No new database, queue, service cluster,
+provider migration, subscription or deployment is needed before this proof.
+Final automatic visual acceptance bounds and catalogue/publication choices remain
+for owner steering. See [discovery proposal](../design/research-and-creation.md#discovery-proposal--30-september-2026).
+
 ## App, website and backend
 
 The mobile fallback shares core rules, identity and preserved content; supporting app/website surfaces access the local or optional global records their role permits. Proposed surfaces include collection/history, permitted specimen lookup, research knowledge, device setup and account recovery. Their exact feature split is open; neither owns a parallel inventory or requires routine play to move onto a phone. Public lookup must use a permitted projection rather than expose private genomes, location history or credentials.

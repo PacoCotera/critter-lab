@@ -29,6 +29,11 @@ lineage; they do not supersede C18 or reopen selected direction.
 
 ## Connected screen evidence
 
+[Three-device audit and repair acceptance](three-device-playability-audit/README.md),
+[research discovery proposal](research-and-creation.md#discovery-proposal--30-september-2026)
+and [generation backend contract](../specs/architecture.md#generation-backend-proposal--30-september-2026)
+are the current review packet. They do not implement or approve repairs.
+
 | Inspect | What it establishes |
 | --- | --- |
 | [Actual native three-device gallery](connected-device-review/native/README.md) | Current functional frames and native player journey; connected UI remains art scaffolding |
@@ -79,3 +84,7 @@ creature, palette or hardware decisions. Use [branding and attribution](../BRAND
 with each artifact's retained provenance and licensing.
 
 [Documentation](../docs/README.md) · [Player introduction](../docs/players/README.md) · [Status](../STATUS.md)
+
+The [full tactile Companion proposal](companion-experience.md) consumes the audit findings
+into one mode, focus, screen-response and return contract. It was independently
+reviewed as design; implementation and native art remain outstanding.
