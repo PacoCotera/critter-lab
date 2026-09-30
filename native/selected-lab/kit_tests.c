@@ -363,6 +363,8 @@ static void early_unload_journey(const char *directory) {
          lab.game.expedition_active && lab.game.expedition_elapsed == 5);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit_link(&kit, KIT_COMPANION, 0));
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING && kit.journal.version == 4);
   assert(!strcmp(kit_expedition_status(&kit), "Returning"));
@@ -487,8 +489,31 @@ static void cargo_action_threshold(const char *directory) {
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN, old_frame);
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_UP, old_frame);
   assert(kit.companion.page == COMP_CARGO);
+  GameState before_review = lab.game;
+  KitJournal before_journal = kit.journal;
+  unsigned cargo_frame = kit_revision(&kit, KIT_COMPANION);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW);
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus), "Keep cargo"));
+  assert(!memcmp(&before_review, &lab.game, sizeof(before_review)) &&
+         !memcmp(&before_journal, &kit.journal, sizeof(before_journal)));
+  /* Cargo's already painted Confirm cannot seal the review it just opened. */
+  kit_input(&kit, KIT_COMPANION, SELECTED_READY, cargo_frame);
+  kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN, cargo_frame);
+  kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_UP, cargo_frame);
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.journal.phase == KIT_IDLE);
+  /* A fresh default Confirm keeps cargo. Sending needs its own fresh choice. */
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_CARGO &&
+         !memcmp(&before_review, &lab.game, sizeof(before_review)) &&
+         !memcmp(&before_journal, &kit.journal, sizeof(before_journal)));
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  assert(kit.companion.focus == 0 && kit.journal.phase == KIT_IDLE);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(kit.journal.phase == KIT_WAITING &&
+         kit.journal.cargo[0] == before_review.expedition_data);
   char marker[580];
   snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
   unlink(marker);
@@ -537,13 +562,13 @@ static void discard_and_home_reception(const char *directory) {
   /* Send review/Keep also leaves inventory, outing and sequence unchanged. */
   press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW);
-  press(&kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_CARGO && lab.game.expedition_data == 100 &&
          kit.journal.phase == KIT_IDLE);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit_link(&kit, KIT_COMPANION, 0));
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING && kit_option_count(&kit, KIT_COMPANION) == 1);
   uint32_t sealed_data = kit.journal.cargo[0];
@@ -692,6 +717,8 @@ int main(void) {
   kit_tick(&kit, 170);
   assert(lab.game.expedition_data == review_cargo);
   assert(kit_link(&kit, KIT_COMPANION, 0));
+  assert(kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING);
   uint32_t cargo = kit.journal.cargo[0];

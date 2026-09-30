@@ -709,7 +709,8 @@ static void companion_task(DeviceKit *kit, unsigned page) {
     ++view->task_depth;
   }
   companion_page(kit, page);
-  if (page == COMP_DISCARD_REVIEW || page == COMP_FINISH_REVIEW)
+  if (page == COMP_SEND_REVIEW || page == COMP_DISCARD_REVIEW ||
+      page == COMP_FINISH_REVIEW)
     kit->companion.focus = 1; /* Review starts on the reversible Keep action. */
 }
 static void companion_back(DeviceKit *kit) {
