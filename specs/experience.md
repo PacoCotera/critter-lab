@@ -16,7 +16,11 @@ The complete game may first be designed and prototyped in software or an app. A 
 
 Lab extensibility is not a fixed page count or a commitment to unlimited hardware capacity. Physical display count, display modules, controls and performance budgets remain separate decisions. Current kit play still supports operation without a required phone. Final layouts, creature behavior and physical designs retain their own review gates.
 
-Expedition selection reinforces these roles: compare investigation theme, tier eligibility and optional event opportunities at the Lab, then carry the chosen expedition on the simple Probe. Baseline resource gathering is shared; accepted events may temporarily boost it. Return is player-directed or required by simulated damage, not a fixed survey countdown. The [connected expedition study](../design/probe-expedition/README.md) proposes layouts and existing-control interactions; rates, tier unlock order and physical performance remain unvalidated.
+Expedition selection and field play belong on the Companion. The Lab receives
+records and accepted results; it has no live away-expedition view. Return is
+player-directed. The [reviewed map study](../design/expedition-map-study/README.md)
+guides the accepted local map loop; rates, budgets and physical performance
+remain unvalidated.
 
 ## Operate the object
 
@@ -273,5 +277,9 @@ movement toward interesting locations, deliberate acquisition and visible progre
 for each resource class. Keep earned whole units, time/chance preparation, sample
 finds and discovery coverage distinct. Cargo remains accessible without permanently
 occupying focus or replacing the field task. Existing physical controls only; no
-clickable map/touch shortcuts or mandatory reflex/constant-attention test. Layout,
-interaction rules, timing and sample conditions are proposals for the next review.
+clickable map/touch shortcuts or mandatory reflex/constant-attention test. Owner
+approved the reviewed map loop and one active gathering source on 30 September.
+Switching preserves preparation; independent trace discovery leads to deliberate
+sample collection. The reviewed composition and physical-control flow guide
+implementation. Exact pacing, chance, budgets and place catalogue remain
+provisional; actual native acceptance is pending.

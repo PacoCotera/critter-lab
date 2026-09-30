@@ -78,6 +78,24 @@ Genome information is **unknown**, not locked. Research discovers and decodes it
 
 The Probe gathers resources of different types for Lab research and can also gather samples containing genomes to discover and research. These are distinct expedition outputs. Expedition types shape which resources are gathered; a gathering expedition need not be bound to one sample or yield a new sample every time. Signals/collection points, awarded resource quantities, sample capsules and decoded genome knowledge are distinct concepts. Their detailed conversion and capsule preparation are proposed in the [connected research design](../design/research-and-creation.md), not selected hardware or balance rules.
 
+### Local field loop — accepted direction
+
+Owner approved the reviewed map loop on 30 September. Companion movement follows
+visible legal paths; arriving or previewing a place awards nothing. Explicit work
+activates one finite resource source. Switching pauses the previous source while
+retaining preparation, resolved outcomes and remaining budget; work can continue
+while exploring. Whole resource awards and preparation toward a chance attempt
+remain separate. Revisiting or restarting cannot refill a source or reroll results.
+
+An independent trace reveals a route to a sample cache. Inspection and collection
+are separate actions; the capsule stays neutral until Lab research. Repeat
+supply-only outings remain possible. Return review freezes work, cancellation
+restores the same journey, and Send seals results until explicit Lab acceptance.
+Acceptance credits once and records received evidence; Lab cannot infer an away
+position or preparation. The [field design](../design/probe-sampling.md) owns the
+worked contract. Numeric pacing, chance, budgets and place catalogue remain
+provisional fixtures, not final balance.
+
 ### Research is discovery across expeditions — accepted
 
 Research discoveries decode parts of the genome. **A fully decoded genome is needed to incubate a critter.** Genomes vary in complexity, with game progression from simpler toward more complex research. Show that decoding process at the Lab, not only a generic study-complete message. [Genetics](genetics.md#genome-imagery-and-progression) owns decoded/unknown representation and complexity boundaries. Exact progression gates and balance remain open.
@@ -106,7 +124,11 @@ Accepted V1: one qualifying sample supports one founder creation. Findings, supp
 
 Accepted explicit creation spends the chosen sample and displayed creation supplies together and saves one parentless individual. Before submission, the player may revise or leave without spending creation inputs; already-used research reagents remain spent. A confirmed rejection spends no creation inputs. Uncertain delivery checks the same request. After acceptance, leaving does not cancel, refund or reroll it. Revealing, inspecting or retrying its visuals charges nothing further.
 
-Another founder requires another qualifying sample, available through field or console investigation. Breeding is a separate route with separate permissions and costs. The [creation design](../design/creation-terms.md) explains the experience. Permanent service/content-failure remedies remain open; no technical error is an in-world crafting failure.
+Another founder requires another qualifying sample acquired in the field with
+the Companion. Console-only acquisition has been removed. Breeding is a separate
+route with separate permissions and costs. The [creation design](../design/creation-terms.md)
+explains the experience. Permanent service/content-failure remedies remain open;
+no technical error is an in-world crafting failure.
 
 ## Resources and crafting
 

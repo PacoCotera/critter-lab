@@ -21,11 +21,15 @@ Player language must reflect discovery rather than cargo transport. Use expediti
 The current accepted model separates whole collected resources from time-and-chance progress toward another award attempt. Items are fungible within their resource class and indivisible. Only awarded items occupy cargo space; activity progress stays on the Companion and cannot be transferred or spent. [Gameplay](gameplay.md#research-collection-and-gathering--accepted) owns this accounting rule. Collection-work accounting is distinct from spendable resources; do not introduce another player currency or cosmetic progress counter. Progress must come from the expedition state, and observed context must distinguish measured inputs from fictional events and simulator inputs. Show relevant changes rather than animation for its own sake. Refresh cadence and power behavior require physical e-ink validation.
 
 The connected native fixture simulates timed chance attempts, whole supplies and an optional sample encounter. Its intervals, probabilities, capacity and expedition duration are provisional test values. It does not establish real sensing, physical radio behavior or a complete field economy. Screens must distinguish actual simulated state from proposed mechanics. Owner
-30September correction: propose a generated exploration map with steerable movement,
-interesting locations and deliberate interactions that unlock resources and samples.
-Display separate per-resource preparation toward an attempt beside accumulated whole
-units. A decorative landscape and seconds alone are not an expedition experience.
-This new interaction/map design is not yet implemented in the deployed fixture.
+30 September accepted revision: implement the reviewed local map loop with
+steerable movement, interesting places and deliberate acquisition. One finite
+resource source works at a time; switching preserves preparation and remaining
+budget. Sample discovery follows an independent trace and explicit collection,
+never elapsed time alone. Display preparation toward a chance attempt separately
+from whole earned units. The [reviewed map study](../design/expedition-map-study/README.md)
+provides the composition and control contract. Implementation is underway; the
+deployed fixture remains the previous loop until release verification. Exact
+pacing, chance, budgets and place catalogue are provisional.
 
 ## Straightforward sampling — accepted direction
 
