@@ -15,6 +15,7 @@ enum { COMP_PROBE, COMP_CARGO, COMP_FRIENDS, COMP_MODES, COMP_SEND_REVIEW };
 
 typedef struct {
   unsigned revision, acknowledged, epoch, acknowledged_epoch, focus, page;
+  unsigned minimum_action_revision;
   int suspended;
   SelectedGesture gestures[10];
   char message[96];

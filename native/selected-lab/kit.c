@@ -7,8 +7,10 @@
 
 static void refresh(KitView *view, int interaction) {
   ++view->revision;
-  if (interaction)
+  if (interaction) {
     ++view->epoch;
+    view->minimum_action_revision = view->revision;
+  }
 }
 static void refresh_all(DeviceKit *kit) {
   ++kit->lab->revision;
@@ -129,6 +131,8 @@ int kit_init(DeviceKit *kit, SelectedLab *lab, uint32_t clock) {
   kit->clock = clock;
   kit->companion.revision = kit->companion.epoch = 1;
   kit->dock.revision = kit->dock.epoch = 1;
+  kit->companion.minimum_action_revision = 1;
+  kit->dock.minimum_action_revision = 1;
   snprintf(kit->journal_path, sizeof(kit->journal_path), "%s.kit",
            lab->save_path);
   char marker[580];
@@ -370,7 +374,8 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
   }
   KitView *view = device == KIT_COMPANION ? &kit->companion : &kit->dock;
   if (input == SELECTED_READY) {
-    if (!view->suspended && revision == view->revision) {
+    if (!view->suspended && revision >= view->minimum_action_revision &&
+        revision <= view->revision) {
       view->acknowledged = revision;
       view->acknowledged_epoch = view->epoch;
     }

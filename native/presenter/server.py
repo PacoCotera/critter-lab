@@ -23,7 +23,7 @@ class NativeProcess:
     """One selected native process; serialized status/input and binary frame reads."""
     def __init__(self, executable, timeout=10, kit=False):
         self.process = subprocess.Popen([str(executable), "kit-serve" if kit else "serve"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
         self.timeout = timeout
         self.unavailable = False
 
@@ -86,6 +86,19 @@ class NativeProcess:
         except subprocess.TimeoutExpired:
             self.process.terminate()
             self.process.wait()
+
+    def command_sequence(self, lines):
+        """A painted READY/down prefix cannot interleave with another client."""
+        if not self.lock.acquire(timeout=self.timeout):
+            raise RuntimeError("Native transport busy or unavailable")
+        try:
+            for line in lines:
+                result, _ = self.command(line)
+                if "error" in result:
+                    break
+            return result, None
+        finally:
+            self.lock.release()
 
 
 def load_release(path):
@@ -297,12 +310,21 @@ class Handler(BaseHTTPRequestHandler):
                 allowed = {f"{button}-{edge}" for button in allowed_buttons for edge in ("down", "up")} | {"cancel", "suspend", "resume", "ready"}
                 if name not in allowed:
                     raise ValueError()
+            painted_ready = "ready" in command
+            if painted_ready:
+                expected_keys.add("ready")
+                if command["ready"] is not True or not isinstance(name, str) or not name.endswith("-down"):
+                    raise ValueError()
             if set(command) != expected_keys or not isinstance(name, str) or name not in EVENTS:
                 raise ValueError()
             if type(revision) is not int or not 0 <= revision <= 4294967295:
                 raise ValueError()
             line = (f"device {devices[device]} " if self.path == "/api/device-input" else "") + f"{name} {revision}"
-            result, _ = self.server.native.command(line)
+            if painted_ready:
+                prefix = (f"device {devices[device]} " if self.path == "/api/device-input" else "") + f"ready {revision}"
+                result, _ = self.server.native.command_sequence([prefix, line])
+            else:
+                result, _ = self.server.native.command(line)
             self.reply(400 if "error" in result else 200, result)
         except (ValueError, UnicodeError):
             self.reply(400, {"error": "Invalid command body"})
