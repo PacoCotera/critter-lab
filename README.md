@@ -12,7 +12,10 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 *Selected family appearance, not a manufactured kit or measured hardware design.
 [Concept details and earlier studies](design/lab-controls/concepts.md) preserve provenance.*
 
-[Polished Core V1 roadmap](ROADMAP.md) tracks the current implementation round.
+[Roadmap](ROADMAP.md) connects the delivered Core V1 with the current exploration
+design round. The [generated-map study](design/expedition-map-study/README.md)
+proposes steerable Companion field play and a received-only Lab expedition log;
+its screens are design proofs, not the deployed simulator.
 
 ## Playable software today
 

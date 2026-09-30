@@ -1,5 +1,14 @@
 # Product status
 
+**Active design:** [Companion exploration overhaul](https://github.com/PacoCotera/critter-lab/issues/49).
+Owner review of V1 identified passive field play and misleading Lab expedition
+ownership. The new direction is a generated steerable Companion map, deliberate
+investigation/acquisition and a received-only Lab expedition log. The
+[gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
+contains proposed rules; native-size visuals and actual game/UX/art review are in
+progress. This is a design study, not a deployed mechanic. The checkpoint below
+remains live while the owner reviews the rest of the loop.
+
 **Software:** [Polished Core V1](ROADMAP.md), internally accepted. This revision
 contains Home, safe return/review controls, a collection Overview, sample-specific
 A/B discovery, explicit supported-form creation, incubation and retained residents.

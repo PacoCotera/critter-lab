@@ -125,8 +125,8 @@ proof does not claim their implementation.
 
 | Surface | What must be visible and actionable |
 | --- | --- |
-| Lab Home | Saved Lab stock, Companion activity/awaiting receipt, retained research, incubation and residents. Carried cargo is separate from spendable stock. |
-| Lab Explore | Shared baseline gathering, each expedition's distinct possible opportunity, and relevant supply needs. A route cannot promise a genotype or merely rename identical behavior. |
+| Lab Home | Saved Lab stock, actual pending received haul, retained research, incubation and residents. Any older Companion information is labeled as received/cached; away activity and carried cargo cannot be inferred from shared simulator state. |
+| Lab expedition log | Received completed expedition records and their actual findings/accepted contents. No route selection, live away position, preparation or timer. Cached information is labeled; a log is not a field-control screen. |
 | Companion Probe/Cargo | Active expedition, actual observations/progress and owned cargo. Mode changes preserve the current outing. Send stops collection; accepted unloading ends it. Receipt confirms transport; the next outing is a new expedition. Simulator device selection is outside the device face. |
 | Lab receipt | Named haul, exact quantities and samples, pending/saved result. Credit once; retries return the same receipt. Fresh Lab acceptance transfers ownership and clears matching carried quantities once; a matching acknowledgment then closes the pending receipt metadata. Lost acknowledgment must not leave spendable copies on both devices. |
 | Research overview | Overview entry above the left sample list; collection-wide discoveries, pending work and shared supply needs. It does not borrow the last selected sample's progress as the collection status. |
@@ -235,8 +235,8 @@ Points in this map report field progress; they are not an additional spend arrow
 | Thing | What it is / contains | How it relates to the rest |
 | --- | --- | --- |
 | Probe | Portable executor of a selected expedition; retains activity, collection progress and results | Gathers typed resources and sometimes samples. Does not decode genomes or own the player's research |
-| Lab | Workbench for collection, inventory, research, expedition planning and incubation | Makes player choices and their consequences visible; shared terminal does not merge profiles |
-| Expedition type | Investigation theme and eligible events; tier requirements govern availability | Selected at Lab, shapes opportunities on Probe. Expected mix is not guaranteed yield or a promise of a sample |
+| Lab | Workbench for collection, inventory, research and incubation; received expedition log | Shows only field records actually received; shared terminal does not merge profiles or infer away-device state |
+| Expedition type | Investigation theme and eligible events; tier requirements govern availability | Selected and played on Companion. Expected mix is not guaranteed yield or a promise of a sample |
 | Signals | Sensed observations and separately identified fictional event inputs | Evidence used by expedition rules. Neither spendable materials nor genome zones; no physical sensor per resource/gene |
 | Collection points | **Recommended:** expedition-local measure of qualified gathering activity | Explains gathering progress toward declared collection milestones. Not research XP, money, a resource count or gene count. Conversion/rates remain to design |
 | Resource type / stack | A defined game material and its available quantity | Requirements on studies/creation refer to types and quantities. Stock is shared across that player's genome records |
@@ -314,7 +314,7 @@ Recommend progression by expanding what the player understands and can undertake
 
 Do not use unknown regions as level locks. Distinguish **knowledge** (what this record establishes), **means** (resources/capabilities to run a study), and **complexity** (the information/relationships to understand). Rarity, strength, cost and visual density are separate. Exact access gates, pacing, content ladder and equipment benefits remain open; no XP-level system is proposed here. A more complex genome must offer a meaningful discovery payoff, not merely more repetitions. Existing individuals never become incomplete when later content grows.
 
-Console-only play retains equivalent access to samples and necessary resource types through Lab acquisition/crafting/investigation. The exact route needs its own worked example; avoid quietly making any essential type or whole family Probe-exclusive.
+Companion owns field acquisition in the current three-device loop. The Lab researches accepted samples and uses accepted whole resources; it does not duplicate expedition selection or field play. Earlier console-only acquisition proposals are superseded. The proposed [map exploration study](probe-sampling.md#generated-field-loop--owner-review-proposal) connects field choices to research needs without claiming a particular resource or sample is guaranteed.
 
 ## Workbench experience and hardware consequences
 
@@ -323,8 +323,8 @@ Console-only play retains equivalent access to samples and necessary resource ty
 | Choose what to work on | Collection previews the actual genome record, discoveries and affordable studies; chosen workpiece becomes central | Lab rotation previews; Confirm opens; Back restores collection focus |
 | Inspect a zone | Show its partial structure/known relationships with unknown portions, plus relevant findings; no padlock or generic green completion grid | Rotate through meaningful targets, Confirm inspect; monochrome-safe known/unknown distinctions |
 | Run research | Bring the sample, chosen study and actual reagents into a cost review; pending work stays distinct from an accepted discovery | Existing Confirm commits, Back leaves a review; feedback must remain legible without animation or touch |
-| Plan gathering | Compare expedition events and discovery opportunities against inventory gaps and collection interests | Lab controls select profile; Probe receives enough content to operate without a phone |
-| Gather and return | Typed awards, field progress and capsule finds remain distinct; receipt changes Lab availability once | Probe Next/Confirm with visible focus; persistent expedition state; no sensor per item or invented capsule mechanism |
+| Plan gathering | Compare expedition opportunities against retained inventory gaps and collection interests | Companion selects and plays; locally available content supports play without a phone. Lab has received records only |
+| Gather and return | Typed awards, field preparation and capsule finds remain distinct; receipt changes Lab availability once | Existing Companion directions, Confirm and Back; persistent expedition state. Proposed map interactions require owner review before implementation |
 | Prepare incubation | Complete supported genome, source sample and required materials together | Lab explicit review/commit; physical placement/display/printing remain later engineering design |
 
 Concise candidate language: **Unknown**, **Partly decoded**, **Decoded**, **Data card packs 2 / Needs 3**, **Pale variant carried**, **Crown present**, **New capsule**, **Prepare**, **Compare**, **Incubate**. These label objects and discoveries backed by the worked genotype/phenotype rules. The visual work must supply the relationships instead of explaining the whole process in paragraphs on the device. Keep the small specimen identity, give the research object a meaningful workbench presence, and use selected refinement-02 vocabulary. Do not copy the previous bare grid/layout.

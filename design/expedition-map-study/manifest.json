@@ -1,0 +1,2044 @@
+{
+  "status": "Provisional static expedition proposal; no runtime, balance or physical-display claim",
+  "palette": {
+    "graphite": "#1e282f",
+    "field": "#202b32",
+    "shadow": "#0b1821",
+    "blue": "#2389c6",
+    "cyan": "#67cef5",
+    "ink": "#e3edef",
+    "muted": "#a5b6bd",
+    "warm": "#f1cd79",
+    "saved": "#a3cda8"
+  },
+  "assets": [
+    {
+      "name": "data-compact",
+      "path": "design/core-v1-art/exports/data-compact.png",
+      "sha256": "91f78ee2a8a22823b8fb3b4974d7be8e81ac627244bbbb2eeb3a9fbdedd96732",
+      "width": 37,
+      "height": 48,
+      "scale": 1
+    },
+    {
+      "name": "energy-compact",
+      "path": "design/core-v1-art/exports/energy-compact.png",
+      "sha256": "f8fbde28f362d564659052eadd9249b3cdd395481d7b1378ce8b41ef75c17218",
+      "width": 43,
+      "height": 51,
+      "scale": 1
+    },
+    {
+      "name": "essence-compact",
+      "path": "design/core-v1-art/exports/essence-compact.png",
+      "sha256": "5659ab61e083bd55a94369dcfe3ea09189955162f7492d1230cf6dbc61e84277",
+      "width": 47,
+      "height": 49,
+      "scale": 1
+    },
+    {
+      "name": "sample-neutral",
+      "path": "design/core-v1-art/exports/sample-neutral.png",
+      "sha256": "60030250f1202e103e9e1497dcf0b318c5963cfcb0dfb09cfc9bc8646cd0beb8",
+      "width": 54,
+      "height": 54,
+      "scale": 1
+    },
+    {
+      "name": "data-primary",
+      "path": "design/core-v1-art/exports/data-primary.png",
+      "sha256": "adaf1042d1b1a03c298d485bbf2ab666e4e0bc31305ab0d7f6f7c75b52ff25ab",
+      "width": 90,
+      "height": 100,
+      "scale": 1
+    },
+    {
+      "name": "energy-primary",
+      "path": "design/core-v1-art/exports/energy-primary.png",
+      "sha256": "b81288270d1da126d7360bc96f9c8cf034c3ba12cb41fa19346eefd886e5835a",
+      "width": 90,
+      "height": 100,
+      "scale": 1
+    },
+    {
+      "name": "essence-primary",
+      "path": "design/core-v1-art/exports/essence-primary.png",
+      "sha256": "74e1bca1a63fbc7414b3f78e83add0fb493c63e4d00a8880991c408158694715",
+      "width": 90,
+      "height": 90,
+      "scale": 1
+    }
+  ],
+  "references": [
+    {
+      "path": "design/game-art-proposals/35-vault-composition/18-c-refined.png",
+      "sha256": "889745d74ae7bcd7c80ef5737258b3fdf0357423c1d2362a3630925ca07a632b"
+    },
+    {
+      "path": "design/companion-connected-art/03-gemini-probe-corrected.png",
+      "sha256": "abd0840b6720fbb12e7652bf72536ed39822a79b4f43006771e934c2598c2669"
+    },
+    {
+      "path": "design/companion-connected-art/04-gemini-cargo.png",
+      "sha256": "17d95ecc7dd0a548826d9dfe0bc360b7a764b267bae70e82132d9073f93b5b9e"
+    },
+    {
+      "path": "design/companion-connected-art/07-gemini-lab-arrival-blue.png",
+      "sha256": "ad46c0bbc063d3be60d07ffdd56e50f8e82fcd9ffb4308191ccff75c4b590ffb"
+    },
+    {
+      "path": "native/shared/fonts/Vera.ttf",
+      "sha256": "c4c45690b345435b2cba52ecabe275f05e49b389b39fe68ad03afbb551288d3d"
+    },
+    {
+      "path": "native/shared/fonts/VeraBd.ttf",
+      "sha256": "cc037385e4d55bfde89b13e03091ee93bf40c0c52ddd391ff031ab276f13b8e9"
+    }
+  ],
+  "screens": [
+    {
+      "name": "01-map-seed-a",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "5deead6bf5a7f11e5eae46205edf6bacbaa03cf99b9bb6230b013fbae8a98679",
+      "svgSha256": "363051627d0ec6a75d55203f7c0465cdf9660be715b6ff13032ad339f5c1c7e2"
+    },
+    {
+      "name": "02-brook-opportunity",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "357701366e630134090c809951481110747cc81a03bd9ac28e1b6ac644043378",
+      "svgSha256": "2a5f80b0baed9a71d475add9fe84c97fa2aa22e0ee3812585db09c86abfbe497"
+    },
+    {
+      "name": "03-active-map-lead",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "deb513bd905a2855ea0776c3130d88e35681f61616f7587ee0ede55819b4da25",
+      "svgSha256": "000b201818a6403984e9e75abc73584de8c14f43b9ad92da8530bbd473e1b982"
+    },
+    {
+      "name": "04-sealed-sample",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "1b68e643675a6365288cedbcb54a5f1f4f36115daf00a7d36e847cf981ff8396",
+      "svgSha256": "3898961cc4fd6e368e1d7403a799246d9bc18860a1b01b253ad309b169f32eaa"
+    },
+    {
+      "name": "05-return-review",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "91ad153a8f6be467b76a7d02f9a984a9001579d58d73194b93663a7fd7b0d43f",
+      "svgSha256": "764d3f32c3f9282f81ffd0424a49650183730cd2b95b513aeac9d79f4c9c3cb3"
+    },
+    {
+      "name": "06-sent-awaiting-receipt",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "c53047a81d357ddebe315a9e049171b7453dada309f530dd9ca99284605b881f",
+      "svgSha256": "4642a3ee04bdfb6a942aad7d4e9e1db4cad98e762dae7e81335246b21bffafbe"
+    },
+    {
+      "name": "07-map-seed-b",
+      "width": 450,
+      "height": 600,
+      "pngSha256": "27f937c501821d32908ee275aa8142e849c66f93325614af5818c357493eda30",
+      "svgSha256": "35e566e8a8b77435cb718557137ad9cd70e34e927ff48542d02c6655d25126a0"
+    },
+    {
+      "name": "08-lab-received-log",
+      "width": 1024,
+      "height": 600,
+      "pngSha256": "d67e83034f6a2a764f6f4c845ca165faae1e9c7c619ded891f8b5472bb560dbb",
+      "svgSha256": "86023f7714175cdb2895eee68959066b9f3736cf74cd63ab3bf4edb22985f305"
+    },
+    {
+      "name": "09-lab-received-detail",
+      "width": 1024,
+      "height": 600,
+      "pngSha256": "6e4c5c978ae717ddd632618e066b4d25a189aaf82458001f2706d956b7b91c93",
+      "svgSha256": "f6c843275c636e69ec5311ce03a297847f0cda06ae682b03c1c40d3e56e041bd"
+    }
+  ],
+  "maps": [
+    {
+      "screen": "01-map-seed-a",
+      "seed": 1429,
+      "nodes": [
+        {
+          "id": "camp",
+          "name": "Camp",
+          "x": 2,
+          "y": 8,
+          "type": "camp"
+        },
+        {
+          "id": "brook",
+          "name": "Moss bend",
+          "x": 7,
+          "y": 8,
+          "type": "brook"
+        },
+        {
+          "id": "relay",
+          "name": "Relay",
+          "x": 2,
+          "y": 2,
+          "type": "relay"
+        },
+        {
+          "id": "stone",
+          "name": "Stone shelf",
+          "x": 7,
+          "y": 2,
+          "type": "ridge"
+        },
+        {
+          "id": "cache",
+          "name": "Old cache",
+          "x": 16,
+          "y": 5,
+          "type": "cache"
+        }
+      ],
+      "routes": [
+        [
+          "camp",
+          "brook"
+        ],
+        [
+          "camp",
+          "relay"
+        ],
+        [
+          "relay",
+          "stone"
+        ],
+        [
+          "stone",
+          "brook"
+        ]
+      ],
+      "legalTiles": [
+        "2,2",
+        "2,3",
+        "2,4",
+        "2,5",
+        "2,6",
+        "2,7",
+        "2,8",
+        "3,2",
+        "3,8",
+        "4,2",
+        "4,8",
+        "5,2",
+        "5,8",
+        "6,2",
+        "6,8",
+        "7,2",
+        "7,3",
+        "7,4",
+        "7,5",
+        "7,6",
+        "7,7",
+        "7,8"
+      ],
+      "state": {
+        "subtitle": "Goal: Essence resupply · expedition 014",
+        "position": "camp",
+        "lead": false,
+        "status": {
+          "camp": "active"
+        },
+        "activity": "Data · Camp · 2 attempts left",
+        "counts": [
+          1,
+          0,
+          0
+        ],
+        "prep": [
+          30,
+          0,
+          0
+        ],
+        "prepStatus": [
+          "Active",
+          "Not started",
+          "Not started"
+        ],
+        "place": "Camp · ordinary opportunities",
+        "purpose": "Inspect: supplies here, or explore the branches."
+      }
+    },
+    {
+      "screen": "03-active-map-lead",
+      "seed": 1429,
+      "nodes": [
+        {
+          "id": "camp",
+          "name": "Camp",
+          "x": 2,
+          "y": 8,
+          "type": "camp"
+        },
+        {
+          "id": "brook",
+          "name": "Moss bend",
+          "x": 7,
+          "y": 8,
+          "type": "brook"
+        },
+        {
+          "id": "relay",
+          "name": "Relay",
+          "x": 2,
+          "y": 2,
+          "type": "relay"
+        },
+        {
+          "id": "stone",
+          "name": "Stone shelf",
+          "x": 7,
+          "y": 2,
+          "type": "ridge"
+        },
+        {
+          "id": "cache",
+          "name": "Old cache",
+          "x": 16,
+          "y": 5,
+          "type": "cache"
+        }
+      ],
+      "routes": [
+        [
+          "camp",
+          "brook"
+        ],
+        [
+          "camp",
+          "relay"
+        ],
+        [
+          "relay",
+          "stone"
+        ],
+        [
+          "stone",
+          "brook"
+        ]
+      ],
+      "legalTiles": [
+        "10,8",
+        "11,8",
+        "12,8",
+        "13,8",
+        "14,8",
+        "15,8",
+        "16,5",
+        "16,6",
+        "16,7",
+        "16,8",
+        "2,2",
+        "2,3",
+        "2,4",
+        "2,5",
+        "2,6",
+        "2,7",
+        "2,8",
+        "3,2",
+        "3,8",
+        "4,2",
+        "4,8",
+        "5,2",
+        "5,8",
+        "6,2",
+        "6,8",
+        "7,2",
+        "7,3",
+        "7,4",
+        "7,5",
+        "7,6",
+        "7,7",
+        "7,8",
+        "8,8",
+        "9,8"
+      ],
+      "state": {
+        "subtitle": "Goal: Essence resupply · expedition 014",
+        "position": "trail",
+        "tile": [
+          12,
+          8
+        ],
+        "lead": true,
+        "status": {
+          "camp": "inspected",
+          "brook": "active",
+          "cache": "unvisited"
+        },
+        "activity": "Essence · Moss bend · 2 attempts left",
+        "counts": [
+          1,
+          0,
+          1
+        ],
+        "prep": [
+          30,
+          0,
+          60
+        ],
+        "prepStatus": [
+          "Paused",
+          "Not started",
+          "Active"
+        ],
+        "place": "On the east trail · travelling",
+        "purpose": "Finding: sealed-container trace continues east."
+      }
+    },
+    {
+      "screen": "07-map-seed-b",
+      "seed": 7183,
+      "nodes": [
+        {
+          "id": "camp",
+          "name": "Camp",
+          "x": 9,
+          "y": 8,
+          "type": "camp"
+        },
+        {
+          "id": "brook",
+          "name": "Moss bend",
+          "x": 9,
+          "y": 2,
+          "type": "brook"
+        },
+        {
+          "id": "relay",
+          "name": "Relay",
+          "x": 3,
+          "y": 5,
+          "type": "relay"
+        },
+        {
+          "id": "stone",
+          "name": "Stone shelf",
+          "x": 15,
+          "y": 5,
+          "type": "ridge"
+        },
+        {
+          "id": "cache",
+          "name": "Old cache",
+          "x": 17,
+          "y": 1,
+          "type": "cache"
+        }
+      ],
+      "routes": [
+        [
+          "camp",
+          "relay"
+        ],
+        [
+          "camp",
+          "stone"
+        ],
+        [
+          "relay",
+          "brook"
+        ],
+        [
+          "stone",
+          "brook"
+        ]
+      ],
+      "legalTiles": [
+        "10,2",
+        "10,8",
+        "11,2",
+        "11,8",
+        "12,2",
+        "12,8",
+        "13,2",
+        "13,8",
+        "14,2",
+        "14,8",
+        "15,2",
+        "15,3",
+        "15,4",
+        "15,5",
+        "15,6",
+        "15,7",
+        "15,8",
+        "3,2",
+        "3,3",
+        "3,4",
+        "3,5",
+        "3,6",
+        "3,7",
+        "3,8",
+        "4,2",
+        "4,8",
+        "5,2",
+        "5,8",
+        "6,2",
+        "6,8",
+        "7,2",
+        "7,8",
+        "8,2",
+        "8,8",
+        "9,2",
+        "9,8"
+      ],
+      "state": {
+        "subtitle": "Goal: Essence resupply · expedition 014",
+        "position": "camp",
+        "lead": false,
+        "status": {
+          "camp": "active"
+        },
+        "activity": "Data · Camp · 2 attempts left",
+        "counts": [
+          1,
+          0,
+          0
+        ],
+        "prep": [
+          30,
+          0,
+          0
+        ],
+        "prepStatus": [
+          "Active",
+          "Not started",
+          "Not started"
+        ],
+        "place": "Camp · ordinary opportunities",
+        "purpose": "Inspect: supplies here, or explore the branches."
+      }
+    }
+  ],
+  "textBounds": [
+    {
+      "screen": "01-map-seed-a",
+      "bounds": [
+        {
+          "value": "Fern valley",
+          "x": 29,
+          "y": 28,
+          "width": 147,
+          "height": 23
+        },
+        {
+          "value": "Goal: Essence resupply · expedition 014",
+          "x": 30,
+          "y": 59,
+          "width": 305,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Camp",
+          "x": 47,
+          "y": 296,
+          "width": 44,
+          "height": 13
+        },
+        {
+          "value": "Moss bend",
+          "x": 147,
+          "y": 296,
+          "width": 82,
+          "height": 11
+        },
+        {
+          "value": "Relay",
+          "x": 47,
+          "y": 176,
+          "width": 42,
+          "height": 14
+        },
+        {
+          "value": "Stone shelf",
+          "x": 147,
+          "y": 176,
+          "width": 89,
+          "height": 11
+        },
+        {
+          "value": "Data · Camp · 2 attempts left",
+          "x": 30,
+          "y": 346,
+          "width": 267,
+          "height": 15
+        },
+        {
+          "value": "1",
+          "x": 91,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 88,
+          "y": 408,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "value": "30% prep",
+          "x": 33,
+          "y": 427,
+          "width": 66,
+          "height": 13
+        },
+        {
+          "value": "Active",
+          "x": 33,
+          "y": 451,
+          "width": 42,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 224,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 221,
+          "y": 408,
+          "width": 49,
+          "height": 13
+        },
+        {
+          "value": "0% prep",
+          "x": 166,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 166,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 357,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 354,
+          "y": 408,
+          "width": 56,
+          "height": 10
+        },
+        {
+          "value": "0% prep",
+          "x": 299,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 299,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "Camp · ordinary opportunities",
+          "x": 30,
+          "y": 474,
+          "width": 339,
+          "height": 19
+        },
+        {
+          "value": "Inspect: supplies here, or explore the branches.",
+          "x": 30,
+          "y": 504,
+          "width": 361,
+          "height": 14
+        },
+        {
+          "value": "Directions: move · Confirm: inspect",
+          "x": 30,
+          "y": 538,
+          "width": 265,
+          "height": 14
+        },
+        {
+          "value": "Back: modes",
+          "x": 30,
+          "y": 560,
+          "width": 96,
+          "height": 11
+        }
+      ]
+    },
+    {
+      "screen": "02-brook-opportunity",
+      "bounds": [
+        {
+          "value": "Fern valley",
+          "x": 29,
+          "y": 28,
+          "width": 147,
+          "height": 23
+        },
+        {
+          "value": "Expedition 014 · Moss bend",
+          "x": 30,
+          "y": 59,
+          "width": 210,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Moss bend",
+          "x": 42,
+          "y": 132,
+          "width": 148,
+          "height": 19
+        },
+        {
+          "value": "Inspect the markings to find their direction.",
+          "x": 43,
+          "y": 300,
+          "width": 343,
+          "height": 15
+        },
+        {
+          "value": "Data · Camp · 2 attempts left",
+          "x": 30,
+          "y": 346,
+          "width": 267,
+          "height": 15
+        },
+        {
+          "value": "1",
+          "x": 91,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 88,
+          "y": 408,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "value": "30% prep",
+          "x": 33,
+          "y": 427,
+          "width": 66,
+          "height": 13
+        },
+        {
+          "value": "Active",
+          "x": 33,
+          "y": 451,
+          "width": 42,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 224,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 221,
+          "y": 408,
+          "width": 49,
+          "height": 13
+        },
+        {
+          "value": "0% prep",
+          "x": 166,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 166,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 357,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 354,
+          "y": 408,
+          "width": 56,
+          "height": 10
+        },
+        {
+          "value": "0% prep",
+          "x": 299,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 299,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "Inspect trace",
+          "x": 45,
+          "y": 487,
+          "width": 123,
+          "height": 16
+        },
+        {
+          "value": "Start Essence gathering",
+          "x": 45,
+          "y": 517,
+          "width": 202,
+          "height": 17
+        },
+        {
+          "value": "Up/Down: choose · Confirm: act",
+          "x": 30,
+          "y": 540,
+          "width": 237,
+          "height": 14
+        },
+        {
+          "value": "Back: same map position",
+          "x": 30,
+          "y": 560,
+          "width": 189,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "screen": "03-active-map-lead",
+      "bounds": [
+        {
+          "value": "Fern valley",
+          "x": 29,
+          "y": 28,
+          "width": 147,
+          "height": 23
+        },
+        {
+          "value": "Goal: Essence resupply · expedition 014",
+          "x": 30,
+          "y": 59,
+          "width": 305,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Camp",
+          "x": 47,
+          "y": 296,
+          "width": 44,
+          "height": 13
+        },
+        {
+          "value": "Moss bend",
+          "x": 147,
+          "y": 296,
+          "width": 82,
+          "height": 11
+        },
+        {
+          "value": "Relay",
+          "x": 47,
+          "y": 176,
+          "width": 42,
+          "height": 14
+        },
+        {
+          "value": "Stone shelf",
+          "x": 147,
+          "y": 176,
+          "width": 89,
+          "height": 11
+        },
+        {
+          "value": "Old cache",
+          "x": 327,
+          "y": 236,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "Essence · Moss bend · 2 attempts left",
+          "x": 30,
+          "y": 346,
+          "width": 343,
+          "height": 15
+        },
+        {
+          "value": "1",
+          "x": 91,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 88,
+          "y": 408,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "value": "30% prep",
+          "x": 33,
+          "y": 427,
+          "width": 66,
+          "height": 13
+        },
+        {
+          "value": "Paused",
+          "x": 33,
+          "y": 451,
+          "width": 48,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 224,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 221,
+          "y": 408,
+          "width": 49,
+          "height": 13
+        },
+        {
+          "value": "0% prep",
+          "x": 166,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 166,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "1",
+          "x": 357,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 354,
+          "y": 408,
+          "width": 56,
+          "height": 10
+        },
+        {
+          "value": "60% prep",
+          "x": 299,
+          "y": 427,
+          "width": 67,
+          "height": 13
+        },
+        {
+          "value": "Active",
+          "x": 299,
+          "y": 451,
+          "width": 42,
+          "height": 11
+        },
+        {
+          "value": "On the east trail · travelling",
+          "x": 30,
+          "y": 474,
+          "width": 315,
+          "height": 19
+        },
+        {
+          "value": "Finding: sealed-container trace continues east.",
+          "x": 30,
+          "y": 504,
+          "width": 353,
+          "height": 14
+        },
+        {
+          "value": "Directions: move · inspect at places",
+          "x": 30,
+          "y": 538,
+          "width": 270,
+          "height": 14
+        },
+        {
+          "value": "Back: modes",
+          "x": 30,
+          "y": 560,
+          "width": 96,
+          "height": 11
+        }
+      ]
+    },
+    {
+      "screen": "04-sealed-sample",
+      "bounds": [
+        {
+          "value": "Fern valley",
+          "x": 29,
+          "y": 28,
+          "width": 147,
+          "height": 23
+        },
+        {
+          "value": "Located lead · unopened sample",
+          "x": 30,
+          "y": 59,
+          "width": 247,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Old cache",
+          "x": 42,
+          "y": 132,
+          "width": 137,
+          "height": 19
+        },
+        {
+          "value": "Sealed",
+          "x": 326,
+          "y": 253,
+          "width": 63,
+          "height": 13
+        },
+        {
+          "value": "Contents unknown · collect to take it",
+          "x": 43,
+          "y": 300,
+          "width": 311,
+          "height": 13
+        },
+        {
+          "value": "Essence · Moss bend · 2 attempts left",
+          "x": 30,
+          "y": 346,
+          "width": 343,
+          "height": 15
+        },
+        {
+          "value": "1",
+          "x": 91,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 88,
+          "y": 408,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "value": "30% prep",
+          "x": 33,
+          "y": 427,
+          "width": 66,
+          "height": 13
+        },
+        {
+          "value": "Paused",
+          "x": 33,
+          "y": 451,
+          "width": 48,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 224,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 221,
+          "y": 408,
+          "width": 49,
+          "height": 13
+        },
+        {
+          "value": "0% prep",
+          "x": 166,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 166,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "1",
+          "x": 357,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 354,
+          "y": 408,
+          "width": 56,
+          "height": 10
+        },
+        {
+          "value": "60% prep",
+          "x": 299,
+          "y": 427,
+          "width": 67,
+          "height": 13
+        },
+        {
+          "value": "Active",
+          "x": 299,
+          "y": 451,
+          "width": 42,
+          "height": 11
+        },
+        {
+          "value": "Collect sealed sample",
+          "x": 45,
+          "y": 487,
+          "width": 209,
+          "height": 17
+        },
+        {
+          "value": "Leave it here",
+          "x": 45,
+          "y": 517,
+          "width": 108,
+          "height": 13
+        },
+        {
+          "value": "Up/Down: choose · Confirm: act",
+          "x": 30,
+          "y": 540,
+          "width": 237,
+          "height": 14
+        },
+        {
+          "value": "Back: same map position",
+          "x": 30,
+          "y": 560,
+          "width": 189,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "screen": "05-return-review",
+      "bounds": [
+        {
+          "value": "Return to Lab",
+          "x": 29,
+          "y": 28,
+          "width": 180,
+          "height": 18
+        },
+        {
+          "value": "014 · review freezes gathering",
+          "x": 30,
+          "y": 59,
+          "width": 231,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Earned this expedition",
+          "x": 43,
+          "y": 133,
+          "width": 282,
+          "height": 22
+        },
+        {
+          "value": "1",
+          "x": 105,
+          "y": 177,
+          "width": 15,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 52,
+          "y": 238,
+          "width": 41,
+          "height": 13
+        },
+        {
+          "value": "0",
+          "x": 231,
+          "y": 177,
+          "width": 18,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 178,
+          "y": 238,
+          "width": 61,
+          "height": 17
+        },
+        {
+          "value": "1",
+          "x": 357,
+          "y": 177,
+          "width": 15,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 304,
+          "y": 238,
+          "width": 71,
+          "height": 13
+        },
+        {
+          "value": "1 sealed sample",
+          "x": 123,
+          "y": 291,
+          "width": 200,
+          "height": 22
+        },
+        {
+          "value": "Contents unknown",
+          "x": 123,
+          "y": 324,
+          "width": 159,
+          "height": 13
+        },
+        {
+          "value": "Supplies 2/4 · Capsules 1/1",
+          "x": 43,
+          "y": 362,
+          "width": 229,
+          "height": 17
+        },
+        {
+          "value": "Send earned items + sample.",
+          "x": 30,
+          "y": 412,
+          "width": 263,
+          "height": 18
+        },
+        {
+          "value": "Seals expedition; gathering stops.",
+          "x": 30,
+          "y": 439,
+          "width": 299,
+          "height": 18
+        },
+        {
+          "value": "Send to Lab",
+          "x": 46,
+          "y": 471,
+          "width": 128,
+          "height": 14
+        },
+        {
+          "value": "Keep exploring",
+          "x": 45,
+          "y": 509,
+          "width": 151,
+          "height": 18
+        },
+        {
+          "value": "Up/Down: choose · Confirm: select",
+          "x": 30,
+          "y": 540,
+          "width": 258,
+          "height": 14
+        },
+        {
+          "value": "Back: keep · same position",
+          "x": 30,
+          "y": 560,
+          "width": 187,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "screen": "06-sent-awaiting-receipt",
+      "bounds": [
+        {
+          "value": "Expedition sent",
+          "x": 29,
+          "y": 28,
+          "width": 205,
+          "height": 23
+        },
+        {
+          "value": "014 · awaiting Lab receipt",
+          "x": 30,
+          "y": 59,
+          "width": 198,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Returning record sealed",
+          "x": 42,
+          "y": 136,
+          "width": 311,
+          "height": 22
+        },
+        {
+          "value": "1",
+          "x": 86,
+          "y": 302,
+          "width": 15,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 58,
+          "y": 339,
+          "width": 41,
+          "height": 13
+        },
+        {
+          "value": "0",
+          "x": 217,
+          "y": 302,
+          "width": 18,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 178,
+          "y": 339,
+          "width": 61,
+          "height": 17
+        },
+        {
+          "value": "1",
+          "x": 347,
+          "y": 302,
+          "width": 15,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 311,
+          "y": 339,
+          "width": 71,
+          "height": 13
+        },
+        {
+          "value": "1 sealed sample",
+          "x": 128,
+          "y": 395,
+          "width": 209,
+          "height": 22
+        },
+        {
+          "value": "Gathering stopped",
+          "x": 128,
+          "y": 428,
+          "width": 163,
+          "height": 18
+        },
+        {
+          "value": "The Lab has not accepted it yet.",
+          "x": 30,
+          "y": 481,
+          "width": 289,
+          "height": 18
+        },
+        {
+          "value": "No new gathering from this expedition.",
+          "x": 30,
+          "y": 510,
+          "width": 309,
+          "height": 15
+        },
+        {
+          "value": "Back: modes · receipt stays pending",
+          "x": 30,
+          "y": 552,
+          "width": 275,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "screen": "07-map-seed-b",
+      "bounds": [
+        {
+          "value": "Fern valley",
+          "x": 29,
+          "y": 28,
+          "width": 147,
+          "height": 23
+        },
+        {
+          "value": "Goal: Essence resupply · expedition 014",
+          "x": 30,
+          "y": 59,
+          "width": 305,
+          "height": 14
+        },
+        {
+          "value": "Probe",
+          "x": 28,
+          "y": 82,
+          "width": 58,
+          "height": 14
+        },
+        {
+          "value": "Cargo",
+          "x": 151,
+          "y": 82,
+          "width": 59,
+          "height": 17
+        },
+        {
+          "value": "Companions",
+          "x": 275,
+          "y": 82,
+          "width": 123,
+          "height": 18
+        },
+        {
+          "value": "Camp",
+          "x": 187,
+          "y": 296,
+          "width": 44,
+          "height": 13
+        },
+        {
+          "value": "Moss bend",
+          "x": 187,
+          "y": 176,
+          "width": 82,
+          "height": 11
+        },
+        {
+          "value": "Relay",
+          "x": 67,
+          "y": 236,
+          "width": 42,
+          "height": 14
+        },
+        {
+          "value": "Stone shelf",
+          "x": 307,
+          "y": 236,
+          "width": 89,
+          "height": 11
+        },
+        {
+          "value": "Data · Camp · 2 attempts left",
+          "x": 30,
+          "y": 346,
+          "width": 267,
+          "height": 15
+        },
+        {
+          "value": "1",
+          "x": 91,
+          "y": 376,
+          "width": 14,
+          "height": 20
+        },
+        {
+          "value": "Data",
+          "x": 88,
+          "y": 408,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "value": "30% prep",
+          "x": 33,
+          "y": 427,
+          "width": 66,
+          "height": 13
+        },
+        {
+          "value": "Active",
+          "x": 33,
+          "y": 451,
+          "width": 42,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 224,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Energy",
+          "x": 221,
+          "y": 408,
+          "width": 49,
+          "height": 13
+        },
+        {
+          "value": "0% prep",
+          "x": 166,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 166,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "0",
+          "x": 357,
+          "y": 376,
+          "width": 17,
+          "height": 20
+        },
+        {
+          "value": "Essence",
+          "x": 354,
+          "y": 408,
+          "width": 56,
+          "height": 10
+        },
+        {
+          "value": "0% prep",
+          "x": 299,
+          "y": 427,
+          "width": 58,
+          "height": 13
+        },
+        {
+          "value": "Not started",
+          "x": 299,
+          "y": 451,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "Camp · ordinary opportunities",
+          "x": 30,
+          "y": 474,
+          "width": 339,
+          "height": 19
+        },
+        {
+          "value": "Inspect: supplies here, or explore the branches.",
+          "x": 30,
+          "y": 504,
+          "width": 361,
+          "height": 14
+        },
+        {
+          "value": "Directions: move · Confirm: inspect",
+          "x": 30,
+          "y": 538,
+          "width": 265,
+          "height": 14
+        },
+        {
+          "value": "Back: modes",
+          "x": 30,
+          "y": 560,
+          "width": 96,
+          "height": 11
+        }
+      ]
+    },
+    {
+      "screen": "08-lab-received-log",
+      "bounds": [
+        {
+          "value": "Expedition log",
+          "x": 36,
+          "y": 35,
+          "width": 256,
+          "height": 31
+        },
+        {
+          "value": "Received expeditions",
+          "x": 38,
+          "y": 78,
+          "width": 213,
+          "height": 19
+        },
+        {
+          "value": "Received expeditions",
+          "x": 50,
+          "y": 138,
+          "width": 300,
+          "height": 24
+        },
+        {
+          "value": "Fern valley · 014",
+          "x": 62,
+          "y": 201,
+          "width": 213,
+          "height": 22
+        },
+        {
+          "value": "Today · 14:20 · accepted",
+          "x": 62,
+          "y": 237,
+          "width": 206,
+          "height": 17
+        },
+        {
+          "value": "Earlier records",
+          "x": 52,
+          "y": 309,
+          "width": 157,
+          "height": 14
+        },
+        {
+          "value": "No earlier expeditions",
+          "x": 52,
+          "y": 344,
+          "width": 194,
+          "height": 18
+        },
+        {
+          "value": "Recorded route · 014",
+          "x": 425,
+          "y": 140,
+          "width": 316,
+          "height": 21
+        },
+        {
+          "value": "Received Today · 14:20 · accepted",
+          "x": 426,
+          "y": 178,
+          "width": 322,
+          "height": 18
+        },
+        {
+          "value": "Camp",
+          "x": 448,
+          "y": 395,
+          "width": 44,
+          "height": 13
+        },
+        {
+          "value": "Moss bend",
+          "x": 548,
+          "y": 395,
+          "width": 82,
+          "height": 11
+        },
+        {
+          "value": "Old cache",
+          "x": 728,
+          "y": 335,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "1 sealed",
+          "x": 850,
+          "y": 332,
+          "width": 92,
+          "height": 15
+        },
+        {
+          "value": "sample",
+          "x": 850,
+          "y": 362,
+          "width": 79,
+          "height": 19
+        },
+        {
+          "value": "Research at Lab",
+          "x": 843,
+          "y": 401,
+          "width": 127,
+          "height": 12
+        },
+        {
+          "value": "1 Data",
+          "x": 488,
+          "y": 478,
+          "width": 74,
+          "height": 15
+        },
+        {
+          "value": "0 Energy",
+          "x": 669,
+          "y": 478,
+          "width": 103,
+          "height": 19
+        },
+        {
+          "value": "1 Essence",
+          "x": 850,
+          "y": 478,
+          "width": 115,
+          "height": 15
+        },
+        {
+          "value": "Up/Down: choose record · Confirm: details · Back: Home",
+          "x": 38,
+          "y": 551,
+          "width": 504,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "screen": "09-lab-received-detail",
+      "bounds": [
+        {
+          "value": "Expedition log",
+          "x": 36,
+          "y": 35,
+          "width": 256,
+          "height": 31
+        },
+        {
+          "value": "Received expeditions",
+          "x": 38,
+          "y": 78,
+          "width": 213,
+          "height": 19
+        },
+        {
+          "value": "Fern valley · expedition 014",
+          "x": 50,
+          "y": 139,
+          "width": 418,
+          "height": 27
+        },
+        {
+          "value": "Received Today · 14:20",
+          "x": 51,
+          "y": 179,
+          "width": 217,
+          "height": 18
+        },
+        {
+          "value": "Camp",
+          "x": 122,
+          "y": 403,
+          "width": 44,
+          "height": 13
+        },
+        {
+          "value": "Moss bend",
+          "x": 222,
+          "y": 403,
+          "width": 82,
+          "height": 11
+        },
+        {
+          "value": "Old cache",
+          "x": 402,
+          "y": 343,
+          "width": 76,
+          "height": 11
+        },
+        {
+          "value": "Moss bend: trace inspected.",
+          "x": 51,
+          "y": 464,
+          "width": 278,
+          "height": 19
+        },
+        {
+          "value": "Old cache: sealed capsule collected.",
+          "x": 51,
+          "y": 499,
+          "width": 362,
+          "height": 19
+        },
+        {
+          "value": "Accepted contents",
+          "x": 652,
+          "y": 141,
+          "width": 263,
+          "height": 24
+        },
+        {
+          "value": "1 Data",
+          "x": 721,
+          "y": 208,
+          "width": 85,
+          "height": 18
+        },
+        {
+          "value": "0 Energy",
+          "x": 721,
+          "y": 280,
+          "width": 118,
+          "height": 23
+        },
+        {
+          "value": "1 Essence",
+          "x": 721,
+          "y": 352,
+          "width": 130,
+          "height": 18
+        },
+        {
+          "value": "1 sealed sample",
+          "x": 721,
+          "y": 426,
+          "width": 180,
+          "height": 19
+        },
+        {
+          "value": "Research at the Lab",
+          "x": 653,
+          "y": 496,
+          "width": 178,
+          "height": 14
+        },
+        {
+          "value": "Back: received log",
+          "x": 38,
+          "y": 551,
+          "width": 163,
+          "height": 18
+        }
+      ]
+    }
+  ],
+  "proofs": [
+    {
+      "name": "companion-sequence",
+      "width": 1350,
+      "height": 1200,
+      "scale": 1,
+      "screens": [
+        "01-map-seed-a",
+        "02-brook-opportunity",
+        "03-active-map-lead",
+        "04-sealed-sample",
+        "05-return-review",
+        "06-sent-awaiting-receipt"
+      ],
+      "sha256": "8946e41f0ed97b84fe7abd6897260cd4aab752d937ead7c4edcec8f9d43e911d"
+    },
+    {
+      "name": "two-seeds",
+      "width": 900,
+      "height": 600,
+      "scale": 1,
+      "screens": [
+        "01-map-seed-a",
+        "07-map-seed-b"
+      ],
+      "sha256": "bb5da1c53e33377f6942012bcf14de597b90574b72de20e12625e3e4c5219720"
+    },
+    {
+      "name": "lab-received",
+      "width": 1024,
+      "height": 1200,
+      "scale": 1,
+      "screens": [
+        "08-lab-received-log",
+        "09-lab-received-detail"
+      ],
+      "sha256": "20ced72e425e96625bdb7084cd6915def5abc6132597421f873c1202a1b0991e"
+    }
+  ],
+  "source": {
+    "buildSha256": "cbf514e99277a62b92bc6ea7a5c5107be6ebee397d7b0af3ba5a40a02589e482",
+    "statesSha256": "7aa8b9940a118cbef51b82784bb14cfd048500b0d94a417eef91d6f6d7546581",
+    "mapFootprint": {
+      "width": 400,
+      "height": 220,
+      "tile": 20
+    },
+    "localCrops": [
+      {
+        "kind": "brook",
+        "x": 60,
+        "y": 137,
+        "width": 181,
+        "height": 57,
+        "scale": 2
+      },
+      {
+        "kind": "cache",
+        "x": 240,
+        "y": 77,
+        "width": 126,
+        "height": 57,
+        "scale": 2
+      }
+    ]
+  }
+}
