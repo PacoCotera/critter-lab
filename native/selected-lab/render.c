@@ -105,7 +105,7 @@ static void stock_amount(SelectedRow *row, int x, unsigned amount) {
   int top = 74 - bold->baseline;
   native_text_row(bold, whole, x, top, row->y, SELECTED_LAB_WIDTH, row->pixels,
                   0, colors[INK]);
-  label(row, x, 75, "units", 18, MUTED);
+  label(row, x, 75, amount == GAME_SUPPLY_UNIT ? "unit" : "units", 18, MUTED);
 }
 
 static void wrapped_label(SelectedRow *row, int x, int y, const char *text,
@@ -323,16 +323,21 @@ static void home_overview(SelectedRow *row, const SelectedLab *lab) {
 
   label(row, 422, 223, "EXPLORE", 18, MUTED);
   heading(row, 422, 255,
-          game->expedition_active  ? "Gathering"
-          : game->expedition_id[0] ? "Haul ready"
-                                   : "At the Lab",
+          game->expedition_active ? "Gathering"
+          : game->expedition_id[0]
+              ? (game_transfer_available(game) ? "Haul ready" : "Paused")
+              : "At the Lab",
           26, INK);
   if (game->expedition_id[0]) {
     snprintf(text, sizeof(text), "%u / 60 seconds", game->expedition_elapsed);
     label(row, 422, 292, text, 18, MUTED);
     label(row, 422, 318,
-          game->expedition_active ? "Expedition active" : "Ready to return", 18,
-          MUTED);
+          game->expedition_active         ? "Expedition active"
+          : game_transfer_available(game) ? "Ready to return"
+          : game->expedition_elapsed < GAME_EXPEDITION_SECONDS
+              ? "Continue on Companion"
+              : "Finish on Companion",
+          18, MUTED);
   } else {
     label(row, 422, 292, "No expedition", 18, MUTED);
     label(row, 422, 318, "Choose a route", 18, MUTED);

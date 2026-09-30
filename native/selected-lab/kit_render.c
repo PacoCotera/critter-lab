@@ -167,8 +167,15 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     if (view->mode == i) {
       fill(row, x - 4, 84, 128, 25, FIELD);
       fill(row, x, 109, 118, 3, BORDER);
-      if (selector)
-        border(row, x - 4, 82, 128, 30, EDGE);
+      if (selector) {
+        int pressed = 0;
+        for (unsigned button = 0; button < 9; ++button)
+          pressed |=
+              view->gestures[button].held && view->gestures[button].allowed;
+        if (pressed)
+          fill(row, x - 3, 83, 126, 27, GLOW);
+        border(row, x - 4, 82, 128, 30, pressed ? FOCUS : EDGE);
+      }
     }
     text(row, x + 4, 88, modes[i], 18, view->mode == i ? TEXT : SECONDARY);
   }
@@ -190,6 +197,9 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     if (has_run) {
       text(row, 28, 158, kit_route(kit), 18, SECONDARY);
       text(row, 28, 182, kit_expedition_status(kit), 18, SECONDARY);
+      snprintf(value, sizeof(value), "%u / %u sec", elapsed,
+               GAME_EXPEDITION_SECONDS);
+      text(row, 300, 158, value, 18, SECONDARY);
       progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
     }
     static const char *names[] = {"Data", "Energy", "Essence"};
@@ -215,7 +225,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       snprintf(value, sizeof(value), "Free space: %u / 40 units",
                (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
       text(row, 28, 412, value, 18, SECONDARY);
-      if (reserved || receipt)
+      if (reserved || receipt || kit->journal.phase == KIT_COMPLETE)
         wrapped(row, 28, 440, kit_stage(kit), 390, 18, SECONDARY);
       else if (!game_transfer_available(game))
         text(row, 28, 440, "No items to send", 18, SECONDARY);
@@ -274,7 +284,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       if (game->gather_last_attempted_mask) {
         if (game->gather_last_awarded_mask)
           resource_names(value, sizeof(value),
-                         "Last find: ", game->gather_last_awarded_mask);
+                         "Last attempt: ", game->gather_last_awarded_mask);
         else
           strcpy(value, "Last attempt: no items found");
         text(row, 28, due == 7 ? 440 : 464, value, 18, TEXT);
@@ -343,7 +353,8 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
       text(row, 24 + (int)i * 248, 85, labels[i], 22, TEXT);
-      snprintf(value, sizeof(value), "%u units", journal->dock_stock[i] / 100);
+      snprintf(value, sizeof(value), "%u %s", journal->dock_stock[i] / 100,
+               journal->dock_stock[i] == 100 ? "unit" : "units");
       text(row, 24 + (int)i * 248, 122, value, 22, TEXT);
     }
   } else {
@@ -399,8 +410,9 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
       const SelectedSprite *asset = &selected_sprites[i];
       resource(row, i, x + (108 - (int)asset->width * 2) / 2, 289, 2);
       text(row, x + 123, 298, names[i], 22, SECONDARY);
-      snprintf(value, sizeof(value), "%u units",
-               kit->journal.cargo[i] / GAME_SUPPLY_UNIT);
+      snprintf(value, sizeof(value), "%u %s",
+               kit->journal.cargo[i] / GAME_SUPPLY_UNIT,
+               kit->journal.cargo[i] == GAME_SUPPLY_UNIT ? "unit" : "units");
       text(row, x + 123, 337, value, 26, TEXT);
     }
     if (kit->journal.elapsed < GAME_EXPEDITION_SECONDS)
@@ -440,8 +452,9 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
                         game->expedition_essence};
     static const char *names[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
-      snprintf(value, sizeof(value), "%s %u units", names[i],
-               cargo[i] / GAME_SUPPLY_UNIT);
+      snprintf(value, sizeof(value), "%s %u %s", names[i],
+               cargo[i] / GAME_SUPPLY_UNIT,
+               cargo[i] == GAME_SUPPLY_UNIT ? "unit" : "units");
       text(row, 48 + (int)i * 308, 461, value, 22, TEXT);
     }
   }

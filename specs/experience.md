@@ -239,3 +239,9 @@ simulation only. No physical printing, charging or cloud status is inferred.
 The display is a timestamped cache of accepted state, marked stale when offline.
 Developer link switches sit outside device shells; screen pixels are not inputs.
 The host aggregate and recovery limits are defined in [architecture](architecture.md#three-device-host-simulator).
+
+The connected Companion implementation is functional scaffolding, not accepted
+visual design. Its mechanics and native rendering evidence do not approve the
+text-panel composition. Screen art is being derived from Gemini with the approved
+C18/hardware references while preserving the real gathering/whole-item/reception
+journey above.
