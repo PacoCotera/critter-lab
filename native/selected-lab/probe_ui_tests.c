@@ -52,24 +52,54 @@ static void projection_and_phase_guards(void) {
   kit.companion.mode = COMP_CARGO;
   assert(!kit_probe_projection(&kit, &after));
   kit.companion.page = COMP_PROBE;
+  lab.game.field.active_source = 0;
+  lab.game.field.last_source[0] = 0;
+  lab.game.gather_progress_ms[0] = 1500;
   kit.failed = 1;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_UNAVAILABLE && !after.action_count);
+  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
+  assert(!strcmp(after.preparation_labels[0], "Saved") && !strstr(after.source, "Active"));
+  assert(!strcmp(after.source, "Saved preparation / actions unavailable"));
+  GameState retained = lab.game;
+  memset(&lab.game.field, 0, sizeof(lab.game.field));
+  lab.game.expedition_id[0] = 0;
+  lab.game.gather_progress_ms[0] = 0;
+  assert(kit_probe_projection(&kit, &after) && !after.preparation_available);
+  assert(!strcmp(after.preparation_labels[0], "Unavailable"));
+  assert(!strcmp(after.source, "Preparation unavailable"));
+  lab.game = retained;
   kit.failed = 0;
   game_field_record(&lab.game, &kit.sealed_field);
   kit.journal.phase = KIT_WAITING;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_SENT);
+  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
+  assert(!strcmp(after.preparation_labels[0], "Paused"));
   kit.journal.phase = KIT_ACK_PENDING;
   memset(&lab.game.field, 0, sizeof(lab.game.field));
   lab.game.expedition_id[0] = 0;
   lab.game.expedition_data = lab.game.expedition_energy = lab.game.expedition_essence = 0;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_ENDED);
+  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
+  assert(!strcmp(after.preparation_labels[0], "Paused"));
   assert(!after.cargo.supplies[0] && !after.cargo.capsules && !after.field.map.avatar_visible);
   kit.journal.phase = KIT_COMPLETE;
   assert(kit_probe_projection(&kit, &after) && after.action_count == 3);
   kit.journal.phase = KIT_IDLE;
   memset(&kit.sealed_field, 0, sizeof(kit.sealed_field));
+  assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_ENTRY);
+  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
   strcpy(lab.game.expedition_id, "legacy-outing");
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_RETAINED);
+  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
+  /* A new outing has no source selected yet; retained preparation is paused. */
+  lab.game.expedition_id[0] = 0;
+  GameCommand next = {0};
+  next.type = GAME_COMMAND_FIELD_START;
+  next.data.field.seed = 777;
+  next.data.field.monotonic_seconds = 100;
+  assert(game_field_start(&lab.game, &next) == GAME_OK);
+  assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_MAP);
+  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
 }
 static void legal_neighbors_and_camera(void) {
   ExpeditionMapView map = {0};
@@ -153,11 +183,93 @@ static void retained_roots_and_memory(void) {
   native_ui_destroy(context);
   free(cargo_pixels);
 }
-int main(void) {
+static void export_fixture(NativeUiContext *context, const char *directory,
+                           const char *name, const CompanionProbeView *view) {
+  CompanionProbeView before = *view;
+  const uint8_t *rgb = native_ui_probe(context, view);
+  assert(rgb && !memcmp(&before, view, sizeof(before)));
+  char path[512];
+  int length = snprintf(path, sizeof(path), "%s/%s.bmp", directory, name);
+  assert(length > 0 && (size_t)length < sizeof(path));
+  FILE *output = fopen(path, "wb");
+  assert(output);
+  unsigned stride = (450 * 3 + 3) & ~3u;
+  unsigned fields[][2] = {{54 + stride * 600,4},{0,4},{54,4},{40,4},{450,4},
+                          {600,4},{1,2},{24,2},{0,4},{stride * 600,4},
+                          {2835,4},{2835,4},{0,4},{0,4}};
+  assert(fwrite("BM", 1, 2, output) == 2);
+  for (unsigned field = 0; field < sizeof(fields)/sizeof(fields[0]); ++field)
+    for (unsigned byte = 0; byte < fields[field][1]; ++byte)
+      assert(fputc((int)((fields[field][0] >> (8 * byte)) & 255), output) != EOF);
+  uint8_t row[1352];
+  for (unsigned y = 600; y > 0; --y) {
+    memset(row, 0, sizeof(row));
+    for (unsigned x = 0; x < 450; ++x)
+      for (unsigned channel = 0; channel < 3; ++channel)
+        row[x * 3 + channel] = rgb[((y - 1) * 450 + x) * 3 + 2 - channel];
+    assert(fwrite(row, 1, stride, output) == stride);
+  }
+  assert(!fclose(output));
+}
+static void representative_exports(const char *directory) {
+  SelectedLab lab;
+  DeviceKit kit;
+  field_fixture(&lab, &kit);
+  NativeUiContext *context = native_ui_create();
+  assert(context);
+  CompanionProbeView map;
+  assert(kit_probe_projection(&kit, &map));
+  const unsigned corners[][2] = {{0,0},{19,0},{0,10},{19,10}};
+  const char *names[] = {"fixture-camera-nw", "fixture-camera-ne", "fixture-camera-sw", "fixture-camera-se"};
+  for (unsigned corner = 0; corner < 4; ++corner) {
+    CompanionProbeView view = map;
+    view.field.map.avatar_x = corners[corner][0];
+    view.field.map.avatar_y = corners[corner][1];
+    export_fixture(context, directory, names[corner], &view);
+  }
+  kit.companion.page = COMP_FIELD_SITE;
+  kit.companion.focus = 2;
+  CompanionProbeView site;
+  assert(kit_probe_projection(&kit, &site) && site.action_count == 3);
+  export_fixture(context, directory, "fixture-camp-three-actions", &site);
+  CompanionProbeView full = map;
+  full.cargo.supplies[0] = 40;
+  full.cargo.supplies[1] = full.cargo.supplies[2] = 0;
+  full.cargo.capsules = 1;
+  full.field.preparation_status[0] = EXPEDITION_PREP_CAPACITY_FULL;
+  full.field.preparation_ms[0] = GAME_GATHER_ATTEMPT_MS;
+  strcpy(full.preparation_labels[0], "Hold full");
+  strcpy(full.context, "Supply bag full / preparation kept");
+  strcpy(full.source, "Data / Camp / 3 attempts left");
+  export_fixture(context, directory, "fixture-hold-full40", &full);
+  kit.companion.page = COMP_PROBE;
+  lab.game.field.active_source = 0;
+  lab.game.field.last_source[0] = 0;
+  lab.game.gather_progress_ms[0] = 1500;
+  kit.failed = 1;
+  CompanionProbeView failed;
+  assert(kit_probe_projection(&kit, &failed));
+  assert(failed.preparation_available && !strcmp(failed.preparation_labels[0], "Saved"));
+  export_fixture(context, directory, "fixture-unavailable-saved-preparation", &failed);
+  native_ui_destroy(context);
+  char path[512];
+  int length = snprintf(path, sizeof(path), "%s/probe-fixtures.txt", directory);
+  assert(length > 0 && (size_t)length < sizeof(path));
+  FILE *metadata = fopen(path, "w");
+  assert(metadata);
+  fputs("Representative presentation fixtures, not actual play or saved-world claims.\n"
+        "Camera fixtures relocate a copied avatar to each world corner; they do not claim legal movement there.\n"
+        "Camp fixture has three real Kit choices and focus2.\n"
+        "Hold-full fixture presents Data40, capsule1 and a full retained attempt.\n"
+        "Unavailable fixture presents1500ms saved Data preparation, no map or actions.\n", metadata);
+  assert(!fclose(metadata));
+}
+int main(int argc, char **argv) {
   projection_and_phase_guards();
   legal_neighbors_and_camera();
   asset_fidelity();
   retained_roots_and_memory();
+  if (argc == 2) representative_exports(argv[1]);
   puts("Companion Probe retained UI checks passed");
   return 0;
 }

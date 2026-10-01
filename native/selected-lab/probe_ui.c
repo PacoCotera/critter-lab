@@ -282,19 +282,18 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   snprintf(ui->capsule_count, sizeof(ui->capsule_count), "%u / %u", view->cargo.capsules, view->cargo.capsule_capacity);
   lv_label_set_text_static(ui->capsule_quantity, ui->capsule_count);
   const char *names[] = {"Data", "Energy", "Essence"};
-  const char *states[] = {"Not started", "Active", "Paused", "Finished", "Hold full"};
   for (unsigned resource = 0; resource < 3; ++resource) {
-    unsigned state = scene ? view->field.preparation_status[resource] : EXPEDITION_PREP_NOT_STARTED;
+    unsigned state = view->preparation_available ? view->field.preparation_status[resource] : EXPEDITION_PREP_NOT_STARTED;
     if (state > EXPEDITION_PREP_CAPACITY_FULL) state = EXPEDITION_PREP_NOT_STARTED;
-    unsigned preparation = scene ? view->field.preparation_ms[resource] : 0;
+    unsigned preparation = view->preparation_available ? view->field.preparation_ms[resource] : 0;
     if (preparation > GAME_GATHER_ATTEMPT_MS) preparation = GAME_GATHER_ATTEMPT_MS;
     unsigned percent = preparation * 100 / GAME_GATHER_ATTEMPT_MS;
     snprintf(ui->preparation[resource], sizeof(ui->preparation[resource]), "%s %u%%", names[resource], percent);
     lv_label_set_text_static(ui->prep_text[resource], ui->preparation[resource]);
-    lv_label_set_text_static(ui->prep_state[resource], states[state]);
+    lv_label_set_text_static(ui->prep_state[resource], view->preparation_labels[resource]);
     lv_obj_set_width(ui->prep_track[resource], preparation ? (124 * preparation / GAME_GATHER_ATTEMPT_MS) : 1);
     lv_obj_set_hidden(ui->prep_track[resource], !preparation);
-    lv_obj_set_style_bg_color(ui->prep_track[resource], lv_color_hex(state == EXPEDITION_PREP_ACTIVE ?
+    lv_obj_set_style_bg_color(ui->prep_track[resource], lv_color_hex(!view->failed && state == EXPEDITION_PREP_ACTIVE ?
                                CORE_ART_BLUE_HIGHLIGHT_RGB : CORE_ART_SECONDARY_RGB), 0);
   }
   return 1;

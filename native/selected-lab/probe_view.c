@@ -41,6 +41,18 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
   int sealed = transfer >= KIT_WAITING && transfer <= KIT_ACK_PENDING;
   int live = has_field && game->field.version && game->expedition_id[0] &&
              out->field.map.avatar_visible && !sealed && !out->cargo.accepted;
+  /* Preparation belongs to the Companion across outings and transfers. Never
+   * reconstruct it from a sealed delivery record or reset it with the map. */
+  int saved_preparation = 0;
+  for (unsigned resource = 0; resource < 3; ++resource) {
+    out->field.preparation_ms[resource] = game->gather_progress_ms[resource];
+    saved_preparation |= game->gather_progress_ms[resource] != 0;
+    if (!live || (out->field.preparation_status[resource] == EXPEDITION_PREP_NOT_STARTED &&
+                  game->gather_progress_ms[resource]))
+      out->field.preparation_status[resource] = game->gather_progress_ms[resource]
+          ? EXPEDITION_PREP_PAUSED : EXPEDITION_PREP_NOT_STARTED;
+  }
+  out->preparation_available = !out->failed || live || saved_preparation;
   out->phase = out->failed ? PROBE_UNAVAILABLE : out->cargo.accepted ? PROBE_ENDED :
       sealed ? PROBE_SENT : live ? (view->page == COMP_FIELD_SITE ? PROBE_SITE : PROBE_MAP) :
       game->expedition_id[0] ? PROBE_RETAINED : PROBE_ENTRY;
@@ -69,7 +81,8 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
     strcpy(out->context, "Sample limit / supplies still available");
   else if (!strcmp(view->message, "Source finished. Explore another opportunity."))
     strcpy(out->context, "Source finished / explore another place");
-  strcpy(out->source, "No active source");
+  snprintf(out->source, sizeof(out->source), "%s",
+           saved_preparation ? "Preparation retained / no active source" : "No active source");
   if (live) {
     const char *names[] = {"Data", "Energy", "Essence"};
     for (unsigned resource = 0; resource < 3; ++resource) {
@@ -80,6 +93,18 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
         break;
       }
     }
+  }
+  const char *preparation_states[] = {"Not started", "Active", "Paused", "Finished", "Hold full"};
+  for (unsigned resource = 0; resource < 3; ++resource) {
+    unsigned state = out->field.preparation_status[resource];
+    if (state > EXPEDITION_PREP_CAPACITY_FULL) state = EXPEDITION_PREP_NOT_STARTED;
+    snprintf(out->preparation_labels[resource], sizeof(out->preparation_labels[resource]), "%s",
+             out->failed ? (live || out->field.preparation_ms[resource] ? "Saved" : "Unavailable") : preparation_states[state]);
+  }
+  if (out->failed) {
+    snprintf(out->context, sizeof(out->context), "%s", out->status);
+    snprintf(out->source, sizeof(out->source), "%s",
+             live || saved_preparation ? "Saved preparation / actions unavailable" : "Preparation unavailable");
   }
   if (!selector && !out->failed && out->phase != PROBE_MAP) {
     out->action_count = kit_option_count(kit, KIT_COMPANION);
