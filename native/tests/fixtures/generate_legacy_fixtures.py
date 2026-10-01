@@ -75,4 +75,10 @@ for name in ("authored-v1.save", "authored-v2.save", "runtime-v2.save"):
                   if name == "runtime-v2.save" else "authored fixed-offset historical ABI")
         records.append({"file": name, "bytes": len(data),
                         "sha256": hashlib.sha256(data).hexdigest(), "source": source})
-(ROOT / "manifest.json").write_text(json.dumps({"fixtures": records}, indent=2) + "\n")
+manifest_path = ROOT / "manifest.json"
+if manifest_path.exists():
+    regenerated_names = {record["file"] for record in records}
+    for record in json.loads(manifest_path.read_text())["fixtures"]:
+        if record["file"] not in regenerated_names:
+            records.append(record)
+manifest_path.write_text(json.dumps({"fixtures": records}, indent=2) + "\n")

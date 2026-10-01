@@ -44,7 +44,8 @@ static void corridor(uint8_t *paths, unsigned x, unsigned y, unsigned end_x,
     paths[cell(x, y)] = 1;
   }
 }
-static void generate_geometry(GameExpeditionField *field) {
+/* Saved legacy outings retain their exact topology and terrain draw order. */
+static void generate_geometry_v1(GameExpeditionField *field) {
   int second = (field->seed & 1u) != 0;
   const uint8_t first_x[GAME_FIELD_SITES] = {2, 7, 2, 7, 16}, first_y[GAME_FIELD_SITES] = {8, 8, 2, 2, 5};
   const uint8_t second_x[GAME_FIELD_SITES] = {9, 9, 3, 15, 17}, second_y[GAME_FIELD_SITES] = {8, 2, 5, 5, 0};
@@ -67,6 +68,98 @@ static void generate_geometry(GameExpeditionField *field) {
     field->terrain[index] = value < 2 ? 2 : value < 4 ? 3 : 1;
     if (index % GAME_FIELD_COLUMNS == (second ? 11u : 10u)) field->terrain[index] = 4;
   }
+}
+static void generate_geometry_v2(GameExpeditionField *field) {
+  _Static_assert(GAME_FIELD_COLUMNS == 20u && GAME_FIELD_ROWS == 11u &&
+                 GAME_FIELD_SITES == 5u, "Version2 geometry is pinned to its20x11 five-place grid");
+  uint32_t geometry_random = field->seed;
+  field->site_x[0] = (uint8_t)(2u + random_next(&geometry_random) % 16u);
+  field->site_y[0] = 9;
+  field->site_x[1] = (uint8_t)(2u + random_next(&geometry_random) % 16u);
+  field->site_y[1] = 4;
+
+  /* Enumerate a small finite pool rather than retrying random placements. */
+  for (unsigned site = 2; site < 4; ++site) {
+    uint8_t candidate_x[64], candidate_y[64];
+    unsigned candidate_count = 0;
+    for (unsigned y = 5; y <= 8; ++y) {
+      for (unsigned x = 2; x <= 17; ++x) {
+        int separated = 1;
+        for (unsigned previous = 0; previous < site; ++previous) {
+          int dx = (int)x - field->site_x[previous];
+          int dy = (int)y - field->site_y[previous];
+          unsigned separation = (unsigned)(dx < 0 ? -dx : dx) +
+                                (unsigned)(dy < 0 ? -dy : dy);
+          if (separation < 4) separated = 0;
+        }
+        if (separated) {
+          candidate_x[candidate_count] = (uint8_t)x;
+          candidate_y[candidate_count++] = (uint8_t)y;
+        }
+      }
+    }
+    /* The fixed interior band always leaves candidates for these two sites. */
+    unsigned selected = random_next(&geometry_random) % candidate_count;
+    field->site_x[site] = candidate_x[selected];
+    field->site_y[site] = candidate_y[selected];
+  }
+  field->site_x[4] = (uint8_t)(2u + random_next(&geometry_random) % 16u);
+  field->site_y[4] = 1;
+
+  unsigned order[4] = {0, 1, 2, 3};
+  uint8_t connected[4][4] = {{0}};
+  for (unsigned remaining = 4; remaining > 1; --remaining) {
+    unsigned selected = random_next(&geometry_random) % remaining;
+    unsigned saved = order[remaining - 1];
+    order[remaining - 1] = order[selected];
+    order[selected] = saved;
+  }
+  for (unsigned index = 1; index < 4; ++index) {
+    unsigned first = order[index];
+    unsigned second = order[random_next(&geometry_random) % index];
+    connected[first][second] = connected[second][first] = 1;
+    corridor(field->paths, field->site_x[first], field->site_y[first],
+             field->site_x[second], field->site_y[second],
+             (int)(random_next(&geometry_random) & 1u));
+  }
+  if (random_next(&geometry_random) & 1u) {
+    unsigned first_choices[6], second_choices[6], count = 0;
+    for (unsigned first = 0; first < 4; ++first) {
+      for (unsigned second = first + 1; second < 4; ++second) {
+        if (!connected[first][second]) {
+          first_choices[count] = first;
+          second_choices[count++] = second;
+        }
+      }
+    }
+    unsigned selected = random_next(&geometry_random) % count;
+    unsigned first = first_choices[selected], second = second_choices[selected];
+    corridor(field->paths, field->site_x[first], field->site_y[first],
+             field->site_x[second], field->site_y[second],
+             (int)(random_next(&geometry_random) & 1u));
+  }
+
+  /* Public corridors stay at y>=4. Only deliberate trace opens this branch. */
+  corridor(field->hidden_paths, field->site_x[1], field->site_y[1],
+           field->site_x[1], field->site_y[4], 1);
+  corridor(field->hidden_paths, field->site_x[1], field->site_y[4],
+           field->site_x[4], field->site_y[4], 0);
+  unsigned river_column = 3u + random_next(&geometry_random) % 14u;
+  for (unsigned index = 0; index < GAME_FIELD_CELLS; ++index) {
+    unsigned value = random_next(&geometry_random) % 20u;
+    field->terrain[index] = value < 2 ? 2 : value < 4 ? 3 : 1;
+    if (index % GAME_FIELD_COLUMNS == river_column) field->terrain[index] = 4;
+  }
+}
+static int supported_field_version(uint32_t version) {
+  return version == GAME_FIELD_LEGACY_CONTENT_VERSION ||
+         version == GAME_FIELD_CONTENT_VERSION;
+}
+static void generate_geometry(GameExpeditionField *field) {
+  if (field->version == GAME_FIELD_LEGACY_CONTENT_VERSION)
+    generate_geometry_v1(field);
+  else if (field->version == GAME_FIELD_CONTENT_VERSION)
+    generate_geometry_v2(field);
 }
 GameResult game_field_start(GameState *state, const GameCommand *command) {
   if (state->expedition_id[0] || state->legacy_supply_encoding ||
@@ -255,7 +348,7 @@ GameResult game_field_unload(GameState *state, const GameCommand *command) {
   return GAME_OK;
 }
 int game_received_valid(const GameReceivedExpedition *record) {
-  if (record->version != GAME_FIELD_CONTENT_VERSION || !record->seed || record->kind > 2 ||
+  if (!supported_field_version(record->version) || !record->seed || record->kind > 2 ||
       !record->expedition_id[0] || !memchr(record->expedition_id,0,64) ||
       !memchr(record->sample_id,0,40) || record->visited > 31 ||
       (record->inspected & ~record->visited) || record->trace > 1 || record->collected > 1 ||
@@ -282,7 +375,7 @@ int game_field_valid(const GameState *state) {
     const GameExpeditionField empty = {0};
     return !memcmp(field,&empty,sizeof(empty));
   }
-  if (field->version != GAME_FIELD_CONTENT_VERSION || !field->seed ||
+  if (!supported_field_version(field->version) || !field->seed ||
       !state->expedition_id[0] || state->expedition_elapsed || field->x >= (int)GAME_FIELD_COLUMNS ||
       field->y >= (int)GAME_FIELD_ROWS || field->visited > 31 || (field->inspected & ~field->visited) ||
       field->trace > 1 || field->collected > 1 || field->sample_budget > 8 ||
@@ -290,10 +383,11 @@ int game_field_valid(const GameState *state) {
       (field->active_source >= GAME_FIELD_SOURCES && field->active_source != GAME_FIELD_NONE) ||
       !memchr(field->capsule_id,0,40) || (!!field->capsule_id[0] != !!field->collected) ||
       (field->collected && (!field->trace || field->capsule_profile < 1 || field->capsule_profile > 2))) return 0;
-  /* Pinned geometry must still represent the selected connected topology.
+  /* Pinned geometry must still represent its versioned connected topology.
    * This detects a checksum-valid edited corridor or hidden connector, rather
    * than merely accepting bounded bytes that could strand the player. */
   GameExpeditionField expected = {0};
+  expected.version = field->version;
   expected.seed = field->seed;
   generate_geometry(&expected);
   if (memcmp(field->terrain, expected.terrain, sizeof(field->terrain)) ||

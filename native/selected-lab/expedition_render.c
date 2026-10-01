@@ -297,7 +297,7 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
     }
     const char *caption = view->message[0] ? view->message
       : current==4 ? "Contents unknown / collect to take it"
-      : current==1 ? "Inspect markings to learn their direction."
+      : current==1 ? "Inspect markings to find the trail."
                    : "Choose supplies to gather.";
     message_lines(&row,43,279-shift,caption,362,14);
   }

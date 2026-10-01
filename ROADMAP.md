@@ -17,8 +17,10 @@ concerns stay in issue44; a craft repair is not discovery or player approval.
 The [bounded discovery trial](design/expedition-map-study/README.md#generated-discovery-trial)
 now has two actually generated route results, a finite supply-versus-trail event
 contract and a [sample-specific question/reveal contract](design/research-and-creation.md#next-comparison-trial).
-This is an executable geometry spike plus paper design, not native gameplay.
-The next gate is native-size art/controls and a saved playable slice. Automatic
+The event and sample workpiece remain paper design. [Saved procedural geometry](docs/evidence/procedural-expeditions/README.md)
+is now a native playable slice with legacy-map/receipt compatibility and actual
+control/output proof. The next gate is one useful finite map event and its
+saved consequence; acquisition/research still need depth. Automatic
 Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
 values and visual treatment remain proposals. No new infrastructure, map service,
 provider, sensor/radio, canonical species, capture/training or ecology enters it.

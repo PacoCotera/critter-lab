@@ -161,9 +161,10 @@ before delivery. The original art masters/hashes remain unchanged.
 
 This closes these concrete repairs, not the full depth/craft/discovery gap. The
 oversized one-action navigation pane, weak player presence and uneven sibling
-arrival geometry still need composition work. Fixed maps, no map events, dull
-chance acquisition, same-feeling samples and checklist research remain rejected.
+arrival geometry still need composition work. [Saved procedural maps](../../docs/evidence/procedural-expeditions/README.md) now
+replace the fixed templates for new outings. No map events, dull chance
+acquisition, same-feeling samples and checklist research remain rejected.
 The [comparison mapping](../research-and-creation.md#next-comparison-trial) exposes
 why a cosmetic alignment puzzle would not solve discovery: authored pre-finding
-specimen evidence and its interpretation rule are missing. No production
-procedural/event/minigame feature is claimed in this increment.
+specimen evidence and its interpretation rule are missing. The later geometry proof closes map variation only; no event or research
+minigame feature is claimed by the frame-repair increment.

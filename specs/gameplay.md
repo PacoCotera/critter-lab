@@ -45,9 +45,10 @@ linked to accepted resources, samples and subsequent research. Any status must s
 its received/cached provenance; shared simulator memory is not wireless receipt.
 [Companion profiles](probe.md#companion-selected-expedition-profiles--accepted-direction)
 define the boundary. The installed map loop permits movement, source choice,
-trace discovery and explicit sample collection, but its two authored topology
-families are fixtures rather than procedural generation. No interactive map
-event is implemented. Owner playtest rejects repetitive routes and chance-waiting
+trace discovery and explicit sample collection. New fieldcontent2 outings now
+generate saved source positions, connected corridors and terrain; legacy
+fieldcontent1 records keep their exact authored geometry. The [native proof](../docs/evidence/procedural-expeditions/README.md)
+covers route variation and retained saves. No interactive map event is implemented. Owner playtest rejects repetitive routes and chance-waiting
 as the central activity: the next field experience must generate genuinely varied,
 saved, reachable maps and expose events with meaningful decisions and consequences.
 Distinct sample acquisition and useful research follow-through must supply the

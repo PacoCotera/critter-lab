@@ -898,7 +898,7 @@ static void activate_companion(DeviceKit *kit) {
     }
     if (apply(kit, command, NULL) == GAME_OK) {
       strcpy(kit->companion.message, command.type == GAME_COMMAND_FIELD_TRACE
-        ? "Sealed-container trace continues east. Route revealed."
+        ? "Sealed-container trail found. Route revealed."
         : command.type == GAME_COMMAND_FIELD_COLLECT ? "Sealed sample collected."
         : "Gathering source selected. Preparation kept.");
     } else if (command.type == GAME_COMMAND_FIELD_COLLECT)

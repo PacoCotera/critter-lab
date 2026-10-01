@@ -105,7 +105,8 @@ typedef struct {
 #define GAME_FIELD_SOURCES 6u
 #define GAME_FIELD_HISTORY 16u
 #define GAME_FIELD_NONE 255u
-#define GAME_FIELD_CONTENT_VERSION 1u
+#define GAME_FIELD_LEGACY_CONTENT_VERSION 1u
+#define GAME_FIELD_CONTENT_VERSION 2u
 
 /* Companion field state is distinct from Lab-accepted expedition records. */
 typedef struct {
