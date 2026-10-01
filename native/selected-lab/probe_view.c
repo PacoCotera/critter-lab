@@ -116,7 +116,7 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
                          out->field.map.site_collected[4];
   if (sample_collected) {
     out->action_count = 0;
-    strcpy(out->context, "Sample collected / sealed contents unknown");
+    strcpy(out->context, "Sample collected / contents unknown");
   }
   snprintf(out->footer, sizeof(out->footer), "%s", selector ? "Left/Right: mode / Down/Confirm: enter" :
       sample_collected ? "Back: map" :

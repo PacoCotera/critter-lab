@@ -127,8 +127,8 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     if (!ui->quantities[material]) goto failure;
   }
   ui->capsule = image(ui->root, sample, 296, 403);
-  ui->capsule_text = text(ui->root, small, 349, 409, 72, 22, "Capsules");
-  ui->capsule_quantity = text(ui->root, action, 349, 432, 72, 27, "0 / 1");
+  ui->capsule_text = text(ui->root, small, 357, 409, 64, 22, "Sample");
+  ui->capsule_quantity = text(ui->root, action, 357, 432, 64, 27, "0 / 1");
   ui->context = text(ui->root, body, 28, 484, 394, 24, "");
   ui->source = text(ui->root, small, 28, 504, 394, 22, "");
   const char *names[] = {"Data", "Energy", "Essence"};
