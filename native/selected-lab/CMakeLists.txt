@@ -3,12 +3,24 @@ project(critter_selected_lab VERSION 0.1.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED YES)
 
-add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c assets.c overview_assets.c pip_art.c core_art.c
+# Pinned upstream source; configure never downloads another dependency.
+set(LV_BUILD_CONF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lv_conf.h" CACHE PATH "" FORCE)
+foreach(option_name CONFIG_LV_BUILD_DEMOS CONFIG_LV_BUILD_EXAMPLES
+  CONFIG_LV_USE_THORVG CONFIG_LV_USE_THORVG_INTERNAL LV_BUILD_INSTALL
+  LV_BUILD_TESTS LV_BUILD_USE_KCONFIG LV_BUILD_SET_CONFIG_OPTS
+  LV_FETCH_DEPENDENCIES LV_USE_FIND_PACKAGE LV_USE_PKG_CONFIG)
+  set(${option_name} OFF CACHE BOOL "" FORCE)
+endforeach()
+add_subdirectory(../vendor/lvgl ${CMAKE_CURRENT_BINARY_DIR}/lvgl)
+
+add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c
+  cargo_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/expedition.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
 target_include_directories(selected_lab_core PUBLIC . ../shared)
 target_compile_features(selected_lab_core PUBLIC c_std_17)
+target_link_libraries(selected_lab_core PUBLIC lvgl::lvgl m)
 target_compile_options(selected_lab_core PRIVATE -Wall -Wextra -Wpedantic -Werror)
 set_target_properties(selected_lab_core PROPERTIES C_EXTENSIONS NO)
 
@@ -23,6 +35,13 @@ if(BUILD_TESTING)
  target_link_libraries(game_checks PRIVATE selected_lab_core)
  target_compile_options(game_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
  add_test(NAME game_domain_checks COMMAND game_checks)
+endif()
+
+if(BUILD_TESTING)
+  add_executable(cargo_ui_checks cargo_ui_tests.c)
+  target_link_libraries(cargo_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(cargo_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME companion_cargo_ui_checks COMMAND cargo_ui_checks)
 endif()
 if(BUILD_TESTING)
   add_executable(selected_lab_checks tests.c)

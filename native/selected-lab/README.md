@@ -53,6 +53,18 @@ are reused. Original references and extraction provenance remain retained in the
 [asset manifest](asset-manifest.json). Native rendering is editable C geometry,
 not a full-screen screenshot. Host scaling does not establish physical readability.
 
+Companion Cargo is the first [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
+It uses a retained widget tree, grid/flex layout, shared theme, source-exact native
+resource sprites and a Vera glyph adapter. Its context belongs to the host process;
+game/view state remains in the Kit. Probe, Companions, Lab and Dock retain their
+existing renderers. The focused `companion_cargo_ui_checks` gate covers this
+boundary alongside the domain, Kit and presenter checks.
+
+The headless Cargo path uses still focus in the live presenter. A controlled
+120ms LVGL focus-fade export exercises the animation API without changing game
+time, readiness or inputs. It is animation evidence, not live scheduling or audio
+playback. ESP32/RPi physical drivers, power and performance remain unvalidated.
+
 The superseded standalone review presenter was removed after checking callers;
 use `native/presenter/server.py` with `CRITTER_DEMO_BINARY` pointing at the selected
 Lab executable. The production path is the one exercised by HTTP tests and CI.

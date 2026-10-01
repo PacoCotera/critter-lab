@@ -2,6 +2,7 @@
 #include "expedition_render.h"
 #include "kit.h"
 #include "native_font.h"
+#include "native_ui.h"
 #include "overview_assets.h"
 #include <string.h>
 #include <time.h>
@@ -789,7 +790,8 @@ static int word(FILE *output, unsigned value, unsigned bytes) {
       return 0;
   return 1;
 }
-int kit_bmp(const DeviceKit *kit, unsigned device, FILE *output) {
+static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
+                    const uint8_t *frame) {
   unsigned width = kit_width(device), height = kit_height(device),
            stride = (width * 3 + 3) & ~3u;
   uint8_t pixels[SELECTED_LAB_WIDTH * 3];
@@ -814,7 +816,10 @@ int kit_bmp(const DeviceKit *kit, unsigned device, FILE *output) {
       return 0;
   for (unsigned y = height; y > 0; --y) {
     memset(pixels, 0, sizeof(pixels));
-    render_row(kit, device, y - 1, pixels);
+    if (frame)
+      memcpy(pixels, frame + (y - 1) * width * 3, width * 3);
+    else
+      render_row(kit, device, y - 1, pixels);
     for (unsigned x = 0; x < width; ++x) {
       uint8_t swap = pixels[x * 3];
       pixels[x * 3] = pixels[x * 3 + 2];
@@ -824,4 +829,24 @@ int kit_bmp(const DeviceKit *kit, unsigned device, FILE *output) {
       return 0;
   }
   return !ferror(output);
+}
+
+int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
+               NativeUiContext *context, int still) {
+  CompanionCargoView view;
+  if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) {
+    /* Other-device frame requests must not cancel Companion presentation. */
+    if (device == KIT_COMPANION) native_ui_cancel(context);
+    return bmp_rows(kit, device, output, NULL);
+  }
+  int temporary = !context;
+  if (temporary) context = native_ui_create();
+  if (!context) return 0;
+  const uint8_t *frame = native_ui_cargo(context, &view, still);
+  int result = frame && bmp_rows(kit, device, output, frame);
+  if (temporary) native_ui_destroy(context);
+  return result;
+}
+int kit_bmp(const DeviceKit *kit, unsigned device, FILE *output) {
+  return kit_bmp_ui(kit, device, output, NULL, 1);
 }

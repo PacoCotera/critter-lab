@@ -31,7 +31,7 @@ jobs:
           node --test native/presenter/reset.test.mjs
           node --test prototype/generation/retained-job.test.mjs
           node prototype/generation/retained-job.mjs replay docs/evidence/polished-core-v1/retained/545f7eb8f52583b1cfdea303aa029993f8ddd80242677f038bea2e8642580ca8
-          ctest --test-dir native/build/lab -R "selected_lab_native_checks|game_domain_checks|three_device_kit_checks" --output-on-failure
+          ctest --test-dir native/build/lab -R "selected_lab_native_checks|game_domain_checks|three_device_kit_checks|companion_cargo_ui_checks" --output-on-failure
           native/build/lab/selected-lab/selected_lab frame native/build/lab/selected-lab.bmp
           git rev-parse HEAD > native/build/lab/source-revision.log
           sha256sum native/build/lab/selected-lab/selected_lab native/build/lab/selected-lab.bmp > native/build/lab/selected-lab-sha256.log
