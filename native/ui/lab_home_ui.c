@@ -80,6 +80,7 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
   }
   if (!native_ui_frame_init(&ui->focus, ui->root, 188, 58, CORE_ART_FOCUS_RGB)) goto failure;
   native_ui_surface(ui->focus.object, 0x292922, CORE_ART_FOCUS_RGB, 0);
+  native_ui_frame_size(&ui->focus, 188, 58);
   lv_obj_set_style_shadow_color(ui->focus.object, lv_color_hex(0xc58f32), 0);
   lv_obj_set_style_shadow_width(ui->focus.object, 10, 0);
   lv_obj_set_style_shadow_opa(ui->focus.object, 40, 0);
@@ -95,8 +96,8 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
     int tx = x+150, ty = y+12;
     ui->readouts[i][0] = text(ui->root, fonts->small, tx, ty, 180, 24, CORE_ART_SECONDARY_RGB, "");
     ui->readouts[i][1] = text(ui->root, fonts->status, tx, ty+32, 180, 34, CORE_ART_INK_RGB, "");
-    ui->readouts[i][2] = text(ui->root, fonts->small, tx, ty+69, 180, 44, CORE_ART_SECONDARY_RGB, "");
-    ui->readouts[i][3] = text(ui->root, fonts->small, tx, ty+113, 180, 44, CORE_ART_SECONDARY_RGB, "");
+    ui->readouts[i][2] = text(ui->root, fonts->small, tx, ty+69, 180, 40, CORE_ART_SECONDARY_RGB, "");
+    ui->readouts[i][3] = text(ui->root, fonts->small, tx, ty+107, 180, 40, CORE_ART_SECONDARY_RGB, "");
     if (!ui->overview_art[i]) goto failure;
     for (unsigned j=0;j<4;++j) if (!ui->readouts[i][j]) goto failure;
   }

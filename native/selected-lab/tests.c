@@ -495,7 +495,7 @@ int main(void) {
   snprintf(lockpath, sizeof(lockpath), "%s.lock", path);
   unlink(lockpath);
   uint8_t pixels[SELECTED_LAB_WIDTH * 3];
-  for (unsigned page = V1_HOME; page <= V1_CREATE_REVIEW; page++) {
+  for (unsigned page = V1_EXPEDITION; page <= V1_CREATE_REVIEW; page++) {
     lab.page = (SelectedPage)page;
     for (unsigned row = 0; row < SELECTED_LAB_HEIGHT; row++)
       selected_lab_row(&lab, row, pixels);
@@ -558,6 +558,9 @@ int main(void) {
   /* Maximum valid stock must not paint over the header's right-hand inset. */
   SelectedLab empty_header, full_header;
   selected_lab_init(&empty_header);
+  /* This row API covers only the remaining legacy Lab action pages.
+   * Home's native-frame boundaries are checked in home_ui_tests.c. */
+  empty_header.page = V1_SAMPLES;
   full_header = empty_header;
   full_header.game.data = full_header.game.energy = full_header.game.essence =
       1000000;
