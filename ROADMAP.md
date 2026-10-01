@@ -14,12 +14,14 @@ sealed clearance and choice-only navigation. Source864eca5 passed native/HTTP/CI
 and the bounded technical/art/pixel checks. Remaining composition and cadence
 concerns stay in issue44; a craft repair is not discovery or player approval.
 
-Then develop the [one discovery trial](design/probe-sampling.md#next-discovery-trial):
-two genuinely generated map results, one finite interactive event and one
-specimen-specific evidence comparison in the main Lab workpiece. The owner requests
-procedural variation and active discovery; exact event/puzzle rules and art mapping
-remain proposals. No new infrastructure, map service, provider, sensor/radio,
-canonical species, capture/training or ecology enters this iteration.
+The [bounded discovery trial](design/expedition-map-study/README.md#generated-discovery-trial)
+now has two actually generated route results, a finite supply-versus-trail event
+contract and a [sample-specific question/reveal contract](design/research-and-creation.md#next-comparison-trial).
+This is an executable geometry spike plus paper design, not native gameplay.
+The next gate is native-size art/controls and a saved playable slice. Automatic
+Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
+values and visual treatment remain proposals. No new infrastructure, map service,
+provider, sensor/radio, canonical species, capture/training or ecology enters it.
 
 ## Delivered checkpoint: Polished Core V1
 

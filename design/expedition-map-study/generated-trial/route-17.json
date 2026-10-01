@@ -1,0 +1,266 @@
+{
+  "status": "provisional geometry and event-design experiment; not game runtime",
+  "geometry_version": "route-design-trial-1",
+  "seed": 17,
+  "grid": [
+    20,
+    11
+  ],
+  "sites": [
+    {
+      "role": "Camp",
+      "tile": [
+        15,
+        9
+      ]
+    },
+    {
+      "role": "Moss bend",
+      "tile": [
+        11,
+        4
+      ]
+    },
+    {
+      "role": "Relay",
+      "tile": [
+        2,
+        7
+      ]
+    },
+    {
+      "role": "Stone shelf",
+      "tile": [
+        6,
+        7
+      ]
+    },
+    {
+      "role": "Sealed cache",
+      "tile": [
+        7,
+        1
+      ]
+    }
+  ],
+  "construction_edges": [
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "visible_tiles": [
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      7
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      6,
+      4
+    ],
+    [
+      6,
+      5
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      6,
+      7
+    ],
+    [
+      7,
+      4
+    ],
+    [
+      7,
+      7
+    ],
+    [
+      8,
+      4
+    ],
+    [
+      8,
+      7
+    ],
+    [
+      9,
+      4
+    ],
+    [
+      9,
+      7
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      10,
+      7
+    ],
+    [
+      11,
+      4
+    ],
+    [
+      11,
+      7
+    ],
+    [
+      12,
+      7
+    ],
+    [
+      13,
+      7
+    ],
+    [
+      14,
+      7
+    ],
+    [
+      15,
+      7
+    ],
+    [
+      15,
+      8
+    ],
+    [
+      15,
+      9
+    ]
+  ],
+  "ordinary_trace_tiles": [
+    [
+      7,
+      1
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      11,
+      2
+    ],
+    [
+      11,
+      3
+    ]
+  ],
+  "event_connector_tiles": [
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      6,
+      2
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      7,
+      2
+    ]
+  ],
+  "event": {
+    "site": "Relay",
+    "choices": [
+      "Recover 3 Energy",
+      "Read the trail"
+    ],
+    "supplies": [
+      0,
+      3,
+      0
+    ],
+    "ordinary_sample_steps_from_event": 19,
+    "event_sample_steps_from_event": 11,
+    "saved_once": true,
+    "reveal": "connector and sealed cache location only; no sample contents"
+  }
+}
