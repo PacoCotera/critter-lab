@@ -27,9 +27,9 @@ No board, panel, BSP, new dependency or SDK upgrade is selected here.
 The target has no full-frame allocation. Its profile is 792x272 RGB888 with an
 8-row partial draw buffer (19,008 bytes with the current stride alignment).
 The single Dock LVGL pool is provisionally bounded at 96 KiB. Six existing icon
-images are converted by the existing bridge into 30,720 heap bytes. PSRAM is
-disabled. These configured byte bounds are distinct from measured ELF/map size
-and runtime heap/stack consumption; compile-only evidence cannot prove runtime
+images are converted by the existing bridge into 30,720 heap bytes. No PSRAM
+component is included. These configured byte bounds are distinct from measured
+ELF/map size and runtime heap/stack consumption; compile-only evidence cannot prove runtime
 fit or arbitrary upstream allocation-failure recovery.
 
 `app_main` is an explicitly synthetic headless fixture runner. It composes World,

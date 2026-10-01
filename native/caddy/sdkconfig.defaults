@@ -1,3 +1,2 @@
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
-# The headless harness neither needs nor claims PSRAM, panel DMA or a board.
-CONFIG_SPIRAM=n
+# No PSRAM component is included; the harness claims no panel DMA or board.
