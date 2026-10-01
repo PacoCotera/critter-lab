@@ -236,7 +236,13 @@ static void retained_routes_and_exports(void) {
     if (index == 9) { complete_a(&lab); complete_b(&lab); lab.page = V1_LIBRARY; lab.focus = 5; }
     if (index == 10) lab.page = V1_LIBRARY_FINDING;
     if (index == 11) { lab.page = V1_FINDING; lab.game.samples[0].incubated = 1; }
-    if (index == 12) { lab.storage_error = 1; strcpy(lab.message, "Storage unavailable. Findings are kept."); }
+    if (index == 12) {
+      static const char feedback[] = "Storage unavailable. Findings are kept. Retry after recovery; your sample and discoveries stay.";
+      assert(sizeof(feedback) == sizeof(lab.message)); /* 95 visible bytes + terminator. */
+      lab.storage_error = 1;
+      lab.game.data = lab.game.energy = lab.game.essence = 1000000;
+      strcpy(lab.message, feedback);
+    }
     if (index == 13) { lab.page = V1_LIBRARY; lab.game.sample_count = 0; }
     if (index == 14) {
       lab.page = V1_LIBRARY;
@@ -255,6 +261,7 @@ static void retained_routes_and_exports(void) {
     }
     LabResearchView view;
     assert(selected_lab_research_projection(&lab, 0, &view) && native_ui_research(context, &view));
+    if (index == 12) assert(view.stock[0] == 10000 && !strcmp(view.message, lab.message));
     if (index == 6) {
       const uint8_t *frame = native_ui_research(context, &view);
       assert(frame);
