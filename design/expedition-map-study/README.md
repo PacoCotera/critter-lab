@@ -1,5 +1,11 @@
 # Expedition map study
 
+**Current review:** coding is paused for the owner's joined [Probe gathering and
+genomic research discussion](../probe-bench-review.md). Its three alternatives
+supersede implementation readiness of the field-only recommendation below.
+Existing studies and useful unfinished source remain preserved; neither the
+Stone/two-seed candidate nor a new bench mechanic is selected.
+
 ## Gathering review: exploration and source decisions
 
 Issue [60](https://github.com/PacoCotera/critter-lab/issues/60), following actual

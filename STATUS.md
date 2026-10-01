@@ -20,7 +20,7 @@ The Companion entry/cargo increment is live: purposeful destination cards replac
 
 ## Next gameplay priorities
 
-Research still needs progressive discovery and useful variation across repeated samples, beyond paid facts and reference comparisons. The current navigation/workpiece correction is delivered; the next experience proof is grounded in the [existing research trial](design/research-and-creation.md#next-comparison-trial).
+Owner paused coding for a joined [Probe and genomic bench design review](design/probe-bench-review.md). It compares three researched connected journeys and a concrete hereditary investigation. These are proposals for discussion; no new discovery mechanic is selected. Research still needs progressive discovery and useful variation across repeated samples beyond paid facts and reference comparisons. The navigation/workpiece correction is delivered.
 
 Exploration remains road-bound. Saved generated geometry exists in the native prototype, but the three named expedition kinds still share finite source rules and do not offer meaningful distinctions. Open movement, distinct opportunities and retained map events are undelivered gameplay work; see the [exploration study](design/expedition-map-study/README.md).
 
