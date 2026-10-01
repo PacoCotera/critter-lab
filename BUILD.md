@@ -7,7 +7,7 @@ source and art, but cannot yet produce a complete physical kit.
 | Component | Available evidence/source | Remaining boundary |
 | --- | --- | --- |
 | Connected game | Native C17 Lab/Companion/Dock host simulation; gathering, reception, research, genome selection, incubation, reveal, habitat visits and durable saves | Provisional Pip content/balance; broader studies, capture/training, ecology and independent device authority |
-| Native presentation | Native frames and physical-control transport; Companion Probe/Cargo use LVGL, complete Dock LVGL candidate awaits verification | Remaining Lab/Companion manual-renderer migration; shared ESP-IDF UI builds, art and human usability |
+| Native presentation | Native frames and physical-control transport; Companion Probe/Cargo and complete Dock family use LVGL with checked native output | Remaining Lab/Companion manual-renderer migration; shared ESP-IDF UI builds, art and human usability |
 | Lab platform | Linux x86-64 executable built with GCC/CMake/Ninja; Raspberry Pi4 development reference | ARM build, HDMI/input integration, board performance and physical evidence |
 | Portable firmware | Legacy nRF52840 Probe and ESP32-S3 Companion compiler scaffolds | Current combined Companion drivers, sensors, radio, storage, board validation and flashing instructions |
 | Caddy | Logical four-gray summary/cache and simulated Print/Feed/link interruption | Current ESP-IDF UI target, display/printer drivers, charging and bench evidence |

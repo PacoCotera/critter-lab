@@ -170,9 +170,9 @@ Companion Cargo and Probe currently use retained450×600 workpieces with
 `80ca777e37a2b176770726a02e07a6fb79ef0b39`. Their shared display/context owns
 separate roots, copied view facts and bounded assets. The
 [native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
-mode switching and the field/return journey. The Dock candidate uses retained
+mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
-boundary; new native verification is pending. Lab and other Companion families remain on
+boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). Lab and other Companion families remain on
 manual C renderers. Those paths are known architectural debt, not an accepted
 exception. The existing ESP-IDF Companion build is an older demonstration
 scaffold; it does not compile the current game UI. Host pixel-stream evidence,

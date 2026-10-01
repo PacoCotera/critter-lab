@@ -35,8 +35,8 @@ physical focus replace manual screen drawing in those workpieces. The
 [Cargo proof](docs/evidence/native-ui-foundation/README.md) and
 [Probe proof](docs/evidence/native-companion-probe/README.md) record actual
 handoff, source-exact material pixels and output review. All device screens must
-use this framework. A complete Dock LVGL candidate and portable display boundary
-are under native verification; Lab and remaining Companion families still need
+use this framework. The [complete Dock LVGL family and portable display boundary](docs/evidence/native-dock-lvgl/README.md)
+passed native output and independent review; Lab and remaining Companion families still need
 migration. Current ESP-IDF scaffolds do not contain the current UI. Final HiBit
 artwork and human playability remain open.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
