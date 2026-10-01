@@ -75,6 +75,11 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     lv_obj_t *name = text(ui->root, body, 29 + (int)mode * 126, 19, mode == 2 ? 142 : 110, 24, modes[mode]);
     if (!name) goto failure;
     if (mode) lv_obj_set_style_text_color(name, lv_color_hex(CORE_ART_SECONDARY_RGB), 0);
+    else {
+      lv_obj_set_style_border_side(name, LV_BORDER_SIDE_BOTTOM, 0);
+      lv_obj_set_style_border_width(name, 2, 0);
+      lv_obj_set_style_border_color(name, lv_color_hex(CORE_ART_BLUE_RGB), 0);
+    }
   }
   ui->title = text(ui->root, place, 28, 58, 394, 34, "");
   ui->status = text(ui->root, small, 33, 112, 384, 60, "");
@@ -212,7 +217,8 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   lv_obj_set_hidden(ui->root, false);
   lv_label_set_text_static(ui->title, view->title);
   lv_label_set_text_static(ui->status, view->status);
-  lv_label_set_text_static(ui->context, view->context);
+  lv_label_set_text_static(ui->context, !strcmp(view->context, view->status) &&
+      view->phase == PROBE_ENTRY ? "" : view->context);
   lv_label_set_text_static(ui->source, view->source);
   lv_label_set_text_static(ui->footer, view->footer);
   int scene = view->phase == PROBE_MAP || view->phase == PROBE_SITE;

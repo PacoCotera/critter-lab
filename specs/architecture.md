@@ -170,7 +170,9 @@ Companion Cargo and Probe currently use retained450×600 workpieces with
 `80ca777e37a2b176770726a02e07a6fb79ef0b39`. Their shared display/context owns
 separate roots, copied view facts and bounded assets. The
 [native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
-mode switching and the field/return journey. Other screen families remain on
+mode switching and the field/return journey. The Dock candidate uses retained
+LVGL for its complete page family and extracts the portable display/partial-flush
+boundary; new native verification is pending. Lab and other Companion families remain on
 manual C renderers. Those paths are known architectural debt, not an accepted
 exception. The existing ESP-IDF Companion build is an older demonstration
 scaffold; it does not compile the current game UI. Host pixel-stream evidence,
@@ -200,10 +202,12 @@ window system, external GPU or new development environment.
 ```mermaid
 flowchart LR
   Input[Physical controls and visible-frame acknowledgement] --> Kit[Kit interaction and game commands]
-  Kit --> View[Copied permitted Cargo and Probe facts]
+  Kit --> View[Copied permitted device view facts]
   View --> UI[LVGL widgets / layouts / shared theme / assets]
-  UI --> Raster[Bounded software display flush]
-  Raster --> Frame[Existing native frame transport]
+  UI --> Display[Profile-sized display and partial draw buffer]
+  Display --> Flush[Validated area / stride / format flush]
+  Flush --> Host[Host export frame and native pixel transport]
+  Flush --> MCU[ESP-IDF partial display adapter: not yet implemented]
 ```
 
 The Kit remains the sole focus/eligibility/commit authority. Framework focus
@@ -216,6 +220,48 @@ this real path passes independent native/control and art/UX review. Owner permit
 a complete re-layout, particularly of Companion; old page geometry is not a
 constraint. Game/UX/art must discuss player questions, visual hierarchy and actual
 control sequences before dependent compositions are treated as selected.
+
+### Current migration coverage and target evidence
+
+| Product screen family | Composition now | Remaining requirement |
+| --- | --- | --- |
+| Companion Probe and field source choice, including Probe mode preview | LVGL | Shared current UI must compile under ESP-IDF; physical adapter unvalidated |
+| Companion Cargo | LVGL | Same target-build requirement |
+| Companion other mode previews, Send/Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
+| Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
+| Caddy World/Supplies/Connections/print review | Candidate retained LVGL, four-gray host output | Native output/review pending; shared ESP-IDF UI compile follows |
+
+The current three-device presenter is one Linux x86-64 process. It verifies
+logical views, controls and native output, not separate physical endpoints.
+The Lab has no verified ARM/HDMI/GPIO adapter. `native/companion` currently
+builds an old ESP-IDF scanline demo without the current LVGL UI; a Caddy ESP-IDF
+target is absent. The historical nRF Probe fixture is not the combined Companion.
+None of these scaffold builds qualifies as current firmware evidence.
+
+Portable UI headers must contain owned plain-C view facts, styles/assets and
+profile/display interfaces. They must not require `DeviceKit`, `SelectedLab`,
+`FILE`, POSIX storage, radio or GPIO. Projection adapters extract permitted
+facts; semantic physical input still reaches the interaction/domain owner.
+Host full-frame export storage is optional adapter storage, not an embedded UI
+requirement. The ESP32 path can consume partial regions without a host RGB frame.
+One shared LVGL lifetime owns all displays; profile-specific roots/assets avoid
+instantiating every screen family on each device.
+
+Flush-ready means the adapter has released the draw buffer. It is distinct from
+the painted-frame acknowledgement used to authorize input, especially for an
+asynchronous e-paper refresh. Area, stride, format and buffer lifetime must be
+validated. Panel format conversion is permitted here; UI composition is not.
+
+The next bounded implementation migrates the entire Dock family and extracts
+that display/host boundary. A subsequent headless ESP-IDF compile must contain
+the same shared Dock UI, pinned LVGL and partial-flush adapter; report ELF/map/
+memory evidence separately from hardware boot. Remaining Companion families
+then migrate, followed by complete Lab journey workpieces. Each slice requires
+exact pushed source, actual native output, physical-control regression checks
+and independent review. Final architecture acceptance audits all entry points:
+no active manual compositor, silent fallback or full-screen legacy bitmap wrapper.
+UI pool, assets/fonts, draw buffers and adapter storage are measured separately;
+host memory success does not establish MCU fit or physical performance.
 
 Shared margins, palette, font hierarchy, framing and focus styles belong in theme
 tokens. Images use retained Gemini source pixels at native size with verified

@@ -122,8 +122,11 @@ int main(int argc, char **argv) {
   if (kit_mode)
     kit_init(&kit, &lab, now_seconds());
   NativeUiContext *ui = kit_mode ? native_ui_create() : NULL;
-  if (kit_mode && !ui) {
-    fprintf(stderr, "Native Cargo renderer unavailable\n");
+  NativeUiContext *dock_ui = kit_mode ? native_ui_create_device(KIT_DOCK) : NULL;
+  if (kit_mode && (!ui || !dock_ui)) {
+    fprintf(stderr, "Native device renderer unavailable\n");
+    native_ui_destroy(ui);
+    native_ui_destroy(dock_ui);
     close(lock);
     return 2;
   }
@@ -148,7 +151,7 @@ int main(int argc, char **argv) {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
                    54 + stride * kit_height(device));
-            if (!kit_bmp_ui(&kit, device, stdout, ui, 1))
+            if (!kit_bmp_ui(&kit, device, stdout, device == KIT_DOCK ? dock_ui : ui, 1))
               goto failure;
           }
         } else if (fields == 3 && number(token, &revision) &&
@@ -211,10 +214,12 @@ int main(int argc, char **argv) {
       goto failure;
   }
   native_ui_destroy(ui);
+  native_ui_destroy(dock_ui);
   close(lock);
   return ferror(stdin) ? 2 : 0;
 failure:
   native_ui_destroy(ui);
+  native_ui_destroy(dock_ui);
   close(lock);
   return 2;
 }

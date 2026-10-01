@@ -2,14 +2,18 @@
 #define CRITTER_NATIVE_UI_H
 #include "cargo_view.h"
 #include "probe_view.h"
+#include "../ui/dock_view.h"
 
 typedef struct NativeUiContext NativeUiContext;
 NativeUiContext *native_ui_create(void);
+NativeUiContext *native_ui_create_device(unsigned device);
+int kit_dock_projection(const DeviceKit *kit, DockView *view);
 void native_ui_destroy(NativeUiContext *context);
 /* RGB byte order matches kit's existing row renderer; NULL means failure. */
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still);
 const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeView *view);
+const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view);
 /* Controlled proof clock only: no game tick or input acknowledgement.
  * Advancement is refused while another context exists: LVGL's clock is global. */
 void native_ui_advance(NativeUiContext *context, unsigned milliseconds);

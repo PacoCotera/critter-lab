@@ -42,10 +42,21 @@ The owner subsequently rejected preparation during exploration. The revised
 recommendation removes the field clock: immediate finite collection by default,
 conditional source selection for real alternatives/capacity. Its first proof is
 one encounter with fresh versus near-full cargo, not an event catalogue. Studies
-remain immediate; existing incubation is the natural background process. The
-proposal is not deployed mechanics or selected reward balance. The
-selected Dock module's [four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
-is confirmed; the current one-bit renderer still needs correction.
+remain immediate; existing incubation is the natural background process. The timer-free source candidate has passed a native quantity/ownership journey;
+final output corrections and integration are pending. It is not deployed or
+canonical reward balance. The selected Dock module's
+[four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
+is confirmed and the manual-renderer maintenance is checked; real LVGL conversion
+is the next architecture gate.
+
+Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
+ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
+shows current manual-renderer debt and the old firmware-scaffold gap. Convert the
+complete Dock family first, extract the portable display/host boundary, compile
+the same UI under ESP-IDF, then finish Companion families and Lab journey
+workpieces. Preserve game/save/physical-control behavior. Each slice has actual
+output and independent review; no host or scaffold success establishes firmware
+or physical readiness. No new engine or infrastructure is authorized.
 
 ## Delivered checkpoint: Polished Core V1
 

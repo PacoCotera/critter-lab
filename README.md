@@ -34,8 +34,11 @@ for real Companion Cargo and Probe. Shared layout, theme, image/font adapters an
 physical focus replace manual screen drawing in those workpieces. The
 [Cargo proof](docs/evidence/native-ui-foundation/README.md) and
 [Probe proof](docs/evidence/native-companion-probe/README.md) record actual
-handoff, source-exact material pixels and output review. Other screen families
-and final HiBit artwork are not yet migrated or accepted.
+handoff, source-exact material pixels and output review. All device screens must
+use this framework. A complete Dock LVGL candidate and portable display boundary
+are under native verification; Lab and remaining Companion families still need
+migration. Current ESP-IDF scaffolds do not contain the current UI. Final HiBit
+artwork and human playability remain open.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the

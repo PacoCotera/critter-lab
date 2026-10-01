@@ -10,7 +10,6 @@
 typedef struct {
   unsigned y, width;
   uint8_t *pixels;
-  int epaper;
 } KitRow;
 enum {
   BACKGROUND,
@@ -28,12 +27,6 @@ static const uint8_t palette[][3] = {
     {25, 36, 43},    {214, 222, 226}, {183, 198, 205}, {29, 119, 191},
     {237, 197, 106}, {42, 51, 56},    {10, 17, 23},    {56, 100, 132},
     {29, 38, 45},    {77, 70, 48}};
-/* Four-level paper roles are chosen for contrast, not converted from the
- * luminous Lab palette. Final raster quantization also covers authored icons. */
-static const uint8_t paper_palette[][3] = {
-    {255,255,255}, {0,0,0}, {85,85,85}, {170,170,170},
-    {0,0,0}, {255,255,255}, {85,85,85}, {85,85,85},
-    {170,170,170}, {170,170,170}};
 static void fill(KitRow *row, int x, int y, int width, int height,
                  unsigned color) {
   if ((int)row->y < y || (int)row->y >= y + height)
@@ -41,7 +34,7 @@ static void fill(KitRow *row, int x, int y, int width, int height,
   for (int at = x; at < x + width; ++at)
     if (at >= 0 && at < (int)row->width) {
       memcpy(row->pixels + at * 3,
-             row->epaper ? paper_palette[color] : palette[color], 3);
+             palette[color], 3);
     }
 }
 static void border(KitRow *row, int x, int y, int width, int height,
@@ -58,7 +51,7 @@ static void text(KitRow *row, int x, int y, const char *value, unsigned size,
     if ((unsigned)lab_fonts[i].size == size)
       font = &lab_fonts[i];
   native_text_row(font, value, x, y, row->y, row->width, row->pixels, 0,
-                  row->epaper ? paper_palette[color] : palette[color]);
+                  palette[color]);
 }
 static void heading(KitRow *row, int x, int y, const char *value,
                     unsigned size, unsigned color) {
@@ -69,7 +62,7 @@ static void heading(KitRow *row, int x, int y, const char *value,
   if (!selected)
     return;
   native_text_row(selected, value, x, y, row->y, row->width, row->pixels, 0,
-                  row->epaper ? paper_palette[color] : palette[color]);
+                  palette[color]);
 }
 static void art(KitRow *row, unsigned icon, int x, int y) {
   int at = (int)row->y - y;
@@ -192,7 +185,7 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
   field_heading(row, 29, 28, review ? "Return to Lab" : accepted ? "Cargo empty"
                                                    : sealed ? "Expedition sent"
                                                                   : "Cargo", 24, TEXT);
-  field_text(row, 30, 59, review ? "Review freezes gathering"
+  field_text(row, 30, 59, review ? "Review current cargo"
                   : acknowledged ? "Expedition ended / choose a new outing"
                                   : kit_stage(kit), 15, SECONDARY);
   static const char *modes[] = {"Probe", "Cargo", "Companions"};
@@ -238,7 +231,7 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
   if (review) {
     field_text(row, 28, 414, capsules ? "Send earned items and the sample."
                               : "Send earned items to the Lab.", 18, TEXT);
-    field_text(row, 28, 442, "Seals the outing / gathering stops.", 18, SECONDARY);
+    field_text(row, 28, 442, "Seals carried cargo.", 18, SECONDARY);
   } else if (accepted) {
     field_text(row, 28, 414, acknowledged ? "Delivery complete / cargo transferred."
                                          : "Lab accepted / receipt pending.", 18, TEXT);
@@ -596,79 +589,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                           : "Up / Down: choose  /  Back: modes",
        18, SECONDARY);
 }
-static void dock_row(const DeviceKit *kit, KitRow *row) {
-  const KitView *view = &kit->dock;
-  const KitJournal *journal = &kit->journal;
-  char value[96];
-  fill(row, 0, 0, 792, 272, BACKGROUND);
-  border(row, 8, 8, 776, 256, TEXT);
-  text(row, 24, 23, "BEECHO LAB / DOCK", 26, TEXT);
-  text(row, 485, 28,
-       kit_dock_cache_current(kit) ? "Synced (simulation)"
-       : journal->dock_online ? "Cached / stale" : "Offline / cached", 22,
-       SECONDARY);
-  fill(row, 24, 66, 744, 2, TEXT);
-  if (view->page == 2) {
-    text(row, 24, 89, "World summary print preview", 26, TEXT);
-    text(row, 24, 133, "No physical printer or paper output is connected.", 22,
-         TEXT);
-  } else if (view->focus == 0) {
-    const CoreArtId icons[] = {CORE_ART_RESIDENTS_MONO, CORE_ART_SAMPLES_MONO,
-                               CORE_ART_INCUBATING_MONO};
-    const unsigned amounts[] = {journal->dock_residents, journal->dock_samples,
-                                 journal->dock_incubations};
-    const char *names[] = {"Residents", "Samples", "Incubating"};
-    for (unsigned i = 0; i < 3; ++i) {
-      int x = 24 + (int)i * 248;
-      fill(row, x - 4, 82, 228, 69, PANEL);
-      category(row, icons[i], x, 89);
-      text(row, x + 47, 87, names[i], 22, TEXT);
-      snprintf(value, sizeof(value), "%u", amounts[i]);
-      text(row, x + 47, 117, value, 32, TEXT);
-    }
-    snprintf(value, sizeof(value), "Visits together: %u", kit_dock_visits(kit));
-    text(row, 24, 153, value, 18, SECONDARY);
-  } else if (view->focus == 1) {
-    static const char *labels[] = {"Data", "Energy", "Essence"};
-    for (unsigned i = 0; i < 3; ++i) {
-      int x = 24 + (int)i * 248;
-      fill(row, x - 4, 82, 228, 69, PANEL);
-      category(row, (CoreArtId)(CORE_ART_DATA_MONO + i), x, 89);
-      text(row, x + 47, 85, labels[i], 22, TEXT);
-      snprintf(value, sizeof(value), "%u %s", journal->dock_stock[i] / 100,
-               journal->dock_stock[i] == 100 ? "unit" : "units");
-      text(row, x + 47, 122, value, 22, TEXT);
-    }
-  } else {
-    text(row, 24, 88,
-         journal->dock_online ? "Lab link available (simulated)"
-                              : "Lab link unavailable; last snapshot retained",
-         22, TEXT);
-    text(row, 24, 122, "Cloud: not connected   Charging: not measured", 22,
-         SECONDARY);
-    text(row, 24, 155, "Radio protocol: unselected", 18, SECONDARY);
-  }
-  time_t local_stamp = (time_t)journal->dock_updated_at - 6 * 3600;
-  struct tm *local_time = gmtime(&local_stamp);
-  char stamp[32] = "unknown";
-  if (journal->dock_updated_at && local_time)
-    strftime(stamp, sizeof(stamp), "%H:%M:%S Mexico City", local_time);
-  snprintf(value, sizeof(value), "%sSnapshot %s%s",
-           view->page == 1 ? "OK: Back / " : "", stamp,
-           kit_dock_cache_current(kit) ? "" : " / stale");
-  text(row, 24, 178, value, 18, SECONDARY);
-  if (view->message[0])
-    text(row, 24, 201, view->message, 18, TEXT);
-  unsigned count = view->page == 2 ? 2 : 3;
-  for (unsigned i = 0; i < count; ++i) {
-    int x = 24 + (int)i * (view->page == 2 ? 450 : 248);
-    if (view->focus == i) {
-      fill(row, x - 4, 222, view->page == 2 && i == 0 ? 420 : 228, 32, PANEL);
-      border(row, x - 4, 222, view->page == 2 && i == 0 ? 420 : 228, 32, TEXT);
-    }
-    text(row, x + 8, 227, kit_option(kit, KIT_DOCK, i), 18, TEXT);
-  }
-}
 static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   unsigned phase = kit->journal.phase;
@@ -767,7 +687,7 @@ static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
     memcpy(context.incoming, kit->journal.cargo, sizeof(context.incoming));
     selected_lab_row_with_context(kit->lab, &context, y, pixels);
     if (kit->normalization_pending) {
-      KitRow row = {y, kit_width(device), pixels, 0};
+      KitRow row = {y, kit_width(device), pixels};
       fill(&row, 24, 548, 976, 38, FIELD);
       border(&row, 24, 548, 976, 38, FOCUS);
       text(&row, 36, 557,
@@ -776,21 +696,12 @@ static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
     }
     return;
   }
-  KitRow row = {y, kit_width(device), pixels, device == KIT_DOCK};
+  KitRow row = {y, kit_width(device), pixels};
   if (device == KIT_COMPANION)
     companion_row(kit, &row);
-  else if (device == KIT_DOCK)
-    dock_row(kit, &row);
   else
     lab_explore_row(kit, &row);
-  if (device == KIT_DOCK)
-    for (unsigned x = 0; x < row.width; ++x) {
-      unsigned luminance = (54u * pixels[x * 3] +
-                            183u * pixels[x * 3 + 1] +
-                            19u * pixels[x * 3 + 2] + 128u) / 256u;
-      uint8_t value = (uint8_t)(((luminance + 42u) / 85u) * 85u);
-      memset(pixels + x * 3, value, 3);
-    }
+
 }
 static int word(FILE *output, unsigned value, unsigned bytes) {
   for (unsigned i = 0; i < bytes; ++i)
@@ -800,6 +711,7 @@ static int word(FILE *output, unsigned value, unsigned bytes) {
 }
 static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
                     const uint8_t *frame) {
+  if (device == KIT_DOCK && !frame) return 0;
   unsigned width = kit_width(device), height = kit_height(device),
            stride = (width * 3 + 3) & ~3u;
   uint8_t pixels[SELECTED_LAB_WIDTH * 3];
@@ -841,6 +753,18 @@ static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
 
 int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                NativeUiContext *context, int still) {
+  if (!kit || !kit->lab || !output || device >= KIT_DEVICE_COUNT) return 0;
+  if (device == KIT_DOCK) {
+    DockView view;
+    if (!kit_dock_projection(kit, &view)) return 0;
+    int temporary = !context;
+    if (temporary) context = native_ui_create_device(KIT_DOCK);
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_dock(context, &view);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   CompanionProbeView probe;
   if (device == KIT_COMPANION && kit_probe_projection(kit, &probe)) {
     int temporary = !context;
@@ -851,8 +775,12 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
     if (temporary) native_ui_destroy(context);
     return result;
   }
+  if (device == KIT_COMPANION && (kit->companion.page == COMP_PROBE ||
+      kit->companion.page == COMP_FIELD_SITE ||
+      (kit->companion.page == COMP_MODES && kit->companion.mode == COMP_PROBE))) return 0;
   CompanionCargoView view;
   if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) {
+    if (device == KIT_COMPANION && kit->companion.page == COMP_CARGO) return 0;
     /* Other-device frame requests must not cancel Companion presentation. */
     if (device == KIT_COMPANION) native_ui_cancel(context);
     return bmp_rows(kit, device, output, NULL);

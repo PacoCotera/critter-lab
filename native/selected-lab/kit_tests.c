@@ -1121,7 +1121,7 @@ int main(void) {
   assert(kit.dock.focus == 1);
   press(&kit, KIT_DOCK, SELECTED_UP_DOWN);
   assert(kit.dock.focus == 0);
-  /* Separate native sizes and true binary monochrome, including padded BMP
+  /* Separate native sizes and four-gray Dock output, including padded BMP
    * rows. */
   for (unsigned device = 0; device < 3; ++device) {
     FILE *frame = tmpfile();
@@ -1132,9 +1132,12 @@ int main(void) {
     if (device == KIT_DOCK) {
       rewind(frame);
       assert(fseek(frame, 54, SEEK_SET) == 0);
-      int value;
-      while ((value = fgetc(frame)) != EOF)
-        assert(value == 0 || value == 255);
+      for (unsigned pixel = 0; pixel < kit_width(device) * kit_height(device); ++pixel) {
+        int blue = fgetc(frame), green = fgetc(frame), red = fgetc(frame);
+        assert(blue >= 0 && blue == green && green == red);
+        assert(blue == 0 || blue == 85 || blue == 170 || blue == 255);
+      }
+      assert(fgetc(frame) == EOF);
     }
     fclose(frame);
   }

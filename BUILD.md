@@ -7,10 +7,10 @@ source and art, but cannot yet produce a complete physical kit.
 | Component | Available evidence/source | Remaining boundary |
 | --- | --- | --- |
 | Connected game | Native C17 Lab/Companion/Dock host simulation; gathering, reception, research, genome selection, incubation, reveal, habitat visits and durable saves | Provisional Pip content/balance; broader studies, capture/training, ecology and independent device authority |
-| Native presentation | State-driven native frames and physical-control transport; [actual gallery](design/connected-device-review/native/README.md) | Faithful shared-asset derivation from reviewed Gemini concepts; final art and human usability acceptance |
+| Native presentation | Native frames and physical-control transport; Companion Probe/Cargo use LVGL, complete Dock LVGL candidate awaits verification | Remaining Lab/Companion manual-renderer migration; shared ESP-IDF UI builds, art and human usability |
 | Lab platform | Linux x86-64 executable built with GCC/CMake/Ninja; Raspberry Pi4 development reference | ARM build, HDMI/input integration, board performance and physical evidence |
 | Portable firmware | Legacy nRF52840 Probe and ESP32-S3 Companion compiler scaffolds | Current combined Companion drivers, sensors, radio, storage, board validation and flashing instructions |
-| Caddy | Logical monochrome summary/cache, simulated Print/Feed and link interruption | Display/printer drivers, charging, electronics and bench measurements |
+| Caddy | Logical four-gray summary/cache and simulated Print/Feed/link interruption | Current ESP-IDF UI target, display/printer drivers, charging and bench evidence |
 | Earlier experiments | Pinned Node/browser studies and genetic/transfer fixtures | Separate studies do not form another integrated product |
 | Cloud and mobile | Product roles, contracts and explicit fallback direction | Production services, authentication, synchronization and mobile game implementation |
 | Website | Public website source under `website/` | A website is not the game client or physical-kit proof |
@@ -19,8 +19,11 @@ source and art, but cannot yet produce a complete physical kit.
 The current product is one combined Companion, one home Lab and one shared Caddy.
 Probe is a mode. The caddy development reference is 5.79-inch monochrome,
 792×272; older separate-Probe/3.7-inch builds and renders remain historical evidence.
-Lab is Linux C17, not ESP-IDF; that framework belongs to the separate Companion
-scaffold. Native host checks establish software behavior, not flashed-device or
+Lab targets Linux C17 on Raspberry Pi4. Companion and Caddy target ESP32 with
+ESP-IDF; the current Companion scaffold is historical and contains no current
+LVGL game UI, and a Caddy target is still missing. Every product screen must
+use LVGL; [architecture coverage](specs/architecture.md#current-migration-coverage-and-target-evidence)
+records the incomplete migration. Native host checks establish software behavior, not flashed-device or
 physical-display performance.
 
 The [native guide](native/README.md) contains build commands and the existing

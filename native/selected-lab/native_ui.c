@@ -2,12 +2,20 @@
 #include "ui_assets.h"
 #include "ui_theme.h"
 #include "probe_ui.h"
+#include "../ui/display.h"
+#include "../ui/host_frame.h"
+#include "../ui/dock_ui.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
 enum { CARGO_WIDTH = 450, CARGO_HEIGHT = 600, DRAW_ROWS = 60, FADE_MS = 120 };
 struct NativeUiContext {
+  unsigned device;
+  UiDisplay *transport;
+  UiHostFrame frame;
+  DockUi *dock;
+  NativeUiImage dock_images[6];
   lv_display_t *display;
   NativeProbeUi *probe;
   lv_obj_t *cargo_root;
@@ -23,32 +31,6 @@ struct NativeUiContext {
   int has_previous, failed, pending;
   unsigned elapsed;
 };
-static unsigned context_count;
-
-static void flush_rgb(lv_display_t *display, const lv_area_t *area, uint8_t *pixels) {
-  NativeUiContext *context = lv_display_get_user_data(display);
-  int width = area->x2 - area->x1 + 1;
-  int height = area->y2 - area->y1 + 1;
-  uint32_t stride = lv_draw_buf_width_to_stride((unsigned)width, LV_COLOR_FORMAT_RGB888);
-  if (area->x1 < 0 || area->y1 < 0 || area->x2 >= CARGO_WIDTH ||
-      area->y2 >= CARGO_HEIGHT || width <= 0 || height <= 0 ||
-      (uint64_t)stride * (unsigned)height > CARGO_WIDTH * DRAW_ROWS * 3u) {
-    context->failed = 1;
-  } else {
-    for (int row = 0; row < height; ++row) {
-      uint8_t *target = context->rgb + ((area->y1 + row) * CARGO_WIDTH + area->x1) * 3;
-      const uint8_t *source = pixels + (unsigned)row * stride;
-      /* LVGL calls this RGB888 but its native bytes are B,G,R. */
-      for (int column = 0; column < width; ++column) {
-        target[column * 3] = source[column * 3 + 2];
-        target[column * 3 + 1] = source[column * 3 + 1];
-        target[column * 3 + 2] = source[column * 3];
-      }
-    }
-  }
-  /* This releases LVGL's buffer; it never acknowledges a visible Kit frame. */
-  lv_display_flush_ready(display);
-}
 static lv_obj_t *surface(lv_obj_t *parent, int width, int height) {
   lv_obj_t *object = lv_obj_create(parent);
   if (object) {
@@ -186,30 +168,52 @@ static int compose(NativeUiContext *context) {
          context->capacity && context->feedback;
 }
 NativeUiContext *native_ui_create(void) {
+  return native_ui_create_device(KIT_COMPANION);
+}
+NativeUiContext *native_ui_create_device(unsigned device) {
+  if (device != KIT_COMPANION && device != KIT_DOCK) return NULL;
   NativeUiContext *context = calloc(1, sizeof(*context));
   if (!context) return NULL;
-  if (!context_count) lv_init();
-  ++context_count;
-  context->rgb = calloc(CARGO_WIDTH * CARGO_HEIGHT, 3);
-  context->draw = malloc(CARGO_WIDTH * DRAW_ROWS * 3);
+  context->device = device;
+  UiDisplayProfile profile = {device == KIT_DOCK ? 792 : CARGO_WIDTH,
+      device == KIT_DOCK ? 272 : CARGO_HEIGHT, DRAW_ROWS, UI_COLOR_RGB888};
+  size_t draw_size = ui_display_buffer_size(&profile);
+  context->draw = malloc(draw_size);
+  if (!context->draw || !ui_host_frame_init(&context->frame, &profile)) goto failure;
+  context->rgb = context->frame.rgb;
+  context->transport = ui_display_create(&profile, context->draw, draw_size,
+                                         ui_host_frame_flush, &context->frame);
+  if (!context->transport) goto failure;
+  context->display = ui_display_lvgl(context->transport);
   native_ui_font_init(&context->title_font, &lab_heading_fonts[0]);
   native_ui_font_init(&context->body_font, &lab_fonts[0]);
   native_ui_font_init(&context->small_font, &lab_fonts[15]);
   native_ui_font_init(&context->quantity_font, &lab_fonts[7]);
   native_ui_font_init(&context->action_font, &lab_heading_fonts[4]);
+  if (device == KIT_DOCK) {
+    native_ui_font_init(&context->body_font, &lab_fonts[3]);
+    native_ui_font_init(&context->small_font, &lab_fonts[0]);
+    native_ui_font_init(&context->quantity_font, &lab_fonts[8]);
+    const CoreArtId ids[] = {CORE_ART_RESIDENTS_MONO, CORE_ART_SAMPLES_MONO,
+        CORE_ART_INCUBATING_MONO, CORE_ART_DATA_MONO, CORE_ART_ENERGY_MONO, CORE_ART_ESSENCE_MONO};
+    const lv_image_dsc_t *icons[6];
+    for (unsigned index = 0; index < 6; ++index) {
+      if (!native_ui_image_init(&context->dock_images[index], ids[index])) goto failure;
+      icons[index] = &context->dock_images[index].image;
+    }
+    lv_display_set_default(context->display);
+    context->dock = dock_ui_create(lv_display_get_screen_active(context->display),
+        &context->title_font, &context->body_font, &context->small_font,
+        &context->quantity_font, icons);
+    if (!context->dock) goto failure;
+    return context;
+  }
   for (unsigned index = 0; index < 4; ++index) {
     CoreArtId id = index == 3 ? CORE_ART_SAMPLE_NEUTRAL : (CoreArtId)(CORE_ART_DATA_PRIMARY + index);
     if (!native_ui_image_init(&context->images[index], id)) goto failure;
   }
-  if (!context->rgb || !context->draw) goto failure;
-  context->display = lv_display_create(CARGO_WIDTH, CARGO_HEIGHT);
   context->actions = lv_group_create();
-  if (!context->display || !context->actions) goto failure;
-  lv_display_set_color_format(context->display, LV_COLOR_FORMAT_RGB888);
-  lv_display_set_user_data(context->display, context);
-  lv_display_set_buffers(context->display, context->draw, NULL,
-                          CARGO_WIDTH * DRAW_ROWS * 3, LV_DISPLAY_RENDER_MODE_PARTIAL);
-  lv_display_set_flush_cb(context->display, flush_rgb);
+  if (!context->actions) goto failure;
   if (!compose(context)) goto failure;
   context->probe = native_probe_ui_create(context->screen, context->actions,
       &context->body_font, &context->title_font, &context->small_font, &context->action_font, &context->images[3]);
@@ -235,13 +239,14 @@ void native_ui_destroy(NativeUiContext *context) {
   if (!context) return;
   native_ui_cancel(context);
   native_probe_ui_destroy(context->probe);
+  dock_ui_destroy(context->dock);
   if (context->actions) lv_group_delete(context->actions);
-  if (context->display) lv_display_delete(context->display);
+  ui_display_destroy(context->transport);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
-  free(context->rgb);
+  for (unsigned index = 0; index < 6; ++index) native_ui_image_destroy(&context->dock_images[index]);
+  ui_host_frame_destroy(&context->frame);
   free(context->draw);
   free(context);
-  if (--context_count == 0) lv_deinit();
 }
 int native_ui_animation_pending(const NativeUiContext *context) {
   return context && context->pending;
@@ -249,7 +254,7 @@ int native_ui_animation_pending(const NativeUiContext *context) {
 void native_ui_advance(NativeUiContext *context, unsigned milliseconds) {
   /* LVGL's timer clock is process-wide. Export one animated context at a time;
    * advancing one must never silently animate another held context. */
-  if (!context || context_count != 1 || !context->pending ||
+  if (!context || ui_display_count() != 1 || !context->pending ||
       context->previous.held || context->previous.suspended) return;
   unsigned remaining = FADE_MS - context->elapsed;
   if (milliseconds > remaining) milliseconds = remaining;
@@ -260,7 +265,8 @@ void native_ui_advance(NativeUiContext *context, unsigned milliseconds) {
 }
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still) {
-  if (!context || !view || context->failed) return NULL;
+  if (!context || context->device != KIT_COMPANION || !view ||
+      context->failed || ui_display_failed(context->transport)) return NULL;
   native_probe_ui_hide(context->probe);
   lv_obj_set_hidden(context->cargo_root, false);
   int same = context->has_previous &&
@@ -331,13 +337,20 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
   }
   context->has_previous = 1;
   lv_refr_now(context->display);
-  return context->failed ? NULL : context->rgb;
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
 }
 const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeView *view) {
-  if (!context || !view || context->failed) return NULL;
+  if (!context || context->device != KIT_COMPANION || !view ||
+      context->failed || ui_display_failed(context->transport)) return NULL;
   native_ui_cancel(context);
   lv_obj_set_hidden(context->cargo_root, true);
   if (!native_probe_ui_update(context->probe, view)) return NULL;
   lv_refr_now(context->display);
-  return context->failed ? NULL : context->rgb;
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
+}
+const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view) {
+  if (!context || context->device != KIT_DOCK || !view ||
+      ui_display_failed(context->transport) || !dock_ui_update(context->dock, view)) return NULL;
+  lv_refr_now(context->display);
+  return ui_display_failed(context->transport) ? NULL : ui_host_frame_rgb(&context->frame, 1);
 }
