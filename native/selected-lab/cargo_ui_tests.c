@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "native_ui.h"
 #include "ui_assets.h"
+#include "expedition.h"
 #include "../ui/companion_cargo_ui.h"
 #include "../ui/display.h"
 #include <assert.h>
