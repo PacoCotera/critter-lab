@@ -20,6 +20,12 @@ The Companion entry/cargo increment is live: purposeful destination cards replac
 
 ## Next gameplay priorities
 
+Separately, the owner authorized a [generative-backend workbench](prototype/generator-workbench/README.md)
+for system design and tinkering. The local Node scaffold reuses the pinned Pip
+engine, resolves editable genomes with causal traces, generates diagnostic SVG
+and fact records, compares candidates and exposes coverage/gaps. It is not game
+integration, configured incubation or production sprite/animation generation.
+
 Owner paused coding for the [connected discovery design review](design/probe-bench-review.md).
 Responsive encounters are selected with procedural state/relations and derived
 actions, not scripted scenes. Research is the richest visual genome backbone;
