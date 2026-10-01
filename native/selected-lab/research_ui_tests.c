@@ -315,7 +315,7 @@ static void assert_native_portrait(const uint8_t *frame, CoreArtId id, unsigned 
 static void assert_reference_pixels(const uint8_t *frame, CoreArtId id, unsigned x, unsigned scale) {
   const CoreArtSprite *source = core_art_sprite(id);
   assert(source && source->width == 261 && source->height == 289);
-  unsigned checked = 0;
+  unsigned checked = 0, eligible = 0;
   for (unsigned row = 1; row < 39; ++row) {
     for (unsigned column = 1; column < 47; ++column) {
       const uint8_t *pixel = source->rgba + ((148 + row) * source->width + 164 + column) * 4;
@@ -328,6 +328,7 @@ static void assert_reference_pixels(const uint8_t *frame, CoreArtId id, unsigned
             uniform &= !memcmp(pixel, pixel + (dy * (int)source->width + dx) * 4, 4);
       }
       if (!uniform) continue;
+      ++eligible;
       for (unsigned dy = 0; dy < scale; ++dy)
         for (unsigned dx = 0; dx < scale; ++dx) {
           unsigned screen_x = x + column * scale + dx;
@@ -341,7 +342,11 @@ static void assert_reference_pixels(const uint8_t *frame, CoreArtId id, unsigned
         }
     }
   }
-  assert(checked > 100);
+  /* The marked original has only 21 uniform 3x3 centers in this internal ROI.
+   * Coverage follows exact source eligibility, not a flat output threshold. */
+  assert(eligible && checked == eligible * scale * scale);
+  if (scale == 1) assert(eligible == 1748);
+  printf("Reference source%u scale%u: eligible=%u exact_RGB=%u\n", (unsigned)id, scale, eligible, checked);
 }
 
 static void partial_reference_routes(void) {
