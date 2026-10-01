@@ -48,7 +48,7 @@ static void fixture(SelectedLab *lab, DeviceKit *kit) {
   kit->journal.cargo[1] = 200;
   kit->journal.cargo[2] = 100;
   kit->journal.accept_sequence = 7;
-  snprintf(kit->journal.haul_id, sizeof(kit->journal.haul_id), "haul-7/%s", kit->sealed_field.expedition_id);
+  snprintf(kit->journal.haul_id, sizeof(kit->journal.haul_id), "haul-7/%.56s", kit->sealed_field.expedition_id);
   kit->journal.phase = KIT_IDLE;
 }
 
@@ -252,13 +252,14 @@ static void rendering_and_lifetime(void) {
   const char *names[] = {"list", "detail", "empty", "arrival", "arrival-error", "receipt-recovery", "receipt", "complete"};
   for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); ++i) {
     fixture(&lab, &kit);
-    kit.received_detail = i == 1;
+    kit.received_detail = i == 1 || i == 2;
     if (i == 2) lab.game.received_count = lab.game.received_cursor = 0;
     if (i >= 3) kit.journal.phase = i < 5 ? KIT_ARRIVED : i == 5 ? KIT_COMMITTING : i == 6 ? KIT_ACK_PENDING : KIT_COMPLETE;
     kit.failed = i == 4 || i == 5;
     if (i >= 5) { accepted_sample(&lab, &kit); kit.caller_valid = 1; }
     LabReceptionView view;
     assert(kit_reception_projection(&kit, &view) && native_ui_reception(context, &view));
+    if (i == 2) assert(view.mode == LAB_RECEPTION_LOG_EMPTY && !view.received.detail);
     FILE *generic = tmpfile(), *persistent = tmpfile();
     assert(generic && persistent && kit_bmp(&kit, KIT_LAB, generic) && kit_bmp_ui(&kit, KIT_LAB, persistent, context, 1));
     equal_bmps(generic, persistent);
@@ -284,6 +285,12 @@ static void rendering_and_lifetime(void) {
   invalid.received.record_count = EXPEDITION_VIEW_RECORDS + 1;
   assert(!native_ui_reception(context, &invalid));
   invalid = view;
+  invalid.received.selected = invalid.received.record_count;
+  assert(!native_ui_reception(context, &invalid));
+  invalid = view;
+  memset(invalid.received.record_labels[0], 'X', sizeof(invalid.received.record_labels[0]));
+  assert(!native_ui_reception(context, &invalid));
+  invalid = view;
   invalid.received.map.avatar_visible = 1;
   assert(!native_ui_reception(context, &invalid));
   invalid = view;
@@ -306,7 +313,8 @@ static void rendering_and_lifetime(void) {
   assert(!native_ui_reception(context, &invalid));
   lab.game.received_count = GAME_FIELD_HISTORY + 1;
   FILE *output = tmpfile();
-  assert(output && !kit_bmp_ui(&kit, KIT_LAB, output, context, 1) && !ftell(output) && !fclose(output));
+  assert(output && !kit_bmp(&kit, KIT_LAB, output) && !ftell(output));
+  assert(!kit_bmp_ui(&kit, KIT_LAB, output, context, 1) && !ftell(output) && !fclose(output));
   native_ui_destroy(context);
 
   fixture(&lab, &kit);

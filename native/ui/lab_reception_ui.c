@@ -18,6 +18,7 @@ struct LabReceptionUi {
   const lv_image_dsc_t *materials[7], *field[FIELD_ART_COUNT];
   char incoming_text[3][32], stock_text[3][32], received_text[3][48];
   char facts_text[192], record_text[80];
+  char row_text[4][96];
   unsigned cell_size;
 };
 
@@ -206,6 +207,19 @@ failure:
   return NULL;
 }
 static int terminated(const char *text, size_t size) { return memchr(text, 0, size) != NULL; }
+static void record_name(const char *identity, char *output, size_t capacity) {
+  const char *number = strrchr(identity, '-');
+  if (number && number[1]) {
+    ++number;
+    const char *end = number;
+    while (*end >= '0' && *end <= '9') ++end;
+    if (!*end) {
+      snprintf(output, capacity, "Expedition %02lu", strtoul(number, NULL, 10));
+      return;
+    }
+  }
+  snprintf(output, capacity, "Expedition");
+}
 static int valid(const LabReceptionView *view) {
   if ((unsigned)view->mode > LAB_RECEPTION_LOG_EMPTY ||
       !terminated(view->incoming_title,sizeof(view->incoming_title)) ||
@@ -278,10 +292,18 @@ int lab_reception_ui_update(LabReceptionUi *ui, const LabReceptionView *view) {
   for (unsigned i=0;i<4;++i) {
     unsigned index=first+i;
     lv_obj_set_hidden(ui->rows[i],empty || detail || index>=record->record_count);
-    if (index<record->record_count) lv_label_set_text_static(ui->rows[i],record->record_labels[index]);
+    if (index<record->record_count) {
+      char identity[64], name[64];
+      snprintf(identity,sizeof(identity),"%s",record->record_labels[index]);
+      char *contents=strstr(identity," / ");
+      if (contents) { *contents=0; contents+=3; }
+      record_name(identity,name,sizeof(name));
+      snprintf(ui->row_text[i],sizeof(ui->row_text[i]),"%s\n%.28s",name,contents ? contents : "");
+      lv_label_set_text_static(ui->rows[i],ui->row_text[i]);
+    }
   }
   lv_obj_set_pos(ui->focus.object,0,28+(int)(record->selected-first)*60);
-  snprintf(ui->record_text,sizeof(ui->record_text),"%s",record->outing_id);
+  record_name(record->outing_id,ui->record_text,sizeof(ui->record_text));
   lv_label_set_text_static(ui->record_title,ui->record_text);
   lv_label_set_text_static(ui->received_at,record->received_label);
   ui->cell_size=detail ? 32 : 24;
