@@ -328,6 +328,11 @@ algorithmic construction pipeline remains required.
 
 ### Next increments and stopping condition
 
+The [first locus/expression content proposal](../../design/genome-starter-content.md)
+defines24connected candidate records, implementation type order, baseline/partial/
+full-expression visual obligations and the future expedition-engineering idea.
+It is the content design for the next package, not implemented or canonical biology.
+
 1. Establish the framework-based compendium manager and full eleven-family
    inventory, with the deep priority-family draft catalogue and complete records.
    Validate one connected structural/appearance/movement cluster within that

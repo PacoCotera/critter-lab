@@ -286,6 +286,13 @@ Selected automation direction: LLMs propose reusable loci, variants, family base
 
 The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Class baselines compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
 
+The considered [starter content proposal](../design/genome-starter-content.md)
+prioritizes body/surface/walk-turn types and their visual baseline/region/phenotype
+mapping. Its24candidate records, new family grammar and expression operators are
+proposed, not canonical or implemented. Owner's CRISPR-CAS-like expedition-item
+idea is recorded there as future targeted engineering, distinct from expression
+sampling and epigenetic marks; edit policy, resources and inheritance remain open.
+
 Founder generation assembles candidates within these constraints; expression resolves them to a phenotype with an explanation trace. Breeding derives alleles from actual parents under explicit inheritance/viability rules rather than manufacturing a replacement valid child. Invalid combinations are rejected or handled by the chosen reproductive policy, not repaired by silently swapping genes. Content versions and saved genomes, expression and assets remain pinned.
 
 The [bounded engine contract](genetic-engine.md) uses Pip's applicable baseline, a small locus set and declared unmodeled boundaries. It covers a varied batch, inherited phenotype causes, incompatible-combination rejection and one compatible cross. This is not the automatic artwork/encyclopedia generator. No whole-library editor, broad class catalogue, universal solver or production service is required for the genetic proof. Later extension follows the existing extension policy and all five layers/eleven families.
