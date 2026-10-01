@@ -134,6 +134,9 @@ void lab_home_ui_destroy(LabHomeUi *ui) {
   if (ui->root) lv_obj_delete(ui->root);
   free(ui);
 }
+void lab_home_ui_hide(LabHomeUi *ui) {
+  if (ui) lv_obj_set_hidden(ui->root, true);
+}
 static int terminated(const char *value, size_t size) {
   return memchr(value, 0, size) != NULL;
 }
@@ -157,6 +160,7 @@ int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view) {
       view->landing.show_resources > 1 || view->landing.primary_resources > 1 || view->landing.show_progress > 1 ||
       (view->landing.show_progress && (!view->landing.total || view->landing.progress > view->landing.total))) return 0;
   ui->view = *view;
+  lv_obj_set_hidden(ui->root, false);
   view = &ui->view;
   lv_label_set_text_static(ui->title, view->title);
   lv_obj_set_pos(ui->focus.object, 34, 179+(int)view->focus*68);

@@ -1,6 +1,6 @@
 #include "home_view.h"
 #include "core_art.h"
-#include "expedition_render.h"
+#include "reception_view.h"
 #include "kit.h"
 #include "native_font.h"
 #include "native_ui.h"
@@ -52,146 +52,6 @@ static void text(KitRow *row, int x, int y, const char *value, unsigned size,
   native_text_row(font, value, x, y, row->y, row->width, row->pixels, 0,
                   palette[color]);
 }
-static void heading(KitRow *row, int x, int y, const char *value,
-                    unsigned size, unsigned color) {
-  const NativeFont *selected = NULL;
-  for (unsigned i = 0; i < LAB_HEADING_FONT_COUNT; ++i)
-    if ((unsigned)lab_heading_narrow_fonts[i].size == size)
-      selected = &lab_heading_narrow_fonts[i];
-  if (!selected)
-    return;
-  native_text_row(selected, value, x, y, row->y, row->width, row->pixels, 0,
-                  palette[color]);
-}
-static void resource(KitRow *row, unsigned icon, int x, int y, int primary) {
-  CoreArtId id = (CoreArtId)((primary ? CORE_ART_DATA_PRIMARY
-                                    : CORE_ART_DATA_COMPACT) + icon);
-  core_art_row(id, x, y, row->y, row->width, row->pixels);
-}
-static void panel(KitRow *row, int x, int y, int width, int height) {
-  core_art_panel_row(x, y, width, height, row->y, row->width, row->pixels);
-}
-static void action_focus(KitRow *row, int x, int y, int width, int height) {
-  core_art_focus_row(x, y, width, height, row->y, row->width, row->pixels);
-}
-static void wrapped(KitRow *row, int x, int y, const char *value, int width,
-                    unsigned size, unsigned color) {
-  char line[128] = {0};
-  size_t used = 0;
-  while (*value) {
-    const char *end = strchr(value, ' ');
-    size_t length = end ? (size_t)(end - value) : strlen(value);
-    char candidate[128];
-    snprintf(candidate, sizeof(candidate), "%s%.*s", line, (int)length, value);
-    const NativeFont *font = &lab_fonts[0];
-    for (unsigned i = 0; i < LAB_FONT_COUNT; ++i)
-      if ((unsigned)lab_fonts[i].size == size)
-        font = &lab_fonts[i];
-    if (used && native_text_width(font, candidate) > width) {
-      text(row, x, y, line, size, color);
-      y += (int)size + 4;
-      used = 0;
-    }
-    if (used + length + 2 >= sizeof(line))
-      break;
-    memcpy(line + used, value, length);
-    used += length;
-    line[used++] = ' ';
-    line[used] = 0;
-    value += length;
-    if (*value == ' ')
-      ++value;
-  }
-  if (used)
-    text(row, x, y, line, size, color);
-}
-static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
-  const GameState *game = &kit->lab->game;
-  unsigned phase = kit->journal.phase;
-  if (phase != KIT_ARRIVED && phase != KIT_COMMITTING &&
-      !(kit->caller_valid && (phase == KIT_ACK_PENDING || phase == KIT_COMPLETE))) {
-    ExpeditionReceivedView received = {0};
-    kit_received_projection(kit, kit->received_selected, &received);
-    expedition_received_row(&received, row->y, row->pixels);
-    if (kit->failed) {
-      fill(row, 24, 544, 976, 38, FIELD);
-      text(row, 36, 552, "Storage unavailable. Received records preserved.", 18, FOCUS);
-    }
-    return;
-  }
-  ExpeditionFieldView field;
-  int map_outing = kit_field_projection(kit, &field);
-  char value[128];
-  fill(row, 0, 0, 1024, 600, BACKGROUND);
-  if (row->y < 112) {
-    selected_lab_row(kit->lab, row->y, row->pixels);
-    return;
-  }
-  int manifest = phase >= KIT_ARRIVED;
-  int accepted = map_outing ? field.delivery_accepted : phase >= KIT_ACK_PENDING;
-  if (manifest) {
-    /*07's ownership comparison: incoming is never rendered as accepted stock. */
-    panel(row, 32, 142, 302, 386);
-    panel(row, 686, 142, 306, 386);
-    heading(row, 50, 157, "FROM COMPANION", 26, TEXT);
-    heading(row, 710, 157, "LAB STOCK", 26, TEXT);
-    static const char *names[] = {"Data", "Energy", "Essence"};
-    const unsigned stock[] = {game->data, game->energy, game->essence};
-    for (unsigned i = 0; i < 3; ++i) {
-      int y = 204 + (int)i * 101;
-      resource(row, i, 49, y, 1);
-      text(row, 161, y + 54, names[i], 22, SECONDARY);
-      snprintf(value, sizeof(value), "%u", kit->journal.cargo[i] / GAME_SUPPLY_UNIT);
-      heading(row, 161, y + 8, value, 32, TEXT);
-      resource(row, i, 700, y, 1);
-      text(row, 812, y + 54, names[i], 22, SECONDARY);
-      snprintf(value, sizeof(value), "%u", stock[i] / GAME_SUPPLY_UNIT);
-      heading(row, 812, y + 8, value, 32, TEXT);
-    }
-    wrapped(row, 365, 204, accepted ? "Supplies stored at the Lab"
-                                      : "Supplies waiting at the Lab",
-            286, 26, TEXT);
-    wrapped(row, 365, 400, accepted ? "The haul is included in Lab stock."
-                                     : "Store haul / End expedition",
-            286, 18, SECONDARY);
-    const GameSample *sample = kit_received_sample(kit);
-    if (accepted && sample)
-      snprintf(value, sizeof(value), "Sample recorded: %s", sample->id);
-    else if (accepted)
-      snprintf(value, sizeof(value), "Supplies saved / no sample recorded");
-    else if (map_outing)
-      snprintf(value, sizeof(value), "%s",
-               field.capsule_count ? "Sealed sample waiting / contents unknown"
-                                   : "Supplies only / no sample collected");
-    else
-      snprintf(value, sizeof(value), "%s",
-               kit->journal.elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
-               : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
-                                                       : "Sample shelf full / supplies only");
-    text(row, 48, 537, value, 18, SECONDARY);
-  }
-  if (kit->failed) {
-    wrapped(row, manifest ? 365 : 48, manifest ? 314 : 509,
-            accepted ? "Delivery committed. Receipt recovery needed."
-                     : "Storage unavailable. Cargo preserved.",
-            manifest ? 286 : 920, manifest ? 18 : 22, FOCUS);
-  } else if (phase == KIT_ARRIVED) {
-    fill(row, 371, 312, 282, 60, FIELD);
-    action_focus(row, 376, 316, 272, 52);
-    heading(row, 391, 326, "Confirm: accept haul", 26, FOCUS);
-  } else {
-    wrapped(row, manifest ? 365 : 48, manifest ? 314 : 509,
-         phase == KIT_ACK_PENDING        ? "Waiting for Companion receipt"
-         : phase == KIT_COMPLETE         ? "Companion receipt confirmed"
-         : kit->journal.companion_online ? "Lab link available (simulation)"
-                                         : "Companion offline",
-         manifest ? 286 : 920, manifest ? 18 : 22, SECONDARY);
-  }
-  text(row, 48, 565,
-       kit->caller_valid ? "Back: return to your previous screen"
-                         : "Back: Lab overview",
-       18, SECONDARY);
-}
 static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
                        uint8_t *pixels) {
   if (device == KIT_LAB && !kit_lab_explore(kit)) {
@@ -212,9 +72,6 @@ static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
     }
     return;
   }
-  KitRow row = {y, kit_width(device), pixels};
-  if (device == KIT_LAB) lab_explore_row(kit, &row);
-
 }
 static int word(FILE *output, unsigned value, unsigned bytes) {
   for (unsigned i = 0; i < bytes; ++i)
@@ -267,6 +124,17 @@ static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
 int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                NativeUiContext *context, int still) {
   if (!kit || !kit->lab || !output || device >= KIT_DEVICE_COUNT) return 0;
+  if (device == KIT_LAB && kit_lab_explore(kit)) {
+    LabReceptionView view;
+    if (!kit_reception_projection(kit, &view)) return 0;
+    int temporary = !context;
+    if (temporary) context = native_ui_create_device(KIT_LAB);
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_reception(context, &view);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   if (device == KIT_LAB && kit->lab->page == V1_HOME) {
     SelectedLabRenderContext facts = {SELECTED_HAUL_NONE, {0,0,0}};
     if (kit->journal.phase == KIT_ARRIVED || kit->journal.phase == KIT_COMMITTING)

@@ -9,7 +9,5 @@ int kit_received_projection(const DeviceKit *kit, unsigned index,
                             ExpeditionReceivedView *out);
 void expedition_field_row(const ExpeditionFieldView *view, unsigned y,
                           uint8_t *pixels);
-void expedition_received_row(const ExpeditionReceivedView *view, unsigned y,
-                             uint8_t *pixels);
 
 #endif

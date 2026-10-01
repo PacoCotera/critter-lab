@@ -12,4 +12,5 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
     const lv_image_dsc_t *const images[13]);
 int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view);
 void lab_home_ui_destroy(LabHomeUi *ui);
+void lab_home_ui_hide(LabHomeUi *ui);
 #endif

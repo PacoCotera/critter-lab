@@ -1,5 +1,7 @@
 #include "native_ui.h"
 #include "../ui/lab_home_ui.h"
+#include "../ui/lab_reception_ui.h"
+#include "field_art.h"
 #include "ui_assets.h"
 #include "ui_theme.h"
 #include "probe_ui.h"
@@ -17,6 +19,8 @@ enum { CARGO_WIDTH = 450, CARGO_HEIGHT = 600, DRAW_ROWS = 60 };
 struct NativeUiContext {
   unsigned device;
   LabHomeUi *home;
+  LabReceptionUi *reception;
+  NativeUiImage reception_tiles[FIELD_ART_COUNT];
   NativeUiImage home_images[13];
   lv_font_t home_fonts[5];
   UiDisplay *transport;
@@ -132,12 +136,15 @@ void native_ui_destroy(NativeUiContext *context) {
   companion_resident_ui_destroy(context->residents);
   dock_ui_destroy(context->dock);
   lab_home_ui_destroy(context->home);
+  lab_reception_ui_destroy(context->reception);
   if (context->actions) lv_group_delete(context->actions);
   ui_display_destroy(context->transport);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
   for (unsigned index = 0; index < 6; ++index) native_ui_image_destroy(&context->dock_images[index]);
   for (unsigned index = 0; index < 3; ++index) native_ui_image_destroy(&context->resident_images[index]);
   for (unsigned index = 0; index < 13; ++index) native_ui_image_destroy(&context->home_images[index]);
+  for (unsigned index = 0; index < FIELD_ART_COUNT; ++index)
+    native_ui_image_destroy(&context->reception_tiles[index]);
   ui_host_frame_destroy(&context->frame);
   free(context->draw);
   free(context);
@@ -213,6 +220,31 @@ const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view) {
 const uint8_t *native_ui_home(NativeUiContext *context, const LabHomeView *view) {
   if (!context || context->device != KIT_LAB || !view ||
       ui_display_failed(context->transport) || !lab_home_ui_update(context->home, view)) return NULL;
+  lab_reception_ui_hide(context->reception);
+  lv_refr_now(context->display);
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
+}
+
+const uint8_t *native_ui_reception(NativeUiContext *context, const LabReceptionView *view) {
+  if (!context || context->device != KIT_LAB || !view ||
+      ui_display_failed(context->transport)) return NULL;
+  if (!context->reception) {
+    const lv_image_dsc_t *tiles[FIELD_ART_COUNT], *materials[7];
+    for (unsigned i=0; i<FIELD_ART_COUNT; ++i) {
+      if (!context->reception_tiles[i].pixels && !native_ui_image_from_sprite(
+          &context->reception_tiles[i], field_art_sprite((FieldArtId)i))) return NULL;
+      tiles[i] = &context->reception_tiles[i].image;
+    }
+    for (unsigned i=0; i<4; ++i) materials[i] = &context->home_images[7+i].image;
+    for (unsigned i=0; i<3; ++i) materials[4+i] = &context->home_images[4+i].image;
+    const LabHomeFonts fonts = {&context->home_fonts[0], &context->home_fonts[1],
+        &context->home_fonts[2], &context->home_fonts[3], &context->home_fonts[4]};
+    context->reception = lab_reception_ui_create(
+        lv_display_get_screen_active(context->display), &fonts, materials, tiles);
+    if (!context->reception) return NULL;
+  }
+  if (!lab_reception_ui_update(context->reception, view)) return NULL;
+  lab_home_ui_hide(context->home);
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }
