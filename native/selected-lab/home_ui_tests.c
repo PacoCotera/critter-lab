@@ -328,7 +328,7 @@ static void retained_lifetime_and_exports(void) {
     snprintf(name, sizeof(name), "empty-%u", focus);
     export_fixture(&kit, home, name);
   }
-  lv_mem_monitor_t warm, final;
+  lv_mem_monitor_t warm, first_cycle, final;
   for (unsigned focus = 0; focus < 5; ++focus) {
     lab.focus = focus;
     assert(selected_lab_home_view(&lab, NULL, 0, &view) && native_ui_home(home, &view));
@@ -339,9 +339,21 @@ static void retained_lifetime_and_exports(void) {
     assert(selected_lab_home_view(&lab, NULL, 0, &view) && native_ui_home(home, &view));
     assert(native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
   }
+  lv_mem_monitor(&first_cycle);
+  for (unsigned update = 0; update < 100; ++update) {
+    lab.focus = update % 5;
+    assert(selected_lab_home_view(&lab, NULL, 0, &view) && native_ui_home(home, &view));
+    assert(native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
+  }
   lv_mem_monitor(&final);
-  assert(warm.free_size == final.free_size);
-  printf("Three retained contexts plus resident: used=%zu peak=%zu total=%zu; 100 warm updates flat\n", final.total_size - final.free_size, final.max_used, final.total_size);
+  printf("Three-context pool: before=%zu first100=%zu second100=%zu; first_delta=%" PRId64 " second_delta=%" PRId64 " peak=%zu total=%zu\n",
+      warm.total_size - warm.free_size, first_cycle.total_size - first_cycle.free_size,
+      final.total_size - final.free_size, (int64_t)warm.free_size - (int64_t)first_cycle.free_size,
+      (int64_t)first_cycle.free_size - (int64_t)final.free_size, final.max_used, final.total_size);
+  fflush(stdout);
+  /* Compare identical full-device cycles; the first is recorded initialization,
+   * rather than comparing Home-only work with later Companion/Dock updates. */
+  assert(first_cycle.free_size == final.free_size);
   const uint8_t *companion_frame = native_ui_resident(companion, &resident);
   const uint8_t *dock_frame = native_ui_dock(dock, &dock_view);
   uint8_t *companion_saved = malloc(450 * 600 * 3), *dock_saved = malloc(792 * 272 * 3);
