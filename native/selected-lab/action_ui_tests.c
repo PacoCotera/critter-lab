@@ -202,7 +202,14 @@ static void assert_native_portrait(const uint8_t *frame, CoreArtId id) {
     for (unsigned column = 0; column < source->width; ++column) {
       const uint8_t *pixel = source->rgba + (row * source->width + column) * 4;
       if (pixel[3] == 255) {
-        assert(!memcmp(frame + ((247 + row) * SELECTED_LAB_WIDTH + 405 + column) * 3, pixel, 3));
+        const uint8_t *actual = frame + ((247 + row) * SELECTED_LAB_WIDTH + 405 + column) * 3;
+        if (memcmp(actual, pixel, 3)) {
+          fprintf(stderr, "Original portrait mismatch art=%u source=%u,%u frame=%u,%u actual=%u,%u,%u expected=%u,%u,%u\n",
+              (unsigned)id, column, row, 405 + column, 247 + row,
+              actual[0], actual[1], actual[2], pixel[0], pixel[1], pixel[2]);
+          fflush(stderr);
+        }
+        assert(!memcmp(actual, pixel, 3));
         ++checked;
       }
     }
@@ -295,6 +302,7 @@ static void routes_exports(void) {
     assert(selected_lab_action_projection(&lab, 0, &view));
     const uint8_t *frame = native_ui_actions(context, &view);
     assert(frame);
+    export_fixture(&kit, context, preference ? "A1-before-pixels" : "A0-before-pixels");
     assert_native_portrait(frame, preference ? CORE_ART_PIP_MARKED : CORE_ART_PIP_PLAIN);
     if (!preference) {
       uint8_t *expected = malloc(SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3);
