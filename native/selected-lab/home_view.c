@@ -39,7 +39,7 @@ static void overview(const SelectedLab *lab,
     strcpy(out->overview[section].name, names[section]);
   strcpy(out->overview[0].status,
       context && context->haul == SELECTED_HAUL_WAITING ? "Supplies waiting" :
-      context && context->haul == SELECTED_HAUL_STORED ? "Supplies stored" :
+      context && context->haul == SELECTED_HAUL_STORED ? "Cargo transferred" :
       lab->kit_mode ? "Received records" : game->expedition_active ? "Gathering" :
       game->expedition_id[0] ? (game_transfer_available(game) ? "Haul ready" : "Paused") :
       "At the Lab");
@@ -94,11 +94,12 @@ static void explore(const SelectedLab *lab,
   const GameState *game = &lab->game;
   if (context && context->haul != SELECTED_HAUL_NONE) {
     int waiting = context->haul == SELECTED_HAUL_WAITING;
-    strcpy(out->landing.heading, waiting ? "SUPPLIES WAITING AT THE LAB" : "SUPPLIES STORED AT THE LAB");
+    strcpy(out->landing.heading, waiting ? "SUPPLIES WAITING AT THE LAB" : "SOURCE CARGO EMPTY");
     strcpy(out->landing.body, waiting ? "Open Explore to accept this haul." : "Expedition ended.");
-    out->landing.show_resources = out->landing.primary_resources = 1;
+    out->landing.show_resources = out->landing.primary_resources = waiting;
+    out->landing.art = LAB_HOME_ART_EXPLORE;
     for (unsigned resource = 0; resource < 3; ++resource)
-      out->landing.amounts[resource] = context->incoming[resource] / GAME_SUPPLY_UNIT;
+      out->landing.amounts[resource] = waiting ? context->incoming[resource] / GAME_SUPPLY_UNIT : 0;
     strcpy(out->landing.strip, waiting ? "Incoming supplies are separate from Lab stock." :
         "The accepted haul is included in Lab stock.");
     return;

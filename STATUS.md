@@ -1,115 +1,25 @@
 # Product status
 
-**Core V1 remains a playable prototype under repair, not a fully accepted product.**
-The connected journey is Companion exploration and gathering → carried Cargo →
-explicit Lab acceptance → retained A/B research and supported creation → saved
-incubation/reveal → the same resident on Lab and Companion → accepted or clearly
-cached Caddy summaries. [Roadmap](ROADMAP.md) and [issue44](https://github.com/PacoCotera/critter-lab/issues/44)
-track the remaining playability and craft gaps.
+Core V1 is a playable prototype under repair. The journey is Companion gathering/return → explicit Lab acceptance → retained sample research → deliberate creation/incubation → the same saved resident on Lab and Companion → accepted or clearly cached Dock.
 
-## Current work
+## Delivered
 
-- **Gathering — native proof checked:** finite retained whole-unit pickup is
-  immediate, without field preparation. The actual quantity/ownership journey
-  passes full cargo plus a sample, sealed offline return, once-only acceptance
-  and zero carried cargo. Chooser and actual capacity-rejection frames were
-  inspected. A misleading unread-clue caption is corrected without new rules.
-- **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
-  Companion and Caddy target ESP32. Dock and all known Companion screen families use LVGL on the host.
-  Lab Home, workspace previews, connected haul reception and received expedition
-  list/detail now use retained LVGL. [Reception proof](docs/evidence/native-lab-reception/README.md)
-  covers once-only acceptance, recovery, actual CLI navigation and native craft.
-  Sample collection, research/review/findings and Library now use a copied view and retained LVGL tree. [Research proof](docs/evidence/native-lab-research/README.md) covers disclosure, explicit spending, retained records, original-size art and safe controls. Creation/review, incubation/reveal, Habitat and residents now use a copied portable view and one retained LVGL family. [Action proof](docs/evidence/native-lab-actions/README.md) covers original portraits, explicit authority, saved identity and measured lifetime. Repeated navigation tutorials are removed across all three families; [actual control frames](docs/evidence/navigation-copy/README.md). The incubator canister is owner-rejected provisional art; a new chamber source is not yet available. Standalone acquisition graphics are retired; supported screens require native LVGL output. Legacy domain/save commands remain regression fixtures and unsupported frames return a recoverable error. [Retirement contract](docs/evidence/lvgl-route-retirement/README.md). Connected Lab acquisition remains removed.
-  [Home native evidence](docs/evidence/native-lab-home/README.md)
-  records exact source, three passed suites, actual CLI frames and independent
-  technical/craft review. [Current shared Companion ESP UI](docs/evidence/native-companion-esp/README.md)
-  now compiles/links at `fadee5d` with independent source/artifact review and CI run 191.
-  Runtime art-memory demand and physical geometry remain unresolved. The same shared Dock UI now compiles/links under installed ESP-IDF in a
-  [headless partial-flush target](docs/evidence/native-dock-lvgl/ESP32.md). [Architecture](specs/architecture.md#native-ui-foundation)
-  owns complete route/target coverage; a component pass is not whole acceptance.
-- **Companion confirmation — host migration verified:** one portable retained
-  Cargo/Send tree preserves existing images/fonts/layout. Actual Keep, offline
-  Send, reconnect/acceptance and zero-current receipt paths pass affected checks
-  and independent technical/focused UI/UX review. Storage errors close actions;
-  expected legacy samples remain distinct from owned capsules. [Native evidence](docs/evidence/native-companion-send/README.md)
-  records actual frames and separate presentation fixtures. ESP32 runtime remains open.
-- **Companion cargo decisions — host migration verified:** item-kind and full
-  quantity selection, safe Discard/Keep and empty Finish reviews now use the same
-  retained Cargo tree. Actual offline controls prove exact2→1→0 loss, caller
-  restoration and no Lab credit/sample on Finish. Independent technical,
-  interaction and native craft review passed. [Native evidence](docs/evidence/native-companion-discard/README.md)
-  distinguishes played frames, maximum/recovery fixtures and retained legacy cargo.
-- **Companions preview — host migration verified:** retained native portraits,
-  saved properties and visits render through a lazy portable LVGL tree. Actual
-  empty/A0/B1 browsing, entry, Back and offline/reconnect preserve identity, visits
-  and inventory. Global storage recovery remains distinct from a stale cache.
-  [Native evidence](docs/evidence/native-companion-resident-preview/README.md)
-  records the exact source, controls, fixtures and bounded independent reviews.
-  Resident list/visit now shares this tree. [Native action evidence](docs/evidence/native-companion-resident-actions/README.md)
-  records selection, save-once visits, shared counts, offline restart and recovery.
-  Independent technical, focused interaction and separate native craft reviews pass.
-- **Simulator — browser maintenance:** candidate shell enlarges Companion beside
-  Lab, groups Back with Confirm and preserves native bitmap aspect ratios. Browser
-  checks at1640,1340 and390 pixels show no horizontal overflow and readable
-  Companion scale. The browser displays native frames and sends depicted controls;
-  it does not compose game screens or simulate ESP32 instructions.
-- **Dock — complete host LVGL migration verified:** all pages/errors compose
-  retained widgets, with four-gray conversion after rendering. Six native suites,
-  changed HTTP journey, independent technical and actual visual/control review
-  pass at5431f44. [Native evidence](docs/evidence/native-dock-lvgl/README.md)
-  records the exact revision, frames and memory. Physical refresh/encoding,
-  power, MCU fit and hardware fit remain unmeasured.
+- Current connected screens use LVGL and native frame output; the browser presents cases and physical controls. The old standalone manual renderer is retired. [Architecture and target evidence](specs/architecture.md#current-migration-coverage-and-target-evidence) distinguishes native host proof, ESP-IDF compilation and unverified hardware runtime.
+- Gathering produces finite whole units immediately without field preparation waits. Cargo ownership, offline sealing and once-only Lab acceptance have native evidence. [Gathering proof](docs/evidence/native-companion-probe/README.md).
+- Lab collection/research and creation/incubation/resident screens preserve costs, retained findings, original portraits and saved identity. [Research evidence](docs/evidence/native-lab-research/README.md) and [action evidence](docs/evidence/native-lab-actions/README.md) establish functional preservation, not discovery enjoyment.
+- Companion is larger in the simulator, with Back beside Confirm. Routine navigation tutorials are removed. Dock renders four gray levels. [Actual navigation frames](docs/evidence/navigation-copy/README.md).
+- The sandbox footer links to the public [deployment changelog](CHANGELOG.md), recording major delivered changes. New sandbox activations start fresh device saves.
 
-Working entry: [PR61](https://github.com/PacoCotera/critter-lab/pull/61) and
-[issue60](https://github.com/PacoCotera/critter-lab/issues/60). Live/reroll baseline
-remains d242dde9. The [sandbox](https://critterlab.basicberry.com) reports the
-activated revision; pushed or tested source is not proof of deployment. Each
-new release starts a fresh shared sandbox through the existing delivery path;
-unchanged release checks preserve play. Manual reset retains a recovery backup.
+## Active repair
 
-## Delivered boundary and evidence
+The Companion entry/cargo increment replaces the empty mode landing with purposeful destination cards, maps vertical expedition choices to Up/Down, removes the repeated Send review and clears accepted current-source quantities in both devices' displays. Immutable delivery history remains in received records. [Issue60](https://github.com/PacoCotera/critter-lab/issues/60) tracks exact integration/review status; source work is not a claim of activation.
 
-The [three-device simulator](native/selected-lab/README.md#three-device-mode)
-runs one Linux x86-64 C17 process with three logical frame/control contexts and
-simulated links. Rules, saved state and input authority are native. Screen
-artwork is not clickable. Host tests do not establish ARM, current ESP32 firmware,
-separate endpoint storage, physical radios, panel/GPIO drivers, printer, charging,
-power or hardware performance.
+## Next gameplay priorities
 
-Existing [Core V1 evidence](docs/evidence/polished-core-v1/README.md),
-[Cargo framework proof](docs/evidence/native-ui-foundation/README.md) and
-[Probe framework proof](docs/evidence/native-companion-probe/README.md) document
-their exact checked revisions. Prior semantic or composition passes do not
-approve subsequent screens or the entire product. The owner rejects current
-environmental craft and passive/repetitive play as final quality. The
-[C18/Gemini references](design/companion-connected-art/README.md) and
-[screen standard](design/screen-design-standard.md) remain authority.
+Habitat overview still shows one resident instead of the population, and collection navigation requires unnecessary confirmation steps. The next Lab slice separates overview, passive selected-item preview and deliberate actions across Habitat and Research.
 
-## Remaining product proof
+Research still feels like a checklist; its navigation column contains content that belongs in the central workpiece. The next research outcome is progressive discovery with sample-specific progress and useful retained findings, grounded in the [existing research trial](design/research-and-creation.md#next-comparison-trial).
 
-Finish the remaining Lab action families. Current shared Dock and Companion UI compile/link
-proofs pass under ESP-IDF; runtime memory and physical adapters remain open. Then improve exploration variety,
-discovery depth, sample variability and research engagement with actual control
-journeys and human playtests. HiBit environment/creature craft, Companions layout
-and the original post-accept Cargo-exit cause remain open in the
-[audit](design/three-device-playability-audit/README.md). Yellow Home is implemented;
-residents remain under Habitat. Collection and selected-sample overviews are
-distinct. Legacy samples retain their versioned research content.
+Exploration remains road-bound. Saved generated geometry exists in the native prototype, but the three named expedition kinds still share finite source rules and do not offer meaningful distinctions. Open movement, distinct opportunities and retained map events are undelivered gameplay work; see the [exploration study](design/expedition-map-study/README.md).
 
-[Generation responsibilities](specs/architecture.md#generation-backend-proposal--30-september-2026)
-remain bounded to local validated jobs and retained art; no deployed generative
-service or paid provider is delivered. Capture/training, habitat ecology, real
-radio and cloud services are outside this round. Reward values and content limits
-remain provisional in [the play guide](native/selected-lab/V1.md).
-
-## Hardware development gate
-
-[Electronics reference](specs/devices.md#electronics-first-v1-reference-specification)
-→ integrated software proof → human playtest → hardware or mobile decision.
-The family is combined Companion, home Lab and Caddy; separate Probe concepts
-are historical. [Selected family materials](design/lab-controls/combined-family-materials.png)
-are concept art, not a physical prototype. The Caddy reference is the5.79-inch
-792×272 four-gray module. Bench evidence and owner selection precede dependent
-PCB/enclosure work or purchases. Local authority placement, nearby-kit protocol
-and optional Cloud Pass reconciliation remain open under
-[architecture](specs/architecture.md) and [local/global records](specs/cloud-sync.md).
+Final C18/Gemini/HiBit craft and enjoyment remain open. The cyan/purple incubator artwork is explicitly rejected; replacement source is not available. Host simulation does not prove ESP32 game runtime, physical radios, e-paper behavior, charging, printer operation or manufacturing fit. No new infrastructure or provider migration is required for the current repairs.

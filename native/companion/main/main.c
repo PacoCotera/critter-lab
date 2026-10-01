@@ -115,7 +115,15 @@ void app_main(void) {
   }
   if (!native_probe_ui_update(probe, &probe_view) || !refresh(display, &counters, "probe-source-choices")) goto cleanup;
   probe_view.selector = 1;
-  probe_view.action_count = 0;
+  probe_view.action_count = 3;
+  probe_view.cargo.capsule_capacity = 1;
+  strcpy(probe_view.title, "Companion");
+  strcpy(probe_view.actions[0], "Probe");
+  strcpy(probe_view.actions[1], "Cargo");
+  strcpy(probe_view.actions[2], "Companions");
+  strcpy(probe_view.mode_detail[0], "Explore / 3 expeditions");
+  strcpy(probe_view.mode_detail[1], "Supplies 0 / 40 / Samples 0 / 1");
+  strcpy(probe_view.mode_detail[2], "No critters yet");
   if (!native_probe_ui_update(probe, &probe_view) || !refresh(display, &counters, "probe-preview")) goto cleanup;
   probe_view.phase = PROBE_UNAVAILABLE;
   probe_view.failed = 1;

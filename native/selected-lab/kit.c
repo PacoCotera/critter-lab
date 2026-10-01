@@ -918,7 +918,7 @@ static void seal(DeviceKit *kit) {
   if (!persist(kit))
     return;
   kit->next_delivery = kit->clock + 2;
-  companion_back(kit);
+  if (kit->companion.page == COMP_SEND_REVIEW) companion_back(kit);
   refresh_all(kit);
 }
 static void activate_companion(DeviceKit *kit) {
@@ -1032,9 +1032,10 @@ static void activate_companion(DeviceKit *kit) {
         companion_back(kit);
       else
         companion_page(kit, COMP_PROBE);
-    } else if (game_transfer_available(&kit->lab->game))
-      companion_task(kit, focus ? COMP_DISCARD_CLASS : COMP_SEND_REVIEW);
-    else if (kit->lab->game.field.version)
+    } else if (game_transfer_available(&kit->lab->game)) {
+      if (focus) companion_task(kit, COMP_DISCARD_CLASS);
+      else seal(kit);
+    } else if (kit->lab->game.field.version)
       companion_task(kit, COMP_FINISH_REVIEW);
     else {
       companion_page(kit, COMP_PROBE);
@@ -1272,18 +1273,15 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
     return;
   }
   if (device == KIT_COMPANION && view->page == COMP_MODES) {
-    if (button == 2 || button == 3) {
+    if (button <= 3) {
       unsigned mode = view->mode;
-      if (button == 2 && mode)
-        --mode;
-      if (button == 3 && mode < COMP_FRIENDS)
-        ++mode;
+      if ((button == 0 || button == 2) && mode) --mode;
+      if ((button == 1 || button == 3) && mode < COMP_FRIENDS) ++mode;
       if (mode != view->mode) {
         view->mode = view->focus = mode;
         refresh(view, 1);
       }
-    } else if (button == 1 || button == 8)
-      companion_enter_actions(kit);
+    } else if (button == 8) companion_enter_actions(kit);
     return;
   }
   if (button <= 1) {
@@ -1468,7 +1466,8 @@ int kit_received_projection(const DeviceKit *kit, unsigned index, ExpeditionRece
   out->trace_inspected = record->trace; out->sample_collected = record->collected;
   return 1;
 }
-static int delivery_accepted(const DeviceKit *kit) {
+int kit_delivery_accepted(const DeviceKit *kit) {
+  if (!kit || !kit->lab) return 0;
   if (kit->journal.phase >= KIT_ACK_PENDING) return 1;
   if (kit->journal.phase != KIT_COMMITTING) return 0;
   /* The game commit can survive a failed receipt-sidecar write. */
@@ -1485,7 +1484,7 @@ int kit_field_projection(const DeviceKit *kit, ExpeditionFieldView *out) {
   const GameState *game = &kit->lab->game;
   const GameExpeditionField *field = &game->field;
   if (kit->sealed_field.version && kit->journal.phase >= KIT_WAITING) {
-    out->delivery_accepted = delivery_accepted(kit);
+    out->delivery_accepted = kit_delivery_accepted(kit);
     out->sent_capsule_count = kit->sealed_field.collected;
     for (unsigned resource = 0; resource < 3; ++resource)
       out->sent[resource] = kit->sealed_field.cargo[resource]/GAME_SUPPLY_UNIT;
@@ -1629,7 +1628,7 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                                        : 1;
   const uint32_t *cargo =
       kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING &&
-              !delivery_accepted(kit)
+              !kit_delivery_accepted(kit)
           ? kit->journal.cargo
           : NULL;
   uint32_t visible_cargo[3] = {0};
@@ -1639,7 +1638,8 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
     visible_cargo[1] = cargo ? cargo[1] : game->expedition_energy;
     visible_cargo[2] = cargo ? cargo[2] : game->expedition_essence;
     memcpy(visible_preparation, game->gather_progress_ms, sizeof(visible_preparation));
-  } else if (device == KIT_LAB && kit->journal.phase >= KIT_ARRIVED) {
+  } else if (device == KIT_LAB && kit->journal.phase >= KIT_ARRIVED &&
+             !kit_delivery_accepted(kit)) {
     memcpy(visible_cargo, kit->journal.cargo, sizeof(visible_cargo));
   }
   fprintf(

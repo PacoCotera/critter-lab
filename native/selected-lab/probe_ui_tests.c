@@ -57,10 +57,10 @@ static void projection_and_phase_guards(void) {
   assert(kit_cargo_facts(&kit, &facts));
   kit.companion.page = COMP_MODES;
   kit.companion.mode = COMP_PROBE;
-  assert(kit_probe_projection(&kit, &after) && after.selector && !after.action_count);
-  assert(strstr(after.footer, "mode") && !strstr(after.footer, "inspect"));
+  assert(kit_probe_projection(&kit, &after) && after.selector && after.action_count == 3);
+  assert(after.active_mode == COMP_PROBE && !after.footer[0]);
   kit.companion.mode = COMP_CARGO;
-  assert(!kit_probe_projection(&kit, &after));
+  assert(kit_probe_projection(&kit, &after) && after.selector && after.active_mode == COMP_CARGO);
   kit.companion.page = COMP_PROBE;
   lab.game.field.active_source = 0;
   lab.game.field.last_source[0] = 0;
@@ -94,6 +94,60 @@ static void projection_and_phase_guards(void) {
   next.data.field.monotonic_seconds = 100;
   assert(game_field_start(&lab.game, &next) == GAME_OK);
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_MAP);
+}
+static void fresh_mode_hub(void) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.page = COMP_MODES;
+  kit.journal.companion_online = 1;
+  GameState before = lab.game;
+  NativeUiContext *context = native_ui_create();
+  assert(context);
+  uint8_t *first = malloc(450 * 600 * 3);
+  assert(first);
+  const char *names[] = {"Probe", "Cargo", "Companions"};
+  for (unsigned mode = 0; mode < 3; ++mode) {
+    kit.companion.mode = kit.companion.focus = mode;
+    CompanionProbeView view;
+    assert(kit_probe_projection(&kit, &view) && view.selector && view.action_count == 3);
+    assert(view.active_mode == mode && view.focus == mode && !strcmp(view.title, "Companion"));
+    assert(strstr(view.mode_detail[0], "3 expeditions") && !view.resident_count);
+    assert(strstr(view.mode_detail[2], "critters"));
+    for (unsigned card = 0; card < 3; ++card) assert(!strcmp(view.actions[card], names[card]));
+    const uint8_t *pixels = native_ui_probe(context, &view);
+    assert(pixels);
+    /* Each workpiece must contain actual title/detail ink. The formerly blank
+     * root cannot satisfy this at all three card positions. */
+    for (unsigned card = 0; card < 3; ++card) {
+      unsigned ink = 0;
+      for (unsigned y = 108 + card * 136; y < 194 + card * 136; ++y)
+        for (unsigned x = 144; x < 405; ++x) {
+          const uint8_t *pixel = pixels + (y * 450 + x) * 3;
+          if ((pixel[0] == 214 && pixel[1] == 222 && pixel[2] == 226) ||
+              (pixel[0] == 183 && pixel[1] == 198 && pixel[2] == 205)) ++ink;
+        }
+      assert(ink > 20);
+    }
+    if (!mode) memcpy(first, pixels, 450 * 600 * 3);
+    else assert(memcmp(first, pixels, 450 * 600 * 3));
+    assert(!memcmp(&before, &lab.game, sizeof(before)) && kit.journal.phase == KIT_IDLE);
+    CompanionProbeView malformed = view;
+    malformed.active_mode = 3;
+    assert(!native_ui_probe(context, &malformed));
+    malformed = view;
+    malformed.action_count = 2;
+    assert(!native_ui_probe(context, &malformed));
+    malformed = view;
+    malformed.resident_count = 9;
+    assert(!native_ui_probe(context, &malformed));
+    malformed = view;
+    memset(malformed.mode_detail[1], 'X', sizeof(malformed.mode_detail[1]));
+    assert(!native_ui_probe(context, &malformed));
+  }
+  free(first);
+  native_ui_destroy(context);
 }
 static void legal_neighbors_and_camera(void) {
   ExpeditionMapView map = {0};
@@ -267,6 +321,7 @@ static void representative_exports(const char *directory) {
 }
 int main(int argc, char **argv) {
   projection_and_phase_guards();
+  fresh_mode_hub();
   legal_neighbors_and_camera();
   asset_fidelity();
   retained_roots_and_memory();

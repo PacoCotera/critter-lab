@@ -91,6 +91,8 @@ const char *kit_route(const DeviceKit *kit);
 const char *kit_expedition_status(const DeviceKit *kit);
 const GameSample *kit_received_sample(const DeviceKit *kit);
 int kit_lab_explore(const DeviceKit *kit);
+/* Includes a saved acceptance whose receipt sidecar is still COMMITTING. */
+int kit_delivery_accepted(const DeviceKit *kit);
 unsigned kit_resident_count(const DeviceKit *kit);
 const KitResidentProjection *kit_resident(const DeviceKit *kit, unsigned index);
 const KitResidentProjection *kit_selected_resident(const DeviceKit *kit);

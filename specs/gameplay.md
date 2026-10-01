@@ -82,7 +82,7 @@ lifecycles, durations, parallelism and offline progress remain undecided. A time
 does not supply discovery depth, and readiness does not automatically spend,
 create or reveal another individual.
 
-Returning to the Lab and unloading ends the expedition. Browsing Cargo or cancelling an unsealed send review does not end it. Sending seals the returning haul and stops collection; successful fresh Lab acceptance stores it once and ends the source expedition. A later matching receipt confirms delivery metadata; it cannot credit another copy or resume the ended expedition. The next outing starts a new expedition identity.
+Returning to the Lab and unloading ends the expedition. Browsing Cargo or leaving before Send does not end it. The current Cargo manifest exposes sealing terms, and one fresh Send seals the returning haul and stops collection; successful fresh Lab acceptance stores it once and ends the source expedition. A later matching receipt confirms delivery metadata; it cannot credit another copy or resume the ended expedition. The next outing starts a new expedition identity.
 
 Early return is an end, not completion of every timed discovery threshold. It cannot grant an unearned sample, extra attempt or late reward. Preserve earned contents, committed outcomes and retained Lab research. Legacy preparation remains separate from inventory and is preserved without conversion; the current field has no preparation gate. Empty outings need an explicit finish path without a phantom haul. Optional encounters never require attendance or gate research/creation. Return reviews actual samples and resources and leads into useful research; exact pacing, events and balance remain open.
 

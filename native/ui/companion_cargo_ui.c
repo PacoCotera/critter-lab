@@ -18,7 +18,7 @@ struct CompanionCargoUi {
   NativeUiFrame outer_frame, subject_frame, focus_frame, halo_frame;
   CompanionCargoFonts fonts;
   const lv_image_dsc_t *images[4];
-  char quantity_text[3][16], receipt_text[192];
+  char quantity_text[3][16];
   CompanionCargoView previous;
   int has_previous, pending;
   unsigned elapsed;
@@ -280,18 +280,13 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
     lv_obj_set_style_text_color(context->quantity[resource], lv_color_hex(
         task && resource == view->selected_resource ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
   }
-  lv_label_set_text_static(context->capsule, view->accepted && !task ? "Delivery record" : view->capsule);
+  lv_label_set_text_static(context->capsule, view->capsule);
   lv_obj_set_hidden(context->capsule_image, task || view->capsules == 0);
   lv_obj_set_pos(context->capsule, task ? 8 : 86, 10);
   lv_obj_set_width(context->capsule, task ? 382 : 298);
   lv_obj_set_pos(context->detail, task ? 8 : 86, 34);
   lv_obj_set_width(context->detail, task ? 382 : 298);
-  if (view->accepted && !task) {
-    snprintf(context->receipt_text, sizeof(context->receipt_text), "%" PRIu32 " Data / %" PRIu32 " Energy / %" PRIu32 " Essence\n%s",
-             view->delivered[0], view->delivered[1], view->delivered[2],
-             view->delivered_capsules ? "1 sample delivered to Lab" : "Supplies stored at Lab");
-    lv_label_set_text_static(context->detail, view->failed ? view->detail : context->receipt_text);
-  } else lv_label_set_text_static(context->detail, view->detail);
+  lv_label_set_text_static(context->detail, view->detail);
   lv_label_set_text_static(context->capacity, view->capacity);
   lv_label_set_text_static(context->feedback, view->feedback);
   lv_label_set_text_static(context->footer, view->failed ? view->footer : "");

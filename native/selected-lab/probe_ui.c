@@ -10,14 +10,17 @@ enum { TILE_SIZE = 32, VIEW_WIDTH = 384, VIEW_HEIGHT = 320, EDGE_CUES = 44 };
 struct NativeProbeUi {
   lv_obj_t *root, *viewport, *world, *title, *status, *context, *source, *footer;
   lv_obj_t *tiles[EXPEDITION_MAP_CELLS], *places[5], *player[2], *cues[EDGE_CUES];
-  lv_obj_t *sheet, *buttons[3], *action_text[3], *rail_focus;
+  lv_obj_t *sheet, *buttons[3], *action_text[3], *rail_focus, *rail[3];
+  lv_obj_t *mode_detail[3], *resident_count, *cargo_total;
+  const lv_font_t *place_font, *small_font, *action_font;
+  const NativeUiImage *sample_art;
   lv_obj_t *quantities[3], *capsule, *capsule_text, *capsule_quantity;
   lv_obj_t *choice_image[3];
   NativeUiFrame focus, reached;
   NativeUiImage art[FIELD_ART_COUNT], materials[3];
   lv_point_precise_t player_points[9], cue_points[EDGE_CUES][3];
   CompanionProbeView view;
-  char quantity_text[3][16], capsule_count[24];
+  char quantity_text[3][16], capsule_count[24], resident_text[16], cargo_text[16];
 };
 static lv_obj_t *box(lv_obj_t *parent, int x, int y, int width, int height, uint32_t color) {
   lv_obj_t *object = lv_obj_create(parent);
@@ -64,6 +67,10 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
                                       const lv_font_t *action, const NativeUiImage *sample) {
   NativeProbeUi *ui = calloc(1, sizeof(*ui));
   if (!ui) return NULL;
+  ui->place_font = place;
+  ui->small_font = small;
+  ui->action_font = action;
+  ui->sample_art = sample;
   for (unsigned asset = 0; asset < FIELD_ART_COUNT; ++asset)
     if (!native_ui_image_from_sprite(&ui->art[asset], field_art_sprite((FieldArtId)asset))) goto failure;
   for (unsigned material = 0; material < 3; ++material)
@@ -74,6 +81,7 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
   for (unsigned mode = 0; mode < 3; ++mode) {
     lv_obj_t *name = text(ui->root, body, 29 + (int)mode * 126, 19, mode == 2 ? 142 : 110, 24, modes[mode]);
     if (!name) goto failure;
+    ui->rail[mode] = name;
     if (mode) lv_obj_set_style_text_color(name, lv_color_hex(CORE_ART_SECONDARY_RGB), 0);
     else {
       lv_obj_set_style_border_side(name, LV_BORDER_SIDE_BOTTOM, 0);
@@ -120,8 +128,12 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     lv_group_add_obj(group, ui->buttons[choice]);
     ui->action_text[choice] = text(ui->buttons[choice], small, 8, 68, 112, 44, "");
     ui->choice_image[choice] = image(ui->buttons[choice], &ui->materials[choice], 40, 8);
-    if (!ui->action_text[choice] || !ui->choice_image[choice]) goto failure;
+    ui->mode_detail[choice] = text(ui->buttons[choice], small, 120, 50, 262, 58, "");
+    if (!ui->action_text[choice] || !ui->choice_image[choice] || !ui->mode_detail[choice]) goto failure;
   }
+  ui->resident_count = text(ui->buttons[2], place, 24, 36, 70, 34, "0");
+  ui->cargo_total = text(ui->buttons[1], place, 24, 36, 70, 34, "0");
+  if (!ui->resident_count || !ui->cargo_total) goto failure;
   for (unsigned material = 0; material < 3; ++material) {
     const CoreArtSprite *sprite = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + material));
     int left = 28 + (int)material * 88;
@@ -211,49 +223,87 @@ static void show_edge_cues(NativeProbeUi *ui, int camera_x, int camera_y, int he
   for (; count < EDGE_CUES; ++count) lv_obj_set_hidden(ui->cues[count], true);
 }
 int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
-  if (!ui || !view || view->action_count > 3) return 0;
-  for (unsigned choice = 0; choice < 3; ++choice)
-    if (view->choice_material[choice] > 3) return 0;
+  if (!ui || !view || view->action_count > 3 || view->active_mode >= 3) return 0;
+  if (view->selector && (view->action_count != 3 || view->focus != view->active_mode ||
+      view->resident_count > 8)) return 0;
+  const char *labels[] = {view->title, view->status, view->context, view->source};
+  const size_t sizes[] = {sizeof(view->title), sizeof(view->status), sizeof(view->context), sizeof(view->source)};
+  for (unsigned index = 0; index < 4; ++index)
+    if (!memchr(labels[index], 0, sizes[index])) return 0;
+  for (unsigned choice = 0; choice < 3; ++choice) {
+    if (view->choice_material[choice] > 3 ||
+        !memchr(view->actions[choice], 0, sizeof(view->actions[choice])) ||
+        !memchr(view->mode_detail[choice], 0, sizeof(view->mode_detail[choice]))) return 0;
+  }
   ui->view = *view;
   view = &ui->view;
   lv_obj_set_hidden(ui->root, false);
+  int hub = view->selector;
+  int routes = !hub && (view->phase == PROBE_ENTRY || view->phase == PROBE_ENDED) &&
+      view->action_count == 3;
+  lv_obj_set_pos(ui->title, 28, hub ? 32 : 58);
   lv_label_set_text_static(ui->title, view->title);
   lv_label_set_text_static(ui->status, view->status);
   lv_label_set_text_static(ui->context, !strcmp(view->context, view->status) &&
       view->phase == PROBE_ENTRY ? "" : view->context);
   lv_label_set_text_static(ui->source, view->source);
-  lv_label_set_text_static(ui->footer, "");
+  lv_obj_set_hidden(ui->context, hub);
+  lv_obj_set_hidden(ui->source, hub);
   lv_obj_set_hidden(ui->footer, true);
-  int scene = view->phase == PROBE_MAP || view->phase == PROBE_SITE;
+  for (unsigned mode = 0; mode < 3; ++mode) lv_obj_set_hidden(ui->rail[mode], hub);
+  int scene = !hub && (view->phase == PROBE_MAP || view->phase == PROBE_SITE);
   lv_obj_set_hidden(ui->viewport, !scene);
-  lv_obj_set_hidden(ui->status, scene);
-  lv_obj_set_hidden(ui->rail_focus, !view->selector);
-  int scene_height = VIEW_HEIGHT;
-  if (view->phase == PROBE_SITE) scene_height = 192;
+  lv_obj_set_hidden(ui->status, scene || hub);
+  lv_obj_set_hidden(ui->rail_focus, true);
+  int scene_height = view->phase == PROBE_SITE ? 192 : VIEW_HEIGHT;
   lv_obj_set_height(ui->viewport, scene_height);
-  int sheet_y = 302;
-  lv_obj_set_pos(ui->sheet, 33, sheet_y);
-  lv_obj_set_height(ui->sheet, 116);
-  lv_obj_set_hidden(ui->sheet, view->selector || !view->action_count);
+  int sheet_y = hub ? 96 : routes ? 180 : 302;
+  lv_obj_set_pos(ui->sheet, hub ? 24 : 33, sheet_y);
+  lv_obj_set_size(ui->sheet, hub ? 402 : 384, hub ? 384 : routes ? 240 : 116);
+  lv_obj_set_hidden(ui->sheet, !view->action_count);
   for (unsigned choice = 0; choice < 3; ++choice) {
     lv_obj_set_hidden(ui->buttons[choice], choice >= view->action_count);
+    lv_obj_set_pos(ui->buttons[choice], hub || routes ? 0 : (int)choice * 128,
+                   hub ? (int)choice * 136 : routes ? (int)choice * 88 : 0);
+    lv_obj_set_size(ui->buttons[choice], hub ? 402 : routes ? 384 : 128,
+                    hub ? 112 : routes ? 64 : 116);
     lv_obj_remove_state(ui->buttons[choice], LV_STATE_FOCUSED | LV_STATE_PRESSED);
+    lv_obj_set_pos(ui->action_text[choice], hub ? 120 : routes ? 18 : 8,
+                   hub ? 12 : routes ? 18 : 68);
+    lv_obj_set_size(ui->action_text[choice], hub ? 262 : routes ? 348 : 112,
+                    hub ? 34 : routes ? 32 : 44);
+    lv_obj_set_style_text_font(ui->action_text[choice], hub ? ui->place_font : routes ? ui->action_font : ui->small_font, 0);
     if (choice < view->action_count) lv_label_set_text_static(ui->action_text[choice], view->actions[choice]);
+    lv_obj_set_hidden(ui->mode_detail[choice], !hub);
+    if (hub) lv_label_set_text_static(ui->mode_detail[choice], view->mode_detail[choice]);
     unsigned material_id = view->choice_material[choice];
-    int material = view->phase == PROBE_SITE && material_id > 0 && material_id <= 3;
-    lv_obj_set_hidden(ui->choice_image[choice], !material);
-    if (material) {
-      unsigned resource = material_id - 1;
-      lv_image_set_src(ui->choice_image[choice], &ui->materials[resource].image);
+    int material = !hub && view->phase == PROBE_SITE && material_id > 0 && material_id <= 3;
+    lv_obj_set_hidden(ui->choice_image[choice], hub ? choice != 0 : !material);
+    if (hub) {
+      lv_image_set_src(ui->choice_image[choice], choice == 0 ? &ui->sample_art->image : &ui->materials[1].image);
+      lv_obj_set_pos(ui->choice_image[choice], choice == 0 ? 25 : 54, choice == 0 ? 29 : 10);
+    } else if (material) {
+      lv_image_set_src(ui->choice_image[choice], &ui->materials[material_id - 1].image);
+      lv_obj_set_pos(ui->choice_image[choice], 40, 8);
     }
   }
-  int focus = !view->selector && view->focus < view->action_count;
+  lv_obj_set_hidden(ui->resident_count, !hub);
+  lv_obj_set_hidden(ui->cargo_total, !hub);
+  snprintf(ui->cargo_text, sizeof(ui->cargo_text), "%u",
+           view->cargo.supplies[0] + view->cargo.supplies[1] + view->cargo.supplies[2]);
+  lv_label_set_text_static(ui->cargo_total, ui->cargo_text);
+  snprintf(ui->resident_text, sizeof(ui->resident_text), "%u", view->resident_count);
+  lv_label_set_text_static(ui->resident_count, ui->resident_text);
+  int focus = !view->failed && view->focus < view->action_count;
   lv_obj_set_hidden(ui->focus.object, !focus);
+  native_ui_frame_size(&ui->focus, hub ? 402 : routes ? 384 : 128,
+                       hub ? 112 : routes ? 64 : 116);
   if (focus) {
     lv_group_focus_obj(ui->buttons[view->focus]);
     lv_obj_add_state(ui->buttons[view->focus], LV_STATE_FOCUSED);
     if (view->pressed) lv_obj_add_state(ui->buttons[view->focus], LV_STATE_PRESSED);
-    lv_obj_set_pos(ui->focus.object, 33 + (int)view->focus * 128, sheet_y);
+    lv_obj_set_pos(ui->focus.object, hub ? 24 : routes ? 33 : 33 + (int)view->focus * 128,
+                   hub ? 96 + (int)view->focus * 136 : routes ? 180 + (int)view->focus * 88 : sheet_y);
   }
   if (scene) {
     const ExpeditionMapView *map = &view->field.map;
