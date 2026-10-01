@@ -67,8 +67,8 @@ or sealed-haul actions. No game command is invoked by a widget.
 Cargo mode preview reuses this retained tree with a copied `selector` flag.
 It has zero Cargo actions, mode-rail focus and noninteractive entry hints.
 Entering Cargo restores remembered action focus; storage failure hides entry
-affordances. Current native output/review is pending. No Kit command originates
-in the widgets.
+affordances. [Native controls/output and independent review](../../docs/evidence/native-companion-cargo-preview/README.md)
+passed for this preview. No Kit command originates in the widgets.
 
 Lab and the remaining Companions preview/resident/visit routes remain open
 renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish projection returns a

@@ -15,7 +15,7 @@ track the remaining playability and craft gaps.
   and zero carried cargo. Chooser and actual capacity-rejection frames were
   inspected. A misleading unread-clue caption is corrected without new rules.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
-  Companion and Caddy target ESP32. Dock, Companion Probe, Cargo, Send/Keep and Discard/Finish use LVGL
+  Companion and Caddy target ESP32. Dock, Companion Probe, Cargo and its mode preview, Send/Keep and Discard/Finish use LVGL
   on the host. All Lab and remaining Companion pages still need conversion.
   The old ESP-IDF Companion demo is not current UI evidence. The same shared Dock UI now compiles/links under installed ESP-IDF in a
   [headless partial-flush target](docs/evidence/native-dock-lvgl/ESP32.md). [Architecture](specs/architecture.md#native-ui-foundation)
