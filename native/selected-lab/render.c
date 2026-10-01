@@ -138,6 +138,31 @@ static void sprite(SelectedRow *row, unsigned asset, int x, int y,
   core_art_row(id, x, y, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
 
+/* Fit the two supported-form previews, preserving the master art and its ratio.
+ * The normal sprite helper uses exact native footprints, not scaling slots. */
+static void form_preview(SelectedRow *row, unsigned asset, int x, int y) {
+  CoreArtId id = asset == SELECTED_SPRITE_COUNT ? CORE_ART_PIP_PLAIN
+                                              : CORE_ART_PIP_MARKED;
+  const CoreArtSprite *source = core_art_sprite(id);
+  unsigned width = 181;
+  unsigned height = source->height * width / source->width;
+  int relative_row = (int)row->y - y;
+  if (relative_row < 0 || (unsigned)relative_row >= height) return;
+  unsigned source_row = (unsigned)relative_row * source->height / height;
+  for (unsigned column = 0; column < width; ++column) {
+    int destination = x + (int)column;
+    if (destination < 0 || destination >= SELECTED_LAB_WIDTH) continue;
+    unsigned source_column = column * source->width / width;
+    const uint8_t *rgba = source->rgba +
+        (source_row * source->width + source_column) * 4;
+    uint8_t *target = row->pixels + destination * 3;
+    unsigned alpha = rgba[3];
+    for (unsigned channel = 0; channel < 3; ++channel)
+      target[channel] = (uint8_t)((rgba[channel] * alpha +
+          target[channel] * (255u - alpha) + 127u) / 255u);
+  }
+}
+
 void selected_lab_sprite_row(unsigned asset, int x, int y, unsigned width,
                              unsigned height, unsigned y_row,
                              uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
@@ -785,10 +810,10 @@ void selected_lab_row_with_context(const SelectedLab *lab,
             label(&row, 416, 219, "Complete reference / no unresolved knowledge", 18, SAGE);
             label(&row, 416, 247, "Plain coat / pale carried", 18, INK);
             label(&row, 700, 247, "Pale markings / expressed", 18, INK);
-            sprite(&row, SELECTED_SPRITE_COUNT + carried.expression.pale_markings,
-                   456, 274, 181, 200);
-            sprite(&row, SELECTED_SPRITE_COUNT + marked.expression.pale_markings,
-                   740, 274, 181, 200);
+            form_preview(&row, SELECTED_SPRITE_COUNT + carried.expression.pale_markings,
+                         456, 274);
+            form_preview(&row, SELECTED_SPRITE_COUNT + marked.expression.pale_markings,
+                         740, 274);
             wrapped_label(&row, 416, 482,
                           entry.finding ? entry.finding : "No finding disclosed.",
                           18, INK, 552);
