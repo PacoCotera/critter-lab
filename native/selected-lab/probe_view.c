@@ -77,7 +77,7 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
       snprintf(out->source, sizeof(out->source), "%u available / %u free slots", game->field.remaining[choice], out->free_slots);
     } else if (choice == KIT_FIELD_TRACE) {
       strcpy(out->context, "Read the trace");
-      strcpy(out->source, "A known clue / no supplies spent");
+      strcpy(out->source, "Unread trace remains available");
     } else if (choice == KIT_FIELD_CAPSULE) {
       strcpy(out->context, "Collect sealed sample");
       strcpy(out->source, "Contents unknown / separate sample slot");

@@ -229,7 +229,7 @@ control sequences before dependent compositions are treated as selected.
 | Companion Cargo | LVGL | Same target-build requirement |
 | Companion other mode previews, Send/Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
-| Caddy World/Supplies/Connections/print review | Candidate retained LVGL, four-gray host output | Native output/review pending; shared ESP-IDF UI compile follows |
+| Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); shared ESP-IDF UI compile follows |
 
 The current three-device presenter is one Linux x86-64 process. It verifies
 logical views, controls and native output, not separate physical endpoints.
@@ -252,8 +252,8 @@ the painted-frame acknowledgement used to authorize input, especially for an
 asynchronous e-paper refresh. Area, stride, format and buffer lifetime must be
 validated. Panel format conversion is permitted here; UI composition is not.
 
-The next bounded implementation migrates the entire Dock family and extracts
-that display/host boundary. A subsequent headless ESP-IDF compile must contain
+The complete host Dock family and display/host boundary are checked at5431f44.
+The next bounded headless ESP-IDF compile must contain
 the same shared Dock UI, pinned LVGL and partial-flush adapter; report ELF/map/
 memory evidence separately from hardware boot. Remaining Companion families
 then migrate, followed by complete Lab journey workpieces. Each slice requires

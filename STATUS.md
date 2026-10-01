@@ -9,31 +9,29 @@ track the remaining playability and craft gaps.
 
 ## Current work
 
-- **Gathering — native proof, final review pending:** pushed candidate d211ec1
-  removes preparation during exploration. Supplies are finite retained whole-unit
-  offers; collection is immediate and atomic. Selection exists for meaningful
-  alternatives, not waiting. The actual HTTP/native journey passed filling cargo,
-  separate sample acquisition, sealed offline return, once-only Lab acceptance
-  and zero carried cargo afterward. Domain, Probe, Cargo, Lab and Dock-gray suites
-  pass; Kit hits a stale one-bit Dock assertion being corrected. Actual art review
-  requested three small hierarchy/copy corrections. No new deployment is claimed.
+- **Gathering — native proof checked:** finite retained whole-unit pickup is
+  immediate, without field preparation. The actual quantity/ownership journey
+  passes full cargo plus a sample, sealed offline return, once-only acceptance
+  and zero carried cargo. Chooser and actual capacity-rejection frames were
+  inspected. A misleading unread-clue caption is corrected without new rules.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
-  Companion and Caddy target ESP32. All product pages must compose through LVGL.
-  Only Companion Probe/Cargo currently do; Lab, Dock and other Companion pages
-  remain manual C raster paths. The current ESP-IDF Companion is an older demo
-  scaffold, and the Caddy firmware target is absent. The next bounded conversion
-  covers the entire Dock family and separates reusable view/UI/display code from
-  host export storage. [Architecture](specs/architecture.md#native-ui-foundation)
-  owns the route inventory, migration sequence and target evidence gates.
+  Companion and Caddy target ESP32. Dock, Companion Probe and Cargo use LVGL
+  on the host. All Lab and remaining Companion pages still need conversion.
+  The old ESP-IDF Companion demo is not current UI evidence. The next bounded
+  artifact compiles the same shared Dock UI under installed ESP-IDF with a
+  headless partial-flush harness. [Architecture](specs/architecture.md#native-ui-foundation)
+  owns complete route/target coverage; a component pass is not whole acceptance.
 - **Simulator — browser maintenance:** candidate shell enlarges Companion beside
   Lab, groups Back with Confirm and preserves native bitmap aspect ratios. Browser
   checks at1640,1340 and390 pixels show no horizontal overflow and readable
   Companion scale. The browser displays native frames and sends depicted controls;
   it does not compose game screens or simulate ESP32 instructions.
-- **Dock — four-gray maintenance checked:** native host output uses four levels
-  for the selected5.79-inch module. This maintenance path still uses manual C
-  drawing and does not satisfy the LVGL requirement. Physical refresh/encoding,
-  power and fit remain unmeasured.
+- **Dock — complete host LVGL migration verified:** all pages/errors compose
+  retained widgets, with four-gray conversion after rendering. Six native suites,
+  changed HTTP journey, independent technical and actual visual/control review
+  pass at5431f44. [Native evidence](docs/evidence/native-dock-lvgl/README.md)
+  records the exact revision, frames and memory. Physical refresh/encoding,
+  power, MCU fit and hardware fit remain unmeasured.
 
 Working entry: [PR61](https://github.com/PacoCotera/critter-lab/pull/61) and
 [issue60](https://github.com/PacoCotera/critter-lab/issues/60). Live/reroll baseline
