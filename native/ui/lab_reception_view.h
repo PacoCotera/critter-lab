@@ -11,7 +11,8 @@ typedef enum {
 } LabReceptionMode;
 
 /* Copied presentation facts only. Stock and incoming are whole display units;
- * incoming remains delivery evidence after acceptance, never extra stock.
+ * incoming is current source cargo and becomes zero on world acceptance.
+ * Historical delivered amounts belong only to received records/journal.
  * Received map data contains only the existing sanitized history projection. */
 typedef struct {
   LabReceptionMode mode;

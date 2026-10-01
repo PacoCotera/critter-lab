@@ -94,6 +94,16 @@ Lab executable. The production path is the one exercised by HTTP tests and CI.
 
 ## Three-device mode
 
+Companion opens a retained three-destination home. Up/Down (or compatible
+Left/Right) selects Probe, Cargo or Companions; Confirm enters without acting.
+The entered Probe route list is vertical, matching Up/Down, while its active
+map remains unchanged. Existing profile names share the current finite offers;
+they do not promise different rewards. Cargo's visible sealing terms precede
+one fresh Send. Lab acceptance separately credits once and clears current source
+cargo on both devices, even before receipt confirmation. Received records retain
+historical amounts; the current Companion receipt pane does not repeat them.
+
+
 `selected_lab kit-serve` is used by the deployed presenter. Device0 is Lab,
 1 Companion and2 Dock. `device ID status`, `device ID frame REVISION` and
 `device ID INPUT REVISION` address distinct native contexts. Companion/Dock

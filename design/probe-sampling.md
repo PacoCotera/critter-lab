@@ -329,6 +329,11 @@ The earlier host experiment (historical fixture, not the installed map implement
 
 ## Generated field loop — owner-review proposal
 
+This retained worked study is historical where it shows preparation or Send review.
+The current timer-free gathering and direct Cargo Send contract is in
+[gameplay](../specs/gameplay.md) and
+[experience](../specs/experience.md#playable-three-device-simulator-boundary).
+
 **Implementation approved by the owner on 30 September 2026.** The heading retains
 the design packet's stable link. Local map movement, deliberate location actions,
 one active finite gathering source, retained preparation, independent trace/cache
@@ -469,7 +474,7 @@ hold and one separate capsule slot for this example.
 | Inspect trace with fresh Confirm | Record Sealed-container trace continues east and reveal Brook–Cache path/location, absent from the earlier map. | Follow the new path now or prioritize finite supply work. No resource award or all-site quota is required. |
 | Start Brook Essence | Camp Data becomes Paused at 30%; Energy is Not started. One accepted attempt earns one Essence; next Essence preparation is 60%. | Resume Camp later or navigate while Brook work remains active. |
 | Steer to Cache, inspect, then Collect | Save exactly one sealed capsule in its separate store; no genomic preview. Earned supplies are Data 1 / Energy 0 / Essence 1, occupying 2 of 4 resource units. | Keep exploring, resume useful work, or return. |
-| Cargo Return/Send review, Keep initially focused | Show only Data 1 / Energy 0 / Essence 1 and one sealed capsule. Freeze the pictured Data 30% / Essence 60% preparation independently; neither enters the manifest. | Keep restores map/source/work state; Send seals these actual contents and stops future work. |
+| Historical map-study Return/Send review (superseded by current direct Send) | Show only Data 1 / Energy 0 / Essence 1 and one sealed capsule. Freeze the pictured Data 30% / Essence 60% preparation independently; neither enters the manifest. | Keep restores map/source/work state; Send seals these actual contents and stops future work. |
 | Lab explicitly accepts received record | Store those whole items/capsule once. Received log records visited/investigated places, resolved attempts/trace and actual contents, not unexplored rewards. | Continue retained Lab research; Companion waits for/retains matching receipt before a new outing. |
 
 The cache sequence is **Brook place inspection → deliberate Inspect trace →

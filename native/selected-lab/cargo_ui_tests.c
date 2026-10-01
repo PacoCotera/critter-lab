@@ -132,10 +132,17 @@ static void cargo_preview_projection_truth(void) {
   assert(kit_cargo_projection(&kit, &view) && !strcmp(view.title, "Stored cargo"));
   kit.companion.focus = COMP_PROBE;
   assert(!kit_cargo_projection(&kit, &view));
+  kit.companion.focus = kit.companion.mode;
   NativeUiContext *context = native_ui_create();
   FILE *output = tmpfile();
-  assert(context && output && !kit_bmp_ui(&kit, KIT_COMPANION, output, context, 1));
-  assert(ftell(output) == 0); /* Invalid migrated preview has no manual fallback. */
+  /* Cargo's old selector is superseded by the common three-mode native hub. */
+  assert(context && output && kit_bmp_ui(&kit, KIT_COMPANION, output, context, 1));
+  assert(ftell(output) == 54 + ((450 * 3 + 3) & ~3) * 600);
+  fclose(output);
+  output = tmpfile();
+  kit.companion.mode = 3;
+  assert(output && !kit_bmp_ui(&kit, KIT_COMPANION, output, context, 1));
+  assert(!ftell(output)); /* A malformed common hub still has no fallback. */
   fclose(output);
   native_ui_destroy(context);
   kit.companion.mode = kit.companion.focus = COMP_FRIENDS;

@@ -3,6 +3,8 @@
 #include "expedition.h"
 #include "expedition_render.h"
 #include "native_ui.h"
+#include "reception_view.h"
+#include "home_view.h"
 #include "save_bytes.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -14,6 +16,73 @@ static void press(DeviceKit *kit, unsigned device, SelectedInput down) {
   kit_input(kit, device, SELECTED_READY, revision);
   kit_input(kit, device, down, revision);
   kit_input(kit, device, (SelectedInput)(down + 1), revision);
+}
+/* Receipt evidence survives acceptance, but it is never current source cargo.
+ * Copy navigation only so each device's projection can be inspected passively. */
+static void accepted_source_is_empty(const DeviceKit *kit) {
+  assert(kit_delivery_accepted(kit));
+  SelectedLab lab = *kit->lab;
+  DeviceKit copy = *kit;
+  copy.lab = &lab;
+  copy.companion.page = COMP_CARGO;
+  copy.companion.mode = COMP_CARGO;
+  copy.companion.focus = 0;
+  CompanionCargoView cargo;
+  assert(kit_cargo_projection(&copy, &cargo) && cargo.accepted && !cargo.capsules);
+  for (unsigned resource = 0; resource < 3; ++resource) {
+    assert(!cargo.supplies[resource]);
+    assert(cargo.delivered[resource] == kit->journal.cargo[resource] / GAME_SUPPLY_UNIT);
+  }
+  copy.companion.page = COMP_PROBE;
+  copy.companion.mode = COMP_PROBE;
+  CompanionProbeView probe;
+  assert(kit_probe_projection(&copy, &probe) && probe.cargo.accepted && !probe.cargo.capsules);
+  assert(!probe.cargo.supplies[0] && !probe.cargo.supplies[1] && !probe.cargo.supplies[2]);
+  lab.page = V1_CARGO;
+  copy.caller_valid = 1;
+  LabReceptionView reception;
+  assert(kit_reception_projection(&copy, &reception) && reception.mode == LAB_RECEPTION_ARRIVAL);
+  assert(!reception.can_accept && !reception.incoming[0] && !reception.incoming[1] && !reception.incoming[2]);
+  assert(reception.stock[0] == lab.game.data / GAME_SUPPLY_UNIT &&
+         reception.stock[1] == lab.game.energy / GAME_SUPPLY_UNIT &&
+         reception.stock[2] == lab.game.essence / GAME_SUPPLY_UNIT);
+  for (unsigned device = KIT_LAB; device <= KIT_COMPANION; ++device) {
+    FILE *status = tmpfile();
+    assert(status);
+    kit_status(&copy, device, status);
+    long size = ftell(status);
+    char text[32768];
+    assert(size > 0 && size < (long)sizeof(text));
+    rewind(status);
+    assert(fread(text, 1, (size_t)size, status) == (size_t)size);
+    text[size] = 0;
+    assert(strstr(text, "\"cargo\":[0,0,0]") && !fclose(status));
+  }
+  /* The connected Home preview must use current source facts as well, even
+   * when the committed world precedes its receipt-sidecar update. */
+  lab.page = V1_HOME;
+  lab.focus = 1;
+  SelectedLabRenderContext home_facts = {SELECTED_HAUL_STORED, {0, 0, 0}};
+  LabHomeView home_view;
+  assert(selected_lab_home_view(&lab, &home_facts, copy.normalization_pending, &home_view));
+  assert(!home_view.landing.amounts[0] && !home_view.landing.amounts[1] && !home_view.landing.amounts[2]);
+  if (copy.failed) snprintf(home_view.warning, sizeof(home_view.warning), "%s", lab.message);
+  FILE *home_output = tmpfile();
+  assert(home_output && kit_bmp(&copy, KIT_LAB, home_output) && ftell(home_output) == 1843254);
+  NativeUiContext *home_context = native_ui_create_device(KIT_LAB);
+  assert(home_context);
+  const uint8_t *home_pixels = native_ui_home(home_context, &home_view);
+  assert(home_pixels && !fseek(home_output, 54, SEEK_SET));
+  uint8_t home_row[1024 * 3];
+  for (unsigned y = 600; y > 0; --y) {
+    assert(fread(home_row, 1, sizeof(home_row), home_output) == sizeof(home_row));
+    for (unsigned x = 0; x < 1024; ++x)
+      for (unsigned channel = 0; channel < 3; ++channel)
+        assert(home_row[x * 3 + channel] == home_pixels[((y - 1) * 1024 + x) * 3 + 2 - channel]);
+  }
+  native_ui_destroy(home_context);
+  assert(!fclose(home_output));
+  assert(!memcmp(&lab.game, &kit->lab->game, sizeof(lab.game)));
 }
 /* Legacy transport regressions deliberately start the frozen timed command.
  * The new map/control journey has its own checks below. */
@@ -41,8 +110,18 @@ static void persist_fixture(DeviceKit *kit) {
 }
 static void mode_navigation(DeviceKit *kit) {
   uint64_t sequence = kit->lab->game.last_operation_sequence;
+  GameState initial_world = kit->lab->game;
   assert(kit->companion.page == COMP_MODES &&
          kit->companion.mode == COMP_PROBE);
+  press(kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(kit->companion.page == COMP_MODES && kit->companion.mode == COMP_CARGO);
+  press(kit, KIT_COMPANION, SELECTED_DOWN_DOWN);
+  assert(kit->companion.page == COMP_MODES && kit->companion.mode == COMP_FRIENDS);
+  press(kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  press(kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  assert(kit->companion.page == COMP_MODES && kit->companion.mode == COMP_PROBE);
+  assert(!memcmp(&initial_world, &kit->lab->game, sizeof(initial_world)) &&
+         kit->journal.phase == KIT_IDLE);
   press(kit, KIT_COMPANION, SELECTED_LEFT_DOWN);
   assert(kit->companion.mode == COMP_PROBE);
   press(kit, KIT_COMPANION, SELECTED_RIGHT_DOWN);
@@ -448,14 +527,12 @@ static void early_unload_journey(const char *directory) {
   uint32_t random_state = lab.game.gather_random_state;
   uint64_t attempts = lab.game.gather_attempt_count;
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   assert(!strcmp(lab.game.expedition_id, source_id) &&
          lab.game.expedition_active && lab.game.expedition_elapsed == 5);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit_link(&kit, KIT_COMPANION, 0));
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
-  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  assert(kit.companion.page == COMP_CARGO && kit.journal.phase == KIT_IDLE);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING && kit.journal.version == 4);
   char sealed_haul_id[64];
@@ -596,31 +673,23 @@ static void cargo_action_threshold(const char *directory) {
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN, old_frame);
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_UP, old_frame);
   assert(kit.companion.page == COMP_CARGO);
-  GameState before_review = lab.game;
+  GameState before_send = lab.game;
   KitJournal before_journal = kit.journal;
   unsigned cargo_frame = kit_revision(&kit, KIT_COMPANION);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
-  assert(!strcmp(kit_option(&kit, KIT_COMPANION, kit.companion.focus), "Keep cargo"));
-  assert(!memcmp(&before_review, &lab.game, sizeof(before_review)) &&
-         !memcmp(&before_journal, &kit.journal, sizeof(before_journal)));
-  /* Cargo's already painted Confirm cannot seal the review it just opened. */
+  assert(kit.journal.phase == KIT_WAITING && kit.companion.page != COMP_SEND_REVIEW);
+  assert(!memcmp(&before_send, &lab.game, sizeof(before_send)));
+  assert(kit.journal.cargo[0] == before_send.expedition_data);
+  KitJournal sealed_once = kit.journal;
+  /* A stale or repeated Confirm cannot seal the already sealed haul again. */
   kit_input(&kit, KIT_COMPANION, SELECTED_READY, cargo_frame);
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN, cargo_frame);
   kit_input(&kit, KIT_COMPANION, SELECTED_CONFIRM_UP, cargo_frame);
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.journal.phase == KIT_IDLE);
-  /* A fresh default Confirm keeps cargo. Sending needs its own fresh choice. */
+  assert(!memcmp(&sealed_once, &kit.journal, sizeof(sealed_once)));
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_CARGO &&
-         !memcmp(&before_review, &lab.game, sizeof(before_review)) &&
-         !memcmp(&before_journal, &kit.journal, sizeof(before_journal)));
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
-  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
-  assert(kit.companion.focus == 0 && kit.journal.phase == KIT_IDLE);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.journal.phase == KIT_WAITING &&
-         kit.journal.cargo[0] == before_review.expedition_data);
+  assert(!memcmp(&sealed_once, &kit.journal, sizeof(sealed_once)) &&
+         !memcmp(&before_send, &lab.game, sizeof(before_send)));
+  assert(before_journal.phase == KIT_IDLE);
   char marker[580];
   snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
   unlink(marker);
@@ -666,16 +735,13 @@ static void discard_and_home_reception(const char *directory) {
          lab.game.last_operation_sequence == before_review + 1);
   assert(lab.game.data == 0 && lab.game.gather_random_state == before_random &&
          strstr(kit.companion.message, "Discarded 2"));
-  /* Send review/Keep also leaves inventory, outing and sequence unchanged. */
+  /* Leaving Cargo before Send leaves inventory and outing unchanged. */
   press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_CARGO && lab.game.expedition_data == 100 &&
          kit.journal.phase == KIT_IDLE);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit_link(&kit, KIT_COMPANION, 0));
-  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING && kit_option_count(&kit, KIT_COMPANION) == 1);
   uint32_t sealed_data = kit.journal.cargo[0];
@@ -904,19 +970,17 @@ static void field_control_and_receipt(const char *directory) {
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_RIGHT_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW && kit.companion.focus == 1);
+  assert(kit.companion.page == COMP_CARGO && kit.journal.phase == KIT_IDLE);
   GameExpeditionField reviewed = lab.game.field;
   uint32_t preparation[3];
   memcpy(preparation,lab.game.gather_progress_ms,sizeof(preparation));
   kit_tick(&kit,200);
   assert(!memcmp(&reviewed,&lab.game.field,sizeof(reviewed)));
   assert(!memcmp(preparation,lab.game.gather_progress_ms,sizeof(preparation)));
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Keep. */
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN); /* Leave Cargo without sending. */
   assert(lab.game.field.x == reviewed.x && lab.game.field.active_source == reviewed.active_source);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(kit_link(&kit,KIT_COMPANION,0));
-  press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(kit.journal.version == 5 && kit.journal.phase == KIT_WAITING);
   ExpeditionFieldView sent_view;
@@ -934,6 +998,13 @@ static void field_control_and_receipt(const char *directory) {
   assert(kit_link(&kit,KIT_COMPANION,0));
   press(&kit,KIT_LAB,SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.sample_count == 1 && lab.game.received_count == 1);
+  accepted_source_is_empty(&kit);
+  /* Simulate only the unsaved receipt phase after this real world commit.
+   * Exact saved operation evidence, not the failed sidecar, owns acceptance. */
+  DeviceKit committed_receipt_error = kit;
+  committed_receipt_error.journal.phase = KIT_COMMITTING;
+  committed_receipt_error.failed = 1;
+  accepted_source_is_empty(&committed_receipt_error);
   assert(!lab.game.field.version && !lab.game.expedition_id[0]);
   ExpeditionFieldView accepted_view;
   assert(kit_field_projection(&kit, &accepted_view));
@@ -975,6 +1046,7 @@ static void field_control_and_receipt(const char *directory) {
   assert(kit_link(&kit,KIT_COMPANION,1));
   kit_tick(&kit,402);
   assert(kit.journal.phase == KIT_COMPLETE && kit.acknowledged_capsules == 1);
+  accepted_source_is_empty(&kit);
   assert(kit_field_projection(&kit, &accepted_view));
   assert(accepted_view.delivery_accepted && !accepted_view.capsule_count &&
          accepted_view.sent_capsule_count == 1);
@@ -1223,21 +1295,16 @@ int main(void) {
   assert(lab.game.expedition_elapsed == 60 && lab.game.data == 0);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_CARGO);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW);
-  press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
-  assert(kit.companion.page == COMP_CARGO && kit.companion.task_depth == 1);
+  assert(kit.companion.task_depth == 1);
   press(&kit, KIT_COMPANION, SELECTED_BACK_DOWN);
   assert(kit.companion.page == COMP_PROBE && !kit.companion.task_depth);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
-  assert(kit.companion.page == COMP_SEND_REVIEW);
-  uint32_t review_cargo = lab.game.expedition_data;
+  assert(kit.companion.page == COMP_CARGO && kit.journal.phase == KIT_IDLE);
+  uint32_t before_send_cargo = lab.game.expedition_data;
   kit_tick(&kit, 170);
-  assert(lab.game.expedition_data == review_cargo);
+  assert(lab.game.expedition_data == before_send_cargo);
   assert(kit_link(&kit, KIT_COMPANION, 0));
-  assert(kit.companion.focus == 1);
-  press(&kit, KIT_COMPANION, SELECTED_UP_DOWN);
+  assert(kit.companion.focus == 0);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_WAITING);
   uint32_t cargo = kit.journal.cargo[0];

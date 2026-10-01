@@ -1,131 +1,22 @@
 # Critter Lab roadmap
 
-## Current outcome: repair actual playtest failures
+## Player outcome
 
-The connected native journey was delivered, but actual owner play rejects its
-repetitive expeditions, chance-waiting, same-feeling samples and checklist research.
-The [current audit](design/three-device-playability-audit/README.md) records real
-browser/native play, broken frames/insets, cadence loss and inventory projection
-defects. Functional acceptance did not approve enjoyment or complete visual craft.
+Complete the owner-authorized Polished Core V1 journey: Companion gathers and returns; Lab accepts once, retains sample discoveries and supports deliberate creation; incubation reveals the same saved resident on Lab and Companion; Dock shows accepted or clearly cached world facts. Functional migration does not approve fun, art or hardware readiness.
 
-The current [repair proof](design/three-device-playability-audit/README.md#corrected-native-increment)
-closes accepted Cargo/receipt separation, Home-first controls, shared border craft,
-sealed clearance and choice-only navigation. Source864eca5 passed native/HTTP/CI
-and the bounded technical/art/pixel checks. Remaining composition and cadence
-concerns stay in issue44; a craft repair is not discovery or player approval.
+## Current delivery
 
-The [bounded discovery trial](design/expedition-map-study/README.md#generated-discovery-trial)
-now has two actually generated route results, a finite supply-versus-trail event
-contract and a [sample-specific question/reveal contract](design/research-and-creation.md#next-comparison-trial).
-The event and sample workpiece remain paper design. [Saved procedural geometry](docs/evidence/procedural-expeditions/README.md)
-is now a native playable slice with legacy-map/receipt compatibility and actual
-control/output proof. The active priority is the [native UI foundation](specs/architecture.md#native-ui-foundation):
-the first real detailed Companion Cargo screen with LVGL, shared layout/theme and
-guarded physical focus has passed its [native journey and output review](docs/evidence/native-ui-foundation/README.md).
-Owner permits complete re-layout. The active [Probe composition slice](https://github.com/PacoCotera/critter-lab/issues/58)
-uses a native32px player-following map, retained place actions, compact whole cargo
-and a persistent whole-cargo strip. The [prior native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
-records the changed composition and actual gather/trace/sample/return/current-zero
-path. Art is extracted from a Gemini master; environmental depth remains unapproved
-and entry composition is sparse. The [Companions resident workpiece](docs/evidence/native-companion-resident-actions/README.md)
-now preserves saved art, properties and visits through list/visit/offline recovery,
-with independent native technical, interaction and craft passes. Further layout
-and broader HiBit craft remain open.
-Finite map events and their saved consequences remain subsequent
-work; acquisition/research still need depth. Automatic
-Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
-values and visual treatment remain proposals. No new infrastructure, map service,
-provider, sensor/radio, canonical species, capture/training or ecology enters it.
+Native graphics-framework coverage is complete for current connected device pages. The obsolete standalone acquisition renderer is retired while domain/input/save regression remains. [Architecture](specs/architecture.md#current-migration-coverage-and-target-evidence) owns target distinctions; [retirement evidence](docs/evidence/lvgl-route-retirement/README.md) records checks. [Deployment notes](CHANGELOG.md) track significant sandbox changes. Every increment uses the existing Git, CI and native-frame delivery gate with fresh sandbox saves.
 
-The next owner-feedback review is [issue60](https://github.com/PacoCotera/critter-lab/issues/60):
-[gathering/source decisions and movement](design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions).
-The joined proposal compares open-terrain prospecting with discrete survey sectors,
-and rejects a shortcut packet or repeated claims as a sufficient gathering overhaul.
-The owner subsequently rejected preparation during exploration. The revised
-recommendation removes the field clock: immediate finite collection by default,
-conditional source selection for real alternatives/capacity. Its first proof is
-one encounter with fresh versus near-full cargo, not an event catalogue. Studies
-remain immediate; existing incubation is the natural background process. The timer-free source candidate has passed a native quantity/ownership journey;
-actual choice, capacity-rejection and corrected result frames now pass focused game, UX and art review. It is not deployed or
-canonical reward balance. The selected Dock module's
-[four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
-is confirmed. The [complete host Dock LVGL family](docs/evidence/native-dock-lvgl/README.md)
-now passes native/control and independent review; the [same-source ESP-IDF compile/link proof](docs/evidence/native-dock-lvgl/ESP32.md) also passes. Runtime panel output remains unvalidated.
+## Ordered ready outcomes
 
-Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
-ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
-shows current manual-renderer debt and the old firmware-scaffold gap. Dock and
-every known Companion host family now use the portable display/host boundary;
-the shared Dock UI has an ESP-IDF compile proof. [The current shared Companion UI compile](docs/evidence/native-companion-esp/README.md)
-also passes at `fadee5d`. Lab Home and workspace previews now pass native
-route/control/lifetime and independent technical/craft review; see the
-[Home proof](docs/evidence/native-lab-home/README.md). Connected reception and
-received records also pass [native checks and review](docs/evidence/native-lab-reception/README.md).
-Sample research and Library now pass [native disclosure/control/lifetime and focused output review](docs/evidence/native-lab-research/README.md). Creation/review, incubation/reveal and resident/Habitat actions now pass [native authority, lifetime and focused output review](docs/evidence/native-lab-actions/README.md). Repeated navigation tutorials have been removed; [actual connected output](docs/evidence/navigation-copy/README.md) retains consequential state/cost/error copy. The rejected incubator artwork still needs actual replacement source.
-Standalone acquisition graphics and unused scanline helpers are retired without a fifth graphics root or restoring console-only acquisition. Existing domain/save regressions now capture supported LVGL pages and verify recoverable unsupported-frame errors; [retirement evidence](docs/evidence/lvgl-route-retirement/README.md). Runtime memory/profile and
-physical adapters remain separate unresolved boundaries.
-Preserve game/save/physical-control behavior. Each slice has actual
-output and independent review; no host or scaffold success establishes firmware
-or physical readiness. No new engine or infrastructure is authorized.
+1. **Companion entry and transfer clarity:** purposeful mode destinations, spatially correct expedition selection, one deliberate Send and visibly empty accepted source cargo on both devices. Preserve actual stock, saved receipt/history and offline recovery. [Issue60](https://github.com/PacoCotera/critter-lab/issues/60) holds current review/integration status.
+2. **Lab collections and discovery:** show Habitat population instead of one resident; preview selected collection entries immediately and reserve sidebar space for navigation. Directions update passive previews; Confirm enters a task or deliberately commits an action; Back returns. No navigation may spend resources, transfer cargo or record a visit. Research discovery follows the same collection/selected-item hierarchy: move explanations/status out of navigation into the workpiece; show collection versus selected-sample views distinctly. Replace the checklist experience with sample-specific unknowns, directed studies and retained progressive discoveries. Use the [comparison trial](design/research-and-creation.md#next-comparison-trial), [genetic constraints](specs/genetics.md) and actual playtest. Automatic analysis remains accepted; no guessed-answer quiz is selected. Scope the smallest playable research slice with game design, genomics and UX before coding.
+3. **Exploration depth:** open traversable terrain, useful generated variation, distinguishable expedition opportunities and one retained local discovery/event. The [exploration study](design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions) is a design input. Current native saved geometry is implemented, but road restrictions and common finite source rules remain. Do not claim device generation or differentiated expedition behavior from a paper study or UI change.
+4. **Visual craft:** replace the rejected incubator with an actual Gemini-sourced protected biological chamber; preserve unknown contents until Open. Continue C18/Gemini/HiBit composition, margins, hierarchy and meaningful visuals through actual native exports. Existing assets and useful unfinished references remain preserved.
 
-## Delivered checkpoint: Polished Core V1
+Each outcome ends in a small coherent PR, focused independent review, actual native physical-control proof and a sandbox release. Do not hold a reviewed increment for unrelated art or whole-milestone consolidation. Current defects and broader review findings remain in [issue44](https://github.com/PacoCotera/critter-lab/issues/44) and the [three-device audit](design/three-device-playability-audit/README.md).
 
-Owner-authorized implementation round, 30 September 2026. Parent outcome
-[issue25](https://github.com/PacoCotera/critter-lab/issues/25); concrete repair
-acceptance [issue44](https://github.com/PacoCotera/critter-lab/issues/44). This
-roadmap replaces the prior audit-only stopping boundary.
+## Boundaries
 
-**Journey:** Companion gathers/returns → Lab accepts once → retained sample
-discovers meaningful A/B relationships → supported-form draft and exact creation
-review → saved incubation/reveal → same resident visited at Lab and Companion →
-accepted or visibly cached Dock. C18/Gemini03/04/07 and the selected hardware
-family remain visual authority. Every increment needs actual native art and
-interaction acceptance, not functional commands alone.
-
-| Order | Usable increment | Completion evidence |
-| --- | --- | --- |
-| 1 | Dependable Home/Back, Cargo/return/receipt, connected whole-item discard/capacity and explicit creation review | Fresh physical controls, safe escape, no preview spend/duplicate credit, retained caller and permanent Dock freshness |
-| 2, alongside1 | Shared editable art masters, native type/frame/focus, meaningful activity/reference/process subjects and monochrome variants | Actual1× contact sheet/compositions against references, coherent margins/optical scale/material craft, no baked screens |
-| 3 | Collection versus sample research, A/B evidence mapping, useful comparisons/resupply and complete supported selection | Different real findings, retained knowledge, validated17-reference completeness/disclosed support, exact costs |
-| 4 | Incubation/reveal and actual shared resident inspection/visits with retained art | One ID/descriptor/genome/art lineage, same saved visit, timestamped offline read-only and no fabricated care |
-| 5 | Bounded local generation pipeline and connected V1 delivery | Permitted description and validated descriptor/art output, exact replay/offline reuse, full native/control walkthrough and updated docs |
-
-All five implementation increments have native evidence in
-[the Core V1 walkthrough](docs/evidence/polished-core-v1/README.md). Changed actual
-art/game/UX checks passed; the running release is identified by the sandbox's
-release endpoint. Human playtest and physical validation remain later gates.
-
-## Locked requirements and provisional defaults
-
-Yellow Critters becomes **Home**; resident selection remains under **Habitat**.
-Console-only acquisition is removed. The Companion gathers; Lab researches and
-creates; Dock is an accepted/cached projection. Existing physical controls only.
-Algorithms own rules and evidence; rendering and generated text do not mutate them.
-
-Use the [reviewed A/B example](design/research-and-creation.md#discovery-proposal--30-september-2026)
-as provisional V1 content: heritage4 Data, movement4 Energy, relevant comparison4
-Essence, creation5 of each. Required facts/disclosed support govern completion,
-not a click quota. New field content uses immediate finite whole offers; legacy
-timed fields remain frozen and returnable. Offer counts are provisional balance;
-new descriptions or scenery never imply different yields. Existing records keep
-their pinned legacy content; new content cannot silently change a saved individual.
-
-The [generation contract](specs/architecture.md#generation-backend-proposal--30-september-2026)
-starts as local validated jobs using existing runtimes/approved art, not deployed
-microservices or a mandatory model call. Preserve resolved output and original
-bytes/hashes/versions. Offline novelty/art failure cannot reroll creation.
-
-## Delivery boundary
-
-One coherent source/asset/spec increment at a time, Git history and existing CI.
-Native builds use the existing VM/toolchains at a clean exact pushed revision.
-New sandbox deployments start fresh across the Lab, Companion and Dock, clearing
-world, transfer and cache state together. Unchanged-version checks preserve play. Complete actual affected
-visual/game/UX/domain/technical review before claiming delivery. The original Cargo
-trap remains open until relevant cause/regression evidence supports closure.
-
-No capture/training/needs/ecology, deployed cloud generation, paid provider change,
-real-radio endpoint or hardware development enters this round. After internal V1
-delivery, a human walkthrough assesses comprehension, enjoyment and hardware
-versus mobile. Physical performance requires later bench evidence. No calendar or
-usage guarantee is inferred. Progress reports use Mexico City times.
+No console-only acquisition, new infrastructure, purchases, provider migration, real-radio/hardware commitment, capture/training/ecology or cloud deployment. Continue the selected physical controls and existing standard graphics framework. Preserve whole-unit resources, sample identity, discovery authority and explicit complete-genome creation. Hardware development follows satisfactory software play; a mobile fallback remains allowed if the device experience does not justify building the kit.

@@ -102,6 +102,13 @@ def run(binary, proof=None):
         try:
             for device in ("lab", "companion", "dock"):
                 frame(device, "initial")
+            initial = state("companion")
+            assert initial["page"] == "modes" and initial["mode"] == 0
+            selected = press("companion", "down")
+            assert selected["page"] == "modes" and selected["mode"] == 1
+            assert selected["cargo"] == initial["cargo"] and selected["stock"] == initial["stock"]
+            assert "field" not in selected and selected["phase"] == 0
+            assert press("companion", "up")["mode"] == 0
             assert press("companion", "right")["mode"] == 1
             frame("companion", "mode-cargo")
             assert press("companion", "right")["mode"] == 2
@@ -114,6 +121,7 @@ def run(binary, proof=None):
             assert request("/api/input", {"event": "confirm-down", "revision": 1})[0] == 400
             assert press("companion", "confirm")["page"] == "probe"
             assert state("companion")["cargo"] == [0, 0, 0]
+            frame("companion", "expedition-chooser")
             press("companion", "confirm")
             assert state("companion")["field"]["active_source"] == 255
             press("companion", "confirm")  # Inspect Camp, no automatic award/start.
@@ -163,21 +171,25 @@ def run(binary, proof=None):
             press("companion", "right")
             press("companion", "confirm")  # Cargo.
             frame("companion", "cargo")
-            review = press("companion", "confirm")
-            assert review["page"] == "send-review" and review["focus"] == "Keep cargo"
-            assert review["phase"] == 0
-            frame("companion", "send-review")
-            reviewed = state("companion")["cargo"]
+            sending = state("companion")
+            assert sending["page"] == "cargo" and sending["focus"] == "Send to Lab"
+            assert sending["phase"] == 0
+            before_send = sending["cargo"]
             preparation = state("companion")["gather_progress_ms"]
             time.sleep(2.1)
-            assert state("companion")["cargo"] == reviewed
+            assert state("companion")["cargo"] == before_send
             assert state("companion")["gather_progress_ms"] == preparation
             link("companion", False)
-            sending = press("companion", "up")  # Deliberately choose Send.
-            assert sending["focus"] == "Send to Lab" and sending["phase"] == 0
+            # One deliberate Send seals the manifest; there is no second review.
             sealed = press("companion", "confirm")
-            assert sealed["phase"] == 1
+            assert sealed["phase"] == 1 and sealed["page"] != "send-review"
             frame("companion", "sending-offline")
+            repeated = press("companion", "confirm")
+            assert repeated["phase"] == 1 and repeated["haul"] == sealed["haul"]
+            assert repeated["cargo"] == sealed["cargo"] and repeated["stock"] == [0, 0, 0]
+            reopened = press("companion", "confirm")
+            assert reopened["page"] == "cargo" and reopened["phase"] == 1
+            assert reopened["haul"] == sealed["haul"]
             time.sleep(2.1)
             assert state("companion")["phase"] == 1
             cargo = sealed["cargo"]
@@ -204,6 +216,7 @@ def run(binary, proof=None):
             assert accepted["expedition_seconds"] == 0 and accepted["samples"] == 1
             assert accepted["received_count"] == 1
             assert state("companion")["cargo"] == [0, 0, 0]
+            assert state("lab")["cargo"] == [0, 0, 0]
             assert state("companion")["cargo_capsules"] == 0
             assert state("companion")["delivery_record"] == {
                 "accepted": True, "supplies": [amount // 100 for amount in cargo], "capsules": 1}
@@ -211,11 +224,21 @@ def run(binary, proof=None):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]
             assert press("lab", "confirm")["stock"] == credited
+            before_home = state("lab")
+            assert press("lab", "critters")["page"] == "home"
+            assert press("lab", "down")["focus"] == "Explore"
+            accepted_home = frame("lab", "accepted-home")
+            assert accepted_home["cargo"] == [0, 0, 0] and accepted_home["stock"] == credited
+            returned = press("lab", "confirm")
+            for key in ("page", "received_selected", "received_detail", "phase", "stock",
+                        "samples", "received_count", "cargo", "haul"):
+                assert returned[key] == before_home[key], (key, returned, before_home)
             link("companion", True)
             link("dock", True)
             time.sleep(2.1)
             assert state("companion")["phase"] == 5
             assert state("companion")["cargo"] == retained
+            assert state("lab")["cargo"] == [0, 0, 0]
             assert state("companion")["gather_progress_ms"] == preparation
             frame("companion", "receipt")
             assert state("companion")["focus"] == "Choose a new expedition"

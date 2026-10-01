@@ -50,16 +50,17 @@ static void arrival_projection(const DeviceKit *kit, LabReceptionView *out) {
   int map_outing = kit_field_projection(kit, &field);
   /* The game commit may survive a failed receipt-sidecar write. Preserve the
    * existing operation-evidence projection for that COMMITTING recovery case. */
-  int accepted = map_outing ? field.delivery_accepted : phase >= KIT_ACK_PENDING;
+  int accepted = kit_delivery_accepted(kit);
   int failed = kit->failed || kit->lab->storage_error;
 
   strcpy(out->incoming_title, "FROM COMPANION");
-  strcpy(out->status, accepted ? "Supplies stored at the Lab" :
+  strcpy(out->status, accepted ? "Cargo transferred / source empty" :
                                 "Supplies waiting at the Lab");
   strcpy(out->hint, accepted ? "The haul is included in Lab stock." :
                               "Store haul / End expedition");
   for (unsigned resource = 0; resource < 3; ++resource)
-    out->incoming[resource] = kit->journal.cargo[resource] / GAME_SUPPLY_UNIT;
+    out->incoming[resource] = accepted ? 0 :
+        kit->journal.cargo[resource] / GAME_SUPPLY_UNIT;
 
   const GameSample *sample = kit_received_sample(kit);
   /* kit_received_sample intentionally waits for ACK_PENDING. A committed map

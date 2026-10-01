@@ -23,7 +23,7 @@ int kit_cargo_facts(const DeviceKit *kit, CompanionCargoFacts *out) {
   } else {
     const uint32_t current[] = {game->expedition_data, game->expedition_energy,
                                 game->expedition_essence};
-    out->accepted = phase >= KIT_ACK_PENDING && !game->expedition_id[0];
+    out->accepted = kit_delivery_accepted(kit);
     out->delivered_capsules = out->accepted && kit_received_sample(kit) ? 1 : 0;
     out->capsule_capacity = 1;
     for (unsigned resource = 0; resource < 3; ++resource) {
@@ -166,16 +166,17 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   snprintf(out->capsule, sizeof(out->capsule), "%s",
            out->capsules ? "1 sealed sample" : "No sample in cargo");
   if (out->accepted) {
-    snprintf(out->detail, sizeof(out->detail),
-             "Delivery record: %" PRIu32 " Data / %" PRIu32 " Energy / %" PRIu32 " Essence. %s",
-             out->delivered[0], out->delivered[1], out->delivered[2],
-             out->delivered_capsules ? "1 sample delivered to Lab." : "Supplies stored at Lab.");
+    snprintf(out->capsule, sizeof(out->capsule), "%s", "No sample in cargo");
+    snprintf(out->detail, sizeof(out->detail), "%s", "Cargo transferred to Lab.");
   } else {
     const char *detail = sealed ? "This expedition cannot resume." :
         no_outing ? (empty_cargo ? "No cargo." :
                                   "Cargo remains here. Nothing sent to Lab.") :
         review ? (out->capsules ? "Contents unknown\nSeals cargo; exploration stops."
                                : "Seals cargo; exploration stops.") :
+        game_transfer_available(&kit->lab->game) ?
+            (out->capsules ? "Contents unknown.\nSending stops collection." :
+                             "Sending stops collection.") :
         out->capsules ? "Contents unknown" : "Whole items / source progress retained.";
     snprintf(out->detail, sizeof(out->detail), "%s", detail);
   }

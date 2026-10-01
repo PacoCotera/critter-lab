@@ -22,31 +22,48 @@ player-directed. The [reviewed map study](../design/expedition-map-study/README.
 guides the accepted local map loop; rates, budgets and physical performance
 remain unvalidated.
 
+## Navigation and passive previews — owner direction
+
+The owner requires navigation-only sidebars. Directions select a destination or
+inspectable target and update its read-only preview immediately, without spending,
+accepting, starting work or visiting. Confirm enters the selected task or performs
+its explicit action; Back restores its caller. Collection browsing should expose
+sample-specific findings as focus moves. Habitat Overview should show the resident
+population rather than treating one selected resident as the whole Habitat.
+
+Current Lab navigation still mixes data/explanations into some choices and its
+Habitat Overview remains centered on a selected resident. These are observed
+current defects and the next layout/discovery slice, not changes implemented by
+the Companion entry/transfer repair. No new grid, evidence minigame or canonical
+layout is approved here. Existing controls and knowledge/cost boundaries remain.
+
 ## Framework-led Companion layout
 
 Owner permits a complete game re-layout, particularly Companion, to use the
 selected displays and LVGL. Existing page geometry is not a design requirement.
 Approved Gemini/C18 identity and the physical controls remain requirements.
 
-The considered game/UX direction is a slim stable Probe / Cargo / Companions mode
-rail with distinct workpieces below it. Probe centers the legal map, player and
-known local finding, with compact current cargo always available. Cargo centers
-actual whole materials, a capsule only when carried, capacity and a deliberate
-return decision. Companions centers the same saved individual and supported visit.
-A universal dashboard would improve predictable summaries but adds entry steps
-and reduces subject space; it is not the preferred next prototype.
+The Companion home presents three full-width destinations: Probe, Cargo and
+Companions. Up/Down selects their vertically arranged workpieces; Left/Right
+retains compatible clamped selection. A fresh Confirm enters the remembered
+mode without starting an outing, spending, sending or visiting. Each destination
+shows current known state: outing location/status, current supply/sample capacity,
+and the retained revealed-critter count. Compact current cargo remains visible.
+No unrevealed portrait or new scene asset is needed for this home.
 
-This is a design direction, not approval of final composition. Start from each
-player question and real content, allocate layout, apply retained source art, then
-walk focus and return with the existing buttons. Current native framework proofs
-cover every known Companion host family, the complete Dock family and Lab Home/workspace previews. Owner direction on1 October requires every game screen
-to use LVGL; remaining Lab action families require real retained
-conversion, not a wrapper around their old bitmap. Target adapters and hardware
-validation remain separate from host proof. A framework does not supply missing art or
-make waiting/acquisition engaging. Existing Cargo inspection and return costs six
-fresh gestures, and opening/cancelling Send review costs eight: migration alone
-does not remove that friction. Any changed return flow needs an explicit interaction
-prototype before becoming product behavior.
+Within each mode a slim rail is secondary to its workpiece. Probe centers the
+legal map, player and known local finding; its unstarted outing choices are
+full-width vertical rows matching Up/Down. The existing three profile names do
+not imply different finite yields: current field offers and rules are shared.
+Cargo centers actual whole materials, a capsule only when carried, capacity and
+its deliberate Send action. Companions centers the same saved individual and
+supported visit. Final art, discovery depth and enjoyment remain separate gates.
+
+Every supported connected screen uses a retained LVGL tree and copied facts;
+transport serializers have no manual drawing fallback. Target adapters and
+hardware validation remain separate from host proof. A framework does not supply
+missing art or make acquisition engaging. Cargo exposes the actual manifest and
+sealing terms before one fresh Send; Lab acceptance remains separate.
 
 The current bounded timer-free Probe composition uses a native32px illustrated
 world in a384×320 viewport at33/98. A quiet mode rail and26px place title lead
@@ -275,15 +292,16 @@ The current phase is design iteration. Compare and review visual directions, the
 
 Lab, Companion and Dock are visible together. Lab retains its approved Overview
 art and controls. Companion uses directions, Back and Confirm across Probe,
-Cargo and Companions. Left/Right at the three-position selector preview a mode
-immediately, clamped at either end. Down or Confirm enters its remembered valid
-action without invoking it; a fresh Confirm acts. Up/Down moves action focus,
-clamped; Up from the first action or Back returns to the same-mode selector.
-Task Back restores its caller and row. Left/Right inside tasks never aliases
-commit or Back. Probe keeps earned whole supplies visible separately from
-time/chance gathering activity. Cargo expands inventory and opens a whole-item
-manifest; review pauses gathering and a fresh Confirm seals/sends. Mode browsing
-never transfers, discards or rerolls activity. Gathering progress is not cargo.
+Cargo and Companions. At the three-destination home, Up/Down and compatible
+Left/Right select a mode, clamped at either end. Confirm enters its remembered
+valid task without invoking it; a fresh Confirm acts. Up/Down moves action focus,
+clamped; Up from the first action or Back returns to the same selected home
+mode. Task Back restores its caller and row. Left/Right inside tasks never aliases
+commit or Back. Probe keeps earned whole supplies visible. Cargo exposes its
+whole-item manifest and the term that sending stops collection. One fresh Send
+seals/sends directly; there is no normal second Send review. Mode browsing never
+transfers, discards or starts an outing. Discard and empty-Finish reviews retain
+their separate deliberate decisions.
 Companions currently marks party assignment as unimplemented rather than assigning
 a resident or fabricating training effects.
 
@@ -295,7 +313,11 @@ send retains the sealed haul; loss after acceptance retains the receipt until
 Companion receives it. Duplicate acceptance cannot award another haul. Successful fresh acceptance ends the source expedition. Before acceptance use
 Returning; afterward use Returned or Expedition ended, separately from receipt
 status. The matching receipt enables a new outing, never Continue for the ended
-route. Browsing Cargo or cancelling before Send keeps the current expedition.
+route. Browsing Cargo or leaving it before Send keeps the current expedition. On world
+acceptance, current outgoing supplies/sample become zero on Companion and Lab
+reception, including committed-receipt recovery. Accepted historical amounts
+remain only in Received records and the immutable journal; receipt status does
+not redraw them as current cargo.
 Gathering progress remains an activity state on Companion and is never presented
 as an unfinished inventory item in either manifest. Timing/chance fixtures are
 provisional under [gameplay](gameplay.md#research-collection-and-gathering--accepted).

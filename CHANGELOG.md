@@ -2,6 +2,13 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-01 [12:04] — Deployment notes in the sandbox
+
+[PR63](https://github.com/PacoCotera/critter-lab/pull/63) · release `669d0bd`
+
+- **Sandbox:** a Deployment changelog link beside the release details opens these public notes. Entries group the biggest changes by device/domain and distinguish delivered work from open improvements.
+- **Sandbox saves:** this activation starts a fresh game across all three devices.
+
 ## 2026-10-01 [11:50] — Graphics framework cleanup
 
 [PR62](https://github.com/PacoCotera/critter-lab/pull/62) · release `292a305`

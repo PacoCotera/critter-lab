@@ -94,11 +94,11 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
   }
   if (device == KIT_LAB && kit->lab->page == V1_HOME) {
     SelectedLabRenderContext facts = {SELECTED_HAUL_NONE, {0,0,0}};
-    if (kit->journal.phase == KIT_ARRIVED || kit->journal.phase == KIT_COMMITTING)
+    int accepted = kit_delivery_accepted(kit);
+    if (accepted) facts.haul = SELECTED_HAUL_STORED;
+    else if (kit->journal.phase == KIT_ARRIVED || kit->journal.phase == KIT_COMMITTING)
       facts.haul = SELECTED_HAUL_WAITING;
-    else if (kit->journal.phase == KIT_ACK_PENDING || kit->journal.phase == KIT_COMPLETE)
-      facts.haul = SELECTED_HAUL_STORED;
-    memcpy(facts.incoming, kit->journal.cargo, sizeof(facts.incoming));
+    if (!accepted) memcpy(facts.incoming, kit->journal.cargo, sizeof(facts.incoming));
     LabHomeView view;
     if (!selected_lab_home_view(kit->lab, &facts, kit->normalization_pending, &view)) return 0;
     if (kit->failed) snprintf(view.warning, sizeof(view.warning), "%s", kit->lab->message);
@@ -122,8 +122,7 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
     return result;
   }
   if (device == KIT_COMPANION &&
-      ((kit->companion.page == COMP_MODES && kit->companion.mode == COMP_FRIENDS) ||
-       kit->companion.page == COMP_FRIENDS || kit->companion.page == COMP_FRIEND_VISIT)) {
+      (kit->companion.page == COMP_FRIENDS || kit->companion.page == COMP_FRIEND_VISIT)) {
     CompanionResidentView resident;
     if (!kit_resident_projection(kit, &resident)) return 0;
     int temporary = !context;
@@ -146,7 +145,7 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
   }
   if (device == KIT_COMPANION && (kit->companion.page == COMP_PROBE ||
       kit->companion.page == COMP_FIELD_SITE ||
-      (kit->companion.page == COMP_MODES && kit->companion.mode == COMP_PROBE))) return 0;
+      kit->companion.page == COMP_MODES)) return 0;
   CompanionCargoView view;
   if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) return 0;
   int temporary = !context;

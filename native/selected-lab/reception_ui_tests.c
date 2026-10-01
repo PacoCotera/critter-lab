@@ -103,14 +103,15 @@ static void projection_and_permissions(void) {
   accepted_sample(&lab, &kit);
   kit.failed = 1;
   assert(kit_reception_projection(&kit, &view));
-  assert(strstr(view.status, "stored") && strstr(view.sample, "fixture-saved-sample"));
+  assert(strstr(view.status, "source empty") && strstr(view.sample, "fixture-saved-sample"));
   assert(strstr(view.warning, "Receipt recovery") && !view.can_accept);
-  assert(view.stock[0] == 4 && view.incoming[0] == 3);
+  assert(view.stock[0] == 4 && !view.incoming[0] && !view.incoming[1] && !view.incoming[2]);
   kit.failed = 0;
   for (unsigned phase = KIT_ACK_PENDING; phase <= KIT_COMPLETE; ++phase) {
     kit.journal.phase = phase;
     kit.caller_valid = 1;
     assert(kit_reception_projection(&kit, &view) && view.mode == LAB_RECEPTION_ARRIVAL && !view.can_accept);
+    assert(!view.incoming[0] && !view.incoming[1] && !view.incoming[2]);
     assert(strstr(view.sample, "fixture-saved-sample"));
     kit.caller_valid = 0;
     assert(kit_reception_projection(&kit, &view) && view.mode == LAB_RECEPTION_LOG_DETAIL);
@@ -259,6 +260,8 @@ static void rendering_and_lifetime(void) {
     if (i >= 5) { accepted_sample(&lab, &kit); kit.caller_valid = 1; }
     LabReceptionView view;
     assert(kit_reception_projection(&kit, &view) && native_ui_reception(context, &view));
+    if (i >= 5) assert(!view.incoming[0] && !view.incoming[1] && !view.incoming[2]);
+    if (i == 3 || i == 4) assert(view.incoming[0] == 3 && view.incoming[1] == 2 && view.incoming[2] == 1);
     if (i == 2) assert(view.mode == LAB_RECEPTION_LOG_EMPTY && !view.received.detail);
     FILE *generic = tmpfile(), *persistent = tmpfile();
     assert(generic && persistent && kit_bmp(&kit, KIT_LAB, generic) && kit_bmp_ui(&kit, KIT_LAB, persistent, context, 1));
