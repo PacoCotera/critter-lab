@@ -20,8 +20,10 @@ contract and a [sample-specific question/reveal contract](design/research-and-cr
 The event and sample workpiece remain paper design. [Saved procedural geometry](docs/evidence/procedural-expeditions/README.md)
 is now a native playable slice with legacy-map/receipt compatibility and actual
 control/output proof. The active priority is the [native UI foundation](specs/architecture.md#native-ui-foundation):
-one real detailed Companion Cargo screen with LVGL, shared layout/theme and guarded
-physical focus. Finite map events and their saved consequences remain subsequent
+the first real detailed Companion Cargo screen with LVGL, shared layout/theme and
+guarded physical focus has passed its [native journey and output review](docs/evidence/native-ui-foundation/README.md).
+Owner permits complete re-layout. Next is a distinct Probe workpiece with useful
+map/findings space and compact cargo, rather than a mandatory dashboard. Finite map events and their saved consequences remain subsequent
 work; acquisition/research still need depth. Automatic
 Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
 values and visual treatment remain proposals. No new infrastructure, map service,

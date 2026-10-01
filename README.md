@@ -86,3 +86,5 @@ Beecho Lab is a project of **Dirty Pawz Press**. Software uses AGPL-3.0-only,
 hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0.
 See [licensing](LICENSING.md), [branding](BRANDING.md),
 [contributing](CONTRIBUTING.md) and [versioning](releases/README.md).
+
+The [native LVGL Cargo proof](docs/evidence/native-ui-foundation/README.md) records source-exact1× materials, retained layout/focus/frame widgets and actual physical-control handoff. Cargo alone has migrated; other screens and final HiBit craft remain open. Owner permits complete re-layout under the [Companion experience direction](specs/experience.md#framework-led-companion-layout).

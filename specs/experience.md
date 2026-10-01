@@ -22,6 +22,30 @@ player-directed. The [reviewed map study](../design/expedition-map-study/README.
 guides the accepted local map loop; rates, budgets and physical performance
 remain unvalidated.
 
+## Framework-led Companion layout
+
+Owner permits a complete game re-layout, particularly Companion, to use the
+selected displays and LVGL. Existing page geometry is not a design requirement.
+Approved Gemini/C18 identity and the physical controls remain requirements.
+
+The considered game/UX direction is a slim stable Probe / Cargo / Companions mode
+rail with distinct workpieces below it. Probe centers the legal map, player and
+known local finding, with compact current cargo always available. Cargo centers
+actual whole materials, a capsule only when carried, capacity and a deliberate
+return decision. Companions centers the same saved individual and supported visit.
+A universal dashboard would improve predictable summaries but adds entry steps
+and reduces subject space; it is not the preferred next prototype.
+
+This is a design direction, not approval of final composition. Start from each
+player question and real content, allocate layout, apply retained source art, then
+walk focus and return with the existing buttons. The first native framework proof
+covers Cargo only. Map terrain, research, residents and their transitions still
+need separate composed native proofs; a framework does not supply missing art or
+make waiting/acquisition engaging. Existing Cargo inspection and return costs six
+fresh gestures, and opening/cancelling Send review costs eight: migration alone
+does not remove that friction. Any changed return flow needs an explicit interaction
+prototype before becoming product behavior.
+
 ## Operate the object
 
 ### Current owner playtest requirements
