@@ -255,9 +255,9 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
     snprintf(value, sizeof(value), "%u", view->supplies[resource]);
     lv_label_set_text(context->quantity[resource], value);
   }
-  lv_label_set_text(context->capsule, view->capsule);
+  lv_label_set_text(context->capsule, view->accepted ? "Delivery record" : view->capsule);
   if (view->accepted) {
-    snprintf(value, sizeof(value), "Delivered: %u Data / %u Energy / %u Essence\n%s",
+    snprintf(value, sizeof(value), "%u Data / %u Energy / %u Essence\n%s",
              view->delivered[0], view->delivered[1], view->delivered[2],
              view->delivered_capsules ? "1 sample delivered to Lab" : "Supplies stored at Lab");
     lv_label_set_text(context->detail, view->failed ? view->detail : value);

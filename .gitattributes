@@ -1,2 +1,4 @@
 # Retained proof artifacts are checked by exact byte hashes across host platforms.
 docs/evidence/polished-core-v1/retained/** -text
+# Vendored upstream bytes and whitespace stay unchanged for provenance hashes.
+native/vendor/lvgl/** -text -whitespace
