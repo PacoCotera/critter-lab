@@ -2,6 +2,13 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-01 [11:50] — Graphics framework cleanup
+
+[PR62](https://github.com/PacoCotera/critter-lab/pull/62) · release `292a305`
+
+- **Graphics:** retired the old direct-pixel Lab rendering paths. Current device pages stay within LVGL; unsupported historical test pages fail explicitly.
+- **Gameplay:** existing controls, quantities and saved-state behavior are preserved. This activation starts fresh sandbox saves.
+
 ## 2026-10-01 [11:25] — Device UI and gathering update
 
 [PR61](https://github.com/PacoCotera/critter-lab/pull/61) · release `3fdda1d`
