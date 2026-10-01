@@ -97,7 +97,8 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     if (!ui->places[place]) goto failure;
   }
   if (!native_ui_frame_init(&ui->reached, ui->world, 36, 36, CORE_ART_BLUE_HIGHLIGHT_RGB)) goto failure;
-  const lv_point_precise_t diamond[9] = {{16,4},{20,12},{28,16},{20,20},{16,28},{12,20},{4,16},{12,12},{16,4}};
+  /* A small corner pin marks the occupied tile without covering its finding. */
+  const lv_point_precise_t diamond[9] = {{8,4},{10,6},{12,8},{10,10},{8,12},{6,10},{4,8},{6,6},{8,4}};
   memcpy(ui->player_points, diamond, sizeof(diamond));
   ui->player[0] = line(ui->world, ui->player_points, 9, CORE_ART_BLUE_RGB, 4);
   ui->player[1] = line(ui->world, ui->player_points, 9, CORE_ART_INK_RGB, 2);
@@ -126,8 +127,8 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     if (!ui->quantities[material]) goto failure;
   }
   ui->capsule = image(ui->root, sample, 296, 403);
-  ui->capsule_text = text(ui->root, small, 357, 409, 72, 22, "Capsules");
-  ui->capsule_quantity = text(ui->root, action, 357, 432, 72, 27, "0 / 1");
+  ui->capsule_text = text(ui->root, small, 349, 409, 72, 22, "Capsules");
+  ui->capsule_quantity = text(ui->root, action, 349, 432, 72, 27, "0 / 1");
   ui->context = text(ui->root, body, 28, 484, 394, 24, "");
   ui->source = text(ui->root, small, 28, 504, 394, 22, "");
   const char *names[] = {"Data", "Energy", "Essence"};

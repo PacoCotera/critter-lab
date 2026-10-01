@@ -76,6 +76,9 @@ static int compose(NativeUiContext *context) {
   context->cargo_root = surface(context->screen, 450, 600);
   if (!context->cargo_root) return 0;
   native_ui_surface(context->cargo_root, CORE_ART_GRAPHITE_RGB, CORE_ART_BLUE_RGB, 0);
+  /* Applying the surface style removes LVGL's local size styles. Restore the
+   * full display bounds before composing children, or Cargo clips to130px. */
+  lv_obj_set_size(context->cargo_root, CARGO_WIDTH, CARGO_HEIGHT);
   lv_obj_t *rim = surface(context->cargo_root, 426, 576);
   if (!rim) return 0;
   lv_obj_set_pos(rim, 12, 12);

@@ -52,6 +52,9 @@ clamps at world edges; it has no separate input or saved state. Only disclosed
 legal routes and visible places appear. A distinct abstract player marker,
 reached-place cue and legal route continuations preserve orientation. Inspection
 keeps the current place in view rather than replacing the whole map with a ledger.
+The marker occupies a small tile corner so it does not cover the place itself.
+After collecting the sealed sample, inspection displays completion status and
+Back to the map; it does not present a second acquisition as a focused action.
 
 Current whole cargo remains in a72px band beneath the map. Resource preparation
 and current place/action occupy a separate90px workpiece: progress is work toward

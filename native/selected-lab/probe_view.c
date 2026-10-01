@@ -68,7 +68,7 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
   snprintf(out->context, sizeof(out->context), "%s", view->message[0] ? view->message :
       live && out->field.map.site_collected[4] ? "Sealed sample / contents unknown" :
       live && out->field.map.site_inspected[1] ? "Trace found / a known trail continues" :
-      live ? "Preparation toward a supply attempt" : out->status);
+      live ? "Gathering preparation" : out->status);
   /* Presentation wording keeps the existing outcome/recovery meaning in one
    * 18px line; Kit's saved message and game command semantics stay unchanged. */
   if (!strcmp(view->message, "Sealed-container trail found. Route revealed."))
@@ -112,7 +112,14 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
     for (unsigned action = 0; action < out->action_count; ++action)
       snprintf(out->actions[action], sizeof(out->actions[action]), "%s", kit_option(kit, KIT_COMPANION, action));
   }
+  int sample_collected = out->phase == PROBE_SITE && out->field.current_site == 4 &&
+                         out->field.map.site_collected[4];
+  if (sample_collected) {
+    out->action_count = 0;
+    strcpy(out->context, "Sample collected / sealed contents unknown");
+  }
   snprintf(out->footer, sizeof(out->footer), "%s", selector ? "Left/Right: mode / Down/Confirm: enter" :
+      sample_collected ? "Back: map" :
       out->phase == PROBE_MAP ? "Directions: move / Confirm: inspect / Back: modes" :
       out->phase == PROBE_SITE ? "Up/Down: choose / Confirm: act / Back: map" :
       "Up/Down: choose / Confirm: enter / Back: modes");

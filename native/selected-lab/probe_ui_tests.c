@@ -41,6 +41,14 @@ static void projection_and_phase_guards(void) {
   assert(kit_probe_projection(&kit, &after));
   assert(after.phase == PROBE_SITE && after.action_count == 3 && after.focus == 2);
   assert(!strcmp(after.actions[2], "Gather Essence"));
+  lab.game.field.x = lab.game.field.site_x[4];
+  lab.game.field.y = lab.game.field.site_y[4];
+  lab.game.field.trace = 1;
+  lab.game.field.collected = 1;
+  assert(kit_probe_projection(&kit, &after));
+  assert(after.phase == PROBE_SITE && !after.action_count);
+  assert(!strcmp(after.footer, "Back: map"));
+  lab.game = unchanged;
   CompanionCargoView cargo;
   assert(!kit_cargo_projection(&kit, &cargo));
   CompanionCargoFacts facts;
@@ -155,6 +163,13 @@ static void retained_roots_and_memory(void) {
   assert(cargo_pixels);
   rgb = native_ui_cargo(context, &cargo, 1);
   assert(rgb);
+  /* Switching equality alone can accept two identically clipped frames.
+   * Retained Cargo must also paint its frame outside LVGL's default130px root. */
+  const unsigned frame_points[][2] = {{225,14},{225,585}};
+  for (unsigned point = 0; point < 2; ++point) {
+    unsigned pixel = (frame_points[point][1] * 450 + frame_points[point][0]) * 3;
+    assert(rgb[pixel] != rgb[0] || rgb[pixel + 1] != rgb[1] || rgb[pixel + 2] != rgb[2]);
+  }
   memcpy(cargo_pixels, rgb, 450 * 600 * 3);
   kit.companion.page = COMP_FIELD_SITE;
   assert(kit_probe_projection(&kit, &probe));
