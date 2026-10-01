@@ -45,6 +45,9 @@ typedef struct {
   char location[64], outing_id[64], route[40];
   uint32_t earned[3], preparation_ms[3], preparation_status[3];
   uint32_t remaining_chances[3], capsule_count, capsule_capacity;
+  /* Delivery evidence is immutable history, never current hold usage. */
+  uint32_t sent[3], sent_capsule_count;
+  unsigned delivery_accepted;
   char source_name[3][32];
   unsigned action_count, focus;
   char actions[EXPEDITION_VIEW_ACTIONS][64], message[96];

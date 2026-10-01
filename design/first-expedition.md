@@ -1,5 +1,10 @@
 # First expedition: a material trail
 
+Retained original illustrative fixture. Its Lab-selected expedition and timed
+completion examples below are superseded by current [gameplay](../specs/gameplay.md)
+and [field design](probe-sampling.md#next-discovery-trial). It supplies prior
+storytelling references, not current device authority or implemented events.
+
 This is the first expedition within a longer research process, not a complete acquisition-to-research journey. Accepted research direction requires several expeditions: the Probe shows gathering progress toward known needs, while the Lab reveals surprises in the same sample cache, retains discoveries and shows research progress and further gathering needs. See [gameplay](../specs/gameplay.md#research-is-discovery-across-expeditions--accepted). This fixture must be extended with further gathering and resumed research before it represents the connected experience.
 
 **One illustrative fixture for review and simulation.** Accepted: choose an expedition at the Lab, operate the Probe simply without a phone, bring back resources and sample clues, then research every required genomic region before creation. **Names, findings and event effects below are PROPOSED; early-return and missed-encounter policies are accepted in gameplay**, not canonical content or validated hardware behavior. The accepted [sample disclosure boundary](../specs/probe.md#sample-disclosure-boundary--accepted-correction) overrides earlier structural-clue examples. See [Probe sampling](probe-sampling.md), [research](research-and-creation.md) and [creation terms](creation-terms.md).

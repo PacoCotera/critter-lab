@@ -1,0 +1,39 @@
+{
+  "sourceRevision": "864eca5d555c8d1624cde9a7fb646420ec5d8202",
+  "context": "Actual native exports and browser presenter. HTTP return uses isolated earned supply; research continues actual coordinator playtest with earned supplies. No production-game mutation or supply grants.",
+  "review": "Independent technical source review plus actual shared-frame review by art direction and pixel craft; coordinator actual browser controls. Narrow repair only, no fun or physical approval.",
+  "files": [
+    {
+      "file": "repair-gathering-companion.png",
+      "sha256": "a8421d34e622774561a910bafb756ecd750352454f44086e6c6f1c433ea55199"
+    },
+    {
+      "file": "repair-sending-offline-companion.png",
+      "sha256": "9cd2e50313b7c6843e61a8321cdf4c6c575ceae35c1b9c9378845554c2ad6e8d"
+    },
+    {
+      "file": "repair-accepted-offline-companion.png",
+      "sha256": "a5b8795a4b3411cd77c3d7a46f7a6f0743641a530ffb53c2507d2f3b5046a43b"
+    },
+    {
+      "file": "repair-complete-companion.png",
+      "sha256": "405d72103a09eaa11594639247fb97b8c14ffb690af03867bef64e142d04842f"
+    },
+    {
+      "file": "repair-complete-dock.png",
+      "sha256": "f927a82e3e95cdfe5231677e55d5f659438fe98f2f07b384bc08f094dd32d089"
+    },
+    {
+      "file": "repair-complete-form-finding.png",
+      "sha256": "4089bb28ac52715d5bea07905c7bd837a9e53b38670e2c021b6624365249a975"
+    },
+    {
+      "file": "repair-home-restored.png",
+      "sha256": "4c270c584580e8151a4c3854df3478632d7d2eba803cde95af595cbfb552ae11"
+    },
+    {
+      "file": "repair-browser-finding.jpg",
+      "sha256": "02e240471bf45e3c3f84ac7fc9a6457bae241902c63136c2988eee2d42bb1e7e"
+    }
+  ]
+}

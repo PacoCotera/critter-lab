@@ -5,9 +5,13 @@
 ## Discovery proposal — 30 September 2026
 
 Joined game-design, genomics and UX proposal; methods, costs and pacing remain
-for owner steering. The current native loop still has five fixed purchases and
-two identical supported Pip outcomes per sample. Better labels alone cannot make
-that loop variable. Accepted requirements remain sample-specific retained
+for owner steering. The current native loop now retains authored A/B findings,
+different useful investigation paths and supported forms. Owner playtest still
+finds samples too alike and research a checklist; this implementation is not an
+accepted discovery experience. The next interaction must make specimen-specific
+evidence the main workpiece, with active comparison and meaningful next questions.
+Navigation names choices; results, errors and explanations belong beside evidence.
+Exact comparison content and rules remain proposals. Accepted requirements remain sample-specific retained
 knowledge, complete supported selection, indivisible supplies and deliberate
 creation. This proposal explains the next bounded content/interaction proof.
 
@@ -67,6 +71,59 @@ if unresolved. Omit redundant resolved work rather than charge again. Method
 applicability, prerequisites and exact price remain proposed. Deterministic
 findings from accepted sample/method come first; assay noise, research failure
 and destructive tests are not introduced here.
+
+### Next comparison trial
+
+**Provisional paper proposal; no new native mechanic or evidence approved.**
+The [joined discovery trial](probe-sampling.md#next-discovery-trial) needs a
+truthful mapping before illustration or code. Current `pip-discovery-v1` authors
+A/B findings and support relationships, but no raw assay traces, measured values
+or evidence-to-alignment rule. Matching a cursor, waveform or silhouette cannot
+justify a new finding. Sample identity marks are not a genomic map.
+
+The smallest truthful alternative is an active **paired-reference comparison**
+of B's existing walking-effort relationship in the main workpiece. It explains
+an accepted finding; it does not establish a pre-finding inference minigame.
+Its enjoyment and fit with the owner's desired depth remain unvalidated.
+
+| State | Visible content and physical input | Knowledge and spending |
+| --- | --- | --- |
+| Before | After B's pattern and movement findings, show known plain/carried coat and steady/burst-capable movement badges. Walking-effort pairing remains unknown. Preview `Compare movement effort — 4 Essence`; Back returns. | Preview is free. No result-pair tags, complete founder portrait, genotype or invented traces. Price is the current provisional fixture. |
+| Start | A fresh Confirm submits the existing comparison on the retained sample/content version. | Current native investigation atomically records its finding and spends 4 Essence once; it has no paid unfinished puzzle session. Rejection spends nothing. |
+| Compare | Under `Same walking action · healthy/rested adult · firm ground · mild conditions`, Left/Right selects Steady or Burst-capable; Confirm pins that authored pair beside a baseline card. Up/Down emphasizes movement mode or walking effort. | Steady pairs with Lower walking effort; Burst-capable pairs with Baseline walking effort. Tags and connecting brackets illustrate qualitative fictional reference content, not measurements. Inspection is free and has no correct-answer gate. |
+| Retain | Back exits inspection. Reopen the same finding or choose the next useful investigation. | Preserve sample, finding and spend through retry/reload. Animation/focus cannot grant knowledge. Known and redundant investigations remain free. |
+
+Exact comparison rule: keep walking action and context identical. B's steady
+alternative has lower reference walking energy than baseline; its burst-capable
+alternative equals baseline walking energy. Do not imply numeric savings, speed,
+burst cost, endurance, fatigue or universally superior movement. Never visually
+combine burst capability with lower walking effort into an unsupported third form.
+Use cropped symbolic panels and categorical tags, not distances, timed gait,
+numbered energy bars or full early portraits. Controls are directions, Confirm
+and Back; the removed knob and screen-click shortcuts stay out.
+
+This records the one existing `effort-comparison` finding and movement/support
+references. If heritage was already known, the complete required reference set
+permits supported-form selection through the existing creation boundary. If this
+comparison runs early, baseline/heritage remain unknown; complete selection stays
+unavailable and a redundant movement purchase is unnecessary. An uncertain accepted
+operation is reconciled using the same request, never charged again. Back before
+Start is free; Back after Start retains the result rather than refunding it.
+
+**A contrast:** both A alternatives are short-burst capable and movement-efficient,
+so this effort comparison would manufacture a distinction. A's useful existing
+follow-up instead resolves plain coat with pale variation carried versus pale
+markings. Only after coat-comparison acceptance may cropped reference swatches
+show those alternatives; the plain swatch has no faint pale markings. Running
+that comparison early leaves baseline and movement unresolved. Neither A nor B
+represents a hidden finished founder or a physically measured living specimen.
+
+An artist can illustrate three truthful frames: unknown B pairing, accepted
+paired workpiece, retained finding/next question. A manipulation that genuinely
+reveals previously unknown information still needs authored specimen evidence,
+an interpretation rule and a narrow disclosure contract. Those are missing
+content decisions, not details an artist may invent. Stop at this paper trial;
+do not promote explanatory inspection into an approved minigame.
 
 ### Genomic acceptance boundary
 

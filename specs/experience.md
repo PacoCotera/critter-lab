@@ -36,8 +36,11 @@ Cargo trap is pending isolated reproduction; it is not claimed repaired.
 
 Keep the lab-wide Home overview and focus-driven feature previews. Correct the
 prototype's single-device shortcut: Lab plans and receives; the separate Companion
-conducts Probe-mode expeditions and owns carried cargo until acknowledged receipt.
-The simulator must make both device roles and their transfer visible.
+conducts Probe-mode expeditions and carries cargo until successful Lab acceptance.
+Acceptance clears current carried supplies and capsules when it credits Lab.
+The immutable delivery record and pending acknowledgment stay distinct from
+current inventory; receipt completion cannot award another copy. The simulator
+must make both device roles and this ownership transition visible.
 
 Display resources as integer counts with explicit units; gathering progress is
 separate from usable stock. Do not round away saved quantities or imply that a
@@ -109,7 +112,7 @@ The overview keeps the selected sample, useful research topics, retained knowled
 
 #### Worked interaction: Sample A
 
-Implementation evidence: the [selected Lab prototype](../prototype/lab-selected/README.md) supports the authored two-Data Markings study, local saved finding, reload/retry and free inspection through the console controls. This is an isolated browser fixture using the existing Pip engine; it does not establish expedition inventory integration, incubation, final result artwork or a complete Lab application.
+Current implementation evidence is the [connected native journey](../docs/evidence/playable-expeditions/README.md). The two-Data browser study described below is a retained earlier illustrative fixture, not current cost, controls or connected-game authority.
 
 The existing illustrative fixture starts with Data 2, Energy 1 and Essence 0. A pale-marking variant is known; the other required markings fact and adult-reference appearance are unresolved. All other required information in this small authored example is assumed established. Labels below illustrate purpose and hierarchy, not final player copy.
 
@@ -126,7 +129,7 @@ Each view answers its own purpose: overview offers useful places to explore; rev
 
 #### Connected sample overview, study review and inspection
 
-The [27 connected screen proposal](../design/game-art-proposals/README.md#connected-feature-led-research-proposal--27) uses a clearly illustrative combination of existing crown, eye-ring and markings findings. It is not a new canonical baseline. Crown and Eye rings are established free-inspection destinations; Markings begins with known pale inheritance and unknown expected appearance. The scope label is Research because the view crosses genomic dimension families.
+The retained earlier screen27 proposal (historical composition fixture, not current controls or canonical traits) uses a clearly illustrative combination of existing crown, eye-ring and markings findings. It is not a new canonical baseline. Crown and Eye rings are established free-inspection destinations; Markings begins with known pale inheritance and unknown expected appearance. The scope label is Research because the view crosses genomic dimension families.
 
 - **Overview:** three stable feature targets. Rotate moves one focus; Confirm inspects a known finding for free or opens the supported Markings study review. Action hints follow the focused target. Back restores collection. Only Markings has an authored study in this fixture; do not invent studies for the other two.
 - **Review:** name the study purpose and show cost2 Data packs against stock2. Start study is the explicit spending boundary. Return or Back leaves without spending and restores Markings focus. The reference art does not reveal the unknown result.
@@ -152,7 +155,7 @@ research resolves on commitment and has no background research queue.
 
 ### Simulated console controls — accepted
 
-The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Research/Home/Library/Habitat workspace keys in the middle, Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Home opens Overview · Lab; Habitat includes the full revealed-resident list; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
+The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Home/Research/Library/Habitat workspace keys in the middle (yellow Home first, orange Research second), Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Home opens Overview · Lab; Habitat includes the full revealed-resident list; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
 
 Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 

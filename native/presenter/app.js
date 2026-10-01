@@ -1,6 +1,8 @@
 let sandbox;
 let replacingSandbox = false;
 const stopDeviceTransports = [];
+const refreshDeviceFrames = new Map();
+let acceptancePaintPending = false;
 
 function stopSandboxTransports() {
   replacingSandbox = true;
@@ -47,6 +49,8 @@ async function connectDevice(deviceId, controls) {
   let pendingActivations = 0;
   let frameInFlight = false;
   let pollInFlight = false;
+  let drawing = Promise.resolve();
+  let acceptedHaulPainted;
 
   stopDeviceTransports.push(() => {
     inputBlocked = true;
@@ -100,7 +104,7 @@ async function connectDevice(deviceId, controls) {
         inputResultRevision = state.revision;
         if (inputResultRevision === inputStartRevision) inputStartedAt = 0;
       }
-      if (generation === transportGeneration && !inputBlocked) receive(state);
+      if (generation === transportGeneration && !inputBlocked) await receive(state);
     }).catch(() => generation === transportGeneration ? stopAfterTransportFailure() : undefined)
       .finally(() => {
         --pendingCommands;
@@ -108,9 +112,22 @@ async function connectDevice(deviceId, controls) {
       });
   }
 
-  function receive(state) {
+  async function receive(state) {
     // A background status response can arrive after a newer input response.
     if (!acceptSandbox(state.sandbox) || inputBlocked || state.revision < revision) return;
+    // In this single-host presenter acceptance clears native Companion cargo.
+    // Paint that authoritative view before exposing increased Lab stock.
+    if (deviceId === 'lab' && state.phase >= 4 && state.haul &&
+        acceptedHaulPainted !== state.haul) {
+      acceptancePaintPending = true;
+      try {
+        const refreshCompanion = refreshDeviceFrames.get('companion');
+        if (!refreshCompanion) throw new Error('Companion transport not connected.');
+        await refreshCompanion();
+        acceptedHaulPainted = state.haul;
+      } finally { acceptancePaintPending = false; }
+      if (inputBlocked || state.revision < revision) return;
+    }
     revision = state.revision;
     (deviceId === 'lab' ? ['research', 'critters', 'library', 'habitat'] : []).forEach((name, index) => {
       document.querySelector(`#${deviceId}-${name}`).setAttribute('aria-pressed', String(name === 'critters' ? state.page === 'home' : state.workspace === index));
@@ -118,7 +135,7 @@ async function connectDevice(deviceId, controls) {
     status.textContent = `${state.focus} · ${state.transfer}`;
     const link = document.querySelector(`#${deviceId}-link`);
     if (link) link.checked = state.online;
-    if (!frameInFlight && visibleRevision !== revision && requestedRevision !== revision) draw(revision);
+    if (!frameInFlight && visibleRevision !== revision && requestedRevision !== revision) drawing = draw(revision);
   }
 
   async function draw(frame) {
@@ -166,9 +183,20 @@ async function connectDevice(deviceId, controls) {
       if (url) URL.revokeObjectURL(url);
       frameInFlight = false;
       // Replace obsolete view work with only the latest native revision.
-      if (!inputBlocked && frame !== revision && visibleRevision !== revision) draw(revision);
+      if (!inputBlocked && frame !== revision && visibleRevision !== revision) drawing = draw(revision);
     }
   }
+
+  refreshDeviceFrames.set(deviceId, async () => {
+    for (let attempt = 0; attempt < 5 && !inputBlocked; ++attempt) {
+      const response = await fetch(`/api/devices/${deviceId}/status`);
+      if (!response.ok) throw new Error('Native acceptance refresh unavailable.');
+      await receive(await response.json());
+      await drawing;
+      if (visibleRevision && visibleRevision === revision) return;
+    }
+    throw new Error('Accepted Companion frame not painted.');
+  });
 
   const held = new Map();
   for (const name of controls) {
@@ -185,11 +213,12 @@ async function connectDevice(deviceId, controls) {
         send('cancel');
         return;
       }
-      if (pendingActivations || !visibleRevision) {
+      if (pendingActivations || !visibleRevision || acceptancePaintPending) {
         // Bound action backlog. C decides whether the painted interaction still
         // means the same thing while time-only pixels are being refreshed.
         held.set(name, { pointer: event.pointerId, frame: visibleRevision, cancelled: true });
         button.setPointerCapture(event.pointerId);
+        status.textContent = 'Input not applied while updating. Press again after the screen is ready.';
         return;
       }
       held.set(name, { pointer: event.pointerId, frame: visibleRevision });
@@ -239,7 +268,7 @@ async function connectDevice(deviceId, controls) {
   try {
     const response = await fetch(`/api/devices/${deviceId}/status`);
     if (!response.ok) throw new Error('Native C process unavailable.');
-    receive(await response.json());
+    await receive(await response.json());
     if (!document.hidden) send('resume');
   } catch { await stopAfterTransportFailure(); }
 
@@ -252,7 +281,7 @@ async function connectDevice(deviceId, controls) {
     try {
       const response = await fetch(`/api/devices/${deviceId}/status`);
       if (!response.ok) throw new Error('Native device unavailable');
-      receive(await response.json());
+      await receive(await response.json());
     } catch { await stopAfterTransportFailure(); }
     finally { pollInFlight = false; }
   }

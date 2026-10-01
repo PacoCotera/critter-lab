@@ -1383,17 +1383,36 @@ int kit_received_projection(const DeviceKit *kit, unsigned index, ExpeditionRece
   out->trace_inspected = record->trace; out->sample_collected = record->collected;
   return 1;
 }
+static int delivery_accepted(const DeviceKit *kit) {
+  if (kit->journal.phase >= KIT_ACK_PENDING) return 1;
+  if (kit->journal.phase != KIT_COMMITTING) return 0;
+  /* The game commit can survive a failed receipt-sidecar write. */
+  const GameState *game = &kit->lab->game;
+  if (kit->journal.version == 5 &&
+      (game->field.version || game->expedition_id[0])) return 0;
+  for (unsigned i = 0; i < GAME_OPERATION_SLOTS; ++i)
+    if (game->operations[i].sequence == kit->journal.accept_sequence &&
+        !strcmp(game->operations[i].id, kit->journal.haul_id)) return 1;
+  return 0;
+}
 int kit_field_projection(const DeviceKit *kit, ExpeditionFieldView *out) {
   memset(out,0,sizeof(*out));
   const GameState *game = &kit->lab->game;
   const GameExpeditionField *field = &game->field;
+  if (kit->sealed_field.version && kit->journal.phase >= KIT_WAITING) {
+    out->delivery_accepted = delivery_accepted(kit);
+    out->sent_capsule_count = kit->sealed_field.collected;
+    for (unsigned resource = 0; resource < 3; ++resource)
+      out->sent[resource] = kit->sealed_field.cargo[resource]/GAME_SUPPLY_UNIT;
+  }
   if (!field->version) {
     if (!kit->sealed_field.version || kit->journal.phase < KIT_WAITING) return 0;
     const GameReceivedExpedition *sealed = &kit->sealed_field;
     strcpy(out->outing_id,sealed->expedition_id);
-    out->capsule_count = sealed->collected; out->capsule_capacity = 1;
+    out->capsule_count = out->delivery_accepted ? 0 : sealed->collected;
+    out->capsule_capacity = 1;
     for (unsigned resource = 0; resource < 3; ++resource) {
-      out->earned[resource] = sealed->cargo[resource]/GAME_SUPPLY_UNIT;
+      out->earned[resource] = out->delivery_accepted ? 0 : out->sent[resource];
       out->preparation_status[resource] = EXPEDITION_PREP_PAUSED;
     }
     return 1;
@@ -1504,7 +1523,9 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                  ? (kit->journal.phase == KIT_ARRIVED ? "Accept haul"
                                                       : "Companion expeditions")
                  : selected_lab_focus(kit->lab))
-          : kit_option(kit, device, view->focus);
+          : device == KIT_COMPANION && game->field.version && view->page == COMP_PROBE
+              ? "Move on paths / Confirm: inspect a place"
+              : kit_option(kit, device, view->focus);
   const char *page = device == KIT_LAB          ? selected_lab_page(kit->lab)
                      : device == KIT_DOCK       ? "dock"
                      : view->page == COMP_PROBE ? "probe"
@@ -1522,7 +1543,8 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                : device == KIT_DOCK    ? kit->journal.dock_online
                                        : 1;
   const uint32_t *cargo =
-      kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING
+      kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING &&
+              !delivery_accepted(kit)
           ? kit->journal.cargo
           : NULL;
   uint32_t visible_cargo[3] = {0};
@@ -1571,6 +1593,16 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
   fprintf(output, ",\"received_count\":%u,\"received_selected\":%u,\"received_detail\":%s",
           device == KIT_LAB ? game->received_count : 0, kit->received_selected,
           kit->received_detail ? "true" : "false");
+  if (device == KIT_COMPANION) {
+    ExpeditionFieldView field;
+    int has_field = kit_field_projection(kit, &field);
+    fprintf(output, ",\"cargo_capsules\":%u", has_field ? field.capsule_count : 0);
+    if (has_field && kit->sealed_field.version && kit->journal.phase >= KIT_WAITING) {
+      fprintf(output, ",\"delivery_record\":{\"accepted\":%s,\"supplies\":[%u,%u,%u],\"capsules\":%u}",
+              field.delivery_accepted ? "true" : "false", field.sent[0], field.sent[1],
+              field.sent[2], field.sent_capsule_count);
+    }
+  }
   if (device == KIT_COMPANION && game->field.version) {
     ExpeditionFieldView field;
     kit_field_projection(kit, &field);

@@ -197,6 +197,10 @@ def run(binary, proof=None):
             assert accepted["phase"] == 4 and accepted["stock"] == credited
             assert accepted["expedition_seconds"] == 0 and accepted["samples"] == 1
             assert accepted["received_count"] == 1
+            assert state("companion")["cargo"] == [0, 0, 0]
+            assert state("companion")["cargo_capsules"] == 0
+            assert state("companion")["delivery_record"] == {
+                "accepted": True, "supplies": [amount // 100 for amount in cargo], "capsules": 1}
             for device in ("lab", "companion", "dock"):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]

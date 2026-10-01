@@ -222,10 +222,10 @@ static void map_scene(RenderRow *row, const ExpeditionMapView *view, int x, int 
   for (unsigned site=0; site<5; ++site) {
     if (!view->site_visible[site]) continue;
     int text_width=native_text_width(font_for(14,1),site_names[site]);
-    int left=x+view->site_x[site]*20-18;
+    int left=x+(view->site_x[site]*20-crop_x)*scale-18;
     if (left+text_width+4>x+width) left=x+width-text_width-4;
     if (left<x+3) left=x+3;
-    int top=y+view->site_y[site]*20+23;
+    int top=y+(view->site_y[site]*20-crop_y)*scale+23;
     if (top+16>y+height) top=y+height-17;
     rectangle(row,left-3,top-2,text_width+6,18,0x243a35);
     label(row,left,top,site_names[site],14,1,0xe2dec6,text_width+1);
@@ -277,7 +277,8 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
   int shift=site && visible_actions>2?30:0;
   if (!site) {
     panel(&row,23,107,404,232);
-    map_scene(&row,&view->map,25,113,400,220,1,0,0,1,1);
+    /* Crop the raster, not tile positions: keep both bevels and blue strokes. */
+    map_scene(&row,&view->map,29,113,392,220,1,4,0,1,1);
   } else {
     panel(&row,24,110,402,220-shift);
     label(&row,42,132,view->location,25,1,INK,362);

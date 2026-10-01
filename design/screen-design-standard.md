@@ -2,7 +2,7 @@
 
 ## Approved Lab UI baseline
 
-Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The [baseline entry](game-art-proposals/35-vault-composition/README.md) records scope and evidence. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
+Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The scope of that approval is stated below. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
 
 The Lab is a playful genetics research device: graphite surfaces, defined electric-blue frames, saturated crisp pixel artwork and selective warm focus. Preserve biological curiosity and the original pixel personality; avoid cosmic/starfield imagery, purple-dominant surfaces, generic web cards and hardware depicted inside hardware.
 
@@ -11,7 +11,7 @@ The Lab is a playful genetics research device: graphite surfaces, defined electr
 | Element | Approved baseline / derivation rule |
 | --- | --- |
 | Base surfaces | Graphite/dark neutral depth; quieter than art and information |
-| Frames | Defined electric-blue leading edges, dark edge contrast and consistent stepped corners; crisp rather than bloomy |
+| Frames | Defined electric-blue leading edges, dark edge contrast and connected compact pixel chamfers; crisp rather than bloomy |
 | Resources | Saturated blue Data card, gold faceted Energy crystal, rounded translucent lime Essence; stable shape/color identity across Lab screens |
 | Focus | Quiet dark action with selective warm edge/corner highlights and readable light text; one console target, no solid bright yellow fill dominating the screen |
 | Header | Unified sample/context identity and aligned resource inventory; preserve hierarchy and comfortable spacing |
@@ -137,3 +137,16 @@ The connected native Companion/reception text-panel composition is rejected as v
 Translate the artist's composition, frame craft, typography and visual subjects into reusable assets with live state. Preserve real counts, gathering attempts, ownership, physical controls and saved outcomes. Use one reviewed resource master family and one type hierarchy across states; generated sibling images still vary and cannot serve as independent per-screen sprite libraries.
 
 Inspect a composed native-size proof before promoting the new visual treatment. Keep concept assessment separate from native/all-state acceptance. A whole-screen screenshot with baked counters behind overlays, arbitrary sprite scaling or generic replacement panels does not establish fidelity.
+
+## Current shared frame correction
+
+Owner rejected the native border breaks as damaged-looking on30September2026.
+Art direction and pixel production jointly diagnosed the16px-wide,8px-high
+reentrant shoulders and staggered layer transitions. The correction uses one
+connected6px chamfer in2px steps for every local inset layer, a2px blue perimeter,
+quiet dark keyline/inner contrast and graphite field. Warm focus uses that same
+contour with one subdued halo. Upper-edge accents remain on the actual rim;
+no detached shelves, projecting cap rails or arbitrary long side accents.
+This is a shared craft repair preserving C18 direction, not final all-screen art
+approval. Native shallow/tall/nested panels and focus are inspected at1x; original
+references and portrait masters remain retained.

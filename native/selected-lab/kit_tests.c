@@ -766,9 +766,25 @@ static void field_control_and_receipt(const char *directory) {
   assert(selected_lab_load(&lab,path,100));
   DeviceKit kit;
   assert(kit_init(&kit,&lab,100));
+  uint64_t navigation_sequence = lab.game.last_operation_sequence;
+  press(&kit, KIT_LAB, SELECTED_LIBRARY_DOWN);
+  assert(lab.page == V1_LIBRARY && selected_lab_options(&lab) == 1);
+  assert(!strcmp(selected_lab_focus(&lab), "Back to research"));
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_SAMPLES && lab.game.last_operation_sequence == navigation_sequence);
+  press(&kit, KIT_LAB, SELECTED_HOME_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(lab.game.field.version && lab.game.field.active_source == GAME_FIELD_NONE);
+  ExpeditionFieldView map_view;
+  assert(kit_field_projection(&kit, &map_view));
+  uint8_t map_row[450 * 3];
+  expedition_field_row(&map_view, 200, map_row);
+  const unsigned border_columns[] = {23, 24, 425, 426};
+  for (unsigned i = 0; i < sizeof(border_columns)/sizeof(border_columns[0]); ++i) {
+    const uint8_t *pixel = map_row + border_columns[i] * 3;
+    assert(pixel[0] == 35 && pixel[1] == 137 && pixel[2] == 198);
+  }
   unsigned map_frame = kit_revision(&kit,KIT_COMPANION);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_FIELD_SITE && lab.game.field.active_source == GAME_FIELD_NONE);
@@ -821,6 +837,11 @@ static void field_control_and_receipt(const char *directory) {
   press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(kit.journal.version == 5 && kit.journal.phase == KIT_WAITING);
+  ExpeditionFieldView sent_view;
+  assert(kit_field_projection(&kit, &sent_view));
+  assert(!sent_view.delivery_accepted && sent_view.capsule_count == 1 &&
+         sent_view.sent_capsule_count == 1);
+  assert(!memcmp(sent_view.earned, sent_view.sent, sizeof(sent_view.earned)));
   selected_lab_init(&lab);
   assert(selected_lab_load(&lab,path,300));
   assert(kit_init(&kit,&lab,300));
@@ -832,6 +853,13 @@ static void field_control_and_receipt(const char *directory) {
   press(&kit,KIT_LAB,SELECTED_CONFIRM_DOWN);
   assert(kit.journal.phase == KIT_ACK_PENDING && lab.game.sample_count == 1 && lab.game.received_count == 1);
   assert(!lab.game.field.version && !lab.game.expedition_id[0]);
+  ExpeditionFieldView accepted_view;
+  assert(kit_field_projection(&kit, &accepted_view));
+  assert(accepted_view.delivery_accepted && !accepted_view.capsule_count &&
+         accepted_view.sent_capsule_count == 1);
+  for (unsigned resource = 0; resource < 3; ++resource)
+    assert(!accepted_view.earned[resource] &&
+           accepted_view.sent[resource] == sent_view.sent[resource]);
   assert(kit.caller_valid);
   unsigned restored_home_focus = kit.caller.focus;
   press(&kit, KIT_LAB, SELECTED_BACK_DOWN);
@@ -853,6 +881,10 @@ static void field_control_and_receipt(const char *directory) {
   assert(lab.page == V1_HOME && !kit.caller_valid);
   GameState accepted = lab.game;
   kit.journal.phase = KIT_COMMITTING;
+  /* The committed game remains authoritative if receipt persistence fails. */
+  assert(kit_field_projection(&kit, &accepted_view));
+  assert(accepted_view.delivery_accepted && !accepted_view.capsule_count &&
+         !accepted_view.earned[0] && !accepted_view.earned[1] && !accepted_view.earned[2]);
   assert(kit_link(&kit,KIT_COMPANION,0)); /* Persist actual envelope crash fixture. */
   selected_lab_init(&lab);
   assert(selected_lab_load(&lab,path,400));
@@ -861,12 +893,31 @@ static void field_control_and_receipt(const char *directory) {
   assert(kit_link(&kit,KIT_COMPANION,1));
   kit_tick(&kit,402);
   assert(kit.journal.phase == KIT_COMPLETE && kit.acknowledged_capsules == 1);
+  assert(kit_field_projection(&kit, &accepted_view));
+  assert(accepted_view.delivery_accepted && !accepted_view.capsule_count &&
+         accepted_view.sent_capsule_count == 1);
   kit_tick(&kit,403);
   assert(kit.acknowledged_capsules == 1);
   ExpeditionReceivedView received;
   assert(kit_received_projection(&kit,0,&received));
   assert(received.record_count == 1 && !received.map.avatar_visible && received.sample_collected);
   assert(received.map.site_visible[2] && !received.map.site_visible[3]);
+  navigation_sequence = lab.game.last_operation_sequence;
+  press(&kit, KIT_LAB, SELECTED_RESEARCH_DOWN);
+  assert(lab.page == V1_SAMPLES);
+  press(&kit, KIT_LAB, SELECTED_DOWN_DOWN);
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDIES);
+  while (lab.focus + 1 < selected_lab_options(&lab))
+    press(&kit, KIT_LAB, SELECTED_DOWN_DOWN);
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDIES && strstr(lab.message, "Discover every region"));
+  /* A stale/incomplete supported-form view still has a real exit action. */
+  lab.page = V1_CREATE;
+  lab.focus = 0;
+  assert(!strcmp(selected_lab_focus(&lab), "Back to research"));
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.page == V1_STUDIES && lab.game.last_operation_sequence == navigation_sequence);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
   assert(lab.game.field.version && lab.game.field.sample_budget == GAME_MAX_SAMPLES - 1u);
