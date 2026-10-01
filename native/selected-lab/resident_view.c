@@ -5,11 +5,15 @@
 #include <time.h>
 
 #define TERMINATED(value) (memchr((value), 0, sizeof(value)) != NULL)
-int kit_resident_preview_projection(const DeviceKit *kit, CompanionResidentView *out) {
-  if (!kit || !kit->lab || !out || kit->companion.page != COMP_MODES ||
-      kit->companion.mode != COMP_FRIENDS || kit->companion.focus != COMP_FRIENDS ||
+int kit_resident_projection(const DeviceKit *kit, CompanionResidentView *out) {
+  if (!kit || !kit->lab || !out || kit->companion.mode != COMP_FRIENDS ||
       kit->residents.count > GAME_MAX_INDIVIDUALS ||
       !TERMINATED(kit->selected_resident_id) || !TERMINATED(kit->companion.message)) return 0;
+  unsigned page = kit->companion.page;
+  if (page != COMP_MODES && page != COMP_FRIENDS && page != COMP_FRIEND_VISIT) return 0;
+  if ((page == COMP_MODES && kit->companion.focus != COMP_FRIENDS) ||
+      (page == COMP_FRIENDS && kit->companion.focus >= (kit->residents.count ? kit->residents.count : 1)) ||
+      (page == COMP_FRIEND_VISIT && (!kit->residents.count || kit->companion.focus > 1))) return 0;
   /* These are the only strings consumed by existing identity/art/form guards.
    * Domain validity remains the saved-state owner's responsibility. */
   for (unsigned index = 0; index < kit->residents.count; ++index) {
@@ -23,12 +27,18 @@ int kit_resident_preview_projection(const DeviceKit *kit, CompanionResidentView 
   }
   const KitResidentProjection *record = kit_selected_resident(kit);
   if (kit->residents.count && (!record || !record->individual.revealed)) return 0;
+  if (record && page == COMP_FRIENDS &&
+      kit->companion.focus != (unsigned)(record - kit->residents.residents)) return 0;
   memset(out, 0, sizeof(*out));
   out->count = kit_resident_count(kit);
   out->failed = kit->failed || kit->lab->storage_error;
   out->online = kit->journal.companion_online != 0;
   out->current = kit_resident_cache_current(kit);
   out->portrait = RESIDENT_EMPTY_HABITAT;
+  out->screen = page == COMP_MODES ? RESIDENT_PREVIEW : page == COMP_FRIENDS ? RESIDENT_LIST : RESIDENT_VISIT;
+  out->focus = page == COMP_MODES ? 0 : kit->companion.focus;
+  out->suspended = kit->companion.suspended != 0;
+  out->pressed = kit->companion.gestures[8].held && kit->companion.gestures[8].allowed;
   time_t updated = (time_t)kit_residents_updated_at(kit) - 6 * 3600;
   struct tm *snapshot = gmtime(&updated);
   char stamp[16] = "unknown";
@@ -69,8 +79,26 @@ int kit_resident_preview_projection(const DeviceKit *kit, CompanionResidentView 
     strcpy(out->feedback, "Resident snapshot preserved. Storage recovery required.");
   } else if (kit->resident_cache_failed) {
     snprintf(out->status, sizeof(out->status), "Cache unavailable / last update %s", stamp);
-    strcpy(out->feedback, "Last snapshot only. Reconnect to the Lab to update.");
+    strcpy(out->feedback, page != COMP_MODES &&
+        !strncmp(kit->companion.message, "Visit saved", 11)
+        ? "Visit saved in Lab. Snapshot stale."
+        : "Last snapshot only. Reconnect to the Lab to update.");
   }
+  if (!out->failed && out->screen == RESIDENT_VISIT) {
+    out->action_count = 2;
+    out->available[0] = kit_resident_visit_available(kit);
+    out->available[1] = 1;
+    for (unsigned index = 0; index < 2; ++index)
+      snprintf(out->actions[index], sizeof(out->actions[index]), "%s", kit_option(kit, KIT_COMPANION, index));
+  } else if (!out->failed && out->screen == RESIDENT_LIST && !out->count) {
+    out->action_count = 1;
+    out->available[0] = 1;
+    snprintf(out->actions[0], sizeof(out->actions[0]), "%s", kit_option(kit, KIT_COMPANION, 0));
+  }
+  snprintf(out->footer, sizeof(out->footer), "%s", out->failed ? "Storage recovery required" :
+      out->screen == RESIDENT_PREVIEW ? "Left/Right: modes" :
+      out->screen == RESIDENT_VISIT ? "Confirm: choose / Back: residents" :
+      out->count ? "Up/Down: resident / Back: modes" : "Confirm: Probe / Back: modes");
   return 1;
 }
 #undef TERMINATED

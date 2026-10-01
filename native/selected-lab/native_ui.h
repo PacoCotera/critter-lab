@@ -14,7 +14,7 @@ void native_ui_destroy(NativeUiContext *context);
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still);
 const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeView *view);
-const uint8_t *native_ui_resident_preview(NativeUiContext *context, const CompanionResidentView *view);
+const uint8_t *native_ui_resident(NativeUiContext *context, const CompanionResidentView *view);
 const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view);
 /* Controlled proof clock only: no game tick or input acknowledgement.
  * Advancement is refused while another context exists: LVGL's clock is global. */

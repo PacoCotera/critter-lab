@@ -80,6 +80,12 @@ portrait and storage-recovery states use the same LVGL tree. [Actual native outp
 and independent review](../../docs/evidence/native-companion-resident-preview/README.md)
 cover this preview only, with current Companion ESP compilation still required.
 
-Lab and the remaining Companion resident/visit routes remain open
-renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish/mode-preview projection returns a
+The same resident tree now handles the list and two-row visit surface. It copies
+screen/focus/action labels and availability without invoking a command. List
+focus belongs to the selected resident header; visit focus belongs to one of the
+two exact Kit rows. Empty-list Return to Probe, unavailable visits, saved/stale
+feedback and global recovery are explicit states. Native validation and
+independent review for these new routes are pending.
+
+Lab routes remain open renderer migrations. A failed migrated Dock/Companion projection returns a
 render error; it cannot silently reach the old manual renderer.

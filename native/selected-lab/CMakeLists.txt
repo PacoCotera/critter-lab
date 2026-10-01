@@ -35,7 +35,7 @@ if(BUILD_TESTING)
  add_executable(resident_ui_checks resident_ui_tests.c)
  target_link_libraries(resident_ui_checks PRIVATE selected_lab_core)
  target_compile_options(resident_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
- add_test(NAME companion_resident_preview_checks COMMAND resident_ui_checks)
+ add_test(NAME companion_resident_ui_checks COMMAND resident_ui_checks)
 
  add_executable(dock_gray_checks dock_gray_tests.c)
  target_link_libraries(dock_gray_checks PRIVATE selected_lab_core)

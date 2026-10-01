@@ -231,7 +231,7 @@ control sequences before dependent compositions are treated as selected.
 | Companion Discard class/quantity/Keep review and empty Finish review | Retained LVGL using the shared portable Cargo tree | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-discard/README.md); current Companion ESP build still required |
 | Companion Cargo mode preview | Retained LVGL, same portable Cargo tree | [Native output, controls and independent review checked](../docs/evidence/native-companion-cargo-preview/README.md); current Companion ESP build still required |
 | Companion Companions mode preview | Retained LVGL, lazy portable resident preview tree | [Native source/controls/output and independent review checked](../docs/evidence/native-companion-resident-preview/README.md); current Companion ESP build still required |
-| Companion residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
+| Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | Native validation and independent output review pending; current Companion ESP build still required |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
@@ -277,7 +277,15 @@ composition. Companions preview uses a separate lazy retained root with an owned
 plain view of the selected revealed resident. Existing saved-art and form guards
 own provenance and property disclosure; no live research is recomputed here.
 Invalid selection fails the frame rather than falling back to manual drawing.
-Resident/visit workpieces remain separate and unconverted.
+Resident list and visit workpieces reuse that tree with explicit screen tags.
+List focus is the selected resident index; visit focus is the local command row.
+Projection validates both against existing Kit authority. Both visit rows remain
+visible; an unavailable visit is muted with visible focus and a reason. Global
+storage error closes action/focus affordances. Entry never invokes a visit; a
+separate fresh physical Confirm reaches the existing game command. Empty-list
+Return to Probe is preserved; an impossible empty visit fails explicitly.
+Immediate saved-at-Lab/stale-cache feedback is retained without inventing a new
+visit or reading live research. No manual Companion composition/fallback remains.
 
 Flush-ready means the adapter has released the draw buffer. It is distinct from
 the painted-frame acknowledgement used to authorize input, especially for an
