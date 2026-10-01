@@ -1,89 +1,120 @@
-# Three-device playability defects and design gaps
+# Three-device playability: current findings
 
-30 September 2026. Audit of released native revision
-`fd08ff1f3cdd88c9a03bcc388c1326546b5dba38`, its presenter, current gallery
-and C18/Gemini03/04/07 references. This is a prioritized repair packet, not a
-repair release or full V1 acceptance. Defect status belongs to the linked GitHub
-[backlog #44](https://github.com/PacoCotera/critter-lab/issues/44); evidence and proposed acceptance remain here.
+30 September 2026. Assessed installed release
+`ae5dcded00e36dbcbfdbbd16211dca2809f97d1a`.
+The connected loop is playable; satisfying repeat exploration and full fidelity
+to the Gemini references are still open. This assessment makes no code or art
+changes. Task status belongs to [backlog #44](https://github.com/PacoCotera/critter-lab/issues/44);
+the [roadmap](../../ROADMAP.md) owns scope.
 
-**Journey:** choose a task at Lab → gather on Companion → inspect cargo → review
-Send → receive and explicitly Accept at Lab → resume research → choose a fully
-supported form → incubate/reveal → visit the same individual. Dock summarizes
-that same world. Browsing does not spend supplies or transfer ownership.
+## Actual play
 
-## What was exercised
+The released browser simulator was operated through its depicted device buttons
+in a fresh isolated game. No supplies were granted and no route-search script
+drove the task. The existing installed native build and presenter were used;
+the shared public game was preserved.
 
-Two fresh isolated native worlds covered early return, Home and Explore callers,
-sealed offline Send, arrival, acceptance with delayed acknowledgement, post-receipt
-Cargo exits, mode switching, a new outing, immediate empty ending, and Dock summary/
-Print/Feed feedback. Native frames are unmodified, with dimensions and hashes in
-[manifest](manifest.json). Raw status stock/cargo values use the native100-per-item
-compatibility encoding; on-screen quantities are whole items. Research/creation/reveal/Habitat were assessed using
-existing timed-journey exports and exact release source; this pass did not repeat
-their unchanged full timed suite. Full-capacity connected recovery remains a
-source finding, not a new full-capacity reproduction. Host output does not prove
-hand comfort, real radio/panels, battery life, human comprehension or fun.
+The chosen journey started Camp Data, traversed Relay and Moss bend, switched
+sources, inspected the trace, walked its revealed connector, collected the sealed
+sample, then visited Stone shelf for Energy. Return review was cancelled once,
+then sent and explicitly accepted on Lab. Actual delivery was **16 Data,
+7 Energy, 10 Essence and one sealed sample**. Lab reception and Companion receipt
+agreed. Research spent four Data on **Read the pattern**; Home and returning to
+Research retained the finding. Dock showed **12 Data, 7 Energy, 10 Essence**
+after research and one retained sample. Supplies, Connections and Print-preview
+cancellation were exercised.
 
-**Owner-reported Cargo exit trap remains open.** In these native scenarios,
-Lab Back returned from accepted reception to its caller and then Home; Companion
-Back exited while sealed, after offline acceptance and after receipt. Confirm on
-empty post-receipt Cargo returned to Probe. This is limited negative evidence,
-not a repair or grounds to dismiss the original report. An isolated released-presenter browser journey also sent a completed haul,
-resumed its pending arrival after a test-presenter timeout, accepted it, then
-exited Lab reception via Back to Overview. Companion mode selection → Cargo →
-Back also returned to modes after receipt. No repeated same-input or original
-owner-save/browser-state reproduction is claimed. [Browser proof](browser-exits.png). Preserve the relevant save and input/
-paint sequence for investigation; avoid replacing it with a fresh-world-only test.
+Separate game and interaction reviews operated the same installed native build
+with fresh isolated saves. Game play observed a failed first Data attempt,
+followed Relay to Moss, inspected the trace, switched to Essence and returned
+eight Data and two Essence without a sample. Interaction play exercised retained
+movement/work after cancelled return and Dock controls. Art/UI assessed actual
+outputs against original references; it did not perform its own browser play.
 
-![Lab receipt after acceptance](connected-lab-accepted.png)
-![Companion after offline acceptance](delayed-offline-cargo-after-accept.png)
+These are agent-operated sessions with prior product knowledge. They do not
+establish first-time human comprehension, enjoyment, physical thumb comfort,
+real radio, panel refresh or printer operation. Tool inspection time allowed
+gathering to continue; the haul is not a human pacing measure. Creation, reveal
+and shared visits remain covered by the previous
+[actual native journey](../../docs/evidence/playable-expeditions/README.md),
+not repeated in this browser task.
 
-The missing global Home shortcut is an explicit owner requirement. Yellow
-Critters → Home is the UX recommendation, contingent on preserving the named
-resident list elsewhere; the physical key mapping is not implemented or approved
-by this document. Prioritize reported navigation escape, then completion feedback,
-capacity/commit clarity, discovery content and shared visual craft.
+## What holds together
 
-## Prioritized findings
+- **Game:** Inspect changes reachability; collecting is explicit. Earned supplies
+  fund retained discoveries. Lab receives a record, not the live away map.
+- **UX:** Whole resources, preparation, budgets and sealed contents stay distinct.
+  Safe return review, Home recovery and retained Research context worked.
+- **Art/UI:** Resource materials stay recognizable. Map/site views refer to the
+  same place. Original resident identity is preserved in the established journey.
+- **Dock:** Accepted stock and freshness are truthful; Connections and print
+  preview disclose their simulated limits.
 
-| Priority / device | Observed versus expected; evidence | Player impact / proposed acceptance |
+## Defects and focused proof
+
+| Priority / domain | Actual finding | Smallest correction or proof |
 | --- | --- | --- |
-| P1 / connected Companion | Capacity recovery is incomplete. `kit.c` Cargo exposes one action (Send, View expedition or Return to Probe); there is no connected discard path. Standalone Lab discard choices in `input.c` do not establish a connected capability, because Kit Explore intercepts their Confirm. Source inference; full-capacity runtime not supplied. | A paused outing needs an honest supported way to make room. Test capacity with insufficient room for the complete possible next award; expose Send as the existing recovery and clearly explain its ending consequence. A discard flow is a proposed repair requiring a reachable item/quantity review, fresh confirmation and retained outing. Never advertise discard before implementation. |
-| P1 / Lab creation | In `input.c`, Confirm on Plain coat or Pale markings immediately issues `GAME_COMMAND_INCUBATION_START`. `render.c` displays cost and says Confirm starts incubation, but the focused row names a configuration, not the spending action. Source inference. | Configuration inspection and final commitment are easily conflated. Retain a chosen supported form, then show a clearly named Start incubation review with sample and exact stock/cost. Back preserves the draft; only a fresh explicit Start spends once. Validate existing retry/idempotence rather than changing genetics. |
-| P1 / cross-device terminology | Active `design/research-and-creation.md` retains the older pack/storage-unit convention; `native/selected-lab/V1.md` uses 1 pack = 10 items / capacity40 items. Current owner rules require indivisible whole items. Documentary contradiction reported by Game Design; corroborated against current gameplay direction. | Capacity, affordability and manifest amounts cannot be understood consistently. Retire pack conversion from active player rules and screens; use the same whole-item counts for cargo, capacity, arrival, Lab stock, studies and creation. Keep activity progress out of manifests. |
-| P2 / Lab navigation, explicit owner requirement | No existing color shortcut goes Home. Release `input.c` maps orange Research, yellow Critters, green Library, blue Habitat. Back did work in the coordinator's fresh-world paths; that does not provide the requested dependable Home shortcut. | Recommend **yellow Critters → Home**, leaving the other three functions intact. Before remapping, retain a reachable named resident list under Habitat; Critters currently provides that list. Home navigates to Overview - Lab, never accepts, spends, reveals, cancels a sealed haul or changes the world. Pending reception remains reachable. Clear held gestures and require fresh Confirm. Exact physical key choice is a proposal for owner steering. |
-| P2 / Companion return lifecycle | Reproduced offline after Lab acceptance: cargo zero, label Accepted in Lab - receipt pending, View expedition, no prominent ended-outing status. Screenshot [accepted Cargo](delayed-offline-cargo-after-accept.png); release `kit_option()` selects View expedition for all pending phases. | The player has completed an outing but sees an action implying it still exists. Lead with Supplies stored at Lab / Expedition ended. Receipt delay gets separate reconnect guidance. Back must clearly reach modes; show new outing only when the existing receipt policy permits it. Reconnect repairs metadata and never awards again. |
-| P2 / Companion start and ending | Native [fresh-outing frame](connected-new-outing.png) offers Finish expedition at0/60 seconds with empty cargo. Coordinator reproduced immediate empty Finish, ending the outing; result returned to generic Ready to explore with remembered route. `kit.c` tests empty transferable cargo, not elapsed completion. | Finish sounds successful rather than abandoning an unfinished outing. Use explicit End expedition, explain that an early ending gives no completion sample, and review the destructive consequence. A completed outing needs a distinct completion result. Do not silently change timing/yields. |
-| P2 / Companion feedback | `kit_render.c` does not render ordinary Companion `view->message`; lifecycle/counts render, but command/recovery messages can disappear. Source inference, independent of physical actuator feedback. | A failed command, ending or recovery can look like a silent no-op. Allocate a consistent visible result/error region; include cause and available recovery. Focus, pressed, pending, saved and error must differ. Test a real unavailable/failed action without claiming simulated storage faults are board validation. |
-| P2 / Companion orientation | Native selector frames repeat brand, large mode title and the same three modes; large footer copy dominates otherwise sparse views. Cargo/action pages have context-dependent Back destinations with weak hierarchy. Modes already change preview without commitment. | Use one persistent three-position mode rail, one live task subject, and one distinct action focus. Left/Right on the selector immediately replaces overview; Down/Confirm moves to action focus without activating. Nested Back restores caller, action-level Back returns selector. Preserve gathering during ordinary browsing; unsealed Send review pauses it and cancellation restores the prior activity state, including capacity and completion limits. |
-| P2 / Lab research entry and scope | `render.c` Home Research preview mixes collection totals with selected-sample ID and5/5 topic progress. Home Confirm enters the sample list, while the Research shortcut restores its remembered workspace. `input.c`; `researched-home-2-research.png`. V1 explicitly lacks a separate collection overview. Source/static finding. | The player cannot distinguish all samples from the current workpiece or predict where Research returns. Label collection totals separately; retain the selected sample/workpiece across equivalent entries. An empty state must name the meaningful next device/action rather than an inert Find outdoors row. Preserve sample knowledge and stock. |
-| P2 / research discovery, content limitation | Release study content is the same five topic purchases and two supported Pip forms; capsule/count art and fixed findings do not show a sample-specific investigation or an inspectable genetic bitmap. `render.c`, shared Pip study content, `V1.md`; gallery finding/workbench frames. | New headings or a better capsule cannot make discoveries vary. Implement only after steering the joined A/B content proposal: stable sample support, meaningful findings, relevant follow-ups and validated completeness. A bitmap needs a truthful knowledge projection; do not encode hidden phenotype or claim arbitrary pixels are genes. |
-| P2 / Lab unavailable actions | `input.c` can reach creation for another sample while incubation is active; the eventual guard rejects it. Research prepare rows are selectable before all topics resolve. Native Critters list Confirm does not open a visit, although rows look actionable. Source inference. | Distinguish inspectable information from available action before the press. Say Incubator busy with the useful current-job destination; show specific missing research/stock. Critters rows must either be unmistakably a read-only selection or provide an explicit visit action. Do not remove current list access in the Home remap. |
-| P2 / everyday Companion | Companions mode honestly says party assignment is not simulated and has no actions. Native `mode-companions-companion.png`; zero options in `kit.c`. | This is an unfinished core experience, not an empty-player inventory. Show an honest unavailable state distinct from No residents yet. A later resident view must use the same saved individual, known traits and permitted care state; capture, training, party assignment and rewards remain unimplemented proposals. |
-| P2 / reveal and Habitat | Gallery reveal preserves identity/source and provides Meet; Habitat retains that portrait and has Spend time together / Next resident. Current interaction increments visits with the same static response. `input.c`, `05-reveal.png`, `06-habitat.png`. | Identity and recovery are valuable existing features to retain. The emotional payoff is still thin: repeated visits are not demonstrated training or varied behavior. Require perceptible bounded resident response with a still alternative before claiming an expressive Companion, and involve game/art for any new behavioral meaning. |
-| P2 / Dock unavailable functions and freshness | Coordinator confirms Previous/Next preview World/Supplies/Connections; do not misreport Connections as unreachable based on OK toggling. No physical Back exists. Print is preview only; Feed gives a simulated notice. In `kit_render.c`, action messages replace the timestamp/stale line. Source + isolated screenshots. | Keep cached-state time and offline status visible during Print/Feed feedback. Unsupported printer/charging must not appear successful. Use existing OK/Cancel options for preview return and retain selected summary. No print, charging or cloud success can be inferred. |
-| P2 / visual fidelity throughout | Native screenshots remain text-panel scaffolding; current standard explicitly rejects them as final. Approved C18/Gemini03/04/07 concepts establish richer subjects, shared saturated resources, slender blue edges and warm action focus. | Reconstruct reusable native assets and task-specific compositions, not screenshots behind overlays or a generic web-card template. Inspect the actual final native exports in empty, busy, short-stock, pending, saved and error states. Semantic readability alone does not approve craft. |
+| P1 / Companion layout | “This expedition cannot resume” is partly covered by Return to Probe. Confirmed in browser and native operation. | Restore clearance; inspect both sealed receipt types. |
+| P1 / Companion receipt | Empty Cargo says “Earned this expedition / No sample collected” after a successful sample-bearing delivery. Quantities are current; wording falsely implies history. | Current-cargo captions or distinct delivered totals; inspect both receipt types. |
+| P1 / simulator input | Six rapid Right presses advanced five legal tiles. A deliberate extra press reached Moss; later observed-step sequences worked. Source silently cancels a new gesture while an activation is pending. Plausible cause, not a per-gesture diagnosis. | Reproduce the short segment at rapid/ready-separated cadence. Acknowledge consumed/updating input; preserve fresh gestures and stale-screen safety. |
+| P1 / shared composition | Native map raster overwrites blue vertical strokes at x25–26 and x423–424; sampled y200 pixels are terrain instead of frame RGB35,137,198. Arrival siblings differ4px width,6px heading inset and8px outer alignment from other workspaces. | Clip to real frame interior or preserve border draw order; normalize sibling geometry. Separate native damage from browser cropping. |
+| P2 / simulator orientation | Map movement has a View cargo caption. Controls auto-scroll device titles/mode headers out of view. | Project actual movement context and keep screen/depicted controls visible together. |
+| P2 / field feedback | A failed attempt consumed chance and restarted preparation under stale source-selected copy. Finished sources are quiet; marker/bars weak at ordinary browser size. | Compact award/no-find/finished result, stronger marker/bars at native and presenter sizes. |
+| P2 / return copy | Back: keep exploring returns first to Cargo, requiring modes/Probe to reach map. | Name immediate destination; preserve tile/work/cargo. |
 
-## Home shortcut acceptance detail
+One Lab acceptance reported **740 ms input-to-paint** using existing DOM
+instrumentation. This is one observation, not a benchmark, bottleneck diagnosis
+or RPi hardware measurement. No freeze was observed; rapid-press loss stays open.
 
-Home is a navigation escape, not a rollback. Preserve current study/sample, supported configuration draft, selected resident and incubation; preserve sealed transfer and pending reception. Returning through Research/Habitat restores retained context against current world state. Home at Home stays at the overview rather than replaying a task. If an atomic commit is already in progress, finish its existing transaction boundary and then navigate safely; no extra acceptance or spend is triggered. Acceptance requires traces from pending arrival, post-accept/delayed receipt, research review, active incubation, reveal and Habitat. A human key-reach test remains outstanding.
+## What remains shallow or visually weak
 
-## One game/genomics reconciliation
+- **Expeditions:** Sources share the same work/chance model; fixed trace-to-cache
+  becomes predictable. More route labels alone do not create different adventures.
+  Depletion detours currently add access friction more reliably than choices.
+- **Owner play:** Expeditions and samples feel alike; chance acquisition is painfully
+  boring, events absent and sample collection dull. Research feels like a checklist.
+  This direct player evidence supersedes earlier enjoyment hypotheses.
+- **Research:** Known/unknown and retained findings work. Instruments often provide
+  context rather than explain the discovery visually; broad empty action space
+  and prose still dominate results.
+- **Companion:** Tactical navigation and a static portrait do not yet deliver the
+  Gemini field-partner reference's expressive presence in a living place.
+- **Dock:** Truthful monochrome summary is useful; small glyphs, thin outlines and
+  generic typography need the same authored care as the color family.
+- **Physical ergonomics:** Dimensions, hand reach, grip, force, comfort, docked
+  clearance and panel readability remain unmeasured.
 
-Game design and genomics reconciled their actual proposals; UX reviewed the
-joined content. The integrated [research discovery proposal](../research-and-creation.md#discovery-proposal--30-september-2026) and [generation contract](../../specs/architecture.md#generation-backend-proposal--30-september-2026), retain that reciprocal reconciliation. Their A/B support examples now agree: A has relevant markings follow-up; B has a different movement/efficiency relationship. An early broader comparison is justified only by the authored method and intake scope; it does not automatically complete new samples. Whole-item ledger, selected complete supported genome, explicit creation and retained identity are consistent.
+## Ranked incremental proposals
 
-UX supports the joined paper/control example with these acceptance conditions: show what this sample actually established, what is still unresolved, what each available investigation can answer, and exact stock/cost before commitment. Resupply preserves the same workpiece. Known findings remain free to inspect. A relevant follow-up appears because uncertainty remains, not because every player owes a third click. Complete is validated disclosed support, not purchased-row count. LLM descriptions and neutral sample art may not leak undiscovered facts; source facts, reference explanations and saved individual behavior remain distinct. These are design requirements, not proof of fun or implemented native variability.
+These are trials, not approved new mechanics or creature canon.
 
+1. **Craft and clarity:** fix frame/content clearance, receipt wording,
+   acknowledged inputs, movement orientation and attempt feedback first.
+2. **Genuine generated field:** varied saved topology, source/lead placement and a
+   clearly readable token; not two fixed maps or palette/label swaps.
+3. **One immediate event:** a finite choice with visible consequence; waiting
+   through random acquisition must become secondary, not the main activity.
+4. **Active research evidence:** one specimen-specific comparison in the main
+   workpiece, retaining the existing finding and next meaningful question.
+   The [joined trial](../probe-sampling.md#next-discovery-trial) defines its boundary.
 
-The [full tactile Companion proposal](../companion-experience.md) consumes the audit findings
-into one mode, focus, screen-response and return contract. It was independently
-reviewed as design; implementation and native art remain outstanding.
+Game, interaction and art reviewers agreed that reveal emphasis clarifies causality
+but does not add depth, and decoration cannot solve source parity. A short human
+task can fund one study, investigate a promising place, choose return and resume
+the same sample. Confirmed layout/copy repairs do not need to wait for that task.
 
-[Companion promise versus actual pixels](../companion-promise/README.md) compares the newly supplied
-marketing concept/studies with the native frames. Next acceptance must demonstrate
-reference-quality reusable art, a truthful illustrated activity and recognizable
-saved-individual experience; blue frames and matching counts alone are insufficient.
-Missing capture/training/portable resident functions remain explicit gaps.
+## Actual browser evidence
 
-[Full-family promise/craft assessment and joined proof target](promise-gap.md) covers all three devices, including the focused offline Dock captures.
+- [Pending reception](playtest-pending-reception.jpg)
+- [Accepted haul and contradictory Cargo](playtest-accepted-receipt.jpg)
+- [Finding paid with earned Data](playtest-research-finding.jpg)
+- [Dock after research](playtest-dock-stock.jpg)
+- [Screenshot hashes](playtest-manifest.json)
+
+![Actual accepted haul and Companion receipt](playtest-accepted-receipt.jpg)
+
+Earlier audit images and [manifest](manifest.json) remain reference evidence for
+their earlier revision, not current unresolved implementation claims.
+[Family promise comparison](promise-gap.md) and
+[Companion promise](../companion-promise/README.md) preserve visual targets.
+No new infrastructure, radio, capture, training or ecology implementation is implied.

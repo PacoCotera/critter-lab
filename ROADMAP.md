@@ -1,20 +1,24 @@
 # Critter Lab roadmap
 
-## Current outcome: meaningful field exploration
+## Current outcome: repair actual playtest failures
 
-Owner feedback on30September requests a steerable generated Companion map,
-interactive findings and visible per-resource preparation. Lab Explore becomes
-a log of expedition records actually received; it cannot imply live away-device
-knowledge. [Issue49](https://github.com/PacoCotera/critter-lab/issues/49) tracks one
-bounded native implementation with game/UX/art acceptance. The
-[gathering design](design/probe-sampling.md#generated-field-loop--owner-review-proposal)
-holds the owner-approved map loop and one active source with retained preparation.
-Independent trace discovery and received-only Lab records complete the journey.
-Pacing, chance and finite budgets remain provisional. The
-[actual connected native sequence](docs/evidence/playable-expeditions/README.md)
-and reference-derived screens passed independent game/UX and root craft checks.
-Publish through existing Git/CI and activate a fresh sandbox; verify its exact
-release before claiming delivery. No new map service, radio/backend or hardware work.
+The connected native journey was delivered, but actual owner play rejects its
+repetitive expeditions, chance-waiting, same-feeling samples and checklist research.
+The [current audit](design/three-device-playability-audit/README.md) records real
+browser/native play, broken frames/insets, cadence loss and inventory projection
+defects. Functional acceptance did not approve enjoyment or complete visual craft.
+
+First repair current-Cargo/receipt separation at Lab acceptance, Home-first controls,
+frame/content clearance and choice-only navigation. Keep source conservation,
+retained knowledge and existing input safety. One bounded coder increment and
+focused actual-state review precede exact Git/CI/VM delivery.
+
+Then develop the [one discovery trial](design/probe-sampling.md#next-discovery-trial):
+two genuinely generated map results, one finite interactive event and one
+specimen-specific evidence comparison in the main Lab workpiece. The owner requests
+procedural variation and active discovery; exact event/puzzle rules and art mapping
+remain proposals. No new infrastructure, map service, provider, sensor/radio,
+canonical species, capture/training or ecology enters this iteration.
 
 ## Delivered checkpoint: Polished Core V1
 

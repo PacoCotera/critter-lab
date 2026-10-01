@@ -44,10 +44,16 @@ Companion. Its field-related view is a log of expedition records actually receiv
 linked to accepted resources, samples and subsequent research. Any status must state
 its received/cached provenance; shared simulator memory is not wireless receipt.
 [Companion profiles](probe.md#companion-selected-expedition-profiles--accepted-direction)
-define the boundary. Generated-map movement, encounters and interactive acquisition
-are now being designed; exact rules, balance and difficulty consequences remain
-proposed. The deployed Core V1 still uses its earlier timed field fixture until the
-new design is reviewed and implemented.
+define the boundary. The installed map loop permits movement, source choice,
+trace discovery and explicit sample collection, but its two authored topology
+families are fixtures rather than procedural generation. No interactive map
+event is implemented. Owner playtest rejects repetitive routes and chance-waiting
+as the central activity: the next field experience must generate genuinely varied,
+saved, reachable maps and expose events with meaningful decisions and consequences.
+Distinct sample acquisition and useful research follow-through must supply the
+sense of accomplishment. Exact event rules, balance and difficulty remain design
+choices; the [next discovery trial](../design/probe-sampling.md#next-discovery-trial)
+is a bounded proposal, not an implemented feature.
 
 The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, inventory changes, research progress, developmental changes or resources running low, suggesting interventions and the next expedition. Major discoveries and individual reveals punctuate that process. Frequent interest does not establish a neglect penalty; timers, notifications and setbacks remain open.
 

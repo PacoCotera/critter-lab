@@ -2,10 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 let scenario = 0;
-async function exercise(resetLocally) {
+async function exercise(resetLocally, acceptance = false) {
+  const painted = [];
   class Element extends EventTarget {
     constructor() { super(); this.classList = { add() {}, remove() {} }; }
-    setAttribute() {}
+    setAttribute(name, value) {
+      if (name === 'data-visible-revision') painted.push(`${this.selector}:${value}`);
+    }
     setPointerCapture() {}
     getBoundingClientRect() { return { left: 0, right: 100, top: 0, bottom: 100 }; }
     decode() { return Promise.resolve(); }
@@ -14,7 +17,11 @@ async function exercise(resetLocally) {
   const document = new EventTarget();
   document.hidden = false;
   document.querySelector = selector => {
-    if (!elements.has(selector)) elements.set(selector, new Element());
+    if (!elements.has(selector)) {
+      const element = new Element();
+      element.selector = selector;
+      elements.set(selector, element);
+    }
     return elements.get(selector);
   };
   const window = new EventTarget();
@@ -26,26 +33,41 @@ async function exercise(resetLocally) {
   const polls = [];
   let sandbox = 'a'.repeat(32);
   let finishDown;
+  let accepted = false;
+  let finishCompanionFrame;
   const originals = Object.fromEntries(['document', 'window', 'Image', 'fetch', 'requestAnimationFrame', 'setInterval'].map(key => [key, globalThis[key]]));
-  const state = () => ({ sandbox, revision: 1, workspace: 0, focus: 'fresh', transfer: '' });
+  const state = (device = 'lab') => ({ sandbox,
+    revision: accepted && device !== 'dock' ? 2 : 1,
+    phase: acceptance ? accepted ? 4 : 2 : undefined,
+    haul: acceptance ? 'test-haul' : undefined,
+    workspace: 0, focus: 'fresh', transfer: '' });
   Object.assign(globalThis, {
     document, window, Image: Element,
     requestAnimationFrame: callback => queueMicrotask(callback),
     setInterval: callback => { polls.push(callback); return { unref() {} }; },
     fetch: async (url, options) => {
       if (url === '/api/release') return { ok: false };
-      if (url.endsWith('/status')) return { ok: true, json: async () => state() };
-      if (url.includes('/frame')) return { ok: true, headers: { get: () => sandbox }, blob: async () => new Blob() };
+      if (url.endsWith('/status')) {
+        const device = url.split('/')[3];
+        return { ok: true, json: async () => state(device) };
+      }
+      if (url.includes('/frame')) {
+        const frame = { ok: true, headers: { get: () => sandbox }, blob: async () => new Blob() };
+        if (acceptance && url.includes('/companion/frame?revision=2'))
+          return new Promise(resolve => { finishCompanionFrame = () => resolve(frame); });
+        return frame;
+      }
       const body = JSON.parse(options.body);
       calls.push({ url, ...body });
-      if (body.device === 'lab' && body.event === 'confirm-down') {
+      if (!acceptance && body.device === 'lab' && body.event === 'confirm-down') {
         return new Promise(resolve => { finishDown = () => resolve({ ok: true, json: async () => ({ ...state(), sandbox: 'a'.repeat(32) }) }); });
       }
+      if (acceptance && body.device === 'lab' && body.event === 'confirm-up') accepted = true;
       if (url === '/api/reset') {
         sandbox = 'b'.repeat(32);
         return { ok: true, json: async () => ({ sandbox, backup: 'world.reset-backup' }) };
       }
-      return { ok: true, json: async () => state() };
+      return { ok: true, json: async () => state(body.device) };
     }
   });
   async function until(predicate) {
@@ -62,6 +84,26 @@ async function exercise(resetLocally) {
     await until(() => calls.some(call => call.device === 'lab' && call.event === 'ready'));
     const confirm = elements.get('#lab-confirm');
     confirm.dispatchEvent(pointer('pointerdown'));
+    if (acceptance) {
+      await until(() => calls.some(call => call.device === 'lab' && call.event === 'confirm-down'));
+      confirm.dispatchEvent(pointer('pointerup'));
+      await until(() => finishCompanionFrame);
+      assert(!painted.includes('#lab-frame:2'), 'Lab accepted stock painted before Companion cleared');
+      const companionConfirm = elements.get('#companion-confirm');
+      companionConfirm.dispatchEvent(pointer('pointerdown'));
+      companionConfirm.dispatchEvent(pointer('pointerup'));
+      assert.match(elements.get('#companion-status').textContent, /Input not applied/);
+      finishCompanionFrame();
+      await until(() => painted.includes('#lab-frame:2'));
+      assert(painted.indexOf('#companion-frame:2') < painted.indexOf('#lab-frame:2'));
+      assert(!calls.some(call => call.device === 'companion' && call.event === 'confirm-down'));
+      await new Promise(resolve => setImmediate(resolve));
+      companionConfirm.dispatchEvent(pointer('pointerdown'));
+      companionConfirm.dispatchEvent(pointer('pointerup'));
+      await until(() => calls.some(call => call.device === 'companion' && call.event === 'confirm-up'));
+      assert.equal(calls.filter(call => call.device === 'companion' && call.event === 'confirm-up').length, 1);
+      return;
+    }
     await until(() => finishDown);
     confirm.dispatchEvent(pointer('pointerup')); // Release queued behind old down.
     if (resetLocally) {
@@ -92,3 +134,4 @@ async function exercise(resetLocally) {
 
 test('confirmed reset discards held/queued input and prevents duplicate reset', async () => exercise(true));
 test('another browser reset discards this client input and reconnects without resetting again', async () => exercise(false));
+test('accepted Lab stock waits for cleared Companion frame; consumed press never queues', async () => exercise(false, true));

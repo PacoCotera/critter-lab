@@ -42,7 +42,8 @@ static void remember_workspace(SelectedLab *lab) {
 }
 static void enter(SelectedLab *lab, SelectedPage page) {
   remember_workspace(lab);
-  if (!strncmp(lab->message, "Haul saved.", 11))
+  /* Transient feedback belongs to its page; storage recovery remains visible. */
+  if (!lab->storage_error)
     lab->message[0] = '\0';
   lab->page = page;
   lab->workspace = page_workspace(page);
@@ -348,7 +349,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
             return label;
           }
         }
-    return "No discoveries yet";
+    return "Back to research";
   }
   case V1_LIBRARY_FINDING:
     return "Back to library";
@@ -382,7 +383,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_CREATE: {
     PipSupportedCandidate candidate;
     return selected_lab_candidate(lab, lab->sample, option, &candidate)
-               ? candidate.title : "Complete this sample's research first";
+               ? candidate.title : "Back to research";
   }
   case V1_CREATE_REVIEW:
     return option ? "Change supported form" : "Start incubation";
@@ -507,7 +508,7 @@ static void activate(SelectedLab *lab) {
       lab->library_index = focus;
       selected_lab_library_entry(lab, focus, &lab->sample, &lab->study);
       enter(lab, V1_LIBRARY_FINDING);
-    }
+    } else enter(lab, V1_SAMPLES);
     return;
   case V1_LIBRARY_FINDING:
     enter(lab, V1_LIBRARY);
@@ -644,8 +645,8 @@ static void activate(SelectedLab *lab) {
   case V1_CREATE: {
     PipSupportedCandidate candidate;
     if (!selected_lab_candidate(lab, lab->sample, focus, &candidate)) {
-      strcpy(lab->message, "Discover every region before incubation.");
-      interaction_changed(lab);
+      enter(lab, V1_STUDIES);
+      lab->focus = research_methods(lab, lab->sample);
       break;
     }
     lab->creation_preference = focus;

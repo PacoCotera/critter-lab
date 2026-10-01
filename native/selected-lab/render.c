@@ -636,7 +636,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
   const char *page_title = finding_page &&
       selected_lab_research_method(lab, lab->sample, lab->study, &current_method)
           ? current_method.title : titles[lab->page];
-  heading(&row, home ? 276 : 396, home ? 164 : 152,
+  heading(&row, home ? 276 : 394, home ? 164 : 152,
           home ? home_headings[lab->focus % 5]
           : page_title,
           34, INK);
@@ -732,8 +732,8 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       sprite(&row, SPRITE_SAMPLE, 424, 223, 54, 54);
       label(&row, 500, 230, game->samples[sample].id, 22, INK);
       if (selected_lab_research_view(lab, sample, &view)) {
-        knowledge_rows(&row, lab, sample, &view, 421, 300);
-        research_summary(&row, lab, sample, 421, 449, 535);
+        knowledge_rows(&row, lab, sample, &view, 416, 300);
+        research_summary(&row, lab, sample, 416, 449, 535);
       }
     }
   } else if (lab->page == V1_STUDIES && lab->focus >= selected_lab_options(lab) - 1) {
@@ -743,7 +743,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     if (selected_lab_research_view(lab, lab->sample, &view)) {
       wrapped_label(&row, 588, 300, view.complete ? "Complete supported forms are ready to compare."
                                                  : "Some reference knowledge is still unresolved.", 22, INK, 360);
-      research_summary(&row, lab, lab->sample, 421, 449, 535);
+      research_summary(&row, lab, lab->sample, 416, 449, 535);
     }
   } else if (lab->page == V1_DISCARD_REVIEW) {
     unsigned values[] = {game->expedition_data, game->expedition_energy,
@@ -768,15 +768,15 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       int illustrated_forms = finding_page && !strcmp(entry.id, "coat-comparison") &&
           view.complete && selected_lab_candidate(lab, lab->sample, 0, &carried) &&
           selected_lab_candidate(lab, lab->sample, 1, &marked);
-      label(&row, 402, illustrated_forms ? 195 : 203,
+      label(&row, 416, illustrated_forms ? 195 : 203,
             game->samples[lab->sample].id, 18, MUTED);
       if (lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING) {
         if (view.legacy && method < 2) {
           label(&row, 416, 249, "RECORDED FINDING", 22, SAGE);
           sprite(&row, method == 1 ? SPRITE_EYE_RING : SPRITE_CROWN, 421, 300, 115, 115);
-          label(&row, 421, 425, "Reference feature", 18, MUTED);
+          label(&row, 416, 425, "Reference feature", 18, MUTED);
           wrapped_label(&row, 578, 293, entry.finding ? entry.finding : "No finding disclosed.", 22, INK, 374);
-          research_summary(&row, lab, lab->sample, 421, 449, 535);
+          research_summary(&row, lab, lab->sample, 416, 449, 535);
         } else {
           label(&row, 53, 217, "RECORDED FINDING", 18, SAGE);
           if (illustrated_forms) {
@@ -805,7 +805,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
                                                         : CORE_ART_RESEARCH_INHERITANCE;
             const CoreArtSprite *illustration = core_art_sprite(context);
             /* Blank evidence boards depict tools, not this sample's results. */
-            label(&row, 421, 225, "Research context", 18, MUTED);
+            label(&row, 416, 225, "Research context", 18, MUTED);
             core_art_row(context, 416 + (184 - (int)illustration->width) / 2,
                          249 + (195 - (int)illustration->height) / 2,
                          row.y, SELECTED_LAB_WIDTH, row.pixels);
@@ -820,7 +820,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
               label(&row, 805, 345, "Pale markings", 18, INK);
               wrapped_label(&row, 805, 374, "Appearance expressed", 18, MUTED, 143);
             }
-            research_summary(&row, lab, lab->sample, 421, 449, 535);
+            research_summary(&row, lab, lab->sample, 416, 449, 535);
           }
         }
       } else {
@@ -837,25 +837,27 @@ void selected_lab_row_with_context(const SelectedLab *lab,
           label(&row, 655, yy + 15, text, 22, INK);
         }
         label(&row, 791, 321, "Cost / Lab stock", 18, MUTED);
-        wrapped_label(&row, 421, 485, entry.known || !entry.useful ? "Confirm inspects recorded knowledge."
+        wrapped_label(&row, 416, 485, entry.known || !entry.useful ? "Confirm inspects recorded knowledge."
             : lab->page == V1_STUDY_REVIEW ? "Start research spends the listed resources."
                                           : "Confirm reviews this investigation.", 18, INK, 535);
       }
     }
   } else if (lab->page == V1_LIBRARY) {
-    label(&row, 420, 252,
-          game->sample_count ? "Your recorded discoveries"
-                             : "No discoveries yet",
+    unsigned sample, study;
+    int discoveries = selected_lab_library_entry(lab, 0, &sample, &study);
+    label(&row, 416, 252,
+          discoveries ? "Your recorded discoveries" : "No discoveries yet",
           24, INK);
-    label(&row, 420, 310, "Research topics to record findings here.", 22,
+    label(&row, 416, 310, "Research topics to record findings here.", 22,
           MUTED);
-    label(&row, 420, 366, "Select a finding to inspect it freely.", 22, INK);
+    label(&row, 416, 366, discoveries ? "Select a finding to inspect it freely."
+                                         : "Return to research to begin.", 22, INK);
   } else if (lab->page == V1_CREATE || lab->page == V1_CREATE_REVIEW) {
     int review = lab->page == V1_CREATE_REVIEW;
     PipSupportedCandidate candidate;
     int disclosed = review ? selected_lab_creation_draft(lab, &candidate)
                             : selected_lab_candidate(lab, lab->sample, lab->focus, &candidate);
-    label(&row, 412, 208, game->samples[lab->sample].id, 18, MUTED);
+    label(&row, 416, 208, game->samples[lab->sample].id, 18, MUTED);
     if (disclosed) {
       sprite(&row, SELECTED_SPRITE_COUNT + candidate.expression.pale_markings,
              405, 235, 261, 289);
@@ -881,7 +883,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     } else {
       overview_sprite(&row, OVERVIEW_RESEARCH, 423, 260);
       wrapped_label(&row, 588, 281, "Complete this sample's reference knowledge before choosing a form.", 22, INK, 360);
-      research_summary(&row, lab, lab->sample, 421, 449, 535);
+      research_summary(&row, lab, lab->sample, 416, 449, 535);
     }
   } else if (lab->page == V1_INCUBATION) {
     overview_sprite(&row, OVERVIEW_INCUBATOR, 597, 236);
@@ -941,11 +943,15 @@ void selected_lab_row_with_context(const SelectedLab *lab,
                selected_lab_focus(lab));
     label(&row, 30, 572, footer, 18, MUTED);
   } else {
+    if (lab->message[0]) {
+      /* Feedback owns a bounded workpiece band; controls remain stable. */
+      rectangle(&row, 416, 480, 560, 49, ART_FIELD);
+      wrapped_label(&row, 416, 486, lab->message, 18,
+                    lab->storage_error ? WARM : INK, 552);
+    }
     label(&row, 30, 557,
-          lab->message[0]
-              ? lab->message
-              : "Up/down: focus | Right: inspect | Confirm: act | Back: return",
-          18, lab->storage_error ? WARM : MUTED);
+          "Up/down: focus | Right: inspect | Confirm: act | Back: return",
+          18, MUTED);
   }
 }
 

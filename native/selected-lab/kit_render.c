@@ -177,17 +177,18 @@ static void field_heading(KitRow *row, int x, int y, const char *value,
 }
 static void field_cargo_row(const DeviceKit *kit, KitRow *row,
                             const ExpeditionFieldView *field, unsigned page,
-                            int selector, int ended) {
+                            int selector) {
   const KitView *view = &kit->companion;
   int review = page == COMP_SEND_REVIEW;
   int sealed = kit->journal.phase >= KIT_WAITING &&
                kit->journal.phase <= KIT_ACK_PENDING;
-  int acknowledged = ended && kit->journal.phase == KIT_COMPLETE;
+  int accepted = field->delivery_accepted;
+  int acknowledged = accepted && kit->journal.phase == KIT_COMPLETE;
   char value[128];
   fill(row, 0, 0, 450, 600, BACKGROUND);
   panel(row, 12, 12, 426, 576);
-  field_heading(row, 29, 28, review ? "Return to Lab" : sealed ? "Expedition sent"
-                                                   : acknowledged ? "Cargo empty"
+  field_heading(row, 29, 28, review ? "Return to Lab" : accepted ? "Cargo empty"
+                                                   : sealed ? "Expedition sent"
                                                                   : "Cargo", 24, TEXT);
   field_text(row, 30, 59, review ? "Review freezes gathering"
                   : acknowledged ? "Expedition ended / choose a new outing"
@@ -202,11 +203,11 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
     if (selected) fill(row, positions[i], 98, i == 2 ? 138 : 90, 2, BORDER);
   }
   panel(row, 24, 113, 402, 281);
-  field_heading(row, 42, 135, sealed ? "Sealed contents" : "Earned this expedition", 23, TEXT);
+  field_heading(row, 42, 135, "Current cargo", 23, TEXT);
   unsigned total = 0;
   for (unsigned i = 0; i < 3; ++i) {
     int x = 49 + (int)i * 126;
-    unsigned count = acknowledged ? 0 : field->earned[i];
+    unsigned count = field->earned[i];
     total += count;
     resource(row, i, x, 175, 0);
     snprintf(value, sizeof(value), "%u", count);
@@ -214,13 +215,20 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
     field_text(row, x, 237, i == 0 ? "Data" : i == 1 ? "Energy" : "Essence", 18, SECONDARY);
   }
   fill(row, 42, 270, 364, 1, EDGE);
-  unsigned capsules = acknowledged ? 0 : field->capsule_count;
+  unsigned capsules = field->capsule_count;
   if (capsules) {
     category(row, CORE_ART_SAMPLE_NEUTRAL, 49, 283);
     field_heading(row, 120, 289, "1 sealed sample", 22, TEXT);
     field_text(row, 120, 321, "Contents unknown", 18, SECONDARY);
   } else {
-    field_heading(row, 49, 294, "No sample collected", 22, TEXT);
+    field_heading(row, 49, 294, "No sample in cargo", 22, TEXT);
+  }
+  if (accepted) {
+    snprintf(value, sizeof(value), "Delivery record: %u Data / %u Energy / %u Essence",
+             field->sent[0], field->sent[1], field->sent[2]);
+    field_text(row, 42, 324, value, 14, SECONDARY);
+    field_text(row, 42, 342, field->sent_capsule_count ? "1 sample delivered to Lab"
+                                                   : "Supplies-only delivery", 14, SECONDARY);
   }
   snprintf(value, sizeof(value), "Supplies %u / %u / Capsules %u / %u", total,
            GAME_CARGO_CAPACITY / GAME_SUPPLY_UNIT, capsules, field->capsule_capacity);
@@ -229,12 +237,16 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
     field_text(row, 28, 414, capsules ? "Send earned items and the sample."
                               : "Send earned items to the Lab.", 18, TEXT);
     field_text(row, 28, 442, "Seals the outing / gathering stops.", 18, SECONDARY);
+  } else if (accepted) {
+    field_text(row, 28, 414, acknowledged ? "Delivery complete / cargo transferred."
+                                         : "Lab accepted / receipt pending.", 18, TEXT);
+    field_text(row, 28, 442, acknowledged ? "Choose a new outing on Probe."
+                                        : "This expedition cannot resume.", 18, SECONDARY);
   } else if (sealed) {
-    wrapped(row, 28, 414, kit_stage(kit), 390, 18, TEXT);
-    field_text(row, 28, 464, "This expedition cannot resume.", 18, SECONDARY);
-  } else if (acknowledged) {
-    field_text(row, 28, 414, "Supplies stored at the Lab.", 18, TEXT);
-    field_text(row, 28, 443, "Choose a new outing on Probe.", 18, SECONDARY);
+    field_text(row, 28, 414, kit->journal.phase == KIT_WAITING
+                               ? "Sent / waiting for the Lab."
+                               : "At Lab / awaiting acceptance.", 18, TEXT);
+    field_text(row, 28, 442, "This expedition cannot resume.", 18, SECONDARY);
   } else {
     const char *message = view->message[0] ? view->message : "Whole items only / preparation stays here.";
     wrapped(row, 28, 414, message, 390, 18, SECONDARY);
@@ -255,7 +267,8 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
                              : "Up/Down: choose / Back: modes", 16, SECONDARY);
   if (kit->failed) {
     fill(row, 24, 493, 402, 64, FIELD);
-    wrapped(row, 28, 505, "Storage unavailable. Cargo preserved.", 390, 18, FOCUS);
+    wrapped(row, 28, 505, accepted ? "Cargo transferred. Delivery record needs recovery."
+                                 : "Storage unavailable. Cargo preserved.", 390, 18, FOCUS);
   }
 }
 static void companion_row(const DeviceKit *kit, KitRow *row) {
@@ -297,7 +310,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     return;
   }
   if (map_outing && (details || reserved || receipt) && !discard && !finish && !friends) {
-    field_cargo_row(kit, row, &field, page, selector, ended);
+    field_cargo_row(kit, row, &field, page, selector);
     return;
   }
   if (reserved)
@@ -673,7 +686,7 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
     return;
   }
   int manifest = phase >= KIT_ARRIVED;
-  int accepted = phase >= KIT_ACK_PENDING;
+  int accepted = map_outing ? field.delivery_accepted : phase >= KIT_ACK_PENDING;
   if (manifest) {
     /*07's ownership comparison: incoming is never rendered as accepted stock. */
     panel(row, 32, 142, 302, 386);
@@ -715,7 +728,12 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
                                                        : "Sample shelf full / supplies only");
     text(row, 48, 537, value, 18, SECONDARY);
   }
-  if (phase == KIT_ARRIVED) {
+  if (kit->failed) {
+    wrapped(row, manifest ? 365 : 48, manifest ? 314 : 509,
+            accepted ? "Delivery committed. Receipt recovery needed."
+                     : "Storage unavailable. Cargo preserved.",
+            manifest ? 286 : 920, manifest ? 18 : 22, FOCUS);
+  } else if (phase == KIT_ARRIVED) {
     fill(row, 371, 312, 282, 60, FIELD);
     action_focus(row, 376, 316, 272, 52);
     heading(row, 391, 326, "Confirm: accept haul", 26, FOCUS);
@@ -731,8 +749,6 @@ static void lab_explore_row(const DeviceKit *kit, KitRow *row) {
        kit->caller_valid ? "Back: return to your previous screen"
                          : "Back: Lab overview",
        18, SECONDARY);
-  if (kit->failed)
-    text(row, 48, 546, "Storage unavailable. Cargo preserved.", 18, FOCUS);
 }
 static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
                        uint8_t *pixels) {

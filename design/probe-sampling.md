@@ -113,7 +113,7 @@ One trace comparison and bounded readable projection suffice for the next host e
 
 ### Executable integration boundary
 
-The [simulated observation adapter](../prototype/expedition/README.md#simulated-observation-adapter) wraps the existing expedition rules and save repository. Timestamped quality-marked windows credit ordinary gathering once; a sustained light-context change alters one fictional Weather opportunity. Explicit acceptance remains required for the resource boost. Observations/log projections separate coverage, current availability, game events, player choices and results. The comparison covers desk, changing light, missing/stale input, replay/restart and full storage. This remains a bounded host experiment: its window duration, freshness threshold, event weights and 128-window history cap are test parameters, not final hardware, balance or production storage choices. Physical evidence begins only with actual hardware tests.
+The earlier simulated observation adapter (historical host experiment, not the current field loop) wraps the existing expedition rules and save repository. Timestamped quality-marked windows credit ordinary gathering once; a sustained light-context change alters one fictional Weather opportunity. Explicit acceptance remains required for the resource boost. Observations/log projections separate coverage, current availability, game events, player choices and results. The comparison covers desk, changing light, missing/stale input, replay/restart and full storage. This remains a bounded host experiment: its window duration, freshness threshold, event weights and 128-window history cap are test parameters, not final hardware, balance or production storage choices. Physical evidence begins only with actual hardware tests.
 
 ## V1 expeditions, events and risk
 
@@ -325,7 +325,7 @@ The owner approved implementing the [generated field loop](#generated-field-loop
 
 ## Executable slice and limits
 
-The [host experiment](../prototype/expedition/README.md) implements the accepted storage/discard/offload boundaries plus one authored storm and a paid existing Pip Crown study. Its rates boost only Energy while keeping the other baseline yields unchanged; these executable arithmetic fixtures differ from the earlier static-story quantities and do not select final balance. It omits capsule generation, second exposure, all other events, tier upgrades and visual UI. See its reproducible transcript for actual measured software behavior; the design catalogue is not an implementation-completeness claim.
+The earlier host experiment (historical fixture, not the installed map implementation) implements the accepted storage/discard/offload boundaries plus one authored storm and a paid existing Pip Crown study. Its rates boost only Energy while keeping the other baseline yields unchanged; these executable arithmetic fixtures differ from the earlier static-story quantities and do not select final balance. It omits capsule generation, second exposure, all other events, tier upgrades and visual UI. See its reproducible transcript for actual measured software behavior; the design catalogue is not an implementation-completeness claim.
 
 ## Generated field loop — owner-review proposal
 
@@ -602,3 +602,45 @@ and continued existing research. Focused full/exhausted/held-input or receipt-fa
 branches should use legitimate actions or a clearly identified bounded fixture,
 without being reported as a human playthrough. Game design assesses these changed
 screens and outcomes after implementation; static approval alone cannot pass them.
+
+### Next discovery trial
+
+Owner playtest requires procedural variation, visible map events, meaningful
+acquisition and a readable player token; repetitive fixture routes and waiting
+through chance cycles do not meet that requirement. The current implementation
+has two authored topology families, fixed leads and no interactive field event.
+
+One joined game/UX/art proposal explores this six-state journey:
+**generated map → event decision → revealed route and explicit neutral sample →
+accepted return → active Lab evidence comparison → retained finding/next choice**.
+This is a design trial, not current software or approved event/puzzle content.
+
+- Generate a bounded valid five-place graph and its legal paths from a seed;
+  vary topology, site roles and lead/event placement. Save the resolved map once.
+  Essential resources and the required starter discovery stay reachable; reload
+  cannot reroll it. Two seeds must change route/choice, not only labels or color.
+- Try one optional finite fictional packet event: recover a previewed useful
+  supply bundle or follow an additional observation. The chosen consequence
+  happens now and is saved once; revisits/reloads cannot farm it. Exact quantities
+  and the alternative's value remain open, with no mandatory risk or sensing claim.
+- Explicit collection retains a sealed sample and provenance, never a previewed
+  genotype/phenotype. Existing A/B support is the trial's scope; sample identity
+  differences alone do not establish varied discoveries.
+- In the Lab's main workpiece, try one discrete evidence/reference comparison
+  using directions, Confirm and Back. Its supported finding and source evidence
+  need an explicit genomic mapping before code or illustration. Instruments and
+  blank decorative boards are not specimen evidence. The removed knob stays out.
+- Show study cost before commitment; a started comparison spends once. Adjusting
+  or retrying does not recharge, guess hidden genotype or erase evidence. The
+  domain owns outcomes; rendering and generated copy cannot grant completion.
+- Existing preparation can continue as secondary activity; obligatory idle rolls
+  must not be the core of this trial. No event platform, new service, sensor,
+  species catalogue, capture/training or ecology is included.
+
+The minimum next design artifact is two generated-map results, one specified
+finite event and a before/during/after comparison mapped to an existing finding.
+Art must use the Gemini-derived family and truthful evidence, with native-size
+composition proof. Inspect one connected journey, then a player can choose its
+path without a button/route script. Stop after this bounded trial; do not expand
+into a collection of minigames. Current corrective work is separate: frame/inset,
+Home-first controls, readable token/feedback and inventory/receipt projection.

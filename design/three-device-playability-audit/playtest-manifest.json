@@ -1,0 +1,22 @@
+{
+  "release": "ae5dcded00e36dbcbfdbbd16211dca2809f97d1a",
+  "kind": "Unmodified browser screenshots from isolated installed-release play",
+  "files": [
+    {
+      "sha256": "efb6041dd88b70188f98a614edb758345c7cbd1bff41ae8aca9358dc5310c191",
+      "file": "playtest-pending-reception.jpg"
+    },
+    {
+      "sha256": "e59e64ebba110d31a81f89bf602ac28c5201f07a628636fe299352df17f18e8b",
+      "file": "playtest-research-finding.jpg"
+    },
+    {
+      "sha256": "9c9c5fcef423d50d178d68a67db5543c4bdcff34855d67b8b2799ad89615b229",
+      "file": "playtest-dock-stock.jpg"
+    },
+    {
+      "sha256": "441baad650ad37b0f9bfafa024ee7bb2bf9eecd15c861042b2bab4206c58f29b",
+      "file": "playtest-accepted-receipt.jpg"
+    }
+  ]
+}
