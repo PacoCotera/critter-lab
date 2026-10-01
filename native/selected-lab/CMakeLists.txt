@@ -31,6 +31,11 @@ set_target_properties(selected_lab PROPERTIES C_EXTENSIONS NO)
 
 include(CTest)
 if(BUILD_TESTING)
+ add_executable(dock_gray_checks dock_gray_tests.c)
+ target_link_libraries(dock_gray_checks PRIVATE selected_lab_core)
+ target_compile_options(dock_gray_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+ add_test(NAME dock_four_gray_checks COMMAND dock_gray_checks)
+
  add_executable(game_checks ../tests/test_game.c)
  target_link_libraries(game_checks PRIVATE selected_lab_core)
  target_compile_options(game_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)

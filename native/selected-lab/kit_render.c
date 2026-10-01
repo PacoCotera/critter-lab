@@ -10,7 +10,7 @@
 typedef struct {
   unsigned y, width;
   uint8_t *pixels;
-  int mono;
+  int epaper;
 } KitRow;
 enum {
   BACKGROUND,
@@ -28,17 +28,20 @@ static const uint8_t palette[][3] = {
     {25, 36, 43},    {214, 222, 226}, {183, 198, 205}, {29, 119, 191},
     {237, 197, 106}, {42, 51, 56},    {10, 17, 23},    {56, 100, 132},
     {29, 38, 45},    {77, 70, 48}};
+/* Four-level paper roles are chosen for contrast, not converted from the
+ * luminous Lab palette. Final raster quantization also covers authored icons. */
+static const uint8_t paper_palette[][3] = {
+    {255,255,255}, {0,0,0}, {85,85,85}, {170,170,170},
+    {0,0,0}, {255,255,255}, {85,85,85}, {85,85,85},
+    {170,170,170}, {170,170,170}};
 static void fill(KitRow *row, int x, int y, int width, int height,
                  unsigned color) {
   if ((int)row->y < y || (int)row->y >= y + height)
     return;
   for (int at = x; at < x + width; ++at)
     if (at >= 0 && at < (int)row->width) {
-      if (row->mono)
-        memset(row->pixels + at * 3,
-               color == BACKGROUND || color == FIELD ? 255 : 0, 3);
-      else
-        memcpy(row->pixels + at * 3, palette[color], 3);
+      memcpy(row->pixels + at * 3,
+             row->epaper ? paper_palette[color] : palette[color], 3);
     }
 }
 static void border(KitRow *row, int x, int y, int width, int height,
@@ -54,9 +57,8 @@ static void text(KitRow *row, int x, int y, const char *value, unsigned size,
   for (unsigned i = 0; i < LAB_FONT_COUNT; ++i)
     if ((unsigned)lab_fonts[i].size == size)
       font = &lab_fonts[i];
-  const uint8_t black[] = {0, 0, 0};
   native_text_row(font, value, x, y, row->y, row->width, row->pixels, 0,
-                  row->mono ? black : palette[color]);
+                  row->epaper ? paper_palette[color] : palette[color]);
 }
 static void heading(KitRow *row, int x, int y, const char *value,
                     unsigned size, unsigned color) {
@@ -66,9 +68,8 @@ static void heading(KitRow *row, int x, int y, const char *value,
       selected = &lab_heading_narrow_fonts[i];
   if (!selected)
     return;
-  const uint8_t black[] = {0, 0, 0};
   native_text_row(selected, value, x, y, row->y, row->width, row->pixels, 0,
-                  row->mono ? black : palette[color]);
+                  row->epaper ? paper_palette[color] : palette[color]);
 }
 static void art(KitRow *row, unsigned icon, int x, int y) {
   int at = (int)row->y - y;
@@ -601,11 +602,11 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
   char value[96];
   fill(row, 0, 0, 792, 272, BACKGROUND);
   border(row, 8, 8, 776, 256, TEXT);
-  text(row, 24, 23, "BEECHO LAB / DOCK", 26, TEXT);
+  text(row, 24, 23, "CRITTER LAB / DOCK", 26, TEXT);
   text(row, 485, 28,
        kit_dock_cache_current(kit) ? "Synced (simulation)"
        : journal->dock_online ? "Cached / stale" : "Offline / cached", 22,
-       TEXT);
+       SECONDARY);
   fill(row, 24, 66, 744, 2, TEXT);
   if (view->page == 2) {
     text(row, 24, 89, "World summary print preview", 26, TEXT);
@@ -619,17 +620,19 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
     const char *names[] = {"Residents", "Samples", "Incubating"};
     for (unsigned i = 0; i < 3; ++i) {
       int x = 24 + (int)i * 248;
+      fill(row, x - 4, 82, 228, 69, PANEL);
       category(row, icons[i], x, 89);
       text(row, x + 47, 87, names[i], 22, TEXT);
       snprintf(value, sizeof(value), "%u", amounts[i]);
       text(row, x + 47, 117, value, 32, TEXT);
     }
     snprintf(value, sizeof(value), "Visits together: %u", kit_dock_visits(kit));
-    text(row, 24, 153, value, 18, TEXT);
+    text(row, 24, 153, value, 18, SECONDARY);
   } else if (view->focus == 1) {
     static const char *labels[] = {"Data", "Energy", "Essence"};
     for (unsigned i = 0; i < 3; ++i) {
       int x = 24 + (int)i * 248;
+      fill(row, x - 4, 82, 228, 69, PANEL);
       category(row, (CoreArtId)(CORE_ART_DATA_MONO + i), x, 89);
       text(row, x + 47, 85, labels[i], 22, TEXT);
       snprintf(value, sizeof(value), "%u %s", journal->dock_stock[i] / 100,
@@ -642,8 +645,8 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
                               : "Lab link unavailable; last snapshot retained",
          22, TEXT);
     text(row, 24, 122, "Cloud: not connected   Charging: not measured", 22,
-         TEXT);
-    text(row, 24, 155, "Radio protocol: unselected", 18, TEXT);
+         SECONDARY);
+    text(row, 24, 155, "Radio protocol: unselected", 18, SECONDARY);
   }
   time_t local_stamp = (time_t)journal->dock_updated_at - 6 * 3600;
   struct tm *local_time = gmtime(&local_stamp);
@@ -653,14 +656,16 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
   snprintf(value, sizeof(value), "%sSnapshot %s%s",
            view->page == 1 ? "OK: Back / " : "", stamp,
            kit_dock_cache_current(kit) ? "" : " / stale");
-  text(row, 24, 178, value, 18, TEXT);
+  text(row, 24, 178, value, 18, SECONDARY);
   if (view->message[0])
     text(row, 24, 201, view->message, 18, TEXT);
   unsigned count = view->page == 2 ? 2 : 3;
   for (unsigned i = 0; i < count; ++i) {
     int x = 24 + (int)i * (view->page == 2 ? 450 : 248);
-    if (view->focus == i)
+    if (view->focus == i) {
+      fill(row, x - 4, 222, view->page == 2 && i == 0 ? 420 : 228, 32, PANEL);
       border(row, x - 4, 222, view->page == 2 && i == 0 ? 420 : 228, 32, TEXT);
+    }
     text(row, x + 8, 227, kit_option(kit, KIT_DOCK, i), 18, TEXT);
   }
 }
@@ -780,7 +785,10 @@ static void render_row(const DeviceKit *kit, unsigned device, unsigned y,
     lab_explore_row(kit, &row);
   if (device == KIT_DOCK)
     for (unsigned x = 0; x < row.width; ++x) {
-      uint8_t value = pixels[x * 3] >= 128 ? 255 : 0;
+      unsigned luminance = (54u * pixels[x * 3] +
+                            183u * pixels[x * 3 + 1] +
+                            19u * pixels[x * 3 + 2] + 128u) / 256u;
+      uint8_t value = (uint8_t)(((luminance + 42u) / 85u) * 85u);
       memset(pixels + x * 3, value, 3);
     }
 }

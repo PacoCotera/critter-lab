@@ -34,11 +34,11 @@ The manufacturer driver handles a dual-controller panel; port the exact 5in79 dr
 The selected no-suffix module supports **four gray levels**: black, dark gray,
 light gray and white ([manufacturer product table](https://www.waveshare.com/product/5.79inch-e-paper-module.htm),
 [four-grayscale manual](https://www.waveshare.com/wiki/5.79inch_e-Paper_Module_Manual)).
-Black/white describes its pigments, not a one-bit-only capability. The current
-simulator instead thresholds Dock pixels to black/white in `kit_render.c`; that
-is a renderer limitation, not the selected panel specification. Correct the
-Dock projection with a deliberate four-level palette, strong black text/focus
-and subordinate gray grouping; quantize the final frame to four levels. Hardware
+Black/white describes its pigments, not a one-bit-only capability. The native
+Dock projection uses a deliberate four-level palette, strong black text/focus
+and subordinate gray grouping; the final RGB host frame is quantized to
+0/85/170/255, including authored icon and font edges. This is a simulator raster
+contract, not a physical two-bit SPI driver or waveform implementation. Hardware
 grayscale waveform, refresh timing, ghosting and power still require the exact
 driver and bench evidence; black/white partial-refresh timing is not a grayscale
 performance claim.
