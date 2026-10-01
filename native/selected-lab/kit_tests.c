@@ -790,6 +790,8 @@ static void frozen_field_receipt(const char *directory) {
          lab.game.received_count == 1 &&
          lab.game.received[0].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
   kit_tick(&kit, 203);
+  assert(kit.journal.phase == KIT_ACK_PENDING);
+  kit_tick(&kit, 204);
   assert(kit.journal.phase == KIT_COMPLETE);
   selected_lab_init(&lab);
   assert(selected_lab_load(&lab, path, 300));
