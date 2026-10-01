@@ -118,7 +118,8 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
     out->action_count = 0;
     strcpy(out->context, "Sample collected / contents unknown");
   }
-  snprintf(out->footer, sizeof(out->footer), "%s", selector ? "Left/Right: mode / Down/Confirm: enter" :
+  snprintf(out->footer, sizeof(out->footer), "%s", out->failed ? "Back: modes" :
+      selector ? "Left/Right: mode / Down/Confirm: enter" :
       sample_collected ? "Back: map" :
       out->phase == PROBE_MAP ? "Directions: move / Confirm: inspect / Back: modes" :
       out->phase == PROBE_SITE ? "Up/Down: choose / Confirm: act / Back: map" :

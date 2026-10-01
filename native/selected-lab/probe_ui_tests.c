@@ -67,6 +67,7 @@ static void projection_and_phase_guards(void) {
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_UNAVAILABLE && !after.action_count);
   assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
   assert(!strcmp(after.preparation_labels[0], "Saved") && !strstr(after.source, "Active"));
+  assert(!strcmp(after.footer, "Back: modes"));
   assert(!strcmp(after.source, "Saved preparation / actions unavailable"));
   GameState retained = lab.game;
   memset(&lab.game.field, 0, sizeof(lab.game.field));
