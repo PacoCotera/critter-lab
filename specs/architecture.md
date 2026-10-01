@@ -172,8 +172,8 @@ separate roots, copied view facts and bounded assets. The
 [native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
 mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
-boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). Lab and other Companion families remain on
-manual C renderers. Those paths are known architectural debt, not an accepted
+boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
+and visits. Lab families remain on manual C renderers. Those paths are known architectural debt, not an accepted
 exception. The existing ESP-IDF Companion build is an older demonstration
 scaffold; it does not compile the current game UI. Host pixel-stream evidence,
 actual ESP-IDF UI compilation and hardware measurements are separate gates.
@@ -231,7 +231,7 @@ control sequences before dependent compositions are treated as selected.
 | Companion Discard class/quantity/Keep review and empty Finish review | Retained LVGL using the shared portable Cargo tree | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-discard/README.md); current Companion ESP build still required |
 | Companion Cargo mode preview | Retained LVGL, same portable Cargo tree | [Native output, controls and independent review checked](../docs/evidence/native-companion-cargo-preview/README.md); current Companion ESP build still required |
 | Companion Companions mode preview | Retained LVGL, lazy portable resident preview tree | [Native source/controls/output and independent review checked](../docs/evidence/native-companion-resident-preview/README.md); current Companion ESP build still required |
-| Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | Native validation and independent output review pending; current Companion ESP build still required |
+| Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-resident-actions/README.md); current Companion ESP build still required |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
@@ -295,8 +295,9 @@ validated. Panel format conversion is permitted here; UI composition is not.
 The complete host Dock family and display/host boundary are checked at5431f44.
 The [bounded headless ESP-IDF compile](../docs/evidence/native-dock-lvgl/ESP32.md)
 contains the same shared Dock UI, pinned LVGL and partial-flush adapter atc3c8a6d;
-ELF/map/static memory evidence is separate from hardware boot. Remaining Companion families
-then migrate, followed by complete Lab journey workpieces. Each slice requires
+ELF/map/static memory evidence is separate from hardware boot. Current Companion
+shared UI compilation remains required; every Lab family then needs migration.
+Each slice requires
 exact pushed source, actual native output, physical-control regression checks
 and independent review. Final architecture acceptance audits all entry points:
 no active manual compositor, silent fallback or full-screen legacy bitmap wrapper.

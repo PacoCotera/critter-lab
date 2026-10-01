@@ -85,7 +85,8 @@ screen/focus/action labels and availability without invoking a command. List
 focus belongs to the selected resident header; visit focus belongs to one of the
 two exact Kit rows. Empty-list Return to Probe, unavailable visits, saved/stale
 feedback and global recovery are explicit states. Native validation and
-independent review for these new routes are pending.
+independent technical, interaction and craft passes are recorded in the
+[resident action proof](../../docs/evidence/native-companion-resident-actions/README.md).
 
 Lab routes remain open renderer migrations. A failed migrated Dock/Companion projection returns a
 render error; it cannot silently reach the old manual renderer.

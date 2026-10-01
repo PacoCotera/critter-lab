@@ -15,8 +15,9 @@ track the remaining playability and craft gaps.
   and zero carried cargo. Chooser and actual capacity-rejection frames were
   inspected. A misleading unread-clue caption is corrected without new rules.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
-  Companion and Caddy target ESP32. Dock, Companion Probe, Cargo, all three mode previews, Send/Keep and Discard/Finish use LVGL
-  on the host. All Lab and remaining Companion pages still need conversion.
+  Companion and Caddy target ESP32. Dock and all known Companion screen families use LVGL on the host.
+  Every Lab family still needs conversion; current Companion ESP UI compilation
+  remains a separate gate.
   The old ESP-IDF Companion demo is not current UI evidence. The same shared Dock UI now compiles/links under installed ESP-IDF in a
   [headless partial-flush target](docs/evidence/native-dock-lvgl/ESP32.md). [Architecture](specs/architecture.md#native-ui-foundation)
   owns complete route/target coverage; a component pass is not whole acceptance.
@@ -38,7 +39,9 @@ track the remaining playability and craft gaps.
   and inventory. Global storage recovery remains distinct from a stale cache.
   [Native evidence](docs/evidence/native-companion-resident-preview/README.md)
   records the exact source, controls, fixtures and bounded independent reviews.
-  Resident list/visit migration remains open.
+  Resident list/visit now shares this tree. [Native action evidence](docs/evidence/native-companion-resident-actions/README.md)
+  records selection, save-once visits, shared counts, offline restart and recovery.
+  Independent technical, focused interaction and separate native craft reviews pass.
 - **Simulator — browser maintenance:** candidate shell enlarges Companion beside
   Lab, groups Back with Confirm and preserves native bitmap aspect ratios. Browser
   checks at1640,1340 and390 pixels show no horizontal overflow and readable
