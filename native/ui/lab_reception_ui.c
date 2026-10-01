@@ -157,7 +157,7 @@ LabReceptionUi *lab_reception_ui_create(lv_obj_t *parent, const LabHomeFonts *fo
   ui->footer = label(ui->root, fonts->small, 32, 568, 960, 28, CORE_ART_SECONDARY_RGB, "");
   ui->warning = label(ui->root, fonts->small, 48, 512, 928, 30, CORE_ART_FOCUS_RGB, "");
   ui->arrival = surface(ui->root, 40, 112, 944, 392);
-  ui->log = surface(ui->root, 40, 112, 944, 392);
+  ui->log = surface(ui->root, 40, 112, 944, 428);
   if (!ui->title || !ui->footer || !ui->warning || !ui->arrival || !ui->log) goto failure;
   if (!native_ui_frame_init(&ui->left, ui->arrival, 292, 350, CORE_ART_BLUE_RGB) ||
       !native_ui_frame_init(&ui->right, ui->arrival, 292, 350, CORE_ART_BLUE_RGB) ||
@@ -193,7 +193,8 @@ LabReceptionUi *lab_reception_ui_create(lv_obj_t *parent, const LabHomeFonts *fo
   lv_obj_add_event_cb(ui->map, draw_map, LV_EVENT_DRAW_MAIN, ui);
   ui->facts = label(ui->log, fonts->small, 846, 106, 96, 270, CORE_ART_SECONDARY_RGB, "");
   ui->sample_art = image(ui->log, materials[3], 866, 104);
-  ui->empty = label(ui->log, fonts->heading, 16, 90, 912, 144, CORE_ART_INK_RGB, "No expedition records received yet.");
+  ui->empty = label(ui->log, fonts->heading, 16, 90, 912, 144, CORE_ART_INK_RGB,
+      "No expedition records received yet.\n\nReturn with your Companion to record an outing.");
   for (unsigned i=0;i<3;++i) {
     ui->received_art[i] = image(ui->log, materials[4+i], 0, 0);
     ui->received_amount[i] = label(ui->log, fonts->body, 0, 0, 172, 60, CORE_ART_INK_RGB, "");
@@ -266,6 +267,7 @@ int lab_reception_ui_update(LabReceptionUi *ui, const LabReceptionView *view) {
   lv_label_set_text_static(ui->title, arrival ? "HAUL RECEPTION" : "EXPEDITION LOG");
   lv_label_set_text_static(ui->footer, view->footer);
   lv_label_set_text_static(ui->warning, view->warning);
+  lv_obj_set_pos(ui->warning,48,arrival ? 512 : 86);
   lv_obj_set_hidden(ui->warning, !view->warning[0]);
   if (arrival) {
     for (unsigned i=0;i<3;++i) {
@@ -327,11 +329,11 @@ int lab_reception_ui_update(LabReceptionUi *ui, const LabReceptionView *view) {
   for (unsigned i=0;i<3;++i) {
     lv_obj_set_hidden(ui->received_art[i],empty);
     lv_obj_set_hidden(ui->received_amount[i],empty);
-    int x=detail ? 664 : 0, y=detail ? 86+(int)i*72 : 324;
-    lv_obj_set_pos(ui->received_art[i],x+(detail ? 0 : (int)i*116),y);
-    lv_obj_set_style_text_font(ui->received_amount[i],detail ? ui->fonts.body : ui->fonts.small,0);
-    lv_obj_set_pos(ui->received_amount[i],x+55+(detail ? 0 : (int)i*116),y+5);
-    lv_obj_set_size(ui->received_amount[i],detail ? 204 : 60,60);
+    int x=detail ? 664 : 358+(int)i*178, y=detail ? 86+(int)i*72 : 368;
+    lv_obj_set_pos(ui->received_art[i],x,y);
+    lv_obj_set_style_text_font(ui->received_amount[i],ui->fonts.body,0);
+    lv_obj_set_pos(ui->received_amount[i],x+55,y+5);
+    lv_obj_set_size(ui->received_amount[i],detail ? 204 : 170,54);
     snprintf(ui->received_text[i],sizeof(ui->received_text[i]),"%u\n%s",record->accepted[i],names[i]);
     lv_label_set_text_static(ui->received_amount[i],ui->received_text[i]);
   }
