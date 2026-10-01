@@ -1,4 +1,5 @@
 #include "home_view.h"
+#include "resident_gallery_view.h"
 #include "core_art.h"
 #include <inttypes.h>
 #include <stdio.h>
@@ -82,10 +83,8 @@ static void overview(const SelectedLab *lab,
   snprintf(out->overview[3].status, sizeof(out->overview[3].status),
       "%u resident%s", residents, residents == 1 ? "" : "s");
   if (residents) {
-    const GameIndividual *individual = &game->individuals[preview_resident(lab)];
-    snprintf(out->overview[3].detail[0], sizeof(out->overview[3].detail[0]), "%s", individual->id);
-    snprintf(out->overview[3].detail[1], sizeof(out->overview[3].detail[1]),
-        "%u visit%s together", individual->care_visits, individual->care_visits == 1 ? "" : "s");
+    strcpy(out->overview[3].detail[0], "Revealed population");
+    strcpy(out->overview[3].detail[1], "Saved individual records");
   } else strcpy(out->overview[3].detail[0], "No Beecho revealed");
 }
 
@@ -164,7 +163,7 @@ static void incubation(const SelectedLab *lab, LabHomeView *out) {
       "Prepare incubation from Research.");
 }
 
-int selected_lab_home_view(const SelectedLab *lab,
+static int copy_home_view(const SelectedLab *lab,
                            const SelectedLabRenderContext *context,
                            int normalization_pending, LabHomeView *out) {
   if (!lab || !out || lab->page != V1_HOME || lab->focus >= 5 ||
@@ -217,22 +216,10 @@ int selected_lab_home_view(const SelectedLab *lab,
         "Bring a sample to the Lab to begin.");
   } else if (lab->focus == 3) incubation(lab, out);
   else if (lab->focus == 4) {
-    if (residents) {
-      unsigned selected = preview_resident(lab), asset;
-      const GameIndividual *individual = &game->individuals[selected];
-      out->landing.art = LAB_HOME_ART_PENDING;
-      if (selected_lab_original_art(individual, &game->individual_metadata[selected], &asset))
-        out->landing.art = asset == CORE_ART_PIP_PLAIN ? LAB_HOME_ART_PIP_PLAIN : LAB_HOME_ART_PIP_MARKED;
-      snprintf(out->landing.heading, sizeof(out->landing.heading), "%s", individual->id);
-      strcpy(out->landing.body, individual->expression.pale_markings ? "Pale markings" : "Plain coat");
-      snprintf(out->landing.details[0], sizeof(out->landing.details[0]), "%u revealed resident%s",
-          residents, residents == 1 ? "" : "s");
-      snprintf(out->landing.details[1], sizeof(out->landing.details[1]), "%u visit%s together",
-          individual->care_visits, individual->care_visits == 1 ? "" : "s");
-    } else {
-      strcpy(out->landing.heading, "NO REVEALED RESIDENTS");
-      strcpy(out->landing.body, "A Beecho appears here after reveal.");
-    }
+    if (!selected_lab_resident_gallery_projection(lab, &out->gallery)) return 0;
+    snprintf(out->title, sizeof(out->title), "HABITAT / %u resident%s", residents, residents == 1 ? "" : "s");
+    strcpy(out->landing.heading, "No revealed residents yet");
+    strcpy(out->landing.body, "");
   }
   if (lab->storage_error) {
     snprintf(out->warning, sizeof(out->warning), "%s", lab->message);
@@ -242,5 +229,15 @@ int selected_lab_home_view(const SelectedLab *lab,
       "Up/down: preview | Confirm: enter %s | Back: Overview", selected_lab_focus(lab));
   if (normalization_pending)
     strcpy(out->warning, "Accept the existing haul before supply conversion can finish.");
+  return 1;
+}
+
+int selected_lab_home_view(const SelectedLab *lab,
+    const SelectedLabRenderContext *context, int normalization_pending,
+    LabHomeView *out) {
+  if (!out) return 0;
+  LabHomeView view;
+  if (!copy_home_view(lab, context, normalization_pending, &view)) return 0;
+  *out = view;
   return 1;
 }

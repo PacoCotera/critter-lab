@@ -105,6 +105,8 @@ void selected_lab_restore_context(SelectedLab *lab,
   memcpy(lab->workspace_resident, context->workspace_resident,
          sizeof(lab->workspace_resident));
   memcpy(lab->message, context->message, sizeof(lab->message));
+  if (lab->page == V1_HABITAT && lab->focus >= selected_lab_options(lab))
+    lab->focus = selected_lab_options(lab) > 1 ? 1 : 0;
   memset(lab->gestures, 0, sizeof(lab->gestures));
   interaction_changed(lab);
   lab->page_revision = lab->revision;
@@ -242,13 +244,25 @@ static void focus_resident(SelectedLab *lab) {
       return;
     }
 }
+/* Collection entry and return preserve the saved member, never a care focus. */
+static void enter_population(SelectedLab *lab) {
+  unsigned ordinal = 0, selected = 0;
+  for (unsigned index = 0; index < lab->game.individual_count; ++index) {
+    if (!lab->game.individuals[index].revealed) continue;
+    if (index == lab->resident) selected = ordinal;
+    ++ordinal;
+  }
+  enter(lab, V1_CRITTERS);
+  lab->focus = selected;
+  if (ordinal) focus_resident(lab);
+}
 void selected_lab_init(SelectedLab *lab) {
   memset(lab, 0, sizeof(*lab));
   game_state_init(&lab->game);
   lab->workspace_page[0] = V1_SAMPLES;
   lab->workspace_page[1] = V1_HOME;
   lab->workspace_page[2] = V1_LIBRARY;
-  lab->workspace_page[3] = V1_HABITAT;
+  lab->workspace_page[3] = V1_CRITTERS;
   lab->workspace = 4;
   lab->revision = lab->page_revision = lab->interaction_epoch = 1;
   lab->minimum_action_revision = 1;
@@ -314,7 +328,7 @@ unsigned selected_lab_options(const SelectedLab *lab) {
   case V1_REVEAL:
     return 1;
   case V1_HABITAT:
-    return visible_residents(lab) ? 4 : 1;
+    return visible_residents(lab) ? 3 : 1;
   }
   return 1;
 }
@@ -325,8 +339,7 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
                                  "Weather watch"};
   static const char *cargo[] = {"Return + store haul", "Discard 10 Data",
                                 "Discard 10 Energy", "Discard 10 Essence"};
-  static const char *care[] = {"Spend time together", "Next resident",
-                               "Residents", "Explore again"};
+  static const char *care[] = {"Spend time together", "Population", "Explore again"};
   switch (lab->page) {
   case V1_CRITTERS: {
     unsigned index = 0;
@@ -393,9 +406,9 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_REVEAL:
     return "Meet in the habitat";
   case V1_HABITAT:
-    if (lab->kit_mode && (!visible_residents(lab) || option == 3))
+    if (lab->kit_mode && (!visible_residents(lab) || option == 2))
       return "Received expeditions";
-    return visible_residents(lab) ? care[option % 4]
+    return visible_residents(lab) ? care[option % 3]
                                   : "Explore for your first sample";
   }
   return "Return";
@@ -498,11 +511,10 @@ static void activate(SelectedLab *lab) {
   unsigned focus = lab->focus;
   switch (lab->page) {
   case V1_CRITTERS:
-    if (!visible_residents(lab))
-      enter(lab, V1_HABITAT);
-    else {
+    if (visible_residents(lab)) {
       focus_resident(lab);
       enter(lab, V1_HABITAT);
+      lab->focus = 1;
     }
     return;
   case V1_LIBRARY:
@@ -518,17 +530,11 @@ static void activate(SelectedLab *lab) {
     return;
   case V1_HOME: {
     static const SelectedPage pages[] = {V1_HOME, V1_EXPEDITION, V1_SAMPLES,
-                                         V1_INCUBATION, V1_HABITAT};
+                                         V1_INCUBATION, V1_CRITTERS};
     if (!focus)
       break;
-    enter(lab, pages[focus]);
-    if (lab->page == V1_HABITAT && visible_residents(lab)) {
-      for (unsigned i = 0; i < lab->game.individual_count; i++)
-        if (lab->game.individuals[i].revealed) {
-          lab->resident = i;
-          break;
-        }
-    }
+    if (focus == 4) enter_population(lab);
+    else enter(lab, pages[focus]);
     break;
   }
   case V1_EXPEDITION:
@@ -726,29 +732,16 @@ static void activate(SelectedLab *lab) {
     command.type = GAME_COMMAND_HABITAT_VISIT;
     command.data.habitat.individual = lab->resident;
     command.data.habitat.habitat = 1;
-    if (commit(lab, command) >= GAME_OK)
+    if (commit(lab, command) >= GAME_OK) {
       enter(lab, V1_HABITAT);
+      lab->focus = visible_residents(lab) ? 1 : 0;
+    }
     break;
   case V1_HABITAT:
-    if (!visible_residents(lab) || focus == 3)
+    if (!visible_residents(lab) || focus == 2)
       enter(lab, V1_EXPEDITION);
-    else if (focus == 2) {
-      enter(lab, V1_CRITTERS);
-      unsigned index = 0;
-      for (unsigned i = 0; i < lab->game.individual_count; ++i)
-        if (lab->game.individuals[i].revealed) {
-          if (i == lab->resident) {
-            lab->focus = index;
-            break;
-          }
-          ++index;
-        }
-    } else if (focus == 1) {
-      do {
-        lab->resident = (lab->resident + 1) % lab->game.individual_count;
-      } while (!lab->game.individuals[lab->resident].revealed);
-      interaction_changed(lab);
-    } else {
+    else if (focus == 1) enter_population(lab);
+    else if (focus == 0) {
       command.type = GAME_COMMAND_CARE_VISIT;
       command.data.individual = lab->resident;
       if (commit(lab, command) == GAME_OK)
@@ -812,6 +805,33 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
   memset(gesture, 0, sizeof(*gesture));
   if (!allowed || lab->suspended)
     return;
+  if (lab->page == V1_CRITTERS && button <= 3) {
+    unsigned count = visible_residents(lab), selected = lab->focus;
+    if (count && selected < count) {
+      if (button == 0 && selected >= 4) selected -= 4;
+      else if (button == 1 && selected + 4 < count) selected += 4;
+      else if (button == 2 && selected % 4) --selected;
+      else if (button == 3 && selected % 4 < 3 && selected + 1 < count) ++selected;
+    }
+    if (selected != lab->focus) {
+      lab->focus = selected;
+      focus_resident(lab);
+      interaction_changed(lab);
+    }
+    return;
+  }
+  if (lab->page == V1_HABITAT && visible_residents(lab) && button <= 3) {
+    unsigned selected = lab->focus < 3 ? lab->focus : 1;
+    if (button == 0 && selected > 1) selected = 1;
+    else if (button == 1 && selected == 1) selected = 2;
+    else if (button == 2 && selected == 0) selected = 1;
+    else if (button == 3 && selected != 0) selected = 0;
+    if (selected != lab->focus) {
+      lab->focus = selected;
+      interaction_changed(lab);
+    }
+    return;
+  }
   if (button == 0 || button == 1) {
     unsigned count = selected_lab_options(lab);
     lab->focus = (lab->focus + (button == 1 ? 1 : count - 1)) % count;
@@ -830,13 +850,17 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     }
     remember_workspace(lab);
     unsigned workspace = button - 4;
+    if (workspace == 3) {
+      enter_population(lab);
+      return;
+    }
     enter(lab, lab->workspace_page[workspace]);
     lab->focus = lab->workspace_focus[workspace];
     lab->sample = lab->workspace_sample[workspace];
     lab->study = lab->workspace_study[workspace];
     lab->resident = lab->workspace_resident[workspace];
     if (lab->focus >= selected_lab_options(lab))
-      lab->focus = 0;
+      lab->focus = lab->page == V1_HABITAT && selected_lab_options(lab) > 1 ? 1 : 0;
     if (lab->page == V1_CRITTERS)
       focus_resident(lab);
     else if (lab->page == V1_HABITAT && visible_residents(lab) &&
@@ -849,7 +873,7 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     return;
   }
   if (button == 3) {
-    int safe = (lab->page == V1_HOME ||
+    int safe = ((lab->page == V1_HOME && lab->focus != 4) ||
                 (lab->page == V1_SAMPLES && lab->focus &&
                  lab->focus <= lab->game.sample_count) ||
                 (lab->page == V1_STUDIES &&
@@ -872,9 +896,11 @@ void selected_lab_input(SelectedLab *lab, SelectedInput input, int delta,
     } else if (previous == V1_CREATE_REVIEW) {
       enter(lab, V1_CREATE);
       lab->focus = lab->creation_preference;
+    } else if (previous == V1_HABITAT) {
+      enter_population(lab);
     } else if (previous == V1_CRITTERS) {
-      enter(lab, V1_HABITAT);
-      lab->focus = visible_residents(lab) ? 2 : 0;
+      enter(lab, V1_HOME);
+      lab->focus = 4;
     } else if (previous == V1_FINDING || previous == V1_STUDY_REVIEW ||
                previous == V1_CREATE) {
       enter(lab, V1_STUDIES);

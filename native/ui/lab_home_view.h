@@ -1,6 +1,7 @@
 #ifndef CRITTER_LAB_HOME_VIEW_H
 #define CRITTER_LAB_HOME_VIEW_H
 #include <stdint.h>
+#include "lab_resident_gallery_view.h"
 
 typedef enum {
   LAB_HOME_ART_NONE, LAB_HOME_ART_EXPLORE, LAB_HOME_ART_RESEARCH,
@@ -28,5 +29,6 @@ typedef struct {
   } landing;
   char footer[192], warning[160];
   int pressed, suspended;
+  LabResidentGalleryView gallery;
 } LabHomeView;
 #endif

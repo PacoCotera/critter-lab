@@ -40,7 +40,23 @@ directional cross at left, four labeled workspace keys, Back then Confirm at rig
 No knob or clickable screen targets. [Experience specification](../../specs/experience.md#simulated-console-controls--accepted)
 owns action mapping and safety. Native input requires a fresh press/release against
 the visible ready revision; cancellation, overlapping presses and suspension cannot
-carry an armed action into another workspace. Right is read-only navigation.
+carry an armed action into another workspace. Right is read-only navigation or
+passive selection in the explicit Residents gallery and Resident activity.
+
+Home Habitat previews the entire revealed saved population. Confirm or the
+Habitat workspace key enters the four-column, two-row collection; Left/Right
+selects a neighboring column and Up/Down the same-column row. Edges and absent
+members clamp, and physical Back returns to Home Habitat. Selection changes only
+the saved preview. Confirm enters the selected Resident safely on Population;
+its navigation-only rail offers Population and Received expeditions (Explore in
+the standalone fixture). Right focuses the separate Spend time together action,
+Left restores Population, and fresh Confirm alone records care. Back restores
+the selected gallery identity. No new game command or saved navigation format
+is involved.
+Named Resident navigation into Received expeditions uses a transient caller
+distinct from arriving cargo. Back from record detail returns to its list; Back
+from that list restores the same Resident and navigation choice. Lab acceptance
+and the immutable received records retain their existing authority.
 
 The line protocol accepts `status`, `frame REVISION`, `ready REVISION`,
 `cancel REVISION`, `suspend REVISION`, `resume REVISION`, and button phases such as
@@ -76,7 +92,15 @@ and persistent native routes. Focused `lab_research_ui_checks` preserve hidden
 knowledge, explicit costs, saved findings and shared-context lifetime.
 [Creation, incubation, reveal, Habitat and residents](../../docs/evidence/native-lab-actions/README.md)
 share a fourth retained Lab tree, exact candidate/draft authority and saved original
-portrait provenance. Standalone legacy acquisition graphics are retired; its command
+portrait provenance.
+
+The Habitat gallery reuses the two permitted original portrait descriptors through
+standard LVGL half-scale draw tasks, one lightweight component in each existing
+Home/action parent and one selected rim. Its copied view includes up to eight
+revealed stable identities and their saved art permissions; there is no new asset
+backing, registry or phenotype reconstruction. Native fit and the unchanged fixed
+pool must be measured before release; host proof is not physical compatibility.
+Standalone legacy acquisition graphics are retired; its command
 and domain fixture remains available as described below. Focused `lab_action_ui_checks`,
 `lab_reception_ui_checks`, `companion_cargo_ui_checks`,
 `companion_probe_ui_checks` and `companion_resident_ui_checks` cover this boundary

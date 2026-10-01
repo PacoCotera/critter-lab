@@ -56,21 +56,21 @@ static void projection_cases(void) {
     assert(!strcmp(view.stock_units[0], "unit") && !strcmp(view.stock_units[1], "units"));
     assert(!memcmp(&before, &lab, sizeof(lab)));
   }
-  assert(view.landing.art == LAB_HOME_ART_PIP_MARKED);
-  assert(!strcmp(view.landing.heading, "fixture-resident-1"));
-  assert(!strcmp(view.landing.details[1], "7 visits together"));
+  assert(view.gallery.count == 2 && view.gallery.selected == 1);
+  assert(view.gallery.entries[1].portrait == LAB_RESIDENT_PORTRAIT_MARKED);
+  assert(!strcmp(view.gallery.entries[1].id, "fixture-resident-1") && view.gallery.visits == 7);
   lab.resident = GAME_MAX_INDIVIDUALS;
   assert(selected_lab_home_view(&lab, NULL, 0, &view));
-  assert(view.landing.art == LAB_HOME_ART_PIP_PLAIN);
+  assert(view.gallery.selected == 0 && view.gallery.entries[0].portrait == LAB_RESIDENT_PORTRAIT_PLAIN);
   lab.game.individuals[0].revealed = 0;
   assert(selected_lab_home_view(&lab, NULL, 0, &view));
-  assert(view.landing.art == LAB_HOME_ART_PIP_MARKED);
+  assert(view.gallery.count == 1 && view.gallery.entries[0].portrait == LAB_RESIDENT_PORTRAIT_MARKED);
   lab.game.individual_metadata[1].original_art_sha256[0] ^= 1;
   assert(selected_lab_home_view(&lab, NULL, 0, &view));
-  assert(view.landing.art == LAB_HOME_ART_PENDING);
+  assert(view.gallery.entries[0].portrait == LAB_RESIDENT_PORTRAIT_PENDING);
   lab.game.individuals[1].revealed = 0;
   assert(selected_lab_home_view(&lab, NULL, 0, &view));
-  assert(view.landing.art == LAB_HOME_ART_NONE && strstr(view.landing.heading, "NO REVEALED"));
+  assert(!view.gallery.count && !view.gallery.entries[0].id[0]);
 
   lab.focus = 0;
   lab.sample = GAME_MAX_SAMPLES;
@@ -132,6 +132,13 @@ static void projection_cases(void) {
   lab.page = V1_HOME;
   lab.game.sample_count = GAME_MAX_SAMPLES + 1;
   assert(!selected_lab_home_view(&lab, NULL, 0, &view));
+  populated(&lab, &kit);
+  lab.focus = 4;
+  assert(selected_lab_home_view(&lab, NULL, 0, &view));
+  LabHomeView untouched = view;
+  strcpy(lab.game.individuals[1].id, lab.game.individuals[0].id);
+  assert(!selected_lab_home_view(&lab, NULL, 0, &view));
+  assert(!memcmp(&untouched, &view, sizeof(view)));
 }
 
 static void button(SelectedLab *lab, SelectedInput down) {
@@ -273,6 +280,12 @@ static void retained_lifetime_and_exports(void) {
   invalid.landing.show_progress = 1;
   invalid.landing.total = 0;
   assert(!native_ui_home(home, &invalid));
+  invalid = view;
+  invalid.gallery.selected = invalid.gallery.count;
+  assert(!native_ui_home(home, &invalid));
+  invalid = view;
+  strcpy(invalid.gallery.entries[1].id, invalid.gallery.entries[0].id);
+  assert(!native_ui_home(home, &invalid));
 
   lab.focus = 1;
   kit.journal.cargo[0] = 300;
@@ -340,11 +353,25 @@ static void retained_lifetime_and_exports(void) {
   lab.game.samples[1].id[sizeof(lab.game.samples[1].id) - 1] = 0;
   memset(lab.game.individuals[1].id, 'R', sizeof(lab.game.individuals[1].id) - 1);
   lab.game.individuals[1].id[sizeof(lab.game.individuals[1].id) - 1] = 0;
+  memset(lab.game.individuals[1].source_sample_id, 'S', sizeof(lab.game.individuals[1].source_sample_id) - 1);
+  lab.game.individuals[1].source_sample_id[sizeof(lab.game.individuals[1].source_sample_id) - 1] = 0;
   lab.game.individuals[1].art_pending = 0;
   lab.focus = 0;
   export_fixture(&kit, home, "maximum-overview");
   lab.focus = 4;
   export_fixture(&kit, home, "maximum-resident-id");
+  /* Simultaneous maximum population remains a synthetic presentation fixture. */
+  for (unsigned index = 2; index < GAME_MAX_INDIVIDUALS; ++index) {
+    lab.game.individuals[index] = lab.game.individuals[index % 2];
+    lab.game.individual_metadata[index] = lab.game.individual_metadata[index % 2];
+    snprintf(lab.game.individuals[index].id, sizeof(lab.game.individuals[index].id),
+        "fixture-home-population-%u", index);
+  }
+  lab.game.individual_count = GAME_MAX_INDIVIDUALS;
+  export_fixture(&kit, home, "population-eight");
+  lab.game.individual_count = 5;
+  lab.resident = 4;
+  export_fixture(&kit, home, "population-five");
   lab.game.sample_count = lab.game.individual_count = 0;
   lab.game.incubation_ready = 0;
   lab.game.data = lab.game.energy = lab.game.essence = 0;

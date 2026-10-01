@@ -68,6 +68,9 @@ typedef struct {
   int failed;
   uint32_t clock, next_delivery, dock_updated;
   SelectedLabContext caller;
+  /* Named Resident -> received log navigation, separate from arrival return. */
+  SelectedLabContext received_caller;
+  int received_caller_valid;
   int caller_valid, normalization_pending;
   char opened_haul[64];
 } DeviceKit;

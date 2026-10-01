@@ -1,4 +1,5 @@
 #include "lab_action_ui.h"
+#include "lab_resident_gallery.h"
 #include "../selected-lab/ui_theme.h"
 #include "../selected-lab/core_art.h"
 #include <stdio.h>
@@ -16,6 +17,8 @@ struct LabActionUi {
   const lv_image_dsc_t *images[13];
   char stock_text[3][24], shortage_text[3][48], visits_text[48], progress_text[64];
   char reference_text[64];
+  LabResidentGallery gallery;
+  char selected_text[152], source_text[64];
 };
 
 static lv_obj_t *surface(lv_obj_t *parent, int x, int y, int width, int height,
@@ -114,6 +117,7 @@ LabActionUi *lab_action_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
   if (!ui->title || !ui->identity || !ui->art || !ui->heading || !ui->form ||
       !ui->reference || !ui->cost || !ui->body || !ui->coat || !ui->features ||
       !ui->source_title || !ui->source || !ui->visits || !ui->progress || !ui->pending || !ui->message) goto failure;
+  if (!lab_resident_gallery_init(&ui->gallery, ui->root, fonts->small, images[11], images[12])) goto failure;
   return ui;
 failure:
   lab_action_ui_destroy(ui);
@@ -152,7 +156,7 @@ static int valid(const LabActionView *view) {
       (view->page == LAB_ACTION_REVIEW && view->option_count != 2) ||
       ((view->page == LAB_ACTION_INCUBATION || view->page == LAB_ACTION_REVEAL) && view->option_count != 1) ||
       (view->page == LAB_ACTION_HABITAT && view->option_count !=
-          (view->detail == LAB_ACTION_RESIDENT_SHOWN ? 4u : 1u)) ||
+          (view->detail == LAB_ACTION_RESIDENT_SHOWN ? 3u : 1u)) ||
       (view->page == LAB_ACTION_RESIDENTS && view->detail == LAB_ACTION_RESIDENT_EMPTY && view->option_count != 1)) return 0;
   if (view->candidate_authorized != (view->detail == LAB_ACTION_CREATE_AVAILABLE) ||
       view->draft_valid != (view->detail == LAB_ACTION_REVIEW_VALID) ||
@@ -170,6 +174,11 @@ static int valid(const LabActionView *view) {
   if ((view->detail == LAB_ACTION_CREATE_LOCKED || view->detail == LAB_ACTION_REVIEW_STALE) &&
       view->art != LAB_ACTION_ART_TOOLS) return 0;
   if (view->detail == LAB_ACTION_RESIDENT_EMPTY && view->art != LAB_ACTION_ART_NONE) return 0;
+  if (!lab_resident_gallery_view_valid(&view->gallery)) return 0;
+  if (view->page == LAB_ACTION_RESIDENTS &&
+      (view->option_count != (view->gallery.count ? view->gallery.count : 1u) ||
+       (view->gallery.count && (view->focus != view->gallery.selected || !view->resident_visible)) ||
+       (!view->gallery.count && view->resident_visible))) return 0;
   return 1;
 }
 
@@ -182,6 +191,22 @@ int lab_action_ui_update(LabActionUi *ui, const LabActionView *view) {
   int incubation = view->page == LAB_ACTION_INCUBATION;
   int locked = view->detail == LAB_ACTION_CREATE_LOCKED || view->detail == LAB_ACTION_REVIEW_STALE;
   int portrait = view->art == LAB_ACTION_ART_PLAIN || view->art == LAB_ACTION_ART_MARKED;
+  int population = view->page == LAB_ACTION_RESIDENTS;
+  int activity = view->page == LAB_ACTION_HABITAT && resident;
+  lab_resident_gallery_hide(&ui->gallery);
+  lv_obj_set_pos(ui->header.object, 24, population ? 16 : 24);
+  lv_obj_set_pos(ui->rail.object, 24, population ? 124 : 140);
+  native_ui_frame_size(&ui->rail, population || activity ? 208 : 330, population ? 432 : 416);
+  lv_obj_set_pos(ui->workpiece.object, population || activity ? 248 : 376, population ? 124 : 140);
+  native_ui_frame_size(&ui->workpiece, population || activity ? 752 : 624, population ? 432 : 416);
+  lv_obj_set_pos(ui->title, population ? 276 : 398, population ? 128 : 153);
+  lv_obj_set_size(ui->title, population ? 696 : 580, population ? 30 : 38);
+  lv_obj_set_pos(ui->identity, 402, 197);
+  lv_obj_set_size(ui->identity, 574, 48);
+  lv_obj_set_style_text_font(ui->form, ui->fonts.body, 0);
+  lv_obj_set_size(ui->form, 278, 64);
+  lv_obj_set_pos(ui->source, 689, 436);
+  lv_obj_set_size(ui->source, 278, 48);
   unsigned row_height = view->page == LAB_ACTION_CREATE || view->page == LAB_ACTION_RESIDENTS ? 110 : 62;
   unsigned visible_rows = view->page == LAB_ACTION_HABITAT ? 4 : 3;
   unsigned first = view->focus >= visible_rows ? view->focus - visible_rows + 1 : 0;
@@ -193,6 +218,7 @@ int lab_action_ui_update(LabActionUi *ui, const LabActionView *view) {
     lv_obj_set_hidden(ui->rows[index], index >= visible_rows || option >= view->option_count);
     if (index < visible_rows && option < view->option_count) {
       lv_obj_set_pos(ui->rows[index], 50, 169+(int)(index*row_height));
+      lv_obj_set_width(ui->rows[index], 286);
       lv_obj_set_height(ui->rows[index], (int)row_height-14);
       lv_label_set_text_static(ui->rows[index], view->options[option]);
       lv_obj_set_style_text_color(ui->rows[index], lv_color_hex(option == view->focus ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
@@ -266,7 +292,66 @@ int lab_action_ui_update(LabActionUi *ui, const LabActionView *view) {
         portrait ? 247 : incubation ? 247 : 285);
   }
   lv_label_set_text_static(ui->message, view->message);
+  lv_obj_set_pos(ui->message, population ? 48 : 398, 552);
+  lv_obj_set_size(ui->message, population ? 938 : 588, 44);
   lv_obj_set_hidden(ui->message, !view->message[0]);
   lv_obj_set_style_text_color(ui->message, lv_color_hex(view->storage_error ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
+  if (population) {
+    lv_obj_set_hidden(ui->focus.object, true);
+    for (unsigned index = 0; index < 4; ++index) lv_obj_set_hidden(ui->rows[index], index != 0);
+    lv_label_set_text_static(ui->rows[0], "Population");
+    lv_obj_set_pos(ui->rows[0], 50, 169);
+    lv_obj_set_size(ui->rows[0], 176, 28);
+    lv_obj_set_style_text_color(ui->rows[0], lv_color_hex(CORE_ART_SECONDARY_RGB), 0);
+    if (!lab_resident_gallery_update(&ui->gallery, &view->gallery, 1)) return 0;
+    lv_obj_set_pos(ui->gallery.object, 264, 160);
+    lv_obj_set_hidden(ui->art, true);
+    lv_obj_set_hidden(ui->pending, true);
+    lv_obj_set_hidden(ui->reference, true);
+    lv_obj_set_hidden(ui->coat, true);
+    lv_obj_set_hidden(ui->features, true);
+    lv_obj_set_hidden(ui->source_title, true);
+    lv_obj_set_hidden(ui->visits, true);
+    lv_obj_set_hidden(ui->body, true);
+    lv_obj_set_hidden(ui->identity, !view->gallery.count);
+    lv_obj_set_pos(ui->identity, 276, 482);
+    lv_obj_set_size(ui->identity, 696, 22);
+    lv_label_set_text_static(ui->identity, view->gallery.count ? view->gallery.entries[view->gallery.selected].id : "");
+    snprintf(ui->selected_text, sizeof(ui->selected_text), "%s / Visits: %u",
+        view->gallery.form_title, (unsigned)view->gallery.visits);
+    snprintf(ui->source_text, sizeof(ui->source_text), "Source sample: %s", view->gallery.source_sample_id);
+    lv_obj_set_pos(ui->form, 276, 506);
+    lv_obj_set_size(ui->form, 696, 22);
+    lv_obj_set_style_text_font(ui->form, ui->fonts.small, 0);
+    lv_label_set_text_static(ui->form, ui->selected_text);
+    lv_obj_set_hidden(ui->form, !view->gallery.count);
+    lv_obj_set_pos(ui->source, 276, 530);
+    lv_obj_set_size(ui->source, 696, 22);
+    lv_label_set_text_static(ui->source, ui->source_text);
+    lv_obj_set_hidden(ui->source, !view->gallery.count);
+    lv_obj_set_hidden(ui->heading, view->gallery.count != 0);
+    lv_obj_set_pos(ui->heading, 276, 276);
+    lv_obj_set_size(ui->heading, 696, 38);
+    lv_label_set_text_static(ui->heading, "No revealed residents yet");
+  } else {
+    lv_obj_set_hidden(ui->focus.object, false);
+    if (activity) {
+      lv_obj_set_hidden(ui->rows[3], true);
+      for (unsigned index = 1; index < 3; ++index) {
+        lv_obj_set_pos(ui->rows[index], 50, 169+(int)(index-1)*62);
+        lv_obj_set_size(ui->rows[index], 176, 48);
+        lv_label_set_text_static(ui->rows[index], view->options[index]);
+        lv_obj_set_hidden(ui->rows[index], false);
+      }
+      lv_obj_set_pos(ui->rows[0], 702, 524);
+      lv_obj_set_size(ui->rows[0], 254, 24);
+      lv_label_set_text_static(ui->rows[0], view->options[0]);
+      lv_obj_set_hidden(ui->rows[0], false);
+      native_ui_frame_size(&ui->focus, view->focus == 0 ? 278 : 180, view->focus == 0 ? 34 : 56);
+      lv_obj_set_pos(ui->focus.object, view->focus == 0 ? 689 : 38,
+          view->focus == 0 ? 516 : 157+(int)(view->focus-1)*62);
+      lv_obj_set_pos(ui->visits, 689, 492);
+    } else lv_obj_set_pos(ui->visits, 689, 498);
+  }
   return 1;
 }

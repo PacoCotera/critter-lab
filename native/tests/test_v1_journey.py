@@ -253,15 +253,28 @@ def journey(binary, frames):
         assert player.state["page"] == "reveal"
         player.capture("05-reveal")
         player.press()
-        assert player.state["page"] == "habitat"
-        player.choose("Spend time together")
-        player.capture("06-habitat")
+        assert player.state["page"] == "habitat" and player.state["focus"] == "Population"
+        before_care = save.read_bytes()
         resident_stock = player.state["stock"]
-        player.choose("Residents")
+        player.press("right")
+        assert player.state["focus"] == "Spend time together"
+        player.press("up")
+        player.press("down")
+        assert player.state["focus"] == "Spend time together"
+        assert save.read_bytes() == before_care and player.state["stock"] == resident_stock
+        player.press()
+        assert player.state["message"] == "Pip perks up and settles beside you."
+        assert save.read_bytes() != before_care and player.state["stock"] == resident_stock
+        player.capture("06-habitat")
+        player.press("left")
+        assert player.state["focus"] == "Population"
+        player.press()
         assert player.state["page"] == "residents"
         player.capture("resident-list")
         player.press()
         assert player.state["page"] == "habitat" and player.state["stock"] == resident_stock
+        player.press("back")
+        assert player.state["page"] == "residents"
         player.press("back")
         player.home_views("revealed-resident")
         stock = player.state["stock"]
@@ -269,6 +282,9 @@ def journey(binary, frames):
         player = Player(binary, save, frames)
         assert player.state["individuals"] == 1 and player.state["stock"] == stock
         player.choose("Habitat")
+        assert player.state["page"] == "residents"
+        player.press()
+        assert player.state["page"] == "habitat" and player.state["focus"] == "Population"
         player.choose("Explore again")
         player.choose("Weather watch")
         player.wait_until(lambda state: sum(state["cargo"]) > 0, 10)

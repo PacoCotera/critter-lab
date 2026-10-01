@@ -31,11 +31,33 @@ its explicit action; Back restores its caller. Collection browsing should expose
 sample-specific findings as focus moves. Habitat Overview should show the resident
 population rather than treating one selected resident as the whole Habitat.
 
-Current Lab navigation still mixes data/explanations into some choices and its
-Habitat Overview remains centered on a selected resident. These are observed
-current defects and the next layout/discovery slice, not changes implemented by
-the Companion entry/transfer repair. No new grid, evidence minigame or canonical
-layout is approved here. Existing controls and knowledge/cost boundaries remain.
+The bounded Habitat slice uses a passive Home population preview and an entered
+four-column, two-row Residents gallery for the eight supported saved residents.
+Only revealed individuals appear. Half-size images reuse each saved-authorized
+original; unsupported appearance remains Art pending. The selected member's full
+identity, retained form, source sample and visits update in a shared detail band.
+This reversible layout requires native scale, fit and memory evidence; it does
+not establish final art, ecology or enjoyment.
+
+Home Up/Down still selects workspaces; Right on Habitat remains passive.
+Confirm on Habitat, or the Habitat key,
+enters Population without care. Inside the gallery, Left/Right selects an adjacent
+column and Up/Down the same-column row; absent neighbors and edges clamp without
+wrapping. Physical Back returns to Home Habitat. These gallery directions replace
+the older Left-as-Back/Right-as-inspect aliases only in that collection. Confirm
+enters the selected Resident activity safely on Population navigation. Its sidebar
+contains Population and Received expeditions (Explore in the standalone fixture);
+the separate workpiece action Spend time together requires fresh Confirm. Right
+passively focuses that action, Left restores Population, and Back restores the
+same gallery member. Browsing and task entry never record care.
+The named Received expeditions visit preserves its Resident caller: detail Back
+returns to the record list, then Back restores that same resident and navigation
+choice. This transient caller is separate from an arriving haul's return context
+and adds no saved world state.
+
+Samples/Library navigation and progressive research remain the next separate
+slice. No evidence minigame, new trait, game rule or habitat simulation is added
+by this population presentation. Existing knowledge/cost boundaries remain.
 
 ## Framework-led Companion layout
 
