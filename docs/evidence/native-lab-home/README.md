@@ -43,8 +43,9 @@ accepted this bounded composition, hierarchy and technical slice.
 
 ## Remaining boundaries
 
-Lab receipt/log, research/library, creation/incubation actions and resident/habitat
-action pages still use manual rendering and must migrate. This increment does not
+Current [route coverage](../../../specs/architecture.md#current-migration-coverage-and-target-evidence)
+owns remaining migration status; the subsequent [reception/log proof](../native-lab-reception/README.md)
+records that family. This Home increment does not
 claim all-device framework completion. Final C18 fidelity, richer art, exploration
 and research engagement, human playability and hardware remain separate gates.
 The live sandbox was not redeployed or reset for this branch proof.

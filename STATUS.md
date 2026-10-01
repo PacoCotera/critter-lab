@@ -16,8 +16,11 @@ track the remaining playability and craft gaps.
   inspected. A misleading unread-clue caption is corrected without new rules.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
   Companion and Caddy target ESP32. Dock and all known Companion screen families use LVGL on the host.
-  Lab Home and workspace previews now use retained LVGL; remaining Lab action
-  families still need conversion. [Home native evidence](docs/evidence/native-lab-home/README.md)
+  Lab Home, workspace previews, connected haul reception and received expedition
+  list/detail now use retained LVGL. [Reception proof](docs/evidence/native-lab-reception/README.md)
+  covers once-only acceptance, recovery, actual CLI navigation and native craft.
+  Research/library, creation/incubation and habitat actions still need conversion.
+  [Home native evidence](docs/evidence/native-lab-home/README.md)
   records exact source, three passed suites, actual CLI frames and independent
   technical/craft review. [Current shared Companion ESP UI](docs/evidence/native-companion-esp/README.md)
   now compiles/links at `fadee5d` with independent source/artifact review and CI run 191.

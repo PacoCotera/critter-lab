@@ -59,8 +59,10 @@ every known Companion host family now use the portable display/host boundary;
 the shared Dock UI has an ESP-IDF compile proof. [The current shared Companion UI compile](docs/evidence/native-companion-esp/README.md)
 also passes at `fadee5d`. Lab Home and workspace previews now pass native
 route/control/lifetime and independent technical/craft review; see the
-[Home proof](docs/evidence/native-lab-home/README.md). Next convert the remaining
-Lab action families, beginning with reception and received logs. Runtime memory/profile and
+[Home proof](docs/evidence/native-lab-home/README.md). Connected reception and
+received records also pass [native checks and review](docs/evidence/native-lab-reception/README.md).
+Next convert research/library actions, then creation/incubation and resident/habitat.
+Standalone legacy expedition gameplay remains explicit debt. Runtime memory/profile and
 physical adapters remain separate unresolved boundaries.
 Preserve game/save/physical-control behavior. Each slice has actual
 output and independent review; no host or scaffold success establishes firmware
