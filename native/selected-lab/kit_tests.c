@@ -778,7 +778,7 @@ static void frozen_field_receipt(const char *directory) {
   DeviceKit kit;
   assert(kit_init(&kit, &lab, 200));
   assert(lab.game.field.version == GAME_FIELD_LEGACY_CONTENT_VERSION &&
-         kit.journal.sealed_field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+         kit.sealed_field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
   assert(kit.journal.version == 5 && kit.journal.phase == KIT_WAITING &&
          !kit.journal.companion_online);
   assert(lab.game.data == 0 && lab.game.expedition_data == GAME_SUPPLY_UNIT);
