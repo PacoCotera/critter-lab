@@ -296,6 +296,12 @@ the current revision; stale-frame rejection permits a later retry. Fresh physica
 down/up edges remain separate acknowledged requests. Lost down acknowledgement,
 overlap or suspension discards unsent releases; native interaction epochs decide eligibility during refresh; stale actions
 are consumed instead of replayed. Readiness follows actual decode/paint, never status alone.
+The single-host presenter explicitly refreshes/paints cleared Companion cargo
+before exposing a new accepted Lab stock frame. Current inventory is zero at the
+atomic accepted unload, including pending receipt; sent contents remain a separate
+read-only delivery record. A consumed gesture during the update receives visible
+feedback and never queues. This join does not establish a real disconnected-radio
+protocol or synchronized future hardware displays.
 Rejected POSTs with unread bodies close their connection. No kernel pool,
 WebSocket dependency or production radio transport is implied by this host bridge.
 

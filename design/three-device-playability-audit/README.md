@@ -118,3 +118,52 @@ their earlier revision, not current unresolved implementation claims.
 [Family promise comparison](promise-gap.md) and
 [Companion promise](../companion-promise/README.md) preserve visual targets.
 No new infrastructure, radio, capture, training or ecology implementation is implied.
+
+## Corrected native increment
+
+Source864eca5d555c8d1624cde9a7fb646420ec5d8202, [PR53](https://github.com/PacoCotera/critter-lab/pull/53).
+This replaces the broken-frame/current-Cargo/navigation behavior identified above.
+The earlier playtest captures remain baseline defect evidence, not current claims.
+
+- Shared panel/focus contours now have connected6px pixel chamfers instead of
+  reentrant cap shelves. Art direction and pixel production directly agreed the
+  repair and independently inspected actual shallow/tall/map/nestedCargo states
+  at native size. Both passed this bounded frame repair.
+- Terrain stays inside the complete rim; sealed-return consequence clears action
+  focus. Both delivery-pending and complete Cargo show zero current supplies and
+  capsules, with immutable sent contents separately labeled Delivery record.
+- Lab acceptance waits for the cleared Companion frame before painting its stock
+  change. Deliberately delayed-frame testing passed; consumed update-time gestures
+  receive visible feedback and do not act later. This does not establish future
+  disconnected-device radio behavior or eliminate every cadence concern.
+- Home is first in the physical row. Empty Library/incomplete-form navigation uses
+  real return actions. Findings, status and failure feedback stay in the main
+  workpiece; two complete coat alternatives remain visible without label overlap.
+- Coordinator checked Home→Research→sample→retained coat finding in the actual
+  browser presenter. The prior16/7/10 earned haul funded these studies; after4Data,
+  4Energy and4Essence total study spend, Lab/Dock agree12/3/6. Reinspection is free.
+
+Validation: exact clean pushed source built in the established native environment;
+three native suites passed; focused actual-native HTTP/link recovery passed; Node
+presenter3/3 passed including delayed paint and consumed input; GitHub native CI
+36798449693 passed. Independent technical source review caught and corrected
+remaining finding-pane facts; actual exports caught a sprite sizing-contract error
+before delivery. The original art masters/hashes remain unchanged.
+
+![Corrected map and connected frame](repair-gathering-companion.png)
+![Empty current Cargo with retained delivery evidence](repair-accepted-offline-companion.png)
+![Finding in the main workpiece](repair-complete-form-finding.png)
+
+[Browser and Home-first proof](repair-browser-finding.jpg),
+[sealed return](repair-sending-offline-companion.png),
+[completed receipt](repair-complete-companion.png),
+[Dock](repair-complete-dock.png), [hashes](repair-manifest.json).
+
+This closes these concrete repairs, not the full depth/craft/discovery gap. The
+oversized one-action navigation pane, weak player presence and uneven sibling
+arrival geometry still need composition work. Fixed maps, no map events, dull
+chance acquisition, same-feeling samples and checklist research remain rejected.
+The [comparison mapping](../research-and-creation.md#next-comparison-trial) exposes
+why a cosmetic alignment puzzle would not solve discovery: authored pre-finding
+specimen evidence and its interpretation rule are missing. No production
+procedural/event/minigame feature is claimed in this increment.

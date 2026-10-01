@@ -8,10 +8,11 @@ The [current audit](design/three-device-playability-audit/README.md) records rea
 browser/native play, broken frames/insets, cadence loss and inventory projection
 defects. Functional acceptance did not approve enjoyment or complete visual craft.
 
-First repair current-Cargo/receipt separation at Lab acceptance, Home-first controls,
-frame/content clearance and choice-only navigation. Keep source conservation,
-retained knowledge and existing input safety. One bounded coder increment and
-focused actual-state review precede exact Git/CI/VM delivery.
+The current [repair proof](design/three-device-playability-audit/README.md#corrected-native-increment)
+closes accepted Cargo/receipt separation, Home-first controls, shared border craft,
+sealed clearance and choice-only navigation. Source864eca5 passed native/HTTP/CI
+and the bounded technical/art/pixel checks. Remaining composition and cadence
+concerns stay in issue44; a craft repair is not discovery or player approval.
 
 Then develop the [one discovery trial](design/probe-sampling.md#next-discovery-trial):
 two genuinely generated map results, one finite interactive event and one
