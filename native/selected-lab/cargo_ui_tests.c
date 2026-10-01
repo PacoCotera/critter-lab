@@ -177,6 +177,39 @@ static void rendering_and_motion(const char *directory, const CompanionCargoView
   native_ui_destroy(context);
   free(still);
 }
+static void representative_fixture_exports(const char *directory) {
+  NativeUiContext *context = native_ui_create();
+  assert(context);
+  CompanionCargoView full = example();
+  full.supplies[0] = 40;
+  full.supplies[1] = full.supplies[2] = 0;
+  full.focus = 1;
+  const uint8_t *rgb = native_ui_cargo(context, &full, 1);
+  assert(rgb);
+  char path[512];
+  snprintf(path, sizeof(path), "%s/fixture-full40.bmp", directory);
+  export_bmp(path, rgb);
+  CompanionCargoView error = full;
+  error.failed = 1;
+  error.action_count = error.capsules = 0;
+  strcpy(error.capsule, "No sample in cargo");
+  strcpy(error.detail, "Storage unavailable. Cargo preserved.");
+  strcpy(error.capacity, "Supplies 40 / 40   Capsules 0 / 1");
+  strcpy(error.feedback, "Storage unavailable");
+  CompanionCargoView unchanged = error;
+  rgb = native_ui_cargo(context, &error, 1);
+  assert(rgb && !memcmp(&error, &unchanged, sizeof(error)));
+  snprintf(path, sizeof(path), "%s/fixture-storage-error.bmp", directory);
+  export_bmp(path, rgb);
+  native_ui_destroy(context);
+  snprintf(path, sizeof(path), "%s/cargo-fixtures.txt", directory);
+  FILE *metadata = fopen(path, "w");
+  assert(metadata);
+  fputs("Representative presentation fixtures, not actual play:\n"
+        "fixture-full40: capacity40, Data40, other supplies0, capsule1, Discard focus.\n"
+        "fixture-storage-error: current40 supplies, no capsule, storage recovery copy, no actions.\n", metadata);
+  assert(!fclose(metadata));
+}
 static void copy_snapshot_file(const char *source, const char *destination, int optional) {
   FILE *input = fopen(source, "rb");
   if (!input && optional && errno == ENOENT) return;
@@ -242,6 +275,7 @@ int main(int argc, char **argv) {
   projection_truth();
   if (argc == 3) actual_save_motion(argv[1], argv[2]);
   else rendering_and_motion(argc == 2 ? argv[1] : NULL, NULL);
+  if (argc >= 2) representative_fixture_exports(argv[1]);
   puts("Companion Cargo UI checks passed");
   return 0;
 }

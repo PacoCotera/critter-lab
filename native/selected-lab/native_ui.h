@@ -8,7 +8,8 @@ void native_ui_destroy(NativeUiContext *context);
 /* RGB byte order matches kit's existing row renderer; NULL means failure. */
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still);
-/* Controlled proof clock only: no game tick or input acknowledgement. */
+/* Controlled proof clock only: no game tick or input acknowledgement.
+ * Advancement is refused while another context exists: LVGL's clock is global. */
 void native_ui_advance(NativeUiContext *context, unsigned milliseconds);
 void native_ui_cancel(NativeUiContext *context);
 int native_ui_animation_pending(const NativeUiContext *context);

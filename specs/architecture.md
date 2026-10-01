@@ -192,7 +192,10 @@ Rendering, cosmetic motion and sound cannot create inventory, alter research,
 advance hidden knowledge or bypass fresh-input guards. The UI context owns its
 display, widget tree, asset adapters and buffers; it holds copied facts rather
 than borrowed game-state pointers. Other screens migrate incrementally only after
-this real path passes independent native/control and art/UX review.
+this real path passes independent native/control and art/UX review. Owner permits
+a complete re-layout, particularly of Companion; old page geometry is not a
+constraint. Game/UX/art must discuss player questions, visual hierarchy and actual
+control sequences before dependent compositions are treated as selected.
 
 Shared margins, palette, font hierarchy, framing and focus styles belong in theme
 tokens. Images use retained Gemini source pixels at native size with verified
@@ -202,7 +205,11 @@ editable masters and native-size review. Layout and craft are separate gates.
 
 The proof's animation is finite and cosmetic, with a fully visible still focus
 and explicit reduced-motion behavior. Sound has no selected backend or assets;
-no playback is claimed. Host memory measurements and tests do not establish
+no playback is claimed. The first host uses one live UI context; two simultaneous
+contexts are lifecycle-test scope. Controlled motion requires a single context
+because LVGL has a global presentation clock. Owned buffers and object returns
+are checked, but arbitrary upstream pool exhaustion is not a validated graceful
+recovery path; fixed-pool margin must be measured, not assumed. Host memory measurements and tests do not establish
 Companion DMA, frame rate, PSRAM fit, thermal or power performance. Dependencies
 are pinned, vendored unchanged with upstream licenses and retrieved through Git;
 no configure-time downloads or new deployment service.
