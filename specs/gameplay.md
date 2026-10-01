@@ -97,6 +97,10 @@ Owner requires each class to have an understandable experimental/genomic job,
 not serve as an arbitrary colored payment. The [current design discussion](../design/probe-bench-review.md#resource-meaning--considered-proposal)
 keeps exact resource fiction and new recipes provisional; current fixture prices
 do not establish those meanings. Retained knowledge is not a consumable supply.
+Owner clarification,1October: an investigation requires an amount of Data related
+to its complexity; more complex research needs more Data. This does not select
+numerical costs or erase previously learned information. Research is the rich
+visual/content backbone linking expedition outcomes to player-created companions.
 Inventory records whole collected items. Current field collection is an explicit
 whole-unit Take, resolved and saved immediately. Arrival, inspection, elapsed time
 and animation grant nothing. A source exposes its exact retained quantity; a

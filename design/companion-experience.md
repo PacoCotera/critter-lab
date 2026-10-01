@@ -4,6 +4,16 @@ Owner-review design proposal, 30 September 2026. Requested by Paco: overhaul the
 
 ## Player outcome
 
+Owner direction,1October: Companion is the ongoing interaction and emotional bond
+with creatures the player creates, breeds and trains. Creature presence and varied
+visual interaction lead; optional detailed inspection includes lineage, genome
+and attributes. This is broader product direction, not a claim these activities
+are implemented or approval of training, breeding, care or progression rules.
+Keep inherited traits, expression, learned changes and individual history distinct.
+Founders have origin records; they must not acquire fabricated parents. The
+[connected design review](probe-bench-review.md) links expeditions and rich visual
+Lab investigation to this ongoing relationship.
+
 Pick up the Companion, recognize what it is doing, move between gathering, carried contents and critter company, take a deliberate action, see its effect, and get back without losing context. The device should reward a glance and invite closer inspection. Useful explanation belongs beside the unfamiliar activity; repeated instructions must not occupy the main experience.
 
 The connected journey is **Companion gathers → player reviews Send → Lab accepts and stores → expedition ends → Lab studies the sample and creates one saved critter → the same individual is available for later inspection/company → Caddy shows the same accepted records.** Sending and Lab acceptance are separate acts. Receipt delay does not undo stored supplies or revive the ended outing. Current Companions mode exposes the same saved resident, known facts and visits. Capture/training, traveller assignment and expressive living response remain incomplete; the original reference is not fully delivered.
