@@ -173,9 +173,9 @@ separate roots, copied view facts and bounded assets. The
 mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
 boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
-and visits. Lab families remain on manual C renderers. Those paths are known architectural debt, not an accepted
+and visits. Lab Home and workspace previews also use retained LVGL; remaining Lab action families use manual C renderers. Those paths are known architectural debt, not an accepted
 exception. The [ESP-IDF Companion target](../native/companion/README.md) now
-registers the current shared UI in a headless harness; compile validation is pending.
+registers the current shared UI in a headless harness; [compile/link validation passed](../docs/evidence/native-companion-esp/README.md). Runtime integration remains unvalidated.
 Host pixel-stream evidence,
 actual ESP-IDF UI compilation and hardware measurements are separate gates.
 
@@ -233,7 +233,8 @@ control sequences before dependent compositions are treated as selected.
 | Companion Cargo mode preview | Retained LVGL, same portable Cargo tree | [Native output, controls and independent review checked](../docs/evidence/native-companion-cargo-preview/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
 | Companion Companions mode preview | Retained LVGL, lazy portable resident preview tree | [Native source/controls/output and independent review checked](../docs/evidence/native-companion-resident-preview/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
 | Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-resident-actions/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
-| Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
+| Lab Home/workspace previews | Retained LVGL, copied view and lazy host display context | [Native route/control/lifetime and independent review passed](../docs/evidence/native-lab-home/README.md) |
+| Lab incoming haul/log, research/library, creation/incubation actions, residents/habitat actions | Manual C raster | Remaining migration; no accepted exception |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
 The current three-device presenter is one Linux x86-64 process. It verifies

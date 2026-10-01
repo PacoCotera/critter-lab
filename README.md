@@ -40,7 +40,7 @@ use this framework. The [complete Dock LVGL family and portable display boundary
 passed native output and independent review. The [Companions preview proof](docs/evidence/native-companion-resident-preview/README.md)
 shows retained saved portraits/properties and offline inspection without a visit.
 The [resident list/visit proof](docs/evidence/native-companion-resident-actions/README.md)
-records save-once visits and shared counts. Every Lab family still needs migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
+records save-once visits and shared counts. [Lab Home and workspace previews](docs/evidence/native-lab-home/README.md) now use retained LVGL, with native routes, controls and independent review checked. Remaining Lab action families still need migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
 and [current Companion UI](docs/evidence/native-companion-esp/README.md)
 now link under ESP-IDF; neither headless target establishes physical operation. Final HiBit
 artwork and human playability remain open.

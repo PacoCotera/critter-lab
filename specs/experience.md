@@ -39,8 +39,8 @@ and reduces subject space; it is not the preferred next prototype.
 This is a design direction, not approval of final composition. Start from each
 player question and real content, allocate layout, apply retained source art, then
 walk focus and return with the existing buttons. Current native framework proofs
-cover Probe and Cargo. Owner direction on1 October requires every game screen
-to use LVGL; remaining Lab, Dock and Companion page families require real retained
+cover every known Companion host family, the complete Dock family and Lab Home/workspace previews. Owner direction on1 October requires every game screen
+to use LVGL; remaining Lab action families require real retained
 conversion, not a wrapper around their old bitmap. Target adapters and hardware
 validation remain separate from host proof. A framework does not supply missing art or
 make waiting/acquisition engaging. Existing Cargo inspection and return costs six
