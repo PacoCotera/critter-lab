@@ -92,6 +92,11 @@ Early return is an end, not completion of every timed discovery threshold. It ca
 
 Supplies are fungible within their own class and indivisible. A Data card can
 substitute for another Data card, but not for an Energy crystal or Essence drop.
+
+Owner requires each class to have an understandable experimental/genomic job,
+not serve as an arbitrary colored payment. The [current design discussion](../design/probe-bench-review.md#resource-meaning--considered-proposal)
+keeps exact resource fiction and new recipes provisional; current fixture prices
+do not establish those meanings. Retained knowledge is not a consumable supply.
 Inventory records whole collected items. Current field collection is an explicit
 whole-unit Take, resolved and saved immediately. Arrival, inspection, elapsed time
 and animation grant nothing. A source exposes its exact retained quantity; a

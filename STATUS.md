@@ -20,7 +20,9 @@ The Companion entry/cargo increment is live: purposeful destination cards replac
 
 ## Next gameplay priorities
 
-Owner paused coding for a joined [Probe and genomic bench design review](design/probe-bench-review.md). It compares three researched connected journeys and a concrete hereditary investigation. These are proposals for discussion; no new discovery mechanic is selected. Research still needs progressive discovery and useful variation across repeated samples beyond paid facts and reference comparisons. The navigation/workpiece correction is delivered.
+Owner paused coding for a joined [Probe and genomic bench design review](design/probe-bench-review.md). The selected Lab feeling is a visual genome field: focus regions, fund meaningful experiments and progressively reveal supported expressions. Original genome-field references have been restored in the review branch. Exact map/content, experimental resource fiction and prices remain proposals; Data consumption is an explicit unresolved coherence problem. Research still needs progressive discovery and useful variation beyond paid facts and reference comparisons. The navigation/workpiece correction is delivered.
+
+Companion Home also needs visual redesign: exploration imagery instead of a sample capsule, a researchable genetic-sample symbol, one cargo summary and an expressive pocket-device landing. The delivered destination cards are a functional entry repair, not accepted final visual design. The joined review records this separate paper proposal; no Home overhaul is deployed.
 
 Exploration remains road-bound. Saved generated geometry exists in the native prototype, but the three named expedition kinds still share finite source rules and do not offer meaningful distinctions. Open movement, distinct opportunities and retained map events are undelivered gameplay work; see the [exploration study](design/expedition-map-study/README.md).
 

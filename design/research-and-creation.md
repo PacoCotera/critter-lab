@@ -4,12 +4,14 @@
 
 ## Current design discussion
 
-Owner paused coding for a joined [Probe and genomic bench review](probe-bench-review.md).
-The three researched alternatives and worked sample investigation there are the
-current review surface. No discovery mechanic has been selected; the existing
-retained A/B workpiece remains an implementation foundation, not an accepted
-discovery game. The earlier trial below is retained explanatory source and must
-not be treated as an instruction to resume dependent coding.
+Owner selected a very visual child-facing genome map: region selection,
+resource-funded experiments, progressive opening and branching expressions.
+The [current Probe/bench brief](probe-bench-review.md#current-visual-research-brief)
+and [original artwork](references/genome-field/README.md) govern the design work.
+Detailed genetics serves deeper parent inspection. Exact encoding, content,
+interaction and balance remain provisional; the retained A/B workpiece is an
+implementation foundation, not accepted discovery play. The trial below must
+not be treated as an instruction to resume paid-question coding.
 
 ## Retained discovery trial
 

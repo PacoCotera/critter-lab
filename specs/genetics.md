@@ -137,6 +137,17 @@ Environmental similarity does not establish identical genomes or individual iden
 
 ### Genome imagery and progression
 
+Owner direction, 1 October 2026: the child-facing Lab experience is a very visual
+genome map. Players select regions, deliberately contribute resources to research,
+progressively reveal their contents and explore supported expression branches.
+Detailed genetic information serves optional deeper inspection for parents;
+the main experience must convey discovery through imagery and response, rather
+than walls of labels, messages or a school lesson. Reuse the [original genome-field
+artwork](../design/references/genome-field/README.md) as visual lineage. Exact
+region mapping, expression imagery, experimentation rules, costs and animation
+remain design work. Revealing information does not install genes or mutate a
+sample; supported branches need not be independently combinable.
+
 Unknown regions represent undiscovered information, never a locked permission or purchased unlock. The player can retain several partially decoded genome research records and choose among them. Resources determine which studies can currently run; they do not make known regions become unknown when spent elsewhere. Zones are a promising owner-supported organizing direction, with visual encoding and exact biological/content mapping still to develop; zones are not automatically the five information layers or one study each.
 
 Accepted: research progressively decodes parts of a genome. A fully decoded genome is required before a critter can be incubated; incubation cannot fill unknown regions or bypass research. The Lab must show which parts are decoded, which remain unknown and the research progress toward completeness. Decoding reveals knowledge and supported possibilities, not mutation of an existing individual.

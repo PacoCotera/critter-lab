@@ -1,6 +1,132 @@
 # Probe gathering and genomic research: design review
 
-**Proposals for owner discussion, 1 October 2026. Coding paused.** This is one connected design comparison, not a selected mechanic, approved visual encoding, deployment or playtest result. Current product rules remain in [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md) and [the sample contract](../specs/sample-to-critter-contract.md). Detailed existing evidence is in [the exploration study](expedition-map-study/README.md) and [research and creation](research-and-creation.md).
+**Owner-selected experience direction, 1 October 2026; visual design in progress.**
+The Lab must feel like progressively opening a genome: select a region, contribute
+resources to an experiment, reveal its contents and explore branching expressions.
+This is a very visual experience for children; detailed genetics serves optional
+parent inspection. The earlier detective/operator choice is superseded. Coding
+remains paused while exact visual content and interaction are designed. Current
+rules remain in [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md)
+and [the sample contract](../specs/sample-to-critter-contract.md).
+
+## Current visual research brief
+
+Use the [retained genome-field artwork](references/genome-field/README.md): a
+woven, recognizable field with local regions and connections. The prior labels,
+knob, resource names, palette and single-candidate example are not a current UI.
+Carry its visual exploration into C18's established game/hardware family.
+
+The minimum design sequence is **region focus → resource contribution → local
+reveal and expression branches**, preserving the whole map and the same sample.
+The map is the workpiece, not a decorative backdrop behind a study menu. Findings
+must visibly change what the player can inspect and choose next. Unknown regions
+remain intriguing and reachable; lack of resources is distinct from an unknown
+genome or an established absence. Decoding reveals knowledge, not installed genes.
+
+Resources remain recognizable whole items. Preview the actual experiment and
+its cost, then one deliberate commitment spends them. Animation should show the
+committed result unfolding and leave a readable still result; it adds no mandatory
+waiting, chance retry or result-confirmation ceremony. Resource recipes, timing,
+branch placement and exact meanings are provisional, not approved balance.
+
+Branches represent supported expressions and their relationships. The inherited
+facts remain sample-specific underneath; a carried variant is not faintly expressed,
+and half of two alternatives cannot create an unsupported third configuration.
+Partial visual references must obey actual knowledge; a complete creature portrait
+belongs to the complete supported preview. No copied letter diagram, chromosome
+claim, generic science imagery or fixed number of study boxes substitutes for this
+content. Genomic complexity must eventually change relationships and exploration,
+not merely add repetitive paid nodes. The underlying framework is underused by the
+current two-profile proof and does not establish adequate discovery variety.
+
+Navigation contains sample/collection destinations, with immediate previews.
+The main area owns region focus, resources, experiment and revealed branches.
+Existing physical directions, Confirm and Back operate this spatial layout.
+Detailed alleles/rules/provenance belong in deeper inspection through those same
+controls; no extra physical button or touch action is implied. Labels should be
+short and subordinate to useful imagery, not replace it.
+
+The first visual proof must show one meaningful region reveal with truthful
+branching content and a contrasting sample outcome. It is not a whole-engine
+redesign, canonical genome encoding, new species set or deployed feature.
+
+## Resource meaning — considered proposal
+
+Owner requires Data, Energy and Essence to serve understandable experimental
+jobs. Colored payments or one resource assigned to each trait do not meet that
+requirement. Game design and an independent experiment/genomic reviewer challenged
+the following proposal together; consistency is not approval of the fiction or fun.
+
+| Supply | Proposed experimental job | Visible consequence |
+| --- | --- | --- |
+| Data | Prepared comparison input for analysis. A single-use carrier is a possible fiction; learned information and reusable references cannot be consumed. | Comparison evidence becomes an interpreted, retained finding. |
+| Energy | Power/work budget for the declared operation. | The instrument runs; more Energy cannot improve or change genes. |
+| Essence | Consumable contrast/readout medium for previously unresolved sample relationships. | An unreadable relationship becomes distinguishable; no genes or traits are installed. |
+
+For an existing B movement region, a proposed Data + Energy comparison establishes
+the supported drive-copy range. A proposed Essence + Energy readout establishes
+the paired drive/efficiency possibilities. Both permitted relationships unfold;
+interpreting their expression references is then free. Joint analysis first makes
+the narrower work redundant/free. A narrower finding remains retained when broader
+work follows. Neither partial result permits a complete creature portrait.
+
+Each input must visibly do its job in the experiment; the recipe belongs to the
+operation, not a region color or desired phenotype. Show actual whole quantities
+and missing input before one atomic commitment; shortages leave stock and knowledge
+unchanged. Not every experiment needs all three resources. Known facts remain
+inspectable without payment. Exact recipes, quantities and authored evidence
+mappings are open; no current fixture price is selected by this brief.
+
+**Unresolved design risk:** Data is information, normally reusable. Calling a
+consumable item a calibration packet does not by itself explain its disappearance.
+The proposed finite preparation needs a simple visual demonstration or a better
+resource model before production. Do not disguise this with technical prose, a
+new machine/service or a mandatory fee. This is fictional game material, not a
+real assay or chemistry claim.
+
+## Companion Home — separate visual proposal
+
+Owner rejects the current text launcher, Probe's reused sample capsule, ambiguous
+"3 expeditions" and duplicated cargo information. Source inspection confirms
+the count means available outing types, not completed or current expeditions.
+Remove that count from Home. The entry repair made destinations reachable; it
+did not achieve the pocket field-partner promise.
+
+UX and art considered one composition at 450×600: a quiet identity header, a
+dominant selected-domain scene, one compact horizontal Probe / Cargo / Companions
+destination rail, and one current-cargo band. Provisional allocations are roughly
+56 / 300 / 92 / 68 pixels, with the remainder for breathing room; these need actual
+native-size visual proof, not production coordinates.
+
+| Focus | Main visual preview | What remains truthful |
+| --- | --- | --- |
+| Probe | An inviting exploration setting; retained local place when an outing is active. | A sample capsule is not an exploration icon. Idle Home invents no active journey or promised encounter. |
+| Cargo | Packing/transfer context with a visibly vacant space when empty. | No repeated totals or capacity; exact whole counts and sample state appear once in the bottom band. |
+| Companions | The actual revealed saved resident; an unoccupied nook when none exists. | No marketing creature, ghost silhouette, egg or implied ownership to decorate an empty account. |
+
+Left/Right follows the horizontal rail and updates previews immediately. Confirm
+enters the named domain; previewing never starts an outing, sends cargo or records
+care. Back restores the same Home destination. The central scene is not a clickable
+screen action. The single cargo band zeros on acceptance and never substitutes
+delivery history for current possessions.
+
+The sample needs a distinct sealed research-specimen silhouette and a recognizable
+generic hereditary/research emblem, not a glowing mana or medicine pill. A type
+symbol identifies what the container is for; it does not reveal its genome.
+Use the same emblem across samples, without specific alleles, decoded sequence or
+creature preview. Its container/emblem master remains a proposed art task.
+
+The strongest tradeoff is less simultaneous overview information in exchange for
+an expressive, changing subject. Short domain names and the single actual cargo
+band preserve orientation. Existing resource masters and owned portraits are
+reusable; proper Probe/Cargo/empty-state illustrations and a replacement sample
+master are missing. Concept crops are references, not finished game assets. This
+is paper design agreement, not rendered-art acceptance, playtesting or deployment.
+
+## Retained alternative research
+
+The comparison below explains the earlier framing and its limitations; it does
+not remain an owner-choice request or an instruction to implement paid questions.
 
 ## The problem both domains must solve
 
@@ -74,6 +200,8 @@ Art direction inspected the actual C18 reference, original 450×600 Companion pr
 
 Game design, UI/UX, genomics and art direction contributed researched critiques and exchanged concrete objections. They rejected hidden-single-genotype fiction, reference clips as assays, genotype receipts presented as active experimentation, fake narrow/broad choices and extra confirmation ceremony. This is proposal review, not visual production, playtesting or universal team acceptance of a game.
 
-**Recommended next decision:** should research's core pleasure be choosing and interpreting meaningful analyses, or should the player operate a deeper fictional experiment? The worked B case gives that discussion a concrete starting point. If it still feels like a paid menu, design its investigative operation before commissioning art or coding another map iteration.
+The owner has replaced the earlier investigator/operator choice with the visual
+genome-region experience above. The worked B case remains a content constraint,
+not the selected child-facing presentation. Do not resume paid-question coding.
 
 After direction, the smallest proof is a connected before/action/after paper storyboard for one field decision and one bench investigation, with exact knowledge transitions and controls. Architecture checks the selected scope/toolchains/framework boundaries before implementation. No new framework, environment, services, radio/hardware commitment or purchases follows from this packet.
