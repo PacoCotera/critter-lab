@@ -8,6 +8,7 @@ typedef struct {
   uint8_t *pixels;
 } NativeUiImage;
 int native_ui_image_init(NativeUiImage *image, CoreArtId id);
+int native_ui_image_from_sprite(NativeUiImage *image, const CoreArtSprite *sprite);
 void native_ui_image_destroy(NativeUiImage *image);
 void native_ui_font_init(lv_font_t *font, const NativeFont *source);
 #endif

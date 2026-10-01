@@ -46,6 +46,20 @@ fresh gestures, and opening/cancelling Send review costs eight: migration alone
 does not remove that friction. Any changed return flow needs an explicit interaction
 prototype before becoming product behavior.
 
+The next bounded Probe composition uses a native32px illustrated world in a
+384×288 local viewport. A north-up camera follows the actual player tile and
+clamps at world edges; it has no separate input or saved state. Only disclosed
+legal routes and visible places appear. A distinct abstract player marker,
+reached-place cue and legal route continuations preserve orientation. Inspection
+keeps the current place in view rather than replacing the whole map with a ledger.
+
+Current whole cargo remains in a72px band beneath the map. Resource preparation
+and current place/action occupy a separate90px workpiece: progress is work toward
+the next unit, never fractional inventory. The existing buttons and game choices
+remain unchanged. Entry, sent and ended states cannot reuse a sealed projection
+as an apparently live map. This composition is an implementation candidate;
+actual native art/control review is required before claiming delivery.
+
 ## Operate the object
 
 ### Current owner playtest requirements
