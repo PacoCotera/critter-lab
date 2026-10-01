@@ -130,6 +130,7 @@ int kit_reception_projection(const DeviceKit *kit, LabReceptionView *out) {
       out->received.map.site_y[site] = 0;
     }
   }
+  if (!out->received.record_count) out->received.detail = 0;
   out->mode = !out->received.record_count ? LAB_RECEPTION_LOG_EMPTY :
       out->received.detail ? LAB_RECEPTION_LOG_DETAIL : LAB_RECEPTION_LOG_LIST;
   strcpy(out->status, "Received expeditions");
