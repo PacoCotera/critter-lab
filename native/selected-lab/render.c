@@ -304,6 +304,26 @@ static void knowledge_rows(SelectedRow *row, const SelectedLab *lab,
     label(row, x, y + 111, "Pale variation known / appearance unresolved", 18, MUTED);
 }
 
+static void overview_sprite(SelectedRow *row, unsigned asset, int x, int y) {
+  int source_y = (int)row->y - y;
+  if (asset >= OVERVIEW_SPRITE_COUNT || source_y < 0 ||
+      source_y >= OVERVIEW_SPRITE_HEIGHT)
+    return;
+  for (int column = 0; column < OVERVIEW_SPRITE_WIDTH; ++column) {
+    int destination = x + column;
+    if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH)
+      continue;
+    const uint8_t *source = overview_pixels[asset] +
+                            (source_y * OVERVIEW_SPRITE_WIDTH + column) * 4;
+    uint8_t *target = row->pixels + destination * 3;
+    unsigned alpha = source[3];
+    for (unsigned channel = 0; channel < 3; ++channel)
+      target[channel] = (uint8_t)((source[channel] * alpha +
+                                   target[channel] * (255u - alpha) + 127u) /
+                                  255u);
+  }
+}
+
 void selected_lab_row_with_context(const SelectedLab *lab,
                                   const SelectedLabRenderContext *context,
                                   unsigned y,

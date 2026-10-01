@@ -1,5 +1,6 @@
 #include "home_view.h"
 #include "core_art.h"
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -45,10 +46,10 @@ static void overview(const SelectedLab *lab,
   if (context && context->haul != SELECTED_HAUL_NONE) {
     strcpy(out->overview[0].detail[0], context->haul == SELECTED_HAUL_WAITING
         ? "Open Explore to accept" : "Expedition ended");
-    unsigned incoming = context->incoming[0] + context->incoming[1] + context->incoming[2];
+    uint64_t incoming = (uint64_t)context->incoming[0] + context->incoming[1] + context->incoming[2];
     if (context->haul == SELECTED_HAUL_WAITING)
       snprintf(out->overview[0].detail[1], sizeof(out->overview[0].detail[1]),
-          "%u incoming unit%s", incoming / GAME_SUPPLY_UNIT,
+          "%" PRIu64 " incoming unit%s", incoming / GAME_SUPPLY_UNIT,
           incoming == GAME_SUPPLY_UNIT ? "" : "s");
     else strcpy(out->overview[0].detail[1], "Stored in Lab stock");
   } else if (lab->kit_mode) {
@@ -123,13 +124,14 @@ static void explore(const SelectedLab *lab,
   }
   snprintf(out->landing.body, sizeof(out->landing.body), "%u / 60 s of active play", game->expedition_elapsed);
   out->landing.show_progress = 1;
-  out->landing.progress = game->expedition_elapsed;
+  out->landing.progress = game->expedition_elapsed > GAME_EXPEDITION_SECONDS
+      ? GAME_EXPEDITION_SECONDS : game->expedition_elapsed;
   out->landing.total = GAME_EXPEDITION_SECONDS;
   out->landing.amounts[0] = game->expedition_data / GAME_SUPPLY_UNIT;
   out->landing.amounts[1] = game->expedition_energy / GAME_SUPPLY_UNIT;
   out->landing.amounts[2] = game->expedition_essence / GAME_SUPPLY_UNIT;
-  unsigned cargo = game->expedition_data + game->expedition_energy + game->expedition_essence;
-  snprintf(out->landing.strip, sizeof(out->landing.strip), "Collected %u / 40 units", cargo / GAME_SUPPLY_UNIT);
+  uint64_t cargo = (uint64_t)game->expedition_data + game->expedition_energy + game->expedition_essence;
+  snprintf(out->landing.strip, sizeof(out->landing.strip), "Collected %" PRIu64 " / 40 units", cargo / GAME_SUPPLY_UNIT);
 }
 
 static void incubation(const SelectedLab *lab, LabHomeView *out) {
@@ -141,7 +143,8 @@ static void incubation(const SelectedLab *lab, LabHomeView *out) {
     snprintf(out->landing.body, sizeof(out->landing.body), "%u / %u s of active play",
         game->incubation_elapsed, GAME_INCUBATION_SECONDS);
     out->landing.show_progress = 1;
-    out->landing.progress = game->incubation_elapsed;
+    out->landing.progress = game->incubation_elapsed > GAME_INCUBATION_SECONDS
+        ? GAME_INCUBATION_SECONDS : game->incubation_elapsed;
     out->landing.total = GAME_INCUBATION_SECONDS;
     if (game->incubation_sample < game->sample_count)
       snprintf(out->landing.details[0], sizeof(out->landing.details[0]), "Source: %s",
@@ -167,6 +170,25 @@ int selected_lab_home_view(const SelectedLab *lab,
       lab->game.sample_count > GAME_MAX_SAMPLES ||
       lab->game.individual_count > GAME_MAX_INDIVIDUALS ||
       (context && (unsigned)context->haul > SELECTED_HAUL_STORED)) return 0;
+  /* Reject malformed fixed backing before string copying or provenance checks. */
+  if (lab->storage_error && !memchr(lab->message, 0, sizeof(lab->message))) return 0;
+  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
+    if (!memchr(lab->game.samples[sample].id, 0, sizeof(lab->game.samples[sample].id)) ||
+        !memchr(lab->game.sample_metadata[sample].content_version, 0,
+                sizeof(lab->game.sample_metadata[sample].content_version))) return 0;
+  }
+  unsigned residents = revealed_residents(&lab->game);
+  if (residents) {
+    unsigned selected = preview_resident(lab);
+    const GameIndividual *individual = &lab->game.individuals[selected];
+    const GameIndividualMetadata *metadata = &lab->game.individual_metadata[selected];
+    if (!memchr(individual->id, 0, sizeof(individual->id))) return 0;
+    if (lab->focus == 4 &&
+        (!memchr(individual->art_id, 0, sizeof(individual->art_id)) ||
+         !memchr(individual->art_version, 0, sizeof(individual->art_version)) ||
+         !memchr(metadata->original_art_version, 0, sizeof(metadata->original_art_version)) ||
+         !memchr(metadata->original_art_sha256, 0, sizeof(metadata->original_art_sha256)))) return 0;
+  }
   memset(out, 0, sizeof(*out));
   out->focus = lab->focus;
   out->suspended = lab->suspended;
@@ -181,7 +203,7 @@ int selected_lab_home_view(const SelectedLab *lab,
   const char *titles[] = {"Overview - Lab", "Overview - Explore", "Overview - Research",
                          "Overview - Incubator", "Overview - Habitat"};
   strcpy(out->title, titles[lab->focus]);
-  unsigned topics = known_topics(lab), residents = revealed_residents(game);
+  unsigned topics = known_topics(lab);
   overview(lab, context, topics, residents, out);
   if (lab->focus == 1) explore(lab, context, out);
   else if (lab->focus == 2) {
