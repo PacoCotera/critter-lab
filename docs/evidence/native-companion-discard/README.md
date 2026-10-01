@@ -68,9 +68,9 @@ flags and explicit failure without raster fallback. Host memory with two tested
 contexts was188088 bytes used out of232392 pooled bytes; this is not MCU fit.
 
 [CI176](https://github.com/PacoCotera/critter-lab/actions/runs/36846217653) passed
-the full Lab host job and Companion/shared Dock compile job. Its historical nRF
-Probe job encountered an API rate limit while fetching the unchanged toolchain;
-only that failed job was retried. This is not a current Companion firmware pass.
+all target jobs, including the full Lab host checks and shared Dock ESP compile.
+The historical nRF job passed after a transient SDK-fetch retry. This is not a
+current Companion firmware pass.
 
 Current Companion ESP-IDF compilation, remaining mode previews/residents/visits,
 every Lab route, broad environmental art, human enjoyment and physical display
