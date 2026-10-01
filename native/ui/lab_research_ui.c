@@ -6,9 +6,9 @@
 #include <string.h>
 
 struct LabResearchUi {
-  lv_obj_t *root, *stock[3], *units[3], *rows[6], *row_details[6];
+  lv_obj_t *root, *stock[3], *units[3], *rows[6], *nav_context;
   lv_obj_t *title, *sample, *heading, *body, *art, *portraits[2], *captions[2];
-  lv_obj_t *finding, *summary[3], *topics[5], *topic_status[5], *partial;
+  lv_obj_t *finding, *summary[3], *partial;
   lv_obj_t *costs[3], *cost_art[3], *cost_title, *counts[3];
   lv_obj_t *alternatives[2], *footer, *message;
   lv_obj_t *coat_clips;
@@ -127,9 +127,10 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
   }
   for (unsigned row = 0; row < 6; ++row) {
     ui->rows[row] = label(ui->root, fonts->small, 50, 169+(int)row*62, 286, 48, CORE_ART_INK_RGB, "");
-    ui->row_details[row] = label(ui->root, fonts->small, 50, 194+(int)row*62, 286, 28, CORE_ART_SECONDARY_RGB, "");
-    if (!ui->rows[row] || !ui->row_details[row]) goto failure;
+    if (!ui->rows[row]) goto failure;
   }
+  ui->nav_context = label(ui->root, fonts->small, 46, 170, 164, 26,
+      CORE_ART_SECONDARY_RGB, "Research");
   ui->title = label(ui->root, fonts->status, 398, 153, 580, 38, CORE_ART_INK_RGB, "");
   ui->sample = label(ui->root, fonts->small, 402, 197, 574, 25, CORE_ART_SECONDARY_RGB, "");
   ui->heading = label(ui->root, fonts->status, 416, 245, 560, 70, CORE_ART_INK_RGB, "");
@@ -146,11 +147,6 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
         CORE_ART_SECONDARY_RGB, index ? "Pale markings\nAppearance expressed" : "Plain coat\nPale variation carried");
     if (!ui->portraits[index] || !ui->captions[index] || !ui->alternatives[index]) goto failure;
   }
-  for (unsigned index = 0; index < 5; ++index) {
-    ui->topics[index] = label(ui->root, fonts->small, 430, 276+(int)index*31, 250, 26, CORE_ART_INK_RGB, "");
-    ui->topic_status[index] = label(ui->root, fonts->small, 706, 276+(int)index*31, 244, 26, CORE_ART_SECONDARY_RGB, "");
-    if (!ui->topics[index] || !ui->topic_status[index]) goto failure;
-  }
   for (unsigned index = 0; index < 3; ++index) {
     ui->summary[index] = label(ui->root, fonts->small, 416, 458+(int)index*26, 552, 48,
         index == 0 ? CORE_ART_SAVED_RGB : index == 1 ? CORE_ART_SECONDARY_RGB : CORE_ART_INK_RGB, "");
@@ -166,7 +162,8 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
     lv_obj_set_hidden(ui->coat_clips, true);
   }
   if (!ui->title || !ui->sample || !ui->heading || !ui->body || !ui->art || !ui->finding ||
-      !ui->cost_title || !ui->partial || !ui->footer || !ui->message || !ui->coat_clips) goto failure;
+      !ui->cost_title || !ui->partial || !ui->footer || !ui->message ||
+      !ui->coat_clips || !ui->nav_context) goto failure;
   return ui;
 failure:
   lab_research_ui_destroy(ui);
@@ -287,7 +284,6 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
     unsigned option = first + row;
     int visible = option < view->option_count;
     lv_obj_set_hidden(ui->rows[row], !visible);
-    lv_obj_set_hidden(ui->row_details[row], true);
     if (!visible) continue;
     lv_label_set_text_static(ui->rows[row], view->options[option]);
     lv_obj_set_style_text_color(ui->rows[row], lv_color_hex(option == view->focus ?
@@ -299,13 +295,8 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
   native_ui_frame_size(&ui->focus, main_actions ? 342 : 180, (int)row_height - 6);
   lv_obj_set_pos(ui->focus.object, main_actions ? 264 : 38,
       (main_actions ? 318 : 157) + (int)((view->focus - first) * row_height));
-  if (main_actions) {
-    /* This is inactive destination context, not another focused action. */
-    lv_obj_set_hidden(ui->row_details[5], false);
-    lv_label_set_text_static(ui->row_details[5], "Research");
-    lv_obj_set_style_text_color(ui->row_details[5], lv_color_hex(CORE_ART_SECONDARY_RGB), 0);
-    place(ui->row_details[5], 46, 170, 164, 26);
-  }
+  /* Inactive destination context, never another focused action. */
+  lv_obj_set_hidden(ui->nav_context, !main_actions);
   lv_label_set_text_static(ui->title, view->title);
   place(ui->title, 264, 153, 720, 38);
   lv_label_set_text_static(ui->sample, view->sample_id);
@@ -344,6 +335,8 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
         comparison ? 475 + (int)index * 24 : 422 + (int)index * 40;
     place(ui->summary[index], pair ? 824 : main_actions ? 620 : 264, y,
         pair ? 160 : main_actions ? 360 : 720, pair ? 110 : plan ? 26 : main_actions ? 48 : comparison ? 24 : 40);
+    if (view->page == LAB_RESEARCH_REVIEW && index == 2)
+      place(ui->summary[index], 264, 430, 336, 88);
   }
   for (unsigned index = 0; index < 2; ++index) {
     lv_obj_set_hidden(ui->portraits[index], !pair);
@@ -368,10 +361,6 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
   }
   lv_obj_set_hidden(ui->coat_clips, !crop);
   if (crop) lv_obj_invalidate(ui->coat_clips);
-  for (unsigned index = 0; index < 5; ++index) {
-    lv_obj_set_hidden(ui->topics[index], true);
-    lv_obj_set_hidden(ui->topic_status[index], true);
-  }
   const int art_slots[] = {-1, 10, 1, 13, 14, 15, 16, 17, -1};
   int slot = art_slots[view->art];
   if (result && view->art != LAB_RESEARCH_ART_CROWN && view->art != LAB_RESEARCH_ART_EYE_RING)
