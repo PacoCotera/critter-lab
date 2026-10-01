@@ -292,6 +292,8 @@ int lab_action_ui_update(LabActionUi *ui, const LabActionView *view) {
         portrait ? 247 : incubation ? 247 : 285);
   }
   lv_label_set_text_static(ui->message, view->message);
+  lv_obj_set_pos(ui->message, population ? 48 : 398, 552);
+  lv_obj_set_size(ui->message, population ? 938 : 588, 44);
   lv_obj_set_hidden(ui->message, !view->message[0]);
   lv_obj_set_style_text_color(ui->message, lv_color_hex(view->storage_error ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
   if (population) {
