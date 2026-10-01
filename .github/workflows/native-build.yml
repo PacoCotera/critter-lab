@@ -134,7 +134,7 @@ jobs:
           test "$(git -C "$RUNNER_TEMP/esp-idf" rev-parse HEAD)" = "$IDF_REVISION"
           python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install --targets="$COMPANION_TARGET"
           python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install-python-env
-      - name: Compile ESP32-S3 firmware
+      - name: Compile legacy Companion scaffold
         run: |
           source native/toolchains.env
           source "$RUNNER_TEMP/esp-idf/export.sh"
@@ -145,6 +145,28 @@ jobs:
           for file in critter_companion.elf critter_companion.bin critter_companion.map bootloader/bootloader.bin partition_table/partition-table.bin flasher_args.json; do
             test -s "native/build/companion/$file"
           done
+      - name: Compile current shared Dock LVGL UI for ESP32-S3
+        run: |
+          source native/toolchains.env
+          source "$RUNNER_TEMP/esp-idf/export.sh"
+          idf.py -C native/caddy -B "$GITHUB_WORKSPACE/native/build/caddy" set-target "$COMPANION_TARGET"
+          idf.py -C native/caddy -B "$GITHUB_WORKSPACE/native/build/caddy" build
+          idf.py -C native/caddy -B "$GITHUB_WORKSPACE/native/build/caddy" size | tee native/build/caddy/size.log
+          git rev-parse HEAD > native/build/caddy/source-revision.log
+          for file in critter_caddy_ui.elf critter_caddy_ui.bin critter_caddy_ui.map; do
+            test -s "native/build/caddy/$file"
+          done
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-caddy-ui-${{ github.sha }}
+          path: |
+            native/build/caddy/critter_caddy_ui.elf
+            native/build/caddy/critter_caddy_ui.bin
+            native/build/caddy/critter_caddy_ui.map
+            native/build/caddy/*.log
+            native/build/caddy/esp-idf/main/dock_assets.json
+          if-no-files-found: error
+          retention-days: 14
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-companion-${{ github.sha }}
