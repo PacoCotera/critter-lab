@@ -27,7 +27,10 @@ uses a native32px player-following map, retained place actions, compact whole ca
 and a persistent whole-cargo strip. The [prior native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
 records the changed composition and actual gather/trace/sample/return/current-zero
 path. Art is extracted from a Gemini master; environmental depth remains unapproved
-and entry composition is sparse. Companions still needs its own workpiece.
+and entry composition is sparse. The [Companions resident workpiece](docs/evidence/native-companion-resident-actions/README.md)
+now preserves saved art, properties and visits through list/visit/offline recovery,
+with independent native technical, interaction and craft passes. Further layout
+and broader HiBit craft remain open.
 Finite map events and their saved consequences remain subsequent
 work; acquisition/research still need depth. Automatic
 Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
@@ -51,10 +54,11 @@ now passes native/control and independent review; the [same-source ESP-IDF compi
 
 Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
 ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
-shows current manual-renderer debt and the old firmware-scaffold gap. Convert the
-complete Dock family first, extract the portable display/host boundary, compile
-the same UI under ESP-IDF, then finish Companion families and Lab journey
-workpieces. Preserve game/save/physical-control behavior. Each slice has actual
+shows current manual-renderer debt and the old firmware-scaffold gap. Dock and
+every known Companion host family now use the portable display/host boundary;
+the shared Dock UI has an ESP-IDF compile proof. Next compile the current shared
+Companion UI under the existing ESP-IDF toolchain, then convert every Lab family.
+Preserve game/save/physical-control behavior. Each slice has actual
 output and independent review; no host or scaffold success establishes firmware
 or physical readiness. No new engine or infrastructure is authorized.
 
