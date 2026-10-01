@@ -149,10 +149,12 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     out->pressed |= view->gestures[button].held && view->gestures[button].allowed;
   }
   int sealed = out->phase >= KIT_WAITING && out->phase <= KIT_ACK_PENDING;
-  snprintf(out->title, sizeof(out->title), "%s", out->accepted ? "Cargo empty" :
+  int no_outing = !kit->lab->game.expedition_id[0] && !sealed;
+  snprintf(out->title, sizeof(out->title), "%s", out->accepted || no_outing ? "Cargo empty" :
            sealed ? "Cargo sealed" : review ? "Return to Lab" : "Cargo");
   snprintf(out->context, sizeof(out->context), "%s",
-           out->accepted ? "Expedition ended" : sealed ? kit_stage(kit) : kit_route(kit));
+           out->accepted ? "Expedition ended" : sealed ? kit_stage(kit) :
+           no_outing ? "No active expedition" : kit_route(kit));
   snprintf(out->capsule, sizeof(out->capsule), "%s",
            out->capsules ? "1 sealed sample" : "No sample in cargo");
   if (out->accepted) {
@@ -162,6 +164,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
              out->delivered_capsules ? "1 sample delivered to Lab." : "Supplies stored at Lab.");
   } else {
     const char *detail = sealed ? "This expedition cannot resume." :
+        no_outing ? "No cargo. Choose a new expedition." :
         review ? (out->capsules ? "Contents unknown\nSeals cargo; exploration stops."
                                : "Seals cargo; exploration stops.") :
         out->capsules ? "Contents unknown" : "Whole items / source progress retained.";

@@ -239,6 +239,14 @@ static void discard_finish_projection_truth(void) {
   assert(kit_cargo_projection(&kit, &view) && view.active_mode == COMP_PROBE);
   kit.companion.mode = COMP_MODES;
   assert(!kit_cargo_projection(&kit, &view));
+  kit.companion.mode = COMP_CARGO;
+  kit.companion.page = COMP_CARGO;
+  kit.companion.focus = 0;
+  lab.game.expedition_id[0] = 0;
+  memset(&lab.game.field, 0, sizeof(lab.game.field));
+  assert(kit_cargo_projection(&kit, &view));
+  assert(!strcmp(view.title, "Cargo empty") && !strcmp(view.context, "No active expedition"));
+  assert(strstr(view.detail, "new expedition") && !strstr(view.detail, "progress retained"));
 }
 static UiFlushResult consume_partial(void *user, UiDisplay *display, const UiArea *area,
     const uint8_t *pixels, size_t stride, UiColorFormat format) {
