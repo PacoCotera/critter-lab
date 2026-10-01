@@ -230,6 +230,17 @@ static void portable_partial(void) {
   assert(!companion_resident_ui_update(ui, &view, NULL));
   memset(view.identity, 'x', sizeof(view.identity));
   assert(!companion_resident_ui_update(ui, &view, &image.image));
+  kit.residents.count = 0;
+  kit.selected_resident_id[0] = 0;
+  kit.companion.page = COMP_FRIENDS;
+  kit.companion.focus = 0;
+  assert(kit_resident_projection(&kit, &view));
+  view.focus = view.selected_index = 1;
+  /* The shape is valid for an empty view, so failure must precede layout. */
+  lv_image_dsc_t empty_shape = image.image;
+  empty_shape.header.w = 136;
+  empty_shape.header.h = 144;
+  assert(!companion_resident_ui_update(ui, &view, &empty_shape));
   companion_resident_ui_destroy(ui);
   native_ui_image_destroy(&image);
   assert(ui_display_destroy(display));

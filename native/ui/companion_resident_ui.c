@@ -34,7 +34,7 @@ static int valid_view(const CompanionResidentView *view, const lv_image_dsc_t *i
       view->portrait > RESIDENT_EMPTY_HABITAT || view->failed > 1 ||
       view->current > 1 || view->online > 1 ||
       (view->count && view->selected_index >= view->count) ||
-      (!view->count && (view->identity[0] || view->visits || view->property[0] ||
+      (!view->count && (view->selected_index || view->identity[0] || view->visits || view->property[0] ||
                         view->portrait != RESIDENT_EMPTY_HABITAT)) ||
       (view->count && (!view->identity[0] || view->portrait == RESIDENT_EMPTY_HABITAT)))
     return 0;
@@ -177,7 +177,8 @@ int companion_resident_ui_update(CompanionResidentUi *ui,
   int header_focus = list && view->count && !view->failed;
   lv_obj_set_hidden(ui->focus_frame.object, !header_focus && !view->action_count);
   native_ui_frame_size(&ui->focus_frame, 398, header_focus ? 30 : 27);
-  lv_obj_set_pos(ui->focus_frame.object, 26, header_focus ? 134 : 506 + (int)view->focus * 32);
+  lv_obj_set_pos(ui->focus_frame.object, 26,
+      view->action_count ? 506 + (int)view->focus * 32 : 134);
   return 1;
 }
 void companion_resident_ui_hide(CompanionResidentUi *ui) {

@@ -87,10 +87,12 @@ static uint32_t companion_property_pixels(const DeviceKit *kit) {
   assert(frame && kit_bmp(kit, KIT_COMPANION, frame));
   unsigned stride = (kit_width(KIT_COMPANION) * 3 + 3) & ~3u;
   uint32_t hash = 2166136261u;
-  for (unsigned y = 267; y < 380; ++y) {
+  /* Exact retained property box. The earlier raster coordinates now overlap
+   * the lower ink of the separate Visits counter. */
+  for (unsigned y = 286; y < 412; ++y) {
     long offset = 54 + (long)(kit_height(KIT_COMPANION) - y - 1) * stride + 303 * 3;
     assert(fseek(frame, offset, SEEK_SET) == 0);
-    for (unsigned byte = 0; byte < 116 * 3; ++byte) {
+    for (unsigned byte = 0; byte < 115 * 3; ++byte) {
       int value = fgetc(frame);
       assert(value != EOF);
       hash = (hash ^ (unsigned)value) * 16777619u;
