@@ -72,6 +72,21 @@ Catalogue records must allow multiple contributors, interaction/context rules an
 per-output reasons from the outset. Exact operators, probabilities and quantitative
 physiology remain design work, not an implemented general solver.
 
+Owner also requires future **epigenetic regulation**. Proposed fictional modeling
+keeps locus/region regulatory marks distinct from inherited allele copies. Marks
+affect expression through declared rules; record their scope, trigger, affected
+operator, establishment/removal, persistence and reproduction reset/transmission
+policy. Inherited regulatory alleles remain layer2; mark interpretation/development
+belongs to layer3 and acquired mark state/history to layer5. This adds neither a
+twelfth dimension nor a replacement genome. Temporary fatigue, learned behavior
+and an ordinary context response are not automatically epigenetic. Same-genome
+experiments compare declared marks/context and their consequences; no marks are
+automatically copied to offspring or treated as mutations. Exact mark mechanics
+remain proposed. Biological inspiration: [NHGRI Epigenomics Fact Sheet](https://www.genome.gov/about-genomics/fact-sheets/Epigenomics-Fact-Sheet)
+distinguishes sequence-preserving regulation and conditional transmission from
+the widespread resetting of marks during reproduction. The game remains fictional
+genetics, not a molecular simulation.
+
 ### Abilities are structured capabilities
 
 Use an extensible ability vocabulary alongside the dimensions, rather than inventing a new genomic layer for every power. Each ability definition states its inherited prerequisites, required structures/resources, activation conditions, parameters, costs, effects, recovery conditions and possible failure. A tree can present it simply; the underlying prerequisites may form a network.

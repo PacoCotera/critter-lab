@@ -304,6 +304,20 @@ it does not invent a new allele per spot. Regulatory contributors may control th
 bounds where defined. Whether this is developmental expression or nonheritable
 render variation must be declared by the rule, not guessed by the UI.
 
+Future epigenetic experiments add an inspectable **regulatory-state overlay**:
+declared locus/region marks, their origin/trigger, affected expression rule,
+establishment/removal, persistence and reproduction reset/transmission policy.
+Inherited copies remain unchanged. Compare the same genotype under different
+supported marks/context and show their downstream phenotype consequences; add a
+regulatory-state encoding alongside the three representations above. Genome art
+can show marks as an overlay rather than replacing inherited glyphs. Ordinary
+fatigue, learning and a transient environmental response are not automatically
+epigenetic. Mark persistence or inheritance is a declared fictional rule, not a
+default. These belong to the existing expression/development and state/history
+layers; exact mechanics and a regulatory-state evaluator are not implemented.
+The [genetics framework](../../specs/genetics.md#accepted-dimension-families-dimensions-to-specify)
+owns the polygenic/epigenetic meaning and biological reference.
+
 The visual prompt is a projection of resolved anatomy, proportions, palette,
 surface features and eligible motion, with explicit exclusions and a separate
 style/pose/camera specification. Selecting a phrase traces back to its phenotype
