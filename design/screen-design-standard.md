@@ -2,7 +2,7 @@
 
 ## Approved Lab UI baseline
 
-Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The [baseline entry](game-art-proposals/35-vault-composition/README.md) records scope and evidence. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
+Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The scope of that approval is stated below. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
 
 The Lab is a playful genetics research device: graphite surfaces, defined electric-blue frames, saturated crisp pixel artwork and selective warm focus. Preserve biological curiosity and the original pixel personality; avoid cosmic/starfield imagery, purple-dominant surfaces, generic web cards and hardware depicted inside hardware.
 
