@@ -1,3 +1,4 @@
+#include "home_view.h"
 #include "core_art.h"
 #include "expedition_render.h"
 #include "kit.h"
@@ -266,6 +267,24 @@ static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
 int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                NativeUiContext *context, int still) {
   if (!kit || !kit->lab || !output || device >= KIT_DEVICE_COUNT) return 0;
+  if (device == KIT_LAB && kit->lab->page == V1_HOME) {
+    SelectedLabRenderContext facts = {SELECTED_HAUL_NONE, {0,0,0}};
+    if (kit->journal.phase == KIT_ARRIVED || kit->journal.phase == KIT_COMMITTING)
+      facts.haul = SELECTED_HAUL_WAITING;
+    else if (kit->journal.phase == KIT_ACK_PENDING || kit->journal.phase == KIT_COMPLETE)
+      facts.haul = SELECTED_HAUL_STORED;
+    memcpy(facts.incoming, kit->journal.cargo, sizeof(facts.incoming));
+    LabHomeView view;
+    if (!selected_lab_home_view(kit->lab, &facts, kit->normalization_pending, &view)) return 0;
+    if (kit->failed) snprintf(view.warning, sizeof(view.warning), "%s", kit->lab->message);
+    int temporary = !context;
+    if (temporary) context = native_ui_create_device(KIT_LAB);
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_home(context, &view);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   if (device == KIT_DOCK) {
     DockView view;
     if (!kit_dock_projection(kit, &view)) return 0;

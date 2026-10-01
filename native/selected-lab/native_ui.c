@@ -1,4 +1,5 @@
 #include "native_ui.h"
+#include "../ui/lab_home_ui.h"
 #include "ui_assets.h"
 #include "ui_theme.h"
 #include "probe_ui.h"
@@ -15,6 +16,9 @@
 enum { CARGO_WIDTH = 450, CARGO_HEIGHT = 600, DRAW_ROWS = 60 };
 struct NativeUiContext {
   unsigned device;
+  LabHomeUi *home;
+  NativeUiImage home_images[13];
+  lv_font_t home_fonts[5];
   UiDisplay *transport;
   UiHostFrame frame;
   DockUi *dock;
@@ -33,12 +37,12 @@ NativeUiContext *native_ui_create(void) {
   return native_ui_create_device(KIT_COMPANION);
 }
 NativeUiContext *native_ui_create_device(unsigned device) {
-  if (device != KIT_COMPANION && device != KIT_DOCK) return NULL;
+  if (device != KIT_COMPANION && device != KIT_DOCK && device != KIT_LAB) return NULL;
   NativeUiContext *context = calloc(1, sizeof(*context));
   if (!context) return NULL;
   context->device = device;
-  UiDisplayProfile profile = {device == KIT_DOCK ? 792 : CARGO_WIDTH,
-      device == KIT_DOCK ? 272 : CARGO_HEIGHT, DRAW_ROWS, UI_COLOR_RGB888};
+  UiDisplayProfile profile = {device == KIT_LAB ? 1024 : device == KIT_DOCK ? 792 : CARGO_WIDTH,
+      device == KIT_DOCK ? 272 : CARGO_HEIGHT, device == KIT_LAB ? 8 : DRAW_ROWS, UI_COLOR_RGB888};
   size_t draw_size = ui_display_buffer_size(&profile);
   context->draw = malloc(draw_size);
   if (!context->draw || !ui_host_frame_init(&context->frame, &profile)) goto failure;
@@ -47,6 +51,31 @@ NativeUiContext *native_ui_create_device(unsigned device) {
                                          ui_host_frame_flush, &context->frame);
   if (!context->transport) goto failure;
   context->display = ui_display_lvgl(context->transport);
+  if (device == KIT_LAB) {
+    native_ui_font_init(&context->home_fonts[0], &lab_heading_narrow_fonts[2]);
+    native_ui_font_init(&context->home_fonts[1], &lab_heading_narrow_fonts[1]);
+    native_ui_font_init(&context->home_fonts[2], &lab_heading_narrow_fonts[0]);
+    native_ui_font_init(&context->home_fonts[3], &lab_fonts[3]);
+    native_ui_font_init(&context->home_fonts[4], &lab_fonts[0]);
+    const CoreArtId ids[] = {CORE_ART_DATA_COMPACT, CORE_ART_ENERGY_COMPACT,
+        CORE_ART_ESSENCE_COMPACT, CORE_ART_DATA_PRIMARY, CORE_ART_ENERGY_PRIMARY,
+        CORE_ART_ESSENCE_PRIMARY, CORE_ART_SAMPLE_NEUTRAL, CORE_ART_PIP_PLAIN, CORE_ART_PIP_MARKED};
+    const lv_image_dsc_t *sources[13];
+    for (unsigned index = 0; index < 13; ++index) {
+      if (index < 4) {
+        const CoreArtSprite sprite = {"home-destination", OVERVIEW_SPRITE_WIDTH,
+            OVERVIEW_SPRITE_HEIGHT, overview_pixels[index], NULL, NULL, 0, 0};
+        if (!native_ui_image_from_sprite(&context->home_images[index], &sprite)) goto failure;
+      } else if (!native_ui_image_init(&context->home_images[index], ids[index-4])) goto failure;
+      sources[index] = &context->home_images[index].image;
+    }
+    const LabHomeFonts fonts = {&context->home_fonts[0], &context->home_fonts[1],
+        &context->home_fonts[2], &context->home_fonts[3], &context->home_fonts[4]};
+    lv_display_set_default(context->display);
+    context->home = lab_home_ui_create(lv_display_get_screen_active(context->display), &fonts, sources);
+    if (!context->home) goto failure;
+    return context;
+  }
   native_ui_font_init(&context->title_font, &lab_heading_fonts[0]);
   native_ui_font_init(&context->body_font, &lab_fonts[0]);
   native_ui_font_init(&context->small_font, &lab_fonts[15]);
@@ -102,11 +131,13 @@ void native_ui_destroy(NativeUiContext *context) {
   companion_cargo_ui_destroy(context->cargo);
   companion_resident_ui_destroy(context->residents);
   dock_ui_destroy(context->dock);
+  lab_home_ui_destroy(context->home);
   if (context->actions) lv_group_delete(context->actions);
   ui_display_destroy(context->transport);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
   for (unsigned index = 0; index < 6; ++index) native_ui_image_destroy(&context->dock_images[index]);
   for (unsigned index = 0; index < 3; ++index) native_ui_image_destroy(&context->resident_images[index]);
+  for (unsigned index = 0; index < 13; ++index) native_ui_image_destroy(&context->home_images[index]);
   ui_host_frame_destroy(&context->frame);
   free(context->draw);
   free(context);
@@ -177,4 +208,11 @@ const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view) {
       ui_display_failed(context->transport) || !dock_ui_update(context->dock, view)) return NULL;
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : ui_host_frame_rgb(&context->frame, 1);
+}
+
+const uint8_t *native_ui_home(NativeUiContext *context, const LabHomeView *view) {
+  if (!context || context->device != KIT_LAB || !view ||
+      ui_display_failed(context->transport) || !lab_home_ui_update(context->home, view)) return NULL;
+  lv_refr_now(context->display);
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
 }

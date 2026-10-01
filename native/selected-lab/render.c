@@ -1,3 +1,5 @@
+#include "native_ui.h"
+#include "home_view.h"
 #include "assets.h"
 #include "core_art.h"
 #include "native_font.h"
@@ -232,15 +234,6 @@ static void focus(SelectedRow *row, int x, int y, int width, int height) {
   core_art_focus_row(x, y, width, height, row->y, SELECTED_LAB_WIDTH, row->pixels);
 }
 
-static unsigned known_topics(const SelectedLab *lab) {
-  unsigned count = 0;
-  for (unsigned sample = 0; sample < lab->game.sample_count; ++sample) {
-    SelectedResearchView view;
-    if (selected_lab_research_view(lab, sample, &view))
-      count += view.completed_methods;
-  }
-  return count;
-}
 
 static const char *research_topic(const SelectedResearchMethod *entry) {
   if (!strcmp(entry->id, "heritage")) return "Inheritance";
@@ -311,373 +304,50 @@ static void knowledge_rows(SelectedRow *row, const SelectedLab *lab,
     label(row, x, y + 111, "Pale variation known / appearance unresolved", 18, MUTED);
 }
 
-static unsigned revealed_residents(const GameState *game) {
-  unsigned count = 0;
-  for (unsigned index = 0; index < game->individual_count; ++index)
-    count += game->individuals[index].revealed;
-  return count;
-}
-
-static unsigned preview_resident(const SelectedLab *lab) {
-  const GameState *game = &lab->game;
-  if (lab->resident < game->individual_count &&
-      game->individuals[lab->resident].revealed)
-    return lab->resident;
-  for (unsigned index = 0; index < game->individual_count; ++index)
-    if (game->individuals[index].revealed)
-      return index;
-  return 0;
-}
-
-static void progress(SelectedRow *row, int x, int y, int width,
-                     unsigned elapsed, unsigned duration) {
-  rectangle(row, x, y, width, 17, DEEP);
-  outline(row, x, y, width, 17, 2, EDGE);
-  if (elapsed > duration)
-    elapsed = duration;
-  rectangle(row, x + 3, y + 3, (width - 6) * (int)elapsed / (int)duration, 11,
-            WARM);
-}
-
-/* The artist's final pixels are rendered at 1:1. Destination artwork is a
- * reusable metaphor; the adjacent live readouts alone describe game state. */
-static void overview_sprite(SelectedRow *row, unsigned asset, int x, int y) {
-  int source_y = (int)row->y - y;
-  if (asset >= OVERVIEW_SPRITE_COUNT || source_y < 0 ||
-      source_y >= OVERVIEW_SPRITE_HEIGHT)
-    return;
-  for (int column = 0; column < OVERVIEW_SPRITE_WIDTH; ++column) {
-    int destination = x + column;
-    if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH)
-      continue;
-    const uint8_t *source = overview_pixels[asset] +
-                            (source_y * OVERVIEW_SPRITE_WIDTH + column) * 4;
-    uint8_t *target = row->pixels + destination * 3;
-    unsigned alpha = source[3];
-    for (unsigned channel = 0; channel < 3; ++channel)
-      target[channel] = (uint8_t)((source[channel] * alpha +
-                                   target[channel] * (255u - alpha) + 127u) /
-                                  255u);
-  }
-}
-
-static void home_overview(SelectedRow *row, const SelectedLab *lab,
-                          const SelectedLabRenderContext *context) {
-  const GameState *game = &lab->game;
-  char text[96];
-  unsigned topics = known_topics(lab);
-  unsigned residents = revealed_residents(game);
-  overview_sprite(row, OVERVIEW_EXPLORE, 272, 207);
-  overview_sprite(row, OVERVIEW_RESEARCH, 642, 207);
-  overview_sprite(row, OVERVIEW_INCUBATOR, 272, 377);
-  overview_sprite(row, OVERVIEW_HABITAT, 642, 377);
-
-  label(row, 422, 223, "EXPLORE", 18, MUTED);
-  heading(row, 422, 255,
-          context && context->haul == SELECTED_HAUL_WAITING ? "Supplies waiting"
-          : context && context->haul == SELECTED_HAUL_STORED ? "Supplies stored"
-          : lab->kit_mode ? "Received records"
-          : game->expedition_active ? "Gathering"
-          : game->expedition_id[0]
-              ? (game_transfer_available(game) ? "Haul ready" : "Paused")
-              : "At the Lab",
-          26, INK);
-  if (context && context->haul != SELECTED_HAUL_NONE) {
-    label(row, 422, 292, context->haul == SELECTED_HAUL_WAITING
-              ? "Open Explore to accept" : "Expedition ended", 18, MUTED);
-    unsigned total = context->incoming[0] + context->incoming[1] + context->incoming[2];
-    snprintf(text, sizeof(text), "%u incoming unit%s", total / GAME_SUPPLY_UNIT,
-             total == GAME_SUPPLY_UNIT ? "" : "s");
-    label(row, 422, 318, context->haul == SELECTED_HAUL_WAITING
-              ? text : "Stored in Lab stock", 18, MUTED);
-  } else if (lab->kit_mode) {
-    snprintf(text, sizeof(text), "%u received outing%s", game->received_count,
-             game->received_count == 1 ? "" : "s");
-    label(row, 422, 292, text, 18, MUTED);
-    label(row, 422, 318, "Open the expedition log", 18, MUTED);
-  } else if (game->expedition_id[0]) {
-    snprintf(text, sizeof(text), "%u / 60 seconds", game->expedition_elapsed);
-    label(row, 422, 292, text, 18, MUTED);
-    label(row, 422, 318,
-          game->expedition_active         ? "Expedition active"
-          : game_transfer_available(game) ? "Ready to return"
-          : game->expedition_elapsed < GAME_EXPEDITION_SECONDS
-              ? "Continue on Companion"
-              : "Finish on Companion",
-          18, MUTED);
-  } else {
-    label(row, 422, 292, "No expedition", 18, MUTED);
-    label(row, 422, 318, "Choose a route", 18, MUTED);
-  }
-
-  label(row, 792, 223, "RESEARCH", 18, MUTED);
-  snprintf(text, sizeof(text), "%u sample%s", game->sample_count,
-           game->sample_count == 1 ? "" : "s");
-  heading(row, 792, 255, text, 26, INK);
-  snprintf(text, sizeof(text), "%u finding%s", topics, topics == 1 ? "" : "s");
-  label(row, 792, 292, text, 18, MUTED);
-  if (game->sample_count && lab->sample < game->sample_count)
-    label(row, 792, 318, game->samples[lab->sample].id, 18, MUTED);
-  else
-    label(row, 792, 318, "Awaiting samples", 18, MUTED);
-
-  rectangle(row, 276, 361, 696, 1, EDGE);
-  label(row, 422, 391, "INCUBATOR", 18, MUTED);
-  heading(row, 422, 423,
-          game->incubation_ready    ? "Ready to open"
-          : game->incubation_active ? "Incubating"
-                                    : "Resting",
-          26, INK);
-  if (game->incubation_active || game->incubation_ready) {
-    snprintf(text, sizeof(text), "%u / %u seconds", game->incubation_elapsed,
-             GAME_INCUBATION_SECONDS);
-    label(row, 422, 460, text, 18, MUTED);
-    label(row, 422, 486, "Of active play", 18, MUTED);
-  } else
-    label(row, 422, 460, "No incubation", 18, MUTED);
-
-  label(row, 792, 391, "HABITAT", 18, MUTED);
-  snprintf(text, sizeof(text), "%u resident%s", residents,
-           residents == 1 ? "" : "s");
-  heading(row, 792, 423, text, 26, INK);
-  if (residents) {
-    const GameIndividual *individual =
-        &game->individuals[preview_resident(lab)];
-    label(row, 792, 460, individual->id, 18, MUTED);
-    snprintf(text, sizeof(text), "%u visit%s together", individual->care_visits,
-             individual->care_visits == 1 ? "" : "s");
-    label(row, 792, 486, text, 18, MUTED);
-  } else
-    label(row, 792, 460, "No Beecho revealed", 18, MUTED);
-}
-
-static void landing_strip(SelectedRow *row, const char *text) {
-  rectangle(row, 320, 448, 622, 2, EDGE);
-  rectangle(row, 320, 459, 622, 44, DEEP);
-  rectangle(row, 320, 459, 3, 44, BLUE);
-  label(row, 334, 469, text, 18, MUTED);
-}
-
-static void home_landing(SelectedRow *row, const SelectedLab *lab,
-                         const SelectedLabRenderContext *context) {
-  const GameState *game = &lab->game;
-  char text[96];
-  if (lab->focus == 0) {
-    home_overview(row, lab, context);
-    return;
-  }
-  if (lab->focus == 1 && context && context->haul != SELECTED_HAUL_NONE) {
-    heading(row, 320, 218, context->haul == SELECTED_HAUL_WAITING
-                ? "SUPPLIES WAITING AT THE LAB" : "SUPPLIES STORED AT THE LAB",
-            32, INK);
-    label(row, 320, 272, context->haul == SELECTED_HAUL_WAITING
-              ? "Open Explore to accept this haul." : "Expedition ended.", 22, INK);
-    const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
-    for (unsigned i = 0; i < 3; ++i) {
-      int x = 324 + (int)i * 215;
-      sprite(row, i, x, 327, 90, 100);
-      label(row, x + 101, 345, names[i], 18, MUTED);
-      snprintf(text, sizeof(text), "%u", context->incoming[i] / GAME_SUPPLY_UNIT);
-      heading(row, x + 101, 375, text, 26, INK);
-    }
-    landing_strip(row, context->haul == SELECTED_HAUL_WAITING
-                   ? "Incoming supplies are separate from Lab stock."
-                   : "The accepted haul is included in Lab stock.");
-    return;
-  }
-  if (lab->focus == 1) {
-    if (lab->kit_mode) {
-      heading(row, 320, 218, "RECEIVED EXPEDITIONS", 32, INK);
-      snprintf(text, sizeof(text), "%u expedition record%s received", game->received_count,
-               game->received_count == 1 ? "" : "s");
-      label(row, 320, 285, text, 22, INK);
-      overview_sprite(row, OVERVIEW_EXPLORE, 330, 335);
-      label(row, 500, 360, "Recorded routes and findings", 22, INK);
-      label(row, 500, 400, "Accepted supplies and samples", 18, MUTED);
-      landing_strip(row, "Confirm: open the received expedition log");
-      return;
-    }
-    heading(row, 320, 218,
-            game->expedition_active  ? "EXPEDITION GATHERING"
-            : game->expedition_id[0] ? "HAUL READY TO RETURN"
-                                     : "NO EXPEDITION ACTIVE",
-            32, game->expedition_id[0] ? WARM : INK);
-    if (!game->expedition_id[0]) {
-      label(row, 320, 285, "Choose an expedition route.", 22, INK);
-      label(row, 320, 335, "Possible finds", 18, MUTED);
-      const char *finds[] = {"DATA", "ENERGY", "ESSENCE"};
-      for (unsigned index = 0; index < 3; ++index) {
-        int x = 330 + (int)index * 188;
-        sprite(row, index, x, 374, 40, 53);
-        label(row, x + 50, 392, finds[index], 18, INK);
-      }
-    } else {
-      snprintf(text, sizeof(text), "%u / 60 s of active play",
-               game->expedition_elapsed);
-      label(row, 320, 277, text, 22, INK);
-      progress(row, 320, 320, 622, game->expedition_elapsed, 60);
-      const unsigned cargo[] = {game->expedition_data, game->expedition_energy,
-                                game->expedition_essence};
-      const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
-      for (unsigned index = 0; index < 3; ++index) {
-        int x = 324 + (int)index * 215;
-        sprite(row, index, x, 374, 40, 53);
-        label(row, x + 51, 375, names[index], 18, MUTED);
-        snprintf(text, sizeof(text), "%u units",
-                 cargo[index] / GAME_SUPPLY_UNIT);
-        label(row, x + 51, 405, text, 18, INK);
-      }
-    }
-    if (game->expedition_id[0]) {
-      unsigned cargo = game->expedition_data + game->expedition_energy +
-                       game->expedition_essence;
-      snprintf(text, sizeof(text), "Collected %u / 40 units",
-               cargo / GAME_SUPPLY_UNIT);
-      landing_strip(row, text);
-    } else
-      landing_strip(row, "No cargo loaded");
-
-  } else if (lab->focus == 2) {
-    overview_sprite(row, OVERVIEW_RESEARCH, 326, 247);
-    snprintf(text, sizeof(text), "%u retained sample%s", game->sample_count,
-             game->sample_count == 1 ? "" : "s");
-    heading(row, 505, 255, text, 32, INK);
-    snprintf(text, sizeof(text), "%u findings recorded", known_topics(lab));
-    label(row, 505, 306, text, 22, INK);
-    label(row, 505, 360, "Choose a sample in Research.", 18, MUTED);
-    landing_strip(row, game->sample_count ? "Each sample has its own evidence and next investigations."
-                                          : "Bring a sample to the Lab to begin.");
-  } else if (lab->focus == 3) {
-    if (game->incubation_active || game->incubation_ready)
-      sprite(row, SPRITE_SAMPLE, 326, 247, 155, 155);
-    heading(row, game->incubation_active || game->incubation_ready ? 505 : 320,
-            245,
-            game->incubation_ready    ? "READY TO OPEN"
-            : game->incubation_active ? "INCUBATING"
-                                      : "NO INCUBATION",
-            32, game->incubation_active || game->incubation_ready ? WARM : INK);
-    if (game->incubation_active || game->incubation_ready) {
-      snprintf(text, sizeof(text), "%u / %u s of active play",
-               game->incubation_elapsed, GAME_INCUBATION_SECONDS);
-      label(row, 505, 303, text, 22, INK);
-      progress(row, 505, 351, 435, game->incubation_elapsed,
-               GAME_INCUBATION_SECONDS);
-      if (game->incubation_sample < game->sample_count) {
-        snprintf(text, sizeof(text), "Source: %s",
-                 game->samples[game->incubation_sample].id);
-        label(row, 505, 395, text, 18, MUTED);
-      }
-    } else {
-      int prepared = 0;
-      for (unsigned sample = 0; sample < game->sample_count; ++sample)
-        {
-          SelectedResearchView view;
-          prepared |= selected_lab_research_view(lab, sample, &view) &&
-                      view.complete && !game->samples[sample].incubated;
-        }
-      label(row, 320, 303,
-            prepared ? "A researched sample is ready to prepare."
-                     : "Complete the supported reference knowledge first.",
-            22, INK);
-      landing_strip(
-          row, prepared
-                   ? "Choose the sample in Research to see its requirements."
-                   : "Prepare incubation from Research.");
-    }
-
-  } else if (lab->focus == 4) {
-    unsigned count = revealed_residents(game);
-    if (count) {
-      unsigned selected = preview_resident(lab);
-      const GameIndividual *individual = &game->individuals[selected];
-      resident_portrait(row, game, selected, 312, 220);
-      heading(row, 585, 255, individual->id, 26, WARM);
-      label(row, 585, 310,
-            individual->expression.pale_markings ? "Pale markings"
-                                                 : "Plain coat",
-            22, INK);
-      snprintf(text, sizeof(text), "%u revealed resident%s", count,
-               count == 1 ? "" : "s");
-      label(row, 585, 356, text, 18, MUTED);
-      snprintf(text, sizeof(text), "%u visit%s together",
-               individual->care_visits,
-               individual->care_visits == 1 ? "" : "s");
-      label(row, 585, 395, text, 18, INK);
-    } else {
-      heading(row, 320, 255, "NO REVEALED RESIDENTS", 32, INK);
-      label(row, 320, 314, "A Beecho appears here after reveal.", 22, INK);
-    }
-  }
-}
-
 void selected_lab_row_with_context(const SelectedLab *lab,
                                   const SelectedLabRenderContext *context,
                                   unsigned y,
                                   uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
+  /* Home owns a retained LVGL tree and is exported through the frame API.
+   * This legacy row API is intentionally unavailable for migrated pages. */
+  if (lab->page == V1_HOME) { memset(pixels, 0, SELECTED_LAB_WIDTH * 3); return; }
+  (void)context;
   SelectedRow row = {y, pixels};
   const GameState *game = &lab->game;
-  int home = lab->page == V1_HOME;
   rectangle(&row, 0, 0, 1024, 600, BASE);
-  panel(&row, 24, home ? 24 : 18, 976, home ? 100 : 94);
-  /* The shared Home header needs breathing room for the three-line stock
-   *
-   * readout. Retain its outer stepped frame without an internal crossing rule.
-   */
-  if (home)
-    rectangle(&row, 37, 37, 950, 75, PANEL);
-  heading(&row, 46, home ? 36 : 32, "BEECHO LAB", 34, INK);
-  label(&row, 47, home ? 84 : 77, "LAB STOCK", 18, MUTED);
+  panel(&row, 24, 18, 976, 94);
+  heading(&row, 46, 32, "BEECHO LAB", 34, INK);
+  label(&row, 47, 77, "LAB STOCK", 18, MUTED);
   unsigned stock[] = {game->data, game->energy, game->essence};
   const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
   for (unsigned i = 0; i < 3; i++) {
-    int x = home ? 402 + (int)i * 196 : 420 + (int)i * 180;
-    sprite(&row, i, x, home ? 41 : 35, 50, 58);
-    label(&row, x + (home ? 62 : 53), home ? 45 : 32, names[i], 18, MUTED);
-    if (home) {
-      char amount[32];
-      snprintf(amount, sizeof(amount), "%u", stock[i] / 100);
-      heading(&row, x + 62, 64, amount, 26, INK);
-      label(&row, x + 62, 87, stock[i] == GAME_SUPPLY_UNIT ? "unit" : "units",
-            18, MUTED);
-    } else
-      stock_amount(&row, x + 54, stock[i]);
+    int x = 420 + (int)i * 180;
+    sprite(&row, i, x, 35, 50, 58);
+    label(&row, x + 53, 32, names[i], 18, MUTED);
+    stock_amount(&row, x + 54, stock[i]);
   }
-  panel(&row, 24, home ? 140 : 134, home ? 208 : 330, home ? 416 : 406);
-  panel(&row, home ? 248 : 376, home ? 140 : 134, home ? 752 : 624,
-        home ? 416 : 406);
-  if (home && lab->focus == 0)
-    rectangle(&row, 264, 156, 720, 384, ART_FIELD);
-  const char *titles[] = {"WORKBENCH", "EXPEDITION",        "CARGO",
-                          "SAMPLES",   "RESEARCH",          "DISCOVERY",
-                          "SUPPORTED FORMS",  "INCUBATOR",         "HELLO, BEECHO",
-                          "HABITAT",   "RESEARCH PLAN",     "DISCARD ITEMS",
-                          "RESIDENTS",  "RECORDED FINDINGS", "SAMPLE FINDING",
-                          "START INCUBATION?"};
-  static const char *home_headings[] = {
-      "Overview - Lab", "Overview - Explore", "Overview - Research",
-      "Overview - Incubator", "Overview - Habitat"};
+  panel(&row, 24, 134, 330, 406);
+  panel(&row, 376, 134, 624, 406);
+  const char *titles[] = {"WORKBENCH", "EXPEDITION", "CARGO", "SAMPLES",
+      "RESEARCH", "DISCOVERY", "SUPPORTED FORMS", "INCUBATOR", "HELLO, BEECHO",
+      "HABITAT", "RESEARCH PLAN", "DISCARD ITEMS", "RESIDENTS",
+      "RECORDED FINDINGS", "SAMPLE FINDING", "START INCUBATION?"};
   SelectedResearchMethod current_method;
   int finding_page = lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING;
   int form_finding = 0;
   const char *page_title = finding_page &&
       selected_lab_research_method(lab, lab->sample, lab->study, &current_method)
           ? current_method.title : titles[lab->page];
-  heading(&row, home ? 276 : 394, home ? 164 : 152,
-          home ? home_headings[lab->focus % 5]
-          : page_title,
-          34, INK);
+  heading(&row, 394, 152, page_title, 34, INK);
   unsigned count = selected_lab_options(lab);
   unsigned first = lab->focus >= 6 ? lab->focus - 5 : 0;
   for (unsigned i = first; i < count && i < first + 6; i++) {
-    int yy = home ? 185 + (int)i * 68
-             : lab->page == V1_CREATE ? 159 + (int)(i - first) * 110
+    int yy = lab->page == V1_CREATE ? 159 + (int)(i - first) * 110
                                       : 159 + (int)(i - first) * 58;
     if (i == lab->focus) {
-      int x = home ? 36 : 39;
-      int width = home ? 184 : 299;
-      int height = home ? 54 : lab->page == V1_CREATE ? 98 : 46;
-      if (home)
-        outline(&row, x - 4, yy - 8, width + 8, height + 8, 3, FOCUS_GLOW);
+      int x = 39;
+      int width = 299;
+      int height = lab->page == V1_CREATE ? 98 : 46;
       rectangle(&row, x, yy - 4, width, height, PANEL);
       focus(&row, x - 2, yy - 6, width + 4, height + 4);
     }
@@ -694,15 +364,13 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       wrapped_label(&row, 53, yy + 10, selected_lab_option(lab, i), 18,
                     i == lab->focus ? WARM : INK, 273);
     } else {
-      label(&row, home ? 56 : 53, yy + (home ? 10 : 7),
-            selected_lab_option(lab, i), home ? 22 : 18,
+      label(&row, 53, yy + 7,
+            selected_lab_option(lab, i), 18,
             i == lab->focus ? WARM : INK);
     }
   }
   char text[100];
-  if (lab->page == V1_HOME) {
-    home_landing(&row, lab, context);
-  } else if (lab->page == V1_EXPEDITION || lab->page == V1_CARGO) {
+  if (lab->page == V1_EXPEDITION || lab->page == V1_CARGO) {
     label(&row, 402, 205,
           game->expedition_active ? "PROBE / GATHERING"
           : game->expedition_id[0]
@@ -958,16 +626,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       label(&row, 414, 439, "Research your first sample to begin.", 22, INK);
   }
 
-  if (lab->page == V1_HOME && !lab->storage_error) {
-    char footer[112];
-    if (lab->focus == 0)
-      strcpy(footer, "Up/down: preview workspaces");
-    else
-      snprintf(footer, sizeof(footer),
-               "Up/down: preview | Confirm: enter %s | Back: Overview",
-               selected_lab_focus(lab));
-    label(&row, 30, 572, footer, 18, MUTED);
-  } else {
+  {
     if (lab->message[0]) {
       /* Feedback stays in the workpiece without hiding a saved form finding. */
       if (form_finding) {
@@ -999,10 +658,21 @@ static int word(FILE *output, unsigned value, unsigned bytes) {
 }
 
 int selected_lab_bmp(const SelectedLab *lab, FILE *output) {
+  if (!lab || !output) return 0;
+  NativeUiContext *context = NULL;
+  const uint8_t *frame = NULL;
+  if (lab->page == V1_HOME) {
+    LabHomeView view;
+    if (!selected_lab_home_view(lab, NULL, 0, &view)) return 0;
+    context = native_ui_create_device(KIT_LAB);
+    if (!context) return 0;
+    frame = native_ui_home(context, &view);
+    if (!frame) { native_ui_destroy(context); return 0; }
+  }
   const unsigned stride = SELECTED_LAB_WIDTH * 3;
   uint8_t pixels[SELECTED_LAB_WIDTH * 3];
   if (fwrite("BM", 1, 2, output) != 2)
-    return 0;
+    goto failure;
   unsigned fields[][2] = {{54 + stride * SELECTED_LAB_HEIGHT, 4},
                           {0, 4},
                           {54, 4},
@@ -1019,16 +689,20 @@ int selected_lab_bmp(const SelectedLab *lab, FILE *output) {
                           {0, 4}};
   for (unsigned index = 0; index < sizeof(fields) / sizeof(fields[0]); ++index)
     if (!word(output, fields[index][0], fields[index][1]))
-      return 0;
+      goto failure;
   for (unsigned y = SELECTED_LAB_HEIGHT; y > 0; --y) {
-    selected_lab_row(lab, y - 1, pixels);
+    if (frame) memcpy(pixels, frame + (y - 1) * stride, stride);
+    else selected_lab_row(lab, y - 1, pixels);
     for (unsigned column = 0; column < SELECTED_LAB_WIDTH; ++column) {
       uint8_t swap = pixels[column * 3];
       pixels[column * 3] = pixels[column * 3 + 2];
       pixels[column * 3 + 2] = swap;
     }
     if (fwrite(pixels, 1, stride, output) != stride)
-      return 0;
+      goto failure;
   }
-  return !ferror(output);
+  { int success = !ferror(output); native_ui_destroy(context); return success; }
+failure:
+  native_ui_destroy(context);
+  return 0;
 }

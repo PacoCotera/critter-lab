@@ -130,6 +130,7 @@ int main(int argc, char **argv) {
     close(lock);
     return 2;
   }
+  NativeUiContext *lab_ui = NULL;
   char line[128];
   while (fgets(line, sizeof(line), stdin)) {
     if (kit_mode && !strncmp(line, "device ", 7)) {
@@ -151,7 +152,11 @@ int main(int argc, char **argv) {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
                    54 + stride * kit_height(device));
-            if (!kit_bmp_ui(&kit, device, stdout, device == KIT_DOCK ? dock_ui : ui, 1))
+            if (device == KIT_LAB && lab.page == V1_HOME && !lab_ui)
+              lab_ui = native_ui_create_device(KIT_LAB);
+            if (device == KIT_LAB && lab.page == V1_HOME && !lab_ui) goto failure;
+            if (!kit_bmp_ui(&kit, device, stdout,
+                device == KIT_LAB ? lab_ui : device == KIT_DOCK ? dock_ui : ui, 1))
               goto failure;
           }
         } else if (fields == 3 && number(token, &revision) &&
@@ -190,7 +195,10 @@ int main(int argc, char **argv) {
       else {
         printf("{\"revision\":%u,\"bytes\":%u}\n", lab.revision,
                54u + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3u);
-        int rendered = kit_mode ? kit_bmp(&kit, KIT_LAB, stdout)
+        if (kit_mode && lab.page == V1_HOME && !lab_ui)
+          lab_ui = native_ui_create_device(KIT_LAB);
+        if (kit_mode && lab.page == V1_HOME && !lab_ui) goto failure;
+        int rendered = kit_mode ? kit_bmp_ui(&kit, KIT_LAB, stdout, lab_ui, 1)
                                 : selected_lab_bmp(&lab, stdout);
         if (!rendered)
           goto failure;
@@ -213,11 +221,13 @@ int main(int argc, char **argv) {
     if (fflush(stdout))
       goto failure;
   }
+  native_ui_destroy(lab_ui);
   native_ui_destroy(ui);
   native_ui_destroy(dock_ui);
   close(lock);
   return ferror(stdin) ? 2 : 0;
 failure:
+  native_ui_destroy(lab_ui);
   native_ui_destroy(ui);
   native_ui_destroy(dock_ui);
   close(lock);
