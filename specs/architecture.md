@@ -105,12 +105,17 @@ their own biological meaning merely because an LLM produced valid syntax.
 ## Generation backend proposal — 30 September 2026
 
 The owner-authorized [generator workbench](../prototype/generator-workbench/README.md)
-is a separate runnable host scaffold for inspecting Pip inputs, expression,
-causal dependencies and diagnostic output. It uses the existing genetics engine
-unchanged. Its browser editor is a developer tool, not a device renderer or game
-interface. Five-layer/eleven-family coverage is visible; general emergent rules,
-configured incubation, body/rig generation, production sprites/animations and
-LLM connections remain unimplemented.
+is the authoring and experiment surface for the game's generative engine. Its
+current runnable host scaffold inspects Pip inputs, expression, causal dependencies
+and diagnostic output using the existing genetics engine unchanged. The
+[expansion design](../prototype/generator-workbench/README.md#authoring-engine-next-design)
+adds locus/name/taxonomy management, complete baseline/genome/expression inspection,
+structured genome art/sequences, permitted expression sampling and visual-prompt
+export. These extensions are not implemented. Its browser UI is a developer tool,
+not a device renderer or game interface; shared content/engine contracts remain
+authoritative for future consumers. General emergent rules, configured incubation,
+body/rig generation, production sprites/animations and LLM connections remain
+unimplemented.
 
 The current logical boundary follows the1October automatic-production direction
 above. Workload placement, providers, paid API access and production topology

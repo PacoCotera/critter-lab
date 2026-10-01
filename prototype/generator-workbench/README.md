@@ -125,3 +125,199 @@ causes, sample boundaries, repeatability, unknown construction values, malformed
 inputs and HTTP recovery. Browser inspection covers actual edit/resolve/compare,
 import/export and rejection/recovery. Host diagnostic evidence does not establish
 hardware, production art quality, gameplay enjoyment or complete biology.
+
+## Authoring engine: next design
+
+Owner direction: this workbench is the authoring and experiment surface for the
+game's generative engine. It must manage the locus compendium, naming and taxonomy;
+inspect the entire baseline, inherited genome and resolved expression; display
+structured genome fingerprint art; sample permitted expressions; and derive a
+visual-generation prompt. The dimension count remains **eleven**, as corrected by
+the owner. The five-locus screen above does not fulfill that direction.
+
+The following is a proposed implementation sequence, not implemented functionality
+or approved new creature biology. Game development remains a separate consumer.
+
+### Whole journey and module boundary
+
+```mermaid
+flowchart LR
+  Author[Manage names, taxonomy, loci and rules] --> Draft[Draft compendium]
+  Draft --> Check[Validate references, rules and worked cases]
+  Check --> Package[Immutable content package]
+  Package --> Baseline[Class baseline and permitted variation]
+  Baseline --> Genome[Complete inherited genome]
+  Genome --> Resolve[Expression and recorded development]
+  Context[Configuration, context and permitted sampling] --> Resolve
+  Package --> Resolve
+  Resolve --> Phenotype[Coherent phenotype with causes]
+  Phenotype --> Construction[Anatomy, surface and legal motion]
+  Phenotype --> Prompt[Fact-derived visual prompt]
+  Baseline --> Inspect[Sequences, genome art and comparison]
+  Genome --> Inspect
+  Phenotype --> Inspect
+  Construction --> Inspect
+  Package --> Game[Game backend and device adapters]
+  Phenotype --> Game
+```
+
+The workbench edits content and exercises the real engine; it does not own a second
+set of genetic rules. The browser owns forms/navigation/inspection. Shared domain
+modules own catalogue validation, inheritance and expression. Game adapters consume
+versioned packages and results; this does not imply that an ESP32 runs the host's
+JavaScript engine. Target runtime placement still needs its existing architecture
+and toolchain gates.
+
+### Compendium depth and management
+
+Begin with a complete eleven-family taxonomy and a deep **Structure, Appearance,
+Mechanics/movement** compendium. A useful initial design horizon is roughly20–30
+distinct candidate loci in each priority family, not a quota or a claim of60–90
+executable genes. Other families retain their baseline definitions, applicability
+and explicit gaps while their detailed catalogue grows.
+
+| Priority family | Proposed coverage to develop |
+| --- | --- |
+| Structure | Organization, segmentation, proportions, support/flexibility, appendage arrangement and attachments, joint geometry, contact structures and optional silhouette features |
+| Appearance | Pigment contributions, palette relationships, marking placement/geometry/density, surface texture, transparency and visible emission where applicable |
+| Mechanics/movement | Eligible modes, coordination and gait, stride/cadence, joint excursion, balance, turning and maneuver control, matched-action effort and medium-specific constraints |
+
+Each locus has a stable ID/version, human name and aliases, primary family and
+affected-family links, applicability, allele/copy definitions, inheritance and
+expression rules, contributors/prerequisites, outputs, construction or motion
+effects, research facts, and valid/invalid worked examples. Several loci may drive
+one trait, and one locus may affect several families. Do not clone a locus into
+each affected dimension or give every class every library locus.
+
+Manage dimensions, locus/allele definitions, class baselines, taxonomy, reusable
+rules and experiment records as related records. Class taxonomy organizes names;
+reproductive compatibility is a separate relationship. Renaming a label does not
+change its stable ID or rewrite existing creatures. Deprecated records remain
+available to packages/individuals that reference them.
+
+The first catalogue store can remain standard Git-versioned structured files with
+draft editing and immutable released packages. An inspectable draft is distinct
+from executable validated content. Database management is a tool responsibility;
+a new database service, account system or deployment is not needed to establish
+it. A different storage implementation should follow a demonstrated query or
+editing need, without changing those contracts.
+
+LLMs may propose reusable definitions and combinations within the declared schema.
+Automatic checks reject unknown references/operators, incompatible anatomy,
+unsupported causal claims and duplicate definitions. New operator semantics remain
+deliberate domain design. Increasing the number of names alone does not add useful
+variability.
+
+A proposed worked cluster connects limb proportions, joint excursion, contact-edge
+geometry and foot-placement control. Their combination may permit a rough-hold
+maneuver only when attachment and reachable-contact checks pass. Individually valid
+features can produce an impossible combined movement; reject that case with its
+contributing reasons instead of adding joints or changing the genome. Appearance
+contributors can then place markings on that same resolved body. This is a rule
+design example, not approved Pip anatomy or an implemented movement operator.
+
+### Workbench views and framework
+
+| View | What the owner can inspect or do |
+| --- | --- |
+| Compendium | Browse/search all eleven families; manage names, taxonomy, loci, alleles and rules; see where-used references and draft/validated/deprecated state |
+| Class/baseline | Inspect structural grammar, all applicable contributors, invariant versus variable properties, exclusions and a complete baseline sequence/art view |
+| Genome experiment | Explore every applicable fixed/variable locus and baseline reference; inspect inherited copies, dependencies and a genotype sequence; compare related genomes |
+| Expression/creature | Inspect resolved values and causes, expressed sequence and genome art, anatomy/surface/motion preview, permitted expression sampling, comparison and prompt export |
+
+Recommendation: **React + Mantine**, using Vite for the developer UI build. Mantine
+supplies established [layout](https://mantine.dev/core/app-shell/),
+[tree navigation](https://mantine.dev/core/tree/), forms and tables; React separates
+component state from domain evaluation. See [React's component/state guidance](https://react.dev/learn/thinking-in-react)
+and [Vite's supported templates/runtime requirements](https://vite.dev/guide/).
+No framework is installed in this revision. The installed host Node runtime was
+checked as24.19.0; concrete package versions and lockfile belong to implementation.
+Device screens continue to use LVGL.
+
+Use a searchable family/record explorer, a large central genome/creature workspace
+and a contextual inspector. Selecting a locus highlights its sequence segment,
+affected body/motion properties and contributing relationships together. Tables
+provide exhaustive access; the visual map supplies relationships. Neither replaces
+the other, and no long explanation is required to navigate between them.
+
+### Three sequences and structured fingerprint art
+
+Keep separate inspectable encodings for:
+
+1. **Baseline:** class/package references, invariants, applicable contributor set
+   and permitted variation; it is not an individual allele assignment.
+2. **Inherited genome:** complete locus IDs and actual allele copies, including
+   carried/unexpressed information and pinned content references.
+3. **Resolved expression:** output values, contributors, rule/context versions and
+   retained developmental outcomes. This is not a second inherited genome.
+
+Prefer readable, versioned fictional tokens before inventing molecular DNA letters.
+For example, `appearance.markings=P/p` belongs to the inherited view while
+`body-markings=none; pale-variant=carried` belongs to its resolved view under the
+existing Pip rule. These are illustrative fragments, not a complete sequence.
+Display ordering must not imply biological linkage or chromosome position unless
+the content explicitly models those relationships.
+
+Fingerprint **art** should encode those inspectable structures using the retained
+[genome-field references](../../design/references/genome-field/README.md): clustered
+regions, paired-copy glyphs, local focus and branch relationships. A visible legend
+and bidirectional selection connect glyphs to records and sequence segments.
+Inherited art retains unexpressed variants; expression art shows resolved outputs
+and their causes. Baseline modules use reference/module glyphs until their internal
+loci are actually modeled; no invented allele pairs fill those gaps. Visual
+mappings need versioning and calibration. A separate
+digest verifies exact data; art is not a cryptographic hash, individual identity,
+permission token or guaranteed proof of uniqueness.
+
+### Permitted randomization and visual prompt
+
+Expose two clearly distinct experiment operations:
+
+- **Generate a genome:** choose inherited variants allowed by the class/package
+  and source constraints. This changes genotype and is not expression sampling.
+- **Sample expression:** keep genotype fixed and sample only explicitly permitted
+  contextual/developmental variation under pinned rules. Show changed and unchanged
+  outputs, causes, context and seed. If no such variation is modeled, report that
+  the expression is deterministic rather than invent variation.
+
+Record actual sampled outcomes as well as seed, algorithm/content/rule versions
+and context. A saved individual does not reroll when reopened. Dominant/recessive
+relationships still apply: expression sampling cannot turn Pip's carried p in Pp
+into pale markings under its current rule. Cosmetic render randomness cannot grant
+new structures or capabilities.
+
+For a future explicit variation rule, a markings genotype could permit a bounded
+range of patch placement or density. Sampling realizes a layout within that range;
+it does not invent a new allele per spot. Regulatory contributors may control the
+bounds where defined. Whether this is developmental expression or nonheritable
+render variation must be declared by the rule, not guessed by the UI.
+
+The visual prompt is a projection of resolved anatomy, proportions, palette,
+surface features and eligible motion, with explicit exclusions and a separate
+style/pose/camera specification. Selecting a phrase traces back to its phenotype
+sources. A prompt is useful for visual calibration and generation experiments; it
+does not by itself supply coherent rigs, repeatable animation or validated artwork.
+All generated representations must preserve the same resolved creature. The
+algorithmic construction pipeline remains required.
+
+### Next increments and stopping condition
+
+1. Establish the framework-based compendium manager and full eleven-family
+   inventory, with the deep priority-family draft catalogue and complete records.
+   Validate one connected structural/appearance/movement cluster within that
+   catalogue before promoting large batches to executable packages.
+2. Expand expression/construction across that content: meaningful body proportions,
+   surface differences and legal gait/maneuver variation, with clear exclusions,
+   causal traces and whole-baseline/genome/expression views. Preserve the existing
+   Pip package as a reference instead of silently rewriting it.
+3. Add declared expression sampling, structured genome art/sequence comparison
+   and fact-derived prompt output. Inspect contrasting creatures and rejection
+   cases before extending the grammar or integrating the game.
+
+The next proof must show useful differences in the resulting creature, not merely
+more selectors. The60–90 candidate range guides compendium breadth; a meaningful
+compendium/connected-rule review need not wait for every planned record to exist.
+Missing records and unsupported rules must remain explicit. General anatomy/rule/style
+choices stay provisional until reviewed.
+This design revision does not implement the compendium, install a framework, make
+model calls, change game saves or deploy the sandbox.
