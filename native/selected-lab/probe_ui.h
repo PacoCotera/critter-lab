@@ -1,6 +1,6 @@
 #ifndef CRITTER_PROBE_UI_H
 #define CRITTER_PROBE_UI_H
-#include "probe_view.h"
+#include "../ui/companion_probe_view.h"
 #include "ui_assets.h"
 typedef struct NativeProbeUi NativeProbeUi;
 NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,

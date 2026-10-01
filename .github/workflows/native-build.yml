@@ -134,7 +134,7 @@ jobs:
           test "$(git -C "$RUNNER_TEMP/esp-idf" rev-parse HEAD)" = "$IDF_REVISION"
           python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install --targets="$COMPANION_TARGET"
           python3.12 "$RUNNER_TEMP/esp-idf/tools/idf_tools.py" install-python-env
-      - name: Compile legacy Companion scaffold
+      - name: Compile current shared Companion LVGL UI for ESP32-S3
         run: |
           source native/toolchains.env
           source "$RUNNER_TEMP/esp-idf/export.sh"
@@ -142,7 +142,8 @@ jobs:
           idf.py -C native/companion -B "$GITHUB_WORKSPACE/native/build/companion" build
           idf.py -C native/companion -B "$GITHUB_WORKSPACE/native/build/companion" size | tee native/build/companion/size.log
           pip freeze > native/build/companion/python-packages.log
-          for file in critter_companion.elf critter_companion.bin critter_companion.map bootloader/bootloader.bin partition_table/partition-table.bin flasher_args.json; do
+          git rev-parse HEAD > native/build/companion/source-revision.log
+          for file in critter_companion_ui.elf critter_companion_ui.bin critter_companion_ui.map bootloader/bootloader.bin partition_table/partition-table.bin flasher_args.json; do
             test -s "native/build/companion/$file"
           done
       - name: Compile current shared Dock LVGL UI for ESP32-S3
@@ -171,13 +172,14 @@ jobs:
         with:
           name: native-companion-${{ github.sha }}
           path: |
-            native/build/companion/critter_companion.elf
-            native/build/companion/critter_companion.bin
-            native/build/companion/critter_companion.map
+            native/build/companion/critter_companion_ui.elf
+            native/build/companion/critter_companion_ui.bin
+            native/build/companion/critter_companion_ui.map
             native/build/companion/bootloader/bootloader.bin
             native/build/companion/partition_table/partition-table.bin
             native/build/companion/flasher_args.json
             native/build/companion/*.log
+            native/build/companion/esp-idf/main/companion_assets.json
             native/companion/sdkconfig
           if-no-files-found: error
           retention-days: 14

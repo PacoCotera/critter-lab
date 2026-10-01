@@ -1,6 +1,5 @@
 #include "probe_ui.h"
 #include "field_art.h"
-#include "expedition.h"
 #include "ui_theme.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -212,6 +211,8 @@ static void show_edge_cues(NativeProbeUi *ui, int camera_x, int camera_y, int he
 }
 int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   if (!ui || !view || view->action_count > 3) return 0;
+  for (unsigned choice = 0; choice < 3; ++choice)
+    if (view->choice_material[choice] > 3) return 0;
   ui->view = *view;
   view = &ui->view;
   lv_obj_set_hidden(ui->root, false);
@@ -236,11 +237,11 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
     lv_obj_set_hidden(ui->buttons[choice], choice >= view->action_count);
     lv_obj_remove_state(ui->buttons[choice], LV_STATE_FOCUSED | LV_STATE_PRESSED);
     if (choice < view->action_count) lv_label_set_text_static(ui->action_text[choice], view->actions[choice]);
-    unsigned source = view->choices[choice];
-    int material = view->phase == PROBE_SITE && source < GAME_FIELD_SOURCES;
+    unsigned material_id = view->choice_material[choice];
+    int material = view->phase == PROBE_SITE && material_id > 0 && material_id <= 3;
     lv_obj_set_hidden(ui->choice_image[choice], !material);
     if (material) {
-      unsigned resource = game_field_source_resource(source);
+      unsigned resource = material_id - 1;
       lv_image_set_src(ui->choice_image[choice], &ui->materials[resource].image);
     }
   }

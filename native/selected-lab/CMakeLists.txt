@@ -15,7 +15,7 @@ add_subdirectory(../vendor/lvgl ${CMAKE_CURRENT_BINARY_DIR}/lvgl)
 
 add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c
   cargo_view.c probe_view.c probe_ui.c resident_view.c field_art.c dock_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
-  ../ui/display.c ../ui/host_frame.c ../ui/dock_ui.c ../ui/companion_cargo_ui.c ../ui/companion_resident_ui.c
+  ../ui/display.c ../ui/probe_geometry.c ../ui/host_frame.c ../ui/dock_ui.c ../ui/companion_cargo_ui.c ../ui/companion_resident_ui.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/expedition.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)

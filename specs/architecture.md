@@ -174,8 +174,9 @@ mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
 boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
 and visits. Lab families remain on manual C renderers. Those paths are known architectural debt, not an accepted
-exception. The existing ESP-IDF Companion build is an older demonstration
-scaffold; it does not compile the current game UI. Host pixel-stream evidence,
+exception. The [ESP-IDF Companion target](../native/companion/README.md) now
+registers the current shared UI in a headless harness; compile validation is pending.
+Host pixel-stream evidence,
 actual ESP-IDF UI compilation and hardware measurements are separate gates.
 
 The architect must review the complete screen-route and target-build inventory
@@ -237,8 +238,9 @@ control sequences before dependent compositions are treated as selected.
 
 The current three-device presenter is one Linux x86-64 process. It verifies
 logical views, controls and native output, not separate physical endpoints.
-The Lab has no verified ARM/HDMI/GPIO adapter. `native/companion` currently
-builds an old ESP-IDF scanline demo without the current LVGL UI. The headless
+The Lab has no verified ARM/HDMI/GPIO adapter. `native/companion` now registers
+the same current Cargo/Probe/resident UI for a headless ESP-IDF compile proof;
+its changed build has not yet been validated. The headless
 Caddy target compiles/links the shared current Dock UI under ESP-IDF; it has no
 physical panel, live game authority or radio adapter. The historical nRF Probe
 fixture is not the combined Companion.

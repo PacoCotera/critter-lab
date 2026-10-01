@@ -41,6 +41,8 @@ static void projection_and_phase_guards(void) {
   assert(kit_probe_projection(&kit, &after));
   assert(after.phase == PROBE_SITE && after.action_count == 3 && after.focus == 2);
   assert(!strcmp(after.actions[2], "Take 1 Essence"));
+  for (unsigned choice = 0; choice < after.action_count; ++choice)
+    assert(after.choice_material[choice] == 1 + game_field_source_resource(after.choices[choice]));
   lab.game.field.x = lab.game.field.site_x[4];
   lab.game.field.y = lab.game.field.site_y[4];
   lab.game.field.trace = 1;
@@ -138,6 +140,9 @@ static void retained_roots_and_memory(void) {
   GameState before = lab.game;
   const uint8_t *rgb = native_ui_probe(context, &probe);
   assert(rgb && !memcmp(&before, &lab.game, sizeof(before)));
+  CompanionProbeView invalid_material = probe;
+  invalid_material.choice_material[0] = 4;
+  assert(!native_ui_probe(context, &invalid_material));
   lv_mem_monitor_t initial, final;
   lv_mem_monitor(&initial);
   kit.companion.page = COMP_CARGO;

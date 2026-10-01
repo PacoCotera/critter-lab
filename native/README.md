@@ -1,7 +1,7 @@
 # Native builds and three-device simulation
 
 The current playable target is `selected_lab`: native C17 rules, saved world,
-focus and scanline pixels, presented as Lab, combined Companion and Dock through
+focus and native frames, presented as Lab, combined Companion and Dock through
 the browser transport. [Target interfaces](selected-lab/README.md),
 [Pip play guide](selected-lab/V1.md) and the
 [actual native gallery](../design/connected-device-review/native/README.md)
@@ -13,7 +13,7 @@ expedition study. The broader catalogue remains unfinished.
 | --- | --- | --- |
 | Lab / selected game | Linux x86-64; Raspberry Pi4 Model B device reference | GCC, CMake, Ninja and C17; ARM build, HDMI/input drivers and Pi performance unverified. Not ESP-IDF. |
 | Legacy Probe scaffold | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0 / GNU SDK 1.0.1; no physical boot or panel driver proof. Not a separate current portable. |
-| Companion scaffold | `esp32s3` (Xtensa) | ESP-IDF 5.5.5; separate from Lab; current combined-device drivers/radio/sensors remain unfinished. |
+| Companion shared UI | `esp32s3` (Xtensa) | Current Cargo/Probe/resident headless LVGL compile candidate under ESP-IDF5.5.5; validation pending, panel/game/input/save/radio absent. |
 
 [Devices](../specs/devices.md) owns physical roles and selected development
 references. The simulator has one host authority and three logical contexts,
