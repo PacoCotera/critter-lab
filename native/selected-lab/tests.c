@@ -1,4 +1,6 @@
 #include "selected_lab.h"
+#include "home_view.h"
+#include "native_ui.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -494,11 +496,15 @@ int main(void) {
   char lockpath[140];
   snprintf(lockpath, sizeof(lockpath), "%s.lock", path);
   unlink(lockpath);
-  uint8_t pixels[SELECTED_LAB_WIDTH * 3];
-  for (unsigned page = V1_EXPEDITION; page <= V1_CREATE_REVIEW; page++) {
-    lab.page = (SelectedPage)page;
-    for (unsigned row = 0; row < SELECTED_LAB_HEIGHT; row++)
-      selected_lab_row(&lab, row, pixels);
+  /* Legacy commands remain domain fixtures; their graphics are retired. */
+  const SelectedPage retired[] = {V1_EXPEDITION, V1_CARGO, V1_DISCARD_REVIEW,
+      (SelectedPage)-1, (SelectedPage)(V1_CREATE_REVIEW + 1)};
+  for (unsigned index = 0; index < sizeof(retired) / sizeof(retired[0]); ++index) {
+    lab.page = retired[index];
+    SelectedLab before = lab;
+    FILE *output = tmpfile();
+    assert(output && !selected_lab_bmp(&lab, output) && !ftell(output));
+    assert(!memcmp(&before, &lab, sizeof(lab)) && !fclose(output));
   }
   /* Populated rows exercise fonts and assets absent from empty-page fixtures.
    */
@@ -558,19 +564,35 @@ int main(void) {
   /* Maximum valid stock must not paint over the header's right-hand inset. */
   SelectedLab empty_header, full_header;
   selected_lab_init(&empty_header);
-  /* This row API covers only the remaining legacy Lab action pages.
-   * Migrated Home/research boundaries have independent native-frame checks. */
-  empty_header.page = V1_CREATE;
   full_header = empty_header;
   full_header.game.data = full_header.game.energy = full_header.game.essence =
       1000000;
-  uint8_t empty_row[SELECTED_LAB_WIDTH * 3], full_row[SELECTED_LAB_WIDTH * 3];
+  NativeUiContext *header_context = native_ui_create_device(KIT_LAB);
+  LabHomeView header_view;
+  assert(header_context && selected_lab_home_view(&empty_header, NULL, 0, &header_view));
+  const uint8_t *header_frame = native_ui_home(header_context, &header_view);
+  assert(header_frame);
+  uint8_t inset[36][(SELECTED_LAB_WIDTH - 972) * 3];
+  uint8_t quantities[36][(972 - 398) * 3];
   for (unsigned row = 60; row < 96; ++row) {
-    selected_lab_row(&empty_header, row, empty_row);
-    selected_lab_row(&full_header, row, full_row);
-    assert(memcmp(empty_row + 972 * 3, full_row + 972 * 3,
-                  (SELECTED_LAB_WIDTH - 972) * 3) == 0);
+    memcpy(inset[row - 60], header_frame + (row * SELECTED_LAB_WIDTH + 972) * 3,
+        sizeof(inset[0]));
+    memcpy(quantities[row - 60], header_frame + (row * SELECTED_LAB_WIDTH + 398) * 3,
+        sizeof(quantities[0]));
   }
+  assert(selected_lab_home_view(&full_header, NULL, 0, &header_view));
+  assert(header_view.stock[0] == 10000 && header_view.stock[1] == 10000 && header_view.stock[2] == 10000);
+  header_frame = native_ui_home(header_context, &header_view);
+  assert(header_frame);
+  unsigned quantity_changed = 0;
+  for (unsigned row = 60; row < 96; ++row) {
+    assert(!memcmp(inset[row - 60], header_frame + (row * SELECTED_LAB_WIDTH + 972) * 3,
+        sizeof(inset[0])));
+    quantity_changed += memcmp(quantities[row - 60],
+        header_frame + (row * SELECTED_LAB_WIDTH + 398) * 3, sizeof(quantities[0])) != 0;
+  }
+  assert(quantity_changed); /* Compare real changed glyphs, not two blank rows. */
+  native_ui_destroy(header_context);
   puts("Native V1 input and frame checks passed");
   return 0;
 }

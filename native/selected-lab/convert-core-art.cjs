@@ -54,26 +54,6 @@ async function main() {
   }
   definitions.push(`const CoreArtSprite core_art_sprites[CORE_ART_COUNT] = {\n${declarations.join(',\n')}\n};`);
   definitions.push('const CoreArtSprite *core_art_sprite(CoreArtId id) {\n  return (unsigned)id < CORE_ART_COUNT ? &core_art_sprites[id] : 0;\n}\n');
-  definitions.push(`void core_art_row(CoreArtId id, int x, int y, unsigned row,
-                  unsigned width, uint8_t *pixels) {
-  const CoreArtSprite *source = core_art_sprite(id);
-  int source_y = (int)row - y;
-  if (!source || source_y < 0 || source_y >= (int)source->height)
-    return;
-  for (unsigned column = 0; column < source->width; ++column) {
-    int destination = x + (int)column;
-    if (destination < 0 || destination >= (int)width)
-      continue;
-    const uint8_t *rgba = source->rgba +
-        ((unsigned)source_y * source->width + column) * 4;
-    uint8_t *target = pixels + destination * 3;
-    unsigned alpha = rgba[3];
-    for (unsigned channel = 0; channel < 3; ++channel)
-      target[channel] = (uint8_t)((rgba[channel] * alpha +
-          target[channel] * (255u - alpha) + 127u) / 255u);
-  }
-}\n`);
-  definitions.push(fs.readFileSync(path.join(artRoot, 'source/native-composition.c'), 'utf8'));
   const header = [
     '#ifndef CRITTER_LAB_CORE_ART_H', '#define CRITTER_LAB_CORE_ART_H', '#include <stdint.h>', '',
     '/* Straight RGBA, exact native footprint; no view/domain computation. */',
@@ -92,12 +72,7 @@ async function main() {
     '#define CORE_ART_SAVED_RGB 0xa3cda8u', '',
     'extern const CoreArtSprite core_art_sprites[CORE_ART_COUNT];',
     'const CoreArtSprite *core_art_sprite(CoreArtId id);',
-    'void core_art_row(CoreArtId id, int x, int y, unsigned row,',
-    '                  unsigned width, uint8_t *pixels);',
-    'void core_art_panel_row(int x, int y, int width, int height, unsigned row,',
-    '                        unsigned canvas_width, uint8_t *pixels);',
-    'void core_art_focus_row(int x, int y, int width, int height, unsigned row,',
-    '                        unsigned canvas_width, uint8_t *pixels);', '', '#endif', '',
+    '', '#endif', '',
   ];
   fs.writeFileSync(path.join(__dirname, 'core_art.h'), header.join('\n'));
   fs.writeFileSync(path.join(__dirname, 'core_art.c'), definitions.join('\n\n'));

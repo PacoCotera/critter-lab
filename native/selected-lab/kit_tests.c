@@ -2,6 +2,7 @@
 #include "kit.h"
 #include "expedition.h"
 #include "expedition_render.h"
+#include "native_ui.h"
 #include "save_bytes.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -830,13 +831,18 @@ static void field_control_and_receipt(const char *directory) {
   assert(lab.game.field.version && lab.game.field.active_source == GAME_FIELD_NONE);
   ExpeditionFieldView map_view;
   assert(kit_field_projection(&kit, &map_view));
-  uint8_t map_row[450 * 3];
-  expedition_field_row(&map_view, 200, map_row);
-  const unsigned border_columns[] = {23, 24, 425, 426};
-  for (unsigned i = 0; i < sizeof(border_columns)/sizeof(border_columns[0]); ++i) {
-    const uint8_t *pixel = map_row + border_columns[i] * 3;
-    assert(pixel[0] == 35 && pixel[1] == 137 && pixel[2] == 198);
-  }
+  DeviceKit before_frame = kit;
+  SelectedLab before_lab = lab;
+  FILE *map_output = tmpfile();
+  assert(map_output && kit_bmp(&kit, KIT_COMPANION, map_output));
+  assert(ftell(map_output) == 811254);
+  assert(!memcmp(&before_frame, &kit, sizeof(kit)) &&
+         !memcmp(&before_lab, &lab, sizeof(lab)));
+  assert(!fseek(map_output, 54, SEEK_SET));
+  unsigned nonzero = 0;
+  int pixel_byte;
+  while ((pixel_byte = fgetc(map_output)) != EOF) nonzero |= (unsigned)pixel_byte;
+  assert(nonzero && !fclose(map_output));
   unsigned map_frame = kit_revision(&kit,KIT_COMPANION);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
   assert(kit.companion.page == COMP_FIELD_SITE && lab.game.field.active_source == GAME_FIELD_NONE);
@@ -1080,7 +1086,53 @@ static void legacy_capsule_limit(const char *directory) {
   }
 }
 
+static void native_graphics_retirement(void) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  lab.kit_mode = 1;
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.journal.companion_online = kit.journal.dock_online = 1;
+  NativeUiContext *context = native_ui_create_device(KIT_LAB);
+  assert(context);
+  const SelectedPage pages[] = {V1_EXPEDITION, V1_CARGO, V1_DISCARD_REVIEW,
+      (SelectedPage)-1, (SelectedPage)(V1_CREATE_REVIEW + 1)};
+  for (unsigned index = 0; index < sizeof(pages) / sizeof(pages[0]); ++index) {
+    lab.page = pages[index];
+    SelectedLab before_lab = lab;
+    DeviceKit before_kit = kit;
+    int supported = index < 2;
+    assert(!selected_lab_frame_supported(&lab));
+    assert(kit_frame_supported(&kit, KIT_LAB) == supported);
+    FILE *standalone = tmpfile();
+    FILE *generic = tmpfile();
+    FILE *persistent = tmpfile();
+    assert(standalone && generic && persistent);
+    assert(!selected_lab_bmp(&lab, standalone) && !ftell(standalone));
+    assert(kit_bmp(&kit, KIT_LAB, generic) == supported);
+    assert(kit_bmp_ui(&kit, KIT_LAB, persistent, context, 1) == supported);
+    assert(ftell(generic) == (supported ? 1843254 : 0));
+    assert(ftell(persistent) == (supported ? 1843254 : 0));
+    if (supported) {
+      rewind(generic);
+      rewind(persistent);
+      int left, right;
+      do {
+        left = fgetc(generic);
+        right = fgetc(persistent);
+        assert(left == right);
+      } while (left != EOF);
+    }
+    assert(!memcmp(&before_lab, &lab, sizeof(lab)) &&
+           !memcmp(&before_kit, &kit, sizeof(kit)));
+    assert(!fclose(standalone) && !fclose(generic) && !fclose(persistent));
+  }
+  assert(!kit_frame_supported(&kit, KIT_DOCK + 1));
+  native_ui_destroy(context);
+}
+
 int main(void) {
+  native_graphics_retirement();
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
   field_control_and_receipt(directory);
