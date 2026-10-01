@@ -57,6 +57,13 @@ The [actual native confirmation/return proof](../../docs/evidence/native-compani
 passed affected checks and independent technical/focused UI/UX output review.
 Current Companion ESP-IDF compilation and physical output remain separate gates.
 
-Lab and the remaining Companion Discard/Finish/preview/visit routes remain open
-renderer migrations. A failed migrated Dock/Probe/Cargo/Send projection returns a
+The same portable Cargo tree also composes Discard class/quantity/review and
+empty Finish review. Their native output and independent verification are in
+progress. Two visible action rows retain the full logical option window; copied
+focus mapping cannot silently select a different quantity. The domain owns loss,
+Keep and caller recovery. The view exposes exact loss/remainder and closes storage
+or sealed-haul actions. No game command is invoked by a widget.
+
+Lab and the remaining Companion preview/visit routes remain open
+renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish projection returns a
 render error; it cannot silently reach the old manual renderer.

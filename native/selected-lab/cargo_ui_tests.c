@@ -144,8 +144,92 @@ static void send_projection_truth(void) {
   assert(ftell(output) == 0); /* A known migrated route cannot reach manual fallback. */
   fclose(output);
   native_ui_destroy(wrong_device);
-  kit.companion.page = COMP_FINISH_REVIEW;
+  kit.companion.page = COMP_FRIENDS;
   assert(!kit_cargo_projection(&kit, &view));
+}
+static void discard_finish_projection_truth(void) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.mode = COMP_CARGO;
+  kit.companion.page = COMP_DISCARD_CLASS;
+  strcpy(lab.game.expedition_id, "discard-proof");
+  lab.game.expedition_data = 40 * GAME_SUPPLY_UNIT;
+  lab.game.field.version = 3;
+  strcpy(lab.game.field.expedition_id, "discard-proof");
+  lab.game.field.collected = 1;
+  GameState saved = lab.game;
+  CompanionCargoView view;
+  for (unsigned focus = 0; focus < 4; ++focus) {
+    kit.companion.focus = focus;
+    assert(kit_cargo_projection(&kit, &view));
+    assert(view.screen == COMPANION_DISCARD_CLASS_SCREEN && view.option_count == 4);
+    assert(view.focus + view.first_visible == focus && view.logical_focus == focus);
+    assert(view.selected_resource == focus && view.capsules == 1);
+    assert(view.action_count == 2);
+    if (focus == 3) assert(!strcmp(view.actions[1], "Keep cargo"));
+  }
+  kit.companion.page = COMP_DISCARD_QUANTITY;
+  kit.companion.discard_resource = 0;
+  for (unsigned focus = 0; focus <= 40; ++focus) {
+    kit.companion.focus = focus;
+    assert(kit_cargo_projection(&kit, &view));
+    assert(view.screen == COMPANION_DISCARD_QUANTITY_SCREEN && view.option_count == 41);
+    assert(view.logical_focus == focus && view.focus + view.first_visible == focus);
+    assert(view.action_count == 2 && view.capsules == 1);
+    if (focus == 39) assert(!strcmp(view.actions[1], "40 whole items"));
+    if (focus == 40) {
+      assert(!strcmp(view.actions[1], "Keep cargo"));
+      assert(!strcmp(view.capsule, "Keep cargo") && !strstr(view.detail, "Loss"));
+    }
+  }
+  kit.companion.page = COMP_DISCARD_REVIEW;
+  kit.companion.focus = 1;
+  kit.companion.discard_quantity = 3 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view));
+  assert(!strcmp(view.actions[0], "Discard 3 Data") && view.focus == 1);
+  assert(!strcmp(view.actions[1], "Keep these items"));
+  assert(strstr(view.detail, "Keep 37 Data") && strstr(view.detail, "Loss permanent"));
+  assert(view.supplies[0] == 40 && view.capsules == 1);
+  kit.journal.companion_online = 0;
+  assert(kit_cargo_projection(&kit, &view) && view.action_count == 2);
+  kit.failed = 1;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count && view.failed);
+  kit.failed = 0;
+  lab.storage_error = 1;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count && view.failed);
+  lab.storage_error = 0;
+  kit.companion.discard_quantity++;
+  assert(!kit_cargo_projection(&kit, &view));
+  kit.companion.discard_quantity = 41 * GAME_SUPPLY_UNIT;
+  assert(!kit_cargo_projection(&kit, &view));
+  kit.companion.discard_quantity = 3 * GAME_SUPPLY_UNIT;
+  kit.companion.discard_resource = 3;
+  assert(!kit_cargo_projection(&kit, &view));
+  NativeUiContext *context = native_ui_create();
+  FILE *output = tmpfile();
+  assert(context && output && !kit_bmp_ui(&kit, KIT_COMPANION, output, context, 1));
+  assert(ftell(output) == 0);
+  fclose(output);
+  native_ui_destroy(context);
+  assert(!memcmp(&saved, &lab.game, sizeof(saved)));
+  kit.companion.discard_resource = 0;
+  kit.journal.phase = KIT_WAITING;
+  kit.sealed_field = lab.game.field;
+  kit.sealed_field.cargo[0] = 40 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count);
+  assert(strstr(view.detail, "already sealed") && !strstr(view.footer, "Keep"));
+  kit.journal.phase = KIT_IDLE;
+  kit.companion.page = COMP_FINISH_REVIEW;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count);
+  assert(strstr(view.detail, "Send or discard"));
+  lab.game.expedition_data = 0;
+  lab.game.field.collected = 0;
+  assert(kit_cargo_projection(&kit, &view) && view.action_count == 2);
+  assert(view.screen == COMPANION_FINISH_SCREEN && view.focus == 1);
+  assert(!strcmp(view.actions[1], "Keep exploring"));
+  assert(strstr(view.capsule, "nothing sent") && !strstr(view.detail, "progress"));
 }
 static UiFlushResult consume_partial(void *user, UiDisplay *display, const UiArea *area,
     const uint8_t *pixels, size_t stride, UiColorFormat format) {
@@ -198,8 +282,10 @@ static void portable_cargo_send_module(void) {
   lv_mem_monitor_t warm, final;
   lv_mem_monitor(&warm);
   for (unsigned index = 0; index < 200; ++index) {
-    view.screen = index & 1 ? COMPANION_SEND_SCREEN : COMPANION_CARGO_SCREEN;
+    view.screen = (CompanionCargoScreen)(index % 6);
     view.focus = index & 1;
+    view.logical_focus = view.focus;
+    view.option_count = 2;
     CompanionCargoView untouched = view;
     assert(companion_cargo_ui_update(ui, &view, 1));
     assert(!memcmp(&view, &untouched, sizeof(view)));
@@ -208,6 +294,13 @@ static void portable_cargo_send_module(void) {
   lv_mem_monitor(&final);
   assert(final.free_size == warm.free_size);
   view.action_count = 3;
+  assert(!companion_cargo_ui_update(ui, &view, 1));
+  view = example();
+  view.screen = COMPANION_DISCARD_QUANTITY_SCREEN;
+  view.option_count = 41;
+  view.logical_focus = 40;
+  view.first_visible = 39;
+  view.focus = 0; /* A stale local mapping must not focus a different action. */
   assert(!companion_cargo_ui_update(ui, &view, 1));
   view = example();
   memset(view.title, 'x', sizeof(view.title));
@@ -308,6 +401,49 @@ static void rendering_and_motion(const char *directory, const CompanionCargoView
   assert(context && native_ui_cargo(context, &untouched, 1));
   native_ui_destroy(context);
   free(still);
+}
+static void discard_finish_fixture_exports(const char *directory) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.mode = COMP_CARGO;
+  strcpy(lab.game.expedition_id, "discard-fixture");
+  lab.game.expedition_data = 40 * GAME_SUPPLY_UNIT;
+  lab.game.field.version = 3;
+  strcpy(lab.game.field.expedition_id, "discard-fixture");
+  lab.game.field.collected = 1;
+  NativeUiContext *context = native_ui_create();
+  assert(context);
+  const unsigned pages[] = {COMP_DISCARD_CLASS, COMP_DISCARD_QUANTITY,
+      COMP_DISCARD_QUANTITY, COMP_DISCARD_REVIEW, COMP_DISCARD_REVIEW,
+      COMP_DISCARD_REVIEW, COMP_FINISH_REVIEW};
+  const unsigned focuses[] = {3, 39, 40, 1, 1, 1, 1};
+  const char *names[] = {"class-keep", "quantity-40", "quantity-keep",
+      "discard-all-keep", "discard-storage-error", "discard-pending", "finish-keep"};
+  for (unsigned index = 0; index < 7; ++index) {
+    kit.companion.page = pages[index];
+    kit.companion.focus = focuses[index];
+    kit.companion.discard_quantity = 40 * GAME_SUPPLY_UNIT;
+    lab.storage_error = index == 4;
+    kit.journal.phase = index == 5 ? KIT_WAITING : KIT_IDLE;
+    if (index == 5) {
+      kit.sealed_field = lab.game.field;
+      kit.sealed_field.cargo[0] = 40 * GAME_SUPPLY_UNIT;
+    }
+    if (index == 6) {
+      lab.game.expedition_data = 0;
+      lab.game.field.collected = 0;
+    }
+    CompanionCargoView view;
+    assert(kit_cargo_projection(&kit, &view));
+    const uint8_t *rgb = native_ui_cargo(context, &view, 1);
+    assert(rgb);
+    char path[512];
+    snprintf(path, sizeof(path), "%s/fixture-%s.bmp", directory, names[index]);
+    export_bmp(path, rgb);
+  }
+  native_ui_destroy(context);
 }
 static void representative_fixture_exports(const char *directory) {
   NativeUiContext *context = native_ui_create();
@@ -436,10 +572,14 @@ int main(int argc, char **argv) {
   image_fidelity();
   projection_truth();
   send_projection_truth();
+  discard_finish_projection_truth();
   portable_cargo_send_module();
   if (argc == 3) actual_save_motion(argv[1], argv[2]);
   else rendering_and_motion(argc == 2 ? argv[1] : NULL, NULL);
-  if (argc >= 2) representative_fixture_exports(argv[1]);
+  if (argc >= 2) {
+    representative_fixture_exports(argv[1]);
+    discard_finish_fixture_exports(argv[1]);
+  }
   puts("Companion Cargo UI checks passed");
   return 0;
 }

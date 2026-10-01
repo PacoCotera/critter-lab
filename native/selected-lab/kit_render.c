@@ -268,9 +268,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   int receipt = kit->journal.phase == KIT_ACK_PENDING;
   int ended = (receipt || kit->journal.phase == KIT_COMPLETE) && !game->expedition_id[0];
   int details = page == COMP_CARGO;
-  int discard = page == COMP_DISCARD_CLASS || page == COMP_DISCARD_QUANTITY ||
-                page == COMP_DISCARD_REVIEW;
-  int finish = page == COMP_FINISH_REVIEW;
   int friends = page == COMP_FRIENDS || page == COMP_FRIEND_VISIT;
   int friend_visit = page == COMP_FRIEND_VISIT;
   char value[128];
@@ -295,7 +292,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     }
     return;
   }
-  if (map_outing && (details || reserved || receipt) && !discard && !finish && !friends) {
+  if (map_outing && (details || reserved || receipt) && !friends) {
     field_cargo_row(kit, row, &field, selector);
     return;
   }
@@ -308,7 +305,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   panel(row, 12, 12, 426, 576);
   text(row, 28, 26, "BEECHO / COMPANION", 18, SECONDARY);
   heading(row, 28, 48,
-         details || discard     ? "CARGO"
+         details ? "CARGO"
        : friends ? "COMPANIONS"
                               : "PROBE",
        34, TEXT);
@@ -332,37 +329,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   }
   fill(row, 28, 112, 394, 2, EDGE);
   int action_top = 490;
-  if (discard || finish) {
-    static const char *names[] = {"Data", "Energy", "Essence"};
-    text(row, 28, 134,
-         finish ? "End this expedition?"
-         : page == COMP_DISCARD_CLASS ? "Choose item kind"
-         : page == COMP_DISCARD_QUANTITY ? "Choose whole items"
-                                         : "Discard these items?",
-         22, TEXT);
-    if (finish) {
-      wrapped(row, 28, 204, "This ends the expedition without a sample. Nothing is sent to the Lab.",
-              390, 22, TEXT);
-      wrapped(row, 28, 320, "Your next supply attempts keep their progress.",
-              390, 18, SECONDARY);
-    } else {
-      unsigned resource_index = page == COMP_DISCARD_CLASS ? view->focus % 3
-                                                          : view->discard_resource;
-      resource(row, resource_index, 50, 208, 1);
-      text(row, 187, 220, names[resource_index], 22, TEXT);
-      snprintf(value, sizeof(value), "Carried: %u %s", cargo[resource_index] / GAME_SUPPLY_UNIT, names[resource_index]);
-      text(row, 28, 346, value, 18, SECONDARY);
-      if (page == COMP_DISCARD_REVIEW) {
-        snprintf(value, sizeof(value), "Discard %u %s?",
-                 view->discard_quantity / GAME_SUPPLY_UNIT, names[resource_index]);
-        text(row, 28, 384, value, 22, TEXT);
-        text(row, 28, 417, "These items cannot be recovered.", 18, SECONDARY);
-      } else {
-        text(row, 28, 384, "Choose how many to keep or discard.", 18, SECONDARY);
-      }
-    }
-    action_top = 470;
-  } else if (friends) {
+  if (friends) {
     const KitResidentProjection *record = kit_selected_resident(kit);
     unsigned count = kit_resident_count(kit);
     time_t updated = (time_t)kit_residents_updated_at(kit) - 6 * 3600;
@@ -520,10 +487,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   unsigned count =
       selector || kit->failed || (page == COMP_FRIENDS && kit_resident_count(kit))
           ? 0 : kit_option_count(kit, KIT_COMPANION);
-  unsigned first = discard && view->focus >= 2 ? view->focus - 1 : 0;
-  unsigned visible_count = discard ? 2 : count;
-  for (unsigned i = first; i < count && i < first + visible_count; ++i) {
-    int y = action_top + (int)(i - first) * (has_run || discard || finish || friend_visit ? 32 : 38);
+  for (unsigned i = 0; i < count; ++i) {
+    int y = action_top + (int)i * (has_run || friend_visit ? 32 : 38);
     if (view->focus == i) {
       fill(row, 24, y - 4, 402, 31,
            FIELD);
@@ -531,13 +496,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       text(row, 34, y, ">", 18, FOCUS);
     }
     const char *option = kit_option(kit, KIT_COMPANION, i);
-    if (page == COMP_DISCARD_REVIEW && i == 0) {
-      static const char *names[] = {"Data", "Energy", "Essence"};
-      snprintf(value, sizeof(value), "Discard %u %s",
-               view->discard_quantity / GAME_SUPPLY_UNIT,
-               names[view->discard_resource]);
-      option = value;
-    }
     heading(row, 58, y - 3, option, 26,
             friend_visit && i == 0 && !kit_resident_visit_available(kit) ? SECONDARY : TEXT);
   }
@@ -551,8 +509,8 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
          "Down / Confirm: choose an action",
          18, SECONDARY);
   } else if (view->message[0] && !friends) {
-    int result_y = discard || finish ? 413 : details ? 439 : 276;
-    fill(row, 24, result_y, 402, discard || finish || details ? 46 : 64, FIELD);
+    int result_y = details ? 439 : 276;
+    fill(row, 24, result_y, 402, details ? 46 : 64, FIELD);
     wrapped(row, 28, result_y + 3, view->message, 390, 18, TEXT);
   }
   text(row, 28, 553,
@@ -561,8 +519,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
                                    ? "Up/Down: resident / Back: modes"
                                    : "Confirm: Probe / Back: modes"
        : friend_visit     ? "Confirm: choose / Back: residents"
-       : discard          ? "Up/Down: choose / Back: keep items"
-       : finish           ? "Confirm: choose / Back: keep exploring"
        : view->task_depth ? "Back: return to the previous view"
                           : "Up / Down: choose  /  Back: modes",
        18, SECONDARY);
@@ -759,7 +715,11 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
   CompanionCargoView view;
   if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) {
     if (device == KIT_COMPANION && (kit->companion.page == COMP_CARGO ||
-                                  kit->companion.page == COMP_SEND_REVIEW)) return 0;
+                                  kit->companion.page == COMP_SEND_REVIEW ||
+                                  kit->companion.page == COMP_DISCARD_CLASS ||
+                                  kit->companion.page == COMP_DISCARD_QUANTITY ||
+                                  kit->companion.page == COMP_DISCARD_REVIEW ||
+                                  kit->companion.page == COMP_FINISH_REVIEW)) return 0;
     /* Other-device frame requests must not cancel Companion presentation. */
     if (device == KIT_COMPANION) native_ui_cancel(context);
     return bmp_rows(kit, device, output, NULL);

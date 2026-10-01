@@ -22,9 +22,15 @@ struct CompanionCargoUi {
   unsigned elapsed;
 };
 static int valid_view(const CompanionCargoView *view) {
-  if (!view || (view->screen != COMPANION_CARGO_SCREEN && view->screen != COMPANION_SEND_SCREEN) ||
+  if (!view || view->screen < COMPANION_CARGO_SCREEN || view->screen > COMPANION_FINISH_SCREEN ||
       view->action_count > 2 ||
       (view->action_count && view->focus >= view->action_count)) return 0;
+  if (view->screen >= COMPANION_DISCARD_CLASS_SCREEN &&
+      (!view->option_count || view->logical_focus >= view->option_count ||
+       view->first_visible > view->logical_focus ||
+       view->focus != view->logical_focus - view->first_visible ||
+       view->first_visible + view->action_count > view->option_count ||
+       view->selected_resource > 3)) return 0;
   const char *strings[] = {view->identity, view->title, view->context, view->capsule,
       view->detail, view->capacity, view->feedback, view->footer,
       view->actions[0], view->actions[1]};
@@ -229,7 +235,12 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
       !strcmp(context->previous.footer, view->footer) &&
       context->previous.phase == view->phase && context->previous.accepted == view->accepted &&
       context->previous.failed == view->failed && context->previous.action_count == view->action_count &&
+      context->previous.first_visible == view->first_visible &&
+      context->previous.logical_focus == view->logical_focus &&
+      context->previous.option_count == view->option_count &&
+      context->previous.selected_resource == view->selected_resource &&
       context->previous.capsules == view->capsules &&
+      !strcmp(context->previous.capsule, view->capsule) &&
       !memcmp(context->previous.supplies, view->supplies, sizeof(view->supplies)) &&
       !strcmp(context->previous.feedback, view->feedback) &&
       !memcmp(context->previous.actions, view->actions, sizeof(view->actions));
@@ -241,14 +252,21 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
   view = &context->previous;
   lv_label_set_text_static(context->title, view->title);
   lv_label_set_text_static(context->context, view->context);
+  int task = view->screen >= COMPANION_DISCARD_CLASS_SCREEN;
   for (unsigned resource = 0; resource < 3; ++resource) {
     snprintf(context->quantity_text[resource], sizeof(context->quantity_text[resource]),
              "%" PRIu32, view->supplies[resource]);
     lv_label_set_text_static(context->quantity[resource], context->quantity_text[resource]);
+    lv_obj_set_style_text_color(context->quantity[resource], lv_color_hex(
+        task && resource == view->selected_resource ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
   }
-  lv_label_set_text_static(context->capsule, view->accepted ? "Delivery record" : view->capsule);
-  lv_obj_set_hidden(context->capsule_image, view->capsules == 0);
-  if (view->accepted) {
+  lv_label_set_text_static(context->capsule, view->accepted && !task ? "Delivery record" : view->capsule);
+  lv_obj_set_hidden(context->capsule_image, task || view->capsules == 0);
+  lv_obj_set_pos(context->capsule, task ? 8 : 86, 10);
+  lv_obj_set_width(context->capsule, task ? 382 : 298);
+  lv_obj_set_pos(context->detail, task ? 8 : 86, 34);
+  lv_obj_set_width(context->detail, task ? 382 : 298);
+  if (view->accepted && !task) {
     snprintf(context->receipt_text, sizeof(context->receipt_text), "%" PRIu32 " Data / %" PRIu32 " Energy / %" PRIu32 " Essence\n%s",
              view->delivered[0], view->delivered[1], view->delivered[2],
              view->delivered_capsules ? "1 sample delivered to Lab" : "Supplies stored at Lab");
