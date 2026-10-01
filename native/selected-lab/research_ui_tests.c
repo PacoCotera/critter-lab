@@ -12,6 +12,20 @@
 #include <string.h>
 #include <unistd.h>
 
+static void checkpoint(const char *stage) {
+  if (!ui_display_count()) {
+    printf("Research checkpoint %s: displays=0 (LVGL deinitialized)\n", stage);
+    fflush(stdout);
+    return;
+  }
+  lv_mem_monitor_t memory;
+  lv_mem_monitor(&memory);
+  printf("Research checkpoint %s: displays=%u used=%zu peak=%zu free=%zu largest=%zu\n",
+      stage, ui_display_count(), memory.total_size - memory.free_size,
+      memory.max_used, memory.free_size, memory.free_biggest_size);
+  fflush(stdout);
+}
+
 /* Copied research/art fixtures are synthetic retained samples, not played
  * acquisitions or births. The control test below uses real game commits. */
 static void fixture(SelectedLab *lab, DeviceKit *kit) {
@@ -362,6 +376,7 @@ static void partial_reference_routes(void) {
   assert(view.coat_reference_pair && !view.complete && !view.portraits[0] && !view.portraits[1]);
   NativeUiContext *context = native_ui_create_device(KIT_LAB);
   assert(context && native_ui_research(context, &view));
+  checkpoint("partial reference first render");
   assert(!native_ui_research_reference_scale(context, 0));
   assert(!native_ui_research_reference_scale(context, 3));
   for (unsigned scale = 1; scale <= 2; ++scale) {
@@ -538,6 +553,7 @@ static void physical_review_and_library(void) {
   assert(selected_lab_research_projection(&lab, 0, &view) && view.costs[0] == 4);
   NativeUiContext *context = native_ui_create_device(KIT_LAB);
   assert(context && native_ui_research(context, &view));
+  checkpoint("physical review rendered");
   assert(!memcmp(&retained, &lab.game, sizeof(retained)));
   button(&lab, SELECTED_RIGHT_DOWN);
   assert(lab.page == V1_STUDY_REVIEW && !memcmp(&retained, &lab.game, sizeof(retained)));
@@ -562,6 +578,7 @@ static void physical_review_and_library(void) {
   assert(lab.page == V1_LIBRARY_FINDING);
   assert(selected_lab_research_projection(&lab, 0, &view) && view.known_method && !view.portraits[0]);
   assert(native_ui_research(context, &view));
+  checkpoint("physical Library finding rendered");
   button(&lab, SELECTED_BACK_DOWN);
   assert(lab.page == V1_LIBRARY);
   button(&lab, SELECTED_HOME_DOWN);
@@ -572,6 +589,7 @@ static void physical_review_and_library(void) {
   SelectedResearchView knowledge;
   assert(selected_lab_research_view(&reloaded, 0, &knowledge) && knowledge.partial_p && !knowledge.complete);
   native_ui_destroy(context);
+  checkpoint("physical context destroyed");
   unlink(path);
   char lock[520];
   snprintf(lock, sizeof(lock), "%s.lock", path);
@@ -603,6 +621,7 @@ static void three_context_memory(void) {
   }
   NativeUiContext *companion = native_ui_create(), *dock = native_ui_create_device(KIT_DOCK);
   assert(companion && dock);
+  checkpoint("memory peer contexts created");
   CompanionResidentView resident = {0};
   resident.portrait = RESIDENT_PORTRAIT_PLAIN;
   resident.count = resident.current = resident.online = 1;
@@ -610,8 +629,10 @@ static void three_context_memory(void) {
   DockView dock_view;
   assert(native_ui_resident(companion, &resident));
   assert(kit_dock_projection(&kit, &dock_view) && native_ui_dock(dock, &dock_view));
+  checkpoint("memory peers rendered");
   NativeUiContext *context = native_ui_create_device(KIT_LAB);
   assert(context && ui_display_count() == 3);
+  checkpoint("memory Lab context created");
   LabHomeView home;
   lab.page = V1_HOME;
   lab.focus = 4;
@@ -646,10 +667,18 @@ static void three_context_memory(void) {
   assert(partial.coat_reference_pair && !partial.complete);
   lv_mem_monitor_t first, final;
   for (unsigned cycle = 0; cycle < 200; ++cycle) {
-    assert(native_ui_home(context, &home) && native_ui_reception(context, &reception));
-    assert(native_ui_actions(context, &gallery) && native_ui_actions(context, &activity));
+    assert(native_ui_home(context, &home));
+    if (!cycle) checkpoint("memory Home rendered");
+    assert(native_ui_reception(context, &reception));
+    if (!cycle) checkpoint("memory reception rendered");
+    assert(native_ui_actions(context, &gallery));
+    if (!cycle) checkpoint("memory gallery rendered");
+    assert(native_ui_actions(context, &activity));
+    if (!cycle) checkpoint("memory resident activity rendered");
     assert(native_ui_research(context, cycle % 2 ? &topic : &pair));
+    if (!cycle) checkpoint("memory complete pair rendered");
     assert(native_ui_research(context, &partial));
+    if (!cycle) checkpoint("memory partial pair rendered");
     assert(native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
     if (cycle == 99) lv_mem_monitor(&first);
   }
@@ -674,8 +703,11 @@ int main(void) {
   projection_cases();
   comparison_projection_cases();
   partial_reference_routes();
+  checkpoint("partial reference routes complete");
   retained_routes_and_exports();
+  checkpoint("retained routes complete");
   physical_review_and_library();
+  checkpoint("physical controls complete");
   three_context_memory();
   puts("Lab research disclosure, native routes, physical authority and retained lifetime checks passed");
   return 0;
