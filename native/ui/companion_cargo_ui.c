@@ -14,6 +14,7 @@ struct CompanionCargoUi {
   lv_obj_t *title, *context, *quantity[3], *capsule, *detail;
   lv_obj_t *capacity, *feedback, *footer, *buttons[2], *button_text[2], *capsule_image;
   lv_obj_t *mode_labels[3];
+  lv_obj_t *preview_hints[2];
   NativeUiFrame outer_frame, subject_frame, focus_frame, halo_frame;
   CompanionCargoFonts fonts;
   const lv_image_dsc_t *images[4];
@@ -26,6 +27,9 @@ static int valid_view(const CompanionCargoView *view) {
   if (!view || view->screen < COMPANION_CARGO_SCREEN || view->screen > COMPANION_FINISH_SCREEN ||
       view->action_count > 2 ||
       view->active_mode > 2 ||
+      view->selector > 1 ||
+      (view->selector && (view->screen != COMPANION_CARGO_SCREEN ||
+                          view->active_mode != 1 || view->action_count || view->focus)) ||
       (view->action_count && view->focus >= view->action_count)) return 0;
   if (view->screen >= COMPANION_DISCARD_CLASS_SCREEN &&
       (!view->option_count || view->logical_focus >= view->option_count ||
@@ -160,6 +164,14 @@ static int compose(CompanionCargoUi *context) {
                                          CORE_ART_INK_RGB, 16, action ? 2 : 6, 370, 26, "");
     if (!context->button_text[action]) return 0;
   }
+  context->preview_hints[0] = label(bands[4], context->fonts.action, CORE_ART_INK_RGB,
+      4, 6, 394, 26, "Down / Confirm: enter Cargo");
+  context->preview_hints[1] = label(bands[4], context->fonts.small, CORE_ART_SECONDARY_RGB,
+      4, 36, 394, 26, "Browsing never sends or spends");
+  for (unsigned index = 0; index < 2; ++index) {
+    if (!context->preview_hints[index]) return 0;
+    lv_obj_set_hidden(context->preview_hints[index], true);
+  }
   context->footer = label(bands[5], context->fonts.small, CORE_ART_SECONDARY_RGB,
                            4, 2, 394, 20, "");
   if (!context->footer) return 0;
@@ -240,6 +252,7 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
       context->previous.option_count == view->option_count &&
       context->previous.selected_resource == view->selected_resource &&
       context->previous.active_mode == view->active_mode &&
+      context->previous.selector == view->selector &&
       context->previous.capsules == view->capsules &&
       !strcmp(context->previous.capsule, view->capsule) &&
       !memcmp(context->previous.supplies, view->supplies, sizeof(view->supplies)) &&
@@ -256,7 +269,8 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
   for (unsigned mode = 0; mode < 3; ++mode) {
     lv_obj_set_style_border_width(context->mode_labels[mode], mode == view->active_mode ? 2 : 0, 0);
     lv_obj_set_style_text_color(context->mode_labels[mode], lv_color_hex(
-        mode == view->active_mode ? CORE_ART_INK_RGB : CORE_ART_SECONDARY_RGB), 0);
+        mode == view->active_mode ? (view->selector && !view->failed ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB)
+                                 : CORE_ART_SECONDARY_RGB), 0);
   }
   int task = view->screen >= COMPANION_DISCARD_CLASS_SCREEN;
   for (unsigned resource = 0; resource < 3; ++resource) {
@@ -281,6 +295,8 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
   lv_label_set_text_static(context->capacity, view->capacity);
   lv_label_set_text_static(context->feedback, view->feedback);
   lv_label_set_text_static(context->footer, view->footer);
+  for (unsigned index = 0; index < 2; ++index)
+    lv_obj_set_hidden(context->preview_hints[index], !view->selector || view->failed);
   for (unsigned action = 0; action < 2; ++action) {
     lv_obj_remove_state(context->buttons[action], LV_STATE_FOCUSED | LV_STATE_PRESSED);
     if (action >= view->action_count) lv_obj_set_hidden(context->buttons[action], true);
@@ -289,7 +305,19 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
       lv_label_set_text_static(context->button_text[action], view->actions[action]);
     }
   }
-  if (view->focus < view->action_count) {
+  if (view->selector && !view->failed) {
+    /* The interaction layer owns the selected mode. These are presentation
+     * frames, with no clickable action or domain callback on the label. */
+    lv_obj_update_layout(context->cargo_root);
+    lv_area_t bounds;
+    lv_obj_get_coords(context->mode_labels[view->active_mode], &bounds);
+    lv_obj_set_hidden(context->focus_frame.object, false);
+    lv_obj_set_pos(context->focus_frame.object, bounds.x1 - 2, bounds.y1 - 2);
+    native_ui_frame_size(&context->focus_frame, lv_area_get_width(&bounds) + 4,
+                         lv_area_get_height(&bounds) + 4);
+    lv_obj_set_hidden(context->halo_frame.object, true);
+    context->pending = 0;
+  } else if (view->focus < view->action_count) {
     lv_obj_t *selected = context->buttons[view->focus];
     lv_group_focus_obj(selected);
     lv_obj_add_state(selected, LV_STATE_FOCUSED);

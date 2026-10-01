@@ -116,11 +116,14 @@ static int cargo_task_projection(const DeviceKit *kit, CompanionCargoView *out) 
 }
 int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   if (!kit || !out || (kit->companion.page != COMP_CARGO &&
+                       !(kit->companion.page == COMP_MODES && kit->companion.mode == COMP_CARGO) &&
                        kit->companion.page != COMP_SEND_REVIEW &&
                        kit->companion.page != COMP_DISCARD_CLASS &&
                        kit->companion.page != COMP_DISCARD_QUANTITY &&
                        kit->companion.page != COMP_DISCARD_REVIEW &&
                        kit->companion.page != COMP_FINISH_REVIEW))
+    return 0;
+  if (kit->companion.page == COMP_MODES && kit->companion.focus != COMP_CARGO)
     return 0;
   CompanionCargoFacts facts;
   if (!kit_cargo_facts(kit, &facts)) return 0;
@@ -138,6 +141,8 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   out->phase = kit->journal.phase;
   out->failed = kit->failed || kit->lab->storage_error;
   out->focus = view->focus;
+  out->selector = view->page == COMP_MODES;
+  if (out->selector) out->focus = 0;
   out->selected_resource = 3;
   if (view->mode > COMP_FRIENDS) return 0;
   out->active_mode = view->mode;
@@ -205,7 +210,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     return cargo_task_projection(kit, out);
   /* Normal sealing returns to Cargo. A restored/defensive sealed review must
    * never offer Keep as cancellation or Send as a second seal operation. */
-  out->action_count = out->failed || (review && (sealed || out->accepted))
+  out->action_count = out->selector || out->failed || (review && (sealed || out->accepted))
                          ? 0 : kit_option_count(kit, KIT_COMPANION);
   if (out->action_count > 2)
     return 0;
@@ -213,6 +218,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     snprintf(out->actions[action], sizeof(out->actions[action]), "%s",
              kit_option(kit, KIT_COMPANION, action));
   snprintf(out->footer, sizeof(out->footer), "%s", out->failed ? "Storage recovery required" :
+           out->selector ? "Left/Right: modes" :
            review && !sealed && !out->accepted ? "Back: Keep cargo" :
            "Up/Down: choose / Back: modes");
   return 1;

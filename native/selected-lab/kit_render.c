@@ -170,94 +170,6 @@ static void field_heading(KitRow *row, int x, int y, const char *value,
                            unsigned size, unsigned color) {
   field_label(row, x, y, value, size, color, 1);
 }
-static void field_cargo_row(const DeviceKit *kit, KitRow *row,
-                            const ExpeditionFieldView *field, int selector) {
-  const KitView *view = &kit->companion;
-  int sealed = kit->journal.phase >= KIT_WAITING &&
-               kit->journal.phase <= KIT_ACK_PENDING;
-  int accepted = field->delivery_accepted;
-  int acknowledged = accepted && kit->journal.phase == KIT_COMPLETE;
-  char value[128];
-  fill(row, 0, 0, 450, 600, BACKGROUND);
-  panel(row, 12, 12, 426, 576);
-  field_heading(row, 29, 28, accepted ? "Cargo empty"
-                                                   : sealed ? "Expedition sent"
-                                                                  : "Cargo", 24, TEXT);
-  field_text(row, 30, 59, acknowledged ? "Expedition ended / choose a new outing"
-                                  : kit_stage(kit), 15, SECONDARY);
-  static const char *modes[] = {"Probe", "Cargo", "Companions"};
-  static const int positions[] = {28, 151, 275};
-  for (unsigned i = 0; i < 3; ++i) {
-    int selected = view->mode == i;
-    if (selector && selected)
-      action_focus(row, positions[i] - 4, 78, i == 2 ? 143 : 98, 27);
-    field_heading(row, positions[i], 82, modes[i], 18, selected ? TEXT : SECONDARY);
-    if (selected) fill(row, positions[i], 98, i == 2 ? 138 : 90, 2, BORDER);
-  }
-  panel(row, 24, 113, 402, 281);
-  field_heading(row, 42, 135, "Current cargo", 23, TEXT);
-  unsigned total = 0;
-  for (unsigned i = 0; i < 3; ++i) {
-    int x = 49 + (int)i * 126;
-    unsigned count = field->earned[i];
-    total += count;
-    resource(row, i, x, 175, 0);
-    snprintf(value, sizeof(value), "%u", count);
-    field_heading(row, x + 57, 177, value, 27, TEXT);
-    field_text(row, x, 237, i == 0 ? "Data" : i == 1 ? "Energy" : "Essence", 18, SECONDARY);
-  }
-  fill(row, 42, 270, 364, 1, EDGE);
-  unsigned capsules = field->capsule_count;
-  if (capsules) {
-    category(row, CORE_ART_SAMPLE_NEUTRAL, 49, 283);
-    field_heading(row, 120, 289, "1 sealed sample", 22, TEXT);
-    field_text(row, 120, 321, "Contents unknown", 18, SECONDARY);
-  } else {
-    field_heading(row, 49, 294, "No sample in cargo", 22, TEXT);
-  }
-  if (accepted) {
-    snprintf(value, sizeof(value), "Delivery record: %u Data / %u Energy / %u Essence",
-             field->sent[0], field->sent[1], field->sent[2]);
-    field_text(row, 42, 324, value, 14, SECONDARY);
-    field_text(row, 42, 342, field->sent_capsule_count ? "1 sample delivered to Lab"
-                                                   : "Supplies-only delivery", 14, SECONDARY);
-  }
-  snprintf(value, sizeof(value), "Supplies %u / %u / Capsules %u / %u", total,
-           GAME_CARGO_CAPACITY / GAME_SUPPLY_UNIT, capsules, field->capsule_capacity);
-  field_text(row, 42, 363, value, 16, SECONDARY);
-  if (accepted) {
-    field_text(row, 28, 414, acknowledged ? "Delivery complete / cargo transferred."
-                                         : "Lab accepted / receipt pending.", 18, TEXT);
-    field_text(row, 28, 442, acknowledged ? "Choose a new outing on Probe."
-                                        : "This expedition cannot resume.", 18, SECONDARY);
-  } else if (sealed) {
-    field_text(row, 28, 414, kit->journal.phase == KIT_WAITING
-                               ? "Sent / waiting for the Lab."
-                               : "At Lab / awaiting acceptance.", 18, TEXT);
-    field_text(row, 28, 442, "This expedition cannot resume.", 18, SECONDARY);
-  } else {
-    const char *message = view->message[0] ? view->message : "Whole items only / preparation stays here.";
-    wrapped(row, 28, 414, message, 390, 18, SECONDARY);
-  }
-  unsigned count = selector || kit->failed ? 0 : kit_option_count(kit, KIT_COMPANION);
-  for (unsigned i = 0; i < count && i < 2; ++i) {
-    int top = 479 + (int)i * 32;
-    if (i == view->focus) action_focus(row, 29, top, 392, 30);
-    field_heading(row, 45, top + 8, kit_option(kit, KIT_COMPANION, i), 20,
-            i == view->focus ? FOCUS : TEXT);
-  }
-  if (selector) {
-    field_text(row, 28, 491, "Left / Right: change mode", 22, TEXT);
-    field_text(row, 28, 525, "Down / Confirm: enter Cargo", 18, SECONDARY);
-  }
-  field_text(row, 28, 556, selector ? "Browsing never sends or spends"
-                    : "Up/Down: choose / Back: modes", 16, SECONDARY);
-  if (kit->failed) {
-    fill(row, 24, 493, 402, 64, FIELD);
-    wrapped(row, 28, 505, accepted ? "Cargo transferred. Delivery record needs recovery."
-                                 : "Storage unavailable. Cargo preserved.", 390, 18, FOCUS);
-  }
-}
 static void companion_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   const KitView *view = &kit->companion;
@@ -290,10 +202,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       fill(row, 24, 500, 402, 76, FIELD);
       wrapped(row, 28, 507, "Storage unavailable. Progress preserved.", 390, 18, FOCUS);
     }
-    return;
-  }
-  if (map_outing && (details || reserved || receipt) && !friends) {
-    field_cargo_row(kit, row, &field, selector);
     return;
   }
   if (reserved)
@@ -719,7 +627,9 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                                   kit->companion.page == COMP_DISCARD_CLASS ||
                                   kit->companion.page == COMP_DISCARD_QUANTITY ||
                                   kit->companion.page == COMP_DISCARD_REVIEW ||
-                                  kit->companion.page == COMP_FINISH_REVIEW)) return 0;
+                                  kit->companion.page == COMP_FINISH_REVIEW ||
+                                  (kit->companion.page == COMP_MODES &&
+                                   kit->companion.mode == COMP_CARGO))) return 0;
     /* Other-device frame requests must not cancel Companion presentation. */
     if (device == KIT_COMPANION) native_ui_cancel(context);
     return bmp_rows(kit, device, output, NULL);

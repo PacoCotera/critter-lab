@@ -90,6 +90,57 @@ static CompanionCargoView example(void) {
   view.capsules = view.capsule_capacity = 1;
   return view;
 }
+static void cargo_preview_projection_truth(void) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.page = COMP_MODES;
+  kit.companion.mode = kit.companion.focus = COMP_CARGO;
+  lab.game.expedition_data = 2 * GAME_SUPPLY_UNIT;
+  strcpy(lab.game.expedition_id, "preview-proof");
+  kit.journal.companion_online = 1;
+  GameState saved = lab.game;
+  KitJournal journal = kit.journal;
+  CompanionCargoView view;
+  assert(kit_cargo_projection(&kit, &view));
+  assert(view.selector && view.screen == COMPANION_CARGO_SCREEN);
+  assert(view.active_mode == COMP_CARGO && !view.focus && !view.action_count);
+  assert(view.supplies[0] == 2 && !strcmp(view.footer, "Left/Right: modes"));
+  assert(!memcmp(&saved, &lab.game, sizeof(saved)) && !memcmp(&journal, &kit.journal, sizeof(journal)));
+  kit.journal.companion_online = 0;
+  assert(kit_cargo_projection(&kit, &view) && !strcmp(view.feedback, "Lab offline") && !view.action_count);
+  for (unsigned error = 0; error < 2; ++error) {
+    kit.failed = error == 0;
+    lab.storage_error = error == 1;
+    assert(kit_cargo_projection(&kit, &view) && view.failed && !view.action_count);
+    assert(!strcmp(view.feedback, "Storage unavailable") && !strcmp(view.footer, "Storage recovery required"));
+  }
+  kit.failed = lab.storage_error = 0;
+  kit.journal.phase = KIT_WAITING;
+  kit.journal.cargo[0] = 3 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view) && view.supplies[0] == 3 && !view.action_count);
+  assert(!strcmp(view.title, "Cargo sealed"));
+  lab.game.expedition_id[0] = 0;
+  kit.journal.phase = KIT_ACK_PENDING;
+  assert(kit_cargo_projection(&kit, &view) && view.accepted && !view.supplies[0] && !view.action_count);
+  assert(view.delivered[0] == 3 && !strcmp(view.title, "Cargo empty"));
+  kit.journal.phase = KIT_IDLE;
+  lab.game.expedition_data = 0;
+  assert(kit_cargo_projection(&kit, &view) && !strcmp(view.context, "No active expedition"));
+  lab.game.expedition_data = 2 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view) && !strcmp(view.title, "Stored cargo"));
+  kit.companion.focus = COMP_PROBE;
+  assert(!kit_cargo_projection(&kit, &view));
+  NativeUiContext *context = native_ui_create();
+  FILE *output = tmpfile();
+  assert(context && output && !kit_bmp_ui(&kit, KIT_COMPANION, output, context, 1));
+  assert(ftell(output) == 0); /* Invalid migrated preview has no manual fallback. */
+  fclose(output);
+  native_ui_destroy(context);
+  kit.companion.mode = kit.companion.focus = COMP_FRIENDS;
+  assert(!kit_cargo_projection(&kit, &view));
+}
 static void send_projection_truth(void) {
   SelectedLab lab;
   selected_lab_init(&lab);
@@ -313,6 +364,28 @@ static void portable_cargo_send_module(void) {
   }
   lv_mem_monitor(&final);
   assert(final.free_size == warm.free_size);
+  /* Switching preview/action ownership cannot leave stale focus or allocate
+   * a second composition tree. The caller may discard its plain view. */
+  for (unsigned index = 0; index < 100; ++index) {
+    view = example();
+    view.selector = index & 1;
+    if (view.selector) view.action_count = view.focus = 0;
+    assert(companion_cargo_ui_update(ui, &view, 1));
+    memset(&view, 0, sizeof(view));
+    lv_refr_now(ui_display_lvgl(display));
+  }
+  lv_mem_monitor(&final);
+  assert(final.free_size == warm.free_size);
+  view = example();
+  view.selector = 1;
+  assert(!companion_cargo_ui_update(ui, &view, 1)); /* Preview cannot carry actions. */
+  view.action_count = view.focus = 0;
+  view.active_mode = COMP_PROBE;
+  assert(!companion_cargo_ui_update(ui, &view, 1));
+  view.active_mode = COMP_CARGO;
+  view.screen = COMPANION_SEND_SCREEN;
+  assert(!companion_cargo_ui_update(ui, &view, 1));
+  view = example();
   view.action_count = 3;
   assert(!companion_cargo_ui_update(ui, &view, 1));
   view = example();
@@ -477,6 +550,60 @@ static void discard_finish_fixture_exports(const char *directory) {
   export_bmp(stored_path, stored_rgb);
   native_ui_destroy(context);
 }
+static void cargo_preview_rendering(const char *directory) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.mode = kit.companion.focus = COMP_CARGO;
+  kit.companion.page = COMP_MODES;
+  kit.journal.companion_online = 1;
+  NativeUiContext *context = native_ui_create();
+  uint8_t *normal = malloc(450 * 600 * 3);
+  assert(context && normal);
+  const char *names[] = {"empty", "active", "offline", "sealed", "accepted",
+                         "kit-error", "lab-error", "stored"};
+  for (unsigned index = 0; index < 8; ++index) {
+    memset(&lab.game.field, 0, sizeof(lab.game.field));
+    strcpy(lab.game.expedition_id, index ? "preview-fixture" : "");
+    lab.game.expedition_data = index ? 2 * GAME_SUPPLY_UNIT : 0;
+    kit.journal.phase = index == 3 ? KIT_WAITING : index == 4 ? KIT_ACK_PENDING : KIT_IDLE;
+    kit.journal.companion_online = index != 2;
+    kit.journal.cargo[0] = 3 * GAME_SUPPLY_UNIT;
+    if (index == 4 || index == 7) lab.game.expedition_id[0] = 0;
+    kit.failed = index == 5;
+    lab.storage_error = index == 6;
+    CompanionCargoView view;
+    assert(kit_cargo_projection(&kit, &view) && view.selector && !view.action_count);
+    const uint8_t *rgb = native_ui_cargo(context, &view, 1);
+    assert(rgb);
+    if (directory) {
+      char path[512];
+      snprintf(path, sizeof(path), "%s/fixture-preview-%s.bmp", directory, names[index]);
+      export_bmp(path, rgb);
+    }
+  }
+  kit.failed = lab.storage_error = 0;
+  kit.companion.page = COMP_CARGO;
+  kit.companion.focus = 1;
+  CompanionCargoView view;
+  assert(kit_cargo_projection(&kit, &view) && !view.selector && view.action_count == 2);
+  const uint8_t *rgb = native_ui_cargo(context, &view, 1);
+  assert(rgb);
+  memcpy(normal, rgb, 450 * 600 * 3);
+  for (unsigned index = 0; index < 4; ++index) {
+    kit.companion.page = COMP_MODES;
+    kit.companion.focus = COMP_CARGO;
+    assert(kit_cargo_projection(&kit, &view) && native_ui_cargo(context, &view, 1));
+    kit.companion.page = COMP_CARGO;
+    kit.companion.focus = 1;
+    assert(kit_cargo_projection(&kit, &view));
+    rgb = native_ui_cargo(context, &view, 1);
+    assert(rgb && !memcmp(normal, rgb, 450 * 600 * 3));
+  }
+  free(normal);
+  native_ui_destroy(context);
+}
 static void representative_fixture_exports(const char *directory) {
   NativeUiContext *context = native_ui_create();
   assert(context);
@@ -603,9 +730,11 @@ static void actual_save_motion(const char *directory, const char *source) {
 int main(int argc, char **argv) {
   image_fidelity();
   projection_truth();
+  cargo_preview_projection_truth();
   send_projection_truth();
   discard_finish_projection_truth();
   portable_cargo_send_module();
+  cargo_preview_rendering(argc >= 2 ? argv[1] : NULL);
   if (argc == 3) actual_save_motion(argv[1], argv[2]);
   else rendering_and_motion(argc == 2 ? argv[1] : NULL, NULL);
   if (argc >= 2) {

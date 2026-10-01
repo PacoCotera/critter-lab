@@ -229,7 +229,8 @@ control sequences before dependent compositions are treated as selected.
 | Companion Cargo | LVGL | Same target-build requirement |
 | Companion Send/Keep confirmation | Retained LVGL using shared portable Cargo/Send tree | [Actual host source/control/output and independent review checked](../docs/evidence/native-companion-send/README.md); current Companion ESP build still required |
 | Companion Discard class/quantity/Keep review and empty Finish review | Retained LVGL using the shared portable Cargo tree | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-discard/README.md); current Companion ESP build still required |
-| Companion other mode previews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
+| Companion Cargo mode preview | Retained LVGL, same portable Cargo tree | Native output and independent review pending; current Companion ESP build still required |
+| Companion Companions mode preview, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
@@ -264,6 +265,14 @@ widget focus are separate copied facts; the UI does not navigate or decide loss.
 Review shows exact whole-item loss and remainder; Keep and Back retain the caller
 and cargo. Finish is only available for an empty outing and sends nothing.
 Storage failures close actions. This migration adds no rules or physical controls.
+
+Cargo mode preview uses the same owned view with an explicit selector flag.
+It shows current cargo or the accepted delivery record and always exposes zero
+Cargo actions. Mode focus belongs to the rail, separately from remembered Cargo
+action focus. Left/Right switches modes; Down or Confirm enters Cargo without
+sending or discarding. Storage errors hide navigation affordances. Projection
+rejects inconsistent mode/focus and the known route cannot fall back to raster
+composition. Companions preview and resident/visit workpieces remain separate.
 
 Flush-ready means the adapter has released the draw buffer. It is distinct from
 the painted-frame acknowledgement used to authorize input, especially for an

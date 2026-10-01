@@ -64,6 +64,12 @@ focus mapping cannot silently select a different quantity. The domain owns loss,
 Keep and caller recovery. The view exposes exact loss/remainder and closes storage
 or sealed-haul actions. No game command is invoked by a widget.
 
-Lab and the remaining Companion preview/visit routes remain open
+Cargo mode preview reuses this retained tree with a copied `selector` flag.
+It has zero Cargo actions, mode-rail focus and noninteractive entry hints.
+Entering Cargo restores remembered action focus; storage failure hides entry
+affordances. Current native output/review is pending. No Kit command originates
+in the widgets.
+
+Lab and the remaining Companions preview/resident/visit routes remain open
 renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish projection returns a
 render error; it cannot silently reach the old manual renderer.

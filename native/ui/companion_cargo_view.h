@@ -23,6 +23,8 @@ typedef struct {
    * local to those rows; navigation remains owned by the interaction layer. */
   unsigned logical_focus, first_visible, option_count, selected_resource;
   unsigned active_mode;
+  /* Mode browsing is read-only; focus belongs to the mode rail, not actions. */
+  unsigned selector;
   int held, pressed, suspended;
   char identity[64], title[40], context[96], capsule[64], detail[192];
   char capacity[96], feedback[96], footer[64], actions[2][64];
