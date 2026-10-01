@@ -3,7 +3,9 @@
 #include <string.h>
 
 int native_ui_image_init(NativeUiImage *image, CoreArtId id) {
-  const CoreArtSprite *source = core_art_sprite(id);
+  return native_ui_image_from_sprite(image, core_art_sprite(id));
+}
+int native_ui_image_from_sprite(NativeUiImage *image, const CoreArtSprite *source) {
   memset(image, 0, sizeof(*image));
   if (!source || source->width > 65535 || source->height > 65535)
     return 0;

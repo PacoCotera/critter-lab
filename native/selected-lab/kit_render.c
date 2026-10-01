@@ -833,6 +833,16 @@ static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
 
 int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                NativeUiContext *context, int still) {
+  CompanionProbeView probe;
+  if (device == KIT_COMPANION && kit_probe_projection(kit, &probe)) {
+    int temporary = !context;
+    if (temporary) context = native_ui_create();
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_probe(context, &probe);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   CompanionCargoView view;
   if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) {
     /* Other-device frame requests must not cancel Companion presentation. */

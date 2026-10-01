@@ -1,6 +1,7 @@
 #include "native_ui.h"
 #include "ui_assets.h"
 #include "ui_theme.h"
+#include "probe_ui.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -8,6 +9,8 @@
 enum { CARGO_WIDTH = 450, CARGO_HEIGHT = 600, DRAW_ROWS = 60, FADE_MS = 120 };
 struct NativeUiContext {
   lv_display_t *display;
+  NativeProbeUi *probe;
+  lv_obj_t *cargo_root;
   lv_group_t *actions;
   lv_obj_t *screen, *title, *context, *quantity[3], *capsule, *detail;
   lv_obj_t *capacity, *feedback, *buttons[2], *button_text[2], *capsule_image;
@@ -70,10 +73,16 @@ static int compose(NativeUiContext *context) {
   lv_display_set_default(context->display);
   context->screen = lv_display_get_screen_active(context->display);
   native_ui_surface(context->screen, CORE_ART_GRAPHITE_RGB, CORE_ART_BLUE_RGB, 0);
-  lv_obj_t *rim = surface(context->screen, 426, 576);
+  context->cargo_root = surface(context->screen, 450, 600);
+  if (!context->cargo_root) return 0;
+  native_ui_surface(context->cargo_root, CORE_ART_GRAPHITE_RGB, CORE_ART_BLUE_RGB, 0);
+  /* Applying the surface style removes LVGL's local size styles. Restore the
+   * full display bounds before composing children, or Cargo clips to130px. */
+  lv_obj_set_size(context->cargo_root, CARGO_WIDTH, CARGO_HEIGHT);
+  lv_obj_t *rim = surface(context->cargo_root, 426, 576);
   if (!rim) return 0;
   lv_obj_set_pos(rim, 12, 12);
-  lv_obj_t *content = surface(context->screen, 402, 560);
+  lv_obj_t *content = surface(context->cargo_root, 402, 560);
   if (!content) return 0;
   lv_obj_set_pos(content, 24, 24);
   static const int32_t columns[] = {402, LV_GRID_TEMPLATE_LAST};
@@ -164,10 +173,10 @@ static int compose(NativeUiContext *context) {
               4, 2, 394, 20, "Up/Down: choose / Back: modes")) return 0;
   /* Overlay retained frame widgets after content so grid cells cannot erase
    * their stepped edges. Their points are owned by this context. */
-  if (!native_ui_frame_init(&context->outer_frame, context->screen, 426, 576, CORE_ART_BLUE_RGB) ||
-      !native_ui_frame_init(&context->subject_frame, context->screen, 402, 318, CORE_ART_BLUE_RGB) ||
-      !native_ui_frame_init(&context->focus_frame, context->screen, 402, 38, CORE_ART_FOCUS_RGB) ||
-      !native_ui_frame_init(&context->halo_frame, context->screen, 408, 44, CORE_ART_FOCUS_RGB)) return 0;
+  if (!native_ui_frame_init(&context->outer_frame, context->cargo_root, 426, 576, CORE_ART_BLUE_RGB) ||
+      !native_ui_frame_init(&context->subject_frame, context->cargo_root, 402, 318, CORE_ART_BLUE_RGB) ||
+      !native_ui_frame_init(&context->focus_frame, context->cargo_root, 402, 38, CORE_ART_FOCUS_RGB) ||
+      !native_ui_frame_init(&context->halo_frame, context->cargo_root, 408, 44, CORE_ART_FOCUS_RGB)) return 0;
   lv_obj_set_pos(context->outer_frame.object, 12, 12);
   lv_obj_set_pos(context->subject_frame.object, 24, 112);
   lv_obj_set_hidden(context->focus_frame.object, true);
@@ -202,6 +211,9 @@ NativeUiContext *native_ui_create(void) {
                           CARGO_WIDTH * DRAW_ROWS * 3, LV_DISPLAY_RENDER_MODE_PARTIAL);
   lv_display_set_flush_cb(context->display, flush_rgb);
   if (!compose(context)) goto failure;
+  context->probe = native_probe_ui_create(context->screen, context->actions,
+      &context->body_font, &context->small_font, &context->action_font, &context->images[3]);
+  if (!context->probe) goto failure;
   return context;
 failure:
   native_ui_destroy(context);
@@ -222,6 +234,7 @@ void native_ui_cancel(NativeUiContext *context) {
 void native_ui_destroy(NativeUiContext *context) {
   if (!context) return;
   native_ui_cancel(context);
+  native_probe_ui_destroy(context->probe);
   if (context->actions) lv_group_delete(context->actions);
   if (context->display) lv_display_delete(context->display);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
@@ -248,6 +261,8 @@ void native_ui_advance(NativeUiContext *context, unsigned milliseconds) {
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still) {
   if (!context || !view || context->failed) return NULL;
+  native_probe_ui_hide(context->probe);
+  lv_obj_set_hidden(context->cargo_root, false);
   int same = context->has_previous &&
       !strcmp(context->previous.identity, view->identity) &&
       context->previous.phase == view->phase && context->previous.accepted == view->accepted &&
@@ -315,6 +330,14 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
     context->pending = 0;
   }
   context->has_previous = 1;
+  lv_refr_now(context->display);
+  return context->failed ? NULL : context->rgb;
+}
+const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeView *view) {
+  if (!context || !view || context->failed) return NULL;
+  native_ui_cancel(context);
+  lv_obj_set_hidden(context->cargo_root, true);
+  if (!native_probe_ui_update(context->probe, view)) return NULL;
   lv_refr_now(context->display);
   return context->failed ? NULL : context->rgb;
 }

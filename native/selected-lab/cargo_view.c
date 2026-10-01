@@ -3,23 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
-int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
-  if (!kit || !out || kit->companion.page != COMP_CARGO)
+int kit_cargo_facts(const DeviceKit *kit, CompanionCargoFacts *out) {
+  if (!kit || !out || !kit->lab)
     return 0;
   memset(out, 0, sizeof(*out));
-  const KitView *view = &kit->companion;
   const GameState *game = &kit->lab->game;
-  out->phase = kit->journal.phase;
-  out->failed = kit->failed;
-  out->focus = view->focus;
-  out->revision = view->revision;
-  out->epoch = view->epoch;
-  out->suspended = view->suspended;
-  for (unsigned button = 0; button < 10; ++button) {
-    out->held |= view->gestures[button].held;
-    out->pressed |= view->gestures[button].held && view->gestures[button].allowed;
-  }
-  int sealed = out->phase >= KIT_WAITING && out->phase <= KIT_ACK_PENDING;
+  unsigned phase = kit->journal.phase;
+  int sealed = phase >= KIT_WAITING && phase <= KIT_ACK_PENDING;
   ExpeditionFieldView field;
   if (kit_field_projection(kit, &field)) {
     memcpy(out->supplies, field.earned, sizeof(out->supplies));
@@ -32,7 +22,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   } else {
     const uint32_t current[] = {game->expedition_data, game->expedition_energy,
                                 game->expedition_essence};
-    out->accepted = out->phase >= KIT_ACK_PENDING && !game->expedition_id[0];
+    out->accepted = phase >= KIT_ACK_PENDING && !game->expedition_id[0];
     out->delivered_capsules = out->accepted && kit_received_sample(kit) ? 1 : 0;
     out->capsule_capacity = 1;
     for (unsigned resource = 0; resource < 3; ++resource) {
@@ -43,6 +33,33 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     snprintf(out->identity, sizeof(out->identity), "%s",
              game->expedition_id[0] ? game->expedition_id : kit->journal.haul_id);
   }
+  return 1;
+}
+int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
+  if (!kit || !out || kit->companion.page != COMP_CARGO)
+    return 0;
+  CompanionCargoFacts facts;
+  if (!kit_cargo_facts(kit, &facts)) return 0;
+  memset(out, 0, sizeof(*out));
+  memcpy(out->supplies, facts.supplies, sizeof(out->supplies));
+  memcpy(out->delivered, facts.delivered, sizeof(out->delivered));
+  out->capsules = facts.capsules;
+  out->capsule_capacity = facts.capsule_capacity;
+  out->delivered_capsules = facts.delivered_capsules;
+  out->accepted = facts.accepted;
+  strcpy(out->identity, facts.identity);
+  const KitView *view = &kit->companion;
+  out->phase = kit->journal.phase;
+  out->failed = kit->failed;
+  out->focus = view->focus;
+  out->revision = view->revision;
+  out->epoch = view->epoch;
+  out->suspended = view->suspended;
+  for (unsigned button = 0; button < 10; ++button) {
+    out->held |= view->gestures[button].held;
+    out->pressed |= view->gestures[button].held && view->gestures[button].allowed;
+  }
+  int sealed = out->phase >= KIT_WAITING && out->phase <= KIT_ACK_PENDING;
   snprintf(out->title, sizeof(out->title), "%s", out->accepted ? "Cargo empty" : "Cargo");
   snprintf(out->context, sizeof(out->context), "%s",
            out->accepted ? "Expedition ended" : sealed ? kit_stage(kit) : kit_route(kit));

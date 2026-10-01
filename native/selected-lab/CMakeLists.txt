@@ -14,7 +14,7 @@ endforeach()
 add_subdirectory(../vendor/lvgl ${CMAKE_CURRENT_BINARY_DIR}/lvgl)
 
 add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c
-  cargo_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
+  cargo_view.c probe_view.c probe_ui.c field_art.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/expedition.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
@@ -35,6 +35,13 @@ if(BUILD_TESTING)
  target_link_libraries(game_checks PRIVATE selected_lab_core)
  target_compile_options(game_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
  add_test(NAME game_domain_checks COMMAND game_checks)
+endif()
+
+if(BUILD_TESTING)
+  add_executable(probe_ui_checks probe_ui_tests.c)
+  target_link_libraries(probe_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(probe_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME companion_probe_ui_checks COMMAND probe_ui_checks)
 endif()
 
 if(BUILD_TESTING)

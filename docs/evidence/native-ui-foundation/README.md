@@ -3,8 +3,9 @@
 Bounded host proof of LVGL 9.6.0, using the actual Companion Cargo page at 450×600.
 Native code owns the pixels: retained labels, images, buttons, grid/flex and stepped
 line frames. The presenter displays the resulting bitmap; this is not an HTML
-screen painted over the game. Lab, Probe, Companions and Dock remain on their
-existing renderers in this increment.
+screen painted over the game. This packet records the first Cargo increment.
+The [subsequent Probe composition](../native-companion-probe/README.md) now shares
+its retained display/context. Lab, Companions and Dock retain existing renderers.
 
 ## Player journey and evidence
 

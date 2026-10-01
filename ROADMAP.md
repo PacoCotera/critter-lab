@@ -22,8 +22,13 @@ is now a native playable slice with legacy-map/receipt compatibility and actual
 control/output proof. The active priority is the [native UI foundation](specs/architecture.md#native-ui-foundation):
 the first real detailed Companion Cargo screen with LVGL, shared layout/theme and
 guarded physical focus has passed its [native journey and output review](docs/evidence/native-ui-foundation/README.md).
-Owner permits complete re-layout. Next is a distinct Probe workpiece with useful
-map/findings space and compact cargo, rather than a mandatory dashboard. Finite map events and their saved consequences remain subsequent
+Owner permits complete re-layout. The active [Probe composition slice](https://github.com/PacoCotera/critter-lab/issues/58)
+uses a native32px player-following map, retained place actions, compact whole cargo
+and separate preparation. The [native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
+records the changed composition and actual gather/trace/sample/return/current-zero
+path. Art is extracted from a Gemini master; environmental depth remains unapproved
+and entry composition is sparse. Companions still needs its own workpiece.
+Finite map events and their saved consequences remain subsequent
 work; acquisition/research still need depth. Automatic
 Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
 values and visual treatment remain proposals. No new infrastructure, map service,
