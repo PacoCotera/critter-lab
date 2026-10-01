@@ -8,6 +8,8 @@ typedef struct LabResearchUi LabResearchUi;
 LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
     const lv_image_dsc_t *const images[18]);
 int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view);
+/* Presentation calibration only; no device action or domain state. */
+int lab_research_ui_reference_scale(LabResearchUi *ui, unsigned scale);
 void lab_research_ui_hide(LabResearchUi *ui);
 void lab_research_ui_destroy(LabResearchUi *ui);
 #endif

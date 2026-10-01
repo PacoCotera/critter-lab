@@ -262,6 +262,11 @@ const uint8_t *native_ui_reception(NativeUiContext *context, const LabReceptionV
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }
 
+int native_ui_research_reference_scale(NativeUiContext *context, unsigned scale) {
+  if (!context || !context->research || (scale != 1 && scale != 2)) return 0;
+  return lab_research_ui_reference_scale(context->research, scale);
+}
+
 const uint8_t *native_ui_research(NativeUiContext *context, const LabResearchView *view) {
   if (!context || context->device != KIT_LAB || !view ||
       ui_display_failed(context->transport)) return NULL;

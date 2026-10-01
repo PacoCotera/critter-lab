@@ -2,6 +2,7 @@
 #include "research_view.h"
 #include "home_view.h"
 #include "reception_view.h"
+#include "action_view.h"
 #include "native_ui.h"
 #include "core_art.h"
 #include "../ui/display.h"
@@ -133,10 +134,11 @@ static void projection_cases(void) {
   assert(view.portrait_caption[0][0] && view.portrait_caption[1][0]);
   assert(!view.costs[0] && !view.costs[1] && !view.costs[2]);
   lab.game.samples[0].incubated = 1;
-  assert(selected_lab_research_projection(&lab, 0, &view) && view.used && view.finding[0]);
+  assert(selected_lab_research_projection(&lab, 0, &view) && view.used && view.finding[0] && view.coat_reference_pair);
   lab.sample = 1;
   lab.study = 1;
   assert(pip_record_investigation(&lab.game, 1, 2));
+  assert(lab.game.sample_metadata[1].investigated_methods == (1u << 2));
   assert(selected_lab_research_projection(&lab, 0, &view));
   assert(view.known_method && !view.useful && !view.complete && !view.partial_p);
   assert(!view.costs[0] && !view.costs[1] && !view.costs[2]);
@@ -152,12 +154,108 @@ static void projection_cases(void) {
   lab.game.samples[2].decoded_studies = lab.game.samples[2].decoded_facts = 1;
   assert(selected_lab_research_projection(&lab, 0, &view));
   assert(view.legacy && view.topic_count == 5 && view.known_method && view.art == LAB_RESEARCH_ART_CROWN);
+  assert(!view.coat_reference_pair && view.comparison == LAB_RESEARCH_COMPARISON_NONE);
   lab.page = V1_LIBRARY;
   lab.focus = 0;
   assert(selected_lab_research_projection(&lab, 0, &view));
   assert(view.option_count == 7); /* Three A, three B (movement resolved), one legacy. */
   lab.page = V1_HOME;
   assert(!selected_lab_is_research_page(lab.page) && !selected_lab_research_projection(&lab, 0, &view));
+}
+
+static void comparison_projection_cases(void) {
+  SelectedLab lab;
+  DeviceKit kit;
+  LabResearchView view;
+  fixture(&lab, &kit);
+  assert(pip_record_investigation(&lab.game, 1, 1));
+  lab.page = V1_FINDING;
+  lab.sample = 1;
+  lab.study = 1;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(view.comparison == LAB_RESEARCH_COMPARISON_B_MOVEMENT && !view.coat_reference_pair);
+  assert(!strstr(view.portrait_caption[0], "energy") && !strstr(view.portrait_caption[1], "energy"));
+  assert(pip_record_investigation(&lab.game, 1, 2));
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(view.comparison == LAB_RESEARCH_COMPARISON_B_EFFORT);
+  for (unsigned accepted = 0; accepted < 8; ++accepted) {
+    fixture(&lab, &kit);
+    for (unsigned method = 0; method < PIP_DISCOVERY_METHOD_COUNT; ++method)
+      if (accepted & (1u << method)) assert(pip_record_investigation(&lab.game, 0, method));
+    lab.page = V1_SAMPLES;
+    lab.focus = 1;
+    SelectedLab before = lab;
+    assert(selected_lab_research_projection(&lab, 0, &view));
+    assert(view.selected_record && !strcmp(view.sample_id, lab.game.samples[0].id));
+    assert(!strcmp(view.origin_expedition_id, lab.game.samples[0].origin_expedition_id));
+    assert(view.coat_reference_pair == ((accepted & 5u) == 5u));
+    assert(view.complete == (accepted == 7));
+    assert(view.comparison == LAB_RESEARCH_COMPARISON_NONE);
+    assert(!view.portraits[0] && !view.portraits[1]);
+    assert(!memcmp(&before, &lab, sizeof(lab)));
+    if (accepted & 4u) {
+      lab.page = V1_FINDING;
+      lab.focus = 0;
+      lab.study = 2;
+      assert(selected_lab_research_projection(&lab, 0, &view));
+      assert(view.comparison == LAB_RESEARCH_COMPARISON_A_COAT);
+      if (accepted != 7) assert(!view.portraits[0] && !view.portraits[1]);
+    }
+  }
+  fixture(&lab, &kit);
+  lab.focus = 0;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(!view.selected_record && !view.sample_id[0] && !view.origin_expedition_id[0]);
+  assert(!view.coat_reference_pair && view.comparison == LAB_RESEARCH_COMPARISON_NONE);
+  assert(pip_record_investigation(&lab.game, 0, 0));
+  lab.focus = 1;
+  assert(selected_lab_research_projection(&lab, 0, &view) && view.selected_record && view.partial_p);
+  lab.focus = 2;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(!strcmp(view.sample_id, lab.game.samples[1].id) && !view.partial_p);
+  assert(!strcmp(view.finding, "No findings recorded for this sample yet."));
+  assert(pip_record_investigation(&lab.game, 1, 2));
+  lab.page = V1_FINDING;
+  lab.sample = 1;
+  lab.focus = 0;
+  lab.study = 1;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(view.known_method && !view.useful && !view.coat_reference_pair);
+  assert(view.comparison == LAB_RESEARCH_COMPARISON_B_EFFORT);
+  assert(!view.costs[0] && !view.costs[1] && !view.costs[2]);
+  lab.study = 2;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(view.comparison == LAB_RESEARCH_COMPARISON_B_EFFORT && !view.coat_reference_pair);
+  assert(strstr(view.portrait_caption[0], "Steady") && strstr(view.portrait_caption[0], "lower"));
+  assert(strstr(view.portrait_caption[1], "Burst") && strstr(view.portrait_caption[1], "baseline"));
+
+  assert(pip_record_investigation(&lab.game, 0, 1));
+  assert(pip_record_investigation(&lab.game, 0, 2));
+  lab.page = V1_LIBRARY;
+  unsigned count = selected_lab_options(&lab);
+  for (lab.focus = 0; lab.focus < count; ++lab.focus) {
+    unsigned sample, method_index;
+    SelectedResearchMethod method;
+    assert(selected_lab_library_entry(&lab, lab.focus, &sample, &method_index));
+    assert(selected_lab_research_method(&lab, sample, method_index, &method) && method.known && method.finding);
+    SelectedLab before = lab;
+    assert(selected_lab_research_projection(&lab, 0, &view));
+    assert(view.selected_record && view.known_method);
+    assert(!strcmp(view.sample_id, lab.game.samples[sample].id));
+    assert(!strcmp(view.origin_expedition_id, lab.game.samples[sample].origin_expedition_id));
+    assert(!strcmp(view.finding, method.finding));
+    assert(!view.portraits[0] && !view.portraits[1]);
+    assert(!memcmp(&before, &lab, sizeof(lab)));
+  }
+  fixture(&lab, &kit);
+  lab.page = V1_LIBRARY;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(!view.selected_record && !view.sample_id[0] && !view.finding[0] && !view.coat_reference_pair);
+  memset(&view, 0x5a, sizeof(view));
+  LabResearchView untouched = view;
+  lab.game.sample_metadata[0].disclosed_candidates = 3;
+  assert(!selected_lab_research_projection(&lab, 0, &view));
+  assert(!memcmp(&untouched, &view, sizeof(view)));
 }
 
 static void malformed_sources(NativeUiContext *context) {
@@ -181,6 +279,9 @@ static void malformed_sources(NativeUiContext *context) {
   assert_failed_routes(&kit, context);
   fixture(&lab, &kit);
   memset(lab.game.samples[0].id, 'X', sizeof(lab.game.samples[0].id));
+  assert_failed_routes(&kit, context);
+  fixture(&lab, &kit);
+  memset(lab.game.samples[0].origin_expedition_id, 'X', sizeof(lab.game.samples[0].origin_expedition_id));
   assert_failed_routes(&kit, context);
   fixture(&lab, &kit);
   memset(lab.game.sample_metadata[1].content_version, 'X', sizeof(lab.game.sample_metadata[1].content_version));
@@ -209,6 +310,86 @@ static void assert_native_portrait(const uint8_t *frame, CoreArtId id, unsigned 
       }
     }
   assert(checked > 1000);
+}
+
+static void assert_reference_pixels(const uint8_t *frame, CoreArtId id, unsigned x, unsigned scale) {
+  const CoreArtSprite *source = core_art_sprite(id);
+  assert(source && source->width == 261 && source->height == 289);
+  unsigned checked = 0;
+  for (unsigned row = 1; row < 39; ++row) {
+    for (unsigned column = 1; column < 47; ++column) {
+      const uint8_t *pixel = source->rgba + ((148 + row) * source->width + 164 + column) * 4;
+      int uniform = pixel[3] == 255;
+      if (scale == 2) {
+        /* Interior constant blocks make the nearest sampling origin irrelevant;
+         * every checked output must still equal the original RGB exactly. */
+        for (int dy = -1; dy <= 1; ++dy)
+          for (int dx = -1; dx <= 1; ++dx)
+            uniform &= !memcmp(pixel, pixel + (dy * (int)source->width + dx) * 4, 4);
+      }
+      if (!uniform) continue;
+      for (unsigned dy = 0; dy < scale; ++dy)
+        for (unsigned dx = 0; dx < scale; ++dx) {
+          unsigned screen_x = x + column * scale + dx;
+          unsigned screen_y = 290 + row * scale + dy;
+          const uint8_t *actual = frame + (screen_y * SELECTED_LAB_WIDTH + screen_x) * 3;
+          if (memcmp(actual, pixel, 3))
+            fprintf(stderr, "Reference pixel mismatch scale%u at%u,%u: actual%u/%u/%u expected%u/%u/%u\n",
+                scale, screen_x, screen_y, actual[0], actual[1], actual[2], pixel[0], pixel[1], pixel[2]);
+          assert(!memcmp(actual, pixel, 3));
+          ++checked;
+        }
+    }
+  }
+  assert(checked > 100);
+}
+
+static void partial_reference_routes(void) {
+  SelectedLab lab;
+  DeviceKit kit;
+  fixture(&lab, &kit);
+  assert(pip_record_investigation(&lab.game, 0, 0));
+  assert(pip_record_investigation(&lab.game, 0, 2));
+  lab.page = V1_FINDING;
+  lab.study = 2;
+  LabResearchView view;
+  assert(selected_lab_research_projection(&lab, 0, &view));
+  assert(view.coat_reference_pair && !view.complete && !view.portraits[0] && !view.portraits[1]);
+  NativeUiContext *context = native_ui_create_device(KIT_LAB);
+  assert(context && native_ui_research(context, &view));
+  assert(!native_ui_research_reference_scale(context, 0));
+  assert(!native_ui_research_reference_scale(context, 3));
+  for (unsigned scale = 1; scale <= 2; ++scale) {
+    assert(native_ui_research_reference_scale(context, scale));
+    const uint8_t *frame = native_ui_research(context, &view);
+    assert(frame);
+    assert_reference_pixels(frame, CORE_ART_PIP_PLAIN, 300, scale);
+    assert_reference_pixels(frame, CORE_ART_PIP_MARKED, 570, scale);
+    export_fixture(&kit, context, scale == 1 ? "partial-coat-1x" : "partial-coat-2x");
+  }
+  assert_routes(&kit, context, "partial-coat-default");
+  LabResearchView invalid = view;
+  invalid.partial_p = 1;
+  assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  invalid.topic_known[0] = 0;
+  assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  invalid.comparison = LAB_RESEARCH_COMPARISON_B_EFFORT;
+  assert(!native_ui_research(context, &invalid));
+  const uint8_t *frame = native_ui_research(context, &view);
+  size_t bytes = SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3;
+  uint8_t *retained = malloc(bytes);
+  assert(frame && retained);
+  memcpy(retained, frame, bytes);
+  memset(&view, 'X', sizeof(view));
+  lv_obj_invalidate(lv_screen_active());
+  lv_refr_now(NULL);
+  const uint8_t *rendered = native_ui_research(context, &(LabResearchView){0});
+  assert(!rendered); /* A malformed update cannot replace the retained view. */
+  assert(!memcmp(retained, frame, bytes));
+  free(retained);
+  native_ui_destroy(context);
 }
 
 static void retained_routes_and_exports(void) {
@@ -265,8 +446,8 @@ static void retained_routes_and_exports(void) {
     if (index == 6) {
       const uint8_t *frame = native_ui_research(context, &view);
       assert(frame);
-      assert_native_portrait(frame, CORE_ART_PIP_PLAIN, 405, 247);
-      assert_native_portrait(frame, CORE_ART_PIP_MARKED, 699, 247);
+      assert_native_portrait(frame, CORE_ART_PIP_PLAIN, 264, 247);
+      assert_native_portrait(frame, CORE_ART_PIP_MARKED, 550, 247);
     }
     assert_routes(&kit, context, names[index]);
   }
@@ -306,6 +487,18 @@ static void retained_routes_and_exports(void) {
   invalid = view;
   invalid.page = LAB_RESEARCH_LIBRARY;
   assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  invalid.comparison = (LabResearchComparison)-1;
+  assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  invalid.selected_record = 2;
+  assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  invalid.coat_reference_pair = 2;
+  assert(!native_ui_research(context, &invalid));
+  invalid = view;
+  memset(invalid.origin_expedition_id, 'X', sizeof(invalid.origin_expedition_id));
+  assert(!native_ui_research(context, &invalid));
   malformed_sources(context);
   native_ui_destroy(context);
 }
@@ -341,6 +534,8 @@ static void physical_review_and_library(void) {
   NativeUiContext *context = native_ui_create_device(KIT_LAB);
   assert(context && native_ui_research(context, &view));
   assert(!memcmp(&retained, &lab.game, sizeof(retained)));
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.page == V1_STUDY_REVIEW && !memcmp(&retained, &lab.game, sizeof(retained)));
   button(&lab, SELECTED_BACK_DOWN);
   assert(lab.page == V1_STUDIES && !memcmp(&retained, &lab.game, sizeof(retained)));
   button(&lab, SELECTED_CONFIRM_DOWN);
@@ -352,6 +547,10 @@ static void physical_review_and_library(void) {
   unsigned stale = lab.revision - 1;
   selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, stale);
   assert(!memcmp(&investigated, &lab.game, sizeof(investigated)));
+  button(&lab, SELECTED_BACK_DOWN);
+  assert(lab.page == V1_STUDIES && lab.focus == 0);
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.page == V1_FINDING && !memcmp(&investigated, &lab.game, sizeof(investigated)));
   button(&lab, SELECTED_LIBRARY_DOWN);
   assert(lab.page == V1_LIBRARY && selected_lab_options(&lab) == 1);
   button(&lab, SELECTED_RIGHT_DOWN);
@@ -380,6 +579,23 @@ static void three_context_memory(void) {
   DeviceKit kit;
   fixture(&lab, &kit);
   complete_a(&lab);
+  complete_b(&lab);
+  /* Eight saved-art identities are a synthetic maximum presentation fixture. */
+  lab.game.individual_count = GAME_MAX_INDIVIDUALS;
+  for (unsigned index = 0; index < GAME_MAX_INDIVIDUALS; ++index) {
+    PipSupportedCandidate candidate;
+    assert(selected_lab_candidate(&lab, index % 2, index % 2, &candidate));
+    GameIndividual *individual = &lab.game.individuals[index];
+    snprintf(individual->id, sizeof(individual->id), "research-pool-resident-%u", index);
+    strcpy(individual->source_sample_id, lab.game.samples[index % 2].id);
+    strcpy(individual->origin_kind, "parentless-founder");
+    individual->genome = candidate.genome;
+    individual->expression = candidate.expression;
+    individual->revealed = individual->habitat = individual->origin_founder = 1;
+    strcpy(individual->art_id, pip_content_art_id(&candidate.genome));
+    strcpy(individual->art_version, PIP_ART_VERSION);
+    pip_pin_individual_art(&lab.game, index, candidate.id);
+  }
   NativeUiContext *companion = native_ui_create(), *dock = native_ui_create_device(KIT_DOCK);
   assert(companion && dock);
   CompanionResidentView resident = {0};
@@ -393,33 +609,55 @@ static void three_context_memory(void) {
   assert(context && ui_display_count() == 3);
   LabHomeView home;
   lab.page = V1_HOME;
+  lab.focus = 4;
+  lab.resident = 7;
   assert(selected_lab_home_view(&lab, NULL, 0, &home));
   LabReceptionView reception;
   lab.page = V1_EXPEDITION;
   assert(kit_reception_projection(&kit, &reception));
-  LabResearchView pair, topic;
+  LabActionView gallery, activity;
+  lab.page = V1_CRITTERS;
+  lab.focus = 7;
+  assert(selected_lab_action_projection(&lab, 0, &gallery));
+  lab.page = V1_HABITAT;
+  lab.focus = 1;
+  assert(selected_lab_action_projection(&lab, 0, &activity));
+  LabResearchView pair, topic, partial;
   lab.page = V1_FINDING;
+  lab.focus = lab.sample = 0;
   lab.study = 2;
   assert(selected_lab_research_projection(&lab, 0, &pair));
   lab.page = V1_STUDIES;
   lab.focus = 0;
   assert(selected_lab_research_projection(&lab, 0, &topic));
+  SelectedLab partial_lab;
+  DeviceKit partial_kit;
+  fixture(&partial_lab, &partial_kit);
+  assert(pip_record_investigation(&partial_lab.game, 0, 0));
+  assert(pip_record_investigation(&partial_lab.game, 0, 2));
+  partial_lab.page = V1_FINDING;
+  partial_lab.study = 2;
+  assert(selected_lab_research_projection(&partial_lab, 0, &partial));
+  assert(partial.coat_reference_pair && !partial.complete);
   lv_mem_monitor_t first, final;
   for (unsigned cycle = 0; cycle < 200; ++cycle) {
     assert(native_ui_home(context, &home) && native_ui_reception(context, &reception));
+    assert(native_ui_actions(context, &gallery) && native_ui_actions(context, &activity));
     assert(native_ui_research(context, cycle % 2 ? &topic : &pair));
+    assert(native_ui_research(context, &partial));
     assert(native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
     if (cycle == 99) lv_mem_monitor(&first);
   }
   lv_mem_monitor(&final);
-  printf("Research/reception/Home plus Companion resident/Dock: used=%zu peak=%zu total=%zu first_free=%zu final_free=%zu\n",
+  printf("Research/actions/reception/Home plus Companion resident/Dock: used=%zu peak=%zu total=%zu first_free=%zu final_free=%zu\n",
       final.total_size - final.free_size, final.max_used, final.total_size, first.free_size, final.free_size);
   fflush(stdout);
   assert(first.free_size == final.free_size);
   native_ui_destroy(context);
   assert(ui_display_count() == 2 && native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
   context = native_ui_create_device(KIT_LAB);
-  assert(context && native_ui_research(context, &pair));
+  assert(context && native_ui_home(context, &home) && native_ui_actions(context, &gallery));
+  assert(native_ui_research(context, &partial) && native_ui_research(context, &pair));
   assert(native_ui_resident(companion, &resident) && native_ui_dock(dock, &dock_view));
   native_ui_destroy(context);
   native_ui_destroy(dock);
@@ -429,6 +667,8 @@ static void three_context_memory(void) {
 
 int main(void) {
   projection_cases();
+  comparison_projection_cases();
+  partial_reference_routes();
   retained_routes_and_exports();
   physical_review_and_library();
   three_context_memory();

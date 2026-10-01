@@ -92,9 +92,9 @@ A useful starting clue exists only after an accepted `heritage` finding: **“Pa
 | During / commit | Cost review preserves the clue and question. A fresh Confirm on displayed `Start · 4 Essence` lets the Lab perform the existing coat comparison. On accepted commit the central question becomes a labeled reference pair, revealed together. | Current domain atomically records the comparison and spends4Essence once. The visible reveal illustrates those newly accepted facts; it does not discover them by alignment, cursor location, player interpretation or animation. There is no paid unfinished puzzle or mandatory wait. Rejection shows the actual shortage/error beside the workpiece and changes no knowledge or stock. |
 | After | Heading: **“Coat possibilities · adult · mild reference”**. Two equal, cropped reference-coat panels: **“Plain coat · pale variation carried”** and **“Pale markings · expressed”**. Beneath them: **“Movement still unknown.”** Next useful choice: `Trace movement · 4 Energy`, or return/resupply if short. | This reveals the existing A0/A1 coat relationship only. They are supported reference alternatives from one sample, not two discovered individuals or two predicted finished portraits. Plain/carried has no faint pale markings. No full portrait, complete-genome selection or creation while movement remains unknown. |
 
-Art contract: use a tight torso/coat crop from the retained plain and marked Pip reference masters, omitting eyes, crown, limbs and the whole-body silhouette. Both crops share one framing and context, with no separate specimen IDs. Carried variation is stated in text; it is not painted into the unmarked coat. If an actual source crop cannot avoid unrelated anatomy, use an explicitly labeled qualitative coat swatch preserving only the already-supported plain-versus-pale-marking distinction; do not manufacture a new marking design. Any swatch reconstruction is proposed illustration, not a measured specimen photograph. No microscope scene, spectrum, waveform, percentages, numeric trait bars or specimen movement performance is authorized by this contract.
+Art contract: use an internal coat crop from the retained plain and marked Pip reference masters, omitting eyes, crown, limbs, ventrum/body boundaries and the whole-body silhouette. Both crops share one framing and context, with no separate specimen IDs. Carried variation is stated in text; it is not painted into the unmarked coat. A separate host permission requires validated A heritage and coat findings; it does not grant complete portraits or candidates. Actual LVGL clipping compares source-size and nearest2× views of the same original descriptors. If the crop leaks anatomy or is unintelligible, stop the clip and use truthful text-only or the smaller B relationship proof. New swatch/art reconstruction needs a separate reviewed content decision. No microscope scene, spectrum, waveform, percentages, numeric trait bars or specimen movement performance is authorized by this contract.
 
-Existing controls: Up/Down moves visible investigation/action focus, Confirm previews then fresh Confirm starts, Right may inspect known reference detail, Back/Left returns while retaining the sample and findings. Both revealed coat panels are visible together; no extra Confirm is required to reveal the second alternative. Inspection, revisits and retry after acceptance are free. Reconciliation uses the same accepted request; reopening never charges again. Dpad inspection changes emphasis/view only, never genes, facts or success probability.
+Existing controls: Up/Down moves visible investigation/action focus, Confirm previews then fresh Confirm starts, Right may inspect an already-known finding, Back/Left returns while retaining the sample and findings. Both revealed coat panels are visible together; no extra Confirm is required to reveal the second alternative. Inspection, revisits and retry after acceptance are free. Reconciliation uses the same accepted request; reopening never charges again. This bounded workpiece adds no comparison-emphasis state or interpretation action.
 
 If movement was already investigated, the after-frame replaces “Movement still unknown” with **“Supported forms ready to compare.”** Only the complete-knowledge view may expose full supported reference portraits and offer a reversible form draft. The final creation review remains separate and spends its actual sample/supplies only on explicit acceptance. If coat comparison ran first, baseline and movement both remain unknown. Show the established plain/carried versus pale/expressed relationship as text only: no charcoal/cream palette, torso/coat crop, body outline or complete portrait, because baseline coat/ventrum references remain unknown. Use neutral relationship connectors with no biological encoding; the arrangement does not assert a new gene map. Show those next questions. Once heritage establishes the baseline, free inspection can display the retained coat crops without another purchase. A heritage finding learned later must use its resolved copy rather than repeat “How it shows is still unknown.”
 
@@ -203,17 +203,19 @@ same rail selection; Right remains read-only detail. Confirm on a study opens it
 cost review, then a fresh Confirm commits. Known findings remain freely inspectable.
 Identity and valid focus survive workspace/device switching, receipt and reload.
 
-**Discovery content is the missing dependency.** Current native `pip-proof-v1`
-gives every sample the same five studies and the same two candidate genomes.
-Only markings distinguishes those candidates; both share movement. Per-sample
-study bits persist, but this is not yet the intended progressive discovery model.
-New copy must not claim a distinct movement clue that this content cannot support.
-The smallest content experiment uses the existing supported markings distinction,
-two authored cache/evidence scenarios, two initial study choices and a follow-up
-only when it resolves a remaining uncertainty. Define and version the facts each
-study establishes, supported configurations and required completeness before coding.
-Do not waive required genomic information to shorten the visible checklist or
-invent new alleles/species merely to make two records look different.
+**Discovery interaction remains an open quality boundary.** Current native
+`pip-discovery-v1` retains two validated content profiles. A resolves heritage,
+movement and coat relationships; B resolves heritage and paired movement/effort,
+with effort already establishing movement. The older `pip-proof-v1` five-study
+records remain supported legacy content, not the current package description.
+The [next comparison trial](#next-comparison-trial) uses these existing facts:
+retained clue, useful question, explicit paid procedure, supported reference
+comparison and the next unresolved question. Samples Overview remains aggregate;
+left sample destinations and Library ordinals preview their exact record in main.
+Scientific facts, costs and actions do not occupy navigation. This is inquiry and
+explanatory inspection, not a proven discovery minigame. Richer pre-finding evidence
+requires an authored content decision; no invented assay, allele or study-count
+shortcut may supply it.
 
 Worked decision, without unapproved numbers: Sample A has a retained finding;
 Sample B still has an unanswered supported question. The player can spend stock

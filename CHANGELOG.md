@@ -2,6 +2,14 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-01 [13:50] — Habitat population and resident browsing
+
+[PR65](https://github.com/PacoCotera/critter-lab/pull/65) · release `5e16e75`
+
+- **Habitat:** the overview shows the population together. The Residents gallery displays up to eight revealed critters, with each saved identity, form and source available while browsing.
+- **Controls:** spatial directions change the selected resident and its preview immediately. Confirm opens that resident's activity; only the separate care action records a visit. Back returns to the same resident.
+- **Sandbox saves:** this activation starts a fresh game across all three devices.
+
 ## 2026-10-01 [13:03] — Companion entry and haul handoff
 
 [PR64](https://github.com/PacoCotera/critter-lab/pull/64) · release `ee8ae71`

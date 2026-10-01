@@ -20,23 +20,31 @@ typedef enum {
 typedef enum {
   LAB_RESEARCH_PORTRAIT_NONE, LAB_RESEARCH_PORTRAIT_PLAIN, LAB_RESEARCH_PORTRAIT_MARKED
 } LabResearchPortrait;
+typedef enum {
+  LAB_RESEARCH_COMPARISON_NONE, LAB_RESEARCH_COMPARISON_A_COAT,
+  LAB_RESEARCH_COMPARISON_B_MOVEMENT, LAB_RESEARCH_COMPARISON_B_EFFORT
+} LabResearchComparison;
 /* Owned presentation data only. Rendering cannot investigate, spend, save or
  * derive a phenotype. Portrait permissions are supplied by the host projection. */
 typedef struct {
   LabResearchPage page;
   LabResearchDetail detail;
   LabResearchArt art;
+  LabResearchComparison comparison;
   unsigned focus, option_count, topic_count;
   char options[LAB_RESEARCH_OPTIONS][128];
   char option_details[LAB_RESEARCH_OPTIONS][80];
   char title[96], sample_id[40], heading[96], body[192], finding[256];
+  char origin_expedition_id[64];
   char topics[LAB_RESEARCH_TOPICS][48];
   uint8_t topic_known[LAB_RESEARCH_TOPICS];
   char known[160], missing[160], next[112], message[96], footer[112];
+  /* Shared labels for permitted full portraits or qualitative reference pairs. */
   char portrait_caption[2][80];
   LabResearchPortrait portraits[2];
   unsigned stock[3], costs[3], awaiting, ready, used_records, sample_count;
   uint8_t known_method, useful, legacy, complete, partial_p, used;
   uint8_t show_alternatives, storage_error, suspended;
+  uint8_t selected_record, coat_reference_pair;
 } LabResearchView;
 #endif
