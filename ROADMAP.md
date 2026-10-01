@@ -38,7 +38,12 @@ The next owner-feedback review is [issue60](https://github.com/PacoCotera/critte
 [gathering/source decisions and movement](design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions).
 The joined proposal compares open-terrain prospecting with discrete survey sectors,
 and rejects a shortcut packet or repeated claims as a sufficient gathering overhaul.
-It is a design recommendation awaiting direction, not deployed mechanics. The
+The owner subsequently rejected preparation during exploration. The revised
+recommendation removes the field clock: immediate finite collection by default,
+conditional source selection for real alternatives/capacity. Its first proof is
+one encounter with fresh versus near-full cargo, not an event catalogue. Studies
+remain immediate; existing incubation is the natural background process. The
+proposal is not deployed mechanics or selected reward balance. The
 selected Dock module's [four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
 is confirmed; the current one-bit renderer still needs correction.
 

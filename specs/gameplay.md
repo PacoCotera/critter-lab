@@ -64,6 +64,24 @@ The owner removed console-only acquisition from the product roadmap on 30 Septem
 
 ## Expedition continuity and return — accepted
 
+### Field pacing — owner correction, 1 October 2026
+
+Preparation waiting during interactive exploration is rejected as artificial
+friction. The next gathering design must separate meaningful player effort and
+uncertain findings from an elapsed-time reward gate. Merely hiding the preparation
+bar or shortening its timer does not satisfy this direction. The current native
+release still has four-second preparation attempts; replacement is not deployed.
+The [gathering review](../design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions)
+owns the proposed active action/result contract and its comparison.
+
+Research and incubation may provide background pacing while the Companion is
+used; this is a design possibility, not permission to add delays to every study.
+Current studies resolve immediately. Incubation already has a provisional
+20-second background timer and a separate deliberate opening. New research job
+lifecycles, durations, parallelism and offline progress remain undecided. A timer
+does not supply discovery depth, and readiness does not automatically spend,
+create or reveal another individual.
+
 Returning to the Lab and unloading ends the expedition. Browsing Cargo or cancelling an unsealed send review does not end it. Sending seals the returning haul and stops collection; successful fresh Lab acceptance stores it once and ends the source expedition. A later matching receipt confirms delivery metadata; it cannot credit another copy or resume the ended expedition. The next outing starts a new expedition identity.
 
 Early return is an end, not completion of every timed discovery threshold. It cannot grant an unearned sample, extra attempt or late reward. Preserve earned contents, committed outcomes and retained Lab research. Preparation toward an award remains separate from inventory; its carryover into a new expedition is a provisional fixture, not an approved balance rule. Empty outings need an explicit finish path without a phantom haul. Optional encounters never require attendance or gate research/creation. Return reviews actual samples and resources and leads into useful research; exact pacing, events and balance remain open.

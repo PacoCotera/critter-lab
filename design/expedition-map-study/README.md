@@ -10,6 +10,13 @@ chance watching, road-only movement and repeated instructions. The earlier
 supplies-versus-shortcut packet below remains preserved trial material, but is
 not the recommended answer to this feedback.
 
+**Owner pacing correction, 1 October:** preparation waiting during exploration
+is artificial friction. The joined game/UX/art recommendation now removes that
+clock, rather than demoting its bar. Meaningful field effort is finding,
+observing, choosing and collecting; an animation communicates a committed result,
+never gates it. Background work is a separate Lab process, not passive field
+extraction carried under a new label.
+
 ### Lessons from other games
 
 | Primary source | Relevant lesson | Application and limit here |
@@ -23,34 +30,49 @@ These are examples to learn from, not universal best practices or evidence that
 our proposal is fun. Game design, UX and art exchanged objections directly:
 the packet leaves passive work intact; freer walking alone leaves the same
 five-stop outing intact; repeated ready/claim prompts add chores. The considered
-recommendation is a **map/source-selection trial**, with active harvesting still
-an open alternative rather than a silently completed overhaul.
+recommendation is **exploration-led finite collection**, with a compact source
+selection only when actual alternatives matter. No compulsory reflex/alignment
+game or repeated instant lottery replaces the timer. A separate active tool
+interaction remains an alternative if finding and choosing still lack engagement.
 
 ### Two credible directions
 
 | Direction | Player experience | Strongest tradeoff |
 | --- | --- | --- |
-| **A — open-terrain prospecting, recommended proof** | Walk accessible ground, use trails for orientation, inspect visible landmarks, select finite work and follow observed leads. Work preparation continues secondarily while exploring. | Requires truthful blocked terrain and a discovery rule that open ground cannot bypass. Automated gathering may still lack tactile enjoyment. |
-| **B — discrete survey sectors** | Choose a visible nearby sector, examine its source/lead and choose the next sector; no tile commute. Retain the same cargo/return ownership. | Removes movement friction cheaply, but may lose the sense of inhabiting a place and become another menu sequence. |
+| **A — open-terrain prospecting, recommended proof** | Walk accessible ground, use trails for orientation, inspect landmarks, choose finite findings and collect immediately, then follow observed leads. No preparation clock or passive extraction. | Requires truthful blocked terrain and a discovery rule that open ground cannot bypass. Simple pickups alone may still lack depth if the world offers no useful decisions. |
+| **B — discrete survey sectors** | Choose a nearby sector, examine its finite findings/lead and choose the next sector; no tile commute or preparation gate. Retain the same cargo/return ownership. | Removes movement friction cheaply, but may lose the sense of inhabiting a place and become another menu sequence. |
 
 Neither direction adds combat, survival pressure, new currency, hardware, cloud
 services or a field-event platform. A later active tool interaction should be
 tested separately if source decisions still leave gathering dull; it must add
-agency rather than mandatory reaction timing or button repetition.
+agency rather than mandatory reaction timing or button repetition. Chance may
+vary saved encounter contents before inspection. Once disclosed, actual contents
+and the collection preview are truthful; Back/reload cannot reroll them. Do not
+deplete a source on a rejected capacity check or grant an arrival/read reward.
 
 ### Worked short outing
 
 The same player wants Data for retained Lab research. The Companion knows that
-local intention, not the Lab's live inventory. Times and source budgets are
-prototype parameters; a faster outing is acceptable.
+local intention, not the Lab's live inventory. Contents and capacity examples
+are provisional fixtures; there is no minimum outing time or selected economy.
 
 | Moment | Player choice and visible response | Consequence |
 | --- | --- | --- |
-| Orient | The local map shows accessible ground, a known source and a visually distinct inspectable landmark. Choose useful work or investigate first. | No item for arrival; one source is active at a time. |
-| Start work | At a reached source, the preview names resource class and remaining **attempts**, not promised items. Fresh Confirm starts work, or one compact chooser handles actual alternatives. | Time/chance preparation advances separately; only complete earned units enter cargo. Switching preserves prior preparation. |
-| Observe | At a reached field-record opportunity, Read reveals an alternative source's actual finite work budget and a separate lead toward a sealed-container location. | Immediate new information, no item award, no forged ordinary Moss trace and no sample contents. This proposed event state must be retained once. |
-| Decide | Seed A places the revealed Data source nearby and the sample lead farther away. Seed B puts the sample lead nearby and the remaining Data work farther away. With the first source nearly spent, choose more Data now or investigate the capsule first. | Different useful ordering, not just different corridors. Both opportunities can remain available; no arbitrary forced exclusivity or hidden odds boost from scenery. |
+| Orient | The local map shows accessible ground, a known source and a visually distinct inspectable landmark. Choose supplies or investigate first. | No item for arrival; moving/observing are active effort, not a reward timer. |
+| Inspect/collect | A reached source reveals its saved actual contents. Fresh Confirm collects the previewed whole units immediately; one compact chooser handles meaningful alternatives. | One atomic source decrement/cargo credit. No preparation, passive extraction, repeated claim rolls or held-button gate. Brief feedback does not delay another action. |
+| Observe | At a reached field-record opportunity, Read reveals an alternative source and a separate lead toward a sealed-container location. | Immediate information, no item award, no forged ordinary Moss trace and no sample contents. Retain the proposed event once. |
+| Decide | Seed A puts a useful Data source nearby and the sample lead farther away. Seed B puts the sample lead nearby and Data farther away. Choose supplies now or investigate first. | Different useful ordering, not just corridors. Both opportunities can remain available; no arbitrary exclusivity or hidden boost from scenery. |
 | Collect and return | Follow the deliberate lead, explicitly collect a neutral capsule if capacity permits, review exact cargo, Send, then Lab Accept. | Credit once; current Companion cargo becomes zero, received history remains. Lab/Dock receive accepted records and do not infer live away activity. |
+
+**Conditional source example:** legitimately carried cargo38/40 leaves two slots.
+A recovered supply tray has saved Data2 / Energy2 / Essence1. For a Data need,
+select Data2; the preview says two whole items and40/40 after collection. Fresh
+Confirm saves that result immediately; Energy/Essence remain at the source during
+the outing. Back changes nothing. No loss, fraction, transmutation, new effort
+budget or forced exclusivity is invented. A selected whole count must fit; never
+auto-discard or silently credit part of an offered amount. This is an illustrative
+near-full situation, not a universal cargo puzzle. Fresh cargo with a single useful
+offer should permit simple pickup; extra chooser ceremony needs a real purpose.
 
 This example is a hypothesis, not a native event or measured two-seed playtest.
 If players choose the same sequence without considering the revealed information,
@@ -59,12 +81,12 @@ the variation has failed. Adding faster payouts does not repair that result.
 ### Movement and native hierarchy proof
 
 Source inspection found separate friction: `kit.c` moves one cell on release,
-ignores repeated held downs and pauses preparation while any Companion key is
-held. The presenter also rejects new presses during pending activations. These
+ignores repeated held downs and currently pauses preparation while any Companion
+key is held. The presenter also rejects new presses during pending activations. These
 findings do not measure network latency. Repair reversible movement separately
 from fresh Confirm/Send guards: test taps and bounded hold-repeat with no queued
-steps after release, no held acquisition and no preparation pause solely for
-travel. Preserve review/suspend/pending pauses and no catch-up awards.
+steps after release and no held acquisition. Removing field preparation also
+removes its travel/pause/catch-up semantics; do not retain an invisible extractor.
 
 Proposed 450×600 composition, preserving existing art and shared framing:
 
@@ -72,28 +94,45 @@ Proposed 450×600 composition, preserving existing art and shared framing:
 | --- | --- |
 | Mode | Quiet word/selected underline at the top; full selector only after Back. Compact approved mode glyphs are missing, so do not shrink or repurpose unrelated art. |
 | Place | Distinct 26px place caption at x33/y54, with brief real context. |
-| World | Existing 384×288 local map at x33/y98; strong position feedback, truthful terrain boundaries and visible reached opportunity. No invented saved facing mechanic. |
-| Action/result | One 48px region at y402–450; named action and consequence before commitment, inline result afterward. An arrow resumes travel without dismissing a result page. Genuine alternatives use one small chooser. |
-| Cargo | Persistent unframed 64px band at y470: exact whole counts and separate capsule state. |
-| Work | One unframed 46px strip at y544–590: source line, thin progress track and retained-work line. No three equal zero-percent panels or repeated control paragraphs; bottom ink remains within 600px. |
+| World | Existing native32px family in a proposed384×320 map at x33/y98; one extra row uses space reclaimed from work meters. Strong position feedback and truthful terrain; no invented saved facing. |
+| Action/result | One72px region at y432–504: named action/preview or brief inline result. A genuine chooser can extend upward into the map; no permanent instructions or per-item progress bars. |
+| Cargo | Persistent unframed64px band at y518–582: exact whole counts and separate capsule state. No preparation strip or instructional footer below. |
 
-Direct Confirm is conditional on a complete visible preview. Camp's three actual
-choices cannot be collapsed into a guessed default. Keep the safe return review
+Direct Confirm is conditional on a complete visible preview. Genuine source
+alternatives cannot be collapsed into a guessed default. Keep the safe return review
 and explicit Lab acceptance. Target three to five purposeful field gestures
 instead of the current ten inspection/selection/dismissal gestures, excluding
 travel and safe transfer; this is a design target, not a measured result.
 
 ### Smallest acceptance gate
 
-After owner steering on the changed terrain/interaction direction, build one
-native physical-control trial with two resolved seeds, one finite source choice,
+Build a reversible timer-free physical-control proof, labelled provisional:
+two resolved seed situations, simple pickup and one meaningful near-full choice,
 one observation that changes the next destination and explicit neutral collection.
 Record attempted/applied arrows and input-to-paint using the existing hook; inspect
 release, blocked ground, changed context, capacity rejection and cancelled return.
 Actual exports must be reviewed at 1× against Gemini/C18 before a quality claim.
 An owner playtest must show understandable route choices and useful consequences,
-with waiting no longer the dominant activity. No code, build or deployment changed
+without a preparation wait. This can still fail if the entire field becomes
+commute/press/item with no discovery. No code, build or deployment changed
 for this discussion; agent agreement does not establish enjoyment.
+
+### Background Lab pacing
+
+Actual native studies commit resources and reveal findings immediately. There
+is no research job queue. Existing incubation has a provisional20-second timer,
+advances in eligible powered-on simulation separately from Companion field work
+and requires deliberate opening
+of the same saved individual. Save/load resets clock anchors; no powered-off or
+cloud catch-up is established. Lab suspension/held input also pauses its ticking.
+Retain that natural background process; do not
+add a research delay simply to relocate the rejected field timer. A particular
+procedure may later justify running/ready/reveal states, but its duration,
+parallelism and retention require a separate selected contract. Research discovery
+still needs meaningful findings and choices regardless of whether it takes time.
+
+Away Companion screens may show last-received Lab readiness, not pretend to know
+live progress. Ready is not auto-spend, auto-create or an unsolicited reveal.
 
 ## Earlier map and event studies
 
