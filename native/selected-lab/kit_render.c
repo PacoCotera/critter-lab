@@ -171,10 +171,8 @@ static void field_heading(KitRow *row, int x, int y, const char *value,
   field_label(row, x, y, value, size, color, 1);
 }
 static void field_cargo_row(const DeviceKit *kit, KitRow *row,
-                            const ExpeditionFieldView *field, unsigned page,
-                            int selector) {
+                            const ExpeditionFieldView *field, int selector) {
   const KitView *view = &kit->companion;
-  int review = page == COMP_SEND_REVIEW;
   int sealed = kit->journal.phase >= KIT_WAITING &&
                kit->journal.phase <= KIT_ACK_PENDING;
   int accepted = field->delivery_accepted;
@@ -182,11 +180,10 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
   char value[128];
   fill(row, 0, 0, 450, 600, BACKGROUND);
   panel(row, 12, 12, 426, 576);
-  field_heading(row, 29, 28, review ? "Return to Lab" : accepted ? "Cargo empty"
+  field_heading(row, 29, 28, accepted ? "Cargo empty"
                                                    : sealed ? "Expedition sent"
                                                                   : "Cargo", 24, TEXT);
-  field_text(row, 30, 59, review ? "Review current cargo"
-                  : acknowledged ? "Expedition ended / choose a new outing"
+  field_text(row, 30, 59, acknowledged ? "Expedition ended / choose a new outing"
                                   : kit_stage(kit), 15, SECONDARY);
   static const char *modes[] = {"Probe", "Cargo", "Companions"};
   static const int positions[] = {28, 151, 275};
@@ -228,11 +225,7 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
   snprintf(value, sizeof(value), "Supplies %u / %u / Capsules %u / %u", total,
            GAME_CARGO_CAPACITY / GAME_SUPPLY_UNIT, capsules, field->capsule_capacity);
   field_text(row, 42, 363, value, 16, SECONDARY);
-  if (review) {
-    field_text(row, 28, 414, capsules ? "Send earned items and the sample."
-                              : "Send earned items to the Lab.", 18, TEXT);
-    field_text(row, 28, 442, "Seals carried cargo.", 18, SECONDARY);
-  } else if (accepted) {
+  if (accepted) {
     field_text(row, 28, 414, acknowledged ? "Delivery complete / cargo transferred."
                                          : "Lab accepted / receipt pending.", 18, TEXT);
     field_text(row, 28, 442, acknowledged ? "Choose a new outing on Probe."
@@ -258,8 +251,7 @@ static void field_cargo_row(const DeviceKit *kit, KitRow *row,
     field_text(row, 28, 525, "Down / Confirm: enter Cargo", 18, SECONDARY);
   }
   field_text(row, 28, 556, selector ? "Browsing never sends or spends"
-                    : review ? "Confirm: choose / Back: keep exploring"
-                             : "Up/Down: choose / Back: modes", 16, SECONDARY);
+                    : "Up/Down: choose / Back: modes", 16, SECONDARY);
   if (kit->failed) {
     fill(row, 24, 493, 402, 64, FIELD);
     wrapped(row, 28, 505, accepted ? "Cargo transferred. Delivery record needs recovery."
@@ -275,8 +267,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING;
   int receipt = kit->journal.phase == KIT_ACK_PENDING;
   int ended = (receipt || kit->journal.phase == KIT_COMPLETE) && !game->expedition_id[0];
-  int details = page == COMP_CARGO || page == COMP_SEND_REVIEW;
-  int review = page == COMP_SEND_REVIEW;
+  int details = page == COMP_CARGO;
   int discard = page == COMP_DISCARD_CLASS || page == COMP_DISCARD_QUANTITY ||
                 page == COMP_DISCARD_REVIEW;
   int finish = page == COMP_FINISH_REVIEW;
@@ -305,7 +296,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     return;
   }
   if (map_outing && (details || reserved || receipt) && !discard && !finish && !friends) {
-    field_cargo_row(kit, row, &field, page, selector);
+    field_cargo_row(kit, row, &field, selector);
     return;
   }
   if (reserved)
@@ -437,7 +428,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   } else if (details) {
     heading(row, 28, 125,
          ended      ? "Cargo empty"
-         : review     ? "To Lab"
          : reserved ? "Reserved for transfer"
                     : "Collected items",
          26, TEXT);
@@ -447,17 +437,12 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       if (map_outing && !ended)
         status = field.capsule_count ? "Sealed sample / contents unknown"
                                     : "Supplies only / no sample collected";
-      else if (review)
-        status = elapsed < GAME_EXPEDITION_SECONDS ? "Supplies only / no sample"
-                 : game->sample_count < GAME_MAX_SAMPLES ? "Sample ready to record"
-                                                        : "Sample shelf full / supplies only";
       text(row, 28, 182, status, 18, SECONDARY);
       if (!ended && !map_outing) {
         snprintf(value, sizeof(value), "%u / %u sec", elapsed,
                  GAME_EXPEDITION_SECONDS);
         text(row, 300, 158, value, 18, SECONDARY);
-        if (!review)
-          progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
+        progress(row, 228, 187, 186, 8, elapsed, GAME_EXPEDITION_SECONDS);
       }
     }
     panel(row, 26, 215, 398, 190);
@@ -471,24 +456,18 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
       snprintf(value, sizeof(value), "%u", cargo[i] / GAME_SUPPLY_UNIT);
       heading(row, x + 81, 220, value, 32, TEXT);
     }
-    if (review) {
-      wrapped(row, 28, 420,
-              "Send stops gathering. Lab acceptance stores the haul and ends the expedition.",
-              390, 18, SECONDARY);
-    } else {
-      snprintf(value, sizeof(value), "Free space: %u / 40 units",
-               (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
-      text(row, 28, 414, value, 18, SECONDARY);
-      if (reserved || receipt || (kit->journal.phase == KIT_COMPLETE && !has_run))
-        wrapped(row, 28, 440, kit_stage(kit), 390, 18, SECONDARY);
-      else if (!game_transfer_available(game))
-        text(row, 28, 440, "No items to send", 18, SECONDARY);
-      else
-        text(row, 28, 440,
-             kit->journal.companion_online ? "Lab link available"
-                                           : "Lab offline",
-             18, SECONDARY);
-    }
+    snprintf(value, sizeof(value), "Free space: %u / 40 units",
+             (GAME_CARGO_CAPACITY - total) / GAME_SUPPLY_UNIT);
+    text(row, 28, 414, value, 18, SECONDARY);
+    if (reserved || receipt || (kit->journal.phase == KIT_COMPLETE && !has_run))
+      wrapped(row, 28, 440, kit_stage(kit), 390, 18, SECONDARY);
+    else if (!game_transfer_available(game))
+      text(row, 28, 440, "No items to send", 18, SECONDARY);
+    else
+      text(row, 28, 440,
+           kit->journal.companion_online ? "Lab link available"
+                                         : "Lab offline",
+           18, SECONDARY);
   } else {
     /* Authored fictional setting; facts remain in separate live zones. */
     core_art_row(CORE_ART_PROBE_PLACE, 25, 116, row->y, row->width, row->pixels);
@@ -584,7 +563,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
        : friend_visit     ? "Confirm: choose / Back: residents"
        : discard          ? "Up/Down: choose / Back: keep items"
        : finish           ? "Confirm: choose / Back: keep exploring"
-       : review           ? "Confirm: choose / Back: keep cargo"
        : view->task_depth ? "Back: return to the previous view"
                           : "Up / Down: choose  /  Back: modes",
        18, SECONDARY);
@@ -780,7 +758,8 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
       (kit->companion.page == COMP_MODES && kit->companion.mode == COMP_PROBE))) return 0;
   CompanionCargoView view;
   if (device != KIT_COMPANION || !kit_cargo_projection(kit, &view)) {
-    if (device == KIT_COMPANION && kit->companion.page == COMP_CARGO) return 0;
+    if (device == KIT_COMPANION && (kit->companion.page == COMP_CARGO ||
+                                  kit->companion.page == COMP_SEND_REVIEW)) return 0;
     /* Other-device frame requests must not cancel Companion presentation. */
     if (device == KIT_COMPANION) native_ui_cancel(context);
     return bmp_rows(kit, device, output, NULL);

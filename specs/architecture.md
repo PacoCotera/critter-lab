@@ -227,7 +227,8 @@ control sequences before dependent compositions are treated as selected.
 | --- | --- | --- |
 | Companion Probe and field source choice, including Probe mode preview | LVGL | Shared current UI must compile under ESP-IDF; physical adapter unvalidated |
 | Companion Cargo | LVGL | Same target-build requirement |
-| Companion other mode previews, Send/Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
+| Companion Send/Keep confirmation | Retained LVGL using shared portable Cargo/Send tree | Changed host source awaiting exact native output and independent acceptance; current Companion ESP build still required |
+| Companion other mode previews, Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
@@ -248,6 +249,14 @@ Host full-frame export storage is optional adapter storage, not an embedded UI
 requirement. The ESP32 path can consume partial regions without a host RGB frame.
 One shared LVGL lifetime owns all displays; profile-specific roots/assets avoid
 instantiating every screen family on each device.
+
+`native/ui/companion_cargo_view.h` owns only copied Cargo/Send presentation facts.
+The retained `companion_cargo_ui` receives fonts/images and physical focus but
+cannot access Kit, files or game commands. `selected-lab/cargo_view.c` projects
+ownership and review consequences; `native_ui.c` owns host display/export and
+asset lifetime. Send seals cargo and stops exploration; Lab acceptance ends the
+expedition. Successful sealing returns to Cargo, and offline sealing waits.
+Known migrated Cargo/Send routes fail explicitly rather than using manual fallback.
 
 Flush-ready means the adapter has released the draw buffer. It is distinct from
 the painted-frame acknowledgement used to authorize input, especially for an

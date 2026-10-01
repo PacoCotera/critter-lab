@@ -1,5 +1,6 @@
 #include "cargo_view.h"
 #include "expedition_render.h"
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -36,11 +37,14 @@ int kit_cargo_facts(const DeviceKit *kit, CompanionCargoFacts *out) {
   return 1;
 }
 int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
-  if (!kit || !out || kit->companion.page != COMP_CARGO)
+  if (!kit || !out || (kit->companion.page != COMP_CARGO &&
+                       kit->companion.page != COMP_SEND_REVIEW))
     return 0;
   CompanionCargoFacts facts;
   if (!kit_cargo_facts(kit, &facts)) return 0;
   memset(out, 0, sizeof(*out));
+  int review = kit->companion.page == COMP_SEND_REVIEW;
+  out->screen = review ? COMPANION_SEND_SCREEN : COMPANION_CARGO_SCREEN;
   memcpy(out->supplies, facts.supplies, sizeof(out->supplies));
   memcpy(out->delivered, facts.delivered, sizeof(out->delivered));
   out->capsules = facts.capsules;
@@ -50,7 +54,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   strcpy(out->identity, facts.identity);
   const KitView *view = &kit->companion;
   out->phase = kit->journal.phase;
-  out->failed = kit->failed;
+  out->failed = kit->failed || kit->lab->storage_error;
   out->focus = view->focus;
   out->revision = view->revision;
   out->epoch = view->epoch;
@@ -60,23 +64,39 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     out->pressed |= view->gestures[button].held && view->gestures[button].allowed;
   }
   int sealed = out->phase >= KIT_WAITING && out->phase <= KIT_ACK_PENDING;
-  snprintf(out->title, sizeof(out->title), "%s", out->accepted ? "Cargo empty" : "Cargo");
+  snprintf(out->title, sizeof(out->title), "%s", out->accepted ? "Cargo empty" :
+           sealed ? "Cargo sealed" : review ? "Return to Lab" : "Cargo");
   snprintf(out->context, sizeof(out->context), "%s",
            out->accepted ? "Expedition ended" : sealed ? kit_stage(kit) : kit_route(kit));
   snprintf(out->capsule, sizeof(out->capsule), "%s",
            out->capsules ? "1 sealed sample" : "No sample in cargo");
   if (out->accepted) {
     snprintf(out->detail, sizeof(out->detail),
-             "Delivery record: %u Data / %u Energy / %u Essence. %s",
+             "Delivery record: %" PRIu32 " Data / %" PRIu32 " Energy / %" PRIu32 " Essence. %s",
              out->delivered[0], out->delivered[1], out->delivered[2],
              out->delivered_capsules ? "1 sample delivered to Lab." : "Supplies stored at Lab.");
   } else {
-    snprintf(out->detail, sizeof(out->detail), "%s",
-             out->capsules ? "Contents unknown" : sealed ? "This expedition cannot resume." :
-             "Whole items only / preparation stays here.");
+    const char *detail = sealed ? "This expedition cannot resume." :
+        review ? (out->capsules ? "Contents unknown\nSeals cargo; exploration stops."
+                               : "Seals cargo; exploration stops.") :
+        out->capsules ? "Contents unknown" : "Whole items / source progress retained.";
+    snprintf(out->detail, sizeof(out->detail), "%s", detail);
   }
-  unsigned total = out->supplies[0] + out->supplies[1] + out->supplies[2];
-  snprintf(out->capacity, sizeof(out->capacity), "Supplies %u / %u   Capsules %u / %u",
+  /* Legacy timed outings record their completed sample on acceptance. Show
+   * that expected result separately; it is not an already carried capsule. */
+  const GameState *game = &kit->lab->game;
+  if (review && !sealed && !out->accepted && !game->field.version &&
+      game->expedition_id[0] && game->expedition_elapsed >= GAME_EXPEDITION_SECONDS) {
+    if (game->sample_count < GAME_MAX_SAMPLES) {
+      snprintf(out->capsule, sizeof(out->capsule), "%s", "Sample ready at Lab");
+      snprintf(out->detail, sizeof(out->detail), "%s",
+               "Recorded on acceptance.\nSeals cargo; exploration stops.");
+    } else {
+      snprintf(out->capsule, sizeof(out->capsule), "%s", "No sample / Lab shelf full");
+    }
+  }
+  uint32_t total = out->supplies[0] + out->supplies[1] + out->supplies[2];
+  snprintf(out->capacity, sizeof(out->capacity), "Supplies %" PRIu32 " / %u   Capsules %" PRIu32 " / %" PRIu32,
            total, GAME_CARGO_CAPACITY / GAME_SUPPLY_UNIT, out->capsules, out->capsule_capacity);
   const char *feedback = view->message[0] ? view->message :
       out->accepted ? (out->phase == KIT_COMPLETE ? "Delivery complete / choose a new outing." : "Lab accepted / receipt pending.") :
@@ -88,11 +108,17 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     feedback = "Storage unavailable";
   }
   snprintf(out->feedback, sizeof(out->feedback), "%s", feedback);
-  out->action_count = out->failed ? 0 : kit_option_count(kit, KIT_COMPANION);
+  /* Normal sealing returns to Cargo. A restored/defensive sealed review must
+   * never offer Keep as cancellation or Send as a second seal operation. */
+  out->action_count = out->failed || (review && (sealed || out->accepted))
+                         ? 0 : kit_option_count(kit, KIT_COMPANION);
   if (out->action_count > 2)
     return 0;
   for (unsigned action = 0; action < out->action_count; ++action)
     snprintf(out->actions[action], sizeof(out->actions[action]), "%s",
              kit_option(kit, KIT_COMPANION, action));
+  snprintf(out->footer, sizeof(out->footer), "%s", out->failed ? "Storage recovery required" :
+           review && !sealed && !out->accepted ? "Back: Keep cargo" :
+           "Up/Down: choose / Back: modes");
   return 1;
 }

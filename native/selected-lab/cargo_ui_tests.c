@@ -1,6 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include "native_ui.h"
 #include "ui_assets.h"
+#include "../ui/companion_cargo_ui.h"
+#include "../ui/display.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -85,6 +87,136 @@ static CompanionCargoView example(void) {
   view.supplies[2] = 13;
   view.capsules = view.capsule_capacity = 1;
   return view;
+}
+static void send_projection_truth(void) {
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  DeviceKit kit = {0};
+  kit.lab = &lab;
+  kit.companion.page = COMP_SEND_REVIEW;
+  kit.companion.mode = COMP_CARGO;
+  kit.companion.focus = 1;
+  kit.journal.companion_online = 1;
+  strcpy(lab.game.expedition_id, "review-proof");
+  lab.game.expedition_data = 3 * GAME_SUPPLY_UNIT;
+  lab.game.expedition_energy = GAME_SUPPLY_UNIT;
+  GameState saved = lab.game;
+  KitJournal journal = kit.journal;
+  CompanionCargoView view;
+  assert(kit_cargo_projection(&kit, &view));
+  assert(view.screen == COMPANION_SEND_SCREEN && view.focus == 1 && view.action_count == 2);
+  assert(view.supplies[0] == 3 && view.supplies[1] == 1 && !view.capsules);
+  assert(!strcmp(view.title, "Return to Lab") && !strcmp(view.actions[1], "Keep cargo"));
+  assert(!strcmp(view.footer, "Back: Keep cargo"));
+  assert(strstr(view.detail, "exploration stops") && !strstr(view.detail, "expedition ends"));
+  assert(!memcmp(&saved, &lab.game, sizeof(saved)) && !memcmp(&journal, &kit.journal, sizeof(journal)));
+  kit.journal.companion_online = 0;
+  assert(kit_cargo_projection(&kit, &view) && !strcmp(view.feedback, "Lab offline"));
+  assert(view.action_count == 2 && view.supplies[0] == 3);
+  lab.storage_error = 1;
+  assert(kit_cargo_projection(&kit, &view) && view.failed && !view.action_count);
+  assert(!strcmp(view.feedback, "Storage unavailable"));
+  lab.storage_error = 0;
+  lab.game.expedition_elapsed = GAME_EXPEDITION_SECONDS;
+  assert(kit_cargo_projection(&kit, &view) && !view.capsules);
+  assert(!strcmp(view.capsule, "Sample ready at Lab") && strstr(view.detail, "acceptance"));
+  lab.game.sample_count = GAME_MAX_SAMPLES;
+  assert(kit_cargo_projection(&kit, &view) && !view.capsules);
+  assert(strstr(view.capsule, "shelf full") && !strstr(view.detail, "Recorded"));
+  lab.game.sample_count = 0;
+  lab.game.expedition_elapsed = GAME_EXPEDITION_SECONDS - 1;
+  assert(kit_cargo_projection(&kit, &view) && !strstr(view.capsule, "ready"));
+  kit.failed = 1;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count);
+  assert(strstr(view.detail, "Cargo preserved"));
+  kit.failed = 0;
+  kit.journal.phase = KIT_WAITING;
+  kit.journal.cargo[0] = 7 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count && view.supplies[0] == 7);
+  assert(!strcmp(view.title, "Cargo sealed") && !strstr(view.footer, "Keep"));
+  lab.game.expedition_id[0] = 0;
+  kit.journal.phase = KIT_ACK_PENDING;
+  assert(kit_cargo_projection(&kit, &view) && view.accepted && !view.action_count);
+  assert(!view.supplies[0] && view.delivered[0] == 7);
+  NativeUiContext *wrong_device = native_ui_create_device(KIT_DOCK);
+  FILE *output = tmpfile();
+  assert(wrong_device && output && !kit_bmp_ui(&kit, KIT_COMPANION, output, wrong_device, 1));
+  assert(ftell(output) == 0); /* A known migrated route cannot reach manual fallback. */
+  fclose(output);
+  native_ui_destroy(wrong_device);
+  kit.companion.page = COMP_FINISH_REVIEW;
+  assert(!kit_cargo_projection(&kit, &view));
+}
+static UiFlushResult consume_partial(void *user, UiDisplay *display, const UiArea *area,
+    const uint8_t *pixels, size_t stride, UiColorFormat format) {
+  (void)display;
+  (void)pixels;
+  assert(format == UI_COLOR_RGB888);
+  size_t *consumed = user;
+  *consumed += stride * (size_t)(area->y2 - area->y1 + 1);
+  return UI_FLUSH_COMPLETE;
+}
+static void portable_cargo_send_module(void) {
+  /* The same retained tree runs with only a bounded partial sink, without a
+   * host full-frame allocation, Kit pointer or domain callbacks. */
+  UiDisplayProfile profile = {450, 600, 8, UI_COLOR_RGB888};
+  size_t draw_size = ui_display_buffer_size(&profile), consumed = 0;
+  void *draw = malloc(draw_size);
+  UiDisplay *display = ui_display_create(&profile, draw, draw_size, consume_partial, &consumed);
+  assert(draw && display);
+  lv_font_t fonts[5];
+  native_ui_font_init(&fonts[0], &lab_heading_fonts[0]);
+  native_ui_font_init(&fonts[1], &lab_fonts[0]);
+  native_ui_font_init(&fonts[2], &lab_fonts[15]);
+  native_ui_font_init(&fonts[3], &lab_fonts[7]);
+  native_ui_font_init(&fonts[4], &lab_heading_fonts[4]);
+  CompanionCargoFonts font_view = {&fonts[0], &fonts[1], &fonts[2], &fonts[3], &fonts[4]};
+  NativeUiImage backing[4];
+  const lv_image_dsc_t *images[4];
+  for (unsigned index = 0; index < 4; ++index) {
+    assert(native_ui_image_init(&backing[index], index == 3 ? CORE_ART_SAMPLE_NEUTRAL :
+        (CoreArtId)(CORE_ART_DATA_PRIMARY + index)));
+    images[index] = &backing[index].image;
+  }
+  lv_group_t *group = lv_group_create();
+  CompanionCargoUi *ui = companion_cargo_ui_create(
+      lv_display_get_screen_active(ui_display_lvgl(display)), group, &font_view, images);
+  assert(ui);
+  CompanionCargoView view = example();
+  view.screen = COMPANION_SEND_SCREEN;
+  strcpy(view.title, "Return to Lab");
+  strcpy(view.footer, "Back: Keep cargo");
+  strcpy(view.actions[1], "Keep cargo");
+  view.focus = 1;
+  assert(companion_cargo_ui_update(ui, &view, 1));
+  memset(&view, 0, sizeof(view));
+  lv_refr_now(ui_display_lvgl(display)); /* Retained labels own copied strings. */
+  assert(consumed > 0);
+  view = example();
+  assert(companion_cargo_ui_update(ui, &view, 1));
+  lv_refr_now(ui_display_lvgl(display));
+  lv_mem_monitor_t warm, final;
+  lv_mem_monitor(&warm);
+  for (unsigned index = 0; index < 200; ++index) {
+    view.screen = index & 1 ? COMPANION_SEND_SCREEN : COMPANION_CARGO_SCREEN;
+    view.focus = index & 1;
+    CompanionCargoView untouched = view;
+    assert(companion_cargo_ui_update(ui, &view, 1));
+    assert(!memcmp(&view, &untouched, sizeof(view)));
+    lv_refr_now(ui_display_lvgl(display));
+  }
+  lv_mem_monitor(&final);
+  assert(final.free_size == warm.free_size);
+  view.action_count = 3;
+  assert(!companion_cargo_ui_update(ui, &view, 1));
+  view = example();
+  memset(view.title, 'x', sizeof(view.title));
+  assert(!companion_cargo_ui_update(ui, &view, 1));
+  companion_cargo_ui_destroy(ui);
+  lv_group_delete(group);
+  ui_display_destroy(display);
+  for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&backing[index]);
+  free(draw);
 }
 static void export_bmp(const char *path, const uint8_t *rgb) {
   FILE *output = fopen(path, "wb");
@@ -273,6 +405,8 @@ static void actual_save_motion(const char *directory, const char *source) {
 int main(int argc, char **argv) {
   image_fidelity();
   projection_truth();
+  send_projection_truth();
+  portable_cargo_send_module();
   if (argc == 3) actual_save_motion(argv[1], argv[2]);
   else rendering_and_motion(argc == 2 ? argv[1] : NULL, NULL);
   if (argc >= 2) representative_fixture_exports(argv[1]);

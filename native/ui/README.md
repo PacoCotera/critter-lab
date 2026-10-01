@@ -45,6 +45,16 @@ without automatic visibility. `dock_gray_checks OUTPUT_DIRECTORY` also writes
 labeled representative BMP fixtures; these are synthetic presentation evidence,
 not a physical-control playthrough. Run through the project's native build gate.
 
-Lab and the remaining Companion review/visit routes still have explicitly open
-renderer migrations. A failed migrated Dock/Probe/Cargo projection returns a
+The existing Cargo tree is extracted into `companion_cargo_ui.c` and shared by
+Cargo and Send/Keep. Its plain copied view includes a screen tag and projected
+footer, exact units, sample and focus. Borrowed fonts/images remain caller-owned;
+the module owns widgets and retained label storage. The module accepts a partial
+display sink without allocating host full-frame storage. Kit projection and
+physical command authority remain outside it. Offline Send seals locally and
+waits; Lab acceptance clears current cargo and ends the outing. A defensive
+already-sealed review presents no Keep cancellation or second Send action.
+Changed host source still needs actual native output and independent acceptance.
+
+Lab and the remaining Companion Discard/Finish/preview/visit routes remain open
+renderer migrations. A failed migrated Dock/Probe/Cargo/Send projection returns a
 render error; it cannot silently reach the old manual renderer.
