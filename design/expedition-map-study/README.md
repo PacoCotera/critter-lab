@@ -1,5 +1,102 @@
 # Expedition map study
 
+## Gathering review: exploration and source decisions
+
+Issue [60](https://github.com/PacoCotera/critter-lab/issues/60), following actual
+owner play of the [native Probe release](../../docs/evidence/native-companion-probe/README.md).
+**Design proposal, not deployed behavior or approved balance.** The larger map
+was delivered; gathering rules were not overhauled. The owner rejects passive
+chance watching, road-only movement and repeated instructions. The earlier
+supplies-versus-shortcut packet below remains preserved trial material, but is
+not the recommended answer to this feedback.
+
+### Lessons from other games
+
+| Primary source | Relevant lesson | Application and limit here |
+| --- | --- | --- |
+| [Outer Wilds: The Intentionality of Wandering](https://www.mobiusdigitalgames.com/news/the-intentionality-of-wandering), developer discussion | Give players enough visual information to choose a destination through curiosity instead of blindly choosing a branch. | Existing landmarks invite inspection; an observed lead changes the next useful destination. Do not import its narrative, time loop or survival conditions. |
+| [A Short Hike: crafting a tiny open world](https://blog.playstation.com/2021/08/05/crafting-a-tiny-open-world-a-look-behind-the-scenes-at-the-creation-of-a-short-hike/), developer Adam Robinson-Yu | Design around leaving the obvious route, with worthwhile discoveries off the path. | Test accessible ground with real detour value, not decorative grass beside mandatory roads. Do not import climbing, flying or a minigame catalogue. |
+| [DREDGE: spatial inventory deep dive](https://www.gamedeveloper.com/design/deep-dive-the-surprising-depth-of-spatial-inventories-in-dredge), co-designer Joel Mason | Its early sail/interact/item/return prototype was boring; meaningful decisions needed to extend beyond collecting an item. | Instant bundles or a Confirm for each completed roll are insufficient. Learn contextual decisions and consequences; do not import inventory packing, cargo loss or a new equipment economy. |
+| [No Man's Sky: Beyond](https://www.nomanssky.com/beyond-update/), developer notes | Deliberate target scanning, prospecting and clearer discovery feedback coexist with changes to reduce grind. | Source selection and observations should matter; earned items need brief visible feedback. Hold-to-scan, heat/reflex mechanics and guaranteed improvements to odds are not selected. |
+
+These are examples to learn from, not universal best practices or evidence that
+our proposal is fun. Game design, UX and art exchanged objections directly:
+the packet leaves passive work intact; freer walking alone leaves the same
+five-stop outing intact; repeated ready/claim prompts add chores. The considered
+recommendation is a **map/source-selection trial**, with active harvesting still
+an open alternative rather than a silently completed overhaul.
+
+### Two credible directions
+
+| Direction | Player experience | Strongest tradeoff |
+| --- | --- | --- |
+| **A — open-terrain prospecting, recommended proof** | Walk accessible ground, use trails for orientation, inspect visible landmarks, select finite work and follow observed leads. Work preparation continues secondarily while exploring. | Requires truthful blocked terrain and a discovery rule that open ground cannot bypass. Automated gathering may still lack tactile enjoyment. |
+| **B — discrete survey sectors** | Choose a visible nearby sector, examine its source/lead and choose the next sector; no tile commute. Retain the same cargo/return ownership. | Removes movement friction cheaply, but may lose the sense of inhabiting a place and become another menu sequence. |
+
+Neither direction adds combat, survival pressure, new currency, hardware, cloud
+services or a field-event platform. A later active tool interaction should be
+tested separately if source decisions still leave gathering dull; it must add
+agency rather than mandatory reaction timing or button repetition.
+
+### Worked short outing
+
+The same player wants Data for retained Lab research. The Companion knows that
+local intention, not the Lab's live inventory. Times and source budgets are
+prototype parameters; a faster outing is acceptable.
+
+| Moment | Player choice and visible response | Consequence |
+| --- | --- | --- |
+| Orient | The local map shows accessible ground, a known source and a visually distinct inspectable landmark. Choose useful work or investigate first. | No item for arrival; one source is active at a time. |
+| Start work | At a reached source, the preview names resource class and remaining **attempts**, not promised items. Fresh Confirm starts work, or one compact chooser handles actual alternatives. | Time/chance preparation advances separately; only complete earned units enter cargo. Switching preserves prior preparation. |
+| Observe | At a reached field-record opportunity, Read reveals an alternative source's actual finite work budget and a separate lead toward a sealed-container location. | Immediate new information, no item award, no forged ordinary Moss trace and no sample contents. This proposed event state must be retained once. |
+| Decide | Seed A places the revealed Data source nearby and the sample lead farther away. Seed B puts the sample lead nearby and the remaining Data work farther away. With the first source nearly spent, choose more Data now or investigate the capsule first. | Different useful ordering, not just different corridors. Both opportunities can remain available; no arbitrary forced exclusivity or hidden odds boost from scenery. |
+| Collect and return | Follow the deliberate lead, explicitly collect a neutral capsule if capacity permits, review exact cargo, Send, then Lab Accept. | Credit once; current Companion cargo becomes zero, received history remains. Lab/Dock receive accepted records and do not infer live away activity. |
+
+This example is a hypothesis, not a native event or measured two-seed playtest.
+If players choose the same sequence without considering the revealed information,
+the variation has failed. Adding faster payouts does not repair that result.
+
+### Movement and native hierarchy proof
+
+Source inspection found separate friction: `kit.c` moves one cell on release,
+ignores repeated held downs and pauses preparation while any Companion key is
+held. The presenter also rejects new presses during pending activations. These
+findings do not measure network latency. Repair reversible movement separately
+from fresh Confirm/Send guards: test taps and bounded hold-repeat with no queued
+steps after release, no held acquisition and no preparation pause solely for
+travel. Preserve review/suspend/pending pauses and no catch-up awards.
+
+Proposed 450×600 composition, preserving existing art and shared framing:
+
+| Area | Bounds and hierarchy |
+| --- | --- |
+| Mode | Quiet word/selected underline at the top; full selector only after Back. Compact approved mode glyphs are missing, so do not shrink or repurpose unrelated art. |
+| Place | Distinct 26px place caption at x33/y54, with brief real context. |
+| World | Existing 384×288 local map at x33/y98; strong position feedback, truthful terrain boundaries and visible reached opportunity. No invented saved facing mechanic. |
+| Action/result | One 48px region at y402–450; named action and consequence before commitment, inline result afterward. An arrow resumes travel without dismissing a result page. Genuine alternatives use one small chooser. |
+| Cargo | Persistent unframed 64px band at y470: exact whole counts and separate capsule state. |
+| Work | One unframed 46px strip at y544–590: source line, thin progress track and retained-work line. No three equal zero-percent panels or repeated control paragraphs; bottom ink remains within 600px. |
+
+Direct Confirm is conditional on a complete visible preview. Camp's three actual
+choices cannot be collapsed into a guessed default. Keep the safe return review
+and explicit Lab acceptance. Target three to five purposeful field gestures
+instead of the current ten inspection/selection/dismissal gestures, excluding
+travel and safe transfer; this is a design target, not a measured result.
+
+### Smallest acceptance gate
+
+After owner steering on the changed terrain/interaction direction, build one
+native physical-control trial with two resolved seeds, one finite source choice,
+one observation that changes the next destination and explicit neutral collection.
+Record attempted/applied arrows and input-to-paint using the existing hook; inspect
+release, blocked ground, changed context, capacity rejection and cancelled return.
+Actual exports must be reviewed at 1× against Gemini/C18 before a quality claim.
+An owner playtest must show understandable route choices and useful consequences,
+with waiting no longer the dominant activity. No code, build or deployment changed
+for this discussion; agent agreement does not establish enjoyment.
+
+## Earlier map and event studies
+
 Issue [49](https://github.com/PacoCotera/critter-lab/issues/49): an authored static
 design proposal for exploring on the Companion and receiving the result at the
 Lab. The existing delivered Core V1 is unchanged. This packet is a paper/state

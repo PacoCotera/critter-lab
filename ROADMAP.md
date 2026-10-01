@@ -34,6 +34,14 @@ Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
 values and visual treatment remain proposals. No new infrastructure, map service,
 provider, sensor/radio, canonical species, capture/training or ecology enters it.
 
+The next owner-feedback review is [issue60](https://github.com/PacoCotera/critter-lab/issues/60):
+[gathering/source decisions and movement](design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions).
+The joined proposal compares open-terrain prospecting with discrete survey sectors,
+and rejects a shortcut packet or repeated claims as a sufficient gathering overhaul.
+It is a design recommendation awaiting direction, not deployed mechanics. The
+selected Dock module's [four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
+is confirmed; the current one-bit renderer still needs correction.
+
 ## Delivered checkpoint: Polished Core V1
 
 Owner-authorized implementation round, 30 September 2026. Parent outcome
