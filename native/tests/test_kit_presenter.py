@@ -121,6 +121,7 @@ def run(binary, proof=None):
             assert request("/api/input", {"event": "confirm-down", "revision": 1})[0] == 400
             assert press("companion", "confirm")["page"] == "probe"
             assert state("companion")["cargo"] == [0, 0, 0]
+            frame("companion", "expedition-chooser")
             press("companion", "confirm")
             assert state("companion")["field"]["active_source"] == 255
             press("companion", "confirm")  # Inspect Camp, no automatic award/start.
@@ -223,6 +224,15 @@ def run(binary, proof=None):
                 frame(device, "accepted-offline")
             assert state("dock")["dock_stock"] == [0, 0, 0]
             assert press("lab", "confirm")["stock"] == credited
+            before_home = state("lab")
+            assert press("lab", "critters")["page"] == "home"
+            assert press("lab", "down")["focus"] == "Explore"
+            accepted_home = frame("lab", "accepted-home")
+            assert accepted_home["cargo"] == [0, 0, 0] and accepted_home["stock"] == credited
+            returned = press("lab", "confirm")
+            for key in ("page", "received_selected", "received_detail", "phase", "stock",
+                        "samples", "received_count", "cargo", "haul"):
+                assert returned[key] == before_home[key], (key, returned, before_home)
             link("companion", True)
             link("dock", True)
             time.sleep(2.1)
