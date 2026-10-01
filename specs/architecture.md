@@ -174,10 +174,7 @@ mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
 boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
 and visits. Lab Home, workspace previews and connected reception/received records
-also use retained LVGL. Sample collection, research/review/findings and Library use copied presentation facts and one retained LVGL tree; [native evidence](../docs/evidence/native-lab-research/README.md) covers disclosure, controls, original art and lifetime. Creation/incubation, resident/habitat
-actions and standalone legacy expedition gameplay still use manual C renderers.
-Those paths are known architectural debt, not an accepted
-exception. The [ESP-IDF Companion target](../native/companion/README.md) now
+also use retained LVGL. Sample collection, research/review/findings and Library use copied presentation facts and one retained LVGL tree; [native evidence](../docs/evidence/native-lab-research/README.md) covers disclosure, controls, original art and lifetime. Creation/review, incubation/reveal, Habitat and residents now use copied action facts and one retained LVGL family; [native evidence](../docs/evidence/native-lab-actions/README.md) covers explicit authority, original art and saved identity. Standalone legacy acquisition pages still use manual composition for maintained regression callers. Their disposition remains architectural debt, not an accepted graphics exception or authorized connected Lab acquisition. The [ESP-IDF Companion target](../native/companion/README.md) now
 registers the current shared UI in a headless harness; [compile/link validation passed](../docs/evidence/native-companion-esp/README.md). Runtime integration remains unvalidated.
 Host pixel-stream evidence,
 actual ESP-IDF UI compilation and hardware measurements are separate gates.
@@ -239,7 +236,8 @@ control sequences before dependent compositions are treated as selected.
 | Lab Home/workspace previews | Retained LVGL, copied view and lazy host display context | [Native route/control/lifetime and independent review passed](../docs/evidence/native-lab-home/README.md) |
 | Lab connected incoming haul and received list/detail | Retained LVGL, copied reception/history facts; native image primitives for original field map | [Native controls/output, failure-first routes and independent technical/craft checks passed](../docs/evidence/native-lab-reception/README.md) |
 | Lab sample collection, research/review/findings and Library | Copied knowledge and costs; retained LVGL with original reference art | [Native route, disclosure, physical-control, lifetime and focused craft/game review passed](../docs/evidence/native-lab-research/README.md) |
-| Lab creation/incubation, residents/habitat actions; standalone legacy expedition gameplay | Manual C raster | Remaining migration; no accepted exception |
+| Lab creation/review, incubation/reveal, Habitat and residents | Copied action facts; one reused retained LVGL family | [Native authority, route/pixel/lifetime and focused art/UX/game preservation checks passed](../docs/evidence/native-lab-actions/README.md); rejected canister remains provisional art |
+| Standalone legacy acquisition pages | Manual C raster for maintained regression callers | Retirement/migration contract still open; connected Lab acquisition remains removed; no accepted graphics exception |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
 The current three-device presenter is one Linux x86-64 process. It verifies
