@@ -212,6 +212,12 @@ static void frame_route_equivalence(void) {
     assert(!fclose(generic) && !fclose(persistent));
     lab.kit_mode = 0;
   }
+  lab.focus = 5;
+  FILE *invalid_standalone = tmpfile(), *invalid_connected = tmpfile();
+  assert(invalid_standalone && invalid_connected);
+  assert(!selected_lab_bmp(&lab, invalid_standalone) && !ftell(invalid_standalone));
+  assert(!kit_bmp_ui(&kit, KIT_LAB, invalid_connected, home, 1) && !ftell(invalid_connected));
+  assert(!fclose(invalid_standalone) && !fclose(invalid_connected));
   native_ui_destroy(home);
   assert(ui_display_count() == 0);
 }
