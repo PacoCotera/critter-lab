@@ -1,4 +1,5 @@
 #include "dock_ui.h"
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -130,9 +131,9 @@ int dock_ui_update(DockUi *ui, const DockView *view) {
     lv_image_set_src(ui->icons[index], ui->icons_source[(supplies ? 3 : 0) + index]);
     lv_label_set_text_static(ui->names[index], supplies ? supply_names[index] : world_names[index]);
     if (supplies)
-      snprintf(ui->amounts[index], sizeof(ui->amounts[index]), "%u %s", view->stock[index],
+      snprintf(ui->amounts[index], sizeof(ui->amounts[index]), "%" PRIu32 " %s", view->stock[index],
           view->stock[index] == 1 ? "unit" : "units");
-    else snprintf(ui->amounts[index], sizeof(ui->amounts[index]), "%u", counts[index]);
+    else snprintf(ui->amounts[index], sizeof(ui->amounts[index]), "%" PRIu32, counts[index]);
     lv_obj_set_style_text_font(ui->values[index], supplies ? ui->body : ui->quantity, 0);
     lv_label_set_text_static(ui->values[index], ui->amounts[index]);
     lv_obj_set_hidden(ui->connections[index], !connections);
@@ -149,7 +150,7 @@ int dock_ui_update(DockUi *ui, const DockView *view) {
       ? "Lab link available (simulated)" : "Lab link unavailable; last snapshot retained");
   lv_label_set_text_static(ui->connections[1], "Cloud: not connected   Charging: not measured");
   lv_label_set_text_static(ui->connections[2], "Radio protocol: unselected");
-  snprintf(ui->visits, sizeof(ui->visits), "Visits together: %u", view->visits);
+  snprintf(ui->visits, sizeof(ui->visits), "Visits together: %" PRIu32, view->visits);
   lv_obj_set_hidden(ui->detail, !world);
   lv_label_set_text_static(ui->detail, ui->visits);
   for (unsigned index = 0; index < 2; ++index) lv_obj_set_hidden(ui->print[index], !print);
