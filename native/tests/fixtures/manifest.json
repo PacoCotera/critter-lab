@@ -23,6 +23,24 @@
       "bytes": 18896,
       "sha256": "3d9ef2a3f8efed261c0d3ae0ba8d09110b6c6761d3415b7f30ac1b648d234c29",
       "source": "isolated native runtime at reviewed source864eca5d555c8d1624cde9a7fb646420ec5d8202, delivered public26b4a87559f8da4e454c6ba3f4b13817cb7cf3d0; active legacy field1"
+    },
+    {
+      "file": "field-v1-even.save",
+      "bytes": 18896,
+      "sha256": "840a2b6dee0180fa0e44e9788a965477af4dd4663bd81fe56ca5c5ed0e517070",
+      "source": "isolated native runtime source864eca5d555c8d1624cde9a7fb646420ec5d8202; even legacy outing/received history or pending legacy Kit5 sealed receipt"
+    },
+    {
+      "file": "field-v1-pending.save",
+      "bytes": 18896,
+      "sha256": "4ca377e83a84cfdfedddc117f561646b746d023063ae92483d3b47274e8794c3",
+      "source": "isolated native runtime source864eca5d555c8d1624cde9a7fb646420ec5d8202; even legacy outing/received history or pending legacy Kit5 sealed receipt"
+    },
+    {
+      "file": "field-v1-pending.save.kit",
+      "bytes": 4912,
+      "sha256": "434042e6acf83aad3582f263a5827395c5636120cd4ab255671f0a7447f8c0bd",
+      "source": "isolated native runtime source864eca5d555c8d1624cde9a7fb646420ec5d8202; even legacy outing/received history or pending legacy Kit5 sealed receipt"
     }
   ]
 }

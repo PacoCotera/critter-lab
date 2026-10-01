@@ -603,42 +603,47 @@ static void test_procedural_geometry(const char *path) {
   }
 }
 static void test_frozen_field_geometry(const char *path) {
-  char fixture_path[1024];
-  const char *separator = strrchr(__FILE__, '/');
-  assert(separator);
-  snprintf(fixture_path, sizeof(fixture_path), "%.*s/fixtures/field-v1.save",
-           (int)(separator - __FILE__), __FILE__);
-  GameState state, reopened;
-  assert(game_state_load(fixture_path, &state) == 0);
-  assert(state.field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
-  assert(state.field.site_x[0] == 9 && state.field.site_y[0] == 8);
-  assert(state.field.site_x[1] == 9 && state.field.site_y[1] == 2);
-  assert(game_state_save(path, &state) == 0);
-  assert(game_state_load(path, &reopened) == 0);
-  assert(!memcmp(&state.field, &reopened.field, sizeof(state.field)));
-  game_rules_resume_runtime(&state, 100);
-  walk_field(&state, path, 1);
-  GameCommand action = command(GAME_COMMAND_FIELD_INSPECT);
-  action.data.field.site = 1;
-  assert(apply(&state, path, action) == GAME_OK);
-  action = command(GAME_COMMAND_FIELD_TRACE);
-  action.data.field.site = 1;
-  assert(apply(&state, path, action) == GAME_OK);
-  walk_field(&state, path, 4);
-  GameReceivedExpedition record;
-  game_field_record(&state, &record);
-  assert(record.version == GAME_FIELD_LEGACY_CONTENT_VERSION && game_received_valid(&record));
-  record.accepted_at = 1234;
-  record.accept_sequence = state.last_operation_sequence + 1;
-  action = command(GAME_COMMAND_FIELD_UNLOAD);
-  action.data.field.record = &record;
-  assert(apply(&state, path, action) == GAME_OK);
-  assert(game_state_load(path, &reopened) == 0);
-  assert(reopened.received_count == 1 && reopened.received[0].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
-  record.version = GAME_FIELD_CONTENT_VERSION + 1;
-  assert(!game_received_valid(&record));
-  record.version = 0;
-  assert(!game_received_valid(&record));
+  const char *names[] = {"field-v1.save", "field-v1-even.save"};
+  for (unsigned fixture = 0; fixture < 2; ++fixture) {
+    char fixture_path[1024];
+    const char *separator = strrchr(__FILE__, '/');
+    assert(separator);
+    snprintf(fixture_path, sizeof(fixture_path), "%.*s/fixtures/%s",
+             (int)(separator - __FILE__), __FILE__, names[fixture]);
+    GameState state, reopened;
+    assert(game_state_load(fixture_path, &state) == 0);
+    assert(state.field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+    assert(state.field.site_x[0] == (fixture ? 2 : 9) && state.field.site_y[0] == 8);
+    assert(state.field.site_x[1] == (fixture ? 7 : 9) && state.field.site_y[1] == (fixture ? 8 : 2));
+    unsigned received_before = state.received_count, record_index = state.received_cursor;
+    assert(game_state_save(path, &state) == 0);
+    assert(game_state_load(path, &reopened) == 0);
+    assert(!memcmp(&state.field, &reopened.field, sizeof(state.field)));
+    game_rules_resume_runtime(&state, 100);
+    walk_field(&state, path, 1);
+    GameCommand action = command(GAME_COMMAND_FIELD_INSPECT);
+    action.data.field.site = 1;
+    assert(apply(&state, path, action) == GAME_OK);
+    action = command(GAME_COMMAND_FIELD_TRACE);
+    action.data.field.site = 1;
+    assert(apply(&state, path, action) == GAME_OK);
+    walk_field(&state, path, 4);
+    GameReceivedExpedition record;
+    game_field_record(&state, &record);
+    assert(record.version == GAME_FIELD_LEGACY_CONTENT_VERSION && game_received_valid(&record));
+    record.accepted_at = 1234;
+    record.accept_sequence = state.last_operation_sequence + 1;
+    action = command(GAME_COMMAND_FIELD_UNLOAD);
+    action.data.field.record = &record;
+    assert(apply(&state, path, action) == GAME_OK);
+    assert(game_state_load(path, &reopened) == 0);
+    assert(reopened.received_count == received_before + 1 &&
+           reopened.received[record_index].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+    record.version = GAME_FIELD_CONTENT_VERSION + 1;
+    assert(!game_received_valid(&record));
+    record.version = 0;
+    assert(!game_received_valid(&record));
+  }
 }
 static void test_field_loop(const char *path) {
   GameState state;

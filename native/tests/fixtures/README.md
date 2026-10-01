@@ -23,3 +23,11 @@ source and no earned cargo/sample. Its exact legacy coordinates/terrain/paths ar
 retained through load, navigation, trace, accepted history and another save.
 This is runtime geometry compatibility evidence, not a human playtest or an
 expedition balance fixture. It contains no player/private operational data.
+
+`field-v1-even.save` retains the other legacy topology plus accepted version1
+history. `field-v1-pending.save` and its `.kit` envelope retain an actual offline
+pending legacy supply haul produced by the same native source. Kit recovery tests
+copy those bytes to isolated writable files, reconnect, accept once, restart and
+begin a version2 outing while preserving old history. These are simulated-radio
+native compatibility fixtures, not hardware transport evidence. Regenerating the
+authored ABI fixtures preserves all frozen runtime entries in the manifest.

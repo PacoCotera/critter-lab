@@ -758,6 +758,54 @@ static void walk_field_site(DeviceKit *kit, unsigned site) {
   while (count) press(kit, KIT_COMPANION, (SelectedInput)(route[--count] * 2));
   assert(game_field_site(&kit->lab->game) == site);
 }
+static void frozen_field_receipt(const char *directory) {
+  char path[512], journal[520], fixture_path[1024];
+  snprintf(path, sizeof(path), "%s/frozen-field-receipt", directory);
+  snprintf(journal, sizeof(journal), "%s.kit", path);
+  const char *separator = strrchr(__FILE__, '/');
+  assert(separator);
+  const char *names[] = {"field-v1-pending.save", "field-v1-pending.save.kit"};
+  unsigned char bytes[20000];
+  for (unsigned fixture = 0; fixture < 2; ++fixture) {
+    snprintf(fixture_path, sizeof(fixture_path), "%.*s/../tests/fixtures/%s",
+             (int)(separator - __FILE__), __FILE__, names[fixture]);
+    size_t length = read_saved_bytes(fixture_path, bytes, sizeof(bytes));
+    assert(save_bytes_write(fixture ? journal : path, bytes, length) == 0);
+  }
+  SelectedLab lab;
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 200));
+  DeviceKit kit;
+  assert(kit_init(&kit, &lab, 200));
+  assert(lab.game.field.version == GAME_FIELD_LEGACY_CONTENT_VERSION &&
+         kit.journal.sealed_field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+  assert(kit.journal.version == 5 && kit.journal.phase == KIT_WAITING &&
+         !kit.journal.companion_online);
+  assert(lab.game.data == 0 && lab.game.expedition_data == GAME_SUPPLY_UNIT);
+  assert(kit_link(&kit, KIT_COMPANION, 1));
+  kit_tick(&kit, 202);
+  assert(kit.journal.phase == KIT_ARRIVED);
+  press(&kit, KIT_LAB, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.data == GAME_SUPPLY_UNIT && !lab.game.expedition_data &&
+         lab.game.received_count == 1 &&
+         lab.game.received[0].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+  kit_tick(&kit, 203);
+  assert(kit.journal.phase == KIT_COMPLETE);
+  selected_lab_init(&lab);
+  assert(selected_lab_load(&lab, path, 300));
+  assert(kit_init(&kit, &lab, 300));
+  kit_tick(&kit, 301);
+  assert(lab.game.data == GAME_SUPPLY_UNIT && lab.game.received_count == 1);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
+  assert(lab.game.field.version == GAME_FIELD_CONTENT_VERSION);
+  assert(lab.game.received[0].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+  char marker[540];
+  snprintf(marker, sizeof(marker), "%s.required", journal);
+  unlink(marker);
+  unlink(journal);
+  unlink(path);
+}
 static void field_control_and_receipt(const char *directory) {
   char path[512];
   snprintf(path, sizeof(path), "%s/field-world", directory);
@@ -901,7 +949,8 @@ static void field_control_and_receipt(const char *directory) {
   ExpeditionReceivedView received;
   assert(kit_received_projection(&kit,0,&received));
   assert(received.record_count == 1 && !received.map.avatar_visible && received.sample_collected);
-  assert(received.map.site_visible[2] && !received.map.site_visible[3]);
+  assert(received.map.site_visible[2] == !!(lab.game.received[0].visited & (1u << 2)));
+  assert(received.map.site_visible[3] == !!(lab.game.received[0].visited & (1u << 3)));
   navigation_sequence = lab.game.last_operation_sequence;
   press(&kit, KIT_LAB, SELECTED_RESEARCH_DOWN);
   assert(lab.page == V1_SAMPLES);
@@ -1007,6 +1056,7 @@ int main(void) {
   char directory[] = "/tmp/beecho-kit-XXXXXX";
   assert(mkdtemp(directory));
   field_control_and_receipt(directory);
+  frozen_field_receipt(directory);
   legacy_capsule_limit(directory);
   resident_cache_and_visits(directory);
   legacy_intent_recovery(directory);
