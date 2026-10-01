@@ -14,7 +14,7 @@ NativeUiContext *native_ui_create(void);
 NativeUiContext *native_ui_create_device(unsigned device);
 int kit_dock_projection(const DeviceKit *kit, DockView *view);
 void native_ui_destroy(NativeUiContext *context);
-/* RGB byte order matches kit's existing row renderer; NULL means failure. */
+/* Retained UI exports RGB888 frames; NULL means failure. */
 const uint8_t *native_ui_cargo(NativeUiContext *context,
                                const CompanionCargoView *view, int still);
 const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeView *view);

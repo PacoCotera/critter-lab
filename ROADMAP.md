@@ -62,7 +62,7 @@ route/control/lifetime and independent technical/craft review; see the
 [Home proof](docs/evidence/native-lab-home/README.md). Connected reception and
 received records also pass [native checks and review](docs/evidence/native-lab-reception/README.md).
 Sample research and Library now pass [native disclosure/control/lifetime and focused output review](docs/evidence/native-lab-research/README.md). Creation/review, incubation/reveal and resident/Habitat actions now pass [native authority, lifetime and focused output review](docs/evidence/native-lab-actions/README.md). Repeated navigation tutorials have been removed; [actual connected output](docs/evidence/navigation-copy/README.md) retains consequential state/cost/error copy. The rejected incubator artwork still needs actual replacement source.
-Standalone legacy acquisition callers require explicit disposition rather than a fifth graphics root or restoring console-only acquisition. Runtime memory/profile and
+Standalone acquisition graphics and unused scanline helpers are retired without a fifth graphics root or restoring console-only acquisition. Existing domain/save regressions now capture supported LVGL pages and verify recoverable unsupported-frame errors; [retirement evidence](docs/evidence/lvgl-route-retirement/README.md). Runtime memory/profile and
 physical adapters remain separate unresolved boundaries.
 Preserve game/save/physical-control behavior. Each slice has actual
 output and independent review; no host or scaffold success establishes firmware

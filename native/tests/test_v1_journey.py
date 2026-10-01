@@ -56,6 +56,23 @@ class Player:
             return content
         raise AssertionError("Could not capture a stable native frame")
 
+    def reject_frame(self):
+        # Retired fixture pages keep their command/domain behavior but no graphics.
+        for attempt in range(4):
+            state = self.command("status")
+            revision, page = state["revision"], state["page"]
+            self.process.stdin.write(f"frame {revision}\n".encode())
+            self.process.stdin.flush()
+            header = json.loads(self.process.stdout.readline())
+            if header.get("error") == "Stale frame request":
+                continue
+            assert header == {"error": "Unsupported frame page"}, header
+            assert self.process.poll() is None
+            # This response would fail to parse if BMP bytes followed the error.
+            assert self.command("status")["page"] == page
+            return
+        raise AssertionError("Could not reject a stable retired frame")
+
     def first_sample(self):
         assert self.state["page"] == "samples", self.state
         self.choose("Overview")
@@ -103,20 +120,28 @@ def journey(binary, frames):
         player.command(f"resume {player.state['revision']}")
         assert player.state["expedition_seconds"] == before
         player.wait_until(lambda state: state["expedition_seconds"] >= 60, 65)
-        player.capture("02-expedition")
+        player.reject_frame()
         player.choose("Cargo")
         player.choose("Discard 10 Data")
-        player.capture("discard-review")
+        player.reject_frame()
         player.choose("Keep these items")
         carried = player.state["cargo"]
         before_stock = player.state["stock"]
-        before_frame = player.capture("before-saved-haul")
+        player.reject_frame()
+        player.press("research")
+        assert player.state["page"] == "samples" and player.state["focus"] == "Overview"
+        before_frame = player.capture("before-saved-haul-samples")
+        player.press("back")
+        player.choose("Explore")
+        player.choose("Cargo")
+        assert player.state["cargo"] == carried and player.state["stock"] == before_stock
         player.choose("Return + store haul")
         assert player.state["stock"] == [before_stock[index] + carried[index] // 100 * 100
                                           for index in range(3)]
         assert player.state["cargo"] == [amount % 100 for amount in carried]
         assert player.state["message"].startswith("Haul saved. Lab stock")
-        after_frame = player.capture("after-saved-haul")
+        assert player.state["page"] == "samples" and player.state["focus"] == "Overview"
+        after_frame = player.capture("after-saved-haul-samples")
         width, height = 1024, 600
         stride = width * 3
         header_rows = range(60, 96)

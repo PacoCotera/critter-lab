@@ -78,6 +78,7 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
                unsigned revision);
 int kit_link(DeviceKit *kit, unsigned device, int online);
 void kit_status(DeviceKit *kit, unsigned device, FILE *output);
+int kit_frame_supported(const DeviceKit *kit, unsigned device);
 int kit_bmp(const DeviceKit *kit, unsigned device, FILE *output);
 unsigned kit_revision(const DeviceKit *kit, unsigned device);
 unsigned kit_width(unsigned device);

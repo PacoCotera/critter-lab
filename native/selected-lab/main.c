@@ -150,6 +150,8 @@ int main(int argc, char **argv) {
                  !strcmp(action, "frame")) {
           if (revision != kit_revision(&kit, device))
             puts("{\"error\":\"Stale frame request\"}");
+          else if (!kit_frame_supported(&kit, device))
+            puts("{\"error\":\"Unsupported frame page\"}");
           else {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
@@ -194,6 +196,9 @@ int main(int argc, char **argv) {
     else if (count == 2 && !strcmp(name, "frame") && number(argument, &frame)) {
       if (frame != lab.revision)
         puts("{\"error\":\"Stale frame request\"}");
+      else if (!(kit_mode ? kit_frame_supported(&kit, KIT_LAB)
+                          : selected_lab_frame_supported(&lab)))
+        puts("{\"error\":\"Unsupported frame page\"}");
       else {
         printf("{\"revision\":%u,\"bytes\":%u}\n", lab.revision,
                54u + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3u);

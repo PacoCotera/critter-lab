@@ -53,11 +53,5 @@ typedef enum {
 
 extern const CoreArtSprite core_art_sprites[CORE_ART_COUNT];
 const CoreArtSprite *core_art_sprite(CoreArtId id);
-void core_art_row(CoreArtId id, int x, int y, unsigned row,
-                  unsigned width, uint8_t *pixels);
-void core_art_panel_row(int x, int y, int width, int height, unsigned row,
-                        unsigned canvas_width, uint8_t *pixels);
-void core_art_focus_row(int x, int y, int width, int height, unsigned row,
-                        unsigned canvas_width, uint8_t *pixels);
 
 #endif
