@@ -157,7 +157,6 @@ static void discard_finish_projection_truth(void) {
   strcpy(lab.game.expedition_id, "discard-proof");
   lab.game.expedition_data = 40 * GAME_SUPPLY_UNIT;
   lab.game.field.version = 3;
-  strcpy(lab.game.field.expedition_id, "discard-proof");
   lab.game.field.collected = 1;
   GameState saved = lab.game;
   CompanionCargoView view;
@@ -184,6 +183,10 @@ static void discard_finish_projection_truth(void) {
       assert(!strcmp(view.capsule, "Keep cargo") && !strstr(view.detail, "Loss"));
     }
   }
+  lab.storage_error = 1;
+  assert(kit_cargo_projection(&kit, &view) && !view.action_count);
+  assert(!strcmp(view.feedback, "Storage unavailable"));
+  lab.storage_error = 0;
   kit.companion.page = COMP_DISCARD_REVIEW;
   kit.companion.focus = 1;
   kit.companion.discard_quantity = 3 * GAME_SUPPLY_UNIT;
@@ -216,7 +219,7 @@ static void discard_finish_projection_truth(void) {
   assert(!memcmp(&saved, &lab.game, sizeof(saved)));
   kit.companion.discard_resource = 0;
   kit.journal.phase = KIT_WAITING;
-  kit.sealed_field = lab.game.field;
+  game_field_record(&lab.game, &kit.sealed_field);
   kit.sealed_field.cargo[0] = 40 * GAME_SUPPLY_UNIT;
   assert(kit_cargo_projection(&kit, &view) && !view.action_count);
   assert(strstr(view.detail, "already sealed") && !strstr(view.footer, "Keep"));
@@ -411,7 +414,6 @@ static void discard_finish_fixture_exports(const char *directory) {
   strcpy(lab.game.expedition_id, "discard-fixture");
   lab.game.expedition_data = 40 * GAME_SUPPLY_UNIT;
   lab.game.field.version = 3;
-  strcpy(lab.game.field.expedition_id, "discard-fixture");
   lab.game.field.collected = 1;
   NativeUiContext *context = native_ui_create();
   assert(context);
@@ -428,7 +430,7 @@ static void discard_finish_fixture_exports(const char *directory) {
     lab.storage_error = index == 4;
     kit.journal.phase = index == 5 ? KIT_WAITING : KIT_IDLE;
     if (index == 5) {
-      kit.sealed_field = lab.game.field;
+      game_field_record(&lab.game, &kit.sealed_field);
       kit.sealed_field.cargo[0] = 40 * GAME_SUPPLY_UNIT;
     }
     if (index == 6) {

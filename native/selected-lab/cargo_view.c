@@ -85,7 +85,7 @@ static int cargo_task_projection(const DeviceKit *kit, CompanionCargoView *out) 
       snprintf(out->detail, sizeof(out->detail), "%s", "All items stay in cargo.");
     }
   }
-  if (selector && !view->message[0])
+  if (selector && !view->message[0] && !out->failed)
     snprintf(out->feedback, sizeof(out->feedback), "Choice %u / %u", view->focus + 1, count);
   int sealed = out->phase >= KIT_WAITING && out->phase <= KIT_ACK_PENDING;
   int blocked = sealed || out->accepted || !kit->lab->game.expedition_id[0] ||
