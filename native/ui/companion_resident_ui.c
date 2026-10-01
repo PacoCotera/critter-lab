@@ -95,10 +95,10 @@ CompanionResidentUi *companion_resident_ui_create(lv_obj_t *parent,
   ui->empty_description = label(ui->root, fonts->body, CORE_ART_INK_RGB,
       203, 220, 205, 104, "Reveal a resident at the Lab to meet here.");
   ui->feedback = label(ui->root, fonts->body, CORE_ART_SECONDARY_RGB, 28, 459, 394, 58, "");
-  ui->entry = label(ui->root, fonts->action, CORE_ART_INK_RGB, 28, 524, 394, 26, "Down / Confirm: enter");
+  ui->entry = label(ui->root, fonts->action, CORE_ART_INK_RGB, 28, 524, 394, 26, "");
   ui->preview_hint = label(ui->root, fonts->small, CORE_ART_SECONDARY_RGB,
-                            28, 551, 394, 20, "Browsing never sends or spends");
-  ui->footer = label(ui->root, fonts->small, CORE_ART_SECONDARY_RGB, 28, 568, 394, 20, "Left/Right: modes");
+                            28, 551, 394, 20, "");
+  ui->footer = label(ui->root, fonts->small, CORE_ART_SECONDARY_RGB, 28, 568, 394, 20, "");
   for (unsigned index = 0; index < 2; ++index) {
     ui->buttons[index] = lv_button_create(ui->root);
     if (!ui->buttons[index]) goto failure;
@@ -154,13 +154,13 @@ int companion_resident_ui_update(CompanionResidentUi *ui,
   }
   int preview = view->screen == RESIDENT_PREVIEW;
   int list = view->screen == RESIDENT_LIST;
-  lv_obj_set_hidden(ui->entry, view->failed || (!preview && !(list && view->count)));
-  lv_label_set_text_static(ui->entry, preview ? "Down / Confirm: enter" : "Confirm: view this critter");
-  lv_obj_set_hidden(ui->preview_hint, view->failed || !preview);
+  lv_obj_set_hidden(ui->entry, true);
+  lv_obj_set_hidden(ui->preview_hint, true);
   lv_obj_set_hidden(ui->mode_frame.object, view->failed || !preview);
   lv_obj_set_style_text_color(ui->selected_mode,
       lv_color_hex(view->failed || !preview ? CORE_ART_INK_RGB : CORE_ART_FOCUS_RGB), 0);
-  lv_label_set_text_static(ui->footer, view->footer);
+  lv_label_set_text_static(ui->footer, view->failed ? view->footer : "");
+  lv_obj_set_hidden(ui->footer, !view->failed);
   lv_obj_set_height(ui->feedback, view->action_count ? 44 : 58);
   for (unsigned index = 0; index < 2; ++index) {
     lv_obj_set_hidden(ui->buttons[index], index >= view->action_count);

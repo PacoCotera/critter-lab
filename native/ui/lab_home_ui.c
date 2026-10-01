@@ -226,7 +226,8 @@ int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view) {
     lv_obj_set_width(ui->progress_fill, (int)((uint64_t)view->landing.progress*width/view->landing.total));
     lv_obj_set_hidden(ui->progress_fill, !view->landing.progress);
   }
-  lv_label_set_text_static(ui->footer, view->footer);
+  lv_label_set_text_static(ui->footer, "");
+  lv_obj_set_hidden(ui->footer, true);
   lv_label_set_text_static(ui->warning, view->warning);
   lv_obj_set_hidden(ui->warning, !view->warning[0]);
   return 1;

@@ -171,9 +171,9 @@ int selected_lab_research_projection(const SelectedLab *lab,
     const unsigned costs[] = {method.cost_data, method.cost_energy, method.cost_essence};
     for (unsigned resource = 0; resource < 3; ++resource)
       out->costs[resource] = method.known || !method.useful ? 0 : costs[resource] / GAME_SUPPLY_UNIT;
-    strcpy(out->next, method.known || !method.useful ? "Confirm inspects recorded knowledge." :
+    strcpy(out->next, method.known || !method.useful ? "" :
         lab->page == V1_STUDY_REVIEW ? "Start research spends the listed resources." :
-        "Confirm reviews this investigation.");
+        "");
     return 1;
   }
   out->detail = LAB_RESEARCH_DISCOVERY;

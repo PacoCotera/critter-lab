@@ -310,12 +310,8 @@ void expedition_field_row(const ExpeditionFieldView *view,unsigned y,uint8_t *pi
       if (i==view->focus) focus(&row,29,action_y-8,392,30);
       label(&row,45,action_y,view->actions[i],17,i==view->focus,i==view->focus?WARM:INK,360);
     }
-    label(&row,30,540,"Up/Down: choose / Confirm: act",15,0,INK,390);
-    label(&row,30,560,"Back: same map position",15,0,MUTED,390);
   } else {
     label(&row,30,474,view->location,20,1,INK,390);
     label(&row,30,504,view->message,15,0,MUTED,390);
-    label(&row,30,538,"Directions: move / Confirm: inspect",15,0,INK,390);
-    label(&row,30,560,"Back: modes",15,0,MUTED,390);
   }
 }

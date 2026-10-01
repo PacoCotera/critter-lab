@@ -110,7 +110,7 @@ static void explore(const SelectedLab *lab,
     out->landing.art = LAB_HOME_ART_EXPLORE;
     strcpy(out->landing.details[0], "Recorded routes and findings");
     strcpy(out->landing.details[1], "Accepted supplies and samples");
-    strcpy(out->landing.strip, "Confirm: open the received expedition log");
+    out->landing.strip[0] = '\0';
     return;
   }
   strcpy(out->landing.heading, game->expedition_active ? "EXPEDITION GATHERING" :

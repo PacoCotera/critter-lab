@@ -21,6 +21,11 @@ The Lab is a playful genetics research device: graphite surfaces, defined electr
 | Knowledge | Known and unknown remain explicit; unknown imagery reveals no specimen result and must not imply absent, locked or unaffordable |
 | Feedback | Pending/saved/error remain distinct from knowledge and focus. Red is for actual error/risk, not affordable study cost |
 
+Routine directional/Confirm/Back instructions do not occupy screen footers or
+Home previews. The physical panel, visible focus and concise action names carry
+ordinary navigation. Keep actual costs, commitment terms, results and unusual
+errors visible; removing tutorials must not hide consequences or recovery state.
+
 Approval establishes visual direction, composition grammar and hierarchy. It does not establish exact sampled color tokens, font licensing, native sprite masters, motion, physical-display performance or implemented navigation. Author reusable assets and compact variants faithfully; verify them against this baseline rather than redesigning them independently per screen. Decorative biological imagery is not genomic data. Resource colors must not imply relationships to unrelated traits.
 
 ## Across the device family
@@ -80,13 +85,19 @@ The owner likes the destination silhouettes but rejects their initial brass fini
 as steampunk. Revise materials while preserving expressive saturated sprite detail;
 screen iconography, UI and hardware must convey one identity. Do not turn this into
 uniform grey icons or replace the approved electric-blue screen framing.
-Generic compass, microscope, incubation vessel and terrarium symbols identify
+Generic compass, microscope, incubation chamber and terrarium symbols identify
 destinations; adjacent live counts and captions describe actual state. A topic
 metaphor is not a discovered specimen or an owned inventory item. Keep the same
 symbols across empty and populated states. The four prepared 136×144 files retain
 their opaque graphite backing and must be rendered 1:1 on the documented matching
 field, without the older corner-color matte. This is a bounded implementation
 candidate; it does not approve other screens or establish final pixel masters.
+The owner has since rejected the cyan/purple canister specifically: it does not
+convey incubation. Its original remains preserved. Replacement source art is a
+bounded Gemini study of one sheltered chamber in empty/developing/ready states,
+using the same hardware materials. Developing and ready stay opaque and closed;
+no individual or anatomy is shown before deliberate Open. A generation or brief
+does not approve the actual replacement/native composition.
 
 Information architecture, layout, content, visual references, then navigation. Keep game/hardware constraints present throughout. Identify player purpose and data relationships before choosing art placement. No physical room, workbench or second device depicted inside the device screen. The accepted directional/workspace/Back/Confirm panel drives focus, actions and feedback; no touch or invented controls.
 

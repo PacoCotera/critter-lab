@@ -276,7 +276,7 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
   lv_label_set_text_static(ui->message, view->message);
   lv_obj_set_hidden(ui->message, !view->message[0]);
   lv_obj_set_style_text_color(ui->message, lv_color_hex(view->storage_error ? CORE_ART_FOCUS_RGB : CORE_ART_INK_RGB), 0);
-  lv_obj_set_width(ui->footer, view->message[0] ? 330 : 964);
-  lv_label_set_text_static(ui->footer, view->message[0] ? "Back: return" : view->footer);
+  lv_label_set_text_static(ui->footer, "");
+  lv_obj_set_hidden(ui->footer, true);
   return 1;
 }

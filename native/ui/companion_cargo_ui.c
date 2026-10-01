@@ -165,9 +165,9 @@ static int compose(CompanionCargoUi *context) {
     if (!context->button_text[action]) return 0;
   }
   context->preview_hints[0] = label(bands[4], context->fonts.action, CORE_ART_INK_RGB,
-      4, 6, 394, 26, "Down / Confirm: enter Cargo");
+      4, 6, 394, 26, "");
   context->preview_hints[1] = label(bands[4], context->fonts.small, CORE_ART_SECONDARY_RGB,
-      4, 36, 394, 26, "Browsing never sends or spends");
+      4, 36, 394, 26, "");
   for (unsigned index = 0; index < 2; ++index) {
     if (!context->preview_hints[index]) return 0;
     lv_obj_set_hidden(context->preview_hints[index], true);
@@ -294,9 +294,10 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
   } else lv_label_set_text_static(context->detail, view->detail);
   lv_label_set_text_static(context->capacity, view->capacity);
   lv_label_set_text_static(context->feedback, view->feedback);
-  lv_label_set_text_static(context->footer, view->footer);
+  lv_label_set_text_static(context->footer, view->failed ? view->footer : "");
+  lv_obj_set_hidden(context->footer, !view->failed);
   for (unsigned index = 0; index < 2; ++index)
-    lv_obj_set_hidden(context->preview_hints[index], !view->selector || view->failed);
+    lv_obj_set_hidden(context->preview_hints[index], true);
   for (unsigned action = 0; action < 2; ++action) {
     lv_obj_remove_state(context->buttons[action], LV_STATE_FOCUSED | LV_STATE_PRESSED);
     if (action >= view->action_count) lv_obj_set_hidden(context->buttons[action], true);

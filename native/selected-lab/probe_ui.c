@@ -222,7 +222,8 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   lv_label_set_text_static(ui->context, !strcmp(view->context, view->status) &&
       view->phase == PROBE_ENTRY ? "" : view->context);
   lv_label_set_text_static(ui->source, view->source);
-  lv_label_set_text_static(ui->footer, view->footer);
+  lv_label_set_text_static(ui->footer, "");
+  lv_obj_set_hidden(ui->footer, true);
   int scene = view->phase == PROBE_MAP || view->phase == PROBE_SITE;
   lv_obj_set_hidden(ui->viewport, !scene);
   lv_obj_set_hidden(ui->status, scene);

@@ -265,7 +265,8 @@ int lab_reception_ui_update(LabReceptionUi *ui, const LabReceptionView *view) {
   lv_obj_set_hidden(ui->arrival, !arrival);
   lv_obj_set_hidden(ui->log, arrival);
   lv_label_set_text_static(ui->title, arrival ? "HAUL RECEPTION" : "EXPEDITION LOG");
-  lv_label_set_text_static(ui->footer, view->footer);
+  lv_label_set_text_static(ui->footer, "");
+  lv_obj_set_hidden(ui->footer, true);
   lv_label_set_text_static(ui->warning, view->warning);
   lv_obj_set_pos(ui->warning,48,arrival ? 512 : 86);
   lv_obj_set_hidden(ui->warning, !view->warning[0]);

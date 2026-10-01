@@ -129,6 +129,11 @@ Research is a process of discovering surprises in a sample cache. The connected 
 
 A sample, creature, vessel or inventory is the center of each activity. Composition follows purpose: browsing selects; research examines; creation review explains consequences; Meet gives a saved individual room. Use connected explanations where needed rather than scattered short labels. Details adds depth but must not hide instructions essential to play.
 
+Do not repeat basic control tutorials on ordinary screens, including Home's
+workspace previews. Focus, the physical panel and action labels identify ordinary
+navigation. Costs, sample-use/retained-record terms, actual state, results and
+unusual errors remain visible. This applies across Lab, Companion and Dock.
+
 Separate **focus**, **retained selection/draft**, **navigation** and **domain commitment**. Focus previews; explicit Select retains a value; entering a named destination navigates. A separate supported command commits. Use generic action labels rather than attribute-specific toggles. Back restores caller, object, page and valid focus without committing a draft or cancelling submitted work. Unsupported choices need explanation and fresh selection, never silent substitution.
 
 ```mermaid

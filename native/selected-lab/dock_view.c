@@ -35,8 +35,8 @@ int kit_dock_projection(const DeviceKit *kit, DockView *view) {
   struct tm *local_time = gmtime(&local_stamp);
   if (view->updated_at && local_time)
     strftime(stamp, sizeof(stamp), "%H:%M:%S Mexico City", local_time);
-  snprintf(view->timestamp, sizeof(view->timestamp), "%sSnapshot %s%s",
-      view->page == 1 ? "OK: Back / " : "", stamp, view->current ? "" : " / stale");
+  snprintf(view->timestamp, sizeof(view->timestamp), "Snapshot %s%s",
+      stamp, view->current ? "" : " / stale");
   snprintf(view->message, sizeof(view->message), "%s", kit->dock.message[0]
       ? kit->dock.message : view->unavailable ? "Storage unavailable; last snapshot retained." : "");
   for (unsigned index = 0; index < view->action_count; ++index)
