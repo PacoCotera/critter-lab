@@ -2,6 +2,7 @@
 #include "kit.h"
 #include "native_ui.h"
 #include "research_view.h"
+#include "action_view.h"
 #include "save_bytes.h"
 #include "selected_lab.h"
 #include <limits.h>
@@ -153,9 +154,9 @@ int main(int argc, char **argv) {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
                    54 + stride * kit_height(device));
-            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
+            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
               lab_ui = native_ui_create_device(KIT_LAB);
-            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
+            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
             if (!kit_bmp_ui(&kit, device, stdout,
                 device == KIT_LAB ? lab_ui : device == KIT_DOCK ? dock_ui : ui, 1))
               goto failure;
@@ -196,9 +197,9 @@ int main(int argc, char **argv) {
       else {
         printf("{\"revision\":%u,\"bytes\":%u}\n", lab.revision,
                54u + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3u);
-        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
+        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
           lab_ui = native_ui_create_device(KIT_LAB);
-        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
+        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
         int rendered = kit_mode ? kit_bmp_ui(&kit, KIT_LAB, stdout, lab_ui, 1)
                                 : selected_lab_bmp(&lab, stdout);
         if (!rendered)

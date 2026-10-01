@@ -9,7 +9,11 @@ nearby game text supplies current activity, sample and resident facts.
 
 ## Native handoff
 
-Use `exports/explore.png`, `research.png`, `incubator.png` and `habitat.png`.
+Use the prepared Explore, Research and Habitat exports. The current incubator
+export remains implemented but was rejected by the owner for unclear incubation
+meaning and appearance. Its original is preserved; the replacement Gemini state
+study must pass native-size review before use. Developing and ready remain
+concealed until deliberate Open.
 Each is 136×144 and must be drawn 1:1. The compass has a deliberately smaller
 painted footprint to balance its broad compass face against the narrower subjects.
 The [native sheet](exports/sheet-native.png) and [3× diagnostic](exports/sheet-3x.png)
@@ -44,7 +48,7 @@ The 3× sheet uses nearest-neighbor enlargement only for inspection.
 The source is a 1024×1024 Gemini image acquired with Copy image, not a screenshot
 of the browser. Source art remains distinct from these reduced usage assets.
 The [empty](native-proof/final-empty.png) and [populated](native-proof/final-populated.png)
-proofs are actual 1024�600 C17 Linux host renders from pushed source
+proofs are actual 1024x600 C17 Linux host renders from pushed source
 `492b90f9dd3d74286c282e3d0696bf1dc0d75c2e`. All four asset regions in both
 frames match these exports pixel for pixel. Native input/frame checks and the
 existing Actions target builds passed. These images demonstrate host rendering,

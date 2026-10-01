@@ -1,6 +1,7 @@
 #include "native_ui.h"
 #include "home_view.h"
 #include "research_view.h"
+#include "action_view.h"
 #include "assets.h"
 #include "core_art.h"
 #include "native_font.h"
@@ -168,17 +169,6 @@ int selected_lab_original_art(const GameIndividual *individual,
   return 0;
 }
 
-static void resident_portrait(SelectedRow *row, const GameState *game,
-                               unsigned resident, int x, int y) {
-  unsigned asset;
-  if (resident < game->individual_count &&
-      selected_lab_original_art(&game->individuals[resident],
-                                 &game->individual_metadata[resident], &asset))
-    core_art_row((CoreArtId)asset, x, y, row->y, SELECTED_LAB_WIDTH, row->pixels);
-  else
-    label(row, x, y + 110, "Portrait pending", 22, MUTED);
-}
-
 const char *selected_lab_resident_form_title(
     const GameIndividual *individual,
     const GameIndividualMetadata *metadata) {
@@ -211,79 +201,13 @@ static void focus(SelectedRow *row, int x, int y, int width, int height) {
 }
 
 
-static const char *research_topic(const SelectedResearchMethod *entry) {
-  if (!strcmp(entry->id, "heritage")) return "Inheritance";
-  if (!strcmp(entry->id, "movement")) return "Movement";
-  if (!strcmp(entry->id, "coat-comparison")) return "Coat";
-  if (!strcmp(entry->id, "effort-comparison")) return "Effort";
-  if (!strcmp(entry->id, "form.crown")) return "Crown";
-  if (!strcmp(entry->id, "appearance.rings")) return "Eye rings";
-  if (!strcmp(entry->id, "appearance.markings")) return "Markings";
-  if (!strcmp(entry->id, "movement.drive")) return "Movement";
-  if (!strcmp(entry->id, "movement.efficiency")) return "Effort";
-  return entry->title;
-}
-
-static void research_summary(SelectedRow *row, const SelectedLab *lab,
-                              unsigned sample, int x, int y, int width) {
-  SelectedResearchView view;
-  if (!selected_lab_research_view(lab, sample, &view))
-    return;
-  char known[160] = "Known: ", missing[160] = "Still: ";
-  unsigned known_count = 0, missing_count = 0;
-  const char *suggested = NULL;
-  for (unsigned method = 0; method < view.method_count; ++method) {
-    SelectedResearchMethod entry;
-    if (!selected_lab_research_method(lab, sample, method, &entry)) continue;
-    char *line = entry.known ? known : missing;
-    unsigned *count = entry.known ? &known_count : &missing_count;
-    size_t used = strlen(line);
-    snprintf(line + used, 160 - used, "%s%s", (*count)++ ? " / " : "", research_topic(&entry));
-    if (!suggested && entry.useful && !entry.known) suggested = research_topic(&entry);
-  }
-  if (!known_count) strcpy(known, "Known: no findings yet");
-  if (view.complete) strcpy(known, "Known: complete supported form");
-  label(row, x, y, known, 18, SAGE);
-  label(row, x, y + 22, view.complete ? "No unresolved reference knowledge." : missing, 18, MUTED);
-  char next[112];
-  if (lab->game.samples[sample].incubated)
-    strcpy(next, "Sample used / research record stays.");
-  else if (view.complete)
-    strcpy(next, "Choose a supported form.");
-  else if (suggested)
-    snprintf(next, sizeof(next), "Suggested: %s", suggested);
-  else
-    strcpy(next, "Inspect your recorded findings.");
-  wrapped_label(row, x, y + 44, next, 18, INK, width);
-}
-
-static void overview_sprite(SelectedRow *row, unsigned asset, int x, int y) {
-  int source_y = (int)row->y - y;
-  if (asset >= OVERVIEW_SPRITE_COUNT || source_y < 0 ||
-      source_y >= OVERVIEW_SPRITE_HEIGHT)
-    return;
-  for (int column = 0; column < OVERVIEW_SPRITE_WIDTH; ++column) {
-    int destination = x + column;
-    if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH)
-      continue;
-    const uint8_t *source = overview_pixels[asset] +
-                            (source_y * OVERVIEW_SPRITE_WIDTH + column) * 4;
-    uint8_t *target = row->pixels + destination * 3;
-    unsigned alpha = source[3];
-    for (unsigned channel = 0; channel < 3; ++channel)
-      target[channel] = (uint8_t)((source[channel] * alpha +
-                                   target[channel] * (255u - alpha) + 127u) /
-                                  255u);
-  }
-}
-
 void selected_lab_row_with_context(const SelectedLab *lab,
                                   const SelectedLabRenderContext *context,
                                   unsigned y,
                                   uint8_t pixels[SELECTED_LAB_WIDTH * 3]) {
   /* Home owns a retained LVGL tree and is exported through the frame API.
    * This legacy row API is intentionally unavailable for migrated pages. */
-  if (lab->page == V1_HOME || selected_lab_is_research_page(lab->page)) { memset(pixels, 0, SELECTED_LAB_WIDTH * 3); return; }
+  if (lab->page == V1_HOME || selected_lab_is_research_page(lab->page) || selected_lab_is_action_page(lab->page)) { memset(pixels, 0, SELECTED_LAB_WIDTH * 3); return; }
   (void)context;
   SelectedRow row = {y, pixels};
   const GameState *game = &lab->game;
@@ -314,12 +238,11 @@ void selected_lab_row_with_context(const SelectedLab *lab,
   unsigned count = selected_lab_options(lab);
   unsigned first = lab->focus >= 6 ? lab->focus - 5 : 0;
   for (unsigned i = first; i < count && i < first + 6; i++) {
-    int yy = lab->page == V1_CREATE ? 159 + (int)(i - first) * 110
-                                      : 159 + (int)(i - first) * 58;
+    int yy = 159 + (int)(i - first) * 58;
     if (i == lab->focus) {
       int x = 39;
       int width = 299;
-      int height = lab->page == V1_CREATE ? 98 : 46;
+      int height = 46;
       rectangle(&row, x, yy - 4, width, height, PANEL);
       focus(&row, x - 2, yy - 6, width + 4, height + 4);
     }
@@ -332,9 +255,6 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       selected_lab_research_method(lab, sample, study, &entry);
       label(&row, 53, yy + 23, entry.title, 18,
             i == lab->focus ? WARM : INK);
-    } else if (lab->page == V1_CREATE) {
-      wrapped_label(&row, 53, yy + 10, selected_lab_option(lab, i), 18,
-                    i == lab->focus ? WARM : INK, 273);
     } else {
       label(&row, 53, yy + 7,
             selected_lab_option(lab, i), 18,
@@ -384,85 +304,6 @@ void selected_lab_row_with_context(const SelectedLab *lab,
               ? "This frees 10 cargo units. It cannot be recovered."
               : "Fewer than 10 whole items of this kind.",
           18, INK);
-  } else if (lab->page == V1_CREATE || lab->page == V1_CREATE_REVIEW) {
-    int review = lab->page == V1_CREATE_REVIEW;
-    PipSupportedCandidate candidate;
-    int disclosed = review ? selected_lab_creation_draft(lab, &candidate)
-                            : selected_lab_candidate(lab, lab->sample, lab->focus, &candidate);
-    label(&row, 416, 208, game->samples[lab->sample].id, 18, MUTED);
-    if (disclosed) {
-      sprite(&row, SELECTED_SPRITE_COUNT + candidate.expression.pale_markings,
-             405, 235, 261, 289);
-      label(&row, 689, 238, review ? "SELECTED FORM" : "SUPPORTED PREVIEW", 18, SAGE);
-      wrapped_label(&row, 689, 275, candidate.title, 22, INK, 278);
-      snprintf(text, sizeof(text), "Reference: %s", candidate.id);
-      label(&row, 689, 346, text, 18, MUTED);
-      label(&row, 689, 378, "Cost: 5 of each supply", 18, INK);
-      if (review)
-        wrapped_label(&row, 689, 409, "Uses this sample; research record stays.",
-                      18, INK, 278);
-      else {
-        label(&row, 689, 409, "Drafting spends nothing.", 18, INK);
-        label(&row, 689, 435, "Confirm: review form", 18, INK);
-      }
-      unsigned shortage = 0;
-      for (unsigned i = 0; i < 3; ++i)
-        if (stock[i] < 500) {
-          snprintf(text, sizeof(text), "%s: %u / 5", names[i], stock[i] / GAME_SUPPLY_UNIT);
-          label(&row, 689, 460 + (int)shortage * 22, text, 18, WARM);
-          ++shortage;
-        }
-    } else {
-      overview_sprite(&row, OVERVIEW_RESEARCH, 423, 260);
-      wrapped_label(&row, 588, 281, "Complete this sample's reference knowledge before choosing a form.", 22, INK, 360);
-      research_summary(&row, lab, lab->sample, 416, 449, 535);
-    }
-  } else if (lab->page == V1_INCUBATION) {
-    overview_sprite(&row, OVERVIEW_INCUBATOR, 597, 236);
-    if (game->incubation_active) {
-      label(&row, 417, 209, game->samples[game->incubation_sample].id, 18,
-            MUTED);
-      snprintf(text, sizeof(text), "%u / %u s active play",
-               game->incubation_elapsed, GAME_INCUBATION_SECONDS);
-      label(&row, 469, 458, text, 22, WARM);
-    }
-    label(&row, 424, 406,
-          game->incubation_ready    ? "READY / OPEN WHEN YOU CHOOSE"
-          : game->incubation_active ? "INCUBATING"
-                                    : "No incubation yet",
-          24, game->incubation_ready ? SAGE : INK);
-  } else {
-    int visible =
-        game->individual_count && game->individuals[lab->resident].revealed;
-    const GameIndividual *individual = &game->individuals[lab->resident];
-    label(&row, 415, 210,
-          visible                    ? individual->id
-          : lab->page == V1_CRITTERS ? "No revealed residents yet"
-                                     : "Your habitat awaits",
-          22, INK);
-    if (visible) {
-      resident_portrait(&row, game, lab->resident, 411, 235);
-      label(&row, 686, 248,
-            individual->expression.pale_markings ? "Pale markings"
-                                                 : "Plain coat",
-            28, WARM);
-      label(&row, 686, 297, "Crown frill / pale eye rings", 18, INK);
-      const char *form_title = selected_lab_resident_form_title(
-          individual, &game->individual_metadata[lab->resident]);
-      label(&row, 686, 327, "Selected form", 18, MUTED);
-      wrapped_label(&row, 686, 349,
-                    form_title ? form_title : "Form reference unavailable",
-                    22, INK, 278);
-      label(&row, 686, 412, "Source sample", 18, MUTED);
-      label(&row, 686, 436, individual->source_sample_id, 18, INK);
-      if (lab->page == V1_HABITAT) {
-        snprintf(text, sizeof(text), "Visits together: %u",
-                 individual->care_visits);
-        label(&row, 686, 487, text, 18, SAGE);
-      } else if (lab->page == V1_REVEAL)
-        label(&row, 686, 487, "Ready to meet you.", 18, SAGE);
-    } else
-      label(&row, 414, 439, "Research your first sample to begin.", 22, INK);
   }
 
   {
@@ -471,9 +312,6 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       wrapped_label(&row, 416, 486, lab->message, 18,
                     lab->storage_error ? WARM : INK, 552);
     }
-    label(&row, 30, 557,
-          "Up/down: focus | Right: inspect | Confirm: act | Back: return",
-          18, MUTED);
   }
 }
 
@@ -507,6 +345,14 @@ int selected_lab_bmp(const SelectedLab *lab, FILE *output) {
     context = native_ui_create_device(KIT_LAB);
     if (!context) return 0;
     frame = native_ui_research(context, &view);
+    if (!frame) { native_ui_destroy(context); return 0; }
+  }
+  if (selected_lab_is_action_page(lab->page)) {
+    LabActionView view;
+    if (!selected_lab_action_projection(lab, 0, &view)) return 0;
+    context = native_ui_create_device(KIT_LAB);
+    if (!context) return 0;
+    frame = native_ui_actions(context, &view);
     if (!frame) { native_ui_destroy(context); return 0; }
   }
   const unsigned stride = SELECTED_LAB_WIDTH * 3;

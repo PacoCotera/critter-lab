@@ -2,6 +2,7 @@
 #include "../ui/lab_home_ui.h"
 #include "../ui/lab_reception_ui.h"
 #include "../ui/lab_research_ui.h"
+#include "../ui/lab_action_ui.h"
 #include "field_art.h"
 #include "ui_assets.h"
 #include "ui_theme.h"
@@ -22,6 +23,7 @@ struct NativeUiContext {
   LabHomeUi *home;
   LabReceptionUi *reception;
   LabResearchUi *research;
+  LabActionUi *lab_actions;
   NativeUiImage research_images[5];
   NativeUiImage reception_tiles[FIELD_ART_COUNT];
   NativeUiImage home_images[13];
@@ -141,6 +143,7 @@ void native_ui_destroy(NativeUiContext *context) {
   lab_home_ui_destroy(context->home);
   lab_reception_ui_destroy(context->reception);
   lab_research_ui_destroy(context->research);
+  lab_action_ui_destroy(context->lab_actions);
   if (context->actions) lv_group_delete(context->actions);
   ui_display_destroy(context->transport);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
@@ -228,6 +231,7 @@ const uint8_t *native_ui_home(NativeUiContext *context, const LabHomeView *view)
       ui_display_failed(context->transport) || !lab_home_ui_update(context->home, view)) return NULL;
   lab_reception_ui_hide(context->reception);
   lab_research_ui_hide(context->research);
+  lab_action_ui_hide(context->lab_actions);
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }
@@ -253,6 +257,7 @@ const uint8_t *native_ui_reception(NativeUiContext *context, const LabReceptionV
   if (!lab_reception_ui_update(context->reception, view)) return NULL;
   lab_home_ui_hide(context->home);
   lab_research_ui_hide(context->research);
+  lab_action_ui_hide(context->lab_actions);
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }
@@ -279,6 +284,28 @@ const uint8_t *native_ui_research(NativeUiContext *context, const LabResearchVie
   if (!lab_research_ui_update(context->research, view)) return NULL;
   lab_home_ui_hide(context->home);
   lab_reception_ui_hide(context->reception);
+  lab_action_ui_hide(context->lab_actions);
+  lv_refr_now(context->display);
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
+}
+
+const uint8_t *native_ui_actions(NativeUiContext *context, const LabActionView *view) {
+  if (!context || context->device != KIT_LAB || !view ||
+      ui_display_failed(context->transport)) return NULL;
+  if (!context->lab_actions) {
+    const lv_image_dsc_t *images[13];
+    for (unsigned index = 0; index < 13; ++index)
+      images[index] = &context->home_images[index].image;
+    const LabHomeFonts fonts = {&context->home_fonts[0], &context->home_fonts[1],
+        &context->home_fonts[2], &context->home_fonts[3], &context->home_fonts[4]};
+    context->lab_actions = lab_action_ui_create(
+        lv_display_get_screen_active(context->display), &fonts, images);
+    if (!context->lab_actions) return NULL;
+  }
+  if (!lab_action_ui_update(context->lab_actions, view)) return NULL;
+  lab_home_ui_hide(context->home);
+  lab_reception_ui_hide(context->reception);
+  lab_research_ui_hide(context->research);
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }

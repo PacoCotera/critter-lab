@@ -2,6 +2,7 @@
 #include "core_art.h"
 #include "reception_view.h"
 #include "research_view.h"
+#include "action_view.h"
 #include "kit.h"
 #include "native_font.h"
 #include "native_ui.h"
@@ -125,6 +126,17 @@ static int bmp_rows(const DeviceKit *kit, unsigned device, FILE *output,
 int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                NativeUiContext *context, int still) {
   if (!kit || !kit->lab || !output || device >= KIT_DEVICE_COUNT) return 0;
+  if (device == KIT_LAB && selected_lab_is_action_page(kit->lab->page)) {
+    LabActionView view;
+    if (!selected_lab_action_projection(kit->lab, kit->normalization_pending, &view)) return 0;
+    int temporary = !context;
+    if (temporary) context = native_ui_create_device(KIT_LAB);
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_actions(context, &view);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   if (device == KIT_LAB && selected_lab_is_research_page(kit->lab->page)) {
     LabResearchView view;
     if (!selected_lab_research_projection(kit->lab, kit->normalization_pending, &view)) return 0;

@@ -297,7 +297,8 @@ static void discard_finish_projection_truth(void) {
   memset(&lab.game.field, 0, sizeof(lab.game.field));
   assert(kit_cargo_projection(&kit, &view));
   assert(!strcmp(view.title, "Cargo empty") && !strcmp(view.context, "No active expedition"));
-  assert(strstr(view.detail, "new expedition") && !strstr(view.detail, "progress retained"));
+  assert(!strcmp(view.detail, "No cargo.") && !strstr(view.detail, "progress retained"));
+  assert(view.action_count && !strcmp(view.actions[0], "Return to Probe"));
   lab.game.expedition_data = 2 * GAME_SUPPLY_UNIT;
   assert(kit_cargo_projection(&kit, &view) && view.supplies[0] == 2);
   assert(!strcmp(view.title, "Stored cargo") && !strstr(view.detail, "No cargo"));
