@@ -289,7 +289,7 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   }
   lv_obj_set_hidden(ui->resident_count, !hub);
   lv_obj_set_hidden(ui->cargo_total, !hub);
-  snprintf(ui->cargo_text, sizeof(ui->cargo_text), "%u",
+  snprintf(ui->cargo_text, sizeof(ui->cargo_text), "%" PRIu32,
            view->cargo.supplies[0] + view->cargo.supplies[1] + view->cargo.supplies[2]);
   lv_label_set_text_static(ui->cargo_total, ui->cargo_text);
   snprintf(ui->resident_text, sizeof(ui->resident_text), "%u", view->resident_count);
