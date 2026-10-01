@@ -811,6 +811,7 @@ static void three_context_memory(void) {
   assert(kit_reception_projection(&kit, &reception));
   LabResearchView research;
   lab.page = V1_FINDING;
+  lab.focus = lab.sample = 0;
   lab.study = 2;
   assert(selected_lab_research_projection(&lab, 0, &research));
   LabActionView actions[6];

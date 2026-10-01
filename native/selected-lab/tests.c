@@ -533,7 +533,7 @@ int main(void) {
   frame(&lab);
   lab.page = V1_HOME;
   lab.workspace = 4;
-  lab.workspace_resident[3] = 2;
+  lab.resident = 2;
   ready(&lab);
   selected_lab_input(&lab, SELECTED_CRITTERS_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_CRITTERS_UP, 0, lab.revision);
