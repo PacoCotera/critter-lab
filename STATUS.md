@@ -10,13 +10,13 @@ Core V1 is a playable prototype under repair. The journey is Companion gathering
 - Companion is larger in the simulator, with Back beside Confirm. Routine navigation tutorials are removed. Dock renders four gray levels. [Actual navigation frames](docs/evidence/navigation-copy/README.md).
 - The sandbox footer links to the public [deployment changelog](CHANGELOG.md), recording major delivered changes. New sandbox activations start fresh device saves.
 
-## Active repair
+## Latest delivered repair
 
-The Companion entry/cargo increment replaces the empty mode landing with purposeful destination cards, maps vertical expedition choices to Up/Down, removes the repeated Send review and clears accepted current-source quantities in both devices' displays. Immutable delivery history remains in received records. [Issue60](https://github.com/PacoCotera/critter-lab/issues/60) tracks exact integration/review status; source work is not a claim of activation.
+The Companion entry/cargo increment is live: purposeful destination cards replace the empty landing; vertical expedition choices use Up/Down; Send no longer opens a repeated review. Accepted current-source quantities clear in both devices while immutable received records retain history. [PR64](https://github.com/PacoCotera/critter-lab/pull/64) passed independent technical and craft review, focused native checks and ESP32 target compilation. [Native evidence](docs/evidence/companion-entry-cargo/README.md) and the [deployment changelog](CHANGELOG.md) separate source proof from activation.
 
 ## Next gameplay priorities
 
-Habitat overview still shows one resident instead of the population, and collection navigation requires unnecessary confirmation steps. The next Lab slice separates overview, passive selected-item preview and deliberate actions across Habitat and Research.
+Habitat population is the active next increment: the Home preview and entered collection will show every revealed resident in a four-by-two gallery. Highlighting updates saved identity, form and origin immediately; Confirm opens a separate resident activity without care. Only its named care action records a visit. The existing sidebar remains navigation-only. This increment reuses original portraits and existing LVGL roots; source work is not deployment or visual acceptance. Samples and Library will adopt the same preview/commit grammar in a separate slice.
 
 Research still feels like a checklist; its navigation column contains content that belongs in the central workpiece. The next research outcome is progressive discovery with sample-specific progress and useful retained findings, grounded in the [existing research trial](design/research-and-creation.md#next-comparison-trial).
 

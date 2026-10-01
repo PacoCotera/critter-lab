@@ -1,6 +1,7 @@
 #ifndef CRITTER_LAB_ACTION_VIEW_H
 #define CRITTER_LAB_ACTION_VIEW_H
 #include <stdint.h>
+#include "lab_resident_gallery_view.h"
 
 enum { LAB_ACTION_OPTIONS = 8 };
 typedef enum {
@@ -34,5 +35,6 @@ typedef struct {
   unsigned stock[3], costs[3], elapsed_ms, duration_ms, visits;
   uint8_t candidate_authorized, draft_valid, resident_visible;
   uint8_t storage_error, suspended;
+  LabResidentGalleryView gallery;
 } LabActionView;
 #endif

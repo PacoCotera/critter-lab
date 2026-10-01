@@ -2,6 +2,14 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-01 [13:03] — Companion entry and haul handoff
+
+[PR64](https://github.com/PacoCotera/critter-lab/pull/64) · release `ee8ae71`
+
+- **Companion:** the home screen presents Probe, Cargo and Companions as distinct destinations. Expedition choices follow their vertical Up/Down layout.
+- **Cargo:** Send requires one deliberate selection; Lab acceptance remains separate. Acceptance clears current Companion cargo and the Lab reception source, while received records retain the historical haul.
+- **Sandbox saves:** this activation starts a fresh game across all three devices.
+
 ## 2026-10-01 [12:04] — Deployment notes in the sandbox
 
 [PR63](https://github.com/PacoCotera/critter-lab/pull/63) · release `669d0bd`

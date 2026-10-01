@@ -1,4 +1,5 @@
 #include "action_view.h"
+#include "resident_gallery_view.h"
 #include "core_art.h"
 #include <stdio.h>
 #include <string.h>
@@ -103,7 +104,7 @@ static int copy_view(const SelectedLab *lab, int normalization_pending, LabActio
       lab->page == V1_REVEAL ? LAB_ACTION_REVEAL :
       lab->page == V1_HABITAT ? LAB_ACTION_HABITAT : LAB_ACTION_RESIDENTS;
   const char *titles[] = {"SUPPORTED FORMS", "START INCUBATION?", "INCUBATOR",
-      "HELLO, BEECHO", "HABITAT", "RESIDENTS"};
+      "HELLO, BEECHO", "RESIDENT", "POPULATION"};
   snprintf(view->title, sizeof(view->title), "%s", titles[view->page]);
   view->focus = lab->focus;
   view->option_count = selected_lab_options(lab);
@@ -117,6 +118,13 @@ static int copy_view(const SelectedLab *lab, int normalization_pending, LabActio
   snprintf(view->message, sizeof(view->message), "%s", lab->message);
   if (normalization_pending)
     strcpy(view->message, "Accept the existing haul before supply conversion can finish.");
+  if (lab->page == V1_CRITTERS) {
+    if (!selected_lab_resident_gallery_projection(lab, &view->gallery)) return 0;
+    if (view->gallery.count && (lab->focus != view->gallery.selected ||
+        !game->individuals[lab->resident].revealed)) return 0;
+    snprintf(view->title, sizeof(view->title), "POPULATION / %u resident%s",
+        view->gallery.count, view->gallery.count == 1 ? "" : "s");
+  }
   if (lab->page == V1_CREATE || lab->page == V1_CREATE_REVIEW) {
     snprintf(view->sample_id, sizeof(view->sample_id), "%s", game->samples[lab->sample].id);
     if (!copy_knowledge(lab, view)) return 0;

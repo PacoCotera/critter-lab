@@ -1134,7 +1134,8 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
               kit->journal.phase != KIT_COMMITTING && !kit->caller_valid;
     if (log && ((input == SELECTED_UP_UP || input == SELECTED_DOWN_UP ||
                  input == SELECTED_CONFIRM_UP) ||
-                 (input == SELECTED_BACK_UP && kit->received_detail))) {
+                 (input == SELECTED_BACK_UP && (kit->received_detail || kit->received_caller_valid)) ||
+                 (input == SELECTED_LEFT_UP && kit->received_caller_valid))) {
       unsigned button = (unsigned)input / 2;
       SelectedGesture gesture = kit->lab->gestures[button];
       memset(&kit->lab->gestures[button],0,sizeof(SelectedGesture));
@@ -1142,7 +1143,14 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
           gesture.interaction_epoch == kit->lab->interaction_epoch && !kit->lab->suspended) {
         unsigned count = kit_received_count(kit);
         if (input == SELECTED_CONFIRM_UP && count) kit->received_detail = 1;
-        else if (input == SELECTED_BACK_UP) kit->received_detail = 0;
+        else if (input == SELECTED_BACK_UP || input == SELECTED_LEFT_UP) {
+          if (kit->received_detail) kit->received_detail = 0;
+          else {
+            selected_lab_restore_context(kit->lab, &kit->received_caller);
+            kit->received_caller_valid = 0;
+            return;
+          }
+        }
         else if (!kit->received_detail && count) {
           if (input == SELECTED_UP_UP && kit->received_selected) --kit->received_selected;
           if (input == SELECTED_DOWN_UP && kit->received_selected + 1 < count) ++kit->received_selected;
@@ -1170,7 +1178,17 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
     } else {
       unsigned before = kit->lab->revision;
       uint64_t before_world = kit->lab->game.revision;
+      int from_resident = kit->lab->page == V1_HABITAT && kit->lab->focus == 2 &&
+          input == SELECTED_CONFIRM_UP;
+      SelectedLabContext received_caller;
+      if (from_resident) selected_lab_capture_context(kit->lab, &received_caller);
       selected_lab_input(kit->lab, input, 0, revision);
+      if (from_resident && kit->lab->page == V1_EXPEDITION && kit->lab->revision != before) {
+        kit->received_caller = received_caller;
+        kit->received_caller_valid = 1;
+        kit->received_detail = 0;
+      } else if (kit->lab->page != V1_EXPEDITION && kit->lab->page != V1_CARGO)
+        kit->received_caller_valid = 0;
       if (input == SELECTED_HOME_UP && kit->lab->revision != before &&
           kit->lab->page == V1_HOME)
         kit->caller_valid = 0;

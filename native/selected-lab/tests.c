@@ -542,25 +542,45 @@ int main(void) {
   ready(&lab);
   selected_lab_input(&lab, SELECTED_HABITAT_DOWN, 0, lab.revision);
   selected_lab_input(&lab, SELECTED_HABITAT_UP, 0, lab.revision);
-  assert(lab.page == V1_HABITAT && lab.resident == 2);
-  frame(&lab);
-  lab.focus = 2;
-  button(&lab, SELECTED_CONFIRM_DOWN);
   assert(lab.page == V1_CRITTERS && lab.focus == 1 && lab.resident == 2);
+  frame(&lab);
+  GameState resident_browse = lab.game;
   button(&lab, SELECTED_UP_DOWN);
+  assert(lab.focus == 1 && lab.resident == 2); /* First-row Up clamps. */
+  button(&lab, SELECTED_DOWN_DOWN);
+  assert(lab.focus == 1 && lab.resident == 2); /* Missing same-column row clamps. */
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.focus == 1 && lab.resident == 2); /* No third occupied column. */
+  button(&lab, SELECTED_LEFT_DOWN);
   assert(lab.focus == 0 && lab.resident == 1);
+  assert(!memcmp(&resident_browse, &lab.game, sizeof(resident_browse)));
   button(&lab, SELECTED_CONFIRM_DOWN);
-  assert(lab.page == V1_HABITAT && lab.resident == 1);
-  lab.resident = 2;
-  lab.focus = 1;
+  assert(lab.page == V1_HABITAT && lab.focus == 1 && lab.resident == 1);
+  assert(!memcmp(&resident_browse, &lab.game, sizeof(resident_browse)));
+  button(&lab, SELECTED_RIGHT_DOWN);
+  assert(lab.focus == 0 && lab.resident == 1);
+  button(&lab, SELECTED_UP_DOWN);
+  button(&lab, SELECTED_DOWN_DOWN);
+  assert(lab.focus == 0 && !memcmp(&resident_browse, &lab.game, sizeof(resident_browse)));
+  button(&lab, SELECTED_LEFT_DOWN);
+  assert(lab.page == V1_HABITAT && lab.focus == 1);
+  button(&lab, SELECTED_DOWN_DOWN);
+  button(&lab, SELECTED_DOWN_DOWN);
+  assert(lab.focus == 2 && lab.resident == 1);
+  button(&lab, SELECTED_UP_DOWN);
+  button(&lab, SELECTED_UP_DOWN);
+  assert(lab.focus == 1);
+  button(&lab, SELECTED_BACK_DOWN);
+  assert(lab.page == V1_CRITTERS && lab.focus == 0 && lab.resident == 1);
+  assert(!memcmp(&resident_browse, &lab.game, sizeof(resident_browse)));
   ready(&lab);
   unsigned resident_frame = lab.revision;
   selected_lab_input(&lab, SELECTED_CONFIRM_DOWN, 0, resident_frame);
   selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, resident_frame);
-  assert(lab.resident == 1);
+  assert(lab.page == V1_HABITAT && lab.focus == 1 && lab.resident == 1);
   selected_lab_input(&lab, SELECTED_CONFIRM_DOWN, 0, resident_frame);
   selected_lab_input(&lab, SELECTED_CONFIRM_UP, 0, resident_frame);
-  assert(lab.resident == 1);
+  assert(lab.focus == 1 && !memcmp(&resident_browse, &lab.game, sizeof(resident_browse)));
   /* Maximum valid stock must not paint over the header's right-hand inset. */
   SelectedLab empty_header, full_header;
   selected_lab_init(&empty_header);

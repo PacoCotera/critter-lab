@@ -1,4 +1,5 @@
 #include "lab_home_ui.h"
+#include "lab_resident_gallery.h"
 #include "../selected-lab/ui_theme.h"
 #include "../selected-lab/core_art.h"
 #include <stdio.h>
@@ -16,6 +17,8 @@ struct LabHomeUi {
   LabHomeFonts fonts;
   const lv_image_dsc_t *images[13];
   char quantities[3][24], landing_quantities[3][24];
+  LabResidentGallery gallery;
+  char selected_text[152], source_text[64];
 };
 static lv_obj_t *surface(lv_obj_t *parent, int x, int y, int width,
     int height, uint32_t color) {
@@ -124,6 +127,7 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
   ui->warning = text(ui->root, fonts->small, 276, 514, 696, 38, CORE_ART_FOCUS_RGB, "");
   if (!ui->title || !ui->divider || !ui->landing_art || !ui->pending || !ui->heading || !ui->body ||
       !ui->detail[0] || !ui->detail[1] || !ui->strip || !ui->footer || !ui->warning) goto failure;
+  if (!lab_resident_gallery_init(&ui->gallery, ui->root, fonts->small, images[11], images[12])) goto failure;
   return ui;
 failure:
   lab_home_ui_destroy(ui);
@@ -158,10 +162,19 @@ static int valid_strings(const LabHomeView *v) {
 int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view) {
   if (!ui || !view || view->focus > 4 || (unsigned)view->landing.art > LAB_HOME_ART_PENDING || !valid_strings(view) ||
       view->landing.show_resources > 1 || view->landing.primary_resources > 1 || view->landing.show_progress > 1 ||
-      (view->landing.show_progress && (!view->landing.total || view->landing.progress > view->landing.total))) return 0;
+      (view->landing.show_progress && (!view->landing.total || view->landing.progress > view->landing.total)) ||
+      !lab_resident_gallery_view_valid(&view->gallery)) return 0;
   ui->view = *view;
   lv_obj_set_hidden(ui->root, false);
   view = &ui->view;
+  int population = view->focus == 4;
+  lv_obj_set_pos(ui->header.object, 24, population ? 16 : 24);
+  lv_obj_set_pos(ui->workpiece.object, 248, population ? 124 : 140);
+  native_ui_frame_size(&ui->workpiece, 752, population ? 432 : 416);
+  lv_obj_set_pos(ui->title, 276, population ? 128 : 162);
+  lv_obj_set_size(ui->title, 696, population ? 30 : 44);
+  lv_obj_set_style_text_font(ui->title, population ? ui->fonts.status : ui->fonts.title, 0);
+  lab_resident_gallery_hide(&ui->gallery);
   lv_label_set_text_static(ui->title, view->title);
   lv_obj_set_pos(ui->focus.object, 34, 179+(int)view->focus*68);
   for (unsigned i=0;i<5;++i)
@@ -230,5 +243,35 @@ int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view) {
   lv_obj_set_hidden(ui->footer, true);
   lv_label_set_text_static(ui->warning, view->warning);
   lv_obj_set_hidden(ui->warning, !view->warning[0]);
+  lv_obj_set_pos(ui->warning, population ? 264 : 276, population ? 552 : 514);
+  lv_obj_set_size(ui->warning, population ? 728 : 696, population ? 44 : 38);
+  if (population) {
+    if (!lab_resident_gallery_update(&ui->gallery, &view->gallery, 0)) return 0;
+    lv_obj_set_pos(ui->gallery.object, 264, 160);
+    lv_obj_set_hidden(ui->landing_art, true);
+    lv_obj_set_hidden(ui->pending, true);
+    lv_obj_set_hidden(ui->strip, true);
+    lv_obj_set_hidden(ui->detail[1], true);
+    lv_obj_set_pos(ui->heading, 276, view->gallery.count ? 482 : 276);
+    lv_obj_set_size(ui->heading, 696, view->gallery.count ? 22 : 38);
+    lv_obj_set_style_text_font(ui->heading, view->gallery.count ? ui->fonts.small : ui->fonts.status, 0);
+    lv_label_set_text_static(ui->heading, view->gallery.count ?
+        view->gallery.entries[view->gallery.selected].id : "No revealed residents yet");
+    snprintf(ui->selected_text, sizeof(ui->selected_text), "%s / Visits: %u",
+        view->gallery.form_title, (unsigned)view->gallery.visits);
+    snprintf(ui->source_text, sizeof(ui->source_text), "Source sample: %s", view->gallery.source_sample_id);
+    lv_obj_set_pos(ui->body, 276, 506);
+    lv_obj_set_size(ui->body, 696, 22);
+    lv_obj_set_style_text_font(ui->body, ui->fonts.small, 0);
+    lv_label_set_text_static(ui->body, ui->selected_text);
+    lv_obj_set_hidden(ui->body, !view->gallery.count);
+    lv_obj_set_pos(ui->detail[0], 276, 530);
+    lv_obj_set_size(ui->detail[0], 696, 22);
+    lv_label_set_text_static(ui->detail[0], ui->source_text);
+    lv_obj_set_hidden(ui->detail[0], !view->gallery.count);
+  } else {
+    lv_obj_set_style_text_font(ui->body, ui->fonts.body, 0);
+    for (unsigned index = 0; index < 2; ++index) lv_obj_set_height(ui->detail[index], 48);
+  }
   return 1;
 }
