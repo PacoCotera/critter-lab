@@ -55,7 +55,7 @@ static void overview(const SelectedLab *lab,
   } else if (lab->kit_mode) {
     snprintf(out->overview[0].detail[0], sizeof(out->overview[0].detail[0]),
         "%u received outing%s", game->received_count, game->received_count == 1 ? "" : "s");
-    strcpy(out->overview[0].detail[1], "Open the expedition log");
+    out->overview[0].detail[1][0] = 0;
   } else if (game->expedition_id[0]) {
     snprintf(out->overview[0].detail[0], sizeof(out->overview[0].detail[0]),
         "%u / 60 seconds", game->expedition_elapsed);

@@ -130,7 +130,7 @@ int selected_lab_research_projection(const SelectedLab *lab,
       else if (knowledge.complete) ++out->ready;
       else ++out->awaiting;
     }
-    strcpy(out->next, "Select a sample to see its findings.");
+    out->next[0] = 0;
     return 1;
   }
   if (lab->page == V1_LIBRARY) {
@@ -140,7 +140,7 @@ int selected_lab_research_projection(const SelectedLab *lab,
     out->art = LAB_RESEARCH_ART_TOOLS;
     strcpy(out->heading, recorded ? "Your recorded discoveries" : "No discoveries yet");
     strcpy(out->body, "Research topics to record findings here.");
-    strcpy(out->next, recorded ? "Select a finding to inspect it freely." : "Return to research to begin.");
+    out->next[0] = 0;
     return 1;
   }
   if (!copy_knowledge(lab, sample, out)) return 0;

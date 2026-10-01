@@ -172,7 +172,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
              out->delivered_capsules ? "1 sample delivered to Lab." : "Supplies stored at Lab.");
   } else {
     const char *detail = sealed ? "This expedition cannot resume." :
-        no_outing ? (empty_cargo ? "No cargo. Choose a new expedition." :
+        no_outing ? (empty_cargo ? "No cargo." :
                                   "Cargo remains here. Nothing sent to Lab.") :
         review ? (out->capsules ? "Contents unknown\nSeals cargo; exploration stops."
                                : "Seals cargo; exploration stops.") :

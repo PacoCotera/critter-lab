@@ -41,7 +41,7 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
       out->phase == PROBE_SENT ? kit_stage(kit) : out->phase == PROBE_ENDED ?
       (transfer == KIT_COMPLETE ? "Cargo transferred / choose a new outing" : "Lab accepted / receipt pending") :
       out->phase == PROBE_RETAINED ? "Collection ended / return cargo or finish" :
-      live ? "Explore retained supply offers" : "Choose where to explore");
+      live ? "Explore retained supply offers" : "");
   snprintf(out->context, sizeof(out->context), "%s", out->status);
   out->free_slots = 40 - (out->cargo.supplies[0] + out->cargo.supplies[1] + out->cargo.supplies[2]);
   if (live) {
