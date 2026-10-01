@@ -117,7 +117,7 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
     if (!ui->summary[index]) goto failure;
   }
   ui->footer = label(ui->root, fonts->small, 30, 569, 964, 27, CORE_ART_SECONDARY_RGB, "");
-  ui->message = label(ui->root, fonts->small, 398, 560, 588, 38, CORE_ART_INK_RGB, "");
+  ui->message = label(ui->root, fonts->small, 398, 552, 588, 44, CORE_ART_INK_RGB, "");
   if (!ui->title || !ui->sample || !ui->heading || !ui->body || !ui->art || !ui->finding ||
       !ui->cost_title || !ui->partial || !ui->footer || !ui->message) goto failure;
   return ui;
