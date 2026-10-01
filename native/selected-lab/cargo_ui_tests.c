@@ -247,6 +247,9 @@ static void discard_finish_projection_truth(void) {
   assert(kit_cargo_projection(&kit, &view));
   assert(!strcmp(view.title, "Cargo empty") && !strcmp(view.context, "No active expedition"));
   assert(strstr(view.detail, "new expedition") && !strstr(view.detail, "progress retained"));
+  lab.game.expedition_data = 2 * GAME_SUPPLY_UNIT;
+  assert(kit_cargo_projection(&kit, &view) && view.supplies[0] == 2);
+  assert(!strcmp(view.title, "Stored cargo") && !strstr(view.detail, "No cargo"));
 }
 static UiFlushResult consume_partial(void *user, UiDisplay *display, const UiArea *area,
     const uint8_t *pixels, size_t stride, UiColorFormat format) {
@@ -460,6 +463,18 @@ static void discard_finish_fixture_exports(const char *directory) {
     snprintf(path, sizeof(path), "%s/fixture-%s.bmp", directory, names[index]);
     export_bmp(path, rgb);
   }
+  lab.game.expedition_id[0] = 0;
+  lab.game.expedition_data = 2 * GAME_SUPPLY_UNIT;
+  memset(&lab.game.field, 0, sizeof(lab.game.field));
+  kit.companion.page = kit.companion.mode = COMP_CARGO;
+  kit.companion.focus = 0;
+  CompanionCargoView stored;
+  assert(kit_cargo_projection(&kit, &stored));
+  const uint8_t *stored_rgb = native_ui_cargo(context, &stored, 1);
+  assert(stored_rgb);
+  char stored_path[512];
+  snprintf(stored_path, sizeof(stored_path), "%s/fixture-stored-no-outing.bmp", directory);
+  export_bmp(stored_path, stored_rgb);
   native_ui_destroy(context);
 }
 static void representative_fixture_exports(const char *directory) {
