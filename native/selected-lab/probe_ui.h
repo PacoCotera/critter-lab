@@ -4,7 +4,7 @@
 #include "ui_assets.h"
 typedef struct NativeProbeUi NativeProbeUi;
 NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
-                                      const lv_font_t *body, const lv_font_t *small,
+                                      const lv_font_t *body, const lv_font_t *place, const lv_font_t *small,
                                       const lv_font_t *action, const NativeUiImage *sample);
 void native_probe_ui_destroy(NativeProbeUi *ui);
 void native_probe_ui_hide(NativeProbeUi *ui);

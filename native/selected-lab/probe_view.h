@@ -11,9 +11,8 @@ typedef struct {
   CompanionCargoFacts cargo;
   unsigned phase, selector, failed, suspended, held, pressed, revision, epoch;
   unsigned action_count, focus;
-  unsigned preparation_available;
+  unsigned finite, result, free_slots, choices[3];
   char title[64], status[96], context[96], source[96], footer[96];
-  char preparation_labels[3][16];
   char actions[3][64];
 } CompanionProbeView;
 int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *view);

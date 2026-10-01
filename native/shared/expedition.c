@@ -4,6 +4,13 @@
 #include <string.h>
 
 #define FIELD_ATTEMPTS 12u
+unsigned game_field_initial_units(unsigned source) {
+  static const unsigned units[GAME_FIELD_SOURCES] = {2, 2, 1, 12, 12, 14};
+  return source < GAME_FIELD_SOURCES ? units[source] : 0;
+}
+int game_field_finite(const GameState *state) {
+  return state->field.version == GAME_FIELD_CONTENT_VERSION;
+}
 static unsigned cell(unsigned x, unsigned y) { return y * GAME_FIELD_COLUMNS + x;
 }
 unsigned game_field_source_resource(unsigned source) {
@@ -153,12 +160,13 @@ static void generate_geometry_v2(GameExpeditionField *field) {
 }
 static int supported_field_version(uint32_t version) {
   return version == GAME_FIELD_LEGACY_CONTENT_VERSION ||
+         version == GAME_FIELD_TIMED_CONTENT_VERSION ||
          version == GAME_FIELD_CONTENT_VERSION;
 }
 static void generate_geometry(GameExpeditionField *field) {
   if (field->version == GAME_FIELD_LEGACY_CONTENT_VERSION)
     generate_geometry_v1(field);
-  else if (field->version == GAME_FIELD_CONTENT_VERSION)
+  else if (field->version == GAME_FIELD_TIMED_CONTENT_VERSION || field->version == GAME_FIELD_CONTENT_VERSION)
     generate_geometry_v2(field);
 }
 GameResult game_field_start(GameState *state, const GameCommand *command) {
@@ -173,7 +181,8 @@ GameResult game_field_start(GameState *state, const GameCommand *command) {
   field->sample_budget = (uint8_t)command->data.field.sample_budget;
   field->active_source = GAME_FIELD_NONE;
   memset(field->last_source, GAME_FIELD_NONE, sizeof(field->last_source));
-  memset(field->remaining, FIELD_ATTEMPTS, sizeof(field->remaining));
+  for (unsigned source = 0; source < GAME_FIELD_SOURCES; ++source)
+    field->remaining[source] = (uint8_t)game_field_initial_units(source);
   generate_geometry(field);
   field->x = field->site_x[0];
   field->y = field->site_y[0];
@@ -223,10 +232,29 @@ GameResult game_field_action(GameState *state, const GameCommand *command) {
     field->inspected |= (uint8_t)(1u << site);
     return GAME_OK;
   }
-  if (!(field->inspected & (1u << site))) return GAME_UNAVAILABLE;
+  if (command->type == GAME_COMMAND_FIELD_TAKE) {
+    unsigned source = command->data.field.source;
+    unsigned quantity = command->data.field.quantity;
+    uint64_t total = (uint64_t)state->expedition_data + state->expedition_energy + state->expedition_essence;
+    if (!game_field_finite(state) || !state->expedition_active ||
+        source >= GAME_FIELD_SOURCES || game_field_source_site(source) != site ||
+        !quantity || quantity > field->remaining[source] ||
+        total > GAME_CARGO_CAPACITY || (uint64_t)quantity * GAME_SUPPLY_UNIT > GAME_CARGO_CAPACITY - total)
+      return GAME_UNAVAILABLE;
+    uint32_t *cargo[] = {&state->expedition_data, &state->expedition_energy, &state->expedition_essence};
+    field->remaining[source] -= (uint8_t)quantity;
+    field->awards[source] += (uint8_t)quantity;
+    ++field->attempts[source];
+    field->inspected |= (uint8_t)(1u << site);
+    *cargo[game_field_source_resource(source)] += quantity * GAME_SUPPLY_UNIT;
+    return GAME_OK;
+  }
+  if (!(field->inspected & (1u << site)) &&
+      !(game_field_finite(state) && (command->type == GAME_COMMAND_FIELD_TRACE ||
+                                   command->type == GAME_COMMAND_FIELD_COLLECT))) return GAME_UNAVAILABLE;
   if (command->type == GAME_COMMAND_FIELD_SOURCE) {
     unsigned source = command->data.field.source;
-    if (source >= GAME_FIELD_SOURCES || game_field_source_site(source) != site ||
+    if (!game_field_finite(state) || source >= GAME_FIELD_SOURCES || game_field_source_site(source) != site ||
         !field->remaining[source]) return GAME_UNAVAILABLE;
     field->active_source = (uint8_t)source;
     field->last_source[game_field_source_resource(source)] = (uint8_t)source;
@@ -234,58 +262,32 @@ GameResult game_field_action(GameState *state, const GameCommand *command) {
     return GAME_OK;
   }
   if (command->type == GAME_COMMAND_FIELD_TRACE) {
-    if (site != 1 || field->trace || !field->sample_budget) return GAME_UNAVAILABLE;
+    if (!game_field_finite(state) || site != 1 || field->trace || !field->sample_budget) return GAME_UNAVAILABLE;
     field->trace = 1;
+    field->inspected |= (uint8_t)(1u << site);
     return GAME_OK;
   }
   if (command->type == GAME_COMMAND_FIELD_COLLECT) {
-    if (site != 4 || !field->trace || field->collected || !field->sample_budget ||
+    if (!game_field_finite(state) || site != 4 || !field->trace || field->collected || !field->sample_budget ||
         state->next_identity == UINT32_MAX) return GAME_UNAVAILABLE;
     snprintf(field->capsule_id, sizeof(field->capsule_id), "BEE-S-%05u",
              state->next_identity++);
     field->capsule_profile = (uint8_t)((GAME_MAX_SAMPLES - field->sample_budget) % 2
                             ? GAME_SAMPLE_DISCOVERY_B : GAME_SAMPLE_DISCOVERY_A);
     field->collected = 1;
+    field->inspected |= (uint8_t)(1u << site);
     return GAME_OK;
   }
   return GAME_INVALID;
 }
 GameResult game_field_tick(GameState *state, uint32_t now) {
-  GameExpeditionField *field = &state->field;
   if (!state->runtime_anchors_ready || now < state->expedition_last_tick)
     return GAME_INVALID;
-  uint32_t elapsed = now - state->expedition_last_tick;
+  /* Field1/2 remain frozen; field3 collection is an explicit saved command. */
   state->expedition_last_tick = now;
-  unsigned source = field->active_source;
-  if (source >= GAME_FIELD_SOURCES || !field->remaining[source]) return elapsed ? GAME_OK : GAME_UNAVAILABLE;
-  unsigned resource = game_field_source_resource(source);
-  uint32_t *cargo[3] = {&state->expedition_data, &state->expedition_energy,
-                       &state->expedition_essence};
-  if (elapsed > 60u) elapsed = 60u;
-  for (uint32_t second = 0; second < elapsed && field->remaining[source]; ++second) {
-    unsigned total = *cargo[0] + *cargo[1] + *cargo[2];
-    if (total >= GAME_CARGO_CAPACITY ||
-        GAME_CARGO_CAPACITY - total < GAME_SUPPLY_UNIT) break;
-    state->gather_progress_ms[resource] += 1000u;
-    while (state->gather_progress_ms[resource] >= GAME_GATHER_ATTEMPT_MS &&
-           field->remaining[source]) {
-      if (state->gather_attempt_count == UINT64_MAX) return GAME_UNAVAILABLE;
-      state->gather_progress_ms[resource] -= GAME_GATHER_ATTEMPT_MS;
-      --field->remaining[source];
-      ++field->attempts[source];
-      ++state->gather_attempt_count;
-      state->gather_last_attempted_mask = (uint8_t)(1u << resource);
-      state->gather_last_awarded_mask = 0;
-      if (random_next(&state->gather_random_state) % 4u < 3u) {
-        *cargo[resource] += GAME_SUPPLY_UNIT;
-        ++field->awards[source];
-        state->gather_last_awarded_mask = (uint8_t)(1u << resource);
-      }
-      if (*cargo[0] + *cargo[1] + *cargo[2] >= GAME_CARGO_CAPACITY) break;
-    }
-  }
-  return elapsed ? GAME_OK : GAME_UNAVAILABLE;
+  return GAME_UNAVAILABLE;
 }
+
 void game_field_record(const GameState *state, GameReceivedExpedition *record) {
   const GameExpeditionField *field = &state->field;
   memset(record, 0, sizeof(*record));
@@ -362,8 +364,12 @@ int game_received_valid(const GameReceivedExpedition *record) {
   if (total > GAME_CARGO_CAPACITY) return 0;
   for (unsigned i = 0; i < GAME_FIELD_CELLS; ++i)
     if (record->terrain[i] > 4 || record->walked[i] > 1) return 0;
-  for (unsigned i = 0; i < GAME_FIELD_SOURCES; ++i)
-    if (record->attempts[i] > FIELD_ATTEMPTS || record->awards[i] > record->attempts[i]) return 0;
+  for (unsigned i = 0; i < GAME_FIELD_SOURCES; ++i) {
+    if (record->version == GAME_FIELD_CONTENT_VERSION) {
+      if (record->awards[i] > game_field_initial_units(i) || record->attempts[i] > record->awards[i] ||
+          (!!record->attempts[i] != !!record->awards[i])) return 0;
+    } else if (record->attempts[i] > FIELD_ATTEMPTS || record->awards[i] > record->attempts[i]) return 0;
+  }
   for (unsigned i = 0; i < GAME_FIELD_SITES; ++i)
     if (record->site_x[i] >= GAME_FIELD_COLUMNS || record->site_y[i] >= GAME_FIELD_ROWS ||
         (!(record->visited & (1u << i)) && (record->site_x[i] || record->site_y[i]))) return 0;
@@ -400,9 +406,13 @@ int game_field_valid(const GameState *state) {
         field->walked[i] > 1 || (field->walked[i] && !field->paths[i] &&
         !(field->trace && field->hidden_paths[i]))) return 0;
   if (!field->walked[cell(field->x,field->y)]) return 0;
-  for (unsigned i = 0; i < GAME_FIELD_SOURCES; ++i)
-    if (field->remaining[i] + field->attempts[i] != FIELD_ATTEMPTS ||
-        field->awards[i] > field->attempts[i]) return 0;
+  for (unsigned i = 0; i < GAME_FIELD_SOURCES; ++i) {
+    if (field->version == GAME_FIELD_CONTENT_VERSION) {
+      if (field->remaining[i] + field->awards[i] != game_field_initial_units(i) ||
+          field->attempts[i] > field->awards[i] || (!!field->attempts[i] != !!field->awards[i])) return 0;
+    } else if (field->remaining[i] + field->attempts[i] != FIELD_ATTEMPTS ||
+               field->awards[i] > field->attempts[i]) return 0;
+  }
   for (unsigned i = 0; i < 3; ++i)
     if (field->last_source[i] != GAME_FIELD_NONE &&
         game_field_source_resource(field->last_source[i]) != i) return 0;

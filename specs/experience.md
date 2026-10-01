@@ -38,32 +38,36 @@ and reduces subject space; it is not the preferred next prototype.
 
 This is a design direction, not approval of final composition. Start from each
 player question and real content, allocate layout, apply retained source art, then
-walk focus and return with the existing buttons. The first native framework proof
-covers Cargo only. Map terrain, research, residents and their transitions still
-need separate composed native proofs; a framework does not supply missing art or
+walk focus and return with the existing buttons. Current native framework proofs
+cover Probe and Cargo. Owner direction on1 October requires every game screen
+to use LVGL; remaining Lab, Dock and Companion page families require real retained
+conversion, not a wrapper around their old bitmap. Target adapters and hardware
+validation remain separate from host proof. A framework does not supply missing art or
 make waiting/acquisition engaging. Existing Cargo inspection and return costs six
 fresh gestures, and opening/cancelling Send review costs eight: migration alone
 does not remove that friction. Any changed return flow needs an explicit interaction
 prototype before becoming product behavior.
 
-The current bounded Probe composition uses a native32px illustrated world in a
-384×288 local viewport. A north-up camera follows the actual player tile and
-clamps at world edges; it has no separate input or saved state. Only disclosed
-legal routes and visible places appear. A distinct abstract player marker,
-reached-place cue and legal route continuations preserve orientation. Inspection
-keeps the current place in view rather than replacing the whole map with a ledger.
-The marker occupies a small tile corner so it does not cover the place itself.
-After collecting the sealed sample, inspection displays completion status and
-Back to the map; it does not present a second acquisition as a focused action.
+The current bounded timer-free Probe composition uses a native32px illustrated
+world in a384×320 viewport at33/98. A quiet mode rail and26px place title lead
+into the field; a north-up player-follow camera clamps at world edges without
+another control or saved state. Only disclosed legal routes and visible places
+appear. The abstract corner player marker, reached-place cue and legal clipping
+cues preserve orientation without obscuring findings.
 
-Current whole cargo remains in a72px band beneath the map. Resource preparation
-and current place/action occupy a separate90px workpiece: progress is work toward
-the next unit, never fractional inventory. The existing buttons and game choices
-remain unchanged. Entry, sent and ended states cannot reuse a sealed projection
-as an apparently live map. The [native walkthrough](../docs/evidence/native-companion-probe/README.md)
-records actual controls and repaired composition. Terrain depth and entry craft
-remain provisional; this is not final environmental art approval.
+Local offer, result and exact free space occupy a384×72 context at33/432.
+Current whole cargo occupies an unframed402×64 band at24/518. There is no
+preparation strip or repeated instruction footer. A single offer takes directly
+on fresh Confirm. Actual alternatives temporarily use a384×192 map and material
+clusters at302–418: directions preview one choice, Back preserves the source and
+cargo, and fresh Confirm commits the displayed whole batch. Saved results do not
+gate the next direction. The entire oversized offer remains after rejection.
 
+Entry, sent, ended and unavailable states cannot present a sealed record as a
+live map. Legacy field collection is ended with an explicit return/finish route.
+Neutral samples reveal no contents or genotype. Native intended-size exports
+remain the composition gate; environmental depth, entry craft and human enjoyment
+are not established by geometry or source checks.
 ## Operate the object
 
 ### Current owner playtest requirements
@@ -317,14 +321,12 @@ live map, timer, position or gathering state. A pending incoming transfer remain
 an actual reception event, distinct from knowledge of the field journey. The current
 host simulation's live field overview is superseded direction, pending implementation.
 
-The active [field design](../design/probe-sampling.md) must provide a generated map,
-movement toward interesting locations, deliberate acquisition and visible progress
-for each resource class. Keep earned whole units, time/chance preparation, sample
-finds and discovery coverage distinct. Cargo remains accessible without permanently
-occupying focus or replacing the field task. Existing physical controls only; no
-clickable map/touch shortcuts or mandatory reflex/constant-attention test. Owner
-approved the reviewed map loop and one active gathering source on 30 September.
-Switching preserves preparation; independent trace discovery leads to deliberate
-sample collection. The reviewed composition and physical-control flow guide
-implementation. Exact pacing, chance, budgets and place catalogue remain
-provisional; actual native acceptance is pending.
+The active [field design](../design/probe-sampling.md) provides retained reachable
+locations, deliberate whole-unit acquisition and a separate trace/sample journey.
+The timer-free candidate supersedes the prior single active gathering clock.
+Supplies, remaining offers, sealed samples and disclosed routes stay distinct.
+Actual alternatives use one transient chooser; single visible offers collect
+directly. Cargo remains accessible without replacing the field task. Existing
+physical controls only; no touch shortcuts, reflex test or repeated-roll loop.
+Numeric content, event catalogue, environmental depth and human enjoyment remain
+provisional; source readiness is separate from native acceptance/deployment.

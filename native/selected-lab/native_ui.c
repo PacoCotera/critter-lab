@@ -212,7 +212,7 @@ NativeUiContext *native_ui_create(void) {
   lv_display_set_flush_cb(context->display, flush_rgb);
   if (!compose(context)) goto failure;
   context->probe = native_probe_ui_create(context->screen, context->actions,
-      &context->body_font, &context->small_font, &context->action_font, &context->images[3]);
+      &context->body_font, &context->title_font, &context->small_font, &context->action_font, &context->images[3]);
   if (!context->probe) goto failure;
   return context;
 failure:

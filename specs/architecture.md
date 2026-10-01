@@ -1,6 +1,6 @@
 # Ecosystem architecture
 
-Status: accepted responsibilities with proposed implementation boundaries. Service topology, providers, transports and production schemas remain unselected. LVGL9.6.0 is selected for a bounded native UI proof; physical display integration is unvalidated.
+Status: accepted responsibilities with proposed implementation boundaries. The Lab targets Raspberry Pi4/Linux; Companion and Caddy target ESP32. LVGL9.6.0 is the required graphics framework for all three devices. The current host implementation is only partially migrated; physical display integration is unvalidated. Service topology, providers, transports and production schemas remain unselected.
 
 ```mermaid
 flowchart LR
@@ -157,15 +157,31 @@ For optional global operations, the backend owns accepted service records, opera
 
 ## Native UI foundation
 
-Owner directs an established graphics/UI framework rather than a bespoke game
-engine. Companion Cargo and Probe now use retained450×600 workpieces with
+Owner requires all device screens to use the established graphics/UI framework.
+Application code must not compose screens by writing pixels directly, or wrap a
+legacy manually rendered screen in an LVGL image and call that a migration.
+Display flush adapters may copy or convert library output into the target pixel
+format; that transport operation must remain separate from UI composition.
+Linux is the Lab target and the current host-test platform, not the Companion or
+Caddy firmware target. Their adapters must compile under ESP-IDF for ESP32.
+
+Companion Cargo and Probe currently use retained450×600 workpieces with
 **LVGL9.6.0**, pinned upstream commit
 `80ca777e37a2b176770726a02e07a6fb79ef0b39`. Their shared display/context owns
 separate roots, copied view facts and bounded assets. The
 [native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
 mode switching and the field/return journey. Other screen families remain on
-their existing renderers; this is not complete device migration or physical
-firmware performance evidence.
+manual C renderers. Those paths are known architectural debt, not an accepted
+exception. The existing ESP-IDF Companion build is an older demonstration
+scaffold; it does not compile the current game UI. Host pixel-stream evidence,
+actual ESP-IDF UI compilation and hardware measurements are separate gates.
+
+The architect must review the complete screen-route and target-build inventory
+before migration integration. Acceptance requires LVGL composition for every
+device page, explicit portable view/UI versus host/ESP-IDF adapter boundaries,
+and removal of active manual-renderer fallbacks. Missing LVGL output must fail
+explicitly rather than silently use the old renderer. Existing game ownership,
+save compatibility and physical-control guards remain constraints.
 
 | Established library | Fit for this product | Decision |
 | --- | --- | --- |
@@ -237,7 +253,7 @@ See [cloud synchronization](cloud-sync.md), [genetics](genetics.md), [devices](d
 ## Three-device host simulator
 
 The current simulator presents Lab, combined Companion and Dock together, with
-separate native frame/control contexts at1024×600,450×600 and792×272 monochrome.
+separate native frame/control contexts at1024×600,450×600 and792×272 four-gray.
 One C17 host aggregate remains the simulation authority: existing expedition
 fields are Companion-owned carried cargo; stock, samples and residents are the
 Lab-accepted world. Only Companion controls start expeditions. This does not
@@ -267,15 +283,17 @@ Version4 receipt validation expects the source route already ended. An empty
 outing can Finish without a phantom haul, sample or extra chance draw. The next
 outing gets a new identity; no Continue action follows an accepted unload.
 
-Version2 game saves append separately persisted gathering preparation, chance
+Historical version2 game saves append separately persisted gathering preparation, chance
 state, attempted/awarded classes and a legacy-encoding flag. The decoder checks
 the original version1 payload/checksum and retains its raw semantics until an
 existing receipt intent is resolved or new acceptance converts atomically.
 Conversion preserves whole Lab/carried portions and translates historical
-residues into preparation time, without awarding an item. Progress never occupies
+residues into retained preparation data, without awarding an item. Legacy field
+clocks are frozen in the current proof; their remaining cargo can be returned.
+Progress never occupies
 cargo capacity or pays a cost. New inventory is multiples of the internal100
 encoding for each indivisible item; [V1](../native/selected-lab/V1.md) owns fixture
-timing, chances and costs. Saved chance outcomes prevent restart/retry rerolls.
+current provisional source contents and costs. Saved outcomes prevent restart/retry rerolls.
 
 Core V1 version3 appends parallel research and individual-art metadata after
 the complete frozen version2 payload, including its original tail padding.
@@ -294,9 +312,12 @@ the frozen 8040-byte V3 payload. Exact V1/V2/V3 lengths and checksums are checke
 before zero-extension. Field state pins geometry/content, legal and hidden paths,
 position, visited/inspected places, trace/capsule identity, finite source budgets
 and results. Commands19–24 bind deliberate field actions; actions after Start
-also bind the expected expedition ID. Only one source ticks. Companion eligibility
-drives field time independently of Lab browsing; review/suspension reanchors time
-without catch-up. Ordinary read/paint requests cannot mutate zero-time activity.
+also bind the expected expedition ID. Current field-content version3 reuses that
+saved layout with finite whole-unit source quantities. Appended command26
+(FIELD_TAKE) binds outing, source and previewed quantity; validated acceptance
+atomically credits cargo and decrements that retained source. Inspection, ticks,
+rendering and selection do not award items. Legacy field-content1/2 remain frozen
+and returnable; loading does not convert their attempts into new pickup units.
 
 Received records contain walked paths, visited places, accomplishments, whole
 accepted contents and acceptance time/identity. The Lab projection excludes the

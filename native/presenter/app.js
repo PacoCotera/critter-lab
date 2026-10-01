@@ -100,7 +100,9 @@ async function connectDevice(deviceId, controls) {
       if (response.status === 409) { reconnectSandbox(); return; }
       if (!response.ok) throw new Error('Native input transport unavailable.');
       const state = await response.json();
-      if (event.endsWith('-up') && inputStartedAt) {
+      const directionDown = deviceId === 'companion' && /^(up|down|left|right)-down$/.test(event) &&
+                            state.page === 'probe' && state.field;
+      if ((directionDown || event.endsWith('-up')) && inputStartedAt) {
         inputResultRevision = state.revision;
         if (inputResultRevision === inputStartRevision) inputStartedAt = 0;
       }
@@ -222,6 +224,12 @@ async function connectDevice(deviceId, controls) {
         return;
       }
       held.set(name, { pointer: event.pointerId, frame: visibleRevision });
+      const direction = deviceId === 'companion' && ['up', 'down', 'left', 'right'].includes(name);
+      if (direction) {
+        inputStartedAt = performance.now();
+        inputStartRevision = visibleRevision;
+        inputResultRevision = 0;
+      }
       button.setPointerCapture(event.pointerId);
       button.classList.add('held');
       send(`${name}-down`, visibleRevision);
@@ -234,12 +242,12 @@ async function connectDevice(deviceId, controls) {
       const bounds = button.getBoundingClientRect();
       const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
       if (!gesture.cancelled) {
-        if (inside) {
+        if (inside && !(deviceId === 'companion' && ['up', 'down', 'left', 'right'].includes(name))) {
           inputStartedAt = performance.now();
           inputStartRevision = gesture.frame;
           inputResultRevision = 0;
         }
-        else ++gestureGeneration;
+        else if (!inside) ++gestureGeneration;
         send(inside ? `${name}-up` : 'cancel', gesture.frame);
       }
     });

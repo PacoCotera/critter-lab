@@ -842,33 +842,57 @@ static void field_control_and_receipt(const char *directory) {
   kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN,map_frame);
   kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_UP,map_frame);
   assert(lab.game.field.active_source == GAME_FIELD_NONE);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(!lab.game.expedition_data && !lab.game.expedition_energy && !lab.game.expedition_essence);
+  GameExpeditionField chooser_before = lab.game.field;
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
-  unsigned stable_frame = kit_revision(&kit, KIT_COMPANION);
-  kit_tick(&kit, 100);
-  kit_tick(&kit, 100);
-  assert(kit_revision(&kit, KIT_COMPANION) == stable_frame);
-  assert(lab.game.field.attempts[0] == 0);
-  unsigned lab_frame = kit_revision(&kit,KIT_LAB);
-  kit_input(&kit,KIT_LAB,SELECTED_READY,lab_frame);
-  kit_input(&kit,KIT_LAB,SELECTED_DOWN_DOWN,lab_frame);
+  assert(!memcmp(&chooser_before, &lab.game.field, sizeof(chooser_before)));
+  uint64_t idle_sequence = lab.game.last_operation_sequence;
   kit_tick(&kit,104);
-  assert(lab.game.field.attempts[0] == 1); /* Lab gesture does not pause field. */
-  kit_input(&kit,KIT_LAB,SELECTED_DOWN_UP,lab_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence && !lab.game.gather_attempt_count);
+  /* Native travel commits on eligible down, and repeated down/up cannot repeat. */
+  unsigned direction = 0;
+  const int dx[] = {0,0,-1,1}, dy[] = {-1,1,0,0};
+  for (; direction < 4; ++direction) {
+    int x = lab.game.field.x + dx[direction], y = lab.game.field.y + dy[direction];
+    if (x >= 0 && x < 20 && y >= 0 && y < 11 && lab.game.field.paths[y * 20 + x]) break;
+  }
+  assert(direction < 4);
+  unsigned travel_frame = kit_revision(&kit, KIT_COMPANION);
+  kit_input(&kit,KIT_COMPANION,SELECTED_READY,travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2 + 1),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  kit_input(&kit,KIT_COMPANION,SELECTED_CANCEL,travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2 + 1),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  walk_field_site(&kit,2);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_data == 1200 && !lab.game.field.remaining[4]);
+  assert(kit.companion.page == COMP_PROBE);
+  walk_field_site(&kit,3);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_energy == 1400 && !lab.game.field.remaining[5]);
   walk_field_site(&kit,1);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_DOWN_DOWN);
+  assert(kit.companion.page == COMP_FIELD_SITE && kit_option_count(&kit,KIT_COMPANION) == 2);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_essence == 1200 && kit.companion.field_result);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  walk_field_site(&kit,0);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_data == 1400 && lab.game.field.remaining[1] == 2 && lab.game.field.remaining[2] == 1);
+  press(&kit,KIT_COMPANION,SELECTED_DOWN_DOWN); /* A result needs no dismissal Confirm. */
+  assert(kit.companion.page == COMP_PROBE);
+  walk_field_site(&kit,1);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Only the trace remains here. */
   assert(lab.game.field.trace && !lab.game.field.collected && lab.game.sample_count == 0);
-  press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  assert(lab.game.field.active_source == 3);
-  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   walk_field_site(&kit,4);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Capsule remains eligible with40 supplies. */
   assert(lab.game.field.collected && lab.game.sample_count == 0);
-  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_RIGHT_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
@@ -1044,7 +1068,7 @@ static void legacy_capsule_limit(const char *directory) {
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     kit_tick(&kit, 104);
-    assert(lab.game.field.active_source == 0 && lab.game.field.attempts[0] == 1);
+    assert(lab.game.field.active_source == GAME_FIELD_NONE && lab.game.field.attempts[0] == 1);
     assert(lab.game.sample_count == GAME_MAX_SAMPLES && !lab.game.field.collected);
     char marker[580];
     snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);

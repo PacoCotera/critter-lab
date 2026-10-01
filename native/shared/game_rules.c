@@ -59,6 +59,12 @@ static uint64_t command_fingerprint(const GameCommand *command) {
     value = hash_u32(value, command->data.field.source);
     value = hash_u32(value, command->data.field.monotonic_seconds);
     break;
+  case GAME_COMMAND_FIELD_TAKE:
+    value = hash_text(value, command->data.field.expedition_id);
+    value = hash_u32(value, command->data.field.site);
+    value = hash_u32(value, command->data.field.source);
+    value = hash_u32(value, command->data.field.quantity);
+    break;
   case GAME_COMMAND_FIELD_UNLOAD: {
     const unsigned char *bytes = (const unsigned char *)command->data.field.record;
     for (size_t i = 0; i < sizeof(GameReceivedExpedition); ++i)
@@ -436,6 +442,8 @@ static GameResult apply_domain_command(GameState *state,
   case GAME_COMMAND_FIELD_TRACE:
   case GAME_COMMAND_FIELD_COLLECT:
     return game_field_action(state, command);
+  case GAME_COMMAND_FIELD_TAKE:
+    return game_field_action(state, command);
   case GAME_COMMAND_FIELD_UNLOAD:
     return game_field_unload(state, command);
   case GAME_COMMAND_EXPEDITION_START: {
@@ -765,8 +773,8 @@ GameResult game_apply(const char *path, GameState *state,
   if (command->type == GAME_COMMAND_FIELD_UNLOAD &&
       (!command->data.field.record ||
        !game_received_valid(command->data.field.record))) return GAME_INVALID;
-  if (command->type >= GAME_COMMAND_FIELD_MOVE &&
-      command->type <= GAME_COMMAND_FIELD_COLLECT &&
+  if (((command->type >= GAME_COMMAND_FIELD_MOVE &&
+      command->type <= GAME_COMMAND_FIELD_COLLECT) || command->type == GAME_COMMAND_FIELD_TAKE) &&
       (!command->data.field.expedition_id ||
        !command->data.field.expedition_id[0] ||
        strlen(command->data.field.expedition_id) >= sizeof(state->expedition_id)))

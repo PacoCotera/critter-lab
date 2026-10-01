@@ -40,14 +40,14 @@ static void projection_and_phase_guards(void) {
   kit.companion.focus = 2;
   assert(kit_probe_projection(&kit, &after));
   assert(after.phase == PROBE_SITE && after.action_count == 3 && after.focus == 2);
-  assert(!strcmp(after.actions[2], "Gather Essence"));
+  assert(!strcmp(after.actions[2], "Take 1 Essence"));
   lab.game.field.x = lab.game.field.site_x[4];
   lab.game.field.y = lab.game.field.site_y[4];
   lab.game.field.trace = 1;
   lab.game.field.collected = 1;
   assert(kit_probe_projection(&kit, &after));
   assert(after.phase == PROBE_SITE && !after.action_count);
-  assert(!strcmp(after.footer, "Back: map"));
+  assert(strstr(after.context, "Sample collected"));
   lab.game = unchanged;
   CompanionCargoView cargo;
   assert(!kit_cargo_projection(&kit, &cargo));
@@ -65,42 +65,26 @@ static void projection_and_phase_guards(void) {
   lab.game.gather_progress_ms[0] = 1500;
   kit.failed = 1;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_UNAVAILABLE && !after.action_count);
-  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
-  assert(!strcmp(after.preparation_labels[0], "Saved") && !strstr(after.source, "Active"));
-  assert(!strcmp(after.footer, "Back: modes"));
-  assert(!strcmp(after.source, "Saved preparation / actions unavailable"));
-  GameState retained = lab.game;
-  memset(&lab.game.field, 0, sizeof(lab.game.field));
-  lab.game.expedition_id[0] = 0;
-  lab.game.gather_progress_ms[0] = 0;
-  assert(kit_probe_projection(&kit, &after) && !after.preparation_available);
-  assert(!strcmp(after.preparation_labels[0], "Unavailable"));
-  assert(!strcmp(after.source, "Preparation unavailable"));
-  lab.game = retained;
+  assert(!strstr(after.context, "preparation") && !strstr(after.source, "Active"));
+  assert(!strcmp(after.source, "Actions unavailable / cargo preserved"));
   kit.failed = 0;
   game_field_record(&lab.game, &kit.sealed_field);
   kit.journal.phase = KIT_WAITING;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_SENT);
-  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
-  assert(!strcmp(after.preparation_labels[0], "Paused"));
   kit.journal.phase = KIT_ACK_PENDING;
   memset(&lab.game.field, 0, sizeof(lab.game.field));
   lab.game.expedition_id[0] = 0;
   lab.game.expedition_data = lab.game.expedition_energy = lab.game.expedition_essence = 0;
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_ENDED);
-  assert(after.preparation_available && after.field.preparation_ms[0] == 1500);
-  assert(!strcmp(after.preparation_labels[0], "Paused"));
   assert(!after.cargo.supplies[0] && !after.cargo.capsules && !after.field.map.avatar_visible);
   kit.journal.phase = KIT_COMPLETE;
   assert(kit_probe_projection(&kit, &after) && after.action_count == 3);
   kit.journal.phase = KIT_IDLE;
   memset(&kit.sealed_field, 0, sizeof(kit.sealed_field));
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_ENTRY);
-  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
   strcpy(lab.game.expedition_id, "legacy-outing");
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_RETAINED);
-  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
-  /* A new outing has no source selected yet; retained preparation is paused. */
+  /* Historic preparation stays saved but is never a current collection gate. */
   lab.game.expedition_id[0] = 0;
   GameCommand next = {0};
   next.type = GAME_COMMAND_FIELD_START;
@@ -108,7 +92,6 @@ static void projection_and_phase_guards(void) {
   next.data.field.monotonic_seconds = 100;
   assert(game_field_start(&lab.game, &next) == GAME_OK);
   assert(kit_probe_projection(&kit, &after) && after.phase == PROBE_MAP);
-  assert(after.field.preparation_ms[0] == 1500 && !strcmp(after.preparation_labels[0], "Paused"));
 }
 static void legal_neighbors_and_camera(void) {
   ExpeditionMapView map = {0};
@@ -118,16 +101,16 @@ static void legal_neighbors_and_camera(void) {
   assert(probe_path_neighbors(&map, 0) == 6); /* South20 and East1; never West19. */
   int x, y;
   map.avatar_x = map.avatar_y = 0;
-  probe_camera(&map, 384, 288, &x, &y);
+  probe_camera(&map, 384, 320, &x, &y);
   assert(x == 0 && y == 0);
   map.avatar_x = 19; map.avatar_y = 10;
-  probe_camera(&map, 384, 288, &x, &y);
-  assert(x == 256 && y == 64);
-  probe_camera(&map, 384, 186, &x, &y);
-  assert(x == 256 && y == 166);
+  probe_camera(&map, 384, 320, &x, &y);
+  assert(x == 256 && y == 32);
+  probe_camera(&map, 384, 192, &x, &y);
+  assert(x == 256 && y == 160);
   map.avatar_x = 10; map.avatar_y = 5;
-  probe_camera(&map, 384, 288, &x, &y);
-  assert(x == 144 && y == 32);
+  probe_camera(&map, 384, 320, &x, &y);
+  assert(x == 144 && y == 16);
 }
 static void asset_fidelity(void) {
   for (unsigned asset = 0; asset < FIELD_ART_COUNT; ++asset) {
@@ -252,11 +235,9 @@ static void representative_exports(const char *directory) {
   full.cargo.supplies[0] = 40;
   full.cargo.supplies[1] = full.cargo.supplies[2] = 0;
   full.cargo.capsules = 1;
-  full.field.preparation_status[0] = EXPEDITION_PREP_CAPACITY_FULL;
-  full.field.preparation_ms[0] = GAME_GATHER_ATTEMPT_MS;
-  strcpy(full.preparation_labels[0], "Hold full");
-  strcpy(full.context, "Supply bag full / preparation kept");
-  strcpy(full.source, "Data / Camp / 3 attempts left");
+  full.free_slots = 0;
+  strcpy(full.context, "Not enough room / whole offer kept");
+  strcpy(full.source, "2 Data available / 0 free slots");
   export_fixture(context, directory, "fixture-hold-full40", &full);
   kit.companion.page = COMP_PROBE;
   lab.game.field.active_source = 0;
@@ -265,8 +246,7 @@ static void representative_exports(const char *directory) {
   kit.failed = 1;
   CompanionProbeView failed;
   assert(kit_probe_projection(&kit, &failed));
-  assert(failed.preparation_available && !strcmp(failed.preparation_labels[0], "Saved"));
-  export_fixture(context, directory, "fixture-unavailable-saved-preparation", &failed);
+  export_fixture(context, directory, "fixture-unavailable-progress-preserved", &failed);
   native_ui_destroy(context);
   char path[512];
   int length = snprintf(path, sizeof(path), "%s/probe-fixtures.txt", directory);
@@ -276,8 +256,8 @@ static void representative_exports(const char *directory) {
   fputs("Representative presentation fixtures, not actual play or saved-world claims.\n"
         "Camera fixtures relocate a copied avatar to each world corner; they do not claim legal movement there.\n"
         "Camp fixture has three real Kit choices and focus2.\n"
-        "Hold-full fixture presents Data40, capsule1 and a full retained attempt.\n"
-        "Unavailable fixture presents1500ms saved Data preparation, no map or actions.\n", metadata);
+        "Hold-full fixture presents Data40, capsule1 and an unchanged oversized whole offer.\n"
+        "Unavailable fixture preserves stored state, no map or actions.\n", metadata);
   assert(!fclose(metadata));
 }
 int main(int argc, char **argv) {

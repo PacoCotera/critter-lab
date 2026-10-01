@@ -106,7 +106,8 @@ typedef struct {
 #define GAME_FIELD_HISTORY 16u
 #define GAME_FIELD_NONE 255u
 #define GAME_FIELD_LEGACY_CONTENT_VERSION 1u
-#define GAME_FIELD_CONTENT_VERSION 2u
+#define GAME_FIELD_TIMED_CONTENT_VERSION 2u
+#define GAME_FIELD_CONTENT_VERSION 3u
 
 /* Companion field state is distinct from Lab-accepted expedition records. */
 typedef struct {
@@ -115,6 +116,9 @@ typedef struct {
   uint8_t hidden_paths[GAME_FIELD_CELLS], walked[GAME_FIELD_CELLS];
   uint8_t site_x[GAME_FIELD_SITES], site_y[GAME_FIELD_SITES];
   uint8_t x, y, visited, inspected, trace, collected, active_source;
+  /* Field1/2: remaining attempts, resolved attempts, units won.
+   * Field3: remaining whole units, accepted Take actions, units taken.
+   * Layout stays frozen; the content version defines counter interpretation. */
   uint8_t remaining[GAME_FIELD_SOURCES], attempts[GAME_FIELD_SOURCES];
   uint8_t awards[GAME_FIELD_SOURCES], last_source[3], sample_budget;
   uint8_t capsule_profile;
@@ -129,6 +133,7 @@ typedef struct {
   uint8_t terrain[GAME_FIELD_CELLS], walked[GAME_FIELD_CELLS];
   uint8_t site_x[GAME_FIELD_SITES], site_y[GAME_FIELD_SITES];
   uint8_t visited, inspected, trace, collected;
+  /* Interpret action/unit counters using this record's content version. */
   uint8_t attempts[GAME_FIELD_SOURCES], awards[GAME_FIELD_SOURCES];
 } GameReceivedExpedition;
 

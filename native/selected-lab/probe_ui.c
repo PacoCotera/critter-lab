@@ -1,22 +1,23 @@
 #include "probe_ui.h"
 #include "field_art.h"
+#include "expedition.h"
 #include "ui_theme.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-enum { TILE_SIZE = 32, VIEW_WIDTH = 384, VIEW_HEIGHT = 288, EDGE_CUES = 44 };
+enum { TILE_SIZE = 32, VIEW_WIDTH = 384, VIEW_HEIGHT = 320, EDGE_CUES = 44 };
 struct NativeProbeUi {
   lv_obj_t *root, *viewport, *world, *title, *status, *context, *source, *footer;
   lv_obj_t *tiles[EXPEDITION_MAP_CELLS], *places[5], *player[2], *cues[EDGE_CUES];
   lv_obj_t *sheet, *buttons[3], *action_text[3], *rail_focus;
   lv_obj_t *quantities[3], *capsule, *capsule_text, *capsule_quantity;
-  lv_obj_t *prep_text[3], *prep_state[3], *prep_track[3];
-  NativeUiFrame frames[4], focus, reached;
+  lv_obj_t *choice_image[3];
+  NativeUiFrame focus, reached;
   NativeUiImage art[FIELD_ART_COUNT], materials[3];
   lv_point_precise_t player_points[9], cue_points[EDGE_CUES][3];
   CompanionProbeView view;
-  char quantity_text[3][16], capsule_count[24], preparation[3][32];
+  char quantity_text[3][16], capsule_count[24];
 };
 static lv_obj_t *box(lv_obj_t *parent, int x, int y, int width, int height, uint32_t color) {
   lv_obj_t *object = lv_obj_create(parent);
@@ -59,7 +60,7 @@ static lv_obj_t *line(lv_obj_t *parent, const lv_point_precise_t *points,
   return object;
 }
 NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
-                                      const lv_font_t *body, const lv_font_t *small,
+                                      const lv_font_t *body, const lv_font_t *place, const lv_font_t *small,
                                       const lv_font_t *action, const NativeUiImage *sample) {
   NativeProbeUi *ui = calloc(1, sizeof(*ui));
   if (!ui) return NULL;
@@ -69,19 +70,15 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     if (!native_ui_image_init(&ui->materials[material], (CoreArtId)(CORE_ART_DATA_COMPACT + material))) goto failure;
   ui->root = box(parent, 0, 0, 450, 600, CORE_ART_GRAPHITE_RGB);
   if (!ui->root) goto failure;
-  const int bands[4][4] = {{16,16,418,40},{16,66,418,322},{16,398,418,72},{16,480,418,90}};
-  for (unsigned band = 0; band < 4; ++band) {
-    if (!box(ui->root, bands[band][0], bands[band][1], bands[band][2], bands[band][3], CORE_ART_FIELD_RGB)) goto failure;
-  }
   const char *modes[] = {"Probe", "Cargo", "Companions"};
   for (unsigned mode = 0; mode < 3; ++mode) {
-    lv_obj_t *name = text(ui->root, body, 29 + (int)mode * 126, 25, mode == 2 ? 142 : 110, 24, modes[mode]);
+    lv_obj_t *name = text(ui->root, body, 29 + (int)mode * 126, 19, mode == 2 ? 142 : 110, 24, modes[mode]);
     if (!name) goto failure;
     if (mode) lv_obj_set_style_text_color(name, lv_color_hex(CORE_ART_SECONDARY_RGB), 0);
   }
-  ui->title = text(ui->root, body, 28, 69, 394, 24, "");
+  ui->title = text(ui->root, place, 28, 58, 394, 34, "");
   ui->status = text(ui->root, small, 33, 112, 384, 60, "");
-  ui->viewport = box(ui->root, 33, 92, VIEW_WIDTH, VIEW_HEIGHT, CORE_ART_SHADOW_RGB);
+  ui->viewport = box(ui->root, 33, 98, VIEW_WIDTH, VIEW_HEIGHT, CORE_ART_SHADOW_RGB);
   if (!ui->viewport) goto failure;
   ui->world = box(ui->viewport, 0, 0, 640, 352, CORE_ART_SHADOW_RGB);
   if (!ui->world) goto failure;
@@ -107,47 +104,34 @@ NativeProbeUi *native_probe_ui_create(lv_obj_t *parent, lv_group_t *group,
     ui->cues[cue] = line(ui->viewport, ui->cue_points[cue], 3, CORE_ART_BLUE_HIGHLIGHT_RGB, 2);
     if (!ui->cues[cue]) goto failure;
   }
-  ui->sheet = box(ui->root, 33, 278, 384, 102, CORE_ART_SHADOW_RGB);
+  ui->sheet = box(ui->root, 33, 302, 384, 116, CORE_ART_SHADOW_RGB);
   if (!ui->sheet) goto failure;
   for (unsigned choice = 0; choice < 3; ++choice) {
     ui->buttons[choice] = lv_button_create(ui->sheet);
     if (!ui->buttons[choice]) goto failure;
     native_ui_action(ui->buttons[choice]);
-    lv_obj_set_pos(ui->buttons[choice], 0, choice * 30);
-    lv_obj_set_size(ui->buttons[choice], 384, 28);
+    lv_obj_set_pos(ui->buttons[choice], choice * 128, 0);
+    lv_obj_set_size(ui->buttons[choice], 128, 116);
     lv_group_add_obj(group, ui->buttons[choice]);
-    ui->action_text[choice] = text(ui->buttons[choice], action, 12, 2, 360, 26, "");
-    if (!ui->action_text[choice]) goto failure;
+    ui->action_text[choice] = text(ui->buttons[choice], small, 8, 68, 112, 44, "");
+    ui->choice_image[choice] = image(ui->buttons[choice], &ui->materials[choice], 40, 8);
+    if (!ui->action_text[choice] || !ui->choice_image[choice]) goto failure;
   }
   for (unsigned material = 0; material < 3; ++material) {
     const CoreArtSprite *sprite = core_art_sprite((CoreArtId)(CORE_ART_DATA_COMPACT + material));
     int left = 28 + (int)material * 88;
-    if (!image(ui->root, &ui->materials[material], left, 430 - sprite->center_y)) goto failure;
-    ui->quantities[material] = text(ui->root, action, left + sprite->width + 6, 419, 34, 27, "0");
+    if (!image(ui->root, &ui->materials[material], left, 550 - sprite->center_y)) goto failure;
+    ui->quantities[material] = text(ui->root, action, left + sprite->width + 6, 539, 34, 27, "0");
     if (!ui->quantities[material]) goto failure;
   }
-  ui->capsule = image(ui->root, sample, 296, 403);
-  ui->capsule_text = text(ui->root, small, 357, 409, 64, 22, "Sample");
-  ui->capsule_quantity = text(ui->root, action, 357, 432, 64, 27, "0 / 1");
-  ui->context = text(ui->root, body, 28, 484, 394, 24, "");
-  ui->source = text(ui->root, small, 28, 504, 394, 22, "");
-  const char *names[] = {"Data", "Energy", "Essence"};
-  for (unsigned resource = 0; resource < 3; ++resource) {
-    int x = 28 + (int)resource * 132;
-    ui->prep_text[resource] = text(ui->root, small, x, 524, 126, 22, names[resource]);
-    if (!box(ui->root, x, 543, 124, 3, CORE_ART_SHADOW_RGB)) goto failure;
-    ui->prep_track[resource] = box(ui->root, x, 543, 1, 3, CORE_ART_SECONDARY_RGB);
-    ui->prep_state[resource] = text(ui->root, small, x, 546, 126, 22, "Not started");
-    if (!ui->prep_text[resource] || !ui->prep_track[resource] || !ui->prep_state[resource]) goto failure;
-  }
-  /* Vera16 baseline15: clear the workpiece's570px edge; ink ends by584. */
-  ui->footer = text(ui->root, small, 16, 567, 418, 22, "");
-  for (unsigned band = 0; band < 4; ++band) {
-    if (!native_ui_frame_init(&ui->frames[band], ui->root, bands[band][2], bands[band][3], CORE_ART_BLUE_RGB)) goto failure;
-    lv_obj_set_pos(ui->frames[band].object, bands[band][0], bands[band][1]);
-  }
-  if (!native_ui_frame_init(&ui->focus, ui->root, 384, 28, CORE_ART_FOCUS_RGB)) goto failure;
-  ui->rail_focus = box(ui->root, 23, 20, 111, 31, CORE_ART_SHADOW_RGB);
+  ui->capsule = image(ui->root, sample, 296, 524);
+  ui->capsule_text = text(ui->root, small, 357, 528, 64, 22, "Sample");
+  ui->capsule_quantity = text(ui->root, action, 357, 551, 64, 27, "0 / 1");
+  ui->context = text(ui->root, body, 33, 436, 384, 24, "");
+  ui->source = text(ui->root, small, 33, 461, 384, 22, "");
+  ui->footer = text(ui->root, small, 33, 486, 384, 22, "");
+  if (!native_ui_frame_init(&ui->focus, ui->root, 128, 116, CORE_ART_FOCUS_RGB)) goto failure;
+  ui->rail_focus = box(ui->root, 23, 14, 111, 31, CORE_ART_SHADOW_RGB);
   if (!ui->rail_focus) goto failure;
   lv_obj_set_style_bg_opa(ui->rail_focus, LV_OPA_TRANSP, 0);
   lv_obj_set_style_border_width(ui->rail_focus, 2, 0);
@@ -236,16 +220,23 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   lv_obj_set_hidden(ui->status, scene);
   lv_obj_set_hidden(ui->rail_focus, !view->selector);
   int scene_height = VIEW_HEIGHT;
-  if (view->phase == PROBE_SITE) scene_height -= (int)view->action_count * 30 + 12;
+  if (view->phase == PROBE_SITE) scene_height = 192;
   lv_obj_set_height(ui->viewport, scene_height);
-  int sheet_y = scene ? 92 + scene_height + 6 : 188;
+  int sheet_y = 302;
   lv_obj_set_pos(ui->sheet, 33, sheet_y);
-  lv_obj_set_height(ui->sheet, scene ? 380 - sheet_y : 102);
+  lv_obj_set_height(ui->sheet, 116);
   lv_obj_set_hidden(ui->sheet, view->selector || !view->action_count);
   for (unsigned choice = 0; choice < 3; ++choice) {
     lv_obj_set_hidden(ui->buttons[choice], choice >= view->action_count);
     lv_obj_remove_state(ui->buttons[choice], LV_STATE_FOCUSED | LV_STATE_PRESSED);
     if (choice < view->action_count) lv_label_set_text_static(ui->action_text[choice], view->actions[choice]);
+    unsigned source = view->choices[choice];
+    int material = view->phase == PROBE_SITE && source < GAME_FIELD_SOURCES;
+    lv_obj_set_hidden(ui->choice_image[choice], !material);
+    if (material) {
+      unsigned resource = game_field_source_resource(source);
+      lv_image_set_src(ui->choice_image[choice], &ui->materials[resource].image);
+    }
   }
   int focus = !view->selector && view->focus < view->action_count;
   lv_obj_set_hidden(ui->focus.object, !focus);
@@ -253,7 +244,7 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
     lv_group_focus_obj(ui->buttons[view->focus]);
     lv_obj_add_state(ui->buttons[view->focus], LV_STATE_FOCUSED);
     if (view->pressed) lv_obj_add_state(ui->buttons[view->focus], LV_STATE_PRESSED);
-    lv_obj_set_pos(ui->focus.object, 33, sheet_y + (int)view->focus * 30);
+    lv_obj_set_pos(ui->focus.object, 33 + (int)view->focus * 128, sheet_y);
   }
   if (scene) {
     const ExpeditionMapView *map = &view->field.map;
@@ -282,20 +273,5 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
   lv_obj_set_hidden(ui->capsule, !view->cargo.capsules);
   snprintf(ui->capsule_count, sizeof(ui->capsule_count), "%u / %u", view->cargo.capsules, view->cargo.capsule_capacity);
   lv_label_set_text_static(ui->capsule_quantity, ui->capsule_count);
-  const char *names[] = {"Data", "Energy", "Essence"};
-  for (unsigned resource = 0; resource < 3; ++resource) {
-    unsigned state = view->preparation_available ? view->field.preparation_status[resource] : EXPEDITION_PREP_NOT_STARTED;
-    if (state > EXPEDITION_PREP_CAPACITY_FULL) state = EXPEDITION_PREP_NOT_STARTED;
-    unsigned preparation = view->preparation_available ? view->field.preparation_ms[resource] : 0;
-    if (preparation > GAME_GATHER_ATTEMPT_MS) preparation = GAME_GATHER_ATTEMPT_MS;
-    unsigned percent = preparation * 100 / GAME_GATHER_ATTEMPT_MS;
-    snprintf(ui->preparation[resource], sizeof(ui->preparation[resource]), "%s %u%%", names[resource], percent);
-    lv_label_set_text_static(ui->prep_text[resource], ui->preparation[resource]);
-    lv_label_set_text_static(ui->prep_state[resource], view->preparation_labels[resource]);
-    lv_obj_set_width(ui->prep_track[resource], preparation ? (124 * preparation / GAME_GATHER_ATTEMPT_MS) : 1);
-    lv_obj_set_hidden(ui->prep_track[resource], !preparation);
-    lv_obj_set_style_bg_color(ui->prep_track[resource], lv_color_hex(!view->failed && state == EXPEDITION_PREP_ACTIVE ?
-                               CORE_ART_BLUE_HIGHLIGHT_RGB : CORE_ART_SECONDARY_RGB), 0);
-  }
   return 1;
 }

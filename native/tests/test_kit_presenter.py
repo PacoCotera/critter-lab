@@ -118,13 +118,26 @@ def run(binary, proof=None):
             assert state("companion")["field"]["active_source"] == 255
             press("companion", "confirm")  # Inspect Camp, no automatic award/start.
             assert state("companion")["page"] == "field-site"
-            press("companion", "confirm")  # Explicitly start Camp Data.
+            before = state("companion")["cargo"]
+            press("companion", "back")  # Cancel chooser without taking supplies.
+            assert state("companion")["cargo"] == before
+            walk_to(2)
+            press("companion", "confirm")  # One direct Take12 Data.
+            assert state("companion")["cargo"] == [1200, 0, 0]
+            walk_to(3)
+            press("companion", "confirm")  # One direct Take14 Energy.
+            walk_to(1)
+            press("companion", "confirm")  # Supplies and trace are real alternatives.
+            press("companion", "confirm")  # Take12 Essence, immediate saved result.
             press("companion", "back")
-            deadline = time.monotonic() + 20
-            while not sum(state("companion")["cargo"]) and time.monotonic() < deadline:
-                time.sleep(1)
-            assert sum(state("companion")["cargo"]) > 0
-            frame("companion", "gathering")
+            assert sum(state("companion")["cargo"]) == 3800
+            walk_to(0)
+            press("companion", "confirm")
+            press("companion", "confirm")  # CampData2 fills the remaining two slots.
+            assert sum(state("companion")["cargo"]) == 4000
+            assert state("companion")["field"]["remaining"][1:3] == [2, 1]
+            press("companion", "back")
+            frame("companion", "finite-full-cargo")
             assert state("lab")["stock"] == [0, 0, 0]
             assert state("lab")["cargo"] == [0, 0, 0]
             assert "field" not in state("lab")
@@ -140,19 +153,12 @@ def run(binary, proof=None):
             code, explicit_frame = request(f"/api/devices/lab/frame?revision={current_lab['revision']}")
             assert code == 200 and generic_frame == explicit_frame
             walk_to(1)
-            press("companion", "confirm")  # Inspect Moss bend.
-            press("companion", "down")
-            press("companion", "confirm")  # Independent trace reveals connector.
+            press("companion", "confirm")  # The remaining trace reads directly.
             assert state("companion")["field"]["trace"]
             assert state("companion")["field"]["capsules"] == 0
-            press("companion", "up")
-            press("companion", "confirm")  # Switch source; retain Data preparation.
-            press("companion", "back")
             walk_to(4)
-            press("companion", "confirm")
-            press("companion", "confirm")  # Deliberately collect sealed sample.
+            press("companion", "confirm")  # Deliberately collect a sealed sample at full supply capacity.
             assert state("companion")["field"]["capsules"] == 1
-            press("companion", "back")
             press("companion", "back")  # Modes.
             press("companion", "right")
             press("companion", "confirm")  # Cargo.

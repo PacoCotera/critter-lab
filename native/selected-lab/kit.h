@@ -17,6 +17,7 @@ enum {
   COMP_FINISH_REVIEW, COMP_FRIEND_VISIT, COMP_FIELD_SITE
 };
 #define COMP_FRIEND_LIST COMP_FRIENDS
+enum { KIT_FIELD_TRACE = GAME_FIELD_SOURCES, KIT_FIELD_CAPSULE, KIT_FIELD_NO_CHOICE };
 
 typedef struct {
   unsigned revision, acknowledged, epoch, acknowledged_epoch, focus, page;
@@ -24,6 +25,8 @@ typedef struct {
   unsigned mode, action_focus[3], task_page[4], task_focus[4], task_depth;
   unsigned discard_resource, discard_quantity;
   int suspended;
+  int field_result;
+  unsigned movement_consumed;
   SelectedGesture gestures[10];
   char message[96];
 } KitView;
@@ -81,6 +84,7 @@ unsigned kit_width(unsigned device);
 unsigned kit_height(unsigned device);
 const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index);
 unsigned kit_option_count(const DeviceKit *kit, unsigned device);
+unsigned kit_field_choice(const DeviceKit *kit, unsigned index);
 const char *kit_stage(const DeviceKit *kit);
 const char *kit_route(const DeviceKit *kit);
 const char *kit_expedition_status(const DeviceKit *kit);
