@@ -17,10 +17,11 @@ struct LabActionUi {
   char stock_text[3][24], shortage_text[3][48], visits_text[48], progress_text[64];
 };
 
-static lv_obj_t *surface(lv_obj_t *parent, int x, int y, int width, int height) {
+static lv_obj_t *surface(lv_obj_t *parent, int x, int y, int width, int height,
+    uint32_t color) {
   lv_obj_t *object = lv_obj_create(parent);
   if (!object) return NULL;
-  native_ui_surface(object, CORE_ART_FIELD_RGB, 0, 0);
+  native_ui_surface(object, color, 0, 0);
   lv_obj_set_pos(object, x, y);
   lv_obj_set_size(object, width, height);
   return object;
@@ -56,9 +57,8 @@ LabActionUi *lab_action_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
     if (!images[index]) goto failure;
     ui->images[index] = images[index];
   }
-  ui->root = surface(parent, 0, 0, 1024, 600);
+  ui->root = surface(parent, 0, 0, 1024, 600, CORE_ART_GRAPHITE_RGB);
   if (!ui->root) goto failure;
-  native_ui_surface(ui->root, CORE_ART_GRAPHITE_RGB, 0, 0);
   if (!native_ui_frame_init(&ui->header, ui->root, 976, 100, CORE_ART_BLUE_RGB) ||
       !native_ui_frame_init(&ui->rail, ui->root, 330, 416, CORE_ART_BLUE_RGB) ||
       !native_ui_frame_init(&ui->workpiece, ui->root, 624, 416, CORE_ART_BLUE_RGB) ||
@@ -70,7 +70,7 @@ LabActionUi *lab_action_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
   lv_obj_set_style_shadow_color(ui->focus.object, lv_color_hex(0xc58f32), 0);
   lv_obj_set_style_shadow_width(ui->focus.object, 10, 0);
   lv_obj_set_style_shadow_opa(ui->focus.object, 40, 0);
-  if (!surface(ui->root, 37, 37, 950, 75)) goto failure;
+  if (!surface(ui->root, 37, 37, 950, 75, CORE_ART_FIELD_RGB)) goto failure;
   lv_obj_t *lab_title = label(ui->root, fonts->title, 46, 35, 330, 42, CORE_ART_INK_RGB);
   lv_obj_t *stock_title = label(ui->root, fonts->small, 47, 83, 330, 24, CORE_ART_SECONDARY_RGB);
   if (!lab_title || !stock_title) goto failure;
