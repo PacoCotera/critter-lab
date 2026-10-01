@@ -58,7 +58,7 @@ static void draw_gallery(lv_event_t *event) {
       lv_area_t area = {x+23, y+4, x+23+(int)source->header.w-1, y+4+(int)source->header.h-1};
       lv_draw_image(layer, &image, &area);
     }
-    char ordinal[4];
+    char ordinal[12];
     snprintf(ordinal, sizeof(ordinal), "%u", index+1);
     lv_draw_label_dsc_t label;
     lv_draw_label_dsc_init(&label);
