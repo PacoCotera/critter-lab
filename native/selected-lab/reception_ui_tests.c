@@ -315,6 +315,30 @@ static void rendering_and_lifetime(void) {
   FILE *output = tmpfile();
   assert(output && !kit_bmp(&kit, KIT_LAB, output) && !ftell(output));
   assert(!kit_bmp_ui(&kit, KIT_LAB, output, context, 1) && !ftell(output) && !fclose(output));
+  fixture(&lab, &kit);
+  /* A synthetic retained-history craft fixture exposes the generated route
+   * geometry and all five places. These copied visits are not a played trip. */
+  GameState mapped;
+  game_state_init(&mapped);
+  game_rules_resume_runtime(&mapped, 100);
+  GameCommand start = {0};
+  start.type = GAME_COMMAND_FIELD_START;
+  start.data.field.seed = 17;
+  start.data.field.sample_budget = 1;
+  start.data.field.monotonic_seconds = 100;
+  assert(game_field_start(&mapped, &start) == GAME_OK);
+  GameReceivedExpedition *record = &lab.game.received[0];
+  record->visited = record->inspected = 31;
+  memcpy(record->site_x, mapped.field.site_x, sizeof(record->site_x));
+  memcpy(record->site_y, mapped.field.site_y, sizeof(record->site_y));
+  for (unsigned cell = 0; cell < GAME_FIELD_CELLS; ++cell)
+    record->walked[cell] = !!(mapped.field.paths[cell] || mapped.field.hidden_paths[cell]);
+  assert(game_received_valid(record));
+  kit.received_detail = 1;
+  assert(kit_reception_projection(&kit, &view) && native_ui_reception(context, &view));
+  for (unsigned site = 0; site < GAME_FIELD_SITES; ++site)
+    assert(view.received.map.site_visible[site] && view.received.map.site_inspected[site]);
+  export_fixture(&kit, context, "all-visited-paths");
   native_ui_destroy(context);
 
   fixture(&lab, &kit);
