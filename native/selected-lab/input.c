@@ -393,6 +393,8 @@ const char *selected_lab_option(const SelectedLab *lab, unsigned option) {
   case V1_REVEAL:
     return "Meet in the habitat";
   case V1_HABITAT:
+    if (lab->kit_mode && (!visible_residents(lab) || option == 3))
+      return "Received expeditions";
     return visible_residents(lab) ? care[option % 4]
                                   : "Explore for your first sample";
   }

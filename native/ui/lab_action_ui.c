@@ -15,6 +15,7 @@ struct LabActionUi {
   LabActionView view;
   const lv_image_dsc_t *images[13];
   char stock_text[3][24], shortage_text[3][48], visits_text[48], progress_text[64];
+  char reference_text[64];
 };
 
 static lv_obj_t *surface(lv_obj_t *parent, int x, int y, int width, int height,
@@ -216,7 +217,8 @@ int lab_action_ui_update(LabActionUi *ui, const LabActionView *view) {
   lv_label_set_text_static(ui->form, view->form_title);
   lv_obj_set_hidden(ui->form, !candidate && !resident);
   lv_obj_set_pos(ui->form, 689, resident ? 349 : 275);
-  lv_label_set_text_static(ui->reference, candidate ? view->reference_id : "Selected form");
+  snprintf(ui->reference_text, sizeof(ui->reference_text), "Reference: %s", view->reference_id);
+  lv_label_set_text_static(ui->reference, candidate ? ui->reference_text : "Selected form");
   lv_obj_set_hidden(ui->reference, !candidate && !resident);
   lv_obj_set_pos(ui->reference, 689, resident ? 327 : 346);
   lv_label_set_text_static(ui->cost, "Cost: 5 of each supply");

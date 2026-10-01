@@ -352,6 +352,7 @@ static void routes_exports(void) {
   lab.game.incubation_elapsed = GAME_INCUBATION_SECONDS;
   assert(selected_lab_action_projection(&lab, 0, &view));
   assert(view.art == LAB_ACTION_ART_INCUBATOR_READY && !view.resident_visible && !view.candidate_authorized);
+  assert(view.elapsed_ms == view.duration_ms && view.elapsed_ms == GAME_INCUBATION_SECONDS * 1000);
   assert_routes(&kit, context, "incubator-ready");
   lab.page = V1_REVEAL;
   lab.game.incubation_active = lab.game.incubation_ready = 0;
@@ -363,8 +364,17 @@ static void routes_exports(void) {
   lab.game.individuals[0].art_pending = 0;
   lab.page = V1_HABITAT;
   lab.game.individuals[0].care_visits = GAME_MAX_CARE_VISITS;
+  assert(lab.kit_mode == 1 && selected_lab_action_projection(&lab, 0, &view));
+  assert(!strcmp(view.options[3], "Received expeditions"));
+  lab.kit_mode = 0;
+  assert(selected_lab_action_projection(&lab, 0, &view) && !strcmp(view.options[3], "Explore again"));
+  lab.kit_mode = 1;
   assert_routes(&kit, context, "habitat");
   lab.game.individuals[0].revealed = 0;
+  assert(selected_lab_action_projection(&lab, 0, &view) && !strcmp(view.options[0], "Received expeditions"));
+  lab.kit_mode = 0;
+  assert(selected_lab_action_projection(&lab, 0, &view) && !strcmp(view.options[0], "Explore for your first sample"));
+  lab.kit_mode = 1;
   assert_routes(&kit, context, "habitat-empty");
   lab.page = V1_CRITTERS;
   assert_routes(&kit, context, "residents-empty");
