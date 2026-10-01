@@ -1,6 +1,6 @@
-# Native UI foundation â€” Companion Cargo
+# Native UI foundation — Companion Cargo
 
-Bounded host proof of LVGL9.6.0, using the actual Companion Cargo page at450Ã—600.
+Bounded host proof of LVGL 9.6.0, using the actual Companion Cargo page at 450×600.
 Native code owns the pixels: retained labels, images, buttons, grid/flex and stepped
 line frames. The presenter displays the resulting bitmap; this is not an HTML
 screen painted over the game. Lab, Probe, Companions and Dock remain on their
@@ -10,12 +10,12 @@ existing renderers in this increment.
 
 Exact clean/pushed source `ae93a07c73d643cc296cb802f425b881e139566f` built on the
 existing native VM. Domain, Cargo UI, Lab and Kit checks passed; all native target
-CI36810823393 passed. Prior source d3e536c also passed the existing seven presenter
+CI 36810823393 passed. Prior source d3e536c also passed the existing seven presenter
 bridge checks and real HTTP/native handoff/link/endpoint checks; final correction
 changes only retained frame composition and representative exports.
 
 The coordinator walked the fresh isolated native journey with existing depicted
-controls. Final acceptance delivered3 Data and one sample, then current Companion
+controls. Final acceptance delivered 3 Data and one sample, then current Companion
 supplies/capsules became zero and Back returned to mode selection. Frame/fixture
 exports in [manifest.json](manifest.json) have exact hashes and evidence labels.
 Opaque sprite pixels were compared at their four actual native origins: zero RGB
@@ -25,20 +25,20 @@ Cargo composition: connected stepped frames, safe focus/footer gap, current-zero
 capsule visibility and full/error text fit. Coordinator inspected the same frames.
 This is not approval of whole-game art or enjoyment.
 
-Measured final ELF: text3,976,705, data6,208, bss263,520; total4,246,433 bytes.
-Two-context LVGL pool:39,984 used /254,152 total bytes. Controlled actual-save
-export process peak RSS6,500KiB, elapsed0.10s. Original save/Kit/required hashes
+Measured final ELF: text 3,976,705, data 6,208, bss 263,520; total 4,246,433 bytes.
+Two-context LVGL pool: 39,984 used / 254,152 total bytes. Controlled actual-save
+export process peak RSS 6,500KiB, elapsed 0.10s. Original save/Kit/required hashes
 matched before/after copied-save export. Process timing is not a frame-rate claim.
 Deployment status is reported by the sandbox release endpoint.
 
-The intended proof is actual gathering and sample collection â†’ Cargo with whole
-counts and a carried capsule â†’ Send review and safe cancellation â†’ explicit Send
-â†’ Lab acceptance â†’ current supplies/capsules zero with a separate delivery record
-â†’ Back to mode selection. Read-only current facts drive the UI; render/animation
+The intended proof is actual gathering and sample collection → Cargo with whole
+counts and a carried capsule → Send review and safe cancellation → explicit Send
+→ Lab acceptance → current supplies/capsules zero with a separate delivery record
+→ Back to mode selection. Read-only current facts drive the UI; render/animation
 cannot acquire, transfer, tick game time or spend resources.
 
-Representative full40 and storage-error exports are layout fixtures, not earned
-play or a storage-failure reproduction. Actual-save still and0/60/120ms focus
+Representative full 40 and storage-error exports are layout fixtures, not earned
+play or a storage-failure reproduction. Actual-save still and 0/60/120ms focus
 exports use a copied save with unchanged original hashes. They establish a
 controlled presentation clock only: live host intentionally renders still focus,
 with no continuous animation or audio backend claimed.
@@ -48,7 +48,7 @@ with no continuous animation or audio backend claimed.
 Kit remains the sole input/focus/action authority, including fresh-gesture,
 visible-frame and held/suspended safety. UI receives copied facts and owns its
 widget tree, point arrays, label buffers, assets and display buffers. Source-exact
-primary material sprites remain native1Ã—; the font adapter uses retained Vera
+primary material sprites remain native 1×; the font adapter uses retained Vera
 coverage. Vendor source is unchanged and hash-pinned with its MIT license.
 
 One live host context, two-context lifecycle checks and single-context controlled
