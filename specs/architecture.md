@@ -227,7 +227,7 @@ control sequences before dependent compositions are treated as selected.
 | --- | --- | --- |
 | Companion Probe and field source choice, including Probe mode preview | LVGL | Shared current UI must compile under ESP-IDF; physical adapter unvalidated |
 | Companion Cargo | LVGL | Same target-build requirement |
-| Companion Send/Keep confirmation | Retained LVGL using shared portable Cargo/Send tree | Changed host source awaiting exact native output and independent acceptance; current Companion ESP build still required |
+| Companion Send/Keep confirmation | Retained LVGL using shared portable Cargo/Send tree | [Actual host source/control/output and independent review checked](../docs/evidence/native-companion-send/README.md); current Companion ESP build still required |
 | Companion other mode previews, Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |

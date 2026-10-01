@@ -53,7 +53,9 @@ display sink without allocating host full-frame storage. Kit projection and
 physical command authority remain outside it. Offline Send seals locally and
 waits; Lab acceptance clears current cargo and ends the outing. A defensive
 already-sealed review presents no Keep cancellation or second Send action.
-Changed host source still needs actual native output and independent acceptance.
+The [actual native confirmation/return proof](../../docs/evidence/native-companion-send/README.md)
+passed affected checks and independent technical/focused UI/UX output review.
+Current Companion ESP-IDF compilation and physical output remain separate gates.
 
 Lab and the remaining Companion Discard/Finish/preview/visit routes remain open
 renderer migrations. A failed migrated Dock/Probe/Cargo/Send projection returns a

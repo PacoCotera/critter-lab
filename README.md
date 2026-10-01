@@ -25,12 +25,13 @@ The sandbox release endpoint identifies the currently activated version.
 The [three-device native simulator](native/selected-lab/README.md#three-device-mode)
 connects Companion gathering and Cargo return with explicit Lab reception,
 resource-funded research, genome selection, incubation, deliberate reveal and
-habitat visits. Native C17 owns rules, saved state, focus and pixels; the browser
-transports the depicted physical controls. The devices are logical contexts in
+habitat visits. Native C17 owns rules, saved state and physical focus; LVGL renders
+migrated screens into native framebuffers. The browser transports those frames
+and the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
 The [native UI foundation](specs/architecture.md#native-ui-foundation) uses LVGL 9.6.0
-for real Companion Cargo and Probe. Shared layout, theme, image/font adapters and
+for real Companion Cargo, Send/Keep and Probe. Shared layout, theme, image/font adapters and
 physical focus replace manual screen drawing in those workpieces. The
 [Cargo proof](docs/evidence/native-ui-foundation/README.md) and
 [Probe proof](docs/evidence/native-companion-probe/README.md) record actual
@@ -40,6 +41,9 @@ passed native output and independent review; Lab and remaining Companion familie
 migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
 now links under ESP-IDF; the old Companion scaffold still has no current UI. Final HiBit
 artwork and human playability remain open.
+The [Send/Keep proof](docs/evidence/native-companion-send/README.md) records the
+shared portable Cargo tree, actual offline return/acceptance, safe focus and
+independent technical/UI/UX review.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the
