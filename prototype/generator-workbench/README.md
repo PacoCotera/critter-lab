@@ -216,6 +216,18 @@ contributing reasons instead of adding joints or changing the genome. Appearance
 contributors can then place markings on that same resolved body. This is a rule
 design example, not approved Pip anatomy or an implemented movement operator.
 
+**Future polygenic/cross-dimension traits are required.** Several loci may
+contribute to a shared output, and resolved structural, movement, energy and
+environment-response properties may interact to produce an emergent capability or
+profile. Actual environmental conditions are evaluation context; inherited
+affinities and response rules are genomic contributors. A proposed gait/endurance
+profile can combine supported limb mechanics, coordination, energy supply/recovery
+and response to terrain/conditions. A sensory or metabolic output needs its own
+declared contributors and prerequisites; it is not automatically produced by those
+same inputs. Show the full contribution chain and changed-context comparison. The
+compendium schema must support this now; the general interaction engine is later
+work, not a sum of independent dimension scores or a new gene for every combination.
+
 ### Workbench views and framework
 
 | View | What the owner can inspect or do |

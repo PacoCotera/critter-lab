@@ -61,6 +61,17 @@ These are the accepted initial domain families, not a requirement to implement e
 
 Quantitative dimensions may be influenced by multiple loci; one variant may affect several dimensions. Polygenicity, epistasis and pleiotropy motivate this proposal. They do not require us to simulate molecules or give every improvement a penalty.
 
+Owner explicitly requires future polygenic and cross-dimension traits: movement,
+energy physiology and environmental response can jointly shape locomotion,
+sensory performance or metabolism. Model several inherited contributions to a
+shared trait separately from interactions between resolved traits. Inherited
+affinity/response properties differ from the actual environment supplied as
+expression context. Structural and capability prerequisites still apply; a
+favorable environment cannot invent eyes, limbs or an unavailable locomotion mode.
+Catalogue records must allow multiple contributors, interaction/context rules and
+per-output reasons from the outset. Exact operators, probabilities and quantitative
+physiology remain design work, not an implemented general solver.
+
 ### Abilities are structured capabilities
 
 Use an extensible ability vocabulary alongside the dimensions, rather than inventing a new genomic layer for every power. Each ability definition states its inherited prerequisites, required structures/resources, activation conditions, parameters, costs, effects, recovery conditions and possible failure. A tree can present it simply; the underlying prerequisites may form a network.
