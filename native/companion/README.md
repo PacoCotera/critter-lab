@@ -15,8 +15,10 @@ idf.py -C native/companion -B native/build/companion size
 ```
 
 The project produces `critter_companion_ui.elf`, `.bin` and `.map`. Compile
-validation is pending for this source change. The default SDK partition remains
-unchanged until actual link/bin evidence requires a standard size adjustment.
+validation is pending for the final source change. CI190 linked a1396112-byte
+image, exceeding the default1MiB factory partition. The target therefore uses
+the SDK's standard1500KiB single-factory partition, without OTA. This compile
+configuration does not select a physical board or approve its flash budget.
 No PSRAM, BSP, GPIO, screen/input driver, radio or board revision is configured.
 
 Shared source is `native/ui/display.c`, Cargo/resident trees, Probe UI/geometry,
