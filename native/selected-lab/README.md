@@ -1,8 +1,10 @@
 # Native Beecho Lab V1
 
 The current [playable loop and limits](V1.md) are authoritative for this target.
-Native C17 owns the game, saved world, focus, input authorization and every
-1024×600 pixel. The browser transports fixed simulated hardware button events
+Native C17 owns the game, saved world, focus and input authorization. LVGL
+composes migrated device screens into native frames; remaining manual families
+are tracked in [architecture coverage](../../specs/architecture.md#current-migration-coverage-and-target-evidence).
+The browser transports fixed simulated hardware button events
 and displays native BMP frames. It does not implement the game or screen layout.
 
 ## Platform
@@ -11,7 +13,8 @@ The selected Lab reference is **Raspberry Pi4 Model B**, with the Waveshare 7inc
 HDMI LCD (H), 1024×600. The existing build is Linux **x86-64 host simulation** using
 GCC, CMake and Ninja. It is not an ESP32/ESP-IDF executable, Pi emulation or a
 verified ARM build. Physical HDMI/input integration, board boot and performance
-remain untested. ESP-IDF belongs to the separate Companion target.
+remain untested. Companion and Caddy target ESP32/ESP-IDF. The shared current Dock
+UI has a headless ESP-IDF compile proof; current Companion UI compilation remains open.
 
 Develop locally, commit and push, then fetch the exact clean revision through Git
 on the established VM. Never copy loose source to bypass version control.

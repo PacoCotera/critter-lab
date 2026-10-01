@@ -31,7 +31,7 @@ and the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
 The [native UI foundation](specs/architecture.md#native-ui-foundation) uses LVGL 9.6.0
-for real Companion Cargo, Send/Keep and Probe. Shared layout, theme, image/font adapters and
+for real Companion Cargo, Send/Keep, Discard/Finish and Probe. Shared layout, theme, image/font adapters and
 physical focus replace manual screen drawing in those workpieces. The
 [Cargo proof](docs/evidence/native-ui-foundation/README.md) and
 [Probe proof](docs/evidence/native-companion-probe/README.md) record actual
@@ -44,6 +44,9 @@ artwork and human playability remain open.
 The [Send/Keep proof](docs/evidence/native-companion-send/README.md) records the
 shared portable Cargo tree, actual offline return/acceptance, safe focus and
 independent technical/UI/UX review.
+The [Discard/Finish proof](docs/evidence/native-companion-discard/README.md)
+shows exact whole-item decisions, safe Keep/Back, empty outing completion and
+separate native maximum/recovery fixtures, with independent craft review.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the

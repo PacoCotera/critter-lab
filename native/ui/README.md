@@ -58,8 +58,8 @@ passed affected checks and independent technical/focused UI/UX output review.
 Current Companion ESP-IDF compilation and physical output remain separate gates.
 
 The same portable Cargo tree also composes Discard class/quantity/review and
-empty Finish review. Their native output and independent verification are in
-progress. Two visible action rows retain the full logical option window; copied
+empty Finish review. [Actual native output and independent verification](../../docs/evidence/native-companion-discard/README.md)
+passed within this family. Two visible action rows retain the full logical option window; copied
 focus mapping cannot silently select a different quantity. The domain owns loss,
 Keep and caller recovery. The view exposes exact loss/remainder and closes storage
 or sealed-haul actions. No game command is invoked by a widget.
