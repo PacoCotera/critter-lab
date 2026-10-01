@@ -17,9 +17,8 @@ track the remaining playability and craft gaps.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
   Companion and Caddy target ESP32. Dock, Companion Probe and Cargo use LVGL
   on the host. All Lab and remaining Companion pages still need conversion.
-  The old ESP-IDF Companion demo is not current UI evidence. The next bounded
-  artifact compiles the same shared Dock UI under installed ESP-IDF with a
-  headless partial-flush harness. [Architecture](specs/architecture.md#native-ui-foundation)
+  The old ESP-IDF Companion demo is not current UI evidence. The same shared Dock UI now compiles/links under installed ESP-IDF in a
+  [headless partial-flush target](docs/evidence/native-dock-lvgl/ESP32.md). [Architecture](specs/architecture.md#native-ui-foundation)
   owns complete route/target coverage; a component pass is not whole acceptance.
 - **Simulator — browser maintenance:** candidate shell enlarges Companion beside
   Lab, groups Back with Confirm and preserves native bitmap aspect ratios. Browser

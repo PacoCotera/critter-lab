@@ -48,7 +48,7 @@ host RGB frames, separately allocated assets and physical driver/radio stacks;
 they do not establish MCU fit. Area/stride/channel/capacity and asynchronous
 buffer release checks pass, including a valid narrow/tall partial region.
 
-Same-source headless ESP-IDF compilation is the next separate gate. Lab and
+[Same-source headless ESP-IDF compilation](ESP32.md) passes atc3c8a6d. Lab and
 remaining Companion routes are still manual and remain required migrations.
 See [architecture](../../../specs/architecture.md#native-ui-foundation) and
 [portable UI boundary](../../../native/ui/README.md).

@@ -37,7 +37,8 @@ physical focus replace manual screen drawing in those workpieces. The
 handoff, source-exact material pixels and output review. All device screens must
 use this framework. The [complete Dock LVGL family and portable display boundary](docs/evidence/native-dock-lvgl/README.md)
 passed native output and independent review; Lab and remaining Companion families still need
-migration. Current ESP-IDF scaffolds do not contain the current UI. Final HiBit
+migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
+now links under ESP-IDF; the old Companion scaffold still has no current UI. Final HiBit
 artwork and human playability remain open.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 

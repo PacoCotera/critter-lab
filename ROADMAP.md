@@ -24,7 +24,7 @@ the first real detailed Companion Cargo screen with LVGL, shared layout/theme an
 guarded physical focus has passed its [native journey and output review](docs/evidence/native-ui-foundation/README.md).
 Owner permits complete re-layout. The active [Probe composition slice](https://github.com/PacoCotera/critter-lab/issues/58)
 uses a native32px player-following map, retained place actions, compact whole cargo
-and separate preparation. The [native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
+and a persistent whole-cargo strip. The [prior native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
 records the changed composition and actual gather/trace/sample/return/current-zero
 path. Art is extracted from a Gemini master; environmental depth remains unapproved
 and entry composition is sparse. Companions still needs its own workpiece.
@@ -43,11 +43,11 @@ recommendation removes the field clock: immediate finite collection by default,
 conditional source selection for real alternatives/capacity. Its first proof is
 one encounter with fresh versus near-full cargo, not an event catalogue. Studies
 remain immediate; existing incubation is the natural background process. The timer-free source candidate has passed a native quantity/ownership journey;
-final output corrections and integration are pending. It is not deployed or
+actual choice, capacity-rejection and corrected result frames now pass focused game, UX and art review. It is not deployed or
 canonical reward balance. The selected Dock module's
 [four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
-is confirmed and the manual-renderer maintenance is checked; real LVGL conversion
-is the next architecture gate.
+is confirmed. The [complete host Dock LVGL family](docs/evidence/native-dock-lvgl/README.md)
+now passes native/control and independent review; the [same-source ESP-IDF compile/link proof](docs/evidence/native-dock-lvgl/ESP32.md) also passes. Runtime panel output remains unvalidated.
 
 Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
 ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
@@ -95,7 +95,8 @@ Algorithms own rules and evidence; rendering and generated text do not mutate th
 Use the [reviewed A/B example](design/research-and-creation.md#discovery-proposal--30-september-2026)
 as provisional V1 content: heritage4 Data, movement4 Energy, relevant comparison4
 Essence, creation5 of each. Required facts/disclosed support govern completion,
-not a click quota. Current gathering timing/chance remains provisional and retained;
+not a click quota. New field content uses immediate finite whole offers; legacy
+timed fields remain frozen and returnable. Offer counts are provisional balance;
 new descriptions or scenery never imply different yields. Existing records keep
 their pinned legacy content; new content cannot silently change a saved individual.
 

@@ -110,9 +110,9 @@ acknowledgement after a time-only repaint and rejection after navigation.
 The mode selector previews Probe/Cargo/Companions immediately with clamped
 Left/Right. Down/Confirm enters actions, with a separate fresh Confirm required
 to invoke one. Back restores task callers before returning to the selector.
-Probe shows the generated local map, named sites, one active finite source and
-per-resource preparation separately from earned integer inventory. Directions
-steer; Confirm at a site opens deliberate gathering/investigation actions.
+Probe shows the generated local map, named sites, retained finite whole offers
+and always-visible carried integer inventory. Directions steer; Confirm takes
+a single offer immediately or opens a chooser when real alternatives exist.
 Trace discovery reveals a route; a sealed sample requires explicit collection.
 Cargo/Send use the same source resource sprites and
 whole counts; no item fractions or preparation appear in their manifest.
@@ -122,10 +122,11 @@ restores its previous navigation; world state remains current. Acceptance and
 receipt are distinct durable states. Send stops gathering; fresh acceptance
 unloads once and ends the source expedition, including an early return. Receipt
 closes the handoff, and the next outing starts a new route identity. An empty
-outing can Finish without sending a phantom haul. The shared domain retains preparation and
-chance outcomes across restart and transfer. Versioned recovery boundaries are
+outing can Finish without sending a phantom haul. Source remainders and earned
+units persist across restart. Legacy preparation/chance records remain frozen
+and returnable; loading never converts them into new rewards. Recovery boundaries are
 in [architecture](../../specs/architecture.md#three-device-host-simulator);
-provisional time/chance values belong in [V1](V1.md).
+provisional finite offers and capacity belong in [V1](V1.md).
 
 The [Gemini connected screen references](../../design/companion-connected-art/README.md)
 preserve the reviewed Probe/Cargo/reception compositions and production constraints.

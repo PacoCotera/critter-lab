@@ -229,13 +229,15 @@ control sequences before dependent compositions are treated as selected.
 | Companion Cargo | LVGL | Same target-build requirement |
 | Companion other mode previews, Send/Discard/Finish reviews, residents and visits | Manual C raster | Convert complete families and remove fallback, including empty/offline/error states |
 | Lab Home/workspace previews, incoming haul/log, research/library, creation/incubation, residents/habitat | Manual C raster | Convert every family, including alternate current CLI frame routes |
-| Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); shared ESP-IDF UI compile follows |
+| Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
 The current three-device presenter is one Linux x86-64 process. It verifies
 logical views, controls and native output, not separate physical endpoints.
 The Lab has no verified ARM/HDMI/GPIO adapter. `native/companion` currently
-builds an old ESP-IDF scanline demo without the current LVGL UI; a Caddy ESP-IDF
-target is absent. The historical nRF Probe fixture is not the combined Companion.
+builds an old ESP-IDF scanline demo without the current LVGL UI. The headless
+Caddy target compiles/links the shared current Dock UI under ESP-IDF; it has no
+physical panel, live game authority or radio adapter. The historical nRF Probe
+fixture is not the combined Companion.
 None of these scaffold builds qualifies as current firmware evidence.
 
 Portable UI headers must contain owned plain-C view facts, styles/assets and
@@ -253,9 +255,9 @@ asynchronous e-paper refresh. Area, stride, format and buffer lifetime must be
 validated. Panel format conversion is permitted here; UI composition is not.
 
 The complete host Dock family and display/host boundary are checked at5431f44.
-The next bounded headless ESP-IDF compile must contain
-the same shared Dock UI, pinned LVGL and partial-flush adapter; report ELF/map/
-memory evidence separately from hardware boot. Remaining Companion families
+The [bounded headless ESP-IDF compile](../docs/evidence/native-dock-lvgl/ESP32.md)
+contains the same shared Dock UI, pinned LVGL and partial-flush adapter atc3c8a6d;
+ELF/map/static memory evidence is separate from hardware boot. Remaining Companion families
 then migrate, followed by complete Lab journey workpieces. Each slice requires
 exact pushed source, actual native output, physical-control regression checks
 and independent review. Final architecture acceptance audits all entry points:
@@ -306,8 +308,8 @@ Lab-accepted world. Only Companion controls start expeditions. This does not
 claim separate MCU processes, endpoint storage or radio firmware.
 
 The native kit adapter seals an immutable haul snapshot in an atomic sidecar.
-New seals contain only whole awarded supplies; gathering preparation and chance
-state are separate Companion activity. Simulated arrival opens Lab reception once,
+New seals contain only whole awarded supplies; retained source remainders and
+frozen legacy preparation stay on Companion. Simulated arrival opens Lab reception once,
 never acceptance. The input module captures/restores navigation only, without
 restoring world state, clocks or armed gestures. A fresh Confirm accepts the haul.
 
