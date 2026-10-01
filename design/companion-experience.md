@@ -14,6 +14,19 @@ Founders have origin records; they must not acquire fabricated parents. The
 [connected design review](probe-bench-review.md) links expeditions and rich visual
 Lab investigation to this ongoing relationship.
 
+Owner further defines this as a deep digital pet: recurring visual interaction,
+individual responses, growth, training and intimate inspection of lineage, genome
+and attributes. It is not an inventory terminal with a visit counter. Research
+representative physical-care, training, responsive-pet, artificial-life and
+collection families; source reading does not establish playtested enjoyment.
+Care penalties, death, learned inheritance, breeding/training rules and schedules
+are not implicitly imported from other games. The connected review holds the
+current comparison and considered design proposal. All creature sprites, motion
+and encyclopedia content must be generated algorithmically from the decoded
+genome/configured-incubation expression, using the same saved identity. No
+per-creature illustration or writing is required. Current/learned states choose
+legal behavior; they do not fabricate hereditary anatomy or hidden knowledge.
+
 Pick up the Companion, recognize what it is doing, move between gathering, carried contents and critter company, take a deliberate action, see its effect, and get back without losing context. The device should reward a glance and invite closer inspection. Useful explanation belongs beside the unfamiliar activity; repeated instructions must not occupy the main experience.
 
 The connected journey is **Companion gathers → player reviews Send → Lab accepts and stores → expedition ends → Lab studies the sample and creates one saved critter → the same individual is available for later inspection/company → Caddy shows the same accepted records.** Sending and Lab acceptance are separate acts. Receipt delay does not undo stored supplies or revive the ended outing. Current Companions mode exposes the same saved resident, known facts and visits. Capture/training, traveller assignment and expressive living response remain incomplete; the original reference is not fully delivered.

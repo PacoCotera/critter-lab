@@ -20,9 +20,23 @@ The Companion entry/cargo increment is live: purposeful destination cards replac
 
 ## Next gameplay priorities
 
-Owner paused coding for a joined [connected discovery design review](design/probe-bench-review.md). The selected Lab feeling is a rich visual genome field: focus regions, fund meaningful experiments and progressively reveal supported expressions that lead to companions. Owner clarified that Data requirements scale with research complexity; a consumable-carrier explanation is not required. Exact prices and allocation/consumption remain proposals. The researched Probe alternatives are prospecting, genuine cargo assortment and responsive encounters. The team recommends comparing one responsive encounter with current pickup before creating a larger event set; this is not a selected mechanic or playtest result. Research still needs progressive discovery and useful sample variation. The navigation/workpiece correction is delivered.
+Owner paused coding for the [connected discovery design review](design/probe-bench-review.md).
+Responsive encounters are selected with procedural state/relations and derived
+actions, not scripted scenes. Research is the richest visual genome backbone;
+Data requirements scale with complexity. Virtual Probe/Lab tiers and boosters
+gate simple toward complex, longer investigations; costs/effects/timing remain open.
 
-Companion is the ongoing creature interaction/bond layer, including optional lineage/genome/attribute inspection; breeding and training rules remain future design. Home also needs exploration imagery instead of a sample capsule, a researchable genetic-sample symbol, one cargo summary and an expressive pocket-device landing. Delivered destination cards are a functional entry repair, not accepted final visual design. No new Home/response overhaul is deployed.
+Fully decoded genomes must drive configured incubation's algorithmic creature
+generator. All creature art, sprites, animation and encyclopedia are programmatic
+outputs, not individually drawn/written content. The public architecture now
+records this selected boundary. Existing Pip genetics and portraits do not prove
+the generator, background jobs or expanded content are implemented.
+
+Companion is a deep digital pet. Six representative pet families informed the
+proposal for visible initiative, reciprocal response and retained individual
+history, plus optional Lineage/Genome/Attributes inspection. Source research is
+not exhaustive or playtesting. Home still needs purposeful exploration/sample
+imagery and a playful visual landing. No new Home/pet/generation overhaul is deployed.
 
 Exploration remains road-bound. Saved generated geometry exists in the native prototype, but the three named expedition kinds still share finite source rules and do not offer meaningful distinctions. Open movement, distinct opportunities and retained map events are undelivered gameplay work; see the [exploration study](design/expedition-map-study/README.md).
 

@@ -4,8 +4,8 @@
 Research is the visual/content backbone; worthwhile expeditions supply it, and
 its outcomes become companions the player wants to know and interact with.
 Companion is the ongoing bond, not merely a collection terminal. The child-facing
-genome-map feeling is selected; field mechanics, resource economy, authored content
-and final compositions below remain proposals.
+genome-map feeling is selected; procedural responsive encounters and automatic creature production are selected.
+Exact causal rules, economy, progression and final compositions remain proposals.
 
 The journey is **notice → interact/gather → return → open a genome → discover
 supported expressions → deliberately create → live with the same individual**.
@@ -29,51 +29,49 @@ proposals; they do not establish our game's enjoyment or authorize copied conten
 | [Nintendo's nintendogs + cats developer interview](https://www.nintendo.com/en-gb/Iwata-Asks/Iwata-Asks-Nintendo-3DS/Vol-4-nintendogs-cats/2-Adding-Kittens-Doubled-the-Work/2-Adding-Kittens-Doubled-the-Work-204778.html) | Different animals required different movement/reactions to the same object. | Individual presence needs visible response, beyond skins and counters; no touch/voice controls or animal biology imported. |
 | [Wobbledogs: creator interview](https://www.gamedeveloper.com/design/behind-the-ai-and-physics-of-i-wobbledogs-i-procedurally-goofy-wobbledogs) | Complex hidden AI could look random or buggy; understandable moment-to-moment responses provided life. | Make the bond observable. Do not adopt its mutation, diet or physics systems as our genetics. |
 
-## Probe: three proposals
+## Probe: procedural responsive encounters — selected direction
 
-| Direction | Concrete player action | Repeated-use value | Main risk |
-| --- | --- | --- | --- |
-| **1. Open prospecting** | Walk open ground, optionally record a useful viewpoint observation, then choose a supply destination or sample lead. A simple source still takes one deliberate collection. | Observations, reachable destinations and worthwhile offers change which detour makes sense. | Better routing can remain a commute between Take buttons. |
-| **2. Recovered assortment** | At a genuine assortment, preview actual whole offerings and choose the useful mix against remaining cargo space. | Real local availability and research intention change what to bring back. | Already close to current capacity behavior; forced scarcity or sorting would add chores. |
-| **3. Responsive encounters** | Focus a scene subject/object, intervene, see a consequential response, then choose to collect or follow the new observation. | Authored responses change opportunities and what the player does next. | A compulsory intervention can become a disguised loot-unlock button. |
+Owner selected responsive encounters and requires procedural/generative content,
+not scripted scenarios. LLMs should enable a large creative space. A thousand
+generated story records are still scripts; shuffling names, geometry and rewards
+does not establish variation in play.
 
-These are different hypotheses, not three systems to implement together. Existing
-native play already includes trace-to-cache, finite offers and capacity; proposals
-1 and 2 improve those decisions but do not establish an interactive overhaul.
-The recommendation is to compare **one responsive encounter** with today's pickup
-loop before authoring a larger event set. Open prospecting gives its route context;
-capacity decisions occur only when actual cargo makes them relevant.
+Generate retained **entities, states and relationships**, then derive available
+interactions and consequences from reusable causal rules. Positions, access,
+visibility, movable objects, finite supplies and compatible subject capabilities
+make an operation possible. Conditions/behavior can alter the scene; a successful
+collection transfers actual whole units. No mandatory Read→prepare→intervene→Take
+sequence exists. An exposed source can remain immediate collection.
 
-Worked encounter proposal: a loose cover obscures a supply bundle beside an
-observable field subject. Both useful opportunities are visible before acting.
-Directions preview **Move cover** or **Give room**.
-One Confirm on Move changes the cover and subject response, exposing the actual
-finite bundle. A separate fresh Take collects the disclosed whole amount.
-Giving room instead changes the subject's position and must create a distinct
-useful route/observation opportunity; a cute reaction alone is insufficient.
-The child can choose nearby supplies or follow the observation; neither route is
-compulsory or exclusive. Both resulting opportunities remain readable until the
-player decides. No automatic collection or held-input replay. No reaction deadline,
-bait cost, capture, reward lottery
-or genotype inference is implied. Exact subject/response content needs steering.
+Hand-worked possible output, not an executed seed: a reachable movable object
+obscures a real supply bundle; an observable mobile subject interrupts another
+sightline; alternate approach ground is accessible. Move-object derives from
+reach/mobility/clear destination and opens supply access. Change-approach can alter
+the subject's position under its actual response rule and expose a useful route.
+Both opportunities remain useful and nonexclusive. Another generated state with
+no movable occluder must have a different action set, not the same script in a
+different costume. Specific response laws remain proposed content.
 
-```mermaid
-flowchart LR
-    S[Notice an encounter] --> P[Preview a subject or object]
-    P --> M[Move cover]
-    P --> G[Give room]
-    M --> B[Scene changes: bundle accessible]
-    G --> O[Subject responds: observation or route changes]
-    B --> T[Deliberately take whole supplies]
-    O --> R[Choose the next destination]
-```
+Directions preview visible targets without mutation. One fresh Confirm performs
+the named operation; a separate Take collects only when actual collection is
+needed. No reflex deadline, held-input replay, automatic pickup or result dismissal.
+Observation is not hidden-genome knowledge, ownership or a captured parent.
 
-The second encounter must change response/opportunity and the useful choice,
-not only colors, cover orientation or rewards. Discard this direction if its
-intervention merely delays Take or the response is cosmetic. Short decision
-segments are an experiment size, not a timer or measured completion promise.
-All use existing directions/Confirm/Back; preview commits nothing and results
-need no dismissal. Exact event recovery/authority needs architecture after selection.
+LLMs expand reusable definitions, relations, causal operators and presentation
+within the [generation boundary](../specs/architecture.md#content-management-boundary).
+They do not decide truth through free prose. General operator/rule design needs
+validation; ordinary compatible outputs must not require individually authored
+scenarios. Genetic-algorithm search can improve valid diversity; it is not the
+inheritance rule for a saved family.
+
+[Generating Interactive Worlds with Text](https://arxiv.org/abs/1911.09194)
+investigates compositional locations/characters/objects and new content.
+[Generative Agents](https://arxiv.org/abs/2304.03442) investigates memory/planning
+and emergent behavior in a town simulation. Their abstracts support research
+directions, not ESP32 feasibility, our quality or a selected runtime architecture.
+Compare decisions, legal action sets and useful consequences across outputs;
+prose diversity and seed counts are insufficient. Earlier prospecting/cargo
+alternatives remain useful support, but are not competing selected mechanics.
 
 ## Research: the richest part of the journey
 
@@ -106,10 +104,11 @@ unsupported form. A partial finding is not complete creation eligibility or a
 full-portrait permission; exact facts remain in the linked sample contract.
 
 The first content proof must trace one sample's fact → revealed relationship →
-supported expression → later individual, plus a contrasting sample. New authored
-evidence must justify each reveal. Decorative genomic complexity is insufficient.
+supported expression → later individual, plus a contrasting sample. Generated
+evidence under the defined rules must justify each reveal. Decorative genomic
+complexity is insufficient.
 
-## Resource meaning — considered proposal
+## Resource meaning — accepted broad roles, open economy
 
 | Resource | Role | Requirement boundary |
 | --- | --- | --- |
@@ -125,12 +124,33 @@ shortages preserve all stock and findings. Not every procedure needs all three.
 More scope may need more Data, while useful overlap reuses established knowledge.
 No larger donation chooses a preferred genotype or rare result.
 
+## Configured incubation and progression
+
+The fully decoded genome becomes the input to configured incubation's algorithmic
+generator. Genome/expression constructs anatomy, rig, sprites, animation and
+encyclopedia; no per-creature writers or artists. The [architecture pipeline](../specs/architecture.md#creature-production-pipeline)
+owns generation/validation/retention. General C18/Gemini style and genomic rules
+guide the generator, not a selected prefinished individual portrait.
+
+Fully decoded founder generation is followed by actual-parent breeding and
+traceable lineage. The existing two-copy example allows carried variation to
+reappear in descendants; a research resource or booster cannot select a preferred
+allele. Children are new individuals, not replacements for the parents.
+
+Owner selects eventual virtual Probe/Lab tiers and boosters: start with simple
+genomes, reach more complex relationships and longer research. Proposed gates
+affect future discovery eligibility and analytical methods/scope; exact bonuses,
+timings and recipes remain open. Existing genomes never reroll on upgrade.
+Useful partial discoveries and other play make long research worth following;
+moving a boring wait into the Lab is insufficient. Current studies are immediate;
+background jobs, timing/power/offline completion remain future implementation.
+
 ## Companion: the continuing relationship
 
 Lead with the same saved individual, its recognizable appearance and an expressive
 response to a deliberate interaction. The child's result from research should
-feel like someone worth knowing. One near-term **Invite play / Spend time** response
-is a design proposal; its actual behavior, animation and persistence need authorship.
+feel like someone worth knowing. Visible initiative, reciprocal interaction and remembered experience are the
+proposal. Their behavior/learning rules and generated motion need definition.
 A visit count is bookkeeping, not proof of a bond.
 
 Free Details has visual **Lineage / Genome / Attributes** views. Directional focus
@@ -148,26 +168,59 @@ Probe capsule and ambiguous available-kind count. A sealed genetic-sample icon
 may use a generic hereditary emblem without exposing a decoded sequence.
 Empty Home shows unoccupied space; populated Home uses an actual saved resident.
 
+## Digital-pet comparison and considered interaction
+
+Representative families were researched, not every historical title or playtested
+build. Facts below come from primary sources; application to Critter Lab is our
+design inference. Do not combine them into a feature checklist.
+
+| Family/source | Supported lesson | Proposed application / boundary |
+| --- | --- | --- |
+| [Tamagotchi Paradise](https://tamagotchi-official.com/us/series/paradise/howto/) | Field/individual/cell views, growth and inherited eyes/colors | Reward a glance and deep inspection; do not import its dial, food-driven species or care penalties |
+| [Digimon: official Next Order](https://en.bandainamcoent.eu/digimon/digimon-world-next-order) | Caring/training builds the partner relationship alongside exploration | Developing repertoire complements field play; no imported combat/evolution quota or fusion-as-inheritance |
+| [Nintendogs + cats developers](https://www.nintendo.com/en-gb/Iwata-Asks/Iwata-Asks-Nintendo-3DS/Vol-4-nintendogs-cats/2-Adding-Kittens-Doubled-the-Work/2-Adding-Kittens-Doubled-the-Work-204778.html) | Different subjects require different reactions and movement | Distinct behavior, not substituted appearance; no touch/voice control assumption |
+| [Creatures developers' research](https://www.cp.eng.chula.ac.th/~vishnu/gameResearch/AI/creatures.pdf) | Genetic architecture, current physiology and lifetime learning interact | Separate inherited eligibility, condition and memory; no requirement to copy a biochemical/neural engine |
+| [Wobbledogs publisher](https://store.wearesecretmode.com/games/wobbledogs) | Watching personality/object interactions complements direct intervention | Visible initiative makes observation worthwhile; no imported mutation/diet/physics laws |
+| [Neopets official overview](https://portal.neopets.com/about-neopets) | Persistent pets connect customization, collection and exploration | Long-lived identity and personal expression; no compulsory daily grind or cloud dependency |
+
+Proposed interaction: the same saved resident attends to a real object/place before
+input. Directions focus a near/far target or Details; no creature movement occurs
+on preview. **Invite over** commits once. Inherited movement eligibility permits
+actions, while current condition and actual learned familiarity shape the response.
+Approach, inspection or rest changes the visible scene. A resulting reciprocal
+opportunity can invite another optional action; it is not a result dismissal.
+Later behavior reflects retained history, not random happy clips or invented
+Train+1. No guilt, deadline or canonical care penalty is implied.
+
+Generated motion and the encyclopedia use the same resolved body/capability and
+permitted facts. Visual inspection connects a known genome region to a feature
+or capability and its observed expression. Behavior alone does not prove an
+unknown allele. Deeper Lineage/Genome/Attributes/History remains one free layer;
+the default stays playful. Exact interaction/learning rates are still proposals.
+
 ## Discussion and next proof
 
-Game, UX and art exchanged objections about the actual proposal. The coordinator
-challenged their initial prospecting recommendation because it still resembled
-delivered pickup. Responsive encounter is the revised test, not an approved
-mechanic or fun verdict. Directions match spatial layout, preview is passive,
-and an explicit action owns collection/research/interaction consequences.
+Game, UX and generative architecture/art boundary contributors discussed the
+actual revised proposal. Coordinator challenged script-library generation and
+interchangeable pet clips. Both objections are integrated: generated causal state,
+derived affordances, creature initiative and actual retained learning. The
+configured-incubation amendment replaces individual manual art/content production
+with general-rule design and automatic per-creature outputs. This is paper design,
+not a generator run, rendered storyboard, playtest or production quality verdict.
 
-Compare a current pickup with one encounter's before/action/response, then the
-same sample's region/input/reveal and its eventual saved Companion interaction.
-Include one contrasting opportunity, one shortage and the free detail return.
-Original references/current resource masters/permitted portraits are reusable;
-new event layers, genome-region masters, sample icon and response poses are missing.
-No rendered storyboard or final artwork was produced in this research round.
+Next proof has two bounded stages, not simultaneous ecosystem implementation:
+first generate contrasting states under the same encounter rules and show actual
+different useful choices; then prove one general class/style grammar generates
+contrasting complete genomes' body, legal animation/still and encyclopedia from
+configured incubation. Include carried/expressed and capability differences,
+invalid-output rejection and stable saved replay. Reuse unchanged parental
+inheritance evidence. Configuration effects, exact progression and quality
+calibration remain design work. Existing portraits are reference/legacy fixture
+assets, not proof of automatic creature production.
 
-This is researched paper design, not playtesting or deployment. Selection and a
-small visual/control proof precede coding; the architect then checks actual device
-targets/framework boundaries. No new infrastructure, provider, services, hardware,
-gene laws, species approval, capture/training/ecology implementation or purchases.
-Existing useful studies remain in [field design](probe-sampling.md),
-[the exploration study](expedition-map-study/README.md) and
-[research/creation](research-and-creation.md); their older recommendations do not
-override this owner discussion.
+No game code, new generated assets, services, API calls, hardware or purchases in
+this design round. The architect checks target/framework/workload boundaries before
+implementation. Keep original references and useful unfinished studies in
+[field design](probe-sampling.md), [exploration study](expedition-map-study/README.md)
+and [research/creation](research-and-creation.md); earlier scripted examples and
+manual per-creature assumptions do not override the current owner direction.

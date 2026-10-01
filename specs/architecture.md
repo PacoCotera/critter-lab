@@ -29,113 +29,121 @@ The caddy is the tangible home of the collection, not an assumed mandatory gatew
 
 ## Creature production pipeline
 
-The next bounded genetic-content foundation uses [Pip content and engine contract](genetic-engine.md). Separate reusable class/locus content from individual genomes, expression results and lifetime state. LLM-assisted authoring produces candidate content; explicit algorithms and validation enforce the selected rules. The first contract covers one baseline, locus definitions, traceable phenotype generation and a compatible cross. Execution location, provider and broader tooling are not selected by this proof; preserve the current local/cloud responsibilities below.
+Owner direction,1October: **a fully decoded genome becomes the generative input
+for a critter generator triggered by configured incubation**. Algorithms create
+all creature art, sprites, animations and encyclopedia content from that genome
+and its expressed loci. There is no per-creature illustrator, editor, copywriter
+or manual finishing gate. The crew designs and tests the general genetics,
+procedural construction, behavior, visual grammar and automatic acceptance rules.
+This is the selected production direction, not an implemented generator.
+
+The existing [Pip engine proof](genetic-engine.md) establishes a bounded qualitative
+genetics fixture, not this complete production pipeline. General style and new
+genetic rules still need owner steering; ordinary outputs must not need individual
+human authorship. Original Gemini/C18 art supplies direction and calibration,
+not a catalogue of prefinished creature portraits for the generator to select.
 
 ```mermaid
 flowchart LR
-  Input[Approved inheritance or founder inputs] --> Genome[Versioned genome]
-  Genome --> Phenotype[Contextual phenotype]
-  Rules[Pinned rules and recorded context] --> Phenotype
-  Phenotype --> Descriptor[Appearance descriptor]
-  Grammar[Constrained family content] --> Descriptor
-  Descriptor --> Pixels[Constrained pixel composition]
-  Pixels --> Assets[Preserved portraits and motion assets]
-  Assets --> Runtime[Device-profile runtime]
-  Genome --> Sequence[Separate genetic-sequence visualization]
-  Knowledge[Permitted knowledge and legend rules] --> Sequence
+  Genome[Fully decoded selected genome] --> Express[Algorithmic expression]
+  Config[Configured incubation and pinned context] --> Express
+  Rules[Versioned genetic and construction rules] --> Express
+  Express --> Body[Procedural body, features, palette and rig]
+  Body --> Graphics[Generated sprites, animation and paper views]
+  Express --> Facts[Resolved facts and expression reasons]
+  Facts --> Entry[Programmatic encyclopedia]
+  Origin[Actual founder origin or parental traces] --> Entry
+  State[Current condition and learned history] --> Behavior[Eligible behavior and motion]
+  Express --> Behavior
+  Behavior --> Graphics
+  Graphics --> Saved[Retained individual outputs]
+  Entry --> Saved
 ```
 
-Genetics resolves inherited properties; appearance mapping connects resolved visible properties to structural constraints, proportions, palette and markings. Rendering cannot choose genes to fit its preferred image. Authored constraints must address attachment, layering and incompatible anatomy; not all phenotype properties must be visible.
+The complete inherited genome and incubation configuration are inputs, not a PRNG
+seed alone. Configuration must have declared model-supported effects. Contextual
+expression, development and possible heritable mutation are distinct; their
+settings/effects are not yet selected. Preserve the decoded genome unless an
+explicit approved rule permits change. No temperature/trait sliders or gene
+shopping is implied. Research completeness, accepted creation and deliberate
+reveal remain governed by [sample-to-critter](sample-to-critter-contract.md).
+Generated assets being ready cannot reveal a newborn early.
 
-Motion preserves the same anatomy and markings across frames, with a stable still alternative. Behavior chooses permitted creature actions; animation depicts them. Neither is device navigation or a gameplay commit. Genetic-sequence visualization needs its own mapping and disclosure contract. An unresearched sample bitmap is sample identity/potential, not a resolved individual's genome under research B.
+Procedural construction derives anatomy, proportions, attachments, markings and
+palette from the resolved phenotype. A rig and compatible motion rules generate
+the same body's animation. Behavior selects permitted actions using hereditary
+eligibility, current conditions and retained learned state; animation depicts
+them. Training history does not silently become an inherited capability.
+Rendering cannot choose genes to make a preferred picture. A reskinned fixed
+portrait does not establish this generator.
 
-Content creation and management tooling is required from the beginning: author/import constraints, generate candidates in batches, validate, version and publish. Procedural, genetic and LLM-driven frameworks are preferred exploration directions, not selected technologies. Generated output is candidate data; it cannot approve its own rules or bypass structural/domain validation. Routine content production must not depend on manually drawing every individual.
-
-Logical job, validation, storage and publication responsibilities do not require a separate deployed microservice for each step. Retain stable operation identity, pinned inputs and exact resolved output. Store finished art and hashes, not only seeds, prompts or component names. Retrying a resolved request returns its saved result rather than regenerating an approximation.
+Encyclopedia facts come from resolved genetic/expression reasons, actual origin
+or parents and permitted individual history. Generated language may phrase that
+fact projection, but cannot invent physiology, ancestry, ownership or knowledge.
+Child-facing entries emphasize visual structure/capabilities and short factual
+descriptions; optional inspection exposes depth. Partial research views receive
+only their permitted facts, not a hidden full genome with an instruction to ignore it.
 
 ### Content management boundary
 
-Proposed tool contract: import or author family constraints and assets; record source/provenance; generate a batch; inspect genetic and visual consistency; validate applicability, references and device budgets; publish an immutable content version. Draft content is not eligible for gameplay until validation and publication succeed. Rejected candidates remain distinct from accepted individuals. Distribution must declare supported rules, interpreter and asset profiles; retiring content must not erase saved specimens or their retained art. Exact tool UX, licence checks, publication permissions and content delivery remain to be designed.
+LLMs expand candidate locus/baseline definitions, relationships, rule combinations,
+visual construction parameters and concise factual presentation. Algorithms
+validate them under the declared genetics/construction vocabulary before they
+can become gameplay inputs. Output checks must cover references, applicability,
+expression, structural compatibility, rig/motion legality, factual claims and
+target asset budgets. General-generator calibration uses actual native-size
+outputs against the selected visual references. Automatic checks do not alone
+establish beauty or fun; calibration/human playtesting assesses the generator,
+without requiring per-creature drawing or editing.
+
+Genetic algorithms may search candidate content or parameter combinations for
+validity and useful diversity. Actual breeding inherits from the recorded parents
+under explicit genetic rules; search must not replace accepted parental alleles
+or redraw a child until it is desirable. New general operators cannot publish
+their own biological meaning merely because an LLM produced valid syntax.
 
 ## Generation backend proposal — 30 September 2026
 
-Owner requests backend exploration for generated traits, descriptions and critter
-illustrations using algorithms and LLMs. This is a logical service contract;
-deployment topology, providers, paid API access and production infrastructure are
-unselected. It extends the existing creature pipeline, preserving standalone
-play and the optional global boundary. Separate responsibilities can initially
-be modules/jobs in the existing backend; a service per step is not required.
+The current logical boundary follows the1October automatic-production direction
+above. Workload placement, providers, paid API access and production topology
+remain unselected. Modules/jobs in the existing runtime can prove the boundary;
+a service per step, new queue, editor or full generation platform is not required.
 
-```mermaid
-flowchart LR
-  Author[LLM-assisted catalogue drafts] --> Validate[Schema, genetics and craft validation]
-  Validate --> Catalogue[Approved immutable content bundle]
-  Catalogue --> Engine[Algorithmic sample, inheritance and expression]
-  Engine --> Knowledge[Evidence-backed permitted knowledge]
-  Knowledge --> Copy[Descriptions from allowed facts]
-  Engine --> Appearance[Validated appearance descriptor]
-  Appearance --> Art[Composition or constrained illustration job]
-  Art --> Assets[Retained originals and profile derivatives]
-  Copy --> Views[Lab, Companion, Dock and paper projections]
-  Assets --> Views
-```
-
-| Logical responsibility | Input/output boundary | Acceptance and failure |
+| Responsibility | Input and accepted result | Failure boundary |
 | --- | --- | --- |
-| Catalogue authoring | Approved domain constraints/reference assets → candidate trait definitions, study bundles, descriptions and art masters | LLM suggests reusable content; schema/reference/expression and visual review precede immutable publication. It cannot approve new canonical genes or balance |
-| Genetic resolution | Pinned catalogue, support policy, actual parent inputs or founder rules, context and recorded randomness → valid genomes, phenotype and reasons | Explicit algorithms own truth. Constrained sampling may vary supported combinations; record actual output. No LLM chooses inherited alleles, fixes invalid ancestry or changes a saved individual |
-| Research knowledge | Stable sample support + accepted method/evidence → justified scoped facts, unresolved questions and completeness | Validate evidence, candidate scope and disclosed roster; no caller-supplied complete flag, portrait inference or paid-row count |
-| Description jobs | Permitted fact IDs/parameters, subject, context and template version → concise attributed text draft | Default to controlled claims and approved phrases. LLM never receives hidden whole support merely with instructions not to disclose it; unsupported claims fail validation, existing text remains |
-| Illustration jobs | Validated visible descriptor + approved grammar/reference assets/profile → accepted original and derivatives | Reuse approved layered art offline; Gemini-style generation can produce candidate masters/variants. Validate anatomy, trait expression and pixel craft. Art failure leaves individual intact, with existing asset or honest pending state |
+| Content expansion | General constraints → automatically checked reusable definitions/parameters | Reject unsupported rules; never fabricate an individual's facts |
+| Genetic resolution | Decoded founder inputs or actual parent genomes, pinned rules/context → genome, expression and reasons | No ancestry repair, desirable-child redraw or silent mutation |
+| Procedural graphics | Resolved anatomy/appearance, rig, legal action/state, style/profile → sprites, animation, stills and derivatives | Preserve the subject; reject mismatched geometry/motion rather than change genes |
+| Encyclopedia | Permitted resolved facts, origin/parents and history → structured entry and generated concise wording | Unsupported claims fail; no hidden disclosure or per-creature copywriting |
+| Device presentation | Retained outputs and scoped view → LVGL screens/frame stream | No model call per frame, manual pixel UI or replacement game renderer |
 
-**Trait generation:** LLMs can propose catalogue definitions and worked content
-cases; approved algorithms then sample/derive legal trait combinations and resolve
-expression. They cannot improvise a new rule for each birth. The A/B research
-proposal varies existing Pip support without adding canonical alleles.
+Requests retain stable operation/subject identity, exact genome/configuration,
+rule/content/construction/model/profile versions, expression reasons and provenance.
+Save exact accepted outcomes and finished asset bytes/hashes. Seed or prompt is
+traceability, not a substitute for the result. Retry returns the recorded result;
+a changed model or content version must not replace an established individual.
+Equal genomes may still be different individuals with different origins/history.
 
-**Stable request/result contract:** request ID and subject identity; purpose
-(catalogue draft, research description, supported-form preview or individual
-art); permitted input projection; catalogue/rule/context/mapping/template/profile
-versions; explicit constraints and source-reference provenance. An accepted result
-retains exact genomic output/reason trace or attributed claim IDs, finished asset
-bytes and hashes, plus generator/model provenance where used. PRNG seed/version
-supports traceability but is not a substitute for saved results. Repeating a
-resolved request returns its recorded result, including after model updates.
+Bundled supported rules and a bounded procedural grammar must sustain local core
+play; optional remote expansion cannot make routine play require a phone or live
+model connection. Heavy generation placement and ESP32 memory/runtime feasibility
+need measured design/target proof, not inference from host results. Retained assets
+allow device presentation independent of generation latency. This selects no new
+gateway, hardware, provider or cloud deployment.
 
-**Identity and disclosure:** before research, show neutral sample identity and
-known references, never a blurred/hidden full creature. Known topics may depict
-established features only. Complete supported configuration previews remain
-distinct from the actual individual saved on accepted creation. Individual art
-must retain body plan, crown/rings/markings and palette across screens, animation
-and paper. A carried/unexpressed variant is annotation, not visible markings.
-Equal genomes do not collapse different individual identities. Record origins,
-parent-copy traces where applicable, support/evidence/content and art versions.
+A failed graphics/entry operation preserves genome, configuration, accepted birth
+and spending. Retry the same operation. Use a verified generated still of the same
+subject if available; otherwise show an honest fault/pending state. Never substitute
+another creature portrait or reroll birth. Unsupported legacy content and content
+retirement preserve existing individuals and their retained art.
 
-**Recovery/offline:** bundled validated rules, studies, phrase templates and
-approved reusable art sustain local supported play. Optional remote novelty and
-image latency cannot block basic research/creation or require a phone. A failed
-art job retries the same descriptor, never birth or resource spend. Keep cached
-accepted art/description versions; new profile derivatives do not overwrite
-originals. Unsupported content is reported rather than manufacturing genes.
-Catalogue retirement preserves existing individuals and their assets. Global
-rights/authentication remain governed by the existing synchronization boundary.
-
-Smallest next proof is one supported A/B content bundle, one knowledge-limited
-description draft checked against controlled claims, and one retained descriptor/
-illustration pair using approved art. Validate duplicate-result recovery and
-offline reuse with existing tools. No new database, queue, service cluster,
-provider migration, subscription or deployment is needed before this proof.
-Final automatic visual acceptance bounds and catalogue/publication choices remain
-for owner steering. See [discovery proposal](../design/research-and-creation.md#discovery-proposal--30-september-2026).
-
-The [local retained-Pip proof](../prototype/generation/README.md) now consumes a
-revealed native resident projection and two controlled claims. It saves the exact
-original Gemini portrait, description, immutable input fingerprint and provenance;
-duplicate resolution and read-only replay verify the same retained result. An
-actual connected B1 resident is recorded in the [integration evidence](../docs/evidence/polished-core-v1/retention-evidence.json).
-This is a fixed original/phrase resolver with no model call, service deployment
-or novel creature generation. Unsupported claims and missing/corrupt retained
-artifacts fail instead of silently generating replacements.
+Smallest proposed proof: one general class/style grammar and contrasting complete
+genomes drive configured generation of appearance, a legal action/still and an
+encyclopedia. Check carried-versus-expressed and capability/motion differences,
+reject an incompatible output without changing the genome, and verify stable
+replay. This proof requires no new API integration. Reuse unchanged parent-cross
+evidence; assess actual craft before broadening the grammar. See the
+[connected design review](../design/probe-bench-review.md) for player experience.
 
 ## App, website and backend
 
@@ -314,8 +322,10 @@ host memory success does not establish MCU fit or physical performance.
 Shared margins, palette, font hierarchy, framing and focus styles belong in theme
 tokens. Images use retained Gemini source pixels at native size with verified
 alpha/channel conversion; no framework default skin or magnified coarse sprite
-establishes HiBit quality. Rich terrain and creature detail require authored
-editable masters and native-size review. Layout and craft are separate gates.
+establishes HiBit quality. Current retained images are fixture/reference evidence.
+Future creature detail must come from the algorithmic construction pipeline above,
+with general style grammar and native-size generator calibration. Layout and
+craft are separate gates; no per-creature manual master is required.
 
 The proof's animation is finite and cosmetic, with a fully visible still focus
 and explicit reduced-motion behavior. Sound has no selected backend or assets;

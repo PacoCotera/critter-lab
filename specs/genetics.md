@@ -154,6 +154,16 @@ Accepted: research progressively decodes parts of a genome. A fully decoded geno
 
 Genomes vary in complexity, and the game has progression from simpler genomes toward more complex ones. The small V1 worked genome is an introductory example, not a universal study count or ceiling. Exact progression gates, complexity measures and research requirements remain open; do not invent levels, thresholds or assume complexity is merely more pixels.
 
+Owner direction,1October: the genome is the research centerpiece and the causal
+connection from a fully researched sample to a parentless founder, then actual-parent
+breeding, lineage and variable descendants. Players should learn their creatures
+through visible expression, interaction and optional detailed inspection.
+Virtual Probe/Lab tiers and boosters gate progression toward much more complex,
+longer investigations. Their exact effects/costs remain open. Long research must
+preserve useful partial discoveries; completeness still governs founder creation.
+The [connected design review](../design/probe-bench-review.md) proposes how this
+feels without substituting new canonical genetic rules.
+
 Accepted: unresolved bitmap regions represent genuinely unresolved required information; findings reveal or annotate them; supported configurations have explainable visual differences. Known carried-but-unexpressed variants must differ from unknown regions. A created individual’s genome view must relate to its actual genome; decorative pixels cannot claim genetic meaning. Encoding, region mapping and minigames remain open.
 
 Start with small genomes and increase complexity as play progresses and alleles are discovered. Exact dimensions, triggers and content scale remain open. Visual density is not genetic complexity. New player knowledge does not mutate existing individuals or revoke their established research completeness; any actual genomic/developmental change is explicit and versioned.
@@ -246,13 +256,21 @@ These class-baseline facts still need explicit inherited contributors and expres
 
 Owner requests a genetic engine capable of generating valid genomes and managing a locus library, with LLM-assisted and algorithmic generation to reduce baseline-authoring burden. This is a design objective, not an approved implementation scope, technology choice or API-spending authorization.
 
-Recommended split: LLMs assist content authors by proposing loci, variants, family baselines, relationships and worked phenotype/research examples; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
+Selected automation direction: LLMs propose reusable loci, variants, family baselines, relationships and worked phenotype/research definitions without per-creature content authors; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
 
 The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Class baselines compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
 
 Founder generation assembles candidates within these constraints; expression resolves them to a phenotype with an explanation trace. Breeding derives alleles from actual parents under explicit inheritance/viability rules rather than manufacturing a replacement valid child. Invalid combinations are rejected or handled by the chosen reproductive policy, not repaired by silently swapping genes. Content versions and saved genomes, expression and assets remain pinned.
 
-First proposed proof: encode Pip's applicable baseline, a small locus set and declared unmodeled boundaries; generate a varied batch, explain each phenotype's inherited causes, reject deliberately incompatible combinations and demonstrate one compatible cross. Review phenotype variety and research usefulness as well as validity. No whole-library editor, broad class catalogue, universal genetics solver or production service is needed for this proof. Later extension follows the existing extension policy and all five layers/eleven families.
+The [bounded engine contract](genetic-engine.md) uses Pip's applicable baseline, a small locus set and declared unmodeled boundaries. It covers a varied batch, inherited phenotype causes, incompatible-combination rejection and one compatible cross. This is not the automatic artwork/encyclopedia generator. No whole-library editor, broad class catalogue, universal solver or production service is required for the genetic proof. Later extension follows the existing extension policy and all five layers/eleven families.
+
+Owner further requires configured incubation to trigger an algorithmic creature
+generator from the fully decoded genome and its expressed loci. It produces all
+creature art, sprites, animations and encyclopedia content without per-creature
+illustrators, editors or copywriters. General framework/style rules are designed
+and calibrated; automatic output validation enforces them. Configuration's exact
+effects remain open and cannot silently change the decoded genome. Training and
+learned history still do not rewrite inherited loci.
 
 The [architecture pipeline](architecture.md#creature-production-pipeline) owns remote generation, automated content tooling, appearance mapping and retained assets. Genetics supplies inspectable inherited information and resolved expression; art cannot choose genes. Preserve algorithm/input/rules versions and exact outcomes; neither a random seed nor a prompt is a sufficient record. Learned state remains separate.
 
