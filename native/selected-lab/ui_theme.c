@@ -2,7 +2,8 @@
 #include "core_art.h"
 void native_ui_surface(lv_obj_t *object, uint32_t fill, uint32_t border, unsigned border_width) {
   lv_obj_remove_style_all(object);
-  lv_obj_remove_flag(object, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
+  lv_obj_set_scrollable(object, false);
+  lv_obj_set_clickable(object, false);
   lv_obj_set_style_bg_color(object, lv_color_hex(fill), 0);
   lv_obj_set_style_bg_opa(object, LV_OPA_COVER, 0);
   lv_obj_set_style_border_color(object, lv_color_hex(border), 0);
@@ -12,7 +13,8 @@ void native_ui_surface(lv_obj_t *object, uint32_t fill, uint32_t border, unsigne
 }
 void native_ui_text(lv_obj_t *object, const lv_font_t *font, uint32_t color) {
   lv_obj_remove_style_all(object);
-  lv_obj_remove_flag(object, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
+  lv_obj_set_scrollable(object, false);
+  lv_obj_set_clickable(object, false);
   lv_obj_set_style_text_font(object, font, 0);
   lv_obj_set_style_text_color(object, lv_color_hex(color), 0);
   lv_obj_set_style_text_line_space(object, 0, 0);

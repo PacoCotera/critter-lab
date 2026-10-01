@@ -1,5 +1,6 @@
 #ifndef CRITTER_LV_CONF_H
 #define CRITTER_LV_CONF_H
+#define LV_CONF_H
 /* Single-threaded headless software proof. No external decoder, GPU or driver. */
 #define LV_COLOR_FORMAT_DEFAULT LV_COLOR_FORMAT_RGB888
 #define LV_USE_OS LV_OS_NONE

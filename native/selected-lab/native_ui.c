@@ -14,6 +14,7 @@ struct NativeUiContext {
   lv_font_t title_font, body_font, small_font, quantity_font, action_font;
   NativeUiImage images[4];
   uint8_t *rgb, *draw;
+  char quantity_text[3][16], receipt_text[192];
   CompanionCargoView previous;
   int has_previous, failed, pending;
   unsigned elapsed;
@@ -60,7 +61,7 @@ static lv_obj_t *label(lv_obj_t *parent, const lv_font_t *font, uint32_t color,
     lv_obj_set_pos(object, x, y);
     lv_obj_set_size(object, width, height);
     lv_label_set_long_mode(object, LV_LABEL_LONG_MODE_WRAP);
-    lv_label_set_text(object, text);
+    lv_label_set_text_static(object, text);
   }
   return object;
 }
@@ -165,7 +166,7 @@ static int compose(NativeUiContext *context) {
   lv_obj_set_style_bg_opa(context->halo, LV_OPA_TRANSP, 0);
   lv_obj_set_style_border_width(context->halo, 1, 0);
   lv_obj_set_style_border_color(context->halo, lv_color_hex(CORE_ART_FOCUS_RGB), 0);
-  lv_obj_add_flag(context->halo, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_set_hidden(context->halo, true);
   return context->title && context->context && context->capsule && context->detail &&
          context->capacity && context->feedback;
 }
@@ -207,7 +208,7 @@ void native_ui_cancel(NativeUiContext *context) {
   if (!context) return;
   if (context->halo) {
     lv_anim_delete(context->halo, halo_opacity);
-    lv_obj_add_flag(context->halo, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_hidden(context->halo, true);
   }
   context->pending = 0;
   context->has_previous = 0;
@@ -227,7 +228,10 @@ int native_ui_animation_pending(const NativeUiContext *context) {
   return context && context->pending;
 }
 void native_ui_advance(NativeUiContext *context, unsigned milliseconds) {
-  if (!context || !context->pending || context->previous.held || context->previous.suspended) return;
+  /* LVGL's timer clock is process-wide. Export one animated context at a time;
+   * advancing one must never silently animate another held context. */
+  if (!context || context_count != 1 || !context->pending ||
+      context->previous.held || context->previous.suspended) return;
   unsigned remaining = FADE_MS - context->elapsed;
   if (milliseconds > remaining) milliseconds = remaining;
   context->elapsed += milliseconds;
@@ -248,28 +252,32 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
       !memcmp(context->previous.actions, view->actions, sizeof(view->actions));
   int focus_changed = same && context->previous.focus != view->focus;
   if (!same || still || view->suspended) native_ui_cancel(context);
-  lv_label_set_text(context->title, view->title);
-  lv_label_set_text(context->context, view->context);
-  char value[192];
+  /* Static labels borrow only this context's fixed storage, never a caller's
+   * Kit or stack projection. Ordinary updates do not allocate text buffers. */
+  context->previous = *view;
+  view = &context->previous;
+  lv_label_set_text_static(context->title, view->title);
+  lv_label_set_text_static(context->context, view->context);
   for (unsigned resource = 0; resource < 3; ++resource) {
-    snprintf(value, sizeof(value), "%u", view->supplies[resource]);
-    lv_label_set_text(context->quantity[resource], value);
+    snprintf(context->quantity_text[resource], sizeof(context->quantity_text[resource]),
+             "%u", view->supplies[resource]);
+    lv_label_set_text_static(context->quantity[resource], context->quantity_text[resource]);
   }
-  lv_label_set_text(context->capsule, view->accepted ? "Delivery record" : view->capsule);
+  lv_label_set_text_static(context->capsule, view->accepted ? "Delivery record" : view->capsule);
   if (view->accepted) {
-    snprintf(value, sizeof(value), "%u Data / %u Energy / %u Essence\n%s",
+    snprintf(context->receipt_text, sizeof(context->receipt_text), "%u Data / %u Energy / %u Essence\n%s",
              view->delivered[0], view->delivered[1], view->delivered[2],
              view->delivered_capsules ? "1 sample delivered to Lab" : "Supplies stored at Lab");
-    lv_label_set_text(context->detail, view->failed ? view->detail : value);
-  } else lv_label_set_text(context->detail, view->detail);
-  lv_label_set_text(context->capacity, view->capacity);
-  lv_label_set_text(context->feedback, view->feedback);
+    lv_label_set_text_static(context->detail, view->failed ? view->detail : context->receipt_text);
+  } else lv_label_set_text_static(context->detail, view->detail);
+  lv_label_set_text_static(context->capacity, view->capacity);
+  lv_label_set_text_static(context->feedback, view->feedback);
   for (unsigned action = 0; action < 2; ++action) {
     lv_obj_remove_state(context->buttons[action], LV_STATE_FOCUSED | LV_STATE_PRESSED);
-    if (action >= view->action_count) lv_obj_add_flag(context->buttons[action], LV_OBJ_FLAG_HIDDEN);
+    if (action >= view->action_count) lv_obj_set_hidden(context->buttons[action], true);
     else {
-      lv_obj_remove_flag(context->buttons[action], LV_OBJ_FLAG_HIDDEN);
-      lv_label_set_text(context->button_text[action], view->actions[action]);
+      lv_obj_set_hidden(context->buttons[action], false);
+      lv_label_set_text_static(context->button_text[action], view->actions[action]);
     }
   }
   if (view->focus < view->action_count) {
@@ -277,7 +285,7 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
     lv_group_focus_obj(selected);
     lv_obj_add_state(selected, LV_STATE_FOCUSED);
     if (view->pressed) lv_obj_add_state(selected, LV_STATE_PRESSED);
-    lv_obj_remove_flag(context->halo, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_hidden(context->halo, false);
     lv_obj_set_pos(context->halo, 21, view->focus ? 529 : 483);
     lv_obj_set_height(context->halo, view->focus ? 36 : 44);
     if (focus_changed && !still && !view->held && !view->suspended) {
@@ -292,10 +300,9 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
       context->elapsed = 0;
     } else if (!context->pending) halo_opacity(context->halo, 180);
   } else {
-    lv_obj_add_flag(context->halo, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_hidden(context->halo, true);
     context->pending = 0;
   }
-  context->previous = *view;
   context->has_previous = 1;
   lv_refr_now(context->display);
   return context->failed ? NULL : context->rgb;

@@ -33,6 +33,7 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
     const uint32_t current[] = {game->expedition_data, game->expedition_energy,
                                 game->expedition_essence};
     out->accepted = out->phase >= KIT_ACK_PENDING && !game->expedition_id[0];
+    out->delivered_capsules = out->accepted && kit_received_sample(kit) ? 1 : 0;
     out->capsule_capacity = 1;
     for (unsigned resource = 0; resource < 3; ++resource) {
       out->delivered[resource] = kit->journal.cargo[resource] / GAME_SUPPLY_UNIT;
