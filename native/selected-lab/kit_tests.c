@@ -780,7 +780,7 @@ static void field_control_and_receipt(const char *directory) {
   assert(kit_field_projection(&kit, &map_view));
   uint8_t map_row[450 * 3];
   expedition_field_row(&map_view, 200, map_row);
-  const unsigned border_columns[] = {25, 26, 423, 424};
+  const unsigned border_columns[] = {23, 24, 425, 426};
   for (unsigned i = 0; i < sizeof(border_columns)/sizeof(border_columns[0]); ++i) {
     const uint8_t *pixel = map_row + border_columns[i] * 3;
     assert(pixel[0] == 35 && pixel[1] == 137 && pixel[2] == 198);
