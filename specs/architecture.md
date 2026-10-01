@@ -158,10 +158,14 @@ For optional global operations, the backend owns accepted service records, opera
 ## Native UI foundation
 
 Owner directs an established graphics/UI framework rather than a bespoke game
-engine. The first integration is one real Companion Cargo screen at450×600 using
+engine. Companion Cargo and Probe now use retained450×600 workpieces with
 **LVGL9.6.0**, pinned upstream commit
-`80ca777e37a2b176770726a02e07a6fb79ef0b39`. It is an implementation proof in progress,
-not evidence of a complete device migration or physical firmware performance.
+`80ca777e37a2b176770726a02e07a6fb79ef0b39`. Their shared display/context owns
+separate roots, copied view facts and bounded assets. The
+[native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
+mode switching and the field/return journey. Other screen families remain on
+their existing renderers; this is not complete device migration or physical
+firmware performance evidence.
 
 | Established library | Fit for this product | Decision |
 | --- | --- | --- |
@@ -180,7 +184,7 @@ window system, external GPU or new development environment.
 ```mermaid
 flowchart LR
   Input[Physical controls and visible-frame acknowledgement] --> Kit[Kit interaction and game commands]
-  Kit --> View[Copied permitted Cargo facts]
+  Kit --> View[Copied permitted Cargo and Probe facts]
   View --> UI[LVGL widgets / layouts / shared theme / assets]
   UI --> Raster[Bounded software display flush]
   Raster --> Frame[Existing native frame transport]
