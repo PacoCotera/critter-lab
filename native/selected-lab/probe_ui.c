@@ -2,6 +2,7 @@
 #include "field_art.h"
 #include "ui_theme.h"
 #include <stdio.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -274,11 +275,11 @@ int native_probe_ui_update(NativeProbeUi *ui, const CompanionProbeView *view) {
     show_edge_cues(ui, camera_x, camera_y, scene_height);
   }
   for (unsigned material = 0; material < 3; ++material) {
-    snprintf(ui->quantity_text[material], sizeof(ui->quantity_text[material]), "%u", view->cargo.supplies[material]);
+    snprintf(ui->quantity_text[material], sizeof(ui->quantity_text[material]), "%" PRIu32, view->cargo.supplies[material]);
     lv_label_set_text_static(ui->quantities[material], ui->quantity_text[material]);
   }
   lv_obj_set_hidden(ui->capsule, !view->cargo.capsules);
-  snprintf(ui->capsule_count, sizeof(ui->capsule_count), "%u / %u", view->cargo.capsules, view->cargo.capsule_capacity);
+  snprintf(ui->capsule_count, sizeof(ui->capsule_count), "%" PRIu32 " / %" PRIu32, view->cargo.capsules, view->cargo.capsule_capacity);
   lv_label_set_text_static(ui->capsule_quantity, ui->capsule_count);
   return 1;
 }

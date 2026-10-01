@@ -88,6 +88,7 @@ void app_main(void) {
   strcpy(cargo_view.actions[1], "Confirm");
   for (unsigned page = COMPANION_CARGO_SCREEN; page <= COMPANION_FINISH_SCREEN; ++page) {
     cargo_view.screen = (CompanionCargoScreen)page;
+    if (page == COMPANION_FINISH_SCREEN) memset(cargo_view.supplies, 0, sizeof(cargo_view.supplies));
     if (!companion_cargo_ui_update(cargo, &cargo_view, 1) || !refresh(display, &counters, "cargo-decision")) goto cleanup;
   }
   cargo_view.screen = COMPANION_CARGO_SCREEN;
