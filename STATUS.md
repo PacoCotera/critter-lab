@@ -19,7 +19,7 @@ track the remaining playability and craft gaps.
   Lab Home, workspace previews, connected haul reception and received expedition
   list/detail now use retained LVGL. [Reception proof](docs/evidence/native-lab-reception/README.md)
   covers once-only acceptance, recovery, actual CLI navigation and native craft.
-  Research/library, creation/incubation and habitat actions still need conversion.
+  Sample collection, research/review/findings and Library now use a copied view and retained LVGL tree. [Research proof](docs/evidence/native-lab-research/README.md) covers disclosure, explicit spending, retained records, original-size art and safe controls. Creation/incubation and habitat actions still need conversion.
   [Home native evidence](docs/evidence/native-lab-home/README.md)
   records exact source, three passed suites, actual CLI frames and independent
   technical/craft review. [Current shared Companion ESP UI](docs/evidence/native-companion-esp/README.md)

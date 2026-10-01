@@ -67,7 +67,10 @@ LVGL across standalone and connected frame routes; [native evidence](../../docs/
 records changed controls, copied-state and lifetime checks. Connected reception
 and received expedition records now use a copied view and retained LVGL tree;
 [native proof](../../docs/evidence/native-lab-reception/README.md) covers acceptance,
-recovery, history disclosure and safe return. Research/library, creation/incubation
+recovery, history disclosure and safe return. [Sample research and Library](../../docs/evidence/native-lab-research/README.md)
+now use copied presentation facts and retained LVGL across standalone, generic
+and persistent native routes. Focused `lab_research_ui_checks` preserve hidden
+knowledge, explicit costs, saved findings and shared-context lifetime. Creation/incubation
 and resident/habitat actions plus standalone legacy expedition gameplay retain
 manual renderers. Focused `lab_reception_ui_checks`, `companion_cargo_ui_checks`,
 `companion_probe_ui_checks` and `companion_resident_ui_checks` cover this boundary

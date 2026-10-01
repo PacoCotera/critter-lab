@@ -174,7 +174,7 @@ mode switching and the field/return journey. The Dock uses retained
 LVGL for its complete page family and extracts the portable display/partial-flush
 boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
 and visits. Lab Home, workspace previews and connected reception/received records
-also use retained LVGL. Research/library now has a copied presentation view and retained LVGL tree; native evidence is pending. Creation/incubation, resident/habitat
+also use retained LVGL. Sample collection, research/review/findings and Library use copied presentation facts and one retained LVGL tree; [native evidence](../docs/evidence/native-lab-research/README.md) covers disclosure, controls, original art and lifetime. Creation/incubation, resident/habitat
 actions and standalone legacy expedition gameplay still use manual C renderers.
 Those paths are known architectural debt, not an accepted
 exception. The [ESP-IDF Companion target](../native/companion/README.md) now
@@ -238,7 +238,7 @@ control sequences before dependent compositions are treated as selected.
 | Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-resident-actions/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
 | Lab Home/workspace previews | Retained LVGL, copied view and lazy host display context | [Native route/control/lifetime and independent review passed](../docs/evidence/native-lab-home/README.md) |
 | Lab connected incoming haul and received list/detail | Retained LVGL, copied reception/history facts; native image primitives for original field map | [Native controls/output, failure-first routes and independent technical/craft checks passed](../docs/evidence/native-lab-reception/README.md) |
-| Lab sample collection, research/review/findings and Library | Copied knowledge and costs; retained LVGL with original reference art | Implementation awaiting native route, disclosure, physical-control, lifetime and craft review |
+| Lab sample collection, research/review/findings and Library | Copied knowledge and costs; retained LVGL with original reference art | [Native route, disclosure, physical-control, lifetime and focused craft/game review passed](../docs/evidence/native-lab-research/README.md) |
 | Lab creation/incubation, residents/habitat actions; standalone legacy expedition gameplay | Manual C raster | Remaining migration; no accepted exception |
 | Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
 
