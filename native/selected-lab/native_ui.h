@@ -23,6 +23,8 @@ const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view);
 const uint8_t *native_ui_home(NativeUiContext *context, const LabHomeView *view);
 const uint8_t *native_ui_reception(NativeUiContext *context, const LabReceptionView *view);
 const uint8_t *native_ui_research(NativeUiContext *context, const LabResearchView *view);
+/* Native reference calibration only; requires the retained Research tree. */
+int native_ui_research_reference_scale(NativeUiContext *context, unsigned scale);
 const uint8_t *native_ui_actions(NativeUiContext *context, const LabActionView *view);
 /* Controlled proof clock only: no game tick or input acknowledgement.
  * Advancement is refused while another context exists: LVGL's clock is global. */

@@ -18,25 +18,28 @@ static const char *topic(const SelectedResearchMethod *entry) {
   return entry->title;
 }
 static const char *purpose(const SelectedResearchMethod *entry) {
-  if (!strcmp(entry->id, "heritage")) return "Investigate inheritance.";
-  if (!strcmp(entry->id, "movement")) return "Investigate movement and effort.";
-  if (!strcmp(entry->id, "coat-comparison")) return "Resolve how pale variation can show.";
-  if (!strcmp(entry->id, "effort-comparison")) return "Compare energy use for the same walking action.";
+  if (!strcmp(entry->id, "heritage")) return "What does this sample carry?";
+  if (!strcmp(entry->id, "movement")) return "What movement and effort are supported?";
+  if (!strcmp(entry->id, "coat-comparison")) return "How could pale variation show?";
+  if (!strcmp(entry->id, "effort-comparison")) return "How does effort compare for the same walking action?";
   return "Investigate this reference feature.";
 }
 static int valid_samples(const SelectedLab *lab) {
   if (lab->game.sample_count > GAME_MAX_SAMPLES ||
+      lab->suspended < 0 || lab->suspended > 1 || lab->storage_error < 0 || lab->storage_error > 1 ||
       !memchr(lab->message, 0, sizeof(lab->message))) return 0;
   for (unsigned index = 0; index < lab->game.sample_count; ++index) {
     const GameSample *sample = &lab->game.samples[index];
     const GameSampleMetadata *metadata = &lab->game.sample_metadata[index];
-    if (!memchr(sample->id, 0, sizeof(sample->id)) ||
+    if (!sample->id[0] || !memchr(sample->id, 0, sizeof(sample->id)) ||
         !memchr(sample->origin_expedition_id, 0, sizeof(sample->origin_expedition_id)) ||
         !memchr(metadata->content_version, 0, sizeof(metadata->content_version)) ||
         sample->incubated > 1 || !pip_sample_metadata_valid(&lab->game, index)) return 0;
     if (metadata->profile == GAME_SAMPLE_LEGACY_FIVE &&
         (sample->decoded_studies > PIP_REQUIRED_FACTS_MASK ||
          sample->decoded_facts > PIP_REQUIRED_FACTS_MASK)) return 0;
+    for (unsigned earlier = 0; earlier < index; ++earlier)
+      if (!strcmp(sample->id, lab->game.samples[earlier].id)) return 0;
   }
   return 1;
 }
@@ -50,7 +53,10 @@ static int copy_knowledge(const SelectedLab *lab, unsigned sample, LabResearchVi
   out->partial_p = knowledge.partial_p;
   out->used = lab->game.samples[sample].incubated;
   out->topic_count = knowledge.method_count;
+  out->selected_record = 1;
   snprintf(out->sample_id, sizeof(out->sample_id), "%s", lab->game.samples[sample].id);
+  snprintf(out->origin_expedition_id, sizeof(out->origin_expedition_id), "%s",
+      lab->game.samples[sample].origin_expedition_id);
   strcpy(out->known, "Known: ");
   strcpy(out->missing, "Still: ");
   unsigned known_count = 0, missing_count = 0;
@@ -64,7 +70,15 @@ static int copy_knowledge(const SelectedLab *lab, unsigned sample, LabResearchVi
     unsigned *count = entry.known ? &known_count : &missing_count;
     size_t used = strlen(line);
     snprintf(line + used, sizeof(out->known) - used, "%s%s", (*count)++ ? " / " : "", topic(&entry));
-    if (!suggested && entry.useful && !entry.known) suggested = topic(&entry);
+    if (!suggested && entry.useful && !entry.known) suggested = purpose(&entry);
+    if (entry.known && !out->finding[0] && entry.finding)
+      snprintf(out->finding, sizeof(out->finding), "%s", entry.finding);
+  }
+  if (knowledge.knowledge.profile == GAME_SAMPLE_DISCOVERY_A) {
+    SelectedResearchMethod heritage, coat;
+    if (!selected_lab_research_method(lab, sample, 0, &heritage) ||
+        !selected_lab_research_method(lab, sample, 2, &coat)) return 0;
+    out->coat_reference_pair = heritage.known && coat.known;
   }
   if (!known_count) strcpy(out->known, "Known: no findings yet");
   if (knowledge.complete) {
@@ -73,18 +87,22 @@ static int copy_knowledge(const SelectedLab *lab, unsigned sample, LabResearchVi
   }
   if (out->used) strcpy(out->next, "Sample used / research record stays.");
   else if (knowledge.complete) strcpy(out->next, "Choose a supported form.");
-  else if (suggested) snprintf(out->next, sizeof(out->next), "Suggested: %s", suggested);
+  else if (suggested) snprintf(out->next, sizeof(out->next), "Next question: %s", suggested);
   else strcpy(out->next, "Inspect your recorded findings.");
   return 1;
 }
 
-int selected_lab_research_projection(const SelectedLab *lab,
+static int project_research(const SelectedLab *lab,
     int normalization_pending, LabResearchView *out) {
-  if (!lab || !out || !selected_lab_is_research_page(lab->page) || !valid_samples(lab)) return 0;
+  if (!lab || !out || (normalization_pending != 0 && normalization_pending != 1) ||
+      !selected_lab_is_research_page(lab->page) || !valid_samples(lab)) return 0;
   unsigned options = selected_lab_options(lab);
   if (!options || options > LAB_RESEARCH_OPTIONS || lab->focus >= options) return 0;
-  int selected = lab->page != V1_LIBRARY && !(lab->page == V1_SAMPLES && !lab->focus);
+  int selected = !(lab->page == V1_SAMPLES && !lab->focus);
   unsigned sample = lab->page == V1_SAMPLES ? lab->focus - 1 : lab->sample;
+  unsigned library_study = 0;
+  if (lab->page == V1_LIBRARY)
+    selected = selected_lab_library_entry(lab, lab->focus, &sample, &library_study);
   if (selected && sample >= lab->game.sample_count) return 0;
   memset(out, 0, sizeof(*out));
   out->page = lab->page == V1_SAMPLES ? LAB_RESEARCH_SAMPLES :
@@ -94,7 +112,6 @@ int selected_lab_research_projection(const SelectedLab *lab,
       lab->page == V1_LIBRARY ? LAB_RESEARCH_LIBRARY : LAB_RESEARCH_LIBRARY_FINDING;
   const char *titles[] = {"SAMPLES", "RESEARCH", "RESEARCH PLAN", "DISCOVERY", "RECORDED FINDINGS", "SAMPLE FINDING"};
   strcpy(out->title, titles[out->page]);
-  strcpy(out->footer, "Up/down: focus | Right: inspect | Confirm: act | Back: return");
   out->focus = lab->focus;
   out->option_count = options;
   out->sample_count = lab->game.sample_count;
@@ -111,8 +128,9 @@ int selected_lab_research_projection(const SelectedLab *lab,
     if (lab->page == V1_LIBRARY && selected_lab_library_entry(lab, option, &saved_sample, &study)) {
       SelectedResearchMethod method;
       if (!selected_lab_research_method(lab, saved_sample, study, &method)) return 0;
-      snprintf(out->options[option], sizeof(out->options[option]), "%s", lab->game.samples[saved_sample].id);
-      snprintf(out->option_details[option], sizeof(out->option_details[option]), "%s", method.title);
+      snprintf(out->options[option], sizeof(out->options[option]), "Finding %u", option + 1);
+    } else if (lab->page == V1_SAMPLES && option) {
+      snprintf(out->options[option], sizeof(out->options[option]), "Sample %u", option);
     } else {
       /* selected_lab_option may return a shared helper buffer; copy immediately. */
       snprintf(out->options[option], sizeof(out->options[option]), "%s", selected_lab_option(lab, option));
@@ -133,13 +151,10 @@ int selected_lab_research_projection(const SelectedLab *lab,
     out->next[0] = 0;
     return 1;
   }
-  if (lab->page == V1_LIBRARY) {
-    unsigned saved_sample, study;
-    int recorded = selected_lab_library_entry(lab, 0, &saved_sample, &study);
+  if (lab->page == V1_LIBRARY && !selected) {
     out->detail = LAB_RESEARCH_RECORDS;
     out->art = LAB_RESEARCH_ART_TOOLS;
-    strcpy(out->heading, recorded ? "Your recorded discoveries" : "No discoveries yet");
-    strcpy(out->body, "Research topics to record findings here.");
+    strcpy(out->heading, "No discoveries yet");
     out->next[0] = 0;
     return 1;
   }
@@ -147,6 +162,9 @@ int selected_lab_research_projection(const SelectedLab *lab,
   if (lab->page == V1_SAMPLES) {
     out->detail = LAB_RESEARCH_KNOWLEDGE;
     out->art = LAB_RESEARCH_ART_SAMPLE;
+    strcpy(out->heading, out->used ? "Retained research record" :
+        out->complete ? "Supported forms known" : "Unresolved questions");
+    if (!out->finding[0]) strcpy(out->finding, "No findings recorded for this sample yet.");
     return 1;
   }
   if (lab->page == V1_STUDIES && lab->focus == options - 1) {
@@ -157,7 +175,8 @@ int selected_lab_research_projection(const SelectedLab *lab,
         "Some reference knowledge is still unresolved.");
     return 1;
   }
-  unsigned study = lab->page == V1_STUDIES ? lab->focus : lab->study;
+  unsigned study = lab->page == V1_LIBRARY ? library_study :
+      lab->page == V1_STUDIES ? lab->focus : lab->study;
   if (study >= out->topic_count) return 0;
   SelectedResearchMethod method;
   if (!selected_lab_research_method(lab, sample, study, &method)) return 0;
@@ -176,15 +195,17 @@ int selected_lab_research_projection(const SelectedLab *lab,
         "");
     return 1;
   }
-  out->detail = LAB_RESEARCH_DISCOVERY;
+  out->detail = lab->page == V1_LIBRARY ? LAB_RESEARCH_RECORDS : LAB_RESEARCH_DISCOVERY;
   snprintf(out->title, sizeof(out->title), "%s", method.title);
   snprintf(out->finding, sizeof(out->finding), "%s", method.finding ? method.finding : "No finding disclosed.");
+  if (!method.known) return 0;
   if (out->legacy && study < 2 && method.known) {
     out->art = study ? LAB_RESEARCH_ART_EYE_RING : LAB_RESEARCH_ART_CROWN;
     strcpy(out->body, "Reference feature");
   } else {
     PipSupportedCandidate candidates[2];
-    if (!strcmp(method.id, "coat-comparison") && out->complete && method.known &&
+    if (!strcmp(method.id, "coat-comparison") && out->complete &&
+        lab->page != V1_LIBRARY && method.known &&
         selected_lab_candidate(lab, sample, 0, &candidates[0]) &&
         selected_lab_candidate(lab, sample, 1, &candidates[1])) {
       out->art = LAB_RESEARCH_ART_PAIR;
@@ -194,6 +215,7 @@ int selected_lab_research_projection(const SelectedLab *lab,
         snprintf(out->portrait_caption[index], sizeof(out->portrait_caption[index]), "%s",
             candidates[index].expression.pale_markings ? "Pale markings / expressed" : "Plain coat / pale carried");
       }
+      strcpy(out->body, "Coat possibilities / adult / mild reference");
     } else {
       out->art = !strcmp(method.id, "movement") || !strcmp(method.id, "movement.drive") ? LAB_RESEARCH_ART_MOVEMENT :
           !strcmp(method.id, "effort-comparison") || !strcmp(method.id, "movement.efficiency") ? LAB_RESEARCH_ART_EFFORT :
@@ -201,6 +223,36 @@ int selected_lab_research_projection(const SelectedLab *lab,
       strcpy(out->body, "Research context");
       out->show_alternatives = !strcmp(method.id, "coat-comparison") && method.finding;
     }
+    if (!out->legacy && !strcmp(method.id, "coat-comparison")) {
+      out->comparison = LAB_RESEARCH_COMPARISON_A_COAT;
+      strcpy(out->body, "Coat possibilities / adult / mild reference");
+      if (out->art != LAB_RESEARCH_ART_PAIR) {
+        strcpy(out->portrait_caption[0], "Plain coat / pale variation carried");
+        strcpy(out->portrait_caption[1], "Pale markings / expressed");
+      }
+    } else if (!out->legacy &&
+        lab->game.sample_metadata[sample].profile == GAME_SAMPLE_DISCOVERY_B &&
+        (!strcmp(method.id, "movement") || !strcmp(method.id, "effort-comparison"))) {
+      SelectedResearchMethod effort;
+      if (!selected_lab_research_method(lab, sample, 2, &effort)) return 0;
+      out->comparison = effort.known ? LAB_RESEARCH_COMPARISON_B_EFFORT :
+          LAB_RESEARCH_COMPARISON_B_MOVEMENT;
+      strcpy(out->portrait_caption[0], effort.known ? "Steady / lower walking energy" : "Steady");
+      strcpy(out->portrait_caption[1], effort.known ? "Burst-capable / baseline walking energy" : "Burst-capable");
+      strcpy(out->body, effort.known ?
+          "Same walking action / healthy-rested adult / firm ground / mild conditions" :
+          "Movement possibilities / energy relationship unresolved");
+      out->show_alternatives = 1;
+    }
   }
+  return 1;
+}
+
+int selected_lab_research_projection(const SelectedLab *lab,
+    int normalization_pending, LabResearchView *out) {
+  if (!out) return 0;
+  LabResearchView view;
+  if (!project_research(lab, normalization_pending, &view)) return 0;
+  *out = view;
   return 1;
 }

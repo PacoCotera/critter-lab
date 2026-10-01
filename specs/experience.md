@@ -55,9 +55,24 @@ returns to the record list, then Back restores that same resident and navigation
 choice. This transient caller is separate from an arriving haul's return context
 and adds no saved world state.
 
-Samples/Library navigation and progressive research remain the next separate
-slice. No evidence minigame, new trait, game rule or habitat simulation is added
-by this population presentation. Existing knowledge/cost boundaries remain.
+The separate Research workpiece keeps Samples Overview followed by sample
+destinations on the left. Focus immediately previews that exact sample's full
+identity, origin, retained clue and unknowns in main. Library retains its existing
+finding ordinals and previews the exact focused record freely; it adds no Overview
+or ordinal shift. Inquiry choices, costs, Start, findings and shortages belong in
+main, with only one active focus. Existing Confirm/review/fresh-Start and Back
+caller boundaries remain. This presentation adds no evidence minigame or new
+trait; comprehension, enjoyment and final visual acceptance require actual use.
+
+A's internal coat references have a separate permission: validated heritage and
+coat findings must both be known. Coat before heritage remains text-only. Both
+permitted references appear together, without another reveal click. Complete
+original portraits still require complete knowledge and both supported-candidate
+permissions, on entered free comparison only. B preserves its linked walking
+relationships and common reference conditions; effort also grants free movement
+inspection. The [comparison contract](../design/research-and-creation.md#next-comparison-trial)
+defines these disclosure boundaries. Native source-size/2× clipping and long-copy
+fit are acceptance gates, not approved art inferred from this specification.
 
 ## Framework-led Companion layout
 

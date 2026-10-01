@@ -90,6 +90,17 @@ recovery, history disclosure and safe return. [Sample research and Library](../.
 now use copied presentation facts and retained LVGL across standalone, generic
 and persistent native routes. Focused `lab_research_ui_checks` preserve hidden
 knowledge, explicit costs, saved findings and shared-context lifetime.
+Research's copied view distinguishes aggregate Overview from an exact selected
+sample and previews the focused Library record immediately. The narrow left rail
+contains destinations; scientific facts, questions, costs and actions stay in
+main. A separate validated heritage-plus-coat permission allows simultaneous
+internal original-reference clips; complete portraits keep their existing gates.
+B uses paired qualitative movement/effort labels with common conditions, never
+measured performance. The retained tree reuses its original descriptors and one
+root-local clipped draw object, with no new image backing. Presentation-only
+`native_ui_research_reference_scale` selects1×/2× for native calibration after
+the tree exists; it adds no device input, saved state or procedure. Changed fit,
+disclosure and all-root memory require exact native proof before release.
 [Creation, incubation, reveal, Habitat and residents](../../docs/evidence/native-lab-actions/README.md)
 share a fourth retained Lab tree, exact candidate/draft authority and saved original
 portrait provenance.
