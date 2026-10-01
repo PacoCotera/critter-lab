@@ -30,10 +30,12 @@ transports the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
 The [native UI foundation](specs/architecture.md#native-ui-foundation) uses LVGL 9.6.0
-for real Companion Cargo. Shared layout, theme, image/font adapters and physical
-focus replace manual screen drawing within that slice. The [native proof](docs/evidence/native-ui-foundation/README.md)
-records actual handoff, source-exact material pixels and output review. The
-remaining screens and final HiBit artwork are not yet migrated or accepted.
+for real Companion Cargo and Probe. Shared layout, theme, image/font adapters and
+physical focus replace manual screen drawing in those workpieces. The
+[Cargo proof](docs/evidence/native-ui-foundation/README.md) and
+[Probe proof](docs/evidence/native-companion-probe/README.md) record actual
+handoff, source-exact material pixels and output review. Other screen families
+and final HiBit artwork are not yet migrated or accepted.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the

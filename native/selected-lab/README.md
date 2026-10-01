@@ -53,12 +53,13 @@ are reused. Original references and extraction provenance remain retained in the
 [asset manifest](asset-manifest.json). Native rendering is editable C geometry,
 not a full-screen screenshot. Host scaling does not establish physical readability.
 
-Companion Cargo is the first [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
-It uses a retained widget tree, grid/flex layout, shared theme, source-exact native
-resource sprites and a Vera glyph adapter. Its context belongs to the host process;
-game/view state remains in the Kit. Probe, Companions, Lab and Dock retain their
-existing renderers. The focused `companion_cargo_ui_checks` gate covers this
-boundary alongside the domain, Kit and presenter checks.
+Companion Cargo and Probe use the shared [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
+Retained widget trees, shared layout/theme, source-exact native resource sprites
+and a Vera glyph adapter belong to the host context; game/view state stays in the
+Kit. Companions, Lab and Dock retain their existing renderers. Focused
+`companion_cargo_ui_checks` and `companion_probe_ui_checks` cover this boundary
+alongside domain, Kit and presenter checks. Dock's final host raster uses four
+gray levels; no physical e-paper driver or refresh behavior is established.
 
 The headless Cargo path uses still focus in the live presenter. A controlled
 120ms LVGL focus-fade export exercises the animation API without changing game

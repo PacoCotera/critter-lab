@@ -602,7 +602,7 @@ static void dock_row(const DeviceKit *kit, KitRow *row) {
   char value[96];
   fill(row, 0, 0, 792, 272, BACKGROUND);
   border(row, 8, 8, 776, 256, TEXT);
-  text(row, 24, 23, "CRITTER LAB / DOCK", 26, TEXT);
+  text(row, 24, 23, "BEECHO LAB / DOCK", 26, TEXT);
   text(row, 485, 28,
        kit_dock_cache_current(kit) ? "Synced (simulation)"
        : journal->dock_online ? "Cached / stale" : "Offline / cached", 22,

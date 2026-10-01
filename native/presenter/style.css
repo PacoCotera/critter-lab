@@ -10,7 +10,10 @@ header span { color: #8ea69a; letter-spacing: 0; }
 .housing::after { right: 5px; border-right: 8px solid #39413d; border-radius: 0 22px 0 0; }
 .brand { text-align: center; margin: 0 0 10px; color: #eef1df; font-size: 14px; font-weight: 800; letter-spacing: .25em; text-shadow: 0 1px #26352b; }
 .screen { width: 100%; aspect-ratio: 1024 / 600; border: 9px solid #232c29; border-radius: 13px; overflow: hidden; background: #19242b; pointer-events: none; box-shadow: 0 1px 0 #b2b99e, 0 -1px 0 #344b3b; }
-.screen img { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+/* Native sprites keep their authored pixels; the composite frame also contains
+ * antialiased text. Nearest-neighbor browser scaling destroys glyph coverage at
+ * fractional display sizes, so let the browser resample the complete UI. */
+.screen img { display: block; width: 100%; height: 100%; image-rendering: auto; }
 .controls { display: grid; grid-template-columns: 106px minmax(0, 1fr) 154px; align-items: center; gap: 24px; margin-top: 18px; touch-action: none; }
 button { display: grid; place-items: center; padding: 0; border: 2px solid #26312c; background: linear-gradient(#48524c, #303b34); color: #f2f4e7; box-shadow: 0 4px 0 #26312c, inset 0 1px 1px #ffffff40; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
 button.held { transform: translateY(3px); box-shadow: 0 1px 0 #26312c, inset 0 1px 3px #0005; }
@@ -44,15 +47,16 @@ footer { font-size: 11px; line-height: 1.6; color: #8ba398; }
 
 /* Whole devices stay visible. Narrow screens stack the family. */
 main { max-width:1640px; }
-.device-family { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:28px; align-items:start; }
+.device-family { display:grid; grid-template-columns:minmax(0,1fr) clamp(420px,30vw,500px); gap:28px; align-items:start; }
 .housing.lab { width:100%; min-width:0; }
 .housing.companion { width:100%; min-width:0; padding:14px; background:linear-gradient(120deg,#9caa93,#788b76); }
 .companion .screen { aspect-ratio:450/600; }
-.companion .controls { grid-template-columns:90px 1fr; gap:16px; }
-.companion .dpad { grid-template:repeat(3,30px)/repeat(3,30px); }
-.companion .direction { width:30px;height:30px; }
-.back-button { width:48px;height:48px;border-radius:50%;font-size:28px; }
-.confirm-button { width:60px;height:60px;border-radius:50%;font-size:36px;background:linear-gradient(#ffad38,#f2771a); }
+.companion .controls { grid-template-columns:102px minmax(0,1fr); gap:24px; }
+.companion .dpad { grid-template:repeat(3,34px)/repeat(3,34px); }
+.companion .direction { width:34px;height:34px; }
+.companion .actions { justify-content:flex-end; gap:16px; }
+.companion .back-button { width:52px;height:52px;border-radius:50%;font-size:32px; }
+.companion .confirm-button { width:64px;height:64px;border-radius:50%;font-size:40px;background:linear-gradient(#ffad38,#f2771a); }
 .device-status { margin:12px 0 0;font-size:11px;color:#f1f2e3;min-height:28px; }
 .housing.dock { grid-column:1/-1;width:min(100%,1100px);min-width:0;display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:20px;background:linear-gradient(120deg,#a9b19f,#858f7e); }
 .dock .screen { aspect-ratio:792/272;background:white; }
@@ -71,7 +75,9 @@ main { max-width:1640px; }
 .sandbox-tools button:disabled { opacity:.6;cursor:wait; }
 .simulation-tools label { display:inline-flex;align-items:center;gap:6px;margin:0 24px 10px 0; }
 #link-status { display:block;color:#9eb6a9; }
-@media(max-width:1100px) { .device-family { grid-template-columns:minmax(0,1fr) 270px;gap:16px; } .lab .controls { gap:10px;grid-template-columns:90px minmax(0,1fr) 130px; } .companion .controls { grid-template-columns:80px 1fr;gap:8px; } .companion .dpad { grid-template:repeat(3,26px)/repeat(3,26px); } .companion .direction { width:26px;height:26px; } .companion .back-button{width:38px;height:38px;} .companion .confirm-button{width:48px;height:48px;} }
-@media(max-width:850px) { .device-family { display:flex;flex-direction:column;align-items:center; } .housing.companion { max-width:360px; } .housing.dock { width:100%;grid-template-columns:minmax(0,1fr) 100px;gap:12px; } .printer{padding-left:10px;} }
+@media(max-width:1340px) { .device-family { display:flex;flex-direction:column;align-items:center; } .housing.companion { max-width:500px; } }
+@media(max-width:1100px) { .lab .controls { gap:10px;grid-template-columns:90px minmax(0,1fr) 130px; } }
+@media(max-width:850px) { .housing.dock { width:100%;grid-template-columns:minmax(0,1fr) 100px;gap:12px; } .printer{padding-left:10px;} }
 
 @media(max-width:600px) { .lab .controls { grid-template-columns:72px minmax(0,1fr) 90px; } .lab .workspace span { font-size:6px; letter-spacing:-.03em; } }
+@media(max-width:400px) { .companion .controls { grid-template-columns:90px minmax(0,1fr); gap:16px; } .companion .dpad { grid-template:repeat(3,30px)/repeat(3,30px); } .companion .direction { width:30px;height:30px; } .companion .actions { gap:12px; } }
