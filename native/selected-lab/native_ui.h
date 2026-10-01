@@ -3,6 +3,7 @@
 #include "cargo_view.h"
 #include "../ui/lab_home_view.h"
 #include "../ui/lab_reception_view.h"
+#include "../ui/lab_research_view.h"
 #include "probe_view.h"
 #include "resident_view.h"
 #include "../ui/dock_view.h"
@@ -20,6 +21,7 @@ const uint8_t *native_ui_resident(NativeUiContext *context, const CompanionResid
 const uint8_t *native_ui_dock(NativeUiContext *context, const DockView *view);
 const uint8_t *native_ui_home(NativeUiContext *context, const LabHomeView *view);
 const uint8_t *native_ui_reception(NativeUiContext *context, const LabReceptionView *view);
+const uint8_t *native_ui_research(NativeUiContext *context, const LabResearchView *view);
 /* Controlled proof clock only: no game tick or input acknowledgement.
  * Advancement is refused while another context exists: LVGL's clock is global. */
 void native_ui_advance(NativeUiContext *context, unsigned milliseconds);
