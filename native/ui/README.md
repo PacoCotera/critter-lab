@@ -55,7 +55,8 @@ waits; Lab acceptance clears current cargo and ends the outing. A defensive
 already-sealed review presents no Keep cancellation or second Send action.
 The [actual native confirmation/return proof](../../docs/evidence/native-companion-send/README.md)
 passed affected checks and independent technical/focused UI/UX output review.
-Current Companion ESP-IDF compilation and physical output remain separate gates.
+[Current shared Companion ESP-IDF compilation](../../docs/evidence/native-companion-esp/README.md)
+now passes; physical output and runtime memory remain separate gates.
 
 The same portable Cargo tree also composes Discard class/quantity/review and
 empty Finish review. [Actual native output and independent verification](../../docs/evidence/native-companion-discard/README.md)
@@ -78,7 +79,8 @@ backings are created lazily on the existing display and hidden on Probe/Cargo
 updates; they are destroyed before assets and display. Empty, offline, missing
 portrait and storage-recovery states use the same LVGL tree. [Actual native output, controls
 and independent review](../../docs/evidence/native-companion-resident-preview/README.md)
-cover this preview only, with current Companion ESP compilation still required.
+cover this preview only. Current shared Companion ESP compilation is checked
+separately; physical performance remains unvalidated.
 
 The same resident tree now handles the list and two-row visit surface. It copies
 screen/focus/action labels and availability without invoking a command. List

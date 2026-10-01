@@ -41,7 +41,8 @@ passed native output and independent review. The [Companions preview proof](docs
 shows retained saved portraits/properties and offline inspection without a visit.
 The [resident list/visit proof](docs/evidence/native-companion-resident-actions/README.md)
 records save-once visits and shared counts. Every Lab family still needs migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
-now links under ESP-IDF; the old Companion scaffold still has no current UI. Final HiBit
+and [current Companion UI](docs/evidence/native-companion-esp/README.md)
+now link under ESP-IDF; neither headless target establishes physical operation. Final HiBit
 artwork and human playability remain open.
 The [Send/Keep proof](docs/evidence/native-companion-send/README.md) records the
 shared portable Cargo tree, actual offline return/acceptance, safe focus and

@@ -15,9 +15,10 @@ idf.py -C native/companion -B native/build/companion size
 ```
 
 The project produces `critter_companion_ui.elf`, `.bin` and `.map`. Compile
-validation is pending for the final source change. CI190 linked a1396112-byte
-image, exceeding the default1MiB factory partition. The target therefore uses
-the SDK's standard1500KiB single-factory partition, without OTA. This compile
+validation passes at `fadee5d` with independent source/artifact review; see
+[current target evidence](../../docs/evidence/native-companion-esp/README.md). CI run 190 linked a 1,396,112-byte
+image, exceeding the default 1 MiB factory partition. The target therefore uses
+the SDK's standard 1,500 KiB single-factory partition, without OTA. This compile
 configuration does not select a physical board or approve its flash budget.
 No PSRAM, BSP, GPIO, screen/input driver, radio or board revision is configured.
 

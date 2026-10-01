@@ -9,7 +9,7 @@ source and art, but cannot yet produce a complete physical kit.
 | Connected game | Native C17 Lab/Companion/Dock host simulation; gathering, reception, research, genome selection, incubation, reveal, habitat visits and durable saves | Provisional Pip content/balance; broader studies, capture/training, ecology and independent device authority |
 | Native presentation | Native frames and physical-control transport; every known Companion host screen and complete Dock family use LVGL with checked output | Every Lab family still needs migration; current target compilation, art and human usability remain separate gates |
 | Lab platform | Linux x86-64 executable built with GCC/CMake/Ninja; Raspberry Pi4 development reference | ARM build, HDMI/input integration, board performance and physical evidence |
-| Portable firmware | Legacy nRF52840 Probe scaffold; current Companion shared-UI ESP32-S3 headless compile candidate | Actual Companion compile/link evidence pending; panel/input/game/save/radio integration and board validation absent |
+| Portable firmware | Legacy nRF52840 Probe scaffold; current Companion shared-UI ESP32-S3 headless compile/link proof | Runtime allocation/profile remains unresolved; panel/input/game/save/radio integration and board validation absent |
 | Caddy | Complete retained LVGL four-gray host family; same shared UI compiled/linked in headless ESP32-S3 target | Real input/state/radio, display/printer drivers, charging and bench evidence |
 | Earlier experiments | Pinned Node/browser studies and genetic/transfer fixtures | Separate studies do not form another integrated product |
 | Cloud and mobile | Product roles, contracts and explicit fallback direction | Production services, authentication, synchronization and mobile game implementation |
@@ -21,7 +21,7 @@ Probe is a mode. The caddy development reference is 5.79-inch monochrome,
 792×272; older separate-Probe/3.7-inch builds and renders remain historical evidence.
 Lab targets Linux C17 on Raspberry Pi4. Companion and Caddy target ESP32 with
 ESP-IDF; the [Companion target](native/companion/README.md) now registers current
-shared LVGL UI, with compile validation pending. The Caddy has a headless shared-UI compile target, with no physical
+shared LVGL UI, with [compile/link validation](docs/evidence/native-companion-esp/README.md). The Caddy has a headless shared-UI compile target, with no physical
 panel or game authority adapter. Every product screen must
 use LVGL; [architecture coverage](specs/architecture.md#current-migration-coverage-and-target-evidence)
 records the incomplete migration. Native host checks establish software behavior, not flashed-device or

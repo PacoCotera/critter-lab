@@ -56,8 +56,9 @@ Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
 ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
 shows current manual-renderer debt and the old firmware-scaffold gap. Dock and
 every known Companion host family now use the portable display/host boundary;
-the shared Dock UI has an ESP-IDF compile proof. Next compile the current shared
-Companion UI under the existing ESP-IDF toolchain, then convert every Lab family.
+the shared Dock UI has an ESP-IDF compile proof. [The current shared Companion UI compile](docs/evidence/native-companion-esp/README.md)
+also passes at `fadee5d`; next convert every Lab family. Runtime memory/profile and
+physical adapters remain separate unresolved boundaries.
 Preserve game/save/physical-control behavior. Each slice has actual
 output and independent review; no host or scaffold success establishes firmware
 or physical readiness. No new engine or infrastructure is authorized.

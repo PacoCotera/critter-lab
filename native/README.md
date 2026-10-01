@@ -13,7 +13,7 @@ expedition study. The broader catalogue remains unfinished.
 | --- | --- | --- |
 | Lab / selected game | Linux x86-64; Raspberry Pi4 Model B device reference | GCC, CMake, Ninja and C17; ARM build, HDMI/input drivers and Pi performance unverified. Not ESP-IDF. |
 | Legacy Probe scaffold | `xiao_ble/nrf52840` (Arm Cortex-M4) | Zephyr 4.4.0 / GNU SDK 1.0.1; no physical boot or panel driver proof. Not a separate current portable. |
-| Companion shared UI | `esp32s3` (Xtensa) | Current Cargo/Probe/resident headless LVGL compile candidate under ESP-IDF5.5.5; validation pending, panel/game/input/save/radio absent. |
+| Companion shared UI | `esp32s3` (Xtensa) | [Current Cargo/Probe/resident LVGL compile/link checked](../docs/evidence/native-companion-esp/README.md) under ESP-IDF5.5.5; panel/game/input/save/radio and runtime fit remain absent. |
 
 [Devices](../specs/devices.md) owns physical roles and selected development
 references. The simulator has one host authority and three logical contexts,
@@ -222,12 +222,15 @@ See the [hardware-native development requirement](../docs/builders/foundation-de
 
 On 26 September 2026, an Ubuntu 26.04 x86-64 host with isolated Python 3.12 built all three targets. Five native checks and five HTTP checks passed. A browser completed the expedition, received the haul, ran Structure study and reloaded the retained finding through an authenticated HTTPS reverse proxy.
 
-Probe linked with 105,228 bytes flash and 13,496 bytes RAM reported; Companion produced a 222,736-byte ESP32-S3 image. Both entry points execute a domain review transition and render a row. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
+Probe linked with 105,228 bytes flash and 13,496 bytes RAM reported; Companion produced a 222,736-byte ESP32-S3 image. These historical entry points execute a domain review transition and render a row.
+The current [Companion shared UI target](companion/README.md) replaces its legacy
+row demo; the old image size is not current target evidence. SDK sources match the manifest. These numbers are not application-capacity forecasts or peak-memory measurements. No physical MCU boot or panel operation was tested. Hosted CI remains separate from these host results.
 
 ## Current display and release contracts
 
 The current kit frames are Lab 1024×600 RGB, Companion 450×600 RGB and Dock
-792×272 monochrome. Native scanline rendering and BMP transport are defined in
+792×272 four-gray output. Dock and every known Companion page compose through
+LVGL; every Lab family still requires migration. Native frames and BMP transport are defined in
 [the selected target](selected-lab/README.md). Earlier Probe/Companion profile
 sizes belong to legacy MCU fixtures; they do not describe the current simulator.
 [Font provenance](shared/fonts/README.md) retains licensing and source hashes.
