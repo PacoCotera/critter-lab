@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "kit.h"
+#include "native_ui.h"
 #include "save_bytes.h"
 #include "selected_lab.h"
 #include <limits.h>
@@ -120,6 +121,12 @@ int main(int argc, char **argv) {
   DeviceKit kit;
   if (kit_mode)
     kit_init(&kit, &lab, now_seconds());
+  NativeUiContext *ui = kit_mode ? native_ui_create() : NULL;
+  if (kit_mode && !ui) {
+    fprintf(stderr, "Native Cargo renderer unavailable\n");
+    close(lock);
+    return 2;
+  }
   char line[128];
   while (fgets(line, sizeof(line), stdin)) {
     if (kit_mode && !strncmp(line, "device ", 7)) {
@@ -141,8 +148,8 @@ int main(int argc, char **argv) {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
                    54 + stride * kit_height(device));
-            if (!kit_bmp(&kit, device, stdout))
-              return 2;
+            if (!kit_bmp_ui(&kit, device, stdout, ui, 1))
+              goto failure;
           }
         } else if (fields == 3 && number(token, &revision) &&
                    !strcmp(action, "link") && revision <= 1 &&
@@ -161,7 +168,7 @@ int main(int argc, char **argv) {
         }
       }
       if (fflush(stdout))
-        return 2;
+        goto failure;
       continue;
     }
     char name[32], argument[32], frame_argument[32], extra[2];
@@ -183,7 +190,7 @@ int main(int argc, char **argv) {
         int rendered = kit_mode ? kit_bmp(&kit, KIT_LAB, stdout)
                                 : selected_lab_bmp(&lab, stdout);
         if (!rendered)
-          return 2;
+          goto failure;
       }
     } else {
       SelectedInput input;
@@ -201,8 +208,13 @@ int main(int argc, char **argv) {
       }
     }
     if (fflush(stdout))
-      return 2;
+      goto failure;
   }
+  native_ui_destroy(ui);
   close(lock);
   return ferror(stdin) ? 2 : 0;
+failure:
+  native_ui_destroy(ui);
+  close(lock);
+  return 2;
 }

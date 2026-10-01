@@ -1,6 +1,6 @@
 # Ecosystem architecture
 
-Status: accepted responsibilities with proposed implementation boundaries. Service topology, providers, transports, firmware framework and production schemas remain unselected.
+Status: accepted responsibilities with proposed implementation boundaries. Service topology, providers, transports and production schemas remain unselected. LVGL9.6.0 is selected for a bounded native UI proof; physical display integration is unvalidated.
 
 ```mermaid
 flowchart LR
@@ -154,6 +154,65 @@ For optional global operations, the backend owns accepted service records, opera
 | Pixel rendering | Bounded composition from supplied views/assets/profile; no random regeneration or storage |
 | Device adapters | Display completion, controls, sensors, storage, radio, printer and charging |
 | Supporting services | Remote generation, synchronization and permitted lookup; no implicit ownership through cache |
+
+## Native UI foundation
+
+Owner directs an established graphics/UI framework rather than a bespoke game
+engine. The first integration is one real Companion Cargo screen at450×600 using
+**LVGL9.6.0**, pinned upstream commit
+`80ca777e37a2b176770726a02e07a6fb79ef0b39`. It is an implementation proof in progress,
+not evidence of a complete device migration or physical firmware performance.
+
+| Established library | Fit for this product | Decision |
+| --- | --- | --- |
+| [LVGL](https://github.com/lvgl/lvgl/tree/v9.6.0) | C retained widgets, grid/flex, reusable styles, physical-input groups, software drawing and animation; vendor support for ESP32 and Linux display backends | Use for the shared UI proof |
+| [Raylib](https://github.com/raysan5/raylib/blob/master/FAQ.md) | C game graphics and audio with Raspberry Pi/Linux support; its supported platform list does not provide the shared ESP32 UI path | Keep as an option for richer Lab scenes/audio when a measured requirement justifies it; no dependency now |
+| [LovyanGFX](https://github.com/lovyan03/LovyanGFX) | ESP-IDF/Arduino display driving, DMA and sprite drawing; useful beneath a UI rather than a full retained layout/interaction system | Consider only for a specific unsupported display driver, not a second UI implementation |
+| [Nuklear](https://github.com/Immediate-Mode-UI/Nuklear) | Portable immediate-mode C UI; deliberately leaves renderer and input handling to the application | Would retain more bespoke drawing/focus integration than this slice needs |
+
+Espressif's maintained [esp_lvgl_port](https://github.com/espressif/esp-bsp/tree/master/components/esp_lvgl_port)
+integrates LVGL9 with display and navigation inputs. LVGL supplies embedded Linux
+framebuffer/DRM backends. These are future hardware adapters, not demonstrated
+support for the selected AMOLED, RPi4 panel or Caddy e-paper. The current proof
+uses headless software output on the existing Linux host, requiring no SDL,
+window system, external GPU or new development environment.
+
+```mermaid
+flowchart LR
+  Input[Physical controls and visible-frame acknowledgement] --> Kit[Kit interaction and game commands]
+  Kit --> View[Copied permitted Cargo facts]
+  View --> UI[LVGL widgets / layouts / shared theme / assets]
+  UI --> Raster[Bounded software display flush]
+  Raster --> Frame[Existing native frame transport]
+```
+
+The Kit remains the sole focus/eligibility/commit authority. Framework focus
+mirrors accepted navigation; widget click callbacks cannot issue game commands.
+Rendering, cosmetic motion and sound cannot create inventory, alter research,
+advance hidden knowledge or bypass fresh-input guards. The UI context owns its
+display, widget tree, asset adapters and buffers; it holds copied facts rather
+than borrowed game-state pointers. Other screens migrate incrementally only after
+this real path passes independent native/control and art/UX review. Owner permits
+a complete re-layout, particularly of Companion; old page geometry is not a
+constraint. Game/UX/art must discuss player questions, visual hierarchy and actual
+control sequences before dependent compositions are treated as selected.
+
+Shared margins, palette, font hierarchy, framing and focus styles belong in theme
+tokens. Images use retained Gemini source pixels at native size with verified
+alpha/channel conversion; no framework default skin or magnified coarse sprite
+establishes HiBit quality. Rich terrain and creature detail require authored
+editable masters and native-size review. Layout and craft are separate gates.
+
+The proof's animation is finite and cosmetic, with a fully visible still focus
+and explicit reduced-motion behavior. Sound has no selected backend or assets;
+no playback is claimed. The first host uses one live UI context; two simultaneous
+contexts are lifecycle-test scope. Controlled motion requires a single context
+because LVGL has a global presentation clock. Owned buffers and object returns
+are checked, but arbitrary upstream pool exhaustion is not a validated graceful
+recovery path; fixed-pool margin must be measured, not assumed. Host memory measurements and tests do not establish
+Companion DMA, frame rate, PSRAM fit, thermal or power performance. Dependencies
+are pinned, vendored unchanged with upstream licenses and retrieved through Git;
+no configure-time downloads or new deployment service.
 
 ## Whole-haul transfer
 
