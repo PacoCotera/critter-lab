@@ -48,7 +48,8 @@ typedef enum {
   GAME_COMMAND_FIELD_SOURCE,
   GAME_COMMAND_FIELD_TRACE,
   GAME_COMMAND_FIELD_COLLECT,
-  GAME_COMMAND_FIELD_UNLOAD
+  GAME_COMMAND_FIELD_UNLOAD,
+  GAME_COMMAND_FIELD_TAKE
 } GameCommandType;
 
 typedef struct {
@@ -58,7 +59,7 @@ typedef struct {
   union {
     struct {
       uint32_t kind, seed, monotonic_seconds, sample_budget;
-      unsigned direction, site, source;
+      unsigned direction, site, source, quantity;
       const char *expedition_id;
       const GameReceivedExpedition *record;
     } field;

@@ -45,7 +45,7 @@ linked to accepted resources, samples and subsequent research. Any status must s
 its received/cached provenance; shared simulator memory is not wireless receipt.
 [Companion profiles](probe.md#companion-selected-expedition-profiles--accepted-direction)
 define the boundary. The installed map loop permits movement, source choice,
-trace discovery and explicit sample collection. New fieldcontent2 outings now
+trace discovery and explicit sample collection. Current fieldcontent3 outings reuse fieldcontent2 geometry to
 generate saved source positions, connected corridors and terrain; legacy
 fieldcontent1 records keep their exact authored geometry. The [native proof](../docs/evidence/procedural-expeditions/README.md)
 covers route variation and retained saves. No interactive map event is implemented. Owner playtest rejects repetitive routes and chance-waiting
@@ -64,9 +64,27 @@ The owner removed console-only acquisition from the product roadmap on 30 Septem
 
 ## Expedition continuity and return — accepted
 
+### Field pacing — owner correction, 1 October 2026
+
+Preparation waiting during interactive exploration is rejected as artificial
+friction. The next gathering design must separate meaningful player effort and
+uncertain findings from an elapsed-time reward gate. Merely hiding the preparation
+bar or shortening its timer does not satisfy this direction. The candidate native proof uses immediate retained finite offers; deployment
+and human-play acceptance are separate evidence gates.
+The [gathering review](../design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions)
+owns the proposed active action/result contract and its comparison.
+
+Research and incubation may provide background pacing while the Companion is
+used; this is a design possibility, not permission to add delays to every study.
+Current studies resolve immediately. Incubation already has a provisional
+20-second background timer and a separate deliberate opening. New research job
+lifecycles, durations, parallelism and offline progress remain undecided. A timer
+does not supply discovery depth, and readiness does not automatically spend,
+create or reveal another individual.
+
 Returning to the Lab and unloading ends the expedition. Browsing Cargo or cancelling an unsealed send review does not end it. Sending seals the returning haul and stops collection; successful fresh Lab acceptance stores it once and ends the source expedition. A later matching receipt confirms delivery metadata; it cannot credit another copy or resume the ended expedition. The next outing starts a new expedition identity.
 
-Early return is an end, not completion of every timed discovery threshold. It cannot grant an unearned sample, extra attempt or late reward. Preserve earned contents, committed outcomes and retained Lab research. Preparation toward an award remains separate from inventory; its carryover into a new expedition is a provisional fixture, not an approved balance rule. Empty outings need an explicit finish path without a phantom haul. Optional encounters never require attendance or gate research/creation. Return reviews actual samples and resources and leads into useful research; exact pacing, events and balance remain open.
+Early return is an end, not completion of every timed discovery threshold. It cannot grant an unearned sample, extra attempt or late reward. Preserve earned contents, committed outcomes and retained Lab research. Legacy preparation remains separate from inventory and is preserved without conversion; the current field has no preparation gate. Empty outings need an explicit finish path without a phantom haul. Optional encounters never require attendance or gate research/creation. Return reviews actual samples and resources and leads into useful research; exact pacing, events and balance remain open.
 
 ## Research and creation
 
@@ -74,12 +92,12 @@ Early return is an end, not completion of every timed discovery threshold. It ca
 
 Supplies are fungible within their own class and indivisible. A Data card can
 substitute for another Data card, but not for an Energy crystal or Essence drop.
-Inventory records whole awarded items. Gathering activity toward the next award
-attempt is separate from inventory, based on time and chance; it is not a fraction
-of a resource. Activity progress consumes no cargo space, is never transferred to
-Lab and cannot pay a study or incubation cost. Completing an attempt does not
-guarantee an item. Exact intervals, chances and yields remain provisional until
-playtested; mode switching and restarting must not reroll a committed outcome.
+Inventory records whole collected items. Current field collection is an explicit
+whole-unit Take, resolved and saved immediately. Arrival, inspection, elapsed time
+and animation grant nothing. A source exposes its exact retained quantity; a
+request that exceeds free cargo space rejects unchanged, without a partial award.
+Field1/2 preparation and chance counters remain saved compatibility data, with
+their field clock disabled and no conversion into supplies.
 
 Genome information is **unknown**, not locked. Research discovers and decodes it; missing knowledge is distinct from lacking resources to perform a study. Players keep a collection of partially decoded genomes and choose which to research according to their interests, complexity and the resource types available in their Lab inventory. Switching the active research preserves each record's discoveries. This does not create multiple copies of a sample or confer extra incubation uses.
 
@@ -88,20 +106,26 @@ The Probe gathers resources of different types for Lab research and can also gat
 ### Local field loop — accepted direction
 
 Owner approved the reviewed map loop on 30 September. Companion movement follows
-visible legal paths; arriving or previewing a place awards nothing. Explicit work
-activates one finite resource source. Switching pauses the previous source while
-retaining preparation, resolved outcomes and remaining budget; work can continue
-while exploring. Whole resource awards and preparation toward a chance attempt
-remain separate. Revisiting or restarting cannot refill a source or reroll results.
+visible legal paths; arriving or previewing a place awards nothing. Fresh Confirm
+takes a single visible whole offer directly. Multiple actual alternatives open a
+chooser: directions preview, Back preserves cargo and sources, and fresh Confirm
+takes the exact displayed batch. A saved result does not require dismissal before
+the next direction continues travel. Revisiting or restarting cannot refill offers.
 
-An independent trace reveals a route to a sample cache. Inspection and collection
-are separate actions; the capsule stays neutral until Lab research. Repeat
-supply-only outings remain possible. Return review freezes work, cancellation
-restores the same journey, and Send seals results until explicit Lab acceptance.
-Acceptance credits once and records received evidence; Lab cannot infer an away
-position or preparation. The [field design](../design/probe-sampling.md) owns the
-worked contract. Numeric pacing, chance, budgets and place catalogue remain
-provisional fixtures, not final balance.
+The reversible field3 fixture has CampData2/Energy2/Essence1, MossEssence12,
+RelayData12 and StoneEnergy14. Taking the three remote offers yields38/40;
+CampData2 fills40 while Energy2/Essence1 remain. These quantities are provisional
+proof content, not canonical balance. An independent deliberate trace reveals the
+sample cache; collection remains explicit and its capsule stays neutral until
+Lab research. Full supply cargo does not consume the separate capsule slot.
+
+Field1/2 saves retain their exact topology, cargo, counters and preparation but
+cannot gather further; return existing cargo or explicitly finish an empty outing.
+Return review defaults to Keep. Sending seals current contents until explicit
+Lab acceptance credits once, ends the outing and retains received evidence.
+Lab cannot infer an away position or source selection. Further encounters,
+uncertainty, replenishment and environmental art remain open. The
+[field design](../design/probe-sampling.md) remains the exploration reference.
 
 ### Research is discovery across expeditions — accepted
 

@@ -148,7 +148,8 @@ static GameResult apply(DeviceKit *kit, GameCommand command,
   snprintf(generated, sizeof(generated), "kit-%llu",
            (unsigned long long)command.sequence);
   command.operation_id = identity ? identity : generated;
-  if (command.type >= GAME_COMMAND_FIELD_MOVE && command.type <= GAME_COMMAND_FIELD_COLLECT)
+  if ((command.type >= GAME_COMMAND_FIELD_MOVE && command.type <= GAME_COMMAND_FIELD_COLLECT) ||
+      command.type == GAME_COMMAND_FIELD_TAKE)
     command.data.field.expedition_id = kit->lab->game.expedition_id;
   GameResult result =
       game_apply(kit->lab->save_path, &kit->lab->game, &command);
@@ -637,6 +638,8 @@ const char *kit_expedition_status(const DeviceKit *kit) {
     return "Expedition ended";
   if (pending(kit))
     return "Returning";
+  if (game->field.version)
+    return game_field_finite(game) ? "Exploring" : "Collection ended";
   if (game->expedition_elapsed >= GAME_EXPEDITION_SECONDS)
     return "Expedition complete";
   if (kit->companion.page == COMP_SEND_REVIEW ||
@@ -660,11 +663,34 @@ int kit_lab_explore(const DeviceKit *kit) {
   return kit->lab->page == V1_EXPEDITION || kit->lab->page == V1_CARGO;
 }
 static unsigned probe_option_count(const DeviceKit *kit) {
-  if (kit->lab->game.field.version) return 1;
+  if (kit->lab->game.field.version && game_field_finite(&kit->lab->game)) return 1;
   if (!pending(kit) && kit->lab->game.expedition_id[0] &&
       !game_transfer_available(&kit->lab->game))
     return 2;
   return kit->lab->game.expedition_id[0] || pending(kit) ? 1 : 3;
+}
+unsigned kit_field_choice(const DeviceKit *kit, unsigned index) {
+  const GameExpeditionField *field = &kit->lab->game.field;
+  if (!game_field_finite(&kit->lab->game) || pending(kit)) return KIT_FIELD_NO_CHOICE;
+  unsigned site = game_field_site(&kit->lab->game);
+  for (unsigned source = 0; source < GAME_FIELD_SOURCES; ++source) {
+    if (game_field_source_site(source) == site && field->remaining[source]) {
+      if (!index) return source;
+      --index;
+    }
+  }
+  if (site == 1 && !field->trace && field->sample_budget) {
+    if (!index) return KIT_FIELD_TRACE;
+    --index;
+  }
+  if (site == 4 && field->trace && !field->collected && field->sample_budget && !index)
+    return KIT_FIELD_CAPSULE;
+  return KIT_FIELD_NO_CHOICE;
+}
+static unsigned field_choice_count(const DeviceKit *kit) {
+  unsigned count = 0;
+  while (count < 3 && kit_field_choice(kit, count) != KIT_FIELD_NO_CHOICE) ++count;
+  return count;
 }
 static unsigned carried_units(const DeviceKit *kit, unsigned resource) {
   const GameState *game = &kit->lab->game;
@@ -677,8 +703,7 @@ unsigned kit_option_count(const DeviceKit *kit, unsigned device) {
     return kit->dock.page == 2 ? 2 : 3;
   switch (kit->companion.page) {
   case COMP_FIELD_SITE: {
-    unsigned site = game_field_site(&kit->lab->game);
-    return site == 0 ? 3 : site == 1 ? 2 : 1;
+    return field_choice_count(kit);
   }
   case COMP_MODES:
     return 3;
@@ -710,15 +735,15 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
   }
   switch (kit->companion.page) {
   case COMP_FIELD_SITE: {
-    unsigned site = game_field_site(&kit->lab->game);
-    if (site == 0) {
-      static const char *actions[] = {"Gather Data", "Gather Energy", "Gather Essence"};
-      return actions[index % 3];
-    }
-    if (site == 1) return index ? "Inspect trace" : "Gather Essence";
-    if (site == 2) return "Gather Data";
-    if (site == 3) return "Gather Energy";
-    return kit->lab->game.field.collected ? "Sample collected" : "Collect sealed sample";
+    unsigned choice = kit_field_choice(kit, index);
+    if (choice == KIT_FIELD_TRACE) return "Read trace";
+    if (choice == KIT_FIELD_CAPSULE) return "Collect sealed sample";
+    if (choice >= GAME_FIELD_SOURCES) return "Place cleared";
+    static char offer[64];
+    const char *names[] = {"Data", "Energy", "Essence"};
+    snprintf(offer, sizeof(offer), "Take %u %s", kit->lab->game.field.remaining[choice],
+             names[game_field_source_resource(choice)]);
+    return offer;
   }
   case COMP_MODES: {
     static const char *modes[] = {"Probe", "Cargo", "Companions"};
@@ -760,6 +785,19 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
   default: {
     static const char *routes[] = {"Field survey", "Garden forage",
                                    "Weather watch"};
+    if (game_field_finite(&kit->lab->game) && !pending(kit)) {
+      unsigned count = field_choice_count(kit);
+      if (count > 1) return "Choose a finding";
+      unsigned choice = kit_field_choice(kit, 0);
+      if (choice == KIT_FIELD_TRACE) return "Read trace";
+      if (choice == KIT_FIELD_CAPSULE) return "Collect sealed sample";
+      if (choice >= GAME_FIELD_SOURCES) return "Place cleared / keep exploring";
+      static char offer[64];
+      const char *names[] = {"Data", "Energy", "Essence"};
+      snprintf(offer, sizeof(offer), "Take %u %s", kit->lab->game.field.remaining[choice],
+               names[game_field_source_resource(choice)]);
+      return offer;
+    }
     if (!pending(kit) && kit->lab->game.expedition_id[0] &&
         !game_transfer_available(&kit->lab->game))
       return index ? "Finish expedition" : "View cargo";
@@ -771,6 +809,7 @@ const char *kit_option(const DeviceKit *kit, unsigned device, unsigned index) {
 static void companion_page(DeviceKit *kit, unsigned page) {
   kit->companion.page = page;
   kit->companion.focus = 0;
+  kit->companion.field_result = 0;
   if (page < COMP_MODES)
     kit->companion.mode = page;
   refresh(&kit->companion, 1);
@@ -886,27 +925,36 @@ static void activate_companion(DeviceKit *kit) {
   unsigned focus = kit->companion.focus;
   switch (kit->companion.page) {
   case COMP_FIELD_SITE: {
+    if (kit->companion.field_result) break;
+    unsigned choice = kit_field_choice(kit, focus);
     unsigned site = game_field_site(&kit->lab->game);
     GameCommand command = {0};
     command.data.field.site = site;
-    if (site == 1 && focus == 1) command.type = GAME_COMMAND_FIELD_TRACE;
-    else if (site == 4) command.type = GAME_COMMAND_FIELD_COLLECT;
-    else {
-      command.type = GAME_COMMAND_FIELD_SOURCE;
-      command.data.field.source = site == 0 ? focus : site == 1 ? 3 : site == 2 ? 4 : 5;
-      command.data.field.monotonic_seconds = kit->clock;
+    if (choice == KIT_FIELD_TRACE) command.type = GAME_COMMAND_FIELD_TRACE;
+    else if (choice == KIT_FIELD_CAPSULE) command.type = GAME_COMMAND_FIELD_COLLECT;
+    else if (choice < GAME_FIELD_SOURCES) {
+      command.type = GAME_COMMAND_FIELD_TAKE;
+      command.data.field.source = choice;
+      command.data.field.quantity = kit->lab->game.field.remaining[choice];
+    } else {
+      strcpy(kit->companion.message, "Place cleared. Keep exploring.");
+      refresh(&kit->companion, 1);
+      break;
     }
-    if (apply(kit, command, NULL) == GAME_OK) {
-      strcpy(kit->companion.message, command.type == GAME_COMMAND_FIELD_TRACE
-        ? "Sealed-container trail found. Route revealed."
-        : command.type == GAME_COMMAND_FIELD_COLLECT ? "Sealed sample collected."
-        : "Gathering source selected. Preparation kept.");
-    } else if (command.type == GAME_COMMAND_FIELD_COLLECT)
-      strcpy(kit->companion.message, "Sample store full or prototype sample limit reached. Cache kept.");
-    else if (command.type == GAME_COMMAND_FIELD_TRACE && !kit->lab->game.field.sample_budget)
-      strcpy(kit->companion.message, "Prototype sample limit reached. Supplies remain available.");
-    else if (command.type == GAME_COMMAND_FIELD_SOURCE)
-      strcpy(kit->companion.message, "Source finished. Explore another opportunity.");
+    GameResult result = apply(kit, command, NULL);
+    if (result == GAME_OK) {
+      if (command.type == GAME_COMMAND_FIELD_TAKE) {
+        const char *names[] = {"Data", "Energy", "Essence"};
+        snprintf(kit->companion.message, sizeof(kit->companion.message), "Collected %u %s / saved",
+                 command.data.field.quantity, names[game_field_source_resource(choice)]);
+      } else strcpy(kit->companion.message, choice == KIT_FIELD_TRACE
+                   ? "Trace read / route revealed" : "Sealed sample collected");
+      kit->companion.field_result = 1;
+      kit->companion.focus = 0;
+    } else if (!kit->failed) {
+      snprintf(kit->companion.message, sizeof(kit->companion.message), "%s",
+               command.type == GAME_COMMAND_FIELD_TAKE ? "Not enough room / whole offer kept" : "Action unavailable / progress kept");
+    }
     refresh(&kit->companion, 1);
     break;
   }
@@ -1008,10 +1056,17 @@ static void activate_companion(DeviceKit *kit) {
       visit_resident(kit);
     break;
   default:
-    if (kit->lab->game.field.version && !pending(kit)) {
+    if (game_field_finite(&kit->lab->game) && !pending(kit)) {
       unsigned site = game_field_site(&kit->lab->game);
       if (site >= GAME_FIELD_SITES) {
         strcpy(kit->companion.message, "Inspect at a named place.");
+        refresh(&kit->companion, 1);
+      } else if (field_choice_count(kit) == 1) {
+        /* The full retained offer was visible before this fresh Confirm. */
+        kit->companion.focus = 0;
+        kit->companion.page = COMP_FIELD_SITE;
+        activate_companion(kit);
+        kit->companion.page = COMP_PROBE;
         refresh(&kit->companion, 1);
       } else {
         GameCommand inspect = {0};
@@ -1134,6 +1189,7 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
   }
   if (input >= SELECTED_CANCEL) {
     memset(view->gestures, 0, sizeof(view->gestures));
+    view->movement_consumed = 0;
     if (input != SELECTED_CANCEL) {
       view->suspended = input == SELECTED_SUSPEND;
       refresh(view, 1);
@@ -1158,6 +1214,21 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
                        !kit->lab->storage_error &&
                        revision == view->acknowledged &&
                        view->acknowledged_epoch == view->epoch;
+    if (gesture->allowed && device == KIT_COMPANION && view->page == COMP_PROBE &&
+        kit->lab->game.field.version && !pending(kit) && button < 4) {
+      /* Travel is one eligible fresh press; release cannot take a second step.
+       * Confirm/Send/acceptance retain their separate fresh-release contract. */
+      gesture->allowed = 0;
+      view->movement_consumed |= 1u << button;
+      view->field_result = 0;
+      view->message[0] = 0;
+      GameCommand move = {0};
+      move.type = GAME_COMMAND_FIELD_MOVE;
+      move.data.field.direction = button;
+      if (apply(kit, move, NULL) != GAME_OK && !kit->failed)
+        strcpy(view->message, "Follow a visible path.");
+      return;
+    }
     if (gesture->allowed)
       refresh(view, 0);
     return;
@@ -1166,10 +1237,31 @@ void kit_input(DeviceKit *kit, unsigned device, SelectedInput input,
                 gesture->revision == revision &&
                 gesture->interaction_epoch == view->epoch;
   memset(gesture, 0, sizeof(*gesture));
+  if (view->movement_consumed & (1u << button)) {
+    view->movement_consumed &= ~(1u << button);
+    refresh(view, 0);
+    return;
+  }
   if (!allowed || view->suspended)
     return;
   refresh(view, 0);
   view->message[0] = 0;
+  if (device == KIT_COMPANION && view->page == COMP_FIELD_SITE &&
+      view->field_result && button < 4) {
+    companion_back(kit);
+    view->page = COMP_PROBE;
+  }
+  if (device == KIT_COMPANION && view->page == COMP_FIELD_SITE && button < 4) {
+    unsigned count = field_choice_count(kit);
+    unsigned next = view->focus;
+    if ((button == 0 || button == 2) && next) --next;
+    if ((button == 1 || button == 3) && next + 1 < count) ++next;
+    if (next != view->focus) {
+      view->focus = next;
+      refresh(view, 1);
+    }
+    return;
+  }
   if (device == KIT_COMPANION && view->page == COMP_PROBE &&
       kit->lab->game.field.version && !pending(kit) && button < 4) {
     GameCommand command = {0};
@@ -1281,14 +1373,7 @@ void kit_tick(DeviceKit *kit, uint32_t clock) {
   if (!expedition)
     kit->lab->game.expedition_last_tick = clock;
   if (kit->lab->game.field.version) {
-    unsigned source = kit->lab->game.field.active_source;
-    if (expedition && kit->lab->game.expedition_active && source < GAME_FIELD_SOURCES &&
-        kit->lab->game.field.remaining[source] && !game_gather_capacity_blocked(&kit->lab->game) &&
-        clock > kit->lab->game.expedition_last_tick) {
-      GameCommand tick = {0}; tick.type = GAME_COMMAND_EXPEDITION_TICK;
-      tick.data.monotonic_seconds = clock;
-      (void)apply(kit, tick, NULL);
-    } else kit->lab->game.expedition_last_tick = clock;
+    kit->lab->game.expedition_last_tick = clock;
     selected_lab_tick_devices(kit->lab, clock, 0, 1);
   } else selected_lab_tick_devices(kit->lab, clock, expedition, 1);
   if (kit->lab->game.revision != before) {
@@ -1524,7 +1609,7 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
                                                       : "Companion expeditions")
                  : selected_lab_focus(kit->lab))
           : device == KIT_COMPANION && game->field.version && view->page == COMP_PROBE
-              ? "Move on paths / Confirm: inspect a place"
+              ? (game_field_finite(game) ? kit_option(kit, device, view->focus) : "Collection ended / return cargo")
               : kit_option(kit, device, view->focus);
   const char *page = device == KIT_LAB          ? selected_lab_page(kit->lab)
                      : device == KIT_DOCK       ? "dock"
@@ -1587,7 +1672,7 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
       kit->normalization_pending ? "true" : "false", device == KIT_COMPANION ? kit->companion.mode : 0,
       device == KIT_COMPANION ? game->expedition_elapsed : 0, visible_preparation[0],
       visible_preparation[1], visible_preparation[2],
-      device == KIT_COMPANION ? game_gather_remaining_ms(game) : 0,
+      device == KIT_COMPANION && !game->field.version ? game_gather_remaining_ms(game) : 0,
       device == KIT_COMPANION ? game->gather_last_attempted_mask : 0,
       device == KIT_COMPANION ? game->gather_last_awarded_mask : 0);
   fprintf(output, ",\"received_count\":%u,\"received_selected\":%u,\"received_detail\":%s",
@@ -1606,8 +1691,9 @@ void kit_status(DeviceKit *kit, unsigned device, FILE *output) {
   if (device == KIT_COMPANION && game->field.version) {
     ExpeditionFieldView field;
     kit_field_projection(kit, &field);
-    fprintf(output, ",\"field\":{\"position\":[%u,%u],\"site\":%u,\"trace\":%s,"
+    fprintf(output, ",\"field\":{\"content_version\":%u,\"remaining_unit\":\"%s\",\"position\":[%u,%u],\"site\":%u,\"trace\":%s,"
             "\"capsules\":%u,\"active_source\":%u,\"sample_budget\":%u,\"paths\":[",
+            game->field.version, game_field_finite(game) ? "whole supplies" : "frozen legacy attempts",
             field.map.avatar_x, field.map.avatar_y, field.current_site,
             game->field.trace ? "true" : "false", field.capsule_count,
             game->field.active_source, game->field.sample_budget);

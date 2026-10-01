@@ -1,6 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include "kit.h"
 #include "native_ui.h"
+#include "research_view.h"
+#include "action_view.h"
 #include "save_bytes.h"
 #include "selected_lab.h"
 #include <limits.h>
@@ -122,11 +124,15 @@ int main(int argc, char **argv) {
   if (kit_mode)
     kit_init(&kit, &lab, now_seconds());
   NativeUiContext *ui = kit_mode ? native_ui_create() : NULL;
-  if (kit_mode && !ui) {
-    fprintf(stderr, "Native Cargo renderer unavailable\n");
+  NativeUiContext *dock_ui = kit_mode ? native_ui_create_device(KIT_DOCK) : NULL;
+  if (kit_mode && (!ui || !dock_ui)) {
+    fprintf(stderr, "Native device renderer unavailable\n");
+    native_ui_destroy(ui);
+    native_ui_destroy(dock_ui);
     close(lock);
     return 2;
   }
+  NativeUiContext *lab_ui = NULL;
   char line[128];
   while (fgets(line, sizeof(line), stdin)) {
     if (kit_mode && !strncmp(line, "device ", 7)) {
@@ -148,7 +154,11 @@ int main(int argc, char **argv) {
             unsigned stride = (kit_width(device) * 3 + 3) & ~3u;
             printf("{\"revision\":%u,\"bytes\":%u}\n", revision,
                    54 + stride * kit_height(device));
-            if (!kit_bmp_ui(&kit, device, stdout, ui, 1))
+            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
+              lab_ui = native_ui_create_device(KIT_LAB);
+            if (device == KIT_LAB && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
+            if (!kit_bmp_ui(&kit, device, stdout,
+                device == KIT_LAB ? lab_ui : device == KIT_DOCK ? dock_ui : ui, 1))
               goto failure;
           }
         } else if (fields == 3 && number(token, &revision) &&
@@ -187,7 +197,10 @@ int main(int argc, char **argv) {
       else {
         printf("{\"revision\":%u,\"bytes\":%u}\n", lab.revision,
                54u + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3u);
-        int rendered = kit_mode ? kit_bmp(&kit, KIT_LAB, stdout)
+        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui)
+          lab_ui = native_ui_create_device(KIT_LAB);
+        if (kit_mode && (lab.page == V1_HOME || selected_lab_is_research_page(lab.page) || selected_lab_is_action_page(lab.page) || kit_lab_explore(&kit)) && !lab_ui) goto failure;
+        int rendered = kit_mode ? kit_bmp_ui(&kit, KIT_LAB, stdout, lab_ui, 1)
                                 : selected_lab_bmp(&lab, stdout);
         if (!rendered)
           goto failure;
@@ -210,11 +223,15 @@ int main(int argc, char **argv) {
     if (fflush(stdout))
       goto failure;
   }
+  native_ui_destroy(lab_ui);
   native_ui_destroy(ui);
+  native_ui_destroy(dock_ui);
   close(lock);
   return ferror(stdin) ? 2 : 0;
 failure:
+  native_ui_destroy(lab_ui);
   native_ui_destroy(ui);
+  native_ui_destroy(dock_ui);
   close(lock);
   return 2;
 }

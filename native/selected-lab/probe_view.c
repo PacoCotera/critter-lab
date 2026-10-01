@@ -1,23 +1,10 @@
 #include "probe_view.h"
+#include "expedition.h"
+#include "cargo_view.h"
+#include "expedition_render.h"
 #include <stdio.h>
 #include <string.h>
 
-unsigned probe_path_neighbors(const ExpeditionMapView *map, unsigned cell) {
-  if (!map || cell >= EXPEDITION_MAP_CELLS || !map->paths[cell]) return 0;
-  unsigned x = cell % EXPEDITION_MAP_COLUMNS, y = cell / EXPEDITION_MAP_COLUMNS;
-  return (y && map->paths[cell - EXPEDITION_MAP_COLUMNS] ? 1u : 0u) |
-         (x + 1 < EXPEDITION_MAP_COLUMNS && map->paths[cell + 1] ? 2u : 0u) |
-         (y + 1 < EXPEDITION_MAP_ROWS && map->paths[cell + EXPEDITION_MAP_COLUMNS] ? 4u : 0u) |
-         (x && map->paths[cell - 1] ? 8u : 0u);
-}
-void probe_camera(const ExpeditionMapView *map, int width, int height, int *x, int *y) {
-  int center_x = map->avatar_x * 32 + 16 - width / 2;
-  int center_y = map->avatar_y * 32 + 16 - height / 2;
-  int max_x = EXPEDITION_MAP_COLUMNS * 32 - width;
-  int max_y = EXPEDITION_MAP_ROWS * 32 - height;
-  *x = center_x < 0 ? 0 : center_x > max_x ? max_x : center_x;
-  *y = center_y < 0 ? 0 : center_y > max_y ? max_y : center_y;
-}
 int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
   if (!kit || !out || !kit->lab) return 0;
   const KitView *view = &kit->companion;
@@ -30,6 +17,7 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
   out->revision = view->revision;
   out->epoch = view->epoch;
   out->focus = view->focus;
+  out->result = view->field_result;
   for (unsigned button = 0; button < 10; ++button) {
     out->held |= view->gestures[button].held;
     out->pressed |= view->gestures[button].held && view->gestures[button].allowed;
@@ -39,90 +27,79 @@ int kit_probe_projection(const DeviceKit *kit, CompanionProbeView *out) {
   const GameState *game = &kit->lab->game;
   unsigned transfer = kit->journal.phase;
   int sealed = transfer >= KIT_WAITING && transfer <= KIT_ACK_PENDING;
-  int live = has_field && game->field.version && game->expedition_id[0] &&
+  int live = has_field && game_field_finite(game) && game->expedition_id[0] &&
              out->field.map.avatar_visible && !sealed && !out->cargo.accepted;
-  /* Preparation belongs to the Companion across outings and transfers. Never
-   * reconstruct it from a sealed delivery record or reset it with the map. */
-  int saved_preparation = 0;
-  for (unsigned resource = 0; resource < 3; ++resource) {
-    out->field.preparation_ms[resource] = game->gather_progress_ms[resource];
-    saved_preparation |= game->gather_progress_ms[resource] != 0;
-    if (!live || (out->field.preparation_status[resource] == EXPEDITION_PREP_NOT_STARTED &&
-                  game->gather_progress_ms[resource]))
-      out->field.preparation_status[resource] = game->gather_progress_ms[resource]
-          ? EXPEDITION_PREP_PAUSED : EXPEDITION_PREP_NOT_STARTED;
-  }
-  out->preparation_available = !out->failed || live || saved_preparation;
+  out->finite = game_field_finite(game);
   out->phase = out->failed ? PROBE_UNAVAILABLE : out->cargo.accepted ? PROBE_ENDED :
-      sealed ? PROBE_SENT : live ? (view->page == COMP_FIELD_SITE ? PROBE_SITE : PROBE_MAP) :
+      sealed ? PROBE_SENT : live ? (view->page == COMP_FIELD_SITE && !out->result ? PROBE_SITE : PROBE_MAP) :
       game->expedition_id[0] ? PROBE_RETAINED : PROBE_ENTRY;
-  const char *title = live ? out->field.location : out->phase == PROBE_ENDED ? "Expedition ended" :
-      out->phase == PROBE_SENT ? "Expedition sent" : out->phase == PROBE_RETAINED ? "Retained expedition" :
-      out->failed ? "Progress preserved" : "Choose an expedition";
+  const char *title = out->failed ? "Progress preserved" : live ? out->field.location :
+      out->phase == PROBE_ENDED ? "Expedition ended" : out->phase == PROBE_SENT ? "Expedition sent" :
+      out->phase == PROBE_RETAINED ? "Return retained cargo" : "Choose an expedition";
   snprintf(out->title, sizeof(out->title), "%s", title);
-  snprintf(out->status, sizeof(out->status), "%s", out->failed ? "Storage unavailable. Progress preserved." :
+  snprintf(out->status, sizeof(out->status), "%s", out->failed ? "Storage unavailable / progress preserved" :
       out->phase == PROBE_SENT ? kit_stage(kit) : out->phase == PROBE_ENDED ?
-      (transfer == KIT_COMPLETE ? "Cargo transferred / choose a new outing." : "Lab accepted / receipt pending.") :
-      out->phase == PROBE_RETAINED ? "Saved outing / no retained field map" :
-      live ? kit_route(kit) : "Choose where to explore");
-  snprintf(out->context, sizeof(out->context), "%s", view->message[0] ? view->message :
-      live && out->field.map.site_collected[4] ? "Sealed sample / contents unknown" :
-      live && out->field.map.site_inspected[1] ? "Trace found / a known trail continues" :
-      live ? "Gathering preparation" : out->status);
-  /* Presentation wording keeps the existing outcome/recovery meaning in one
-   * 18px line; Kit's saved message and game command semantics stay unchanged. */
-  if (!strcmp(view->message, "Sealed-container trail found. Route revealed."))
-    strcpy(out->context, "Trace found / route revealed");
-  else if (!strcmp(view->message, "Gathering source selected. Preparation kept."))
-    strcpy(out->context, "Source selected / preparation kept");
-  else if (!strcmp(view->message, "Sample store full or prototype sample limit reached. Cache kept."))
-    strcpy(out->context, "Sample full / limit reached; cache kept");
-  else if (!strcmp(view->message, "Prototype sample limit reached. Supplies remain available."))
-    strcpy(out->context, "Sample limit / supplies still available");
-  else if (!strcmp(view->message, "Source finished. Explore another opportunity."))
-    strcpy(out->context, "Source finished / explore another place");
-  snprintf(out->source, sizeof(out->source), "%s",
-           saved_preparation ? "Preparation retained / no active source" : "No active source");
+      (transfer == KIT_COMPLETE ? "Cargo transferred / choose a new outing" : "Lab accepted / receipt pending") :
+      out->phase == PROBE_RETAINED ? "Collection ended / return cargo or finish" :
+      live ? "Explore retained supply offers" : "");
+  snprintf(out->context, sizeof(out->context), "%s", out->status);
+  out->free_slots = 40 - (out->cargo.supplies[0] + out->cargo.supplies[1] + out->cargo.supplies[2]);
   if (live) {
+    unsigned count = 0;
+    while (count < 3 && kit_field_choice(kit, count) != KIT_FIELD_NO_CHOICE) ++count;
+    unsigned choice = kit_field_choice(kit, view->page == COMP_FIELD_SITE ? view->focus : 0);
     const char *names[] = {"Data", "Energy", "Essence"};
-    for (unsigned resource = 0; resource < 3; ++resource) {
-      unsigned state = out->field.preparation_status[resource];
-      if (state == EXPEDITION_PREP_ACTIVE || state == EXPEDITION_PREP_CAPACITY_FULL) {
-        snprintf(out->source, sizeof(out->source), "%s / %s / %u attempts left",
-                 names[resource], out->field.source_name[resource], out->field.remaining_chances[resource]);
-        break;
+    if (count > 1) {
+      strcpy(out->context, out->field.current_site == 0 ?
+             (out->phase == PROBE_SITE ? "Choose recovered supplies" : "Recovered supplies") :
+             (out->phase == PROBE_SITE ? "Choose a finding" : "Supplies and a trace"));
+      if (out->field.current_site == 0)
+        snprintf(out->source, sizeof(out->source), "Data %u / Energy %u / Essence %u", game->field.remaining[0],
+                 game->field.remaining[1], game->field.remaining[2]);
+      else snprintf(out->source, sizeof(out->source), "%u free slots / supplies or a trace", out->free_slots);
+    } else if (choice < GAME_FIELD_SOURCES) {
+      snprintf(out->context, sizeof(out->context), "Take %u %s", game->field.remaining[choice],
+               names[game_field_source_resource(choice)]);
+      snprintf(out->source, sizeof(out->source), "%u available / %u free slots", game->field.remaining[choice], out->free_slots);
+    } else if (choice == KIT_FIELD_TRACE) {
+      strcpy(out->context, "Read the trace");
+      strcpy(out->source, "Unread trace remains available");
+    } else if (choice == KIT_FIELD_CAPSULE) {
+      strcpy(out->context, "Collect sealed sample");
+      strcpy(out->source, "Contents unknown / separate sample slot");
+    } else {
+      strcpy(out->context, out->field.map.site_collected[4] ? "Sample collected / contents unknown" :
+             out->field.current_site < 5 ? "Place cleared" : "Follow a visible trail");
+      snprintf(out->source, sizeof(out->source), "%u free supply slots", out->free_slots);
+    }
+    if (out->phase == PROBE_SITE && choice < GAME_FIELD_SOURCES)
+      snprintf(out->source, sizeof(out->source), "%u %s available / %u free slots", game->field.remaining[choice],
+               names[game_field_source_resource(choice)], out->free_slots);
+    if (!selector && !out->failed && out->phase == PROBE_SITE) {
+      out->action_count = count;
+      for (unsigned action = 0; action < count; ++action) {
+        out->choices[action] = kit_field_choice(kit, action);
+        if (out->choices[action] < GAME_FIELD_SOURCES)
+          out->choice_material[action] = 1 + game_field_source_resource(out->choices[action]);
+        snprintf(out->actions[action], sizeof(out->actions[action]), "%s", kit_option(kit, KIT_COMPANION, action));
       }
     }
-  }
-  const char *preparation_states[] = {"Not started", "Active", "Paused", "Finished", "Hold full"};
-  for (unsigned resource = 0; resource < 3; ++resource) {
-    unsigned state = out->field.preparation_status[resource];
-    if (state > EXPEDITION_PREP_CAPACITY_FULL) state = EXPEDITION_PREP_NOT_STARTED;
-    snprintf(out->preparation_labels[resource], sizeof(out->preparation_labels[resource]), "%s",
-             out->failed ? (live || out->field.preparation_ms[resource] ? "Saved" : "Unavailable") : preparation_states[state]);
-  }
-  if (out->failed) {
-    snprintf(out->context, sizeof(out->context), "%s", out->status);
-    snprintf(out->source, sizeof(out->source), "%s",
-             live || saved_preparation ? "Saved preparation / actions unavailable" : "Preparation unavailable");
-  }
-  if (!selector && !out->failed && out->phase != PROBE_MAP) {
+    snprintf(out->footer, sizeof(out->footer), "%s", out->result ? "Directions: continue / Back: map" :
+        out->phase == PROBE_SITE ? "Directions: choose / Confirm: act / Back: map" :
+        count > 1 ? "Confirm: choose / Back: modes" : choice == KIT_FIELD_TRACE ? "Confirm: read / Back: modes" :
+        count ? "Confirm: collect / Back: modes" : "Directions: move / Back: modes");
+  } else if (!selector && !out->failed) {
     out->action_count = kit_option_count(kit, KIT_COMPANION);
     if (out->action_count > 3) return 0;
     for (unsigned action = 0; action < out->action_count; ++action)
       snprintf(out->actions[action], sizeof(out->actions[action]), "%s", kit_option(kit, KIT_COMPANION, action));
+    strcpy(out->footer, "Confirm: enter / Back: modes");
   }
-  int sample_collected = out->phase == PROBE_SITE && out->field.current_site == 4 &&
-                         out->field.map.site_collected[4];
-  if (sample_collected) {
-    out->action_count = 0;
-    strcpy(out->context, "Sample collected / contents unknown");
-  }
-  snprintf(out->footer, sizeof(out->footer), "%s", out->failed ? "Back: modes" :
-      selector ? "Left/Right: mode / Down/Confirm: enter" :
-      sample_collected ? "Back: map" :
-      out->phase == PROBE_MAP ? "Directions: move / Confirm: inspect / Back: modes" :
-      out->phase == PROBE_SITE ? "Up/Down: choose / Confirm: act / Back: map" :
-      "Up/Down: choose / Confirm: enter / Back: modes");
+  if (view->message[0] && !out->failed)
+    snprintf(out->context, sizeof(out->context), "%s", view->message);
+  if (!strcmp(view->message, "Receipt confirmed. Choose a new expedition."))
+    strcpy(out->context, "Receipt confirmed / choose a new outing");
+  if (out->failed) strcpy(out->source, "Actions unavailable / cargo preserved");
+  if (selector) strcpy(out->footer, "Left/Right: mode / Down/Confirm: enter");
   return 1;
 }

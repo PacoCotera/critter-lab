@@ -1,6 +1,6 @@
 # Ecosystem architecture
 
-Status: accepted responsibilities with proposed implementation boundaries. Service topology, providers, transports and production schemas remain unselected. LVGL9.6.0 is selected for a bounded native UI proof; physical display integration is unvalidated.
+Status: accepted responsibilities with proposed implementation boundaries. The Lab targets Raspberry Pi4/Linux; Companion and Caddy target ESP32. LVGL9.6.0 is the required graphics framework for all three devices. The current host implementation is only partially migrated; physical display integration is unvalidated. Service topology, providers, transports and production schemas remain unselected.
 
 ```mermaid
 flowchart LR
@@ -157,15 +157,34 @@ For optional global operations, the backend owns accepted service records, opera
 
 ## Native UI foundation
 
-Owner directs an established graphics/UI framework rather than a bespoke game
-engine. Companion Cargo and Probe now use retained450×600 workpieces with
+Owner requires all device screens to use the established graphics/UI framework.
+Application code must not compose screens by writing pixels directly, or wrap a
+legacy manually rendered screen in an LVGL image and call that a migration.
+Display flush adapters may copy or convert library output into the target pixel
+format; that transport operation must remain separate from UI composition.
+Linux is the Lab target and the current host-test platform, not the Companion or
+Caddy firmware target. Their adapters must compile under ESP-IDF for ESP32.
+
+Companion Cargo and Probe currently use retained450×600 workpieces with
 **LVGL9.6.0**, pinned upstream commit
 `80ca777e37a2b176770726a02e07a6fb79ef0b39`. Their shared display/context owns
 separate roots, copied view facts and bounded assets. The
 [native Probe proof](../docs/evidence/native-companion-probe/README.md) covers
-mode switching and the field/return journey. Other screen families remain on
-their existing renderers; this is not complete device migration or physical
-firmware performance evidence.
+mode switching and the field/return journey. The Dock uses retained
+LVGL for its complete page family and extracts the portable display/partial-flush
+boundary; [native verification and independent review pass](../docs/evidence/native-dock-lvgl/README.md). All known Companion host routes now use retained LVGL, including residents
+and visits. Lab Home, workspace previews and connected reception/received records
+also use retained LVGL. Sample collection, research/review/findings and Library use copied presentation facts and one retained LVGL tree; [native evidence](../docs/evidence/native-lab-research/README.md) covers disclosure, controls, original art and lifetime. Creation/review, incubation/reveal, Habitat and residents now use copied action facts and one retained LVGL family; [native evidence](../docs/evidence/native-lab-actions/README.md) covers explicit authority, original art and saved identity. Standalone legacy acquisition pages still use manual composition for maintained regression callers. Their disposition remains architectural debt, not an accepted graphics exception or authorized connected Lab acquisition. The [ESP-IDF Companion target](../native/companion/README.md) now
+registers the current shared UI in a headless harness; [compile/link validation passed](../docs/evidence/native-companion-esp/README.md). Runtime integration remains unvalidated.
+Host pixel-stream evidence,
+actual ESP-IDF UI compilation and hardware measurements are separate gates.
+
+The architect must review the complete screen-route and target-build inventory
+before migration integration. Acceptance requires LVGL composition for every
+device page, explicit portable view/UI versus host/ESP-IDF adapter boundaries,
+and removal of active manual-renderer fallbacks. Missing LVGL output must fail
+explicitly rather than silently use the old renderer. Existing game ownership,
+save compatibility and physical-control guards remain constraints.
 
 | Established library | Fit for this product | Decision |
 | --- | --- | --- |
@@ -184,10 +203,12 @@ window system, external GPU or new development environment.
 ```mermaid
 flowchart LR
   Input[Physical controls and visible-frame acknowledgement] --> Kit[Kit interaction and game commands]
-  Kit --> View[Copied permitted Cargo and Probe facts]
+  Kit --> View[Copied permitted device view facts]
   View --> UI[LVGL widgets / layouts / shared theme / assets]
-  UI --> Raster[Bounded software display flush]
-  Raster --> Frame[Existing native frame transport]
+  UI --> Display[Profile-sized display and partial draw buffer]
+  Display --> Flush[Validated area / stride / format flush]
+  Flush --> Host[Host export frame and native pixel transport]
+  Flush --> MCU[ESP-IDF partial display adapter: not yet implemented]
 ```
 
 The Kit remains the sole focus/eligibility/commit authority. Framework focus
@@ -200,6 +221,95 @@ this real path passes independent native/control and art/UX review. Owner permit
 a complete re-layout, particularly of Companion; old page geometry is not a
 constraint. Game/UX/art must discuss player questions, visual hierarchy and actual
 control sequences before dependent compositions are treated as selected.
+
+### Current migration coverage and target evidence
+
+| Product screen family | Composition now | Remaining requirement |
+| --- | --- | --- |
+| Companion Probe and field source choice, including Probe mode preview | LVGL | [Shared current ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Companion Cargo | LVGL | Same checked shared compile; runtime/panel adapter unvalidated |
+| Companion Send/Keep confirmation | Retained LVGL using shared portable Cargo/Send tree | [Actual host source/control/output and independent review checked](../docs/evidence/native-companion-send/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Companion Discard class/quantity/Keep review and empty Finish review | Retained LVGL using the shared portable Cargo tree | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-discard/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Companion Cargo mode preview | Retained LVGL, same portable Cargo tree | [Native output, controls and independent review checked](../docs/evidence/native-companion-cargo-preview/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Companion Companions mode preview | Retained LVGL, lazy portable resident preview tree | [Native source/controls/output and independent review checked](../docs/evidence/native-companion-resident-preview/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Companion residents and visits | Retained LVGL, same portable resident tree as mode preview | [Native controls/output and independent technical/interaction/craft review checked](../docs/evidence/native-companion-resident-actions/README.md); [same shared ESP compile checked](../docs/evidence/native-companion-esp/README.md); runtime/panel adapter unvalidated |
+| Lab Home/workspace previews | Retained LVGL, copied view and lazy host display context | [Native route/control/lifetime and independent review passed](../docs/evidence/native-lab-home/README.md) |
+| Lab connected incoming haul and received list/detail | Retained LVGL, copied reception/history facts; native image primitives for original field map | [Native controls/output, failure-first routes and independent technical/craft checks passed](../docs/evidence/native-lab-reception/README.md) |
+| Lab sample collection, research/review/findings and Library | Copied knowledge and costs; retained LVGL with original reference art | [Native route, disclosure, physical-control, lifetime and focused craft/game review passed](../docs/evidence/native-lab-research/README.md) |
+| Lab creation/review, incubation/reveal, Habitat and residents | Copied action facts; one reused retained LVGL family | [Native authority, route/pixel/lifetime and focused art/UX/game preservation checks passed](../docs/evidence/native-lab-actions/README.md); rejected canister remains provisional art |
+| Standalone legacy acquisition pages | Manual C raster for maintained regression callers | Retirement/migration contract still open; connected Lab acquisition remains removed; no accepted graphics exception |
+| Caddy World/Supplies/Connections/print review | Retained LVGL, four-gray host output | [Complete host family checked5431f44](../docs/evidence/native-dock-lvgl/README.md); [same shared ESP-IDF UI compile checkedc3c8a6d](../docs/evidence/native-dock-lvgl/ESP32.md) |
+
+The current three-device presenter is one Linux x86-64 process. It verifies
+logical views, controls and native output, not separate physical endpoints.
+The Lab has no verified ARM/HDMI/GPIO adapter. `native/companion` now registers
+the same current Cargo/Probe/resident UI for a headless ESP-IDF compile proof;
+[compile/link/static evidence](../docs/evidence/native-companion-esp/README.md)
+passes at `fadee5d`; runtime allocation/profile and physical adapters are unresolved. The headless
+Caddy target compiles/links the shared current Dock UI under ESP-IDF; it has no
+physical panel, live game authority or radio adapter. The historical nRF Probe
+fixture is not the combined Companion.
+None of these scaffold builds qualifies as current firmware evidence.
+
+Portable UI headers must contain owned plain-C view facts, styles/assets and
+profile/display interfaces. They must not require `DeviceKit`, `SelectedLab`,
+`FILE`, POSIX storage, radio or GPIO. Projection adapters extract permitted
+facts; semantic physical input still reaches the interaction/domain owner.
+Host full-frame export storage is optional adapter storage, not an embedded UI
+requirement. The ESP32 path can consume partial regions without a host RGB frame.
+One shared LVGL lifetime owns all displays; profile-specific roots/assets avoid
+instantiating every screen family on each device.
+
+`native/ui/companion_cargo_view.h` owns only copied Cargo/Send/Discard/Finish presentation facts.
+The retained `companion_cargo_ui` receives fonts/images and physical focus but
+cannot access Kit, files or game commands. `selected-lab/cargo_view.c` projects
+ownership and review consequences; `native_ui.c` owns host display/export and
+asset lifetime. Send seals cargo and stops exploration; Lab acceptance ends the
+expedition. Successful sealing returns to Cargo, and offline sealing waits.
+Known migrated Cargo/Send/Discard/Finish routes fail explicitly rather than using manual fallback.
+Discard selectors project the existing two-row window over all logical choices,
+including forty quantities plus Keep. Logical focus, first visible row and local
+widget focus are separate copied facts; the UI does not navigate or decide loss.
+Review shows exact whole-item loss and remainder; Keep and Back retain the caller
+and cargo. Finish is only available for an empty outing and sends nothing.
+Storage failures close actions. This migration adds no rules or physical controls.
+
+Cargo mode preview uses the same owned view with an explicit selector flag.
+It shows current cargo or the accepted delivery record and always exposes zero
+Cargo actions. Mode focus belongs to the rail, separately from remembered Cargo
+action focus. Left/Right switches modes; Down or Confirm enters Cargo without
+sending or discarding. Storage errors hide navigation affordances. Projection
+rejects inconsistent mode/focus and the known route cannot fall back to raster
+composition. Companions preview uses a separate lazy retained root with an owned
+plain view of the selected revealed resident. Existing saved-art and form guards
+own provenance and property disclosure; no live research is recomputed here.
+Invalid selection fails the frame rather than falling back to manual drawing.
+Resident list and visit workpieces reuse that tree with explicit screen tags.
+List focus is the selected resident index; visit focus is the local command row.
+Projection validates both against existing Kit authority. Both visit rows remain
+visible; an unavailable visit is muted with visible focus and a reason. Global
+storage error closes action/focus affordances. Entry never invokes a visit; a
+separate fresh physical Confirm reaches the existing game command. Empty-list
+Return to Probe is preserved; an impossible empty visit fails explicitly.
+Immediate saved-at-Lab/stale-cache feedback is retained without inventing a new
+visit or reading live research. No manual Companion composition/fallback remains.
+
+Flush-ready means the adapter has released the draw buffer. It is distinct from
+the painted-frame acknowledgement used to authorize input, especially for an
+asynchronous e-paper refresh. Area, stride, format and buffer lifetime must be
+validated. Panel format conversion is permitted here; UI composition is not.
+
+The complete host Dock family and display/host boundary are checked at5431f44.
+The [bounded headless ESP-IDF compile](../docs/evidence/native-dock-lvgl/ESP32.md)
+contains the same shared Dock UI, pinned LVGL and partial-flush adapter atc3c8a6d;
+ELF/map/static memory evidence is separate from hardware boot. [Current Companion shared UI compilation](../docs/evidence/native-companion-esp/README.md)
+passes separately at `fadee5d`; every Lab family still needs migration.
+Each slice requires
+exact pushed source, actual native output, physical-control regression checks
+and independent review. Final architecture acceptance audits all entry points:
+no active manual compositor, silent fallback or full-screen legacy bitmap wrapper.
+UI pool, assets/fonts, draw buffers and adapter storage are measured separately;
+host memory success does not establish MCU fit or physical performance.
 
 Shared margins, palette, font hierarchy, framing and focus styles belong in theme
 tokens. Images use retained Gemini source pixels at native size with verified
@@ -237,15 +347,15 @@ See [cloud synchronization](cloud-sync.md), [genetics](genetics.md), [devices](d
 ## Three-device host simulator
 
 The current simulator presents Lab, combined Companion and Dock together, with
-separate native frame/control contexts at1024×600,450×600 and792×272 monochrome.
+separate native frame/control contexts at1024×600,450×600 and792×272 four-gray.
 One C17 host aggregate remains the simulation authority: existing expedition
 fields are Companion-owned carried cargo; stock, samples and residents are the
 Lab-accepted world. Only Companion controls start expeditions. This does not
 claim separate MCU processes, endpoint storage or radio firmware.
 
 The native kit adapter seals an immutable haul snapshot in an atomic sidecar.
-New seals contain only whole awarded supplies; gathering preparation and chance
-state are separate Companion activity. Simulated arrival opens Lab reception once,
+New seals contain only whole awarded supplies; retained source remainders and
+frozen legacy preparation stay on Companion. Simulated arrival opens Lab reception once,
 never acceptance. The input module captures/restores navigation only, without
 restoring world state, clocks or armed gestures. A fresh Confirm accepts the haul.
 
@@ -267,15 +377,17 @@ Version4 receipt validation expects the source route already ended. An empty
 outing can Finish without a phantom haul, sample or extra chance draw. The next
 outing gets a new identity; no Continue action follows an accepted unload.
 
-Version2 game saves append separately persisted gathering preparation, chance
+Historical version2 game saves append separately persisted gathering preparation, chance
 state, attempted/awarded classes and a legacy-encoding flag. The decoder checks
 the original version1 payload/checksum and retains its raw semantics until an
 existing receipt intent is resolved or new acceptance converts atomically.
 Conversion preserves whole Lab/carried portions and translates historical
-residues into preparation time, without awarding an item. Progress never occupies
+residues into retained preparation data, without awarding an item. Legacy field
+clocks are frozen in the current proof; their remaining cargo can be returned.
+Progress never occupies
 cargo capacity or pays a cost. New inventory is multiples of the internal100
 encoding for each indivisible item; [V1](../native/selected-lab/V1.md) owns fixture
-timing, chances and costs. Saved chance outcomes prevent restart/retry rerolls.
+current provisional source contents and costs. Saved outcomes prevent restart/retry rerolls.
 
 Core V1 version3 appends parallel research and individual-art metadata after
 the complete frozen version2 payload, including its original tail padding.
@@ -294,9 +406,12 @@ the frozen 8040-byte V3 payload. Exact V1/V2/V3 lengths and checksums are checke
 before zero-extension. Field state pins geometry/content, legal and hidden paths,
 position, visited/inspected places, trace/capsule identity, finite source budgets
 and results. Commands19–24 bind deliberate field actions; actions after Start
-also bind the expected expedition ID. Only one source ticks. Companion eligibility
-drives field time independently of Lab browsing; review/suspension reanchors time
-without catch-up. Ordinary read/paint requests cannot mutate zero-time activity.
+also bind the expected expedition ID. Current field-content version3 reuses that
+saved layout with finite whole-unit source quantities. Appended command26
+(FIELD_TAKE) binds outing, source and previewed quantity; validated acceptance
+atomically credits cargo and decrements that retained source. Inspection, ticks,
+rendering and selection do not award items. Legacy field-content1/2 remain frozen
+and returnable; loading does not convert their attempts into new pickup units.
 
 Received records contain walked paths, visited places, accomplishments, whole
 accepted contents and acceptance time/identity. The Lab projection excludes the

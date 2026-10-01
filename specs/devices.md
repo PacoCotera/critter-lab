@@ -31,6 +31,18 @@ Owner rejected the 3.7-inch form factor and supplied the 5.79-inch monochrome pa
 
 The manufacturer driver handles a dual-controller panel; port the exact 5in79 driver rather than treating it as a generic single-controller display. SPI commands, reset, BUSY and power/readiness sequencing require matching revision validation. Vendor timing is roughly 3.5 seconds full / 0.8 seconds partial refresh; the raw datasheet also specifies about 4 seconds at 25°C. These are references, not measured caddy performance. Browse discrete pages, debounce/coalesce input and accept confirmations only against the visible ready frame. Do not assume partial updates are indefinitely ghost-free.
 
+The selected no-suffix module supports **four gray levels**: black, dark gray,
+light gray and white ([manufacturer product table](https://www.waveshare.com/product/5.79inch-e-paper-module.htm),
+[four-grayscale manual](https://www.waveshare.com/wiki/5.79inch_e-Paper_Module_Manual)).
+Black/white describes its pigments, not a one-bit-only capability. The native
+Dock projection uses a deliberate four-level palette, strong black text/focus
+and subordinate gray grouping; the final RGB host frame is quantized to
+0/85/170/255, including authored icon and font edges. This is a simulator raster
+contract, not a physical two-bit SPI driver or waveform implementation. Hardware
+grayscale waveform, refresh timing, ghosting and power still require the exact
+driver and bench evidence; black/white partial-refresh timing is not a grayscale
+performance claim.
+
 Use the black/white no-suffix version for this recommendation. B (red/black/white) and G (red/yellow/black/white) are different panels/refresh profiles, not interchangeable driver variants. This is the adopted development reference, not a purchase or production-panel freeze; keep bezel, cable bend and mounting space outside the active display dimensions.
 
 ### Budgets and interfaces to implement first

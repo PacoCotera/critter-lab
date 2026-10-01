@@ -14,7 +14,8 @@ endforeach()
 add_subdirectory(../vendor/lvgl ${CMAKE_CURRENT_BINARY_DIR}/lvgl)
 
 add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c
-  cargo_view.c probe_view.c probe_ui.c field_art.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
+  home_view.c reception_view.c research_view.c action_view.c cargo_view.c probe_view.c probe_ui.c resident_view.c field_art.c dock_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
+  ../ui/lab_action_ui.c ../ui/lab_research_ui.c ../ui/lab_reception_ui.c ../ui/lab_home_ui.c ../ui/display.c ../ui/probe_geometry.c ../ui/host_frame.c ../ui/dock_ui.c ../ui/companion_cargo_ui.c ../ui/companion_resident_ui.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/expedition.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
@@ -31,6 +32,34 @@ set_target_properties(selected_lab PROPERTIES C_EXTENSIONS NO)
 
 include(CTest)
 if(BUILD_TESTING)
+  add_executable(action_ui_checks action_ui_tests.c)
+  target_link_libraries(action_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(action_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME lab_action_ui_checks COMMAND action_ui_checks)
+  add_executable(research_ui_checks research_ui_tests.c)
+  target_link_libraries(research_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(research_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME lab_research_ui_checks COMMAND research_ui_checks)
+  add_executable(reception_ui_checks reception_ui_tests.c)
+  target_link_libraries(reception_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(reception_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME lab_reception_ui_checks COMMAND reception_ui_checks)
+  add_executable(home_ui_checks home_ui_tests.c)
+  target_link_libraries(home_ui_checks PRIVATE selected_lab_core)
+  target_compile_options(home_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+  add_test(NAME lab_home_ui_checks COMMAND home_ui_checks)
+endif()
+if(BUILD_TESTING)
+ add_executable(resident_ui_checks resident_ui_tests.c)
+ target_link_libraries(resident_ui_checks PRIVATE selected_lab_core)
+ target_compile_options(resident_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+ add_test(NAME companion_resident_ui_checks COMMAND resident_ui_checks)
+
+ add_executable(dock_gray_checks dock_gray_tests.c)
+ target_link_libraries(dock_gray_checks PRIVATE selected_lab_core)
+ target_compile_options(dock_gray_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+ add_test(NAME dock_four_gray_checks COMMAND dock_gray_checks)
+
  add_executable(game_checks ../tests/test_game.c)
  target_link_libraries(game_checks PRIVATE selected_lab_core)
  target_compile_options(game_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)

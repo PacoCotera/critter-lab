@@ -25,15 +25,33 @@ The sandbox release endpoint identifies the currently activated version.
 The [three-device native simulator](native/selected-lab/README.md#three-device-mode)
 connects Companion gathering and Cargo return with explicit Lab reception,
 resource-funded research, genome selection, incubation, deliberate reveal and
-habitat visits. Native C17 owns rules, saved state, focus and pixels; the browser
-transports the depicted physical controls. The devices are logical contexts in
+habitat visits. Native C17 owns rules, saved state and physical focus; LVGL renders
+migrated screens into native framebuffers. The browser transports those frames
+and the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
 The [native UI foundation](specs/architecture.md#native-ui-foundation) uses LVGL 9.6.0
-for real Companion Cargo. Shared layout, theme, image/font adapters and physical
-focus replace manual screen drawing within that slice. The [native proof](docs/evidence/native-ui-foundation/README.md)
-records actual handoff, source-exact material pixels and output review. The
-remaining screens and final HiBit artwork are not yet migrated or accepted.
+for all known Companion host screen families, including resident selection and visits. Shared layout, theme, image/font adapters and
+physical focus replace manual screen drawing in those workpieces. The
+[Cargo proof](docs/evidence/native-ui-foundation/README.md) and
+[Probe proof](docs/evidence/native-companion-probe/README.md) record actual
+handoff, source-exact material pixels and output review. All device screens must
+use this framework. The [complete Dock LVGL family and portable display boundary](docs/evidence/native-dock-lvgl/README.md)
+passed native output and independent review. The [Companions preview proof](docs/evidence/native-companion-resident-preview/README.md)
+shows retained saved portraits/properties and offline inspection without a visit.
+The [resident list/visit proof](docs/evidence/native-companion-resident-actions/README.md)
+records save-once visits and shared counts. [Lab Home and workspace previews](docs/evidence/native-lab-home/README.md) now use retained LVGL, with native routes, controls and independent review checked. [Connected Lab reception and received records](docs/evidence/native-lab-reception/README.md) also use LVGL. [Sample research and Library](docs/evidence/native-lab-research/README.md) now share a retained family with copied knowledge, costs and original-size portraits. Creation/incubation and resident/habitat actions still need migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
+and [current Companion UI](docs/evidence/native-companion-esp/README.md)
+now link under ESP-IDF; neither headless target establishes physical operation. Final HiBit
+artwork and human playability remain open.
+The [Send/Keep proof](docs/evidence/native-companion-send/README.md) records the
+shared portable Cargo tree, actual offline return/acceptance, safe focus and
+independent technical/UI/UX review.
+The [Discard/Finish proof](docs/evidence/native-companion-discard/README.md)
+shows exact whole-item decisions, safe Keep/Back, empty outing completion and
+separate native maximum/recovery fixtures, with independent craft review.
+The [Cargo mode-preview proof](docs/evidence/native-companion-cargo-preview/README.md)
+shows read-only browsing, remembered action entry and separate accepted receipts.
 Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the

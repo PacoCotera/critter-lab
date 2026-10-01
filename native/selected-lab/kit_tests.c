@@ -87,10 +87,12 @@ static uint32_t companion_property_pixels(const DeviceKit *kit) {
   assert(frame && kit_bmp(kit, KIT_COMPANION, frame));
   unsigned stride = (kit_width(KIT_COMPANION) * 3 + 3) & ~3u;
   uint32_t hash = 2166136261u;
-  for (unsigned y = 267; y < 380; ++y) {
+  /* Exact retained property box. The earlier raster coordinates now overlap
+   * the lower ink of the separate Visits counter. */
+  for (unsigned y = 286; y < 412; ++y) {
     long offset = 54 + (long)(kit_height(KIT_COMPANION) - y - 1) * stride + 303 * 3;
     assert(fseek(frame, offset, SEEK_SET) == 0);
-    for (unsigned byte = 0; byte < 116 * 3; ++byte) {
+    for (unsigned byte = 0; byte < 115 * 3; ++byte) {
       int value = fgetc(frame);
       assert(value != EOF);
       hash = (hash ^ (unsigned)value) * 16777619u;
@@ -842,33 +844,57 @@ static void field_control_and_receipt(const char *directory) {
   kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN,map_frame);
   kit_input(&kit,KIT_COMPANION,SELECTED_CONFIRM_UP,map_frame);
   assert(lab.game.field.active_source == GAME_FIELD_NONE);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(!lab.game.expedition_data && !lab.game.expedition_energy && !lab.game.expedition_essence);
+  GameExpeditionField chooser_before = lab.game.field;
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
-  unsigned stable_frame = kit_revision(&kit, KIT_COMPANION);
-  kit_tick(&kit, 100);
-  kit_tick(&kit, 100);
-  assert(kit_revision(&kit, KIT_COMPANION) == stable_frame);
-  assert(lab.game.field.attempts[0] == 0);
-  unsigned lab_frame = kit_revision(&kit,KIT_LAB);
-  kit_input(&kit,KIT_LAB,SELECTED_READY,lab_frame);
-  kit_input(&kit,KIT_LAB,SELECTED_DOWN_DOWN,lab_frame);
+  assert(!memcmp(&chooser_before, &lab.game.field, sizeof(chooser_before)));
+  uint64_t idle_sequence = lab.game.last_operation_sequence;
   kit_tick(&kit,104);
-  assert(lab.game.field.attempts[0] == 1); /* Lab gesture does not pause field. */
-  kit_input(&kit,KIT_LAB,SELECTED_DOWN_UP,lab_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence && !lab.game.gather_attempt_count);
+  /* Native travel commits on eligible down, and repeated down/up cannot repeat. */
+  unsigned direction = 0;
+  const int dx[] = {0,0,-1,1}, dy[] = {-1,1,0,0};
+  for (; direction < 4; ++direction) {
+    int x = lab.game.field.x + dx[direction], y = lab.game.field.y + dy[direction];
+    if (x >= 0 && x < 20 && y >= 0 && y < 11 && lab.game.field.paths[y * 20 + x]) break;
+  }
+  assert(direction < 4);
+  unsigned travel_frame = kit_revision(&kit, KIT_COMPANION);
+  kit_input(&kit,KIT_COMPANION,SELECTED_READY,travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2 + 1),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2),travel_frame);
+  kit_input(&kit,KIT_COMPANION,SELECTED_CANCEL,travel_frame);
+  kit_input(&kit,KIT_COMPANION,(SelectedInput)(direction * 2 + 1),travel_frame);
+  assert(lab.game.last_operation_sequence == idle_sequence + 1);
+  walk_field_site(&kit,2);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_data == 1200 && !lab.game.field.remaining[4]);
+  assert(kit.companion.page == COMP_PROBE);
+  walk_field_site(&kit,3);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_energy == 1400 && !lab.game.field.remaining[5]);
   walk_field_site(&kit,1);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_DOWN_DOWN);
+  assert(kit.companion.page == COMP_FIELD_SITE && kit_option_count(&kit,KIT_COMPANION) == 2);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_essence == 1200 && kit.companion.field_result);
+  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
+  walk_field_site(&kit,0);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  assert(lab.game.expedition_data == 1400 && lab.game.field.remaining[1] == 2 && lab.game.field.remaining[2] == 1);
+  press(&kit,KIT_COMPANION,SELECTED_DOWN_DOWN); /* A result needs no dismissal Confirm. */
+  assert(kit.companion.page == COMP_PROBE);
+  walk_field_site(&kit,1);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Only the trace remains here. */
   assert(lab.game.field.trace && !lab.game.field.collected && lab.game.sample_count == 0);
-  press(&kit,KIT_COMPANION,SELECTED_UP_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  assert(lab.game.field.active_source == 3);
-  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   walk_field_site(&kit,4);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
-  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
+  press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN); /* Capsule remains eligible with40 supplies. */
   assert(lab.game.field.collected && lab.game.sample_count == 0);
-  press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_BACK_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_RIGHT_DOWN);
   press(&kit,KIT_COMPANION,SELECTED_CONFIRM_DOWN);
@@ -1044,7 +1070,7 @@ static void legacy_capsule_limit(const char *directory) {
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     press(&kit, KIT_COMPANION, SELECTED_CONFIRM_DOWN);
     kit_tick(&kit, 104);
-    assert(lab.game.field.active_source == 0 && lab.game.field.attempts[0] == 1);
+    assert(lab.game.field.active_source == GAME_FIELD_NONE && lab.game.field.attempts[0] == 1);
     assert(lab.game.sample_count == GAME_MAX_SAMPLES && !lab.game.field.collected);
     char marker[580];
     snprintf(marker, sizeof(marker), "%s.required", kit.journal_path);
@@ -1097,7 +1123,7 @@ int main(void) {
   assert(kit.dock.focus == 1);
   press(&kit, KIT_DOCK, SELECTED_UP_DOWN);
   assert(kit.dock.focus == 0);
-  /* Separate native sizes and true binary monochrome, including padded BMP
+  /* Separate native sizes and four-gray Dock output, including padded BMP
    * rows. */
   for (unsigned device = 0; device < 3; ++device) {
     FILE *frame = tmpfile();
@@ -1108,9 +1134,12 @@ int main(void) {
     if (device == KIT_DOCK) {
       rewind(frame);
       assert(fseek(frame, 54, SEEK_SET) == 0);
-      int value;
-      while ((value = fgetc(frame)) != EOF)
-        assert(value == 0 || value == 255);
+      for (unsigned pixel = 0; pixel < kit_width(device) * kit_height(device); ++pixel) {
+        int blue = fgetc(frame), green = fgetc(frame), red = fgetc(frame);
+        assert(blue >= 0 && blue == green && green == red);
+        assert(blue == 0 || blue == 85 || blue == 170 || blue == 255);
+      }
+      assert(fgetc(frame) == EOF);
     }
     fclose(frame);
   }

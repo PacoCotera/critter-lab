@@ -1,5 +1,9 @@
 # Native Companion Probe composition
 
+The current [timer-free collection proof](timer-free/README.md) supersedes the
+preparation behavior below. This page preserves its exact earlier checked
+revision; [current architecture coverage](../../../specs/architecture.md#current-migration-coverage-and-target-evidence) owns renderer status.
+
 Actual450×600 host-native LVGL output from clean pushed source
 `59870e53450156d94e590bbce7f276f40f623eec`. Existing physical controls drive the
 game; these are native frames, not browser UI cards. Cargo and Probe share one

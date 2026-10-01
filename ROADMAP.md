@@ -24,15 +24,49 @@ the first real detailed Companion Cargo screen with LVGL, shared layout/theme an
 guarded physical focus has passed its [native journey and output review](docs/evidence/native-ui-foundation/README.md).
 Owner permits complete re-layout. The active [Probe composition slice](https://github.com/PacoCotera/critter-lab/issues/58)
 uses a native32px player-following map, retained place actions, compact whole cargo
-and separate preparation. The [native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
+and a persistent whole-cargo strip. The [prior native Probe walkthrough](docs/evidence/native-companion-probe/README.md)
 records the changed composition and actual gather/trace/sample/return/current-zero
 path. Art is extracted from a Gemini master; environmental depth remains unapproved
-and entry composition is sparse. Companions still needs its own workpiece.
+and entry composition is sparse. The [Companions resident workpiece](docs/evidence/native-companion-resident-actions/README.md)
+now preserves saved art, properties and visits through list/visit/offline recovery,
+with independent native technical, interaction and craft passes. Further layout
+and broader HiBit craft remain open.
 Finite map events and their saved consequences remain subsequent
 work; acquisition/research still need depth. Automatic
 Lab analysis remains accepted; no guessed-answer puzzle is selected. Exact event
 values and visual treatment remain proposals. No new infrastructure, map service,
 provider, sensor/radio, canonical species, capture/training or ecology enters it.
+
+The next owner-feedback review is [issue60](https://github.com/PacoCotera/critter-lab/issues/60):
+[gathering/source decisions and movement](design/expedition-map-study/README.md#gathering-review-exploration-and-source-decisions).
+The joined proposal compares open-terrain prospecting with discrete survey sectors,
+and rejects a shortcut packet or repeated claims as a sufficient gathering overhaul.
+The owner subsequently rejected preparation during exploration. The revised
+recommendation removes the field clock: immediate finite collection by default,
+conditional source selection for real alternatives/capacity. Its first proof is
+one encounter with fresh versus near-full cargo, not an event catalogue. Studies
+remain immediate; existing incubation is the natural background process. The timer-free source candidate has passed a native quantity/ownership journey;
+actual choice, capacity-rejection and corrected result frames now pass focused game, UX and art review. It is not deployed or
+canonical reward balance. The selected Dock module's
+[four-level grayscale capability](specs/devices.md#caddy-e-paper-integration-recommendation)
+is confirmed. The [complete host Dock LVGL family](docs/evidence/native-dock-lvgl/README.md)
+now passes native/control and independent review; the [same-source ESP-IDF compile/link proof](docs/evidence/native-dock-lvgl/ESP32.md) also passes. Runtime panel output remains unvalidated.
+
+Owner requires LVGL for every page of the RPi4/Linux Lab, ESP32 Companion and
+ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current-migration-coverage-and-target-evidence)
+shows current manual-renderer debt and the old firmware-scaffold gap. Dock and
+every known Companion host family now use the portable display/host boundary;
+the shared Dock UI has an ESP-IDF compile proof. [The current shared Companion UI compile](docs/evidence/native-companion-esp/README.md)
+also passes at `fadee5d`. Lab Home and workspace previews now pass native
+route/control/lifetime and independent technical/craft review; see the
+[Home proof](docs/evidence/native-lab-home/README.md). Connected reception and
+received records also pass [native checks and review](docs/evidence/native-lab-reception/README.md).
+Sample research and Library now pass [native disclosure/control/lifetime and focused output review](docs/evidence/native-lab-research/README.md). Creation/review, incubation/reveal and resident/Habitat actions now pass [native authority, lifetime and focused output review](docs/evidence/native-lab-actions/README.md). Repeated navigation tutorials have been removed; [actual connected output](docs/evidence/navigation-copy/README.md) retains consequential state/cost/error copy. The rejected incubator artwork still needs actual replacement source.
+Standalone legacy acquisition callers require explicit disposition rather than a fifth graphics root or restoring console-only acquisition. Runtime memory/profile and
+physical adapters remain separate unresolved boundaries.
+Preserve game/save/physical-control behavior. Each slice has actual
+output and independent review; no host or scaffold success establishes firmware
+or physical readiness. No new engine or infrastructure is authorized.
 
 ## Delivered checkpoint: Polished Core V1
 
@@ -71,7 +105,8 @@ Algorithms own rules and evidence; rendering and generated text do not mutate th
 Use the [reviewed A/B example](design/research-and-creation.md#discovery-proposal--30-september-2026)
 as provisional V1 content: heritage4 Data, movement4 Energy, relevant comparison4
 Essence, creation5 of each. Required facts/disclosed support govern completion,
-not a click quota. Current gathering timing/chance remains provisional and retained;
+not a click quota. New field content uses immediate finite whole offers; legacy
+timed fields remain frozen and returnable. Offer counts are provisional balance;
 new descriptions or scenery never imply different yields. Existing records keep
 their pinned legacy content; new content cannot silently change a saved individual.
 

@@ -1,8 +1,10 @@
 # Native Beecho Lab V1
 
 The current [playable loop and limits](V1.md) are authoritative for this target.
-Native C17 owns the game, saved world, focus, input authorization and every
-1024×600 pixel. The browser transports fixed simulated hardware button events
+Native C17 owns the game, saved world, focus and input authorization. LVGL
+composes migrated device screens into native frames; remaining manual families
+are tracked in [architecture coverage](../../specs/architecture.md#current-migration-coverage-and-target-evidence).
+The browser transports fixed simulated hardware button events
 and displays native BMP frames. It does not implement the game or screen layout.
 
 ## Platform
@@ -11,7 +13,8 @@ The selected Lab reference is **Raspberry Pi4 Model B**, with the Waveshare 7inc
 HDMI LCD (H), 1024×600. The existing build is Linux **x86-64 host simulation** using
 GCC, CMake and Ninja. It is not an ESP32/ESP-IDF executable, Pi emulation or a
 verified ARM build. Physical HDMI/input integration, board boot and performance
-remain untested. ESP-IDF belongs to the separate Companion target.
+remain untested. Companion and Caddy target ESP32/ESP-IDF. The shared current Dock
+UI has a headless ESP-IDF compile proof; current Companion UI compilation remains open.
 
 Develop locally, commit and push, then fetch the exact clean revision through Git
 on the established VM. Never copy loose source to bypass version control.
@@ -53,12 +56,26 @@ are reused. Original references and extraction provenance remain retained in the
 [asset manifest](asset-manifest.json). Native rendering is editable C geometry,
 not a full-screen screenshot. Host scaling does not establish physical readability.
 
-Companion Cargo is the first [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
-It uses a retained widget tree, grid/flex layout, shared theme, source-exact native
-resource sprites and a Vera glyph adapter. Its context belongs to the host process;
-game/view state remains in the Kit. Probe, Companions, Lab and Dock retain their
-existing renderers. The focused `companion_cargo_ui_checks` gate covers this
-boundary alongside the domain, Kit and presenter checks.
+All known Companion screen families and the complete Dock family use the shared [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
+Retained widget trees, shared layout/theme, source-exact native resource sprites
+and a Vera glyph adapter belong to the host context; game/view state stays in the
+Kit. The [Companions preview](../../docs/evidence/native-companion-resident-preview/README.md)
+retains saved portrait/property/visits through offline inspection.
+[Resident-list/visit controls](../../docs/evidence/native-companion-resident-actions/README.md)
+use the same retained tree. Lab Home and workspace previews also use retained
+LVGL across standalone and connected frame routes; [native evidence](../../docs/evidence/native-lab-home/README.md)
+records changed controls, copied-state and lifetime checks. Connected reception
+and received expedition records now use a copied view and retained LVGL tree;
+[native proof](../../docs/evidence/native-lab-reception/README.md) covers acceptance,
+recovery, history disclosure and safe return. [Sample research and Library](../../docs/evidence/native-lab-research/README.md)
+now use copied presentation facts and retained LVGL across standalone, generic
+and persistent native routes. Focused `lab_research_ui_checks` preserve hidden
+knowledge, explicit costs, saved findings and shared-context lifetime. Creation/incubation
+and resident/habitat actions plus standalone legacy expedition gameplay retain
+manual renderers. Focused `lab_reception_ui_checks`, `companion_cargo_ui_checks`,
+`companion_probe_ui_checks` and `companion_resident_ui_checks` cover this boundary
+alongside domain, Kit and presenter checks. Dock's exported LVGL output uses four
+gray levels; no physical e-paper driver or refresh behavior is established.
 
 The headless Cargo path uses still focus in the live presenter. A controlled
 120ms LVGL focus-fade export exercises the animation API without changing game
@@ -109,9 +126,9 @@ acknowledgement after a time-only repaint and rejection after navigation.
 The mode selector previews Probe/Cargo/Companions immediately with clamped
 Left/Right. Down/Confirm enters actions, with a separate fresh Confirm required
 to invoke one. Back restores task callers before returning to the selector.
-Probe shows the generated local map, named sites, one active finite source and
-per-resource preparation separately from earned integer inventory. Directions
-steer; Confirm at a site opens deliberate gathering/investigation actions.
+Probe shows the generated local map, named sites, retained finite whole offers
+and always-visible carried integer inventory. Directions steer; Confirm takes
+a single offer immediately or opens a chooser when real alternatives exist.
 Trace discovery reveals a route; a sealed sample requires explicit collection.
 Cargo/Send use the same source resource sprites and
 whole counts; no item fractions or preparation appear in their manifest.
@@ -121,10 +138,11 @@ restores its previous navigation; world state remains current. Acceptance and
 receipt are distinct durable states. Send stops gathering; fresh acceptance
 unloads once and ends the source expedition, including an early return. Receipt
 closes the handoff, and the next outing starts a new route identity. An empty
-outing can Finish without sending a phantom haul. The shared domain retains preparation and
-chance outcomes across restart and transfer. Versioned recovery boundaries are
+outing can Finish without sending a phantom haul. Source remainders and earned
+units persist across restart. Legacy preparation/chance records remain frozen
+and returnable; loading never converts them into new rewards. Recovery boundaries are
 in [architecture](../../specs/architecture.md#three-device-host-simulator);
-provisional time/chance values belong in [V1](V1.md).
+provisional finite offers and capacity belong in [V1](V1.md).
 
 The [Gemini connected screen references](../../design/companion-connected-art/README.md)
 preserve the reviewed Probe/Cargo/reception compositions and production constraints.
