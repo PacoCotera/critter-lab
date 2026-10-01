@@ -151,7 +151,7 @@ static void form_preview(SelectedRow *row, unsigned asset, int x, int y) {
   unsigned source_row = (unsigned)relative_row * source->height / height;
   for (unsigned column = 0; column < width; ++column) {
     int destination = x + (int)column;
-    if (destination < 0 || destination >= SELECTED_LAB_WIDTH) continue;
+    if (destination < 0 || destination >= (int)SELECTED_LAB_WIDTH) continue;
     unsigned source_column = column * source->width / width;
     const uint8_t *rgba = source->rgba +
         (source_row * source->width + source_column) * 4;
