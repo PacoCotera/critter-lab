@@ -559,8 +559,8 @@ int main(void) {
   SelectedLab empty_header, full_header;
   selected_lab_init(&empty_header);
   /* This row API covers only the remaining legacy Lab action pages.
-   * Home's native-frame boundaries are checked in home_ui_tests.c. */
-  empty_header.page = V1_SAMPLES;
+   * Migrated Home/research boundaries have independent native-frame checks. */
+  empty_header.page = V1_CREATE;
   full_header = empty_header;
   full_header.game.data = full_header.game.energy = full_header.game.essence =
       1000000;

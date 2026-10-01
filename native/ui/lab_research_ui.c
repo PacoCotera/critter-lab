@@ -80,8 +80,8 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
         !label(ui->root, fonts->small, x+62, 39, 126, 24, CORE_ART_SECONDARY_RGB, names[index])) goto failure;
     ui->stock[index] = label(ui->root, fonts->status, x+62, 61, 126, 32, CORE_ART_INK_RGB, "");
     ui->units[index] = label(ui->root, fonts->small, x+62, 89, 126, 22, CORE_ART_SECONDARY_RGB, "");
-    ui->cost_art[index] = image(ui->root, images[4+index], 600, 308+(int)index*56);
-    ui->costs[index] = label(ui->root, fonts->body, 665, 319+(int)index*56, 284, 32, CORE_ART_INK_RGB, "");
+    ui->cost_art[index] = image(ui->root, images[4+index], 600, 332+(int)index*56);
+    ui->costs[index] = label(ui->root, fonts->body, 665, 343+(int)index*56, 284, 32, CORE_ART_INK_RGB, "");
     ui->counts[index] = label(ui->root, fonts->body, 588, 315+(int)index*42, 380, 34, CORE_ART_INK_RGB, "");
     if (!ui->stock[index] || !ui->units[index] || !ui->cost_art[index] || !ui->costs[index] || !ui->counts[index]) goto failure;
   }
@@ -96,7 +96,7 @@ LabResearchUi *lab_research_ui_create(lv_obj_t *parent, const LabHomeFonts *font
   ui->body = label(ui->root, fonts->small, 416, 282, 560, 54, CORE_ART_SECONDARY_RGB, "");
   ui->art = image(ui->root, images[1], 424, 315);
   ui->finding = label(ui->root, fonts->body, 610, 247, 356, 164, CORE_ART_INK_RGB, "");
-  ui->cost_title = label(ui->root, fonts->small, 665, 283, 290, 28, CORE_ART_SECONDARY_RGB, "Cost / Lab stock");
+  ui->cost_title = label(ui->root, fonts->small, 665, 307, 290, 28, CORE_ART_SECONDARY_RGB, "Cost / Lab stock");
   ui->partial = label(ui->root, fonts->small, 416, 400, 556, 28, CORE_ART_SECONDARY_RGB,
       "Pale variation known / appearance unresolved");
   for (unsigned index = 0; index < 2; ++index) {
@@ -210,10 +210,11 @@ int lab_research_ui_update(LabResearchUi *ui, const LabResearchView *view) {
   lv_obj_set_hidden(ui->body, pair || knowledge || collection);
   lv_obj_set_pos(ui->heading, collection || view->detail == LAB_RESEARCH_RECORDS ? 588 : 416, 245);
   lv_obj_set_width(ui->heading, collection || view->detail == LAB_RESEARCH_RECORDS ? 380 : 552);
-  lv_obj_set_pos(ui->body, view->detail == LAB_RESEARCH_PREPARATION ? 588 : 416,
-      view->detail == LAB_RESEARCH_PREPARATION ? 286 : discovery ? 226 : 284);
-  lv_obj_set_width(ui->body, view->detail == LAB_RESEARCH_PREPARATION ? 380 : 552);
-  lv_obj_set_height(ui->body, view->detail == LAB_RESEARCH_PREPARATION ? 130 : 54);
+  int right_body = view->detail == LAB_RESEARCH_PREPARATION || view->detail == LAB_RESEARCH_RECORDS;
+  lv_obj_set_pos(ui->body, right_body ? 588 : 416,
+      view->detail == LAB_RESEARCH_PREPARATION ? 286 : view->detail == LAB_RESEARCH_RECORDS ? 330 : discovery ? 226 : 284);
+  lv_obj_set_width(ui->body, right_body ? 380 : 552);
+  lv_obj_set_height(ui->body, right_body ? 106 : 54);
   const int art_slots[] = {-1, 10, 1, 13, 14, 15, 16, 17, -1};
   int slot = art_slots[view->art];
   lv_obj_set_hidden(ui->art, slot < 0);
