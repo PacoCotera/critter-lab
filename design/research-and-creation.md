@@ -74,56 +74,61 @@ and destructive tests are not introduced here.
 
 ### Next comparison trial
 
-**Provisional paper proposal; no new native mechanic or evidence approved.**
-The [joined discovery trial](probe-sampling.md#next-discovery-trial) needs a
-truthful mapping before illustration or code. Current `pip-discovery-v1` authors
-A/B findings and support relationships, but no raw assay traces, measured values
-or evidence-to-alignment rule. Matching a cursor, waveform or silhouette cannot
-justify a new finding. Sample identity marks are not a genomic map.
+**Reviewed provisional paper contract; no new native mechanic or visual approval.**
+The [generated route/event trial](expedition-map-study/README.md#generated-discovery-trial)
+connects to the same accepted sample record. Current `pip-discovery-v1` contains
+A/B findings and supported relationships, not measured assay traces or a hidden
+answer to align. The accepted Lab procedure performs analysis; the player chooses
+which useful question to pursue. A visible reveal explains its accepted result.
+There is no interpretation quiz, mandatory wait or added completion click.
 
-The smallest truthful alternative is an active **paired-reference comparison**
-of B's existing walking-effort relationship in the main workpiece. It explains
-an accepted finding; it does not establish a pre-finding inference minigame.
-Its enjoyment and fit with the owner's desired depth remain unvalidated.
+#### Primary workpiece: A, a pale possibility with unresolved expression
 
-| State | Visible content and physical input | Knowledge and spending |
+A useful starting clue exists only after an accepted `heritage` finding: **“Pale variation found. How it shows is still unknown.”** This is a retained finding, not a decorative vial mark interpreted as genetic evidence. The workpiece keeps the same neutral capsule/sample identity and origin, one compact retained-clue caption and one open question. Navigation contains choices; discoveries and shortages appear beside the workpiece.
+
+| Moment | Main workpiece and player choice | Exact disclosure / authority |
 | --- | --- | --- |
-| Before | After B's pattern and movement findings, show known plain/carried coat and steady/burst-capable movement badges. Walking-effort pairing remains unknown. Preview `Compare movement effort — 4 Essence`; Back returns. | Preview is free. No result-pair tags, complete founder portrait, genotype or invented traces. Price is the current provisional fixture. |
-| Start | A fresh Confirm submits the existing comparison on the retained sample/content version. | Current native investigation atomically records its finding and spends 4 Essence once; it has no paid unfinished puzzle session. Rejection spends nothing. |
-| Compare | Under `Same walking action · healthy/rested adult · firm ground · mild conditions`, Left/Right selects Steady or Burst-capable; Confirm pins that authored pair beside a baseline card. Up/Down emphasizes movement mode or walking effort. | Steady pairs with Lower walking effort; Burst-capable pairs with Baseline walking effort. Tags and connecting brackets illustrate qualitative fictional reference content, not measurements. Inspection is free and has no correct-answer gate. |
-| Retain | Back exits inspection. Reopen the same finding or choose the next useful investigation. | Preserve sample, finding and spend through retry/reload. Animation/focus cannot grant knowledge. Known and redundant investigations remain free. |
+| Before | Known clue: “Pale variation found.” Open question: **“How could it show?”** No coat swatch or split alternatives yet. Player can choose `Compare the coat` to pursue appearance, or `Trace movement` to pursue movement; preview shows4Essence or4Energy respectively. | Heritage has established baseline/crown/eye-ring references and partial pale variation. Expression, complete supported forms and movement remain unknown unless separately investigated. Nothing is drawn as absent, faintly expressed or locked. Preview/Back spend nothing. |
+| During / commit | Cost review preserves the clue and question. A fresh Confirm on displayed `Start · 4 Essence` lets the Lab perform the existing coat comparison. On accepted commit the central question becomes a labeled reference pair, revealed together. | Current domain atomically records the comparison and spends4Essence once. The visible reveal illustrates those newly accepted facts; it does not discover them by alignment, cursor location, player interpretation or animation. There is no paid unfinished puzzle or mandatory wait. Rejection shows the actual shortage/error beside the workpiece and changes no knowledge or stock. |
+| After | Heading: **“Coat possibilities · adult · mild reference”**. Two equal, cropped reference-coat panels: **“Plain coat · pale variation carried”** and **“Pale markings · expressed”**. Beneath them: **“Movement still unknown.”** Next useful choice: `Trace movement · 4 Energy`, or return/resupply if short. | This reveals the existing A0/A1 coat relationship only. They are supported reference alternatives from one sample, not two discovered individuals or two predicted finished portraits. Plain/carried has no faint pale markings. No full portrait, complete-genome selection or creation while movement remains unknown. |
 
-Exact comparison rule: keep walking action and context identical. B's steady
-alternative has lower reference walking energy than baseline; its burst-capable
-alternative equals baseline walking energy. Do not imply numeric savings, speed,
-burst cost, endurance, fatigue or universally superior movement. Never visually
-combine burst capability with lower walking effort into an unsupported third form.
-Use cropped symbolic panels and categorical tags, not distances, timed gait,
-numbered energy bars or full early portraits. Controls are directions, Confirm
-and Back; the removed knob and screen-click shortcuts stay out.
+Art contract: use a tight torso/coat crop from the retained plain and marked Pip reference masters, omitting eyes, crown, limbs and the whole-body silhouette. Both crops share one framing and context, with no separate specimen IDs. Carried variation is stated in text; it is not painted into the unmarked coat. If an actual source crop cannot avoid unrelated anatomy, use an explicitly labeled qualitative coat swatch preserving only the already-supported plain-versus-pale-marking distinction; do not manufacture a new marking design. Any swatch reconstruction is proposed illustration, not a measured specimen photograph. No microscope scene, spectrum, waveform, percentages, numeric trait bars or specimen movement performance is authorized by this contract.
 
-This records the one existing `effort-comparison` finding and movement/support
-references. If heritage was already known, the complete required reference set
-permits supported-form selection through the existing creation boundary. If this
-comparison runs early, baseline/heritage remain unknown; complete selection stays
-unavailable and a redundant movement purchase is unnecessary. An uncertain accepted
-operation is reconciled using the same request, never charged again. Back before
-Start is free; Back after Start retains the result rather than refunding it.
+Existing controls: Up/Down moves visible investigation/action focus, Confirm previews then fresh Confirm starts, Right may inspect known reference detail, Back/Left returns while retaining the sample and findings. Both revealed coat panels are visible together; no extra Confirm is required to reveal the second alternative. Inspection, revisits and retry after acceptance are free. Reconciliation uses the same accepted request; reopening never charges again. Dpad inspection changes emphasis/view only, never genes, facts or success probability.
 
-**A contrast:** both A alternatives are short-burst capable and movement-efficient,
-so this effort comparison would manufacture a distinction. A's useful existing
-follow-up instead resolves plain coat with pale variation carried versus pale
-markings. Only after coat-comparison acceptance may cropped reference swatches
-show those alternatives; the plain swatch has no faint pale markings. Running
-that comparison early leaves baseline and movement unresolved. Neither A nor B
-represents a hidden finished founder or a physically measured living specimen.
+If movement was already investigated, the after-frame replaces “Movement still unknown” with **“Supported forms ready to compare.”** Only the complete-knowledge view may expose full supported reference portraits and offer a reversible form draft. The final creation review remains separate and spends its actual sample/supplies only on explicit acceptance. If coat comparison ran first, baseline and movement both remain unknown. Show the established plain/carried versus pale/expressed relationship as text only: no charcoal/cream palette, torso/coat crop, body outline or complete portrait, because baseline coat/ventrum references remain unknown. Use neutral relationship connectors with no biological encoding; the arrangement does not assert a new gene map. Show those next questions. Once heritage establishes the baseline, free inspection can display the retained coat crops without another purchase. A heritage finding learned later must use its resolved copy rather than repeat “How it shows is still unknown.”
 
-An artist can illustrate three truthful frames: unknown B pairing, accepted
-paired workpiece, retained finding/next question. A manipulation that genuinely
-reveals previously unknown information still needs authored specimen evidence,
-an interpretation rule and a narrow disclosure contract. Those are missing
-content decisions, not details an artist may invent. Stop at this paper trial;
-do not promote explanatory inspection into an approved minigame.
+#### B contrast: capability does not tell us effort
+
+After B's accepted `movement`, the workpiece clue is **“Steady and burst-capable patterns found. Their energy relationship is unresolved.”** Open question: **“How do these patterns compare in walking effort?”** No lower/baseline tag is attached to either pattern before comparison. A mode badge is a qualitative known capability label, not an observed motion trace.
+
+Player chooses `Compare movement effort · 4 Essence`. Accepted commit reveals two linked text/badge pairs under **“Same walking action · healthy/rested adult · firm ground · mild conditions”**:
+
+- **Steady ↔ lower walking energy**.
+- **Burst-capable ↔ baseline walking energy**.
+
+These are categorical fictional reference facts, with no numeric savings, equal distances, timed walking, speed advantage, burst cost or fatigue claim. Keep each pair visibly connected; the display must not suggest combining burst capability and lower walking energy into a third supported form. No full early portraits. Unlike A, B has no pale-marking expression alternative to investigate; its supported adult coat is plain with pale variation carried.
+
+If B heritage is still unknown, after comparison the next specific question is **“What else does this sample carry?”** with `Read the pattern · 4 Data`. If heritage is known, complete forms are available. Comparison establishes everything the separate movement study would establish: a later `Trace movement` is inspectable freely, not a compulsory purchase. This makes B a genuinely different useful path, even though both records reuse the same workpiece structure.
+
+
+#### Knowledge and review boundary
+
+Use the exact existing findings and evidence masks in `native/shared/pip_genetics.c`.
+A needs heritage, movement and coat comparison in any order. B heritage plus effort
+comparison resolves all required facts; effort already resolves its movement study,
+so buying movement again is unnecessary. Complete required knowledge and disclosed
+supported forms still govern creation; changing the view grants nothing.
+
+Game/genomics authored this concrete before/during/after contract against the
+existing package. UX/art direction inspected the same corrected artifact and
+agreed the shared reference heading, early-comparison text-only boundary, costs,
+retention and physical controls. One bounded correction clarified adult/mild
+context and prevented a baseline-palette leak. This is content/interaction review,
+not a native screen, craft acceptance, human playtest or discovery minigame.
+Only two content profiles remain: this framing does not solve long-term repetition.
+Before production art, compose the actual known/unknown workpiece at native size
+with the retained Gemini-derived masters and inspect the full input journey.
 
 ### Genomic acceptance boundary
 
@@ -134,12 +139,13 @@ required facts and fully disclosed supported configurations; study count is not
 eligibility. Candidate-scoped Pp and pp are separate supported alternatives,
 not contradictory facts merged into one genome.
 
-The host engine supports these four configurations, a partial p projection with
-unresolved appearance, and the 17-entry manifest. It does **not** validate this
-proposed study/evidence mapping. Its current `researchCompleteness()` accepts
-fact statuses; an added evidence-to-fact/support check is necessary before those
-statuses can authorize game creation. Recognizing Pip or receiving a familiar
-reference cannot silently mark a new sample complete.
+The current native `pip-discovery-v1` package validates these four configurations,
+partial pale-variation knowledge and the17-reference manifest. Its accepted
+investigation ledger derives established references; only the full required set
+plus the supported comparison discloses complete candidates. The older host
+`researchCompleteness()` sketch is not the native creation authority. New paper
+illustrations cannot establish evidence or mark a sample complete; recognizing Pip
+or receiving a familiar reference grants no specimen knowledge.
 
 ### One review ledger and next proof
 
@@ -150,9 +156,10 @@ a later possible haul adds3/3/5; incubation costs5 of each plus A's material.
 27 items available equal27 spent. Research completeness and creation affordability
 are separate states; neither haul is guaranteed by a route label.
 
-Next bounded proof: a paper/control walkthrough of A and B, retained findings,
-shortage/resupply, an early applicable comparison, supported-form draft and
-explicit creation. Observe whether a person can explain the discovery, choose
+Next bounded proof: native-size composition and a control walkthrough of the
+changed A/B workpiece, retained findings, shortage/resupply and early comparison.
+Existing supported-form draft and explicit creation remain intact. Observe
+whether a person can explain the discovery, choose
 a useful next study, distinguish reference from sample, and describe carried
 versus expressed. Joy and progression are playtest hypotheses, not established
 by agent agreement. New art derives from the retained Gemini/C18 family and

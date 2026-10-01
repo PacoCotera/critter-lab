@@ -1,0 +1,28 @@
+{
+  "checked_seeds": 64,
+  "unique_geometry_results": 64,
+  "exported": [
+    17,
+    29
+  ],
+  "limitation": "disposable design generator; not native runtime or fun evidence",
+  "generator_sha256": "7808143a0038c41e54672aeb3f7a903308ae6f334962c7840f12cfa16bd8b52c",
+  "evidence_kind": "Generated geometry and paper interaction; not native gameplay, art approval or fun evidence",
+  "checks": [
+    "Essential-site tile reachability",
+    "Concealed ordinary cache reachable after trace",
+    "Finite grid bounds",
+    "Optional event connector reachable",
+    "Pinned exports reproduce byte-for-byte",
+    "Changed Markdown local links resolve"
+  ],
+  "artifacts": {
+    "route-17.json": "209919a30f2bde1be2383ffd74901d60326c3e4727a25e4c1b61f1d03e744486",
+    "route-17.png": "2f6862cb7563a536daf1dff5df1607528a26593ea75cfd42062ec950fe78b127",
+    "route-17.svg": "eb69faed9673aaae38bd3af4fbb85958d91d6ce100f846ea9162627fefeb84ae",
+    "route-29.json": "56e0d73734e3ffc3cc5928231e67be3fb846ca0fbf7d33d4082dda82ea86483c",
+    "route-29.png": "8d44fa6ed861c039aab030f7018848c387ec70651b9cfe29dcc44d8aa1e18d11",
+    "route-29.svg": "803102054be677a3c452f5ec8970746738c7c9c5d43407162ba468d037cd5a00"
+  },
+  "review": "Game/genomics and UX/art reviewed corrected content and generated examples; prototype source inspected independently. One correction addressed weak event value and disclosure context."
+}

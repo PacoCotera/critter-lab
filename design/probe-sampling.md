@@ -644,3 +644,11 @@ composition proof. Inspect one connected journey, then a player can choose its
 path without a button/route script. Stop after this bounded trial; do not expand
 into a collection of minigames. Current corrective work is separate: frame/inset,
 Home-first controls, readable token/feedback and inventory/receipt projection.
+
+
+The first [generated geometry/event trial](expedition-map-study/README.md#generated-discovery-trial)
+now contains two resolved maps and one finite event worked contract. Its prototype
+is separate from native gameplay. [Concrete sample workpiece](research-and-creation.md#next-comparison-trial)
+preserves automatic Lab analysis: agency lies in choosing a useful question,
+not interpreting invented traces or solving a hidden-answer alignment puzzle.
+Native-size art/interaction and a playable integrated trial remain the next gate.

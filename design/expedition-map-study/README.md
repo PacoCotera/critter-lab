@@ -129,3 +129,87 @@ One unchanged regeneration comparison is recorded in `validation.json`. This
 does not claim owner acceptance, playable fun, selected yields or complete
 procedural-map/runtime behavior. Owner steering is required before dependent
 mechanics are implemented.
+
+
+## Generated discovery trial
+
+**Executable geometry spike and reviewed paper interaction, not native gameplay.**
+The live version still has two authored maps and no interactive field event.
+The owner requested real variation and active discovery; these examples answer
+whether a small seeded generator can produce connected choices, then connect one
+finite event to the existing neutral-capsule/retained-research loop. They do not
+select final balance, terrain art, a new species or a research minigame.
+
+### Two actually generated routes
+
+Run [generate_routes.py](generate_routes.py) using Python and the installed Pillow
+runtime. It constructs tile geometry from seeded role positions and a shuffled
+connected tree with an optional edge; it does not select stored map templates.
+Overlapping corridors can create additional connections, so construction edges
+are not advertised as the actual site-adjacency graph. Tile BFS checks reachability.
+The two resolved JSONs are inspectable save candidates; the game does not yet load
+or save this generator. A future native content version must preserve old geometry
+and persist each new resolved route without rerolling after restart.
+
+| Example | Resolved geometry | Event route value from its location |
+| --- | --- | --- |
+| [Seed17 diagram](generated-trial/route-17.png) / [JSON](generated-trial/route-17.json) | Different Camp/role coordinates and corridors | Ordinary visit to Moss then cache:19steps; event connector:11steps. |
+| [Seed29 diagram](generated-trial/route-29.png) / [JSON](generated-trial/route-29.json) | Different geometry, connections and source position | Ordinary visit to Moss then cache:12steps; event connector:8steps. |
+
+![Generated seed17 topology](generated-trial/route-17.png)
+![Generated seed29 topology](generated-trial/route-29.png)
+
+Blue tiles are initially traversable. Green is revealed by the ordinary Moss
+trace; orange by the optional event. **Hidden paths and cache are displayed here
+only for reviewer comparison.** The actual initial player view must conceal them.
+Camp0 is the current/start position, not a final player sprite. Movement awards
+nothing. Diagram colors, numbered squares and grid spacing are explanatory, not
+new game-art direction or native-screen proof.
+
+The first seed29 event location offered equal-length travel alternatives. That
+was weak route value. The corrected experiment places a trail event only where
+it bypasses at least4legal steps through the ordinary Moss investigation stop;
+otherwise it omits that optional event. This eligibility threshold is proposed,
+not final balance. The ordinary lead and sample never depend on an event.
+
+### One finite event: the abandoned field packet
+
+| Player choice | Preview and immediate consequence | Retention / safe exit |
+| --- | --- | --- |
+| Recover supplies | **Recover3Energy**; the preview names3whole items, not chances or fractional preparation. Accepted choice puts those items in current Companion cargo. | Require3free cargo slots. If full, disable this choice without consuming the event or discarding cargo. |
+| Read the trail | **Read the trail**; preview says it reveals a path to a sealed cache. Acceptance immediately reveals the actual connector and cache location. It gives no item or sample contents. | Walking the connector and freshly inspecting/collecting the neutral capsule remain separate deliberate actions. |
+| Leave for now | Back returns to the same tile. No chosen result. | Event remains available. Choosing supplies leaves the ordinary Moss lead intact. If the route is already known, omit the redundant trail choice; Recover/Back remain useful. |
+
+One accepted choice consumes the packet opportunity once. Revisit/reload cannot
+repeat it or reroll the outcome. Resolve resource capacity and chosen consequence
+atomically; rejected input changes nothing. Proposed saved event state names its
+position, unresolved/chosen result and content version alongside the resolved map.
+This contract is **not implemented by the generator**.3Energy and4steps are
+illustrative values, not a new economy or promise that one packet funds research.
+No mandatory risk, timers, radio/sensing claims or event service is introduced.
+
+### Connected player walkthrough
+
+| Moment | Player intention / physical controls | Visible response / durable consequence |
+| --- | --- | --- |
+| Generated outing | Choose an outing on Companion; directions move legal visible tiles, fresh Confirm inspects a reached site. | Camp and essential sources reachable; no start/movement award. Source preparation can continue as secondary activity. |
+| Event decision | Inspect packet, Up/Down chooses Recover supplies or Read the trail; fresh Confirm commits, Back leaves. | Exact useful bundle or immediate new path; one saved choice. No hidden mandatory event. |
+| Neutral sample | Follow either ordinary or event lead, inspect reached cache, freshly Confirm Collect. | One stable sealed capsule and provenance. No A/B trait or founder portrait disclosed in the field. |
+| Accepted return | Cargo review defaults to keep; explicitly Send, then Lab Accept. | Credit once; current Companion supplies/capsule become zero, delivery record retained. Lab and Dock project accepted records, not live away state. |
+| Sample question | On Lab, inspect a retained clue and preview the useful study/cost. | [Concrete A/B workpiece](../research-and-creation.md#next-comparison-trial): A pale-expression question differs from B walking-effort pairing. Lab handles procedure; no interpretation quiz. |
+| Discovery retained | Fresh Start commits existing study; then freely inspect its relationship and choose the next useful question or resupply. | Same sample and paid finding survive Back/reload/trips. Complete facts permit supported-form comparison and separate deliberate creation. |
+
+### Inspection and boundary
+
+One generation pass plus one regeneration check produced identical JSON/SVG/PNG
+outputs for both pinned seeds. A bounded64seed sweep asserted64distinct geometry
+results, connected essential sites, reachable ordinary sample route, bounded cells
+and a valid event connector where offered. This establishes topology viability,
+not pacing, fun, content diversity or native compatibility. The review identified
+and corrected the equal-length event case; game/genomics and UX/art directly
+resolved the sample-reference disclosure boundary in the linked contract.
+
+The next proof must be native-size composition/physical controls and a playable
+slice using versioned saved geometry and truthful event state. Existing Gemini/C18
+masters remain visual authority. The diagrams are not a replacement for the
+pixel artist. No running V1 or deployment was changed by this trial.
