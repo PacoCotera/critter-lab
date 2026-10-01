@@ -107,8 +107,10 @@ travel and safe transfer; this is a design target, not a measured result.
 ### Smallest acceptance gate
 
 Build a reversible timer-free physical-control proof, labelled provisional:
-two resolved seed situations, simple pickup and one meaningful near-full choice,
-one observation that changes the next destination and explicit neutral collection.
+one retained encounter in fresh and legitimately near-full cargo states,
+comparing simple pickup with conditional selection. Include capacity rejection,
+Back and restart without redraw. The wider two-seed discovery outing remains a
+later connected proof, not a dependency for testing this preparation decision.
 Record attempted/applied arrows and input-to-paint using the existing hook; inspect
 release, blocked ground, changed context, capacity rejection and cancelled return.
 Actual exports must be reviewed at 1× against Gemini/C18 before a quality claim.
