@@ -97,11 +97,11 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
     ui->readouts[i][0] = text(ui->root, fonts->small, tx, ty, 180, 24, CORE_ART_SECONDARY_RGB, "");
     ui->readouts[i][1] = text(ui->root, fonts->status, tx, ty+32, 180, 34, CORE_ART_INK_RGB, "");
     ui->readouts[i][2] = text(ui->root, fonts->small, tx, ty+69, 180, 40, CORE_ART_SECONDARY_RGB, "");
-    ui->readouts[i][3] = text(ui->root, fonts->small, tx, ty+107, 180, 40, CORE_ART_SECONDARY_RGB, "");
+    ui->readouts[i][3] = text(ui->root, fonts->small, tx, ty+(i<2 ? 107 : 115), 180, 40, CORE_ART_SECONDARY_RGB, "");
     if (!ui->overview_art[i]) goto failure;
     for (unsigned j=0;j<4;++j) if (!ui->readouts[i][j]) goto failure;
   }
-  ui->divider = surface(ui->root, 276, 367, 696, 1, 0x386484);
+  ui->divider = surface(ui->root, 276, 373, 696, 1, 0x386484);
   ui->landing_art = image(ui->root, images[0], 326, 247);
   ui->pending = text(ui->root, fonts->body, 312, 330, 261, 64, CORE_ART_SECONDARY_RGB, "Portrait pending");
   ui->heading = text(ui->root, fonts->heading, 320, 218, 638, 82, CORE_ART_INK_RGB, "");
