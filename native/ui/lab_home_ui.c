@@ -11,7 +11,7 @@ struct LabHomeUi {
   lv_obj_t *overview_art[4], *readouts[4][4];
   lv_obj_t *landing_art, *pending, *heading, *body, *detail[2], *strip, *progress, *progress_fill;
   lv_obj_t *resource_art[3], *resource_name[3], *resource_amount[3];
-  lv_obj_t *footer, *warning, *divider;
+  lv_obj_t *footer, *warning, *divider, *workpiece_fill;
   NativeUiFrame header, rail, workpiece, focus;
   LabHomeView view;
   LabHomeFonts fonts;
@@ -67,8 +67,9 @@ LabHomeUi *lab_home_ui_create(lv_obj_t *parent, const LabHomeFonts *fonts,
   lv_obj_set_pos(ui->header.object, 24, 24);
   lv_obj_set_pos(ui->rail.object, 24, 140);
   lv_obj_set_pos(ui->workpiece.object, 248, 140);
-  if (!surface(ui->root, 37, 37, 950, 75, CORE_ART_FIELD_RGB) ||
-      !surface(ui->root, 264, 156, 720, 384, 0x2a3338)) goto failure;
+  if (!surface(ui->root, 37, 37, 950, 75, CORE_ART_FIELD_RGB)) goto failure;
+  ui->workpiece_fill = surface(ui->root, 264, 156, 720, 384, 0x2a3338);
+  if (!ui->workpiece_fill) goto failure;
   if (!text(ui->root, fonts->title, 46, 35, 330, 42, CORE_ART_INK_RGB, "BEECHO LAB") ||
       !text(ui->root, fonts->small, 47, 83, 330, 24, CORE_ART_SECONDARY_RGB, "LAB STOCK")) goto failure;
   const char *names[] = {"DATA", "ENERGY", "ESSENCE"};
@@ -168,6 +169,7 @@ int lab_home_ui_update(LabHomeUi *ui, const LabHomeView *view) {
   lv_obj_set_hidden(ui->root, false);
   view = &ui->view;
   int population = view->focus == 4;
+  lv_obj_set_height(ui->workpiece_fill, population ? 396 : 384);
   lv_obj_set_pos(ui->header.object, 24, population ? 16 : 24);
   lv_obj_set_pos(ui->workpiece.object, 248, population ? 124 : 140);
   native_ui_frame_size(&ui->workpiece, 752, population ? 432 : 416);
