@@ -633,6 +633,7 @@ void selected_lab_row_with_context(const SelectedLab *lab,
       "Overview - Incubator", "Overview - Habitat"};
   SelectedResearchMethod current_method;
   int finding_page = lab->page == V1_FINDING || lab->page == V1_LIBRARY_FINDING;
+  int form_finding = 0;
   const char *page_title = finding_page &&
       selected_lab_research_method(lab, lab->sample, lab->study, &current_method)
           ? current_method.title : titles[lab->page];
@@ -778,25 +779,24 @@ void selected_lab_row_with_context(const SelectedLab *lab,
           wrapped_label(&row, 578, 293, entry.finding ? entry.finding : "No finding disclosed.", 22, INK, 374);
           research_summary(&row, lab, lab->sample, 416, 449, 535);
         } else {
-          label(&row, 53, 217, "RECORDED FINDING", 18, SAGE);
           if (illustrated_forms) {
+            form_finding = 1;
             /* Complete supported alternatives, never an early founder reveal. */
-            label(&row, 405, 217, "Plain coat / pale carried", 18, INK);
-            label(&row, 699, 217, "Pale markings / expressed", 18, INK);
+            label(&row, 416, 219, "Complete reference / no unresolved knowledge", 18, SAGE);
+            label(&row, 416, 247, "Plain coat / pale carried", 18, INK);
+            label(&row, 700, 247, "Pale markings / expressed", 18, INK);
             sprite(&row, SELECTED_SPRITE_COUNT + carried.expression.pale_markings,
-                   405, 239, 261, 289);
+                   456, 274, 181, 200);
             sprite(&row, SELECTED_SPRITE_COUNT + marked.expression.pale_markings,
-                   699, 239, 261, 289);
-            wrapped_label(&row, 53, 246, "Known: complete supported form", 18, SAGE, 273);
-            wrapped_label(&row, 53, 311, "No unresolved reference knowledge.", 18, MUTED, 273);
-            wrapped_label(&row, 53, 375,
-                          game->samples[lab->sample].incubated
-                              ? "Sample used / research record stays."
-                              : "Choose a supported form.",
-                          18, INK, 273);
-            wrapped_label(&row, 53, 425,
+                   740, 274, 181, 200);
+            wrapped_label(&row, 416, 482,
                           entry.finding ? entry.finding : "No finding disclosed.",
-                          22, INK, 273);
+                          18, INK, 552);
+            label(&row, 416, 510,
+                  game->samples[lab->sample].incubated
+                      ? "Sample used / research record stays."
+                      : "Choose a supported form.",
+                  16, MUTED);
           } else {
             CoreArtId context = (!strcmp(entry.id, "movement") ||
                                  !strcmp(entry.id, "movement.drive")) ? CORE_ART_RESEARCH_MOVEMENT
@@ -944,10 +944,16 @@ void selected_lab_row_with_context(const SelectedLab *lab,
     label(&row, 30, 572, footer, 18, MUTED);
   } else {
     if (lab->message[0]) {
-      /* Feedback owns a bounded workpiece band; controls remain stable. */
-      rectangle(&row, 416, 480, 560, 49, ART_FIELD);
-      wrapped_label(&row, 416, 486, lab->message, 18,
-                    lab->storage_error ? WARM : INK, 552);
+      /* Feedback stays in the workpiece without hiding a saved form finding. */
+      if (form_finding) {
+        rectangle(&row, 416, 508, 560, 23, ART_FIELD);
+        label(&row, 416, 510, lab->message, 16,
+              lab->storage_error ? WARM : INK);
+      } else {
+        rectangle(&row, 416, 480, 560, 49, ART_FIELD);
+        wrapped_label(&row, 416, 486, lab->message, 18,
+                      lab->storage_error ? WARM : INK, 552);
+      }
     }
     label(&row, 30, 557,
           "Up/down: focus | Right: inspect | Confirm: act | Back: return",
