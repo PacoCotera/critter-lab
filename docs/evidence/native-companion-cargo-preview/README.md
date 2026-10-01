@@ -25,7 +25,7 @@ credited two Data once and cleared current Companion cargo. Accepted previews
 showed the delivery record separately from empty current ownership.
 
 The validation trace contains162 semantic commands and17 native captures.
-The selected450×600 frames are exported from LVGL/native buffers; the browser
+The selected450Ã—600 frames are exported from LVGL/native buffers; the browser
 does not compose them. [frames.json](frames.json) records exact source and hashes.
 
 | Preview or transition | Player-visible result |
@@ -61,6 +61,6 @@ updates. Repeated preview/action transitions restore the exact prior Cargo frame
 including remembered row1 focus geometry. Two host contexts used189448 bytes of
 232200 pooled LVGL bytes; this is not an ESP32 fit measurement.
 
-Companions preview/residents/visits, current Companion ESP-IDF compilation and all
+Companion resident/visit routes, current Companion ESP-IDF compilation and all
 Lab routes remain open. Environmental HiBit craft, human enjoyment, radio, panel
 refresh and physical performance are separate gates. See [architecture coverage](../../../specs/architecture.md#current-migration-coverage-and-target-evidence).

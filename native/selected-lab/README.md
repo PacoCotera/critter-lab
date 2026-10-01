@@ -56,12 +56,14 @@ are reused. Original references and extraction provenance remain retained in the
 [asset manifest](asset-manifest.json). Native rendering is editable C geometry,
 not a full-screen screenshot. Host scaling does not establish physical readability.
 
-Companion Probe, Cargo and its mode preview, Send/Keep, Discard/Finish and the
+Companion Probe, Cargo, all three mode previews, Send/Keep, Discard/Finish and the
 complete Dock family use the shared [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
 Retained widget trees, shared layout/theme, source-exact native resource sprites
 and a Vera glyph adapter belong to the host context; game/view state stays in the
-Kit. Companions preview/residents/visits and Lab retain their manual renderers. Focused
-`companion_cargo_ui_checks` and `companion_probe_ui_checks` cover this boundary
+Kit. The [Companions preview](../../docs/evidence/native-companion-resident-preview/README.md)
+retains saved portrait/property/visits through offline inspection. Resident-list/visit
+routes and Lab retain manual renderers. Focused `companion_cargo_ui_checks`,
+`companion_probe_ui_checks` and `companion_resident_preview_checks` cover this boundary
 alongside domain, Kit and presenter checks. Dock's exported LVGL output uses four
 gray levels; no physical e-paper driver or refresh behavior is established.
 

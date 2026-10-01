@@ -31,14 +31,15 @@ and the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
 The [native UI foundation](specs/architecture.md#native-ui-foundation) uses LVGL 9.6.0
-for real Companion Cargo and its mode preview, Send/Keep, Discard/Finish and Probe. Shared layout, theme, image/font adapters and
+for real Companion Probe, Cargo, all three mode previews, Send/Keep and Discard/Finish. Shared layout, theme, image/font adapters and
 physical focus replace manual screen drawing in those workpieces. The
 [Cargo proof](docs/evidence/native-ui-foundation/README.md) and
 [Probe proof](docs/evidence/native-companion-probe/README.md) record actual
 handoff, source-exact material pixels and output review. All device screens must
 use this framework. The [complete Dock LVGL family and portable display boundary](docs/evidence/native-dock-lvgl/README.md)
-passed native output and independent review; Lab and remaining Companion families still need
-migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
+passed native output and independent review. The [Companions preview proof](docs/evidence/native-companion-resident-preview/README.md)
+shows retained saved portraits/properties and offline inspection without a visit.
+Lab and Companion resident/visit families still need migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
 now links under ESP-IDF; the old Companion scaffold still has no current UI. Final HiBit
 artwork and human playability remain open.
 The [Send/Keep proof](docs/evidence/native-companion-send/README.md) records the

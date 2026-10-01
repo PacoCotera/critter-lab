@@ -76,9 +76,10 @@ ID and projects existing saved art/form guards, visits and cache freshness.
 It never selects a resident or saves a visit. Its root and native portrait
 backings are created lazily on the existing display and hidden on Probe/Cargo
 updates; they are destroyed before assets and display. Empty, offline, missing
-portrait and storage-recovery states use the same LVGL tree. Native validation
-and independent output review are pending for this addition.
+portrait and storage-recovery states use the same LVGL tree. [Actual native output, controls
+and independent review](../../docs/evidence/native-companion-resident-preview/README.md)
+cover this preview only, with current Companion ESP compilation still required.
 
 Lab and the remaining Companion resident/visit routes remain open
-renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish projection returns a
+renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish/mode-preview projection returns a
 render error; it cannot silently reach the old manual renderer.
