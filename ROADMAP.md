@@ -57,7 +57,10 @@ ESP32 Caddy. The [complete route/target inventory](specs/architecture.md#current
 shows current manual-renderer debt and the old firmware-scaffold gap. Dock and
 every known Companion host family now use the portable display/host boundary;
 the shared Dock UI has an ESP-IDF compile proof. [The current shared Companion UI compile](docs/evidence/native-companion-esp/README.md)
-also passes at `fadee5d`; next convert every Lab family. Runtime memory/profile and
+also passes at `fadee5d`. Lab Home and workspace previews now pass native
+route/control/lifetime and independent technical/craft review; see the
+[Home proof](docs/evidence/native-lab-home/README.md). Next convert the remaining
+Lab action families, beginning with reception and received logs. Runtime memory/profile and
 physical adapters remain separate unresolved boundaries.
 Preserve game/save/physical-control behavior. Each slice has actual
 output and independent review; no host or scaffold success establishes firmware

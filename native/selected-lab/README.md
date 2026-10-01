@@ -62,7 +62,10 @@ and a Vera glyph adapter belong to the host context; game/view state stays in th
 Kit. The [Companions preview](../../docs/evidence/native-companion-resident-preview/README.md)
 retains saved portrait/property/visits through offline inspection.
 [Resident-list/visit controls](../../docs/evidence/native-companion-resident-actions/README.md)
-use the same retained tree. Only Lab retains manual screen renderers. Focused `companion_cargo_ui_checks`,
+use the same retained tree. Lab Home and workspace previews also use retained
+LVGL across standalone and connected frame routes; [native evidence](../../docs/evidence/native-lab-home/README.md)
+records changed controls, copied-state and lifetime checks. Remaining Lab action
+pages retain manual renderers. Focused `companion_cargo_ui_checks`,
 `companion_probe_ui_checks` and `companion_resident_ui_checks` cover this boundary
 alongside domain, Kit and presenter checks. Dock's exported LVGL output uses four
 gray levels; no physical e-paper driver or refresh behavior is established.

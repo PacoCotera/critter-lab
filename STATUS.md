@@ -16,7 +16,10 @@ track the remaining playability and craft gaps.
   inspected. A misleading unread-clue caption is corrected without new rules.
 - **Architecture — correction active:** Lab targets Raspberry Pi4/Linux;
   Companion and Caddy target ESP32. Dock and all known Companion screen families use LVGL on the host.
-  Every Lab family still needs conversion. [Current shared Companion ESP UI](docs/evidence/native-companion-esp/README.md)
+  Lab Home and workspace previews now use retained LVGL; remaining Lab action
+  families still need conversion. [Home native evidence](docs/evidence/native-lab-home/README.md)
+  records exact source, three passed suites, actual CLI frames and independent
+  technical/craft review. [Current shared Companion ESP UI](docs/evidence/native-companion-esp/README.md)
   now compiles/links at `fadee5d` with independent source/artifact review and CI run 191.
   Runtime art-memory demand and physical geometry remain unresolved. The same shared Dock UI now compiles/links under installed ESP-IDF in a
   [headless partial-flush target](docs/evidence/native-dock-lvgl/ESP32.md). [Architecture](specs/architecture.md#native-ui-foundation)
@@ -81,7 +84,7 @@ environmental craft and passive/repetitive play as final quality. The
 
 ## Remaining product proof
 
-Finish every Lab LVGL family. Current shared Dock and Companion UI compile/link
+Finish the remaining Lab action families. Current shared Dock and Companion UI compile/link
 proofs pass under ESP-IDF; runtime memory and physical adapters remain open. Then improve exploration variety,
 discovery depth, sample variability and research engagement with actual control
 journeys and human playtests. HiBit environment/creature craft, Companions layout
