@@ -2,8 +2,8 @@
 
 The current [playable loop and limits](V1.md) are authoritative for this target.
 Native C17 owns the game, saved world, focus and input authorization. LVGL
-composes migrated device screens into native frames; remaining manual families
-are tracked in [architecture coverage](../../specs/architecture.md#current-migration-coverage-and-target-evidence).
+composes every supported device screen into native frames; family and target
+coverage are tracked in [architecture coverage](../../specs/architecture.md#current-migration-coverage-and-target-evidence).
 The browser transports fixed simulated hardware button events
 and displays native BMP frames. It does not implement the game or screen layout.
 
@@ -14,7 +14,8 @@ HDMI LCD (H), 1024×600. The existing build is Linux **x86-64 host simulation** 
 GCC, CMake and Ninja. It is not an ESP32/ESP-IDF executable, Pi emulation or a
 verified ARM build. Physical HDMI/input integration, board boot and performance
 remain untested. Companion and Caddy target ESP32/ESP-IDF. The shared current Dock
-UI has a headless ESP-IDF compile proof; current Companion UI compilation remains open.
+and Companion UI have [headless ESP-IDF compile proofs](../../docs/evidence/native-companion-esp/README.md).
+These are compile results, not physical runtime, input, display or memory evidence.
 
 Develop locally, commit and push, then fetch the exact clean revision through Git
 on the established VM. Never copy loose source to bypass version control.
@@ -50,11 +51,13 @@ and JavaScript do not decide focus, destinations or gameplay consequences.
 
 ## Artwork and rendering
 
-`render.c` emits RGB888 scanlines and 24-bit BMP frames. Existing licensed font
-sources, extracted Gemini UI assets and [Pip artwork](../../design/v1-pip/manifest.json)
+`render.c` dispatches supported standalone Lab pages to retained LVGL trees and
+serializes their RGB888 frames as 24-bit BMP. `kit_render.c` does the same for
+connected device families; neither has a manual drawing fallback. Existing licensed
+font sources, extracted Gemini UI assets and [Pip artwork](../../design/v1-pip/manifest.json)
 are reused. Original references and extraction provenance remain retained in the
-[asset manifest](asset-manifest.json). Native rendering is editable C geometry,
-not a full-screen screenshot. Host scaling does not establish physical readability.
+[asset manifest](asset-manifest.json). Native rendering uses retained widgets,
+copied presentation facts and source art. It is not a full-screen screenshot. Host scaling does not establish physical readability.
 
 All known Companion screen families and the complete Dock family use the shared [LVGL UI integration](../../specs/architecture.md#native-ui-foundation).
 Retained widget trees, shared layout/theme, source-exact native resource sprites
@@ -70,9 +73,12 @@ and received expedition records now use a copied view and retained LVGL tree;
 recovery, history disclosure and safe return. [Sample research and Library](../../docs/evidence/native-lab-research/README.md)
 now use copied presentation facts and retained LVGL across standalone, generic
 and persistent native routes. Focused `lab_research_ui_checks` preserve hidden
-knowledge, explicit costs, saved findings and shared-context lifetime. Creation/incubation
-and resident/habitat actions plus standalone legacy expedition gameplay retain
-manual renderers. Focused `lab_reception_ui_checks`, `companion_cargo_ui_checks`,
+knowledge, explicit costs, saved findings and shared-context lifetime.
+[Creation, incubation, reveal, Habitat and residents](../../docs/evidence/native-lab-actions/README.md)
+share a fourth retained Lab tree, exact candidate/draft authority and saved original
+portrait provenance. Standalone legacy acquisition graphics are retired; its command
+and domain fixture remains available as described below. Focused `lab_action_ui_checks`,
+`lab_reception_ui_checks`, `companion_cargo_ui_checks`,
 `companion_probe_ui_checks` and `companion_resident_ui_checks` cover this boundary
 alongside domain, Kit and presenter checks. Dock's exported LVGL output uses four
 gray levels; no physical e-paper driver or refresh behavior is established.
@@ -92,8 +98,17 @@ Lab executable. The production path is the one exercised by HTTP tests and CI.
 1 Companion and2 Dock. `device ID status`, `device ID frame REVISION` and
 `device ID INPUT REVISION` address distinct native contexts. Companion/Dock
 `device ID link 0|1` is a simulation fault control, not a hardware action.
-Legacy `serve` remains the single-device regression fixture; its old mutation
-commands are unavailable in kit mode. Health/release routes remain compatible.
+Legacy `serve` remains the single-device domain/input/save regression fixture;
+its old mutation commands are unavailable in kit mode. Its EXPEDITION, CARGO and
+DISCARD_REVIEW pages have no supported graphics. At a current revision, `frame`
+returns `{"error":"Unsupported frame page"}` without a byte count or BMP data,
+and the process continues to accept status and physical-input commands. Stale
+frame requests retain their existing error precedence. Home, research/Library and
+Lab action pages remain supported LVGL frames. The Python journey captures the
+same Samples stock header before and after legacy offload while retaining its
+quantity, timer, control and restart checks. Connected Kit EXPEDITION/CARGO are
+supported Lab reception/received-record routes, not standalone acquisition UI.
+Health/release routes remain compatible.
 
 The presenter negotiates lossless gzip for native BMP responses and keeps raw BMP
 available. HTTP/1.1 connections are reused; compression and response transfer run

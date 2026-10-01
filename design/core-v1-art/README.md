@@ -113,21 +113,26 @@ identity/hash and optical center only; it computes no game data/view state.
 Nine reviewed material candidates, two exact retained Pip originals, seven
 deliberately authored monochrome categories and the separately reviewed Gemini
 setting derivative enter native tables. Monochrome categories remain provisional
-for actual Dock inspection. Other unreviewed artwork stays out. `core_art_row` composites straight
-RGBA at the exact source footprint; no corner-matte search or resampling occurs.
+for actual Dock inspection. Other unreviewed artwork stays out. Retained LVGL
+image adapters consume the exact native RGBA descriptors; no corner-matte search
+or resampling occurs. The unused scanline composition helpers are retired.
 
-Current composition source in `render.c` and `kit_render.c` uses C18 compact
-resources for header/counts and07 primary resources for Cargo/reception. The
+Current retained UI trees use C18 compact resources for header/counts and07
+primary resources for Cargo/reception. `render.c` and `kit_render.c` dispatch copied
+views to these trees and serialize native frames; they do not compose graphics. The
 reception comparison keeps incoming supplies apart from accepted stock, with
 one central console focus. Home gets optional Kit presentation context without
 changing expedition or stock authority. Stored/ended Cargo removes the active
 meter. Dock categories project only cached counts, beside persistent timestamp
 and a separate result. Existing saved Pip originals remain the shared identity;
-the retained136×144 incubator apparatus projects process without a hidden founder.
+the provisional retained136×144 incubator apparatus projects process without a
+hidden founder. Its appearance remains under owner review.
 
-The shared shoulder/bevel and dark amber inset primitives are authored in
-`source/native-composition.c` and appended by the converter. Existing heading
-atlases provide the explicit title/quantity hierarchy. Live findings and previews
+The former shoulder/bevel and dark amber scanline primitives in
+`source/native-composition.c` remain as authored historical source/reference.
+The converter no longer appends them and production does not compile them.
+Retained LVGL trees, theme and font adapters own current composition and
+title/quantity hierarchy. Live findings and previews
 consume the read-only research/draft adapters; complete supported-form artwork
 is disclosed only through those adapters. Unknown sample views use a neutral
 capsule or reference apparatus, with actual recorded knowledge and next useful
