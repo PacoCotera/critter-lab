@@ -15,3 +15,11 @@ These are authored compatibility checks, not output from historical gameplay.
 The frozen V1 payload/file lengths are 5728/5752 bytes; V2 is 5760/5784 bytes,
 including the five V2 tail-padding bytes. The manifest records each original
 hash and provenance. The generator only rebuilds the two authored fixtures.
+
+
+`field-v1.save` is frozen isolated native output from source864eca5, delivered
+through public merge26b4a875. It holds an active version1 field at Camp, no active
+source and no earned cargo/sample. Its exact legacy coordinates/terrain/paths are
+retained through load, navigation, trace, accepted history and another save.
+This is runtime geometry compatibility evidence, not a human playtest or an
+expedition balance fixture. It contains no player/private operational data.

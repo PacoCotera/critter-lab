@@ -607,8 +607,10 @@ screens and outcomes after implementation; static approval alone cannot pass the
 
 Owner playtest requires procedural variation, visible map events, meaningful
 acquisition and a readable player token; repetitive fixture routes and waiting
-through chance cycles do not meet that requirement. The current implementation
-has two authored topology families, fixed leads and no interactive field event.
+through chance cycles do not meet that requirement. Legacy fieldversion1 has two authored topology families. Candidate native
+fieldversion2 generates role positions, corridors and terrain from a seed. It
+still uses fixed place roles/lead rules and has no interactive field event; actual
+version2 controls/save/render checks are pending in this source revision.
 
 One joined game/UX/art proposal explores this six-state journey:
 **generated map → event decision → revealed route and explicit neutral sample →
@@ -652,3 +654,21 @@ is separate from native gameplay. [Concrete sample workpiece](research-and-creat
 preserves automatic Lab analysis: agency lies in choosing a useful question,
 not interpreting invented traces or solving a hidden-answer alignment puzzle.
 Native-size art/interaction and a playable integrated trial remain the next gate.
+
+
+### Versioned native geometry
+
+Candidate fieldcontent2 replaces seed-parity template selection for new outings
+with bounded seeded coordinates and connected corridors in the same20×11 grid.
+Camp, Moss bend, Relay, Stone shelf and the concealed cache retain their roles.
+A local geometry PRNG never consumes gathering-chance state. Essential sources
+are reachable before trace; only deliberate Moss trace exposes the cache branch.
+New source positions and an optional loop vary legal routes, not sample genes.
+
+Legacy fieldcontent1 keeps its exact generator and active/received/sealed records.
+No save/journal layout or acquisition/economy change is made. Validation regenerates
+only the pinned seed/content version and checks resolved arrays; reload does not
+reroll. Unknown versions and edited geometry fail closed. The frozen legacy
+fixture and64generated-seed reachability/diversity checks cover the changed boundary.
+Native build/control/art proof remains pending until recorded against pushed Git.
+Event rules and sample workpiece remain separate provisional trials.

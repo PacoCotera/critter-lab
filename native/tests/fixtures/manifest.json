@@ -17,6 +17,12 @@
       "bytes": 5784,
       "sha256": "52dd0b8166454b8b66afbc3206bb2db2463d6fb290a2fe7f652c138b4edb6b25",
       "source": "native runtime at revision 04ea5a3b41c5b0e988a3c656802b0baa4eec05cb"
+    },
+    {
+      "file": "field-v1.save",
+      "bytes": 18896,
+      "sha256": "3d9ef2a3f8efed261c0d3ae0ba8d09110b6c6761d3415b7f30ac1b648d234c29",
+      "source": "isolated native runtime at reviewed source864eca5d555c8d1624cde9a7fb646420ec5d8202, delivered public26b4a87559f8da4e454c6ba3f4b13817cb7cf3d0; active legacy field1"
     }
   ]
 }

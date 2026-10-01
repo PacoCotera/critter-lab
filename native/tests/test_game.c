@@ -522,6 +522,124 @@ static void test_whole_supply_rules(const char *path) {
   assert(memcmp(&state, &unchanged, sizeof(state)) == 0);
 }
 
+/* Navigate the actual tile graph; generated routes have no scripted turn list. */
+static int field_route(const GameExpeditionField *field, unsigned site,
+                       unsigned route[GAME_FIELD_CELLS]) {
+  unsigned start = field->y * GAME_FIELD_COLUMNS + field->x;
+  unsigned target = field->site_y[site] * GAME_FIELD_COLUMNS + field->site_x[site];
+  int previous[GAME_FIELD_CELLS];
+  unsigned directions[GAME_FIELD_CELLS], queue[GAME_FIELD_CELLS];
+  for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile) previous[tile] = -1;
+  unsigned head = 0, tail = 0;
+  previous[start] = (int)start;
+  queue[tail++] = start;
+  while (head < tail && previous[target] < 0) {
+    unsigned current = queue[head++];
+    for (unsigned move = 0; move < 4; ++move) {
+      int x = (int)(current % GAME_FIELD_COLUMNS), y = (int)(current / GAME_FIELD_COLUMNS);
+      if (move == 0) --y;
+      if (move == 1) ++y;
+      if (move == 2) --x;
+      if (move == 3) ++x;
+      if (x < 0 || x >= (int)GAME_FIELD_COLUMNS || y < 0 || y >= (int)GAME_FIELD_ROWS) continue;
+      unsigned next = (unsigned)y * GAME_FIELD_COLUMNS + (unsigned)x;
+      if (previous[next] < 0 && (field->paths[next] || (field->trace && field->hidden_paths[next]))) {
+        previous[next] = (int)current;
+        directions[next] = move;
+        queue[tail++] = next;
+      }
+    }
+  }
+  if (previous[target] < 0) return -1;
+  unsigned count = 0;
+  for (unsigned tile = target; tile != start; tile = (unsigned)previous[tile])
+    route[count++] = directions[tile];
+  return (int)count;
+}
+static void walk_field(GameState *state, const char *path, unsigned site) {
+  unsigned route[GAME_FIELD_CELLS];
+  int count = field_route(&state->field, site, route);
+  assert(count >= 0);
+  while (count) {
+    GameCommand action = command(GAME_COMMAND_FIELD_MOVE);
+    action.data.field.direction = route[--count];
+    assert(apply(state, path, action) == GAME_OK);
+  }
+  assert(game_field_site(state) == site);
+}
+static void test_procedural_geometry(const char *path) {
+  GameExpeditionField previous[64];
+  for (unsigned seed = 1; seed <= 64; ++seed) {
+    GameState state, reopened;
+    game_state_init(&state);
+    game_rules_resume_runtime(&state, 100);
+    uint32_t gather_random = state.gather_random_state;
+    GameCommand action = command(GAME_COMMAND_FIELD_START);
+    action.data.field.seed = seed;
+    action.data.field.sample_budget = GAME_MAX_SAMPLES;
+    action.data.field.monotonic_seconds = 100;
+    assert(apply(&state, path, action) == GAME_OK);
+    assert(state.field.version == GAME_FIELD_CONTENT_VERSION);
+    assert(state.gather_random_state == gather_random);
+    for (unsigned earlier = 0; earlier + 1 < seed; ++earlier)
+      assert(memcmp(previous[earlier].site_x, state.field.site_x, GAME_FIELD_SITES) ||
+             memcmp(previous[earlier].site_y, state.field.site_y, GAME_FIELD_SITES) ||
+             memcmp(previous[earlier].paths, state.field.paths, GAME_FIELD_CELLS));
+    previous[seed - 1] = state.field;
+    unsigned route[GAME_FIELD_CELLS];
+    for (unsigned site = 0; site < 4; ++site) assert(field_route(&state.field, site, route) >= 0);
+    assert(field_route(&state.field, 4, route) == -1);
+    state.field.trace = 1; /* Bounded graph fixture; no claimed player action. */
+    assert(field_route(&state.field, 4, route) >= 0);
+    state.field.trace = 0;
+    assert(game_state_load(path, &reopened) == 0);
+    assert(!memcmp(&state.field, &reopened.field, sizeof(state.field)));
+    GameState malformed = state;
+    malformed.field.paths[state.field.y * GAME_FIELD_COLUMNS + state.field.x] = 0;
+    assert(!game_state_valid(&malformed));
+    malformed = state;
+    malformed.field.version = GAME_FIELD_CONTENT_VERSION + 1;
+    assert(!game_state_valid(&malformed));
+  }
+}
+static void test_frozen_field_geometry(const char *path) {
+  char fixture_path[1024];
+  const char *separator = strrchr(__FILE__, '/');
+  assert(separator);
+  snprintf(fixture_path, sizeof(fixture_path), "%.*s/fixtures/field-v1.save",
+           (int)(separator - __FILE__), __FILE__);
+  GameState state, reopened;
+  assert(game_state_load(fixture_path, &state) == 0);
+  assert(state.field.version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+  assert(state.field.site_x[0] == 9 && state.field.site_y[0] == 8);
+  assert(state.field.site_x[1] == 9 && state.field.site_y[1] == 2);
+  assert(game_state_save(path, &state) == 0);
+  assert(game_state_load(path, &reopened) == 0);
+  assert(!memcmp(&state.field, &reopened.field, sizeof(state.field)));
+  game_rules_resume_runtime(&state, 100);
+  walk_field(&state, path, 1);
+  GameCommand action = command(GAME_COMMAND_FIELD_INSPECT);
+  action.data.field.site = 1;
+  assert(apply(&state, path, action) == GAME_OK);
+  action = command(GAME_COMMAND_FIELD_TRACE);
+  action.data.field.site = 1;
+  assert(apply(&state, path, action) == GAME_OK);
+  walk_field(&state, path, 4);
+  GameReceivedExpedition record;
+  game_field_record(&state, &record);
+  assert(record.version == GAME_FIELD_LEGACY_CONTENT_VERSION && game_received_valid(&record));
+  record.accepted_at = 1234;
+  record.accept_sequence = state.last_operation_sequence + 1;
+  action = command(GAME_COMMAND_FIELD_UNLOAD);
+  action.data.field.record = &record;
+  assert(apply(&state, path, action) == GAME_OK);
+  assert(game_state_load(path, &reopened) == 0);
+  assert(reopened.received_count == 1 && reopened.received[0].version == GAME_FIELD_LEGACY_CONTENT_VERSION);
+  record.version = GAME_FIELD_CONTENT_VERSION + 1;
+  assert(!game_received_valid(&record));
+  record.version = 0;
+  assert(!game_received_valid(&record));
+}
 static void test_field_loop(const char *path) {
   GameState state;
   GameState reopened;
@@ -552,14 +670,10 @@ static void test_field_loop(const char *path) {
   action.data.monotonic_seconds = 203;
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.gather_progress_ms[0] == 3000 && !state.gather_attempt_count);
-  for (unsigned step = 0; step < 5; ++step) {
-    action = command(GAME_COMMAND_FIELD_MOVE);
-    action.data.field.direction = 3;
-    assert(apply(&state, path, action) == GAME_OK);
-  }
+  walk_field(&state, path, 1);
   assert(game_field_site(&state) == 1 && !state.field.trace);
   action = command(GAME_COMMAND_FIELD_MOVE);
-  action.data.field.direction = 3;
+  action.data.field.direction = 0;
   GameState before = state;
   assert(apply(&state, path, action) == GAME_UNAVAILABLE);
   assert(!memcmp(&before, &state, sizeof(state)));
@@ -600,11 +714,7 @@ static void test_field_loop(const char *path) {
   action.data.field.site = 1;
   assert(apply(&state, path, action) == GAME_OK);
   assert(state.field.trace && !state.field.collected && state.sample_count == 0);
-  for (unsigned step = 0; step < 12; ++step) {
-    action = command(GAME_COMMAND_FIELD_MOVE);
-    action.data.field.direction = step < 9 ? 3 : 0;
-    assert(apply(&state, path, action) == GAME_OK);
-  }
+  walk_field(&state, path, 4);
   assert(game_field_site(&state) == 4);
   action = command(GAME_COMMAND_FIELD_INSPECT);
   action.data.field.site = 4;
@@ -616,7 +726,8 @@ static void test_field_loop(const char *path) {
   assert(apply(&state, path, action) == GAME_UNAVAILABLE);
   GameReceivedExpedition record;
   game_field_record(&state, &record);
-  assert(!record.site_x[2] && !record.site_y[2] && !record.site_x[3] && !record.site_y[3]);
+  for (unsigned site = 0; site < GAME_FIELD_SITES; ++site)
+    if (!(record.visited & (1u << site))) assert(!record.site_x[site] && !record.site_y[site]);
   record.accepted_at = 1234;
   record.accept_sequence = state.last_operation_sequence + 1;
   action = command(GAME_COMMAND_FIELD_UNLOAD);
@@ -637,7 +748,7 @@ static void test_field_loop(const char *path) {
   action.data.field.monotonic_seconds = 1000;
   action.data.field.sample_budget = 0;
   assert(apply(&state, path, action) == GAME_OK);
-  assert(state.field.site_x[0] == 9 && state.field.active_source == GAME_FIELD_NONE);
+  assert(state.field.version == GAME_FIELD_CONTENT_VERSION && state.field.active_source == GAME_FIELD_NONE);
   unsigned connector_contacts = 0;
   for (unsigned tile = 0; tile < GAME_FIELD_CELLS; ++tile) {
     if (!state.field.hidden_paths[tile] || state.field.paths[tile]) continue;
@@ -1203,6 +1314,8 @@ int main(void) {
   test_frozen_save_files(path);
   test_discovery_content(path);
   test_field_loop(path);
+  test_procedural_geometry(path);
+  test_frozen_field_geometry(path);
   unlink(path);
   char lock_path[256];
   char temporary_path[256];
