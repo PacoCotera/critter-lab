@@ -91,19 +91,25 @@ static void projection_truth(void) {
   kit.companion.page = COMP_FRIENDS;
   assert(!kit_resident_preview_projection(&kit, &view));
 }
+typedef struct { size_t buffer_size; unsigned calls; } PartialSink;
 static UiFlushResult consume_partial(void *user, UiDisplay *display,
     const UiArea *area, const uint8_t *pixels, size_t stride, UiColorFormat format) {
   (void)display;
-  assert(area->y2 - area->y1 < 8 && pixels && stride && format == UI_COLOR_RGB888);
-  *(unsigned *)user += 1;
+  PartialSink *sink = user;
+  /* Narrow dirty rectangles can use more than eight rows while still fitting
+   * the same bounded eight-full-row buffer. */
+  assert(pixels && stride && format == UI_COLOR_RGB888);
+  assert(stride * (size_t)(area->y2 - area->y1 + 1) <= sink->buffer_size);
+  assert(area->y2 - area->y1 + 1 < 600);
+  ++sink->calls;
   return UI_FLUSH_COMPLETE;
 }
 static void portable_partial(void) {
   UiDisplayProfile profile = {450, 600, 8, UI_COLOR_RGB888};
   size_t draw_size = ui_display_buffer_size(&profile);
   void *draw = malloc(draw_size);
-  unsigned consumed = 0;
-  UiDisplay *display = ui_display_create(&profile, draw, draw_size, consume_partial, &consumed);
+  PartialSink sink = {draw_size, 0};
+  UiDisplay *display = ui_display_create(&profile, draw, draw_size, consume_partial, &sink);
   assert(draw && display);
   lv_font_t fonts[5];
   native_ui_font_init(&fonts[0], &lab_heading_fonts[0]);
@@ -124,7 +130,7 @@ static void portable_partial(void) {
   assert(companion_resident_ui_update(ui, &view, &image.image));
   memset(&view, 0, sizeof(view));
   lv_refr_now(ui_display_lvgl(display));
-  assert(consumed);
+  assert(sink.calls);
   lv_mem_monitor_t warm, final;
   lv_mem_monitor(&warm);
   for (unsigned index = 0; index < 100; ++index) {
