@@ -333,6 +333,33 @@ static void representative_fixture_exports(const char *directory) {
   assert(rgb && !memcmp(&error, &unchanged, sizeof(error)));
   snprintf(path, sizeof(path), "%s/fixture-storage-error.bmp", directory);
   export_bmp(path, rgb);
+  CompanionCargoView review = full;
+  review.screen = COMPANION_SEND_SCREEN;
+  strcpy(review.title, "Return to Lab");
+  strcpy(review.detail, "Contents unknown\nSeals cargo; exploration stops.");
+  strcpy(review.actions[1], "Keep cargo");
+  strcpy(review.footer, "Back: Keep cargo");
+  rgb = native_ui_cargo(context, &review, 1);
+  assert(rgb);
+  snprintf(path, sizeof(path), "%s/fixture-send-sample.bmp", directory);
+  export_bmp(path, rgb);
+  review.capsules = 0;
+  strcpy(review.capsule, "Sample ready at Lab");
+  strcpy(review.detail, "Recorded on acceptance.\nSeals cargo; exploration stops.");
+  strcpy(review.capacity, "Supplies 40 / 40   Capsules 0 / 1");
+  rgb = native_ui_cargo(context, &review, 1);
+  assert(rgb);
+  snprintf(path, sizeof(path), "%s/fixture-send-legacy-expected.bmp", directory);
+  export_bmp(path, rgb);
+  review.failed = 1;
+  review.action_count = 0;
+  strcpy(review.detail, "Storage unavailable. Cargo preserved.");
+  strcpy(review.feedback, "Storage unavailable");
+  strcpy(review.footer, "Storage recovery required");
+  rgb = native_ui_cargo(context, &review, 1);
+  assert(rgb);
+  snprintf(path, sizeof(path), "%s/fixture-send-storage-error.bmp", directory);
+  export_bmp(path, rgb);
   native_ui_destroy(context);
   snprintf(path, sizeof(path), "%s/cargo-fixtures.txt", directory);
   FILE *metadata = fopen(path, "w");
@@ -340,6 +367,9 @@ static void representative_fixture_exports(const char *directory) {
   fputs("Representative presentation fixtures, not actual play:\n"
         "fixture-full40: capacity40, Data40, other supplies0, capsule1, Discard focus.\n"
         "fixture-storage-error: current40 supplies, no capsule, storage recovery copy, no actions.\n", metadata);
+  fputs("fixture-send-sample: actual owned sample represented synthetically, Keep focus.\n"
+        "fixture-send-legacy-expected: no carried capsule; expected sample on acceptance, Keep focus.\n"
+        "fixture-send-storage-error: preserved cargo, closed actions and recovery feedback.\n", metadata);
   assert(!fclose(metadata));
 }
 static void copy_snapshot_file(const char *source, const char *destination, int optional) {
