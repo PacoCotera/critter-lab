@@ -125,8 +125,8 @@ static void fresh_mode_hub(void) {
       for (unsigned y = 108 + card * 136; y < 194 + card * 136; ++y)
         for (unsigned x = 144; x < 405; ++x) {
           const uint8_t *pixel = pixels + (y * 450 + x) * 3;
-          if ((pixel[0] == 214 && pixel[1] == 222 && pixel[2] == 226) ||
-              (pixel[0] == 183 && pixel[1] == 198 && pixel[2] == 205)) ++ink;
+          unsigned color = ((unsigned)pixel[0] << 16) | ((unsigned)pixel[1] << 8) | pixel[2];
+          if (color == CORE_ART_INK_RGB || color == CORE_ART_SECONDARY_RGB) ++ink;
         }
       assert(ink > 20);
     }

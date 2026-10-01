@@ -95,6 +95,8 @@ static void projection_cases(void) {
   context.haul = SELECTED_HAUL_STORED;
   assert(selected_lab_home_view(&lab, &context, 0, &view));
   assert(strstr(view.landing.strip, "included") && view.stock[0] == UINT32_MAX / GAME_SUPPLY_UNIT);
+  assert(!view.landing.show_resources && !view.landing.primary_resources);
+  for (unsigned resource = 0; resource < 3; ++resource) assert(!view.landing.amounts[resource]);
   context.haul = SELECTED_HAUL_WAITING;
   for (unsigned i = 0; i < 3; ++i) context.incoming[i] = UINT32_MAX;
   assert(selected_lab_home_view(&lab, &context, 0, &view));
@@ -276,6 +278,10 @@ static void retained_lifetime_and_exports(void) {
   kit.journal.cargo[0] = 300;
   kit.journal.cargo[1] = 200;
   kit.journal.cargo[2] = 100;
+  /* An uncommitted receipt has a real identity; empty IDs/sequence zero would
+   * accidentally match unused synthetic operation slots. */
+  strcpy(kit.journal.haul_id, "fixture-home-receipt");
+  kit.journal.accept_sequence = 7;
   const unsigned phases[] = {KIT_WAITING, KIT_ARRIVED, KIT_COMMITTING, KIT_ACK_PENDING, KIT_COMPLETE};
   for (unsigned i = 0; i < sizeof(phases) / sizeof(phases[0]); ++i) {
     kit.journal.phase = phases[i];
@@ -286,8 +292,22 @@ static void retained_lifetime_and_exports(void) {
     assert(ftell(output) == 54 + SELECTED_LAB_WIDTH * SELECTED_LAB_HEIGHT * 3);
     SelectedLabRenderContext projected = {SELECTED_HAUL_NONE, {300, 200, 100}};
     if (phases[i] == KIT_ARRIVED || phases[i] == KIT_COMMITTING) projected.haul = SELECTED_HAUL_WAITING;
-    if (phases[i] == KIT_ACK_PENDING || phases[i] == KIT_COMPLETE) projected.haul = SELECTED_HAUL_STORED;
+    int accepted = phases[i] == KIT_ACK_PENDING || phases[i] == KIT_COMPLETE;
+    assert(!!kit_delivery_accepted(&kit) == accepted);
+    if (accepted) {
+      projected.haul = SELECTED_HAUL_STORED;
+      memset(projected.incoming, 0, sizeof(projected.incoming));
+    }
     assert(selected_lab_home_view(&lab, &projected, 0, &view));
+    assert(view.stock[0] == 1 && view.stock[1] == 2 && view.stock[2] == 3);
+    if (accepted) {
+      assert(!strcmp(view.landing.heading, "SOURCE CARGO EMPTY"));
+      assert(!view.landing.show_resources && !view.landing.primary_resources);
+      for (unsigned resource = 0; resource < 3; ++resource) assert(!view.landing.amounts[resource]);
+    } else if (projected.haul == SELECTED_HAUL_WAITING) {
+      assert(view.landing.primary_resources && view.landing.amounts[0] == 3 &&
+             view.landing.amounts[1] == 2 && view.landing.amounts[2] == 1);
+    }
     const uint8_t *expected_frame = native_ui_home(home, &view);
     assert(expected_frame);
     assert_bmp_pixels(output, expected_frame);
