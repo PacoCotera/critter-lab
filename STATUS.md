@@ -16,7 +16,7 @@ The Companion entry/cargo increment is live: purposeful destination cards replac
 
 ## Next gameplay priorities
 
-Habitat population is the active next increment: the Home preview and entered collection will show every revealed resident in a four-by-two gallery. Highlighting updates saved identity, form and origin immediately; Confirm opens a separate resident activity without care. Only its named care action records a visit. The existing sidebar remains navigation-only. This increment reuses original portraits and existing LVGL roots; source work is not deployment or visual acceptance. Samples and Library will adopt the same preview/commit grammar in a separate slice.
+Habitat population is the active next increment: the Home preview and entered collection will show every revealed resident in a four-by-two gallery. Highlighting updates saved identity, form and origin immediately; Confirm opens a separate resident activity without care. Only its named care action records a visit. The existing sidebar remains navigation-only. This increment reuses original portraits and existing LVGL roots. Focused native checks, the real save/restart game journey and independent technical/craft review pass; target CI and separate activation remain the release gate. [Population proof](docs/evidence/habitat-population/README.md). Samples and Library will adopt the same preview/commit grammar in a separate slice.
 
 Research still feels like a checklist; its navigation column contains content that belongs in the central workpiece. The next research outcome is progressive discovery with sample-specific progress and useful retained findings, grounded in the [existing research trial](design/research-and-creation.md#next-comparison-trial).
 
