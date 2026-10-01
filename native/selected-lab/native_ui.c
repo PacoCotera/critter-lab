@@ -6,6 +6,8 @@
 #include "../ui/host_frame.h"
 #include "../ui/dock_ui.h"
 #include "../ui/companion_cargo_ui.h"
+#include "../ui/companion_resident_ui.h"
+#include "overview_assets.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -20,6 +22,8 @@ struct NativeUiContext {
   lv_display_t *display;
   NativeProbeUi *probe;
   CompanionCargoUi *cargo;
+  CompanionResidentUi *resident_preview;
+  NativeUiImage resident_images[3];
   lv_group_t *actions;
   lv_font_t title_font, body_font, small_font, quantity_font, action_font;
   NativeUiImage images[4];
@@ -96,11 +100,13 @@ void native_ui_destroy(NativeUiContext *context) {
   native_ui_cancel(context);
   native_probe_ui_destroy(context->probe);
   companion_cargo_ui_destroy(context->cargo);
+  companion_resident_ui_destroy(context->resident_preview);
   dock_ui_destroy(context->dock);
   if (context->actions) lv_group_delete(context->actions);
   ui_display_destroy(context->transport);
   for (unsigned index = 0; index < 4; ++index) native_ui_image_destroy(&context->images[index]);
   for (unsigned index = 0; index < 6; ++index) native_ui_image_destroy(&context->dock_images[index]);
+  for (unsigned index = 0; index < 3; ++index) native_ui_image_destroy(&context->resident_images[index]);
   ui_host_frame_destroy(&context->frame);
   free(context->draw);
   free(context);
@@ -116,6 +122,7 @@ const uint8_t *native_ui_cargo(NativeUiContext *context,
   if (!context || context->device != KIT_COMPANION || !view ||
       ui_display_failed(context->transport)) return NULL;
   native_probe_ui_hide(context->probe);
+  companion_resident_ui_hide(context->resident_preview);
   if (!companion_cargo_ui_update(context->cargo, view, still)) return NULL;
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
@@ -125,7 +132,43 @@ const uint8_t *native_ui_probe(NativeUiContext *context, const CompanionProbeVie
       ui_display_failed(context->transport)) return NULL;
   native_ui_cancel(context);
   companion_cargo_ui_hide(context->cargo);
+  companion_resident_ui_hide(context->resident_preview);
   if (!native_probe_ui_update(context->probe, view)) return NULL;
+  lv_refr_now(context->display);
+  return ui_display_failed(context->transport) ? NULL : context->rgb;
+}
+const uint8_t *native_ui_resident_preview(NativeUiContext *context, const CompanionResidentView *view) {
+  if (!context || context->device != KIT_COMPANION || !view ||
+      view->portrait > RESIDENT_EMPTY_HABITAT || ui_display_failed(context->transport)) return NULL;
+  const lv_image_dsc_t *image = NULL;
+  if (view->portrait != RESIDENT_PORTRAIT_PENDING) {
+    unsigned slot = view->portrait - 1;
+    NativeUiImage *backing = &context->resident_images[slot];
+    if (!backing->pixels) {
+      if (view->portrait == RESIDENT_EMPTY_HABITAT) {
+        const CoreArtSprite habitat = {"overview-habitat", OVERVIEW_SPRITE_WIDTH,
+            OVERVIEW_SPRITE_HEIGHT, overview_pixels[OVERVIEW_HABITAT], NULL, NULL, 0, 0};
+        if (!native_ui_image_from_sprite(backing, &habitat)) return NULL;
+      } else if (!native_ui_image_init(backing,
+          view->portrait == RESIDENT_PORTRAIT_PLAIN ? CORE_ART_PIP_PLAIN : CORE_ART_PIP_MARKED)) return NULL;
+    }
+    image = &backing->image;
+  }
+  if (!context->resident_preview) {
+    const CompanionResidentFonts fonts = {&context->title_font, &context->body_font,
+        &context->small_font, &context->quantity_font, &context->action_font};
+    context->resident_preview = companion_resident_ui_create(
+        lv_display_get_screen_active(context->display), &fonts);
+    if (!context->resident_preview) {
+      for (unsigned index = 0; index < 3; ++index)
+        native_ui_image_destroy(&context->resident_images[index]);
+      return NULL;
+    }
+  }
+  native_ui_cancel(context);
+  native_probe_ui_hide(context->probe);
+  companion_cargo_ui_hide(context->cargo);
+  if (!companion_resident_ui_update(context->resident_preview, view, image)) return NULL;
   lv_refr_now(context->display);
   return ui_display_failed(context->transport) ? NULL : context->rgb;
 }

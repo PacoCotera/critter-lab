@@ -70,6 +70,15 @@ Entering Cargo restores remembered action focus; storage failure hides entry
 affordances. [Native controls/output and independent review](../../docs/evidence/native-companion-cargo-preview/README.md)
 passed for this preview. No Kit command originates in the widgets.
 
-Lab and the remaining Companions preview/resident/visit routes remain open
+Companions mode preview uses `companion_resident_ui.c` and a copied
+`CompanionResidentView`. The selected-lab adapter validates the retained selected
+ID and projects existing saved art/form guards, visits and cache freshness.
+It never selects a resident or saves a visit. Its root and native portrait
+backings are created lazily on the existing display and hidden on Probe/Cargo
+updates; they are destroyed before assets and display. Empty, offline, missing
+portrait and storage-recovery states use the same LVGL tree. Native validation
+and independent output review are pending for this addition.
+
+Lab and the remaining Companion resident/visit routes remain open
 renderer migrations. A failed migrated Dock/Probe/Cargo/Send/Discard/Finish projection returns a
 render error; it cannot silently reach the old manual renderer.

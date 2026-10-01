@@ -14,8 +14,8 @@ endforeach()
 add_subdirectory(../vendor/lvgl ${CMAKE_CURRENT_BINARY_DIR}/lvgl)
 
 add_library(selected_lab_core STATIC input.c render.c kit.c kit_render.c expedition_render.c
-  cargo_view.c probe_view.c probe_ui.c field_art.c dock_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
-  ../ui/display.c ../ui/host_frame.c ../ui/dock_ui.c ../ui/companion_cargo_ui.c
+  cargo_view.c probe_view.c probe_ui.c resident_view.c field_art.c dock_view.c native_ui.c ui_assets.c ui_theme.c assets.c overview_assets.c pip_art.c core_art.c
+  ../ui/display.c ../ui/host_frame.c ../ui/dock_ui.c ../ui/companion_cargo_ui.c ../ui/companion_resident_ui.c
   ../shared/game_state.c ../shared/game_rules.c ../shared/expedition.c ../shared/pip_genetics.c ../shared/save_bytes.c
   ../shared/native_font.c ../shared/lab_font_data.c
   ../shared/lab_heading_font_data.c ../shared/lab_heading_narrow_font_data.c)
@@ -32,6 +32,11 @@ set_target_properties(selected_lab PROPERTIES C_EXTENSIONS NO)
 
 include(CTest)
 if(BUILD_TESTING)
+ add_executable(resident_ui_checks resident_ui_tests.c)
+ target_link_libraries(resident_ui_checks PRIVATE selected_lab_core)
+ target_compile_options(resident_ui_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)
+ add_test(NAME companion_resident_preview_checks COMMAND resident_ui_checks)
+
  add_executable(dock_gray_checks dock_gray_tests.c)
  target_link_libraries(dock_gray_checks PRIVATE selected_lab_core)
  target_compile_options(dock_gray_checks PRIVATE -Wall -Wextra -Wpedantic -Werror -UNDEBUG)

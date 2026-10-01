@@ -143,31 +143,10 @@ static void resource_names(char *value, size_t capacity, const char *prefix,
 }
 /* Expedition layouts use top-of-ink coordinates like the reviewed study.
  * Keep the existing legacy screen anchor unchanged. */
-static void field_label(KitRow *row, int x, int y, const char *value,
-                         unsigned size, unsigned color, int bold) {
-  const NativeFont *fonts = bold ? lab_heading_fonts : lab_fonts;
-  unsigned count = bold ? LAB_HEADING_FONT_COUNT : LAB_FONT_COUNT;
-  const NativeFont *font = &fonts[0];
-  for (unsigned i = 0; i < count; ++i)
-    if ((unsigned)fonts[i].size == size) font = &fonts[i];
-  int ink_top = font->size;
-  for (const unsigned char *at = (const unsigned char *)value; *at; ++at) {
-    unsigned index = *at >= 32 && *at <= 126 ? *at - 32 : '?' - 32;
-    const NativeGlyph *glyph = &font->glyphs[index];
-    if (glyph->height && glyph->top < ink_top) ink_top = glyph->top;
-  }
-  native_text_row(font, value, x, y - ink_top, row->y, row->width,
-                  row->pixels, 0, palette[color]);
-}
-static void field_heading(KitRow *row, int x, int y, const char *value,
-                           unsigned size, unsigned color) {
-  field_label(row, x, y, value, size, color, 1);
-}
 static void companion_row(const DeviceKit *kit, KitRow *row) {
   const GameState *game = &kit->lab->game;
   const KitView *view = &kit->companion;
   unsigned page = view->page == COMP_MODES ? view->mode : view->page;
-  int selector = view->page == COMP_MODES;
   int reserved =
       kit->journal.phase >= KIT_WAITING && kit->journal.phase <= KIT_COMMITTING;
   int receipt = kit->journal.phase == KIT_ACK_PENDING;
@@ -183,14 +162,6 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
   if (map_outing && game->expedition_id[0] && !reserved && !receipt &&
       (page == COMP_PROBE || page == COMP_FIELD_SITE)) {
     expedition_field_row(&field, row->y, row->pixels);
-    if (selector) {
-      action_focus(row, 24, 78, 98, 27);
-      field_heading(row, 28, 82, "Probe", 18, FOCUS);
-      fill(row, 24, 474, 402, 103, BACKGROUND);
-      text(row, 28, 490, "Left / Right: change mode", 22, TEXT);
-      text(row, 28, 525, "Down / Confirm: enter Probe", 18, SECONDARY);
-      text(row, 28, 557, "Confirm: enter selected mode", 16, SECONDARY);
-    }
     if (kit->failed) {
       fill(row, 24, 500, 402, 76, FIELD);
       wrapped(row, 28, 507, "Storage unavailable. Progress preserved.", 390, 18, FOCUS);
@@ -216,16 +187,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     if (view->mode == i) {
       fill(row, x - 4, 84, 128, 25, FIELD);
       fill(row, x, 109, 118, 3, BORDER);
-      if (selector) {
-        int pressed = 0;
-        for (unsigned button = 0; button < 9; ++button)
-          pressed |=
-              view->gestures[button].held && view->gestures[button].allowed;
-        if (pressed)
-          fill(row, x - 3, 83, 126, 27, GLOW);
-        action_focus(row, x - 4, 82, 128, 30);
       }
-    }
     text(row, x + 4, 88, modes[i], 18, view->mode == i ? TEXT : SECONDARY);
   }
   fill(row, 28, 112, 394, 2, EDGE);
@@ -244,7 +206,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
              stamp);
     text(row, 28, 128, value, 18, SECONDARY);
     if (record && count) {
-      if (!selector && !friend_visit)
+      if (!friend_visit)
         action_focus(row, 26, 154, 398, 35);
       heading(row, 39, 160,
               record->individual.expression.pale_markings ? "Pale markings" : "Plain coat",
@@ -282,7 +244,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
         feedback = view->message[0] ? view->message : "Spend time together.";
       wrapped(row, 303, feedback_y, feedback, 116, 18,
               visit_available ? TEXT : SECONDARY);
-      if (!friend_visit && !selector) {
+      if (!friend_visit) {
         snprintf(value, sizeof(value), "%u / %u residents", view->focus + 1, count);
         text(row, 28, 489, value, 18, SECONDARY);
         heading(row, 28, 516, "Confirm: view this critter", 26, TEXT);
@@ -386,7 +348,7 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     }
   }
   unsigned count =
-      selector || kit->failed || (page == COMP_FRIENDS && kit_resident_count(kit))
+      kit->failed || (page == COMP_FRIENDS && kit_resident_count(kit))
           ? 0 : kit_option_count(kit, KIT_COMPANION);
   for (unsigned i = 0; i < count; ++i) {
     int y = action_top + (int)i * (has_run || friend_visit ? 32 : 38);
@@ -404,19 +366,13 @@ static void companion_row(const DeviceKit *kit, KitRow *row) {
     fill(row, 24, 496, 402, 57, FIELD);
     wrapped(row, 28, 502, "Storage unavailable. Cargo preserved.", 390, 18,
             FOCUS);
-  } else if (selector) {
-    text(row, 28, 490, "Left / Right: change mode", 22, TEXT);
-    text(row, 28, 524,
-         "Down / Confirm: choose an action",
-         18, SECONDARY);
   } else if (view->message[0] && !friends) {
     int result_y = details ? 439 : 276;
     fill(row, 24, result_y, 402, details ? 46 : 64, FIELD);
     wrapped(row, 28, result_y + 3, view->message, 390, 18, TEXT);
   }
   text(row, 28, 553,
-       selector           ? "Browsing never sends or spends"
-       : page == COMP_FRIENDS ? kit_resident_count(kit)
+       page == COMP_FRIENDS ? kit_resident_count(kit)
                                    ? "Up/Down: resident / Back: modes"
                                    : "Confirm: Probe / Back: modes"
        : friend_visit     ? "Confirm: choose / Back: residents"
@@ -600,6 +556,18 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
     if (temporary) native_ui_destroy(context);
     return result;
   }
+  if (device == KIT_COMPANION && kit->companion.page == COMP_MODES &&
+      kit->companion.mode == COMP_FRIENDS) {
+    CompanionResidentView resident;
+    if (!kit_resident_preview_projection(kit, &resident)) return 0;
+    int temporary = !context;
+    if (temporary) context = native_ui_create();
+    if (!context) return 0;
+    const uint8_t *frame = native_ui_resident_preview(context, &resident);
+    int result = frame && bmp_rows(kit, device, output, frame);
+    if (temporary) native_ui_destroy(context);
+    return result;
+  }
   CompanionProbeView probe;
   if (device == KIT_COMPANION && kit_probe_projection(kit, &probe)) {
     int temporary = !context;
@@ -621,8 +589,7 @@ int kit_bmp_ui(const DeviceKit *kit, unsigned device, FILE *output,
                                   kit->companion.page == COMP_DISCARD_QUANTITY ||
                                   kit->companion.page == COMP_DISCARD_REVIEW ||
                                   kit->companion.page == COMP_FINISH_REVIEW ||
-                                  (kit->companion.page == COMP_MODES &&
-                                   kit->companion.mode == COMP_CARGO))) return 0;
+                                  kit->companion.page == COMP_MODES)) return 0;
     /* Other-device frame requests must not cancel Companion presentation. */
     if (device == KIT_COMPANION) native_ui_cancel(context);
     return bmp_rows(kit, device, output, NULL);
