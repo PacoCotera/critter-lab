@@ -139,6 +139,8 @@ int kit_cargo_projection(const DeviceKit *kit, CompanionCargoView *out) {
   out->failed = kit->failed || kit->lab->storage_error;
   out->focus = view->focus;
   out->selected_resource = 3;
+  if (view->mode > COMP_FRIENDS) return 0;
+  out->active_mode = view->mode;
   out->revision = view->revision;
   out->epoch = view->epoch;
   out->suspended = view->suspended;

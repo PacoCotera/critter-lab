@@ -22,6 +22,7 @@ typedef struct {
   /* Two visible rows project a potentially longer logical selector. Focus is
    * local to those rows; navigation remains owned by the interaction layer. */
   unsigned logical_focus, first_visible, option_count, selected_resource;
+  unsigned active_mode;
   int held, pressed, suspended;
   char identity[64], title[40], context[96], capsule[64], detail[192];
   char capacity[96], feedback[96], footer[64], actions[2][64];

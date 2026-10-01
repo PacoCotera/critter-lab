@@ -73,6 +73,7 @@ static void projection_truth(void) {
 }
 static CompanionCargoView example(void) {
   CompanionCargoView view = {0};
+  view.active_mode = COMP_CARGO;
   strcpy(view.identity, "render-proof");
   strcpy(view.title, "Cargo");
   strcpy(view.context, "Field survey");
@@ -234,6 +235,10 @@ static void discard_finish_projection_truth(void) {
   assert(view.screen == COMPANION_FINISH_SCREEN && view.focus == 1);
   assert(!strcmp(view.actions[1], "Keep exploring"));
   assert(strstr(view.capsule, "nothing sent") && !strstr(view.detail, "progress"));
+  kit.companion.mode = COMP_PROBE;
+  assert(kit_cargo_projection(&kit, &view) && view.active_mode == COMP_PROBE);
+  kit.companion.mode = COMP_MODES;
+  assert(!kit_cargo_projection(&kit, &view));
 }
 static UiFlushResult consume_partial(void *user, UiDisplay *display, const UiArea *area,
     const uint8_t *pixels, size_t stride, UiColorFormat format) {
@@ -420,11 +425,11 @@ static void discard_finish_fixture_exports(const char *directory) {
   assert(context);
   const unsigned pages[] = {COMP_DISCARD_CLASS, COMP_DISCARD_QUANTITY,
       COMP_DISCARD_QUANTITY, COMP_DISCARD_REVIEW, COMP_DISCARD_REVIEW,
-      COMP_DISCARD_REVIEW, COMP_FINISH_REVIEW};
-  const unsigned focuses[] = {3, 39, 40, 1, 1, 1, 1};
+      COMP_DISCARD_REVIEW, COMP_FINISH_REVIEW, COMP_FINISH_REVIEW};
+  const unsigned focuses[] = {3, 39, 40, 1, 1, 1, 1, 1};
   const char *names[] = {"class-keep", "quantity-40", "quantity-keep",
-      "discard-all-keep", "discard-storage-error", "discard-pending", "finish-keep"};
-  for (unsigned index = 0; index < 7; ++index) {
+      "discard-all-keep", "discard-storage-error", "discard-pending", "finish-keep", "finish-probe-keep"};
+  for (unsigned index = 0; index < 8; ++index) {
     kit.companion.page = pages[index];
     kit.companion.focus = focuses[index];
     kit.companion.discard_quantity = 40 * GAME_SUPPLY_UNIT;
@@ -434,10 +439,11 @@ static void discard_finish_fixture_exports(const char *directory) {
       game_field_record(&lab.game, &kit.sealed_field);
       kit.sealed_field.cargo[0] = 40 * GAME_SUPPLY_UNIT;
     }
-    if (index == 6) {
+    if (index >= 6) {
       lab.game.expedition_data = 0;
       lab.game.field.collected = 0;
     }
+    if (index == 7) kit.companion.mode = COMP_PROBE;
     CompanionCargoView view;
     assert(kit_cargo_projection(&kit, &view));
     const uint8_t *rgb = native_ui_cargo(context, &view, 1);

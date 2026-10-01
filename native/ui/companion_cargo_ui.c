@@ -13,6 +13,7 @@ struct CompanionCargoUi {
   lv_group_t *actions;
   lv_obj_t *title, *context, *quantity[3], *capsule, *detail;
   lv_obj_t *capacity, *feedback, *footer, *buttons[2], *button_text[2], *capsule_image;
+  lv_obj_t *mode_labels[3];
   NativeUiFrame outer_frame, subject_frame, focus_frame, halo_frame;
   CompanionCargoFonts fonts;
   const lv_image_dsc_t *images[4];
@@ -24,6 +25,7 @@ struct CompanionCargoUi {
 static int valid_view(const CompanionCargoView *view) {
   if (!view || view->screen < COMPANION_CARGO_SCREEN || view->screen > COMPANION_FINISH_SCREEN ||
       view->action_count > 2 ||
+      view->active_mode > 2 ||
       (view->action_count && view->focus >= view->action_count)) return 0;
   if (view->screen >= COMPANION_DISCARD_CLASS_SCREEN &&
       (!view->option_count || view->logical_focus >= view->option_count ||
@@ -95,11 +97,9 @@ static int compose(CompanionCargoUi *context) {
                            mode == 1 ? CORE_ART_INK_RGB : CORE_ART_SECONDARY_RGB,
                            0, 0, mode == 2 ? 132 : 104, 26, modes[mode]);
     if (!name) return 0;
-    if (mode == 1) {
-      lv_obj_set_style_border_side(name, LV_BORDER_SIDE_BOTTOM, 0);
-      lv_obj_set_style_border_width(name, 2, 0);
-      lv_obj_set_style_border_color(name, lv_color_hex(CORE_ART_BLUE_RGB), 0);
-    }
+    context->mode_labels[mode] = name;
+    lv_obj_set_style_border_side(name, LV_BORDER_SIDE_BOTTOM, 0);
+    lv_obj_set_style_border_color(name, lv_color_hex(CORE_ART_BLUE_RGB), 0);
   }
   context->title = label(bands[1], context->fonts.title, CORE_ART_INK_RGB,
                          4, 8, 394, 32, "Cargo");
@@ -239,6 +239,7 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
       context->previous.logical_focus == view->logical_focus &&
       context->previous.option_count == view->option_count &&
       context->previous.selected_resource == view->selected_resource &&
+      context->previous.active_mode == view->active_mode &&
       context->previous.capsules == view->capsules &&
       !strcmp(context->previous.capsule, view->capsule) &&
       !memcmp(context->previous.supplies, view->supplies, sizeof(view->supplies)) &&
@@ -252,6 +253,11 @@ int companion_cargo_ui_update(CompanionCargoUi *context,
   view = &context->previous;
   lv_label_set_text_static(context->title, view->title);
   lv_label_set_text_static(context->context, view->context);
+  for (unsigned mode = 0; mode < 3; ++mode) {
+    lv_obj_set_style_border_width(context->mode_labels[mode], mode == view->active_mode ? 2 : 0, 0);
+    lv_obj_set_style_text_color(context->mode_labels[mode], lv_color_hex(
+        mode == view->active_mode ? CORE_ART_INK_RGB : CORE_ART_SECONDARY_RGB), 0);
+  }
   int task = view->screen >= COMPANION_DISCARD_CLASS_SCREEN;
   for (unsigned resource = 0; resource < 3; ++resource) {
     snprintf(context->quantity_text[resource], sizeof(context->quantity_text[resource]),
