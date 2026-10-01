@@ -2,6 +2,17 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-01 [14:49] — Research inquiry and retained findings
+
+[PR67](https://github.com/PacoCotera/critter-lab/pull/67) · release `720c1e6`
+
+- **Research:** highlighting a sample or Library finding updates its exact preview immediately. The left rail holds destinations; clues, questions, resource costs, Start and findings appear in the main workpiece.
+- **Discovery references:** known coat evidence shows permitted original references without revealing an unknown whole form. Complete comparisons preserve the original portraits; linked movement and effort findings remain distinct.
+- **Controls:** browsing and known inspection are free. Fresh Start commits the shown cost; Back restores the selected inquiry. Existing rules and saved findings remain intact.
+- **Sandbox saves:** this activation starts a fresh game across all three devices.
+
+Research enjoyment and wider sample variety remain open gameplay work.
+
 ## 2026-10-01 [13:50] — Habitat population and resident browsing
 
 [PR65](https://github.com/PacoCotera/critter-lab/pull/65) · release `5e16e75`
