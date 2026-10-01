@@ -584,6 +584,7 @@ static void cargo_preview_rendering(const char *directory) {
     }
   }
   kit.failed = lab.storage_error = 0;
+  strcpy(lab.game.expedition_id, "preview-transition");
   kit.companion.page = COMP_CARGO;
   kit.companion.focus = 1;
   CompanionCargoView view;

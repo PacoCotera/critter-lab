@@ -81,9 +81,6 @@ static void resource(KitRow *row, unsigned icon, int x, int y, int primary) {
                                     : CORE_ART_DATA_COMPACT) + icon);
   core_art_row(id, x, y, row->y, row->width, row->pixels);
 }
-static void category(KitRow *row, CoreArtId id, int x, int y) {
-  core_art_row(id, x, y, row->y, row->width, row->pixels);
-}
 static void panel(KitRow *row, int x, int y, int width, int height) {
   core_art_panel_row(x, y, width, height, row->y, row->width, row->pixels);
 }
@@ -161,10 +158,6 @@ static void field_label(KitRow *row, int x, int y, const char *value,
   }
   native_text_row(font, value, x, y - ink_top, row->y, row->width,
                   row->pixels, 0, palette[color]);
-}
-static void field_text(KitRow *row, int x, int y, const char *value,
-                        unsigned size, unsigned color) {
-  field_label(row, x, y, value, size, color, 0);
 }
 static void field_heading(KitRow *row, int x, int y, const char *value,
                            unsigned size, unsigned color) {
