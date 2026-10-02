@@ -66,6 +66,13 @@ current resolved packet text, without rewriting or truncation. Editing or
 rejecting inputs clears the prompt with the preview; an unavailable projection
 shows its actual error and disables copying. This panel makes no provider call.
 
+Template version2 makes that text a positive illustration brief: substantial
+HiBit art direction followed by a readable source-derived phenotype. Complete
+geometry, causal trace, identity and limitation bindings remain in the exported
+packet and advanced source inspection. The workbench handles replay/conflict
+validation before creating the renderer text. [Contract and retained comparisons](art-template.md)
+separate prompt review from anatomical fidelity and actual pet-art acceptance.
+
 Editing copies invalidates the current result, highlight and export. Resolve
 edits differs from generating a new creature. Generation uses a fresh seed and
 the existing bounded valid sampler; retain the seed for replay. A known example

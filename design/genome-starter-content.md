@@ -12,6 +12,15 @@ connected, fully defined content rather than thousands of gene names.
 
 ## V1 diversity and genome-first construction
 
+Owner renderer direction,2October: the image prompt leads with substantive positive
+art direction and an understandable description of the resolved creature. The
+workbench handles replay, conflicts, limitations and source-trace inspection;
+these are separate from the renderer's drawing task. Composition, silhouette,
+pixel-cluster craft, light, surface treatment and pet appeal require deliberate
+direction. Removing audit prose does not resolve missing exterior/material/face
+construction. The [art contract](../prototype/generator-workbench/art-template.md)
+owns this separation and the retained comparison evidence.
+
 Owner requires ground, flying and swimming creatures and a much broader range of
 body organizations. Fish, microbes, insects and land animals illustrate desired
 range; they are not a mandatory taxonomy. **Classes emerge from expressed genomes,

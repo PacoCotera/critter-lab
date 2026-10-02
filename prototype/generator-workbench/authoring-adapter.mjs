@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
+import { describeRendererSubject } from "./art-brief.mjs";
 import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
 import { createGeometryReference } from "./geometry-reference.mjs";
 import { FAMILY_CATALOGUE, FAMILY_RULE_VERSION } from "./family-catalogue.mjs";
@@ -498,12 +499,18 @@ export function projectArtPrompt(packet) {
       throw new Error(
         `Art binding ${id} exceeds ${template.limits.maxBindingCharacters} characters; no facts truncated.`,
       );
+  const rendererBindings = {
+    phenotypeDescription: describeRendererSubject(
+      packet.result,
+      packet.input.context,
+    ),
+  };
   const text = template.promptSections
     .map((section) =>
       section.text.replace(/\{\{([a-zA-Z]+)\}\}/g, (_, key) => {
-        if (!Object.hasOwn(bindings, key))
+        if (!Object.hasOwn(rendererBindings, key))
           throw new Error(`Unknown art binding ${key}`);
-        return bindings[key];
+        return rendererBindings[key];
       }),
     )
     .join("\n\n");

@@ -4,5 +4,6 @@ docs/evidence/polished-core-v1/retained/** -text
 prototype/generator-workbench/evidence/authoring/** -text whitespace=cr-at-eol
 prototype/generator-workbench/evidence/geometry-calibration/** -text whitespace=cr-at-eol
 prototype/generator-workbench/evidence/critter-family/** -text whitespace=cr-at-eol
+prototype/generator-workbench/evidence/renderer-brief/** -text whitespace=cr-at-eol
 # Vendored upstream bytes and whitespace stay unchanged for provenance hashes.
 native/vendor/lvgl/** -text -whitespace
