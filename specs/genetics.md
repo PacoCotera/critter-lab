@@ -54,8 +54,13 @@ not the recoverable payload. The current workbench's `#G` and `#E` references
 remain lookup fingerprints. Measure encoded size on actual records before
 choosing display length or QR use. Packing does not make acquired lifetime
 history heritable, and a genome need not determine later experience. Exact
-field layout, quantization, catalogue availability and compatibility handling
-are bounded architecture work, not an implemented codec or a canonical schema.
+The separate [tree/string host proof](../prototype/generator-workbench/codec-contract.md)
+now implements a bounded lossless mapping with inherited G and complete supplied
+T snapshots, shared or embedded foundations and exact numeric preservation.
+Its measured files establish reconstruction of current records, not a canonical
+production schema, QR transport or validity of imported biological behavior.
+Further field layout, catalogue availability and compatibility policy remain
+bounded design work.
 
 Owner clarification: **genome → expression/development → anatomy and capabilities
 → optional class description**. Organization, segmentation, attachments and
@@ -102,6 +107,12 @@ These are the accepted initial domain families, not a requirement to implement e
 | **Fantastic physiology** | Optional mana-like storage/recovery/conversion, phase stability, spatial reach/control and other capability-specific properties | Explicitly fictional and optional. Teleportation, ghosting, summoning and cloning use the ability model below; no mandatory magic-type bucket |
 
 Quantitative dimensions may be influenced by multiple loci; one variant may affect several dimensions. Polygenicity, epistasis and pleiotropy motivate this proposal. They do not require us to simulate molecules or give every improvement a penalty.
+
+Owner appearance direction: the generated range must include lively, coherent
+pet colours rather than repeatedly dull brown/grey combinations. Expand the
+inherited pigment vocabulary and inspect its expressed combinations; colour
+must still come from genomic expression, not a renderer overriding the palette.
+Exact palette families and mixing rules remain provisional until visual review.
 
 Owner explicitly requires future polygenic and cross-dimension traits: movement,
 energy physiology and environmental response can jointly shape locomotion,

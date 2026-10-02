@@ -15,6 +15,23 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Reversible tree/string experiment
+
+The [codec contract](codec-contract.md) defines a standalone host proof for
+packing inherited records or complete retained snapshots into a reversible
+string. Five layer branches and single-instance loci remain inspectable in the
+decoded tree. An exact pinned foundation supplies repeatable dictionary and
+mapping data; embedded mode carries it. The codec preserves supplied copies,
+provenance, context, literal phenotype and evidence rather than rerunning a
+creature generator during decoding.
+
+Run `node --test genome-codec.test.mjs` and `node codec-proof.mjs` with the
+existing host runtime. [Retained strings and measured roundtrips](evidence/genome-tree-codec/README.md)
+separate inherited G from complete T, and shared S from embedded E. These
+file/string artifacts do not reuse the authoring POST or local import limits.
+UI, fingerprint art and QR sharing are subsequent consumers; the current
+`#G`/`#E` prompt references remain lookup hashes.
+
 ### Shared exterior construction experiment
 
 The standalone `graph-source/1` experiment tests structural breadth after existing
@@ -240,6 +257,7 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `authoring-adapter.mjs`                            | Host records/digests, replay, presentation and fact-derived art-template projection                                                      |
 | `module-scene.mjs` / `module-scene-authoring.mjs`   | Optional verified body/ocular/covering aggregate, bounded unmodified generation, compact replay and positive renderer projection |
 | `authoring-identity.mjs`                           | Separate inherited/expression full digests and short lookup references; not reversible genome payloads |
+| `genome-tree.mjs` / `genome-codec.mjs`              | Lossless layered packet mapping, exact ordered allele packing and bounded versioned string encode/decode |
 | `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
 | `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |
 | `src/`                                             | Framework forms, navigation and inspection of shared results                                                                             |

@@ -29,12 +29,31 @@ lists or a technical phenotype wall. The complete genome and construction data
 remain inspectable separately. These requirements apply to new scene briefs;
 historical submitted prompts retain their exact provenance.
 
+Owner's subsequent Gemini transformations establish the depiction target:
+an appealing digital pet with softened volumes, a readable expressive face
+when supplied by the phenotype, and a welcoming composed gesture. Unfamiliar
+radial or axial anatomy can retain its identity and still feel companionable.
+The orange/charcoal examples show that appeal requires character treatment,
+not only new hues. Render briefs lead with this positive pet direction and
+explicit pixel craft; anatomy and pigments follow as concise concrete facts.
+Faces absent from a source package remain a construction gap to resolve in
+that package. Toy frames, care icons and backgrounds in these references do
+not select device hardware or game UI.
+
+The owner's isolated colourful example further demonstrates purple/cyan/gold
+pigments with readable limb spacing, simplified material strokes and a friendly
+face while retaining an elongated unfamiliar body. Expand inherited pigment
+choices to support such variation. The catalogue's current charcoal/russet and
+cream/slate vocabulary is narrower than this target; exact new allele values
+and mixing policy remain provisional visual experiments.
+
 Short inherited-genome and expressed-creature lookup fingerprints connect a
 new renderer brief to its retained record. They preserve full hashes separately,
 distinguish copy identity from expression and individual provenance, and exclude
 illustration style/view. This is a foundation for later fingerprint art and
-sharing; it does not yet implement compact reversible genome encoding or QR
-payloads. The [art contract](../prototype/generator-workbench/art-template.md)
+sharing. A separate [reversible tree/string proof](../prototype/generator-workbench/codec-contract.md)
+now retains inherited or complete supplied records; QR payloads and art remain
+future consumers. The [art contract](../prototype/generator-workbench/art-template.md)
 owns the current display-code boundary.
 
 Owner requires ground, flying and swimming creatures and a much broader range of
