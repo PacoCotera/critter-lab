@@ -40,6 +40,18 @@ exploration before coding, and keeps the outline/extra passes optional.
 Inherited palette vocabulary remains narrower than the colourful target;
 exact new alleles, regions and mixing policy remain provisional experiments.
 
+The [inherited pigment comparison](../prototype/generator-workbench/evidence/pigment-vocabulary/README.md)
+proposes eight additional body pigments and four secondary-module pigments,
+shown beside the legacy controls. Art direction and genomics considered the
+same candidate records; the comparison preserves existing two-copy partition
+expression and pigment ownership. Review pairings are examples, not inherited
+families, species selectors or permitted-combination bundles. Canonical colours
+remain owner-steered. The default executable catalogues and retained replays
+are unchanged. The [candidate-enabled host experiment](../prototype/generator-workbench/evidence/inherited-pigment-experiment/README.md)
+retains a separate version2 foundation, old allele strings and pair maps, actual
+resolved colour-only variants and bounded random-generation results. It is
+provisional executable content, not canonical palette adoption.
+
 Short inherited-genome and expressed-creature lookup fingerprints connect a
 new renderer brief to its retained record. They preserve full hashes separately,
 distinguish copy identity from expression and individual provenance, and exclude

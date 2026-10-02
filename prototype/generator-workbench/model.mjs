@@ -301,10 +301,20 @@ export function validateCatalogue(catalogue) {
           "Draft/validated status, positive record version and two-copy proof scheme required.",
         ),
       );
+    // Palette partition maps have a finite wider vocabulary; other operators
+    // retain the existing four-allele authoring boundary.
+    const maximumAlleles =
+      locus.status === "validated" &&
+      locus.operator === "partition-map" &&
+      Array.isArray(locus.outputs) &&
+      locus.outputs.length === 1 &&
+      targetSpecs[locus.outputs[0]]?.type === "palette"
+        ? 10
+        : 4;
     if (
       !Array.isArray(locus.alleles) ||
       locus.alleles.length < 1 ||
-      locus.alleles.length > 4 ||
+      locus.alleles.length > maximumAlleles ||
       locus.alleles.some(
         (allele) =>
           !isRecord(allele) ||

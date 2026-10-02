@@ -15,6 +15,25 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Candidate inherited pigments
+
+The [colour comparison](evidence/pigment-vocabulary/README.md) proposes eight
+additional body hues and four secondary-module hues beside the exact legacy
+controls. The separate [candidate host experiment](evidence/inherited-pigment-experiment/README.md)
+uses the existing two pigment loci, partition operator and construction rules.
+It retains controlled colour-only variants and bounded random-generation results;
+canonical colours, the default workbench package and game residents are unchanged.
+
+Run `node --test pigment-proof.test.mjs` and
+`node pigment-proof.mjs --out evidence/inherited-pigment-experiment` with the
+existing host runtime. Candidate records pin their own catalogue foundation;
+old records and compact strings continue to pin the exact old foundation.
+The diagnostics demonstrate expressed colour ownership, not production pet art.
+Validated partition-map records with one known palette output support at most
+ten alleles, with an exact typed map for every unordered pair. Other loci retain
+the four-allele ceiling and their existing stricter operator checks. This bounded
+vocabulary extension does not change old foundations, maps or default content.
+
 ### Reversible tree/string experiment
 
 The [codec contract](codec-contract.md) defines a standalone host proof for
