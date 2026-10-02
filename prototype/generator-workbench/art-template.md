@@ -84,8 +84,10 @@ of returned images; prompt/source tests alone cannot approve pet artwork.
 Owner's [actual Gemini transformations](evidence/owner-pet-transformations/README.md)
 motivate a specialist-led proposal: outline → illustration → pet treatment →
 animation. Art direction, pixel art and genomics considered the same images and
-source records. This is a reversible design proposal; no new generated output,
-stage implementation or canonical creature is approved here.
+source records. This is a reversible design proposal. A bounded
+[two-pass source-to-pet experiment](evidence/faithful-pet/README.md) now retains
+actual returned rasters, prompts and independent findings. No stage implementation
+or canonical creature is approved here.
 
 | Stage | Purpose and handoff |
 | --- | --- |
@@ -110,13 +112,13 @@ absent until those changes have a resolved source. A conceptual redesign is not
 an unchanged specimen or an offspring. The colourful owner image is useful
 evidence of this second route.
 
-The director recommends one combined illustration/pet experiment on retained
+The director selected one combined illustration/pet experiment on retained
 `axial-scales` **#GAA74F886E586 / #E1495F780380B**: three connected regions,
 six fins, supplied eyes, charcoal/slate body and cream fins, actual scales,
 no expressed markings or mouth. Compare source and pet at the same apparent
 scale. The outline is needed only if attachment clarity is unresolved.
 
-Proposed positive brief:
+Exact first submitted brief:
 
 > Turn this unusual creature into an appealing digital pet, shown alone in rich high-bit pixel art. Give its connected body softly modeled rounded volume and a graceful overall rhythm. Make its supplied eye pair the character focus with compact reflective light. Use clear stepped contours, deliberate light and shadow clusters, and selective overlapping scale detail following the body. Its three-region charcoal body, six cream fins and forward scale field remain recognizable. Give every fin comfortable space in a welcoming whole-body composition.
 
@@ -129,6 +131,16 @@ pigment is a recorded proposal, not an unnoticed repair. Retain exact stage
 prompt/references, source IDs, output bytes/hash and disposition using existing
 artifact records. Animation follows a selected still and a concrete motion
 question. No automatic second commission or four-pass sequence is required.
+
+The actual first pass improved volume and pixel craft, but changed pointed fins
+to rounded paddles and expanded the scale field. One controlled correction
+restored the pointed fins; it missed the requested whole-body rotation and still
+extended the scale covering beyond its source domain. Both actual outputs remain
+**HOLD**, with no accepted pet master or animation. This experiment stops after
+the correction. Its next methodological task is to clarify source-reference
+authority and presentation before another distinct experiment, rather than add
+more prose or silently accept changed traits. The evidence page owns the detailed
+findings and exact prompts.
 
 The optional connected scene experiment uses a separate `module-scene-art/1`
 projection of verified body, ocular and skin/scales constructors. The owner's
