@@ -11,6 +11,12 @@ import {
 } from "./authoring-adapter.mjs";
 import { AUTHORING_CATALOGUE } from "./catalogue.mjs";
 import { generateGenome } from "./model.mjs";
+import {
+  moduleSceneCatalogue,
+  resolveModuleSceneAuthoring,
+  generateModuleSceneAuthoring,
+  replayModuleSceneAuthoring,
+} from "./module-scene-authoring.mjs";
 
 const files = new Map([
   ["/legacy", ["legacy.html", "text/html; charset=utf-8"]],
@@ -45,21 +51,39 @@ export function makeServer() {
         request.url === "/api/authoring/catalogue"
       )
         return json(200, authoringCatalogue());
+      if (
+        request.method === "GET" &&
+        request.url === "/api/module-scene/catalogue"
+      )
+        return json(200, moduleSceneCatalogue());
       const operations = [
         "/api/evaluate",
         "/api/authoring/evaluate",
         "/api/authoring/generate",
         "/api/authoring/validate",
         "/api/authoring/replay",
+        "/api/module-scene/evaluate",
+        "/api/module-scene/generate",
+        "/api/module-scene/replay",
       ];
       if (request.method === "POST" && operations.includes(request.url)) {
         const chunks = [];
         let size = 0;
-        for await (const chunk of request) {
+        let exceeded = false;
+        for await (const chunk of request.iterator({
+          destroyOnReturn: false,
+        })) {
           size += chunk.length;
-          if (size > maximumBodyBytes)
-            return json(413, { error: "Experiment exceeds 64 KiB" });
+          if (size > maximumBodyBytes) {
+            exceeded = true;
+            break;
+          }
           chunks.push(chunk);
+        }
+        if (exceeded) {
+          chunks.length = 0;
+          request.resume();
+          return json(413, { error: "Experiment exceeds 64 KiB" });
         }
         let input;
         try {
@@ -69,7 +93,34 @@ export function makeServer() {
         }
         let result;
         if (request.url === "/api/evaluate") result = evaluate(input);
-        else if (request.url === "/api/authoring/evaluate")
+        else if (request.url === "/api/module-scene/evaluate")
+          result = resolveModuleSceneAuthoring(input);
+        else if (request.url === "/api/module-scene/replay")
+          result = replayModuleSceneAuthoring(input);
+        else if (request.url === "/api/module-scene/generate") {
+          if (
+            !input ||
+            typeof input !== "object" ||
+            Array.isArray(input) ||
+            Object.keys(input).some(
+              (key) => !["catalogue", "seed", "maxAttempts"].includes(key),
+            )
+          )
+            return json(422, {
+              status: "rejected",
+              errors: [
+                {
+                  code: "scene-generation-envelope",
+                  path: "input",
+                  message:
+                    "Only catalogue, seed and maxAttempts are supported.",
+                },
+              ],
+            });
+          result = generateModuleSceneAuthoring(input.catalogue, input.seed, {
+            maxAttempts: input.maxAttempts ?? 1024,
+          });
+        } else if (request.url === "/api/authoring/evaluate")
           result = resolveAuthoring(input);
         else if (request.url === "/api/authoring/replay")
           result = replayAuthoring(input);

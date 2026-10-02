@@ -21,6 +21,22 @@ direction. Removing audit prose does not resolve missing exterior/material/face
 construction. The [art contract](../prototype/generator-workbench/art-template.md)
 owns this separation and the retained comparison evidence.
 
+The renderer brief must be self-contained: name the drawing techniques rather
+than assuming knowledge of Critter Lab or a selected style. Creature colors and
+their region boundaries come from expression; illustration shading cannot choose
+a replacement palette. Use compact plain visual facts instead of coordinate
+lists or a technical phenotype wall. The complete genome and construction data
+remain inspectable separately. These requirements apply to new scene briefs;
+historical submitted prompts retain their exact provenance.
+
+Short inherited-genome and expressed-creature lookup fingerprints connect a
+new renderer brief to its retained record. They preserve full hashes separately,
+distinguish copy identity from expression and individual provenance, and exclude
+illustration style/view. This is a foundation for later fingerprint art and
+sharing; it does not yet implement compact reversible genome encoding or QR
+payloads. The [art contract](../prototype/generator-workbench/art-template.md)
+owns the current display-code boundary.
+
 Owner requires ground, flying and swimming creatures and a much broader range of
 body organizations. Fish, microbes, insects and land animals illustrate desired
 range; they are not a mandatory taxonomy. **Classes emerge from expressed genomes,
@@ -145,6 +161,18 @@ own rooted elements, growth direction and contour operators before execution;
 they remain pending in the broad scene rather than substituting a skin texture.
 Later faithful image prompts consume the resulting resolved scene. The existing
 narrow PET calibration is preserved separately.
+
+### Connected authoring scene
+
+The optional [scene authoring connection](../prototype/generator-workbench/README.md#connected-scene-authoring-experiment)
+combines these exact body, ocular and skin/scales consumers after genetic
+resolution. It preserves the older packages and default diagnostic workflow.
+Fresh generation searches unmodified whole genomes within a declared total
+budget, retaining seeds and rejection stages. Failed geometry never becomes a
+repaired or substituted creature. Whole-copy edits invalidate the preview and
+renderer brief until resolution succeeds again. Source construction remains
+distinct from generated illustration and does not establish pet appeal or the
+owner's complete intended anatomical range.
 
 ## Coherent static family implementation proof
 

@@ -80,6 +80,40 @@ integration and faithful renderer prompts remain separate subsequent work; this
 package is not added to the default UI list. Generic diagnostic, geometry-reference
 and Gemini prompt consumers explicitly defer for it rather than omitting features.
 
+### Connected scene authoring experiment
+
+The connected experiment adds the 54-record covering catalogue as an optional package
+in the existing React/Mantine interface. The default diagnostic and three existing
+packages remain independently replayable. One post-resolution scene aggregates
+the solved body, optional eyes and body-local skin/scales without rewriting the
+genetic graph. Its source identities, full construction artifact and renderer
+projection have separate versions and digests.
+
+Generate searches at most 1,024 total unmodified whole-genome draws, accepting
+only a genetically resolved input whose body, eyes and covering construct.
+The declared candidate-seed sequence is the requested unsigned seed plus the
+zero-based draw index, wrapping at 32 bits. Rejection counts identify genetic,
+body, ocular and covering stages. Exhaustion returns no replacement creature;
+art-prompt overflow is a separate presentation failure rather than a gene repair.
+
+The positive Gemini brief describes the verified continuous exterior, rooted
+appendage counts, optional eyes and actual pigment/plate fields. Detailed
+coordinates remain in the exportable scene artifact, addressed by profile and
+digest references in the bounded prompt audit. Diagnostic inspection ink is not
+an inherited pigment. The existing subject, binding and prompt bounds remain.
+The new template uses explicit pixel-art craft and compact plain proportions,
+without brand-context assumptions or a replacement palette. Short `#G…` and
+`#E…` references connect the brief to inherited and expressed identity; their
+full hashes remain in the export. They do not encode a whole genome or implement
+QR sharing.
+
+Scene replay sends a compact retained-input and expected-identity envelope through
+the existing 64KiB loopback endpoint. It reconstructs all geometry and checks
+declared identities; embedded imported geometry is neither sent nor trusted.
+The complete artifact remains available for local inspection/export. Copy edits
+invalidate the current preview and prompt. This connection does not broaden the
+construction profile or deliver finished pet art, fur/feathers, motion or game UI.
+
 Use the existing host Node runtime22.12 or later and pnpm11.19.0:
 
 ```sh
@@ -131,8 +165,10 @@ current resolved packet text, without rewriting or truncation. Editing or
 rejecting inputs clears the prompt with the preview; an unavailable projection
 shows its actual error and disables copying. This panel makes no provider call.
 
-Template version2 makes that text a positive illustration brief: substantial
-HiBit art direction followed by a readable source-derived phenotype. Complete
+Template version3 makes that text a self-contained pixel-art illustration brief,
+followed by compact source-derived visual features. Subject pigments come from
+resolved fields; the craft paragraph cannot replace them with a generic palette.
+Complete
 geometry, causal trace, identity and limitation bindings remain in the exported
 packet and advanced source inspection. The workbench handles replay/conflict
 validation before creating the renderer text. [Contract and retained comparisons](art-template.md)
@@ -202,6 +238,8 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `pet-catalogue.mjs` / `pet-construction.mjs`       | New versioned face ratios and bounded rooted material elements, using the shared continuous solver with exact prior defaults             |
 | `pet-fixtures.mjs` / `pet-projection.mjs`          | Four same-face materials, one face-only copy edit, and lossless bounded source/coordinate dictionaries                                   |
 | `authoring-adapter.mjs`                            | Host records/digests, replay, presentation and fact-derived art-template projection                                                      |
+| `module-scene.mjs` / `module-scene-authoring.mjs`   | Optional verified body/ocular/covering aggregate, bounded unmodified generation, compact replay and positive renderer projection |
+| `authoring-identity.mjs`                           | Separate inherited/expression full digests and short lookup references; not reversible genome payloads |
 | `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
 | `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |
 | `src/`                                             | Framework forms, navigation and inspection of shared results                                                                             |

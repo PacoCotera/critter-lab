@@ -9,7 +9,7 @@ Status: accepted framework with five information layers, eleven dimension famili
 - Affinities describe environments, elements and foods that support or hinder thriving. Skills/abilities need inherited structure; the exact tree or network remains open.
 - Jobs must not determine genomics. Future games interpret expressed properties for potentially many activities. Playful contests and a larger crowd of critters are future game direction, not genetic categories.
 - Compatible genomes may cross, potentially producing non-viable or exceptional offspring. Compatibility must follow declared inherited/reproductive/developmental contracts; taxonomic adjacency or appearance alone cannot authorize a cross. Outcomes and probabilities need definition.
-- Structured genetic imagery should represent class or individual information. Encoding and visual style are deferred until concrete examples help. It is not an identity or permission system.
+- Structured genetic imagery should represent inherited or expressed information. The owner requests a reversible, versioned encoding of the layered tree as a string, providing a foundation for fingerprint art, QR transport and sharing. Exact codec and visual style remain proposed; encoding is not an ownership or permission system.
 - Individual identity differs from class, genome and expression. Public scanning grants neither ownership nor breeding permission. Preserve records and finished art; see [identity and rights](players-social.md).
 - The explore probe gathers environmental signals and points into a sample that needs research and can ultimately yield a lab-created specimen without parents. Such founders enter the same genetics framework as bred offspring. Detailed signal mappings and research mechanics are not yet selected.
 
@@ -30,6 +30,32 @@ A **layer** explains the role of information: inherited, resolved or acquired. A
 Identity, lineage, permissions and evidence accompany all layers rather than becoming genes. Regulatory variants belong to layer 2; rules interpreting them belong to layer 3. Temporary environment and condition feed evaluation without silently rewriting the inherited genome. Distinguish a reference-condition phenotype from current effective performance so a rested adult and a tired juvenile can be compared honestly.
 
 Use **phenotype** in domain records for what we have called the expressed genome. It includes functional properties, not just visible appearance. Player-facing terminology remains a UX choice.
+
+### Reversible layered representation — accepted direction
+
+Represent the five layers as branches of a versioned creature record. Store each
+inherited locus and its ordered copies once; dimension views and polygenic
+relationships reference those records rather than duplicating or flattening
+them. Preserve foundation/rule versions, regulatory information, provenance,
+expression context and realization, resolved phenotype, and modeled lifetime
+state in their respective branches. A genome-only payload and a whole-creature
+payload must declare their different contents.
+
+The owner requests deterministic binary packing followed by a reversible text
+encoding. Decoding must recover the declared tree without silently truncating
+branches. Compact mode may reference an exact shared, version-pinned catalogue;
+portable mode must carry the foundation needed for reconstruction. A payload
+must explicitly distinguish embedded, exactly reconstructable and unmodeled
+information. A random seed alone is insufficient unless every dependency and
+generation rule is pinned and available.
+
+Short hash references identify retained records and check integrity; they are
+not the recoverable payload. The current workbench's `#G` and `#E` references
+remain lookup fingerprints. Measure encoded size on actual records before
+choosing display length or QR use. Packing does not make acquired lifetime
+history heritable, and a genome need not determine later experience. Exact
+field layout, quantization, catalogue availability and compatibility handling
+are bounded architecture work, not an implemented codec or a canonical schema.
 
 Owner clarification: **genome → expression/development → anatomy and capabilities
 → optional class description**. Organization, segmentation, attachments and

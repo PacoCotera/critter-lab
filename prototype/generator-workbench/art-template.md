@@ -1,10 +1,10 @@
 # Genome-first art template
 
 The [versioned template](art-template.json) supplies a positive renderer brief
-for the workbench's current verified creature. Version2 replaces the audit-wall
-text after the owner's2October correction. It leads with deliberate Critter Lab
-HiBit art direction and follows with a readable description of the resolved
-subject. [Four supplied image/prompt comparisons](evidence/renderer-brief/README.md)
+for the workbench's current verified creature. Version3 follows the owner's
+2October correction: explicit pixel-art techniques, expressed subject colors
+and a compact plain visual description. It replaces the assumed brand/style
+context and generic palette treatment in version2. [Four supplied image/prompt comparisons](evidence/renderer-brief/README.md)
 show why rendering quality, anatomical fidelity and pet appeal need separate
 assessment.
 
@@ -36,6 +36,15 @@ Counts, root groups, shape relationships, feature availability, pigment
 partitions, covering extent and expression gates survive that description.
 
 The copyable `packet.prompt.text` is the renderer brief, not the JSON audit.
+One compact reference line identifies the inherited genome (`#G…`) and its
+resolved expression (`#E…`). Full canonical hashes remain in the exported record;
+the declared 12-hex display prefixes are lookup fingerprints, not reversible
+genome packing or guaranteed unique identifiers. Genome identity excludes
+origin, context and realization seed; expression identity retains the resolved
+context, seed, result and verified construction. Illustration style, camera,
+SVG and diagnostic ink cannot change these identities. Individual provenance
+and parentage stay in the existing record and genome origin. QR payloads and
+sharing protocols remain separate work.
 This concise concept prompt is not an exact coordinate transport. Exact marking
 positions and geometry remain inspectable in bindings/reference artifacts;
 text alone cannot establish pixel-level fidelity. Unknown exterior/mask details
@@ -54,19 +63,42 @@ supplies retained depiction direction, not this specimen's anatomy. Naming a
 reference file does not mean it was attached to a provider conversation.
 
 The renderer brief emphasizes a whole subject with breathing room, readable
-thumbnail silhouette, calm midtones, compact shadows and localized material
-detail. Fine ridges enrich the specified surface rather than dominating every
+thumbnail silhouette, source-derived pigments, readable light/shadow and localized
+material detail. Fine ridges enrich the specified surface rather than dominating every
 form. A face carries character only when present; faceless subjects can gain
 appeal through their form and composed presentation. Static presentation does
 not invent pet behavior or current locomotion.
 
-Version2 is a new presentation projection of the same verified phenotype.
+Version3 is a new presentation projection of the same verified phenotype.
 Historical packets, prompts and images remain unchanged. Replaying their source
 genome still verifies the retained input/result and canonical diagnostic; it
 does not claim that a newly projected prompt reproduces the old image or v1
 prompt byte-for-byte. Retain the exact template version and submitted text for
 any future calibration. Actual renderer quality and fidelity require inspection
 of returned images; prompt/source tests alone cannot approve pet artwork.
+
+## Module scene projection
+
+The optional connected scene experiment uses a separate `module-scene-art/1`
+projection of verified body, ocular and skin/scales constructors. The owner's
+latest correction requires a compact, self-contained drawing brief: describe
+pixel craft explicitly instead of relying on a brand or a named art direction,
+and take every subject pigment from the expressed genome. Generic palette or
+midtone prescriptions cannot override those colors. Historical version2 packet
+outputs remain retained; the new projection does not inherit their style text.
+Its plain visual description covers the continuous solved exterior and actual
+rooted appendages, eyes and pigment/plate fields. Diagnostic edge ink is excluded
+from inherited art facts.
+
+Its audit bindings reference the complete exported scene by source, constructor,
+profile and artifact digests. They do not contain every geometry coordinate.
+All coordinates and source traces remain lossless in that artifact, and prompt
+assembly independently replays genes and reconstructs the scene before using
+it. The existing 64KiB subject, 8192-character binding and 32768-character prompt
+bounds remain; overflow withholds the brief while preserving the valid scene.
+The exact emitted UTF-8 text has a separate prompt digest. This source/reference
+boundary is an inspection contract, not evidence of a submitted prompt or a
+returned illustration.
 
 The2October repair stops at reviewed source-derived briefs, focused boundary
 checks and the actual workbench display. It introduces no provider call, new

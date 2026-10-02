@@ -33,12 +33,12 @@ test("renderer briefs preserve contrasting rooted roles and current neutral pose
 test("continuous subject prose follows actual proportions, face and suppressed expression", () => {
   const skin = retained("pet-materials/pet-skin");
   const text = describeRendererSubject(skin.result, skin.input.context);
-  assert.match(text, /continuous 3-lobed body/);
+  assert.match(text, /continuous body with 3 proportion regions/);
   assert.match(text, /6 rounded leaf-shaped fins/);
-  assert.match(text, /2 #f1eddc circular eyes.*40%/);
+  assert.match(text, /2 pale cream #f1eddc circular eyes.*40%/);
   assert.match(text, /separated by 65%/);
   assert.match(text, /#ae674d/);
-  assert.match(text, /#dfd2ae, #718489/);
+  assert.match(text, /cream #dfd2ae, blue-gray #718489/);
   const input = structuredClone(skin.input);
   input.genome.loci["structure.ocular-pair"] = ["absent", "absent"];
   input.genome.loci["structure.oral-opening"] = ["off", "off"];
@@ -73,18 +73,18 @@ test("surface prose preserves actual material extent and realized marking gates"
   const broad = retained("diversity-diagnosis/broad-seed-21");
   assert.match(
     describeRendererSubject(broad.result, broad.input.context),
-    /span 3.48/,
+    /spanning 348.3% of front-region width/,
   );
   assert.match(
     describeRendererSubject(broad.result, broad.input.context),
-    /span 0.7/,
+    /spanning 69.7% of front-region width/,
   );
   const scales = retained("pet-materials/pet-scales");
   const plateSize = Number(
     (
       scales.result.graph.covering.elementProfile.halfWidth /
       scales.result.graph.nodes[0].dimensions[1]
-    ).toFixed(2),
+    ).toFixed(1),
   );
   assert.ok(
     describeRendererSubject(scales.result, scales.input.context).includes(
@@ -114,7 +114,7 @@ test("active marking extent changes the rendered per-region density", () => {
   assert.notEqual(lowText, highText);
 });
 
-test("v2 positive prompt retains full audit bindings and unchanged source identity", () => {
+test("v3 self-contained prompt retains full audit bindings and unchanged source identity", () => {
   for (const name of [
     "diversity-diagnosis/broad-seed-1",
     "diversity-diagnosis/broad-seed-21",
@@ -123,11 +123,15 @@ test("v2 positive prompt retains full audit bindings and unchanged source identi
     const packet = retained(name);
     const before = JSON.stringify(packet);
     const prompt = projectArtPrompt(packet);
-    assert.equal(prompt.templateVersion, 2);
+    assert.equal(prompt.templateVersion, 3);
     assert.deepEqual(prompt.bindings, packet.prompt.bindings);
     assert.equal(JSON.stringify(packet), before);
-    assert.match(prompt.text, /crisp, deliberate pixel clusters/);
-    assert.match(prompt.text, /softly modeled volumes/);
+    assert.match(prompt.text, /pixel art|pixel-art/);
+    assert.match(prompt.text, /pixel clusters/);
+    assert.doesNotMatch(
+      prompt.text,
+      /HiBit|calm midtone|warm upper-left|cool shadow/,
+    );
     assert.doesNotMatch(
       prompt.text,
       /\{\{|sourceGroups|inputDigest|CONSTRUCTED|Do not paint|report the conflict|additional inherited materials/,

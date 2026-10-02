@@ -2,6 +2,10 @@ import { GRAPH_COVERING_RULE_VERSION } from "./graph-covering-catalogue.mjs";
 import { GRAPH_MODULE_RULE_VERSION } from "./graph-module-catalogue.mjs";
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
+import {
+  authoringIdentity,
+  creatureReferenceLine,
+} from "./authoring-identity.mjs";
 import { describeRendererSubject } from "./art-brief.mjs";
 import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
 import { createGeometryReference } from "./geometry-reference.mjs";
@@ -172,6 +176,7 @@ export function resolveAuthoring(input) {
       drawGenomeField(catalogue, retainedInput.genome, result, kind),
     ]),
   );
+  packet.identity = authoringIdentity(packet);
   try {
     packet.prompt = projectArtPrompt(packet);
   } catch (error) {
@@ -535,15 +540,18 @@ export function projectArtPrompt(packet) {
       packet.input.context,
     ),
   };
-  const text = template.promptSections
-    .map((section) =>
-      section.text.replace(/\{\{([a-zA-Z]+)\}\}/g, (_, key) => {
-        if (!Object.hasOwn(rendererBindings, key))
-          throw new Error(`Unknown art binding ${key}`);
-        return rendererBindings[key];
-      }),
-    )
-    .join("\n\n");
+  const text =
+    template.promptSections
+      .map((section) =>
+        section.text.replace(/\{\{([a-zA-Z]+)\}\}/g, (_, key) => {
+          if (!Object.hasOwn(rendererBindings, key))
+            throw new Error(`Unknown art binding ${key}`);
+          return rendererBindings[key];
+        }),
+      )
+      .join("\n\n") +
+    "\n\n" +
+    creatureReferenceLine(authoringIdentity(packet));
   if (text.includes("{{") || text.length > template.limits.maxPromptCharacters)
     throw new Error(
       "Art projection is incomplete or exceeds the template prompt limit.",

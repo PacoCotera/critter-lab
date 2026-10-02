@@ -46,6 +46,12 @@ import {
   initialAuthoringInputs,
   authoringPackageLabel,
   unconsumedOutputNotice,
+  authoringRoute,
+  sceneReplayEnvelope,
+  copyableAuthoringExport,
+  sharedSceneCamera,
+  scenePreviewMarkup,
+  sceneCausalSummary,
 } from "../authoring-ui.mjs";
 
 const clone = (value) => structuredClone(value);
@@ -75,6 +81,8 @@ async function request(path, input) {
         "Request rejected.",
     );
     error.code = data.errors?.[0]?.code;
+    error.generation = data.generation;
+    error.stage = data.stage;
     throw error;
   }
   return data;
@@ -102,6 +110,7 @@ function Workbench() {
   const [packages, setPackages] = useState([]);
   const [familyExamples, setFamilyExamples] = useState([]);
   const [petExamples, setPetExamples] = useState([]);
+  const [sceneExamples, setSceneExamples] = useState([]);
   const [draft, setDraft] = useState(null);
   const [genome, setGenome] = useState(null);
   const [context, setContext] = useState(null);
@@ -147,6 +156,16 @@ function Workbench() {
             "Local records could not be read; current catalogue remains available.",
           );
         }
+        request("/api/module-scene/catalogue")
+          .then((scenePackage) => {
+            setPackages((current) => [...current, scenePackage]);
+            setSceneExamples(scenePackage.sceneExamples ?? []);
+          })
+          .catch(() => {
+            setErrorDetails(
+              "Optional Body / eyes / skin-scales package unavailable. Existing packages remain usable.",
+            );
+          });
       })
       .catch((error) => {
         setMessage(error.message);
@@ -215,7 +234,9 @@ function Workbench() {
         ? petExamples[0]
         : item.catalogue.ruleVersion === "continuous-static/1"
           ? familyExamples[0]
-          : null;
+          : item.catalogue.ruleVersion === "developmental-covering/1"
+            ? sceneExamples[0]
+            : null;
     setGenome(clone(example?.genome ?? item.defaultGeneration.genome));
     setContext(
       example?.context ?? {
@@ -232,7 +253,7 @@ function Workbench() {
     setBatch([]);
   }
   function loadFamilyExample(name) {
-    const example = [...familyExamples, ...petExamples].find(
+    const example = [...familyExamples, ...petExamples, ...sceneExamples].find(
       (item) => item.name === name,
     );
     if (!example || processing.current) return;
@@ -247,7 +268,10 @@ function Workbench() {
     setGenome(exactInput.genome);
     setContext(exactInput.context);
     return run(async () => {
-      const data = await request("/api/authoring/evaluate", exactInput);
+      const data = await request(
+        authoringRoute(catalogue, "evaluate"),
+        exactInput,
+      );
       if (revision !== inputRevision.current) return;
       setPacket(data);
       setMessage("Example loaded. Preview ready.");
@@ -270,7 +294,11 @@ function Workbench() {
             ? "No valid creature found in this bounded search. Generate again for a new seed."
             : error.message,
         );
-        setErrorDetails(error.message);
+        setErrorDetails(
+          error.generation
+            ? `${error.message}\n${pretty(error.generation)}`
+            : error.message,
+        );
         setFailed(true);
       }
     } finally {
@@ -281,7 +309,7 @@ function Workbench() {
   async function resolve(expression = null) {
     const revision = inputRevision.current;
     setPacket(null);
-    const data = await request("/api/authoring/evaluate", {
+    const data = await request(authoringRoute(catalogue, "evaluate"), {
       catalogue,
       genome,
       context,
@@ -301,7 +329,7 @@ function Workbench() {
   async function generate(generationSeed = Number(seed)) {
     const revision = inputRevision.current;
     setPacket(null);
-    const data = await request("/api/authoring/generate", {
+    const data = await request(authoringRoute(catalogue, "generate"), {
       catalogue,
       seed: generationSeed,
       maxAttempts: 1024,
@@ -314,11 +342,19 @@ function Workbench() {
     setGenome(data.input.genome);
     setContext(data.input.context);
     setPacket(data);
-    setMessage("New genome generated. Preview ready.");
+    setMessage(
+      data.scene
+        ? `New scene ready after ${data.generation.attempts} unmodified draws.`
+        : "New genome generated. Preview ready.",
+    );
   }
   function exportJson(kind, value) {
-    setJson(kind);
-    setJsonText(pretty(value));
+    setJson(
+      value?.sceneProjectionVersion === "module-scene/1"
+        ? `${kind} — compact scene replay`
+        : kind,
+    );
+    setJsonText(pretty(copyableAuthoringExport(value)));
   }
   function editCopy(locusId, index, value) {
     if (!genome?.loci?.[locusId]) return;
@@ -397,12 +433,21 @@ function Workbench() {
         "Imported catalogue as separate draft; current experiment unchanged.",
       );
     } else {
-      const data = await request("/api/authoring/replay", {
-        schemaVersion: imported.schemaVersion,
-        input: imported.input,
-        inputDigest: imported.inputDigest,
-        resultDigest: imported.resultDigest,
-      });
+      setPacket(null);
+      const replayEnvelope = imported.sceneProjectionVersion
+        ? sceneReplayEnvelope(imported)
+        : {
+            schemaVersion: imported.schemaVersion,
+            input: imported.input,
+            inputDigest: imported.inputDigest,
+            resultDigest: imported.resultDigest,
+          };
+      const data = await request(
+        imported.sceneProjectionVersion
+          ? "/api/module-scene/replay"
+          : "/api/authoring/replay",
+        replayEnvelope,
+      );
       if (revision !== inputRevision.current) return;
       setCatalogue(data.input.catalogue);
       setDraft(clone(data.input.catalogue));
@@ -428,7 +473,7 @@ function Workbench() {
     const items = [];
     for (let index = 0; index < 6; index++)
       items.push(
-        await request("/api/authoring/generate", {
+        await request(authoringRoute(catalogue, "generate"), {
           catalogue,
           seed: Number(seed) + index,
         }),
@@ -455,6 +500,7 @@ function Workbench() {
   const filtered = scopedLoci(draft, family, search);
   const genomeLoci = scopedLoci(catalogue, family, search);
   const cause = causalSummary(catalogue, packet?.result, selected);
+  const sceneCause = sceneCausalSummary(packet?.scene, selected);
   const currentPrompt =
     isResolvedAuthoringPacket(packet) && !packet.prompt?.error
       ? (packet.prompt?.text ?? "")
@@ -469,11 +515,23 @@ function Workbench() {
     pinned &&
     packet &&
     pinned.ruleVersion === packet.ruleVersion &&
-    Boolean(packet.result.graph.exterior);
+    (Boolean(packet.result.graph.exterior) ||
+      Boolean(packet.scene && pinned.scene));
+  const sceneComparisonCamera =
+    pinned?.scene && packet?.scene ? sharedSceneCamera([pinned, packet]) : null;
   const comparisonCamera = compatibleComparison
     ? sharedPreviewCamera([pinned.result, packet.result])
     : null;
   const differences = compareResults(pinned?.result, packet?.result);
+  function previewMarkup(current, camera = null) {
+    return current.scene
+      ? scenePreviewMarkup(current, camera)
+      : drawAuthoringCreature(
+          current.result,
+          selected,
+          diagnosticViewOptions(camera),
+        );
+  }
   const setField = (key, value) => {
     try {
       const next = JSON.parse(edited);
@@ -1023,6 +1081,22 @@ function Workbench() {
                                 : `The ${packet.result.graph.covering.kind} covering includes this locus in its material trace.`}
                             </Text>
                           )}
+                          {sceneCause?.ocular && (
+                            <Text size="sm" mt="xs">
+                              Eye construction uses this locus;{" "}
+                              {sceneCause.ocularTargets} visible eye targets. An
+                              absent pair retains its presence gate.
+                            </Text>
+                          )}
+                          {sceneCause?.covering && (
+                            <Text size="sm" mt="xs">
+                              Body material construction uses this locus;{" "}
+                              {sceneCause.coveringKind},{" "}
+                              {sceneCause.coveringTargets} plate targets.
+                              Geometry dependencies and direct material causes
+                              remain in the scene trace.
+                            </Text>
+                          )}
                           {!!cause?.dependents.length && (
                             <Text size="xs" c="dimmed" mt="xs">
                               Other dependent outputs:{" "}
@@ -1055,12 +1129,13 @@ function Workbench() {
                       <SvgView
                         compact
                         onSelect={selectLocus}
-                        markup={drawAuthoringCreature(
-                          packet.result,
-                          selected,
-                          diagnosticViewOptions(
-                            packet.result.graph.exterior ? previewCamera : null,
-                          ),
+                        markup={previewMarkup(
+                          packet,
+                          packet.scene
+                            ? null
+                            : packet.result.graph.exterior
+                              ? previewCamera
+                              : null,
                         )}
                       />
                     ) : (
@@ -1072,18 +1147,38 @@ function Workbench() {
                       </div>
                     )}
                     <Text size="xs" c="dimmed">
-                      Amber shows direct and dependency involvement in the
-                      retained construction.
+                      {packet?.scene
+                        ? "Selected module involvement is listed beside the preview; exact targets and source links remain in advanced scene inspection."
+                        : "Amber shows direct and dependency involvement in the retained construction."}
                     </Text>
                     <Text size="xs" c="dimmed" mt="xs">
                       This structural diagram is not generated game art.
                     </Text>
                     <Text size="xs" c="dimmed" mt="xs">
-                      Display: {SURFACE_DETAIL_PROJECTION_VERSION}.{" "}
-                      {catalogue.ruleVersion === "developmental-analytic/1"
-                        ? "Broad graph assembly; face and covering modules are not modeled in this package."
-                        : "Narrow continuous-body calibration; this is not broad anatomy generation."}
+                      Display:{" "}
+                      {packet?.scene
+                        ? "module-scene/1"
+                        : SURFACE_DETAIL_PROJECTION_VERSION}
+                      .{" "}
+                      {catalogue.ruleVersion === "developmental-covering/1"
+                        ? "Verified body, optional eyes and skin/scales source experiment; unsupported construction rejects without changing copies."
+                        : catalogue.ruleVersion === "developmental-analytic/1"
+                          ? "Broad graph assembly; face and covering modules are not modeled in this package."
+                          : "Narrow continuous-body calibration; this is not broad anatomy generation."}
                     </Text>
+                    {packet?.scene && packet.generation && (
+                      <Text size="xs" c="dimmed" mt="xs">
+                        Requested seed {packet.generation.requestedSeed};
+                        winning seed {packet.generation.winningSeed}, draw{" "}
+                        {packet.generation.attempts}/
+                        {packet.generation.maxAttempts}. Rejected: genetic{" "}
+                        {packet.generation.rejected.genetic}, body{" "}
+                        {packet.generation.rejected.body}, eyes{" "}
+                        {packet.generation.rejected.ocular}, material{" "}
+                        {packet.generation.rejected.covering}. Full accounting
+                        is retained in the record.
+                      </Text>
+                    )}
                     {packet && (
                       <Group mt="md" gap="xs">
                         <Button
@@ -1175,7 +1270,9 @@ function Workbench() {
                       ? petExamples
                       : catalogue.ruleVersion === "continuous-static/1"
                         ? familyExamples
-                        : []
+                        : catalogue.ruleVersion === "developmental-covering/1"
+                          ? sceneExamples
+                          : []
                     ).map((example) => (
                       <Button
                         key={example.name}
@@ -1326,6 +1423,7 @@ function Workbench() {
                                 fact: selectedFact,
                                 dependents: cause?.dependents,
                                 targets: cause?.targets,
+                                moduleTargets: sceneCause,
                               })}
                             </Code>
                           </Accordion.Panel>
@@ -1337,7 +1435,8 @@ function Workbench() {
                           <Accordion.Panel>
                             <Code block className="sequence">
                               {pretty(
-                                packet.geometryReference?.manifest ??
+                                packet.scene ??
+                                  packet.geometryReference?.manifest ??
                                   packet.geometryReference,
                               )}
                             </Code>
@@ -1382,11 +1481,15 @@ function Workbench() {
                 <div>
                   <Text size="sm">Pinned · {pinned.ruleVersion}</Text>
                   <SvgView
-                    markup={drawAuthoringCreature(
-                      pinned.result,
-                      null,
-                      diagnosticViewOptions(comparisonCamera),
-                    )}
+                    markup={
+                      pinned.scene
+                        ? scenePreviewMarkup(pinned, sceneComparisonCamera)
+                        : drawAuthoringCreature(
+                            pinned.result,
+                            null,
+                            diagnosticViewOptions(comparisonCamera),
+                          )
+                    }
                     compact
                   />
                 </div>
@@ -1394,11 +1497,15 @@ function Workbench() {
                   <div>
                     <Text size="sm">Current · {packet.ruleVersion}</Text>
                     <SvgView
-                      markup={drawAuthoringCreature(
-                        packet.result,
-                        null,
-                        diagnosticViewOptions(comparisonCamera),
-                      )}
+                      markup={
+                        packet.scene
+                          ? scenePreviewMarkup(packet, sceneComparisonCamera)
+                          : drawAuthoringCreature(
+                              packet.result,
+                              null,
+                              diagnosticViewOptions(comparisonCamera),
+                            )
+                      }
                       compact
                     />
                   </div>
@@ -1514,8 +1621,7 @@ function Workbench() {
                   <Button
                     size="xs"
                     onClick={() => {
-                      setJsonText(pretty(item));
-                      setJson("Replay saved experiment");
+                      exportJson("Replay saved experiment", item);
                     }}
                   >
                     Replay
@@ -1602,6 +1708,13 @@ function Workbench() {
           title={json}
           size="xl"
         >
+          {json?.endsWith("compact scene replay") && (
+            <Text size="sm" mb="sm">
+              Compact replay inputs and verification fingerprints. Import
+              regenerates the scene and prompt; the full source artifact stays
+              in the retained record.
+            </Text>
+          )}
           <Textarea
             aria-label="Copyable authoring JSON"
             value={jsonText}

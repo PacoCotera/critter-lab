@@ -16,6 +16,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "developmental-covering/1")
+    return "Body / eyes / skin-scales experiment";
   if (catalogue.ruleVersion === "continuous-pet/1")
     return "Narrow face/material calibration";
   if (catalogue.ruleVersion === "continuous-static/1")
@@ -43,7 +45,105 @@ export function freshGenerationSeed(previousSeed, randomSeed) {
   return randomSeed === previousSeed ? (randomSeed + 1) >>> 0 : randomSeed;
 }
 export function isResolvedAuthoringPacket(packet) {
-  return packet?.status === "resolved" && packet?.result?.status === "resolved";
+  return (
+    packet?.status === "resolved" &&
+    packet?.result?.status === "resolved" &&
+    (packet.ruleVersion !== "developmental-covering/1" ||
+      (packet.sceneProjectionVersion === "module-scene/1" &&
+        packet.scene?.status === "constructed" &&
+        packet.reference?.status === "constructed"))
+  );
+}
+
+export function authoringRoute(catalogue, operation) {
+  return `/api/${catalogue?.ruleVersion === "developmental-covering/1" ? "module-scene" : "authoring"}/${operation}`;
+}
+
+export function sceneReplayEnvelope(packet) {
+  return {
+    schemaVersion: packet.schemaVersion,
+    sceneProjectionVersion: packet.sceneProjectionVersion,
+    sceneRecordId: packet.sceneRecordId ?? packet.sceneProjection?.recordId,
+    input: packet.input,
+    inputDigest: packet.inputDigest,
+    resultDigest: packet.resultDigest,
+    sceneDigest: packet.sceneDigest ?? packet.scene?.sceneDigest,
+    promptDigest: packet.promptDigest ?? packet.prompt?.promptDigest,
+  };
+}
+
+export function copyableAuthoringExport(value) {
+  return value?.sceneProjectionVersion === "module-scene/1"
+    ? sceneReplayEnvelope(value)
+    : value;
+}
+
+export function sharedSceneCamera(packets) {
+  if (
+    !packets.length ||
+    packets.some(
+      (packet) =>
+        !isResolvedAuthoringPacket(packet) ||
+        packet.sceneProjectionVersion !== "module-scene/1",
+    )
+  )
+    return null;
+  const bounds = packets.map((packet) => packet.scene.body.bounds);
+  const minimumX = Math.min(...bounds.map((bound) => bound.minimumX));
+  const maximumX = Math.max(...bounds.map((bound) => bound.maximumX));
+  const minimumY = Math.min(...bounds.map((bound) => bound.minimumY));
+  const maximumY = Math.max(...bounds.map((bound) => bound.maximumY));
+  const side = Math.max(maximumX - minimumX, maximumY - minimumY) * 1.09;
+  if (
+    ![minimumX, maximumX, minimumY, maximumY, side].every(Number.isFinite) ||
+    side <= 0
+  )
+    return null;
+  return {
+    minimumX: (minimumX + maximumX - side) / 2,
+    minimumY: (minimumY + maximumY - side) / 2,
+    side,
+  };
+}
+
+// Reframe only the outer viewport of the server's verified SVG. Inner geometry is unchanged.
+export function scenePreviewMarkup(packet, camera = null) {
+  if (!isResolvedAuthoringPacket(packet)) return "";
+  if (!camera) return packet.reference.svg;
+  const { scale, offsetX, offsetY } = packet.reference.mapping;
+  const viewBox = [
+    camera.minimumX * scale + offsetX,
+    camera.minimumY * scale + offsetY,
+    camera.side * scale,
+    camera.side * scale,
+  ];
+  if (!viewBox.every(Number.isFinite) || viewBox[2] <= 0)
+    throw new Error(
+      "Scene comparison camera requires finite positive extents.",
+    );
+  return packet.reference.svg.replace(
+    /viewBox="[^"]*"/,
+    `viewBox="${viewBox.join(" ")}"`,
+  );
+}
+
+export function sceneCausalSummary(scene, locusId) {
+  if (scene?.status !== "constructed") return null;
+  const involved = (trace) =>
+    [
+      ...(trace.locusIds ?? []),
+      ...(trace.directLocusIds ?? []),
+      ...(trace.dependencyLocusIds ?? []),
+    ].includes(locusId);
+  return {
+    ocular: scene.ocular.traces.some(involved),
+    ocularTargets: scene.ocular.traces.some(involved)
+      ? scene.ocular.features.length
+      : 0,
+    covering: scene.covering.traces.some(involved),
+    coveringTargets: scene.covering.plates.length,
+    coveringKind: scene.covering.kind,
+  };
 }
 export function scopedSelection(loci, current) {
   return loci.some((locus) => locus.id === current)
