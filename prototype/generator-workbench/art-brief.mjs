@@ -1,6 +1,58 @@
 // Renderer prose is a presentation of verified expression, never an allele resolver.
 const rounded = (value) => Number(value.toFixed(1));
 const list = (values) => values.join(", ");
+export const SEMANTIC_RENDERING_VERSION = "semantic-renderer/1";
+
+// A covering is a material field; construction samples remain in the audit packet.
+export function describeCoveringField({
+  kind,
+  count,
+  startU,
+  endU,
+  elementWidth,
+  widthUnit,
+  widthName,
+  flow,
+  clearAreas,
+  widthLabel = "front-region width",
+  contour = false,
+  rootPigment = false,
+}) {
+  if (kind === "skin") return "The body has bare skin.";
+  if (count === 0)
+    return `The ${kind} field has no realized texture; the body remains bare skin.`;
+  const domain =
+    Number.isFinite(startU) && Number.isFinite(endU)
+      ? `within the ${rounded(startU * 100)}–${rounded(endU * 100)}% longitudinal body field`
+      : "within its body-local field";
+  const size =
+    Number.isFinite(elementWidth) && Number.isFinite(widthUnit)
+      ? `, with ${widthName} about ${rounded((100 * elementWidth) / widthUnit)}% of ${widthLabel}`
+      : "";
+  if (kind === "scales")
+    return `Local overlapping scale texture belongs to the skin ${domain}${size}. ${flow}; body pigment boundaries continue through the texture. Skin outside the field and around ${clearAreas} stays smooth.`;
+  return `Sparse rooted ${kind} texture follows the skin ${domain}${size}. ${flow}${contour ? "; fine contour fans extend beyond the skin outline" : "; the body outline remains uncovered"}. Skin stays visible between the rooted patches and around clear ${clearAreas}.${rootPigment ? " Each patch follows the pigment at its body-local root." : ""}`;
+}
+
+function coveringFlow(elements, fallback) {
+  const directions = [
+    ...new Set(
+      elements
+        .filter((element) => !element.contour)
+        .map((element) => {
+          const [x, y] = element.orientation;
+          if (x > 0 && Math.abs(y) < 1e-8)
+            return "rearward longitudinal alignment";
+          if (x < 0 && Math.abs(y) < 1e-8)
+            return "forward longitudinal alignment";
+          return `alignment ${rounded((Math.atan2(y, x) * 180) / Math.PI)} degrees from the body axis`;
+        }),
+    ),
+  ];
+  return directions.length
+    ? `The material follows ${list(directions)}`
+    : fallback;
+}
 const pigmentLabel = (pigment) => {
   const names = {
     "#465459": "dark slate",
@@ -21,7 +73,7 @@ function regionName(volumes, id) {
   return `body region ${index + 1}`;
 }
 
-function attachmentDescription(graph, volumes) {
+function attachmentDescription(graph, volumes, facts) {
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
   const roots = graph.edges.filter((edge) =>
     volumes.some((volume) => volume.id === edge.from),
@@ -62,15 +114,47 @@ function attachmentDescription(graph, volumes) {
     const groups = new Map();
     for (const node of members) {
       const root = roots.find((edge) => edge.to === node.id);
-      const description = `${root ? regionName(volumes, root.from) : "retained attachment"}, each spanning ${rounded((100 * node.dimensions[1]) / volumes[0].dimensions[1])}% of ${volumes.length === 1 ? "body" : "front-region"} width`;
-      groups.set(description, (groups.get(description) ?? 0) + 1);
+      const anchor = graph.rootAnchors?.find((item) => item.nodeId === node.id);
+      const span = anchor
+        ? facts.find((fact) => fact.id === "finSpan").value
+        : node.dimensions[1];
+      const width = volumes[0].dimensions[1];
+      const chord = anchor
+        ? Math.max(...anchor.chord.map((point) => point[0])) -
+          Math.min(...anchor.chord.map((point) => point[0]))
+        : null;
+      const form = anchor
+        ? `, root chord ${rounded((100 * chord) / width)}% of that width and tapered free tips`
+        : `, longitudinal envelope extent ${rounded((100 * node.dimensions[0]) / width)}% of that width`;
+      const description = `each spanning ${rounded((100 * span) / width)}% of ${volumes.length === 1 ? "body" : "front-region"} width${form}, with retained thickness ${rounded((100 * node.dimensions[2]) / span)}% of span`;
+      if (!groups.has(description)) groups.set(description, new Map());
+      const region = root
+        ? regionName(volumes, root.from)
+        : "retained attachment";
+      const regions = groups.get(description);
+      regions.set(region, (regions.get(region) ?? 0) + 1);
     }
     const shape =
       role === "fin" && graph.profile?.id === "continuous-pet/1"
         ? " rounded leaf-shaped"
         : "";
     sentences.push(
-      `${members.length}${shape} ${role}${members.length === 1 ? "" : "s"}: ${list([...groups].map(([description, count]) => `${count} on the ${description}`))}.`,
+      `${members.length}${shape} ${role}${members.length === 1 ? "" : "s"}: ${list(
+        [...groups].map(([description, regions]) => {
+          const roots = [...regions]
+            .map(
+              ([region, count]) =>
+                `${
+                  facts.find((fact) => fact.id === "symmetry")?.value ===
+                    "bilateral" && count === 2
+                    ? "an opposed pair"
+                    : count
+                } on the ${region}`,
+            )
+            .join(", ");
+          return `${roots}; ${description}`;
+        }),
+      )}.`,
     );
   }
   return sentences;
@@ -175,45 +259,61 @@ function surfaceDescription(graph) {
     sentences.push(`Expressed marking fields contain ${list([...fields])}.`);
   }
   const covering = graph.covering;
-  if (covering?.kind === "skin")
-    sentences.push("The body covering is bare skin.");
-  else if (covering) {
+  if (covering) {
     const count =
-      covering.kind === "scales"
-        ? covering.plates.length
-        : covering.elements.length;
-    const unit =
-      covering.kind === "fur"
-        ? "rooted fur tufts"
-        : covering.kind === "feathers"
-          ? "rooted feathers"
-          : "overlapping scale plates";
-    const extent =
-      covering.atlas?.startU !== undefined
-        ? ` from ${rounded(covering.atlas.startU * 100)}% to ${rounded(covering.atlas.endU * 100)}% along the body`
-        : " in the retained body field";
+      covering.kind === "skin"
+        ? 0
+        : covering.kind === "scales"
+          ? covering.plates.length
+          : covering.elements.length;
     const leadingWidth = graph.nodes.find((node) => node.role === "volume")
       .dimensions[1];
-    const elementSize = covering.elementProfile?.size
-      ? `element scale ${rounded(covering.elementProfile.size / leadingWidth)}`
-      : covering.elementProfile?.halfWidth
-        ? `plate half-width ${rounded(covering.elementProfile.halfWidth / leadingWidth)}`
-        : "";
+    const elements = covering.elements ?? [];
+    const elementWidth =
+      covering.kind === "skin"
+        ? undefined
+        : covering.kind === "scales"
+          ? 2 * covering.elementProfile.halfWidth
+          : covering.elementProfile?.size *
+            (covering.kind === "fur"
+              ? covering.elementProfile.furLengthFraction
+              : covering.elementProfile.lengthFraction);
+    const clearAreas =
+      [
+        graph.nodes.some((node) =>
+          ["ocular", "oral-aperture"].includes(node.role),
+        )
+          ? "facial areas"
+          : null,
+        graph.rootAnchors?.length ? "fin-root areas" : null,
+      ]
+        .filter(Boolean)
+        .join(" and ") || "skin outside its rooted patches";
     sentences.push(
-      `The body carries ${count} ${unit}${extent}, around the clear facial and fin-root areas${elementSize ? `, with ${elementSize} leading-width units` : ""}.`,
+      describeCoveringField({
+        kind: covering.kind,
+        count,
+        startU: covering.atlas?.startU,
+        endU: covering.atlas?.endU,
+        elementWidth,
+        widthUnit: leadingWidth,
+        widthLabel:
+          graph.nodes.filter((node) => node.role === "volume").length === 1
+            ? "body width"
+            : "front-region width",
+        widthName:
+          covering.kind === "scales"
+            ? "full scale width"
+            : "rooted patch reach",
+        flow: coveringFlow(
+          elements,
+          "The scale overlap follows rearward longitudinal alignment",
+        ),
+        clearAreas,
+        contour: elements.some((element) => element.contour),
+        rootPigment: ["fur", "feathers"].includes(covering.kind),
+      }),
     );
-    if (["fur", "feathers"].includes(covering.kind))
-      sentences.push(
-        "Each covering element keeps the pigment of its body-local root; the remaining body surface stays visible between elements.",
-      );
-    if (covering.elements?.length) {
-      const contourCount = covering.elements.filter(
-        (element) => element.contour,
-      ).length;
-      sentences.push(
-        `Surface ${covering.kind} flows toward the posterior${contourCount ? `; ${contourCount} contour tufts fan outward` : ""}.`,
-      );
-    }
   }
   return sentences;
 }
@@ -227,7 +327,7 @@ export function describeRendererSubject(result, context) {
     .sort((a, b) => a.position[0] - b.position[0]);
   const symmetry = result.facts.find((fact) => fact.id === "symmetry")?.value;
   const sentences = [
-    `${symmetry ?? "The retained"} organization: ${graph.exterior ? `one continuous body with ${volumes.length} proportion regions` : volumes.length === 1 ? "one distinct body mass" : `${volumes.length} distinct body masses linked along an axis`}.`,
+    `${symmetry ?? "The retained"} organization: ${graph.exterior ? `one continuous body with ${volumes.length} proportion regions flowing through ${volumes.length - 1} waist transitions` : volumes.length === 1 ? "one distinct body mass" : `${volumes.length} distinct body masses linked along an axis`}.`,
   ];
   const minimumX = Math.min(
     ...volumes.map((node) => node.position[0] - node.dimensions[0] / 2),
@@ -271,7 +371,7 @@ export function describeRendererSubject(result, context) {
       );
   }
   sentences.push(
-    ...attachmentDescription(graph, volumes),
+    ...attachmentDescription(graph, volumes, result.facts),
     faceDescription(graph, volumes),
     ...surfaceDescription(graph),
   );

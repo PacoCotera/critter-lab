@@ -182,9 +182,13 @@ current resolved packet text, without rewriting or truncation. Editing or
 rejecting inputs clears the prompt with the preview; an unavailable projection
 shows its actual error and disables copying. This panel makes no provider call.
 
-Template version3 makes that text a self-contained pixel-art illustration brief,
-followed by compact source-derived visual features. Subject pigments come from
-resolved fields; the craft paragraph cannot replace them with a generic palette.
+Template version4 makes that text a self-contained pixel-art illustration brief,
+followed by compact semantic body, appendage and material descriptions. Diagnostic
+polygons and surface samples are construction aids; they do not prescribe every
+finished contour or describe scales as detached objects. Available appendage
+form comes from actual dimensions/profile facts, and material prose retains
+field, scale, flow and pigment ownership. Subject pigments come from resolved
+fields; the craft paragraph cannot replace them with a generic palette.
 Complete
 geometry, causal trace, identity and limitation bindings remain in the exported
 packet and advanced source inspection. The workbench handles replay/conflict

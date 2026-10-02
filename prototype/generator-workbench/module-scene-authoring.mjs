@@ -1,4 +1,5 @@
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { describeCoveringField } from "./art-brief.mjs";
 import { resolve } from "node:path";
 import {
   authoringIdentity,
@@ -18,7 +19,7 @@ import {
   drawBodyCoveringComparison,
 } from "./graph-covering-presentation.mjs";
 
-export const SCENE_ART_VERSION = "module-scene-art/1";
+export const SCENE_ART_VERSION = "module-scene-art/2";
 export const SCENE_SEARCH_VERSION = "sequential-candidate-seed/1";
 const template = JSON.parse(
   readFileSync(new URL("art-template.json", import.meta.url), "utf8"),
@@ -116,7 +117,7 @@ export function describeModuleScene(scene) {
   const phrases = [
     stations.length === 1
       ? `One continuous rounded body, ${rounded(stations[0].dimensions[0] / unit)} times as long as wide.`
-      : `One continuous body has ${stations.length} ${lengthDescription} rounded regions joined through ${stations.length - 1} narrower waists. ${widthDescription} The whole body is about ${rounded(bodyLength / unit)} times the front region's width.`,
+      : `One continuous body flows through ${stations.length} ${lengthDescription} proportion regions and ${stations.length - 1} narrower waist transitions. ${widthDescription} The whole body is about ${rounded(bodyLength / unit)} times the front region's width.`,
   ];
   const roots = scene.body.appendages.filter((item) =>
     stations.some((station) => station.nodeId === item.parentNodeId),
@@ -125,7 +126,7 @@ export function describeModuleScene(scene) {
   for (const root of roots) {
     let description;
     if (root.role === "fin") {
-      description = `fins on the ${regionName(root.parentNodeId)}, each spanning ${rounded((100 * root.sourceDimensions[1]) / unit)}% of ${stations.length === 1 ? "body" : "front-region"} width`;
+      description = `fins on the ${regionName(root.parentNodeId)}, ${finFormDescription(root, unit, stations.length === 1)}`;
     } else {
       const chain = [root];
       let next = scene.body.appendages.find(
@@ -155,11 +156,15 @@ export function describeModuleScene(scene) {
   const equalSpans =
     roots.length &&
     roots.every(
-      (root) => root.sourceDimensions[1] === roots[0].sourceDimensions[1],
+      (root) =>
+        root.span === roots[0].span &&
+        root.chordWidth === roots[0].chordWidth &&
+        root.sourceDimensions[2] === roots[0].sourceDimensions[2] &&
+        root.kind === roots[0].kind,
     );
   if (pairedFins && equalSpans) {
     phrases.push(
-      `${roots.length} fins form ${stations.length} opposed pairs, ${stations.length === 1 ? "one pair on the body" : "one pair on each region"}; each fin spans ${rounded((100 * roots[0].sourceDimensions[1]) / unit)}% of ${stations.length === 1 ? "body" : "front-region"} width.`,
+      `${roots.length} fins form ${stations.length} opposed pairs, ${stations.length === 1 ? "one pair on the body" : "one pair on each region"}; ${finFormDescription(roots[0], unit, stations.length === 1)}.`,
     );
   } else if (roots.length)
     phrases.push(
@@ -205,22 +210,46 @@ export function describeModuleScene(scene) {
     );
   }
   phrases.push(`${[...fields.keys()].join("; ")}. Unmarked.`);
-  if (scene.covering.kind === "skin") phrases.push("Bare skin.");
-  else {
-    const covering = scene.covering;
-    phrases.push(
-      `${covering.plates.length} overlapping rounded plates run rearward through the ${rounded(covering.field.uStart * 100)}–${rounded(covering.field.uEnd * 100)}% longitudinal strip; diameter ${rounded((100 * 2 * covering.plateProfile.halfWidth) / unit)}% of ${stations.length === 1 ? "body" : "front-region"} width. Pigment boundaries continue through plates; eyes and appendage roots stay clear.`,
-    );
-  }
-  if (
-    stations.length > 1 ||
-    roots.length ||
-    eyes.length ||
-    scene.covering.kind === "scales"
-  )
-    phrases.push("View from above.");
-  else phrases.push("View from above.");
+  const covering = scene.covering;
+  const orientation = covering.plateProfile?.orientation;
+  const flow =
+    orientation?.[0] === 1 && orientation?.[1] === 0
+      ? "The scale texture follows rearward longitudinal alignment"
+      : orientation
+        ? `The scale texture aligns ${rounded((Math.atan2(orientation[1], orientation[0]) * 180) / Math.PI)} degrees from the body axis`
+        : "The body surface follows its retained material field";
+  const clearAreas =
+    [
+      eyes.length ? "eye areas" : null,
+      roots.length ? "appendage-root areas" : null,
+    ]
+      .filter(Boolean)
+      .join(" and ") || "skin beyond its material patches";
+  phrases.push(
+    describeCoveringField({
+      kind: covering.kind,
+      count: covering.plates.length,
+      startU: covering.field?.uStart,
+      endU: covering.field?.uEnd,
+      elementWidth: covering.plateProfile
+        ? 2 * covering.plateProfile.halfWidth
+        : undefined,
+      widthUnit: unit,
+      widthLabel: stations.length === 1 ? "body width" : "front-region width",
+      widthName: "full scale width",
+      flow,
+      clearAreas,
+    }),
+  );
+  phrases.push("View from above.");
   return phrases.join(" ");
+}
+
+function finFormDescription(fin, bodyWidth, singleBody) {
+  const widthLabel = singleBody ? "body width" : "front-region width";
+  const taper =
+    fin.kind === "tapered-fin" ? ", tapering toward the free tip" : "";
+  return `each spans ${rounded((100 * fin.span) / bodyWidth)}% of ${widthLabel}, with a root chord ${rounded((100 * fin.chordWidth) / bodyWidth)}% of that width and retained thickness ${rounded((100 * fin.sourceDimensions[2]) / fin.span)}% of span${taper}`;
 }
 
 function pigmentName(pigment) {

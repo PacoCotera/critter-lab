@@ -127,7 +127,7 @@ test("optional wrapper preserves old packets and aggregates exact body/eye/mater
         ? "evidence/renderer-brief/current-prompts/pet-skin.txt"
         : null;
     if (currentBrief) {
-      assert.equal(resolved.prompt.templateVersion, 3);
+      assert.equal(resolved.prompt.templateVersion, 4);
       assert.ok(
         readFileSync(new URL(currentBrief, import.meta.url), "utf8").length > 0,
       );
@@ -210,14 +210,23 @@ test("positive brief consumes continuous source roots, proportions, eyes and con
   const skin = scenePacket("single-skin");
   const scales = scenePacket("single-scales");
   const changed = scenePacket("single-scales-extent");
+  const changedSize = scenePacket("single-scales-size");
   assert.match(skin.prompt.text, /One continuous rounded body/);
   assert.match(
     scales.prompt.text,
-    new RegExp(
-      `${scales.scene.covering.plates.length} overlapping rounded plates`,
-    ),
+    /Local overlapping scale texture belongs to the skin/,
   );
+  assert.doesNotMatch(
+    scales.prompt.text,
+    /\d+ overlapping rounded plates|plate half-width/,
+  );
+  assert.equal(scales.prompt.templateVersion, 4);
+  assert.equal(scales.prompt.projectionVersion, "module-scene-art/2");
   assert.notEqual(scales.prompt.text, changed.prompt.text);
+  assert.notEqual(
+    scales.prompt.bindings.phenotypeDescription,
+    changedSize.prompt.bindings.phenotypeDescription,
+  );
   assert.match(changed.prompt.text, /20–95%/);
   assert.match(scales.prompt.text, /6 jointed appendages along the body/);
   assert.match(
@@ -238,6 +247,7 @@ test("positive brief consumes continuous source roots, proportions, eyes and con
   assert.equal(absent.status, "resolved");
   assert.match(absent.prompt.text, /Faceless/);
   assert.doesNotMatch(absent.prompt.text, /Two circular eyes/);
+  assert.doesNotMatch(absent.prompt.text, /clear eye areas/);
   assert.match(
     scenePromptBoundsError({}, { phenotypeDescription: "x".repeat(8193) }, ""),
     /binding/,
@@ -263,6 +273,35 @@ test("positive brief consumes continuous source roots, proportions, eyes and con
   assert.notEqual(
     describeModuleScene(swappedSegments),
     describeModuleScene(scales.scene),
+  );
+  const axial = scenePacket("axial-scales");
+  assert.match(axial.prompt.text, /6 fins form 3 opposed pairs/);
+  assert.match(
+    axial.prompt.text,
+    /root chord 27.6%.*retained thickness 20% of span.*tapering toward the free tip/,
+  );
+  assert.match(
+    axial.prompt.text,
+    /full scale width about 24.8% of front-region width/,
+  );
+  assert.doesNotMatch(
+    scales.prompt.text,
+    /fins form|tapering toward the free tip/,
+  );
+  const historical = retained(
+    "evidence/module-scene-workbench/axial-scales.packet.json",
+  );
+  assert.equal(axial.resultDigest, historical.resultDigest);
+  assert.equal(axial.scene.sceneDigest, historical.scene.sceneDigest);
+  assert.equal(axial.reference.svg, historical.reference.svg);
+  assert.deepEqual(axial.identity, historical.identity);
+  assert.equal(
+    axial.prompt.bindings.sceneArtifactReference,
+    historical.prompt.bindings.sceneArtifactReference,
+  );
+  assert.equal(
+    replayModuleSceneAuthoring(compactSceneReplayEnvelope(historical)).status,
+    "rejected",
   );
 });
 

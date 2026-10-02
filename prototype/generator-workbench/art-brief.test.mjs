@@ -1,7 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { describeRendererSubject } from "./art-brief.mjs";
+import {
+  describeRendererSubject,
+  describeCoveringField,
+} from "./art-brief.mjs";
 import {
   projectArtPrompt,
   resolveAuthoring,
@@ -24,6 +27,9 @@ test("renderer briefs preserve contrasting rooted roles and current neutral pose
   assert.match(a, /3 membranes.*leading region/);
   assert.match(b, /2 membranes.*leading region/);
   assert.match(b, /2 fins.*leading region/);
+  assert.match(b, /longitudinal envelope extent/);
+  assert.match(b, /retained thickness/);
+  assert.doesNotMatch(b, /tapered|root chord|leaf-shaped/);
   assert.doesNotMatch(b, /jointed appendages|flying|continuous.*body/);
   assert.match(a, /distinct body masses/);
   assert.match(b, /quiet orthographic still/);
@@ -60,8 +66,10 @@ test("continuous subject prose follows actual proportions, face and suppressed e
 test("surface prose preserves actual material extent and realized marking gates", () => {
   const fur = retained("pet-materials/pet-fur");
   const text = describeRendererSubject(fur.result, fur.input.context);
-  assert.match(text, /11 rooted fur tufts from 20% to 95%/);
-  assert.match(text, /remaining body surface stays visible/);
+  assert.match(text, /Sparse rooted fur texture.*20–95%/);
+  assert.match(text, /Skin stays visible between the rooted patches/);
+  assert.match(text, /rearward longitudinal alignment.*contour fans/);
+  assert.match(text, /pigment at its body-local root/);
   const changed = structuredClone(fur.result);
   changed.graph.surfaces[0].markings = [
     { layout: "patches", orientation: 0.7, scale: 0.2, contrast: 0.4 },
@@ -82,13 +90,13 @@ test("surface prose preserves actual material extent and realized marking gates"
   const scales = retained("pet-materials/pet-scales");
   const plateSize = Number(
     (
-      scales.result.graph.covering.elementProfile.halfWidth /
+      (100 * 2 * scales.result.graph.covering.elementProfile.halfWidth) /
       scales.result.graph.nodes[0].dimensions[1]
     ).toFixed(1),
   );
   assert.ok(
     describeRendererSubject(scales.result, scales.input.context).includes(
-      `plate half-width ${plateSize} leading-width units`,
+      `full scale width about ${plateSize}% of front-region width`,
     ),
   );
 });
@@ -114,7 +122,7 @@ test("active marking extent changes the rendered per-region density", () => {
   assert.notEqual(lowText, highText);
 });
 
-test("v3 self-contained prompt retains full audit bindings and unchanged source identity", () => {
+test("v4 semantic prompt retains full audit bindings and unchanged source identity", () => {
   for (const name of [
     "diversity-diagnosis/broad-seed-1",
     "diversity-diagnosis/broad-seed-21",
@@ -123,11 +131,12 @@ test("v3 self-contained prompt retains full audit bindings and unchanged source 
     const packet = retained(name);
     const before = JSON.stringify(packet);
     const prompt = projectArtPrompt(packet);
-    assert.equal(prompt.templateVersion, 3);
+    assert.equal(prompt.templateVersion, 4);
     assert.deepEqual(prompt.bindings, packet.prompt.bindings);
     assert.equal(JSON.stringify(packet), before);
     assert.match(prompt.text, /pixel art|pixel-art/);
     assert.match(prompt.text, /pixel clusters/);
+    assert.match(prompt.text, /controlled stair-step contours/);
     assert.doesNotMatch(
       prompt.text,
       /HiBit|calm midtone|warm upper-left|cool shadow/,
@@ -139,6 +148,45 @@ test("v3 self-contained prompt retains full audit bindings and unchanged source 
     assert.ok(prompt.text.length < 32768);
     assert.equal(digest(packet.result), packet.resultDigest);
   }
+});
+
+test("material field prose preserves real extent/scale, skin gates and empty realization", () => {
+  const scales = retained("pet-materials/pet-scales");
+  const lowInput = structuredClone(scales.input);
+  lowInput.genome.loci["appearance.covering-extent"] = ["low", "low"];
+  lowInput.genome.loci["appearance.covering-scale"] = ["low", "low"];
+  const extentInput = structuredClone(lowInput);
+  extentInput.genome.loci["appearance.covering-extent"] = ["high", "high"];
+  const sizeInput = structuredClone(lowInput);
+  sizeInput.genome.loci["appearance.covering-scale"] = ["high", "high"];
+  const packets = [lowInput, extentInput, sizeInput].map(resolveAuthoring);
+  for (const packet of packets) assert.equal(packet.status, "resolved");
+  const descriptions = packets.map((packet) =>
+    describeRendererSubject(packet.result, packet.input.context),
+  );
+  assert.notEqual(descriptions[0], descriptions[1]);
+  assert.notEqual(descriptions[0], descriptions[2]);
+  assert.match(
+    descriptions[0],
+    /Local overlapping scale texture belongs to the skin/,
+  );
+  assert.doesNotMatch(
+    descriptions[0],
+    /carries \d+.*scale plates|plate half-width|plate objects/,
+  );
+  assert.match(descriptions[0], /body pigment boundaries continue/);
+  const skin = retained("pet-materials/pet-skin");
+  const changedSkin = structuredClone(skin.input);
+  changedSkin.genome.loci["appearance.covering-scale"] = ["high", "high"];
+  const latent = resolveAuthoring(changedSkin);
+  assert.equal(
+    describeRendererSubject(latent.result, latent.input.context),
+    describeRendererSubject(skin.result, skin.input.context),
+  );
+  assert.match(
+    describeCoveringField({ kind: "scales", count: 0 }),
+    /no realized texture.*bare skin/,
+  );
 });
 
 test("renderer projection retains independent engine authority and rejects unresolved subjects", () => {

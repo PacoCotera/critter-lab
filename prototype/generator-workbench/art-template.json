@@ -1,7 +1,7 @@
 {
   "schemaVersion": "critter-art-template/1",
   "id": "genome-first-hibit-calibration",
-  "version": 3,
+  "version": 4,
   "status": "reusable-prompt-contract-awaiting-calibration",
   "outputKind": "concept-still-calibration",
   "limits": {
@@ -61,7 +61,7 @@
   "promptSections": [
     {
       "id": "pixel-craft",
-      "text": "Draw one whole creature as a polished pixel-art game illustration. Give the existing forms softly modeled, organic volume using deliberate pixel clusters, stepped contours that follow each form, compact shadows and selective edge highlights. Make the silhouette readable at thumbnail size, with tactile material detail concentrated around the leading region and actual features. Use selective material detail to make the described surfaces tactile. Keep the listed pigment colors and region boundaries recognizable. Compose a quiet whole-body pose on a simple background, with every appendage readable. Character comes from the supplied forms and their material portrayal."
+      "text": "Draw one whole creature as a polished pixel-art game illustration. Use deliberate contiguous pixel clusters, controlled stair-step contours and a few coherent form-following shade and highlight groups. Selective crisp material edges and local optical relief make the described surfaces tactile. Keep the expressed pigments and their region boundaries recognizable. Frame the quiet whole-body pose comfortably on a simple background, with every appendage readable. Where modeled eyes exist, make them the character focus."
     },
     {
       "id": "phenotype",
@@ -96,5 +96,6 @@
       "generation outcome and defects"
     ],
     "repairPolicy": "One focused correction addresses concrete defects. A second failed round requires diagnosing framing with the coordinator before another generation or broader work."
-  }
+  },
+  "semanticPresentationVersion": "semantic-renderer/1"
 }

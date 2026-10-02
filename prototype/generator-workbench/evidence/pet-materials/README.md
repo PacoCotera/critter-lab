@@ -1,6 +1,6 @@
 # Pet face and covering experiment
 
-**Game-art outcome: rejected by the owner.** The face comparison is a diagram, not desirable pet art. Bigger pupils, valid construction and matching component counts are insufficient. This proof retains useful authoring diagnostics and failed art calibration; it is not a production asset library or a game release. The [content contract](../../../../design/genome-starter-content.md) and [art realization proposal](../../art-template.md#proposed-correction-boundary-awaiting-owner-review) record the next design boundary.
+**Game-art outcome: rejected by the owner.** The face comparison is a diagram, not desirable pet art. Bigger pupils, valid construction and matching component counts are insufficient. This proof retains useful authoring diagnostics and failed art calibration; it is not a production asset library or a game release. The [content contract](../../../../design/genome-starter-content.md) and [art realization proposal](../../art-template.md#renderer-and-workbench-responsibilities) record the next design boundary.
 
 ## Source and actual authoring UI
 
