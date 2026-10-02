@@ -145,13 +145,14 @@ flowchart LR
   Author[Manage names, taxonomy, loci and rules] --> Draft[Draft compendium]
   Draft --> Check[Validate references, rules and worked cases]
   Check --> Package[Immutable content package]
-  Package --> Baseline[Class baseline and permitted variation]
+  Package --> Baseline[Source genomic foundation and permitted variation]
   Baseline --> Genome[Complete inherited genome]
   Genome --> Resolve[Expression and recorded development]
   Context[Configuration, context and permitted sampling] --> Resolve
   Package --> Resolve
   Resolve --> Phenotype[Coherent phenotype with causes]
   Phenotype --> Construction[Anatomy, surface and legal motion]
+  Phenotype --> Taxonomy[Derived descriptive classification]
   Phenotype --> Prompt[Fact-derived visual prompt]
   Baseline --> Inspect[Sequences, genome art and comparison]
   Genome --> Inspect
@@ -189,9 +190,9 @@ effects, research facts, and valid/invalid worked examples. Several loci may dri
 one trait, and one locus may affect several families. Do not clone a locus into
 each affected dimension or give every class every library locus.
 
-Manage dimensions, locus/allele definitions, class baselines, taxonomy, reusable
-rules and experiment records as related records. Class taxonomy organizes names;
-reproductive compatibility is a separate relationship. Renaming a label does not
+Manage dimensions, locus/allele definitions, source baselines, derived taxonomy, reusable
+rules and experiment records as related records. Taxonomy describes expressed results and organizes names;
+it cannot select anatomy or grant reproductive compatibility. Renaming a label does not
 change its stable ID or rewrite existing creatures. Deprecated records remain
 available to packages/individuals that reference them.
 
@@ -233,7 +234,7 @@ work, not a sum of independent dimension scores or a new gene for every combinat
 | View | What the owner can inspect or do |
 | --- | --- |
 | Compendium | Browse/search all eleven families; manage names, taxonomy, loci, alleles and rules; see where-used references and draft/validated/deprecated state |
-| Class/baseline | Inspect structural grammar, all applicable contributors, invariant versus variable properties, exclusions and a complete baseline sequence/art view |
+| Foundation/baseline | Inspect source-supported fixed/variable contributors, developmental vocabulary, exclusions and complete baseline sequence/art; derived classes describe results afterward |
 | Genome experiment | Explore every applicable fixed/variable locus and baseline reference; inspect inherited copies, dependencies and a genotype sequence; compare related genomes |
 | Expression/creature | Inspect resolved values and causes, expressed sequence and genome art, anatomy/surface/motion preview, permitted expression sampling, comparison and prompt export |
 
@@ -256,7 +257,7 @@ the other, and no long explanation is required to navigate between them.
 
 Keep separate inspectable encodings for:
 
-1. **Baseline:** class/package references, invariants, applicable contributor set
+1. **Baseline:** source/package references, invariants, applicable contributor set
    and permitted variation; it is not an individual allele assignment.
 2. **Inherited genome:** complete locus IDs and actual allele copies, including
    carried/unexpressed information and pinned content references.
@@ -285,7 +286,7 @@ permission token or guaranteed proof of uniqueness.
 
 Expose two clearly distinct experiment operations:
 
-- **Generate a genome:** choose inherited variants allowed by the class/package
+- **Generate a genome:** choose inherited variants allowed by the source/package
   and source constraints. This changes genotype and is not expression sampling.
 - **Sample expression:** keep genotype fixed and sample only explicitly permitted
   contextual/developmental variation under pinned rules. Show changed and unchanged
@@ -329,21 +330,25 @@ algorithmic construction pipeline remains required.
 ### Next increments and stopping condition
 
 The [first locus/expression content proposal](../../design/genome-starter-content.md)
-defines24connected candidate records, implementation type order, baseline/partial/
-full-expression visual obligations and the future expedition-engineering idea.
-It is the content design for the next package, not implemented or canonical biology.
+defines genome-first diversity and a cross-organization ground/air/water proof,
+baseline/partial/full-expression visual obligations and the future engineering
+idea. Its24connected six-legged records are one local calibration case, not
+the V1 catalogue. Classes describe expressed results; they are not anatomy presets.
+This is proposed content design, not implemented or canonical biology.
 
 1. Establish the framework-based compendium manager and full eleven-family
    inventory, with the deep priority-family draft catalogue and complete records.
    Validate one connected structural/appearance/movement cluster within that
    catalogue before promoting large batches to executable packages.
-2. Expand expression/construction across that content: meaningful body proportions,
-   surface differences and legal gait/maneuver variation, with clear exclusions,
+2. Expand expression/construction across developmental/topology contributors:
+   different coherent organizations and legal ground/air/water motion, plus
+   within-organization body/surface/control variation, with clear exclusions,
    causal traces and whole-baseline/genome/expression views. Preserve the existing
    Pip package as a reference instead of silently rewriting it.
 3. Add declared expression sampling, structured genome art/sequence comparison
-   and fact-derived prompt output. Inspect contrasting creatures and rejection
-   cases before extending the grammar or integrating the game.
+   and fact-derived prompt output. Inspect contrasting generated organizations, related variants and rejection
+   cases before integrating the game. Classification follows expression; it
+   must never choose a body or repair the genome.
 
 The next proof must show useful differences in the resulting creature, not merely
 more selectors. The60–90 candidate range guides compendium breadth; a meaningful

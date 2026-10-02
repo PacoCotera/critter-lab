@@ -4,11 +4,11 @@ Status: accepted framework with five information layers, eleven dimension famili
 
 ## Agreed direction and open decisions
 
-- Generate recognizable creatures first, with capacity for thousands of classes and extensive individual variation. Body plans must cover animal-like creatures, plants, insects, bacteria and ghosts. Traits need subdivisions.
-- Selective breeding is central: unusual heritable variation in a normally slow class can become a faster, more reliable lineage. Classes establish tendencies without fixing every individual's performance.
+- Generate recognizable, extensively varied creatures entirely from their genomes and expressed contributors. Classes are emergent descriptions of results, not hardcoded inputs. V1 requires ground, flying and swimming coverage and widely different body organizations. Organism examples express desired range, not a mandatory biological taxonomy; traits need subdivisions.
+- Selective breeding is central: heritable variation can become a faster or more reliable lineage under comparable conditions. Inherited contributors and expression establish tendencies; a class label never assigns performance.
 - Affinities describe environments, elements and foods that support or hinder thriving. Skills/abilities need inherited structure; the exact tree or network remains open.
 - Jobs must not determine genomics. Future games interpret expressed properties for potentially many activities. Playful contests and a larger crowd of critters are future game direction, not genetic categories.
-- Adjacent classes should cross, potentially producing non-viable or exceptional offspring. Adjacency, outcomes and probabilities need definition.
+- Compatible genomes may cross, potentially producing non-viable or exceptional offspring. Compatibility must follow declared inherited/reproductive/developmental contracts; taxonomic adjacency or appearance alone cannot authorize a cross. Outcomes and probabilities need definition.
 - Structured genetic imagery should represent class or individual information. Encoding and visual style are deferred until concrete examples help. It is not an identity or permission system.
 - Individual identity differs from class, genome and expression. Public scanning grants neither ownership nor breeding permission. Preserve records and finished art; see [identity and rights](players-social.md).
 - The explore probe gathers environmental signals and points into a sample that needs research and can ultimately yield a lab-created specimen without parents. Such founders enter the same genetics framework as bred offspring. Detailed signal mappings and research mechanics are not yet selected.
@@ -21,7 +21,7 @@ A **layer** explains the role of information: inherited, resolved or acquired. A
 
 | Layer | Contents | What it does not mean |
 | --- | --- | --- |
-| 1. Class and body-plan definition | Recognizable structural grammar, applicable dimensions, founding variation, reproduction contract and possible developmental forms | A fixed stat sheet, job, individual genome or universal cap on improvement |
+| 1. Genomic foundation and developmental vocabulary | Versioned reusable construction/expression operators, source-baseline constraints, contributor definitions and declared inheritance contracts | A hardcoded class/species body template, individual allele assignment, job or universal cap on improvement |
 | 2. Individual genome | Loci (hereditary positions), variants, copy counts, provenance and regulatory variants; inherited from parents or established at lab creation; optional linked groups | Current speed, hunger, experience or one gene per dimension |
 | 3. Expression and development | Versioned rules resolving inherited interactions, life stage, context and recorded developmental outcomes | A second independently inherited genome or permission to reroll a saved birth |
 | 4. Resolved phenotype | Appearance, intrinsic capabilities, affinity profiles and available abilities, with context and reasons | A job profile, battle power score or identity |
@@ -31,13 +31,29 @@ Identity, lineage, permissions and evidence accompany all layers rather than bec
 
 Use **phenotype** in domain records for what we have called the expressed genome. It includes functional properties, not just visible appearance. Player-facing terminology remains a UX choice.
 
-A class describes structural membership and founder distributions. Those distributions need not be re-applied as a fresh class average at every birth. Class membership rules should preserve recognizable anatomy without automatically reclassifying every unusually fast individual. Hybrids may remain explicitly unclassified until a versioned classification rule applies; similarity of appearance alone does not define reproductive compatibility.
+Owner clarification: **genome → expression/development → anatomy and capabilities
+→ optional class description**. Organization, segmentation, attachments and
+support/actuation are resolved from inspectable genomic contributors under
+reusable compatible-assembly rules. These rules are finite and versioned; they
+are not a table selecting a finished fish, insect or mammal. Baselines may constrain
+actual source-supported combinations but cannot substitute a hidden class preset
+for the genome's modeled construction decisions.
+
+Classification is a downstream view with its own version/reference conditions,
+not authority over anatomy, inheritance, copy counts, behavior or compatibility.
+It must not rewrite a creature when a name or taxonomy changes. The workbench
+manages contributor/module vocabulary and derived classification together;
+organism examples do not impose heads, limbs or one universal genome scheme.
+The [diversity proposal](../design/genome-starter-content.md#v1-diversity-and-genome-first-construction)
+compares different construction/motion outcomes and variation within each.
+Existing Pip and other bounded class-first examples remain pinned legacy proofs,
+not implementations of this broader direction.
 
 ## Behavioral model — accepted direction and proposed implementations
 
 The behavioral direction links genomes to the available behavior model, with phenotypes weighting state transitions. This establishes the direction of a genotype-linked behavioral model, not an executable state graph or numerical balance.
 
-Proposed mapping within the accepted layers: class/body-plan rules supply the applicable behavioral vocabulary and constraints; an individual's genome resolves through expression into capabilities and behavioral tendencies. Those expressed properties influence eligible transitions and their weights. Environment, current condition and learned history also influence the next action without becoming inherited genes. A shared class does not require identical behavior from every individual, and a genome is not a species identifier.
+Proposed mapping within the accepted layers: reusable operators interpret the individual genome into anatomy, eligible actions and behavioral tendencies; expressed prerequisites select applicable behavioral rules. Those expressed properties influence eligible transitions and their weights. Environment, current condition and learned history also influence the next action without becoming inherited genes. A shared class does not require identical behavior from every individual, and a genome is not a species identifier.
 
 Keep transition eligibility separate from weighting: an unavailable capability cannot be acquired merely through a favorable random choice. Exact states, guards, timing, weighting and deterministic versus stochastic selection remain design work. This is the creature's behavioral model, not the device navigation model or merely an animation controller; presentation depicts its actions while preserving individual identity.
 
@@ -103,7 +119,7 @@ Examples for discussion: burrowing, light production, chemical secretion, regene
 
 ## Inheritance and selective breeding
 
-Recommended first model: explicitly declared two-parent, two-copy inheritance for a small compatible class set. It is a tractable fictional subset, not a claim that bacteria, plants and ghosts share one real reproductive system. Preserve room for other copy counts and asexual/copy-based modes without implementing them speculatively.
+Recommended first inheritance proof: explicitly declared two-parent, two-copy inheritance for a small compatible genome-contract set. It is a tractable fictional subset, not a claim that bacteria, plants and ghosts share one real reproductive system. Preserve room for other copy counts and asexual/copy-based modes without implementing them speculatively.
 
 - Use discrete variants for some visible features, small sets of contributing loci for quantitative traits, and a few explicit interactions. Dominance describes expression between variants, not which is better.
 - Begin with independent loci only where stated. Later linked groups and recombination can explain traits that tend to travel together.
@@ -115,7 +131,7 @@ Heritability is a population/environment statistic, not a per-individual transfe
 
 ### Crossing, viability and classification
 
-Product direction permits adjacent-class crossing. Proposed adjacency is a reproductive compatibility relationship, not a position in a list or an appearance score. Evaluate in stages: compatible inputs → inherited combination → developmental viability → resolved offspring → reproductive capability. Viable but infertile is distinct from non-viable.
+Product direction permits compatible crossing. Evaluate the actual inherited representation, reproductive systems and developmental constraints; a derived class label, a position in a taxonomy or an appearance score cannot supply compatibility. Evaluate in stages: compatible inputs → inherited combination → developmental viability → resolved offspring → reproductive capability. Viable but infertile is distinct from non-viable.
 
 Compatible components can produce ordinary or exceptional combinations; incompatible interactions can prevent development. Both should be explained by versioned rules. Exceptional F1 performance and a combination that breeds true are different; later generations may split the combination. Hybrid class assignment, non-viability presentation, costs and forecast disclosure remain product choices.
 
@@ -146,7 +162,7 @@ Reserve linkage/provenance now at the conceptual level; do not equate dimension 
 
 ## Genome baseline, collected sample and phenotype — accepted distinction
 
-A **genome baseline** is the reusable genetic foundation for a compatible kind of critter: body-plan constraints, required systems and permitted variation within the existing five-layer framework. It is not a complete individual genome or a class average freshly imposed on every offspring.
+A **genome baseline** records a source-supported genetic foundation: known/invariant contributors, required systems, applicable rule vocabulary and permitted variation within the existing five-layer framework. It is not a finished species body template, a complete individual allele assignment or a class average freshly imposed on offspring. Modeled topology decisions remain inspectable genomic inputs; expression constructs the body and any class description follows afterward.
 
 A **collected sample** is a particular stable discovery carrying genomic information and supported possibilities consistent with a valid foundation. Research can reveal that foundation and variants distinguishing this sample from others. The sample is not merely a visible-trait fragment. It need not be tissue from an existing individual: tissue is one possible fictional origin, not a universal assumption across all critter classes. Sample provenance does not automatically create a donor parent or ancestry relationship.
 
@@ -284,12 +300,13 @@ Owner requests a genetic engine capable of generating valid genomes and managing
 
 Selected automation direction: LLMs propose reusable loci, variants, family baselines, relationships and worked phenotype/research definitions without per-creature content authors; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
 
-The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Class baselines compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
+The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Source baselines and inherited developmental contributors compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
 
 The considered [starter content proposal](../design/genome-starter-content.md)
-prioritizes body/surface/walk-turn types and their visual baseline/region/phenotype
-mapping. Its24candidate records, new family grammar and expression operators are
-proposed, not canonical or implemented. Owner's CRISPR-CAS-like expedition-item
+defines V1 breadth through genome-derived organization and ground/air/water
+capabilities. Its24candidate body/surface/walk-turn records are one local
+calibration case, not the whole V1 catalogue. New topology operators and the
+contrasting construction/motion proof remain proposed and unimplemented. Owner's CRISPR-CAS-like expedition-item
 idea is recorded there as future targeted engineering, distinct from expression
 sampling and epigenetic marks; edit policy, resources and inheritance remain open.
 

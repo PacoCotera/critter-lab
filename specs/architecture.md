@@ -51,6 +51,7 @@ flowchart LR
   Express --> Body[Procedural body, features, palette and rig]
   Body --> Graphics[Generated sprites, animation and paper views]
   Express --> Facts[Resolved facts and expression reasons]
+  Facts --> Classify[Optional derived classification]
   Facts --> Entry[Programmatic encyclopedia]
   Origin[Actual founder origin or parental traces] --> Entry
   State[Current condition and learned history] --> Behavior[Eligible behavior and motion]
@@ -75,7 +76,13 @@ the same body's animation. Behavior selects permitted actions using hereditary
 eligibility, current conditions and retained learned state; animation depicts
 them. Training history does not silently become an inherited capability.
 Rendering cannot choose genes to make a preferred picture. A reskinned fixed
-portrait does not establish this generator.
+portrait does not establish this generator. The genome includes modeled
+organization/developmental contributors; reusable assembly operators resolve its
+body graph and applicable deformation/motion mechanisms. A class/species label
+is optional downstream classification, never a template selector or authority
+for compatibility. [Genetics](genetics.md#accepted-framework-layers-and-dimensions)
+owns that meaning; the [diversity proof](../design/genome-starter-content.md#v1-diversity-and-genome-first-construction)
+compares materially different organizations and ground/air/water motion.
 
 Encyclopedia facts come from resolved genetic/expression reasons, actual origin
 or parents and permitted individual history. Generated language may phrase that
@@ -150,9 +157,10 @@ subject if available; otherwise show an honest fault/pending state. Never substi
 another creature portrait or reroll birth. Unsupported legacy content and content
 retirement preserve existing individuals and their retained art.
 
-Smallest proposed proof: one general class/style grammar and contrasting complete
-genomes drive configured generation of appearance, a legal action/still and an
-encyclopedia. Check carried-versus-expressed and capability/motion differences,
+Proposed staged proof: preserve the bounded local calibration case, then contrast
+genome-derived body organizations and legal ground/air/water movement under shared
+construction/style rules. Class labels follow the expressed result. Complete
+genomes drive configured generation of appearance, legal action/still and encyclopedia. Check carried-versus-expressed and capability/motion differences,
 reject an incompatible output without changing the genome, and verify stable
 replay. This proof requires no new API integration. Reuse unchanged parent-cross
 evidence; assess actual craft before broadening the grammar. See the

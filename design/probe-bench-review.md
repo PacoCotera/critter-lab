@@ -210,9 +210,12 @@ not a generator run, rendered storyboard, playtest or production quality verdict
 
 Next proof has two bounded stages, not simultaneous ecosystem implementation:
 first generate contrasting states under the same encounter rules and show actual
-different useful choices; then prove one general class/style grammar generates
-contrasting complete genomes' body, legal animation/still and encyclopedia from
-configured incubation. Include carried/expressed and capability differences,
+different useful choices; then prove genome-derived organizations and legal
+ground/air/water motion under shared construction/style rules, with variation
+within each. Classes describe expressed results, never select body templates.
+The [diversity proposal](genome-starter-content.md#v1-diversity-and-genome-first-construction)
+owns these comparative outputs. Complete genomes produce body, legal animation/
+still and encyclopedia from configured incubation. Include carried/expressed and capability differences,
 invalid-output rejection and stable saved replay. Reuse unchanged parental
 inheritance evidence. Configuration effects, exact progression and quality
 calibration remain design work. Existing portraits are reference/legacy fixture

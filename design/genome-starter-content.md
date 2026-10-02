@@ -10,28 +10,91 @@ and follows the eleven-family/five-layer [genetics framework](../specs/genetics.
 The broad compendium grows across all families; its first executable package needs
 connected, fully defined content rather than thousands of gene names.
 
-## First package and useful difference
+## V1 diversity and genome-first construction
 
-Propose a separately versioned flexible terrestrial family, with three bilateral
-limb pairs and a stable two-link hinge grammar. Existing Pip-v1 stays unchanged.
-The general construction grammar generates different bodies, surfaces and motion
-from resolved contributions; no per-creature portraits, illustrations or animation
-clips are selected. Exact new-family identity and geometry remain provisional.
+Owner requires ground, flying and swimming creatures and a much broader range of
+body organizations. Fish, microbes, insects and land animals illustrate desired
+range; they are not a mandatory taxonomy. **Classes emerge from expressed genomes,
+not a hardcoded species/class selection.** The [genetics framework](../specs/genetics.md)
+owns that dependency and the five-layer meaning.
 
-The starter catalogue has **24 candidate loci**:8Structure,7Appearance,6Movement,
-3Energy support. All eleven families remain indexed with honest applicability and
-modeling status. This is neither24mandatory research purchases nor a universal
-complete biological model. The previously proposed60–90priority-family compendium
-horizon remains a breadth goal, not the runtime coverage claim for this package.
+The previous 24-locus proposal varies one six-legged organization. More colors,
+limb lengths or gene names cannot supply a new topology or propulsion mechanism.
+Retain that proposal as one local calibration case, not the V1 catalogue or a
+ceiling on anatomy. The runnable workbench still has only five Pip loci; none of
+the broader construction/motion coverage below has been implemented.
 
-The useful comparison is a squat/wide short-step individual, an elongated/narrow
-long-step individual, their lawful mixed offspring, and two similar-looking
-individuals that carry different marking variants. First generated motion is
-walking and turning. Burst recruitment remains a catalogue candidate pending a
-separate legal burst primitive; leap, climbing, adhesion, flight and swimming are
-outside this proof. Baseline constraints are module records, not fabricated loci.
+Proposed pipeline: inherited developmental/module contributors → expression and
+compatible assembly → body/surface/control graph → legal movement and other
+capabilities → generated representations and optional descriptive classification.
+Classification cannot choose anatomy, add missing loci, determine copy counts or
+make two creatures reproductively compatible. It is a view of the result.
 
-## Implement these type groups in order
+Reusable operators construct volumes, branches, segmentation, support materials,
+attachments, surfaces and actuation/deformation channels. They are general
+building rules, not species portraits or three predefined whole-body templates.
+The genome must encode the modeled organization decisions, including fixed
+contributors; the renderer cannot supply an unrecorded skeleton. Which topology
+operations and bounds are executable is still a design choice. Generativity does
+not mean arbitrary part combinations or undeclared physical capabilities.
+
+### Small breadth proof — output cases, not selectable classes
+
+| Proposed contrasting output | What must actually differ | Example inherited contributions and legal motion |
+| --- | --- | --- |
+| Ground-moving articulated body | Support graph, linked contacts, silhouette and contact-based movement | Symmetry/attachment count, segment proportions, joint envelope and coordination produce planted stepping/turning |
+| Air-moving membrane-supported body | Rooted lifting/deforming surfaces, their support and control channels; not decorative wings on the ground body | Surface span, material flexibility, support geometry and actuation resolve a declared fictional aerial movement/turning rule |
+| Water-moving axial body | Continuous bending organization and propulsion/steering surfaces; no renamed walking feet | Segment arrangement, axial compliance, propulsion extent and phase coordination produce swimming/turning |
+| Distributed/deformable organization challenge | No mandatory head, eyes, legs, hinges or underside | Generated static volume/surface organization tests applicability; motion, reproduction and physiology stay explicitly unsupported until defined |
+
+These are deliberately selected **genome input comparisons** for the generator,
+not a menu of organism classes. Exact example bodies and fictional motion laws
+remain provisional. Two related genomes for each moving case should visibly
+change silhouette and a legal motion characteristic. At least one related-input
+comparison must change the generated organization, attachment or deformation
+graph; three fixed bodies with scalar adjustments are insufficient. The fourth initially tests
+structural breadth only; it does not satisfy a moving microbial-creature promise.
+A later mixed-mode case must derive both modes from compatible contributors,
+not from a ground/air/water class tag. No cross-body breeding is assumed.
+
+The proof also needs a compatible actual-parent cross in two contrasting
+organizations, one suppressed/carried surface contribution and an incompatible
+construction rejected without repairing inherited copies. This is a bounded
+proposal, not a commitment to several complete organism simulations at once.
+
+### Sharing content without flattening anatomy
+
+Share copy-resolution/contribution/gating operators, causal traces and art craft.
+Share an actual locus ID only when its inherited meaning and output/applicability
+contract match. A leg-link record cannot become a fin or wing record by renaming
+it. Surface pattern operators need the expressed body's coordinate atlas; energy
+rules need the actual supported action and medium. No universal speed score,
+paired-copy scheme or identical face/material is imposed across outputs.
+
+The compendium therefore needs developmental/topology contributors alongside
+proportions, pigment and movement. Candidate coverage includes symmetry and
+organization, repeated regions, attachment roles, material/support, surface
+regions, actuation and coordination, and medium-specific support. Numerical depth
+is useful only when these compose into perceptibly different coherent creatures.
+The earlier 60–90 candidate horizon is a planning aid, not a quota or breadth proof.
+
+## Local six-legged calibration package
+
+Propose a separately versioned worked package using flexible support, three
+bilateral limb pairs and a two-link hinge construction case. Its fixed modeled
+organization must be inspectable genomic content, not a class-selected renderer
+preset. Existing Pip-v1 remains a pinned legacy fixture; this proposal does not
+rewrite its records or claim that it follows the expanded generator.
+
+The 24 candidate records below (8Structure/7Appearance/6Movement/3Energy) explore
+variation inside that organization. They are not24mandatory research purchases
+or a universal biological model. Compare squat/wide short-step and elongated/
+narrow long-step individuals, lawful offspring and similar visible individuals
+with different carried marking variants. First motion for this calibration case
+is walk/turn. Burst needs its own legal primitive; flight/swimming belong to the
+broader V1 diversity proof, not this local package's motion coverage.
+
+## Local calibration type groups
 
 | Order | Locus type | First expression behavior | Visible result |
 | --- | --- | --- | --- |
@@ -119,7 +182,7 @@ The adult developer framework need not copy the device layout.
 
 | Representation | What it must communicate | What selecting a part reveals |
 | --- | --- | --- |
-| Baseline | Structural template, actual modules, applicable/invariant/variable regions and permitted construction vocabulary | Source definitions, constraints and candidate contributors; no invented allele pairs for unmodeled module internals |
+| Baseline | Source-supported genomic foundation, inspectable developmental contributors, actual modules, applicable/invariant/variable regions and permitted construction vocabulary | Source definitions, constraints and candidate contributors; no invented allele pairs for unmodeled module internals |
 | Genome part | Stable region/locus IDs, actual copy glyphs and sequence segments, carried/suppressed information | The same locus record, dependencies and affected body/surface/motion channels; surrounding field stays recognizable |
 | Fully expressed genome | Resolved output glyphs and causal contribution field beside the same creature | Exact contributors/context/marks and the corresponding visible or functional output |
 | Regulatory overlay | Declared marks, scope and state distinct from inherited copy glyphs | Establishment/history, affected rules, persistence/reset policy and downstream changes |
@@ -131,9 +194,11 @@ knowledge. Unknown, carried/unexpressed, absent and unsupported remain distinct.
 The phenotype sequence/field never replaces the inherited record or its latent
 variants. A replay digest is separate from this inspectable fingerprint artwork.
 
-Body geometry provides stable local anterior/posterior and dorsal/lateral/ventral
-coordinates. Surface masks and markings attach to these coordinates, not image
-rectangles. Attachment IDs remain stable through proportion changes and all views.
+Derive the coordinate atlas from the actual expressed body graph. Local anterior/
+posterior or dorsal/lateral/ventral axes apply only where those roles exist; radial,
+axial, membrane or distributed surfaces need their own declared coordinates.
+Surface masks and markings attach to that atlas, not image rectangles. Attachment
+IDs remain stable through proportion changes and all views.
 A selected locus/output highlights the same body, surface or rig channel. General
 pixel treatment/lighting belongs to the calibrated construction style; the genome
 supplies anatomy and surface contributions. Preview, sprites, motion, paper and
@@ -181,7 +246,7 @@ permission and transmission require separate game design. Unrestricted allele
 shopping would erase much of the purpose of gathering and breeding; targeted
 engineering should complement those activities.
 
-## Next proof and deferred work
+## Acceptance and deferred detail
 
 Inspect the baseline, contrasting bodies/coat/walk/turn, a lawful offspring, a
 carried-but-unexpressed marking case, an unavailable maneuver and a rejected
@@ -191,8 +256,11 @@ Inspect both complete workbench access and a partial-knowledge projection. Art
 must inspect actual outputs against the original references; this document is not
 that art review or an implemented fully expressed genome.
 
-Defer variable body topology, linked groups/recombination, cross-class hybrids,
-variable copy numbers, quantitative metabolism/vision, transformations, learned
-models, mutations, engineering gameplay and broad epigenetic networks. Framework
+Variable body topology and ground/air/water coverage are required design scope
+for the broader generator; they are not supplied by this local package. Exact
+topology operators need their own bounded implementation proof. Defer unrestricted
+hybrids, general linked groups/recombination, broad variable-copy reproduction,
+quantitative metabolism/vision, transformations, learned models, mutations,
+engineering gameplay and broad epigenetic networks. Framework
 and compendium implementation remains a bounded next task. This package proposal
 introduces no code, generated artwork, model calls, native builds or deployment.
