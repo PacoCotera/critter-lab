@@ -1,3 +1,4 @@
+import { GRAPH_COVERING_RULE_VERSION } from "./graph-covering-catalogue.mjs";
 import { GRAPH_MODULE_RULE_VERSION } from "./graph-module-catalogue.mjs";
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
@@ -120,12 +121,14 @@ export function resolveAuthoring(input) {
   const continuous = [FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
     catalogue.ruleVersion,
   );
-  const ocularModule = catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION;
+  const coveringModule = catalogue.ruleVersion === GRAPH_COVERING_RULE_VERSION;
+  const ocularModule =
+    catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION || coveringModule;
+  const requiredScene = coveringModule ? "body-covering/1" : "ocular-module/1";
   if (ocularModule)
     packet.presentation = {
       status: "unsupported",
-      reason:
-        "Requires the ocular-module/1 scene consumer; the existing diagnostic cannot depict this module.",
+      reason: `Requires the ${requiredScene} scene consumer; the existing diagnostic cannot depict this module.`,
     };
   packet.diagnostic = ocularModule
     ? ""
@@ -141,7 +144,9 @@ export function resolveAuthoring(input) {
       sharedCamera: result.graph.profile.referenceCamera,
     };
   packet.description = ocularModule
-    ? "Broad body expression and inherited ocular facts are retained. Use the ocular-module/1 scene consumer for the constructed ocular pair; sensing is not modeled."
+    ? coveringModule
+      ? `Broad body expression and inherited module facts are retained. Use the ${requiredScene} scene consumer; physiology is not modeled.`
+      : "Broad body expression and inherited ocular facts are retained. Use the ocular-module/1 scene consumer for the constructed ocular pair; sensing is not modeled."
     : continuous
       ? describeContinuousFamily(result)
       : describeAuthoringCreature(result);
@@ -156,8 +161,7 @@ export function resolveAuthoring(input) {
   packet.geometryReference = ocularModule
     ? {
         status: "rejected",
-        error:
-          "Requires the ocular-module/1 scene consumer; the existing body-only reference omits the inherited module.",
+        error: `Requires the ${requiredScene} scene consumer; the existing body-only reference omits the inherited module.`,
       }
     : continuous
       ? continuousReference(result, geometryIdentity)
@@ -241,6 +245,10 @@ export function projectArtPrompt(packet) {
   )
     throw new Error(
       "Art facts/metadata must match the shared engine replay, not client-supplied result hashes.",
+    );
+  if (packet.ruleVersion === GRAPH_COVERING_RULE_VERSION)
+    throw new Error(
+      "Unsupported body-covering/1 art projection: a module-aware renderer brief is required.",
     );
   if (packet.ruleVersion === GRAPH_MODULE_RULE_VERSION)
     throw new Error(

@@ -78,9 +78,17 @@ function localHalfWidth(body, x) {
 }
 
 export function constructOcularModule(result, bodyConstruction, options = {}) {
+  const profile =
+    options?.profileVersion === "ocular-module/2"
+      ? {
+          ...OCULAR_MODULE_PROFILE,
+          id: "ocular-module/2",
+          sourceRuleVersion: "developmental-covering/1",
+        }
+      : OCULAR_MODULE_PROFILE;
   if (
     !isRecord(options) ||
-    options.profileVersion !== OCULAR_MODULE_PROFILE.id ||
+    options.profileVersion !== profile.id ||
     Object.keys(options).some((key) => key !== "profileVersion")
   )
     return reject(
@@ -90,14 +98,18 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
   if (
     !isRecord(result) ||
     result.status !== "resolved" ||
-    result.baseGraphRuleVersion !==
-      OCULAR_MODULE_PROFILE.baseGraphRuleVersion ||
-    result.ocularModuleRuleVersion !== OCULAR_MODULE_PROFILE.id ||
-    !Array.isArray(result.facts)
+    result.baseGraphRuleVersion !== profile.baseGraphRuleVersion ||
+    result.ocularModuleRuleVersion !== profile.id ||
+    !Array.isArray(result.facts) ||
+    (profile.id === "ocular-module/2" &&
+      (result.sourceRuleVersion !== profile.sourceRuleVersion ||
+        result.coveringModuleRuleVersion !== "body-covering/1"))
   )
     return reject(
       "unsupported-source",
-      "Resolved developmental-ocular/1 metadata and facts are required.",
+      profile.id === "ocular-module/2"
+        ? "Resolved developmental-covering/1 metadata and facts are required."
+        : "Resolved developmental-ocular/1 metadata and facts are required.",
     );
   // Reconstruct from the source rather than trusting a rehashed caller-supplied exterior.
   const expectedBody = constructGraphSource(result, {
@@ -114,7 +126,7 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
       "The exact graph-source construction for this resolved result is required.",
     );
   const body = expectedBody.bodyExteriors[0];
-  if (body.outline.length > OCULAR_MODULE_PROFILE.maximumBoundaryVertices)
+  if (body.outline.length > profile.maximumBoundaryVertices)
     return reject(
       "geometry-budget",
       "The retained exterior exceeds the ocular boundary budget.",
@@ -227,7 +239,7 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
       );
       if (
         !insidePolygon(center, body.outline) ||
-        clearance < radius + OCULAR_MODULE_PROFILE.rimClearance
+        clearance < radius + profile.rimClearance
       )
         return reject(
           "ocular-containment",
@@ -245,7 +257,7 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
                 center[1] - appendage.root[1],
               ) -
               appendage.width / 2;
-        if (distance < radius + OCULAR_MODULE_PROFILE.rimClearance)
+        if (distance < radius + profile.rimClearance)
           return reject(
             "ocular-root-overlap",
             "The ocular circle overlaps a retained appendage root exclusion.",
@@ -258,9 +270,9 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
         sourceNodeId: station.nodeId,
         center,
         radius,
-        pupilRadius: radius * OCULAR_MODULE_PROFILE.pupilRatio,
-        outerPalette: OCULAR_MODULE_PROFILE.outerPalette,
-        pupilPalette: OCULAR_MODULE_PROFILE.pupilPalette,
+        pupilRadius: radius * profile.pupilRatio,
+        outerPalette: profile.outerPalette,
+        pupilPalette: profile.pupilPalette,
         sources: [...sources],
       });
     }
@@ -269,7 +281,7 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
         features[0].center[0] - features[1].center[0],
         features[0].center[1] - features[1].center[1],
       ) <
-      2 * radius + OCULAR_MODULE_PROFILE.rimClearance
+      2 * radius + profile.rimClearance
     )
       return reject(
         "ocular-pair-overlap",
@@ -279,8 +291,11 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
   }
   const module = {
     status: "constructed",
-    schemaVersion: "critter-ocular-module/1",
-    profile: { ...OCULAR_MODULE_PROFILE },
+    schemaVersion:
+      profile.id === "ocular-module/2"
+        ? "critter-ocular-module/2"
+        : "critter-ocular-module/1",
+    profile: { ...profile },
     sourceResultDigest: digest(result),
     bodyConstructionDigest: expectedBody.constructionDigest,
     enabled: presence.value,

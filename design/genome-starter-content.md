@@ -130,6 +130,22 @@ separate declared operators. The default workbench package list is unchanged;
 generic diagnostics and Gemini prompts explicitly defer for this new package
 until a faithful projection consumes the module.
 
+### Body-local covering consumer
+
+The next bounded material experiment connects inherited skin/scales, extent and
+element scale to the same broad solved exterior, with reserved ocular and
+appendage-root regions. Actual retained plate geometry, pitch and orientation
+must express the field on both contact and fin organizations. Skin leaves extent
+and scale inactive; those copies remain inspectable. Body, eyes, appendages and
+source pigment ownership must remain unchanged in material-only comparisons.
+
+This establishes shared covering-field construction and causal material facts,
+not all four coverings or finished pet warmth. Fur and feathers require their
+own rooted elements, growth direction and contour operators before execution;
+they remain pending in the broad scene rather than substituting a skin texture.
+Later faithful image prompts consume the resulting resolved scene. The existing
+narrow PET calibration is preserved separately.
+
 ## Coherent static family implementation proof
 
 Owner authorized one complete static genome-derived family and two traceable

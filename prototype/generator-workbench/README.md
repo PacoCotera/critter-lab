@@ -57,6 +57,29 @@ defer for it rather than implying that they depict its new loci. See
 thumbnail legibility. Coverings, oral features, vision physiology, finished pet
 illustration, animation and game/device integration remain outside this slice.
 
+### Broad body-local covering experiment
+
+The separate `developmental-covering/1` package extends the ocular catalogue with
+inherited covering kind (skin/scales), extent and element scale. Its 54 records
+retain 48 executable contributors and the same six drafts. Body construction uses
+the preserved analytic convention; opt-in `ocular-module/2` retains the same eye
+geometry constants with the actual new source-rule identity. Old packages and
+the prior ocular profile remain independently replayable.
+
+Run `node construct-covering-proof.mjs --out evidence/graph-covering-proof`.
+The standalone consumer retains overlapping scale plates in a declared body-local
+field, preserving source pigment ownership and clearing eye/root regions. Skin
+retains extent/scale as inactive. The comparison shows skin/scales on both body
+organizations, extent-only and size-only effects, and an unchanged skin scene
+despite different latent parameters. See [the evidence](evidence/graph-covering-proof/README.md)
+for validation and actual 256px field/exclusion inspection.
+
+This remains source construction, not finished pet art. Fur and feathers need
+their own rooted material and contour operators. Full scene generation, browser
+integration and faithful renderer prompts remain separate subsequent work; this
+package is not added to the default UI list. Generic diagnostic, geometry-reference
+and Gemini prompt consumers explicitly defer for it rather than omitting features.
+
 Use the existing host Node runtime22.12 or later and pnpm11.19.0:
 
 ```sh
