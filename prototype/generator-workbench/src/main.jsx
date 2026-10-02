@@ -32,6 +32,7 @@ import {
   drawGenomeField,
   compareResults,
 } from "../presentation.mjs";
+import { SURFACE_DETAIL_PROJECTION_VERSION } from "../family-presentation.mjs";
 import {
   scopedLoci,
   scopedSelection,
@@ -41,6 +42,9 @@ import {
   sharedPreviewCamera,
   freshGenerationSeed,
   isResolvedAuthoringPacket,
+  initialAuthoringInputs,
+  authoringPackageLabel,
+  unconsumedOutputNotice,
 } from "../authoring-ui.mjs";
 
 const clone = (value) => structuredClone(value);
@@ -126,15 +130,11 @@ function Workbench() {
         setPackages(data.packages ?? []);
         setFamilyExamples(data.familyExamples ?? []);
         setPetExamples(data.petExamples ?? []);
-        const initial =
-          data.packages?.find(
-            (item) => item.catalogue.ruleVersion === "continuous-pet/1",
-          ) ?? data;
-        const example = data.petExamples?.[0];
+        const initial = initialAuthoringInputs(data);
         setCatalogue(initial.catalogue);
         setDraft(clone(initial.catalogue));
-        setGenome(example?.genome ?? initial.defaultGeneration.genome);
-        setContext(example?.context ?? data.referenceContext);
+        setGenome(initial.genome);
+        setContext(initial.context);
         setEdited(pretty(initial.catalogue.loci[0]));
         setMessage(
           "Ready to generate a creature. Known examples are also available.",
@@ -454,7 +454,12 @@ function Workbench() {
   const filtered = scopedLoci(draft, family, search);
   const genomeLoci = scopedLoci(catalogue, family, search);
   const cause = causalSummary(catalogue, packet?.result, selected);
+  const consumerNotice = unconsumedOutputNotice(catalogue, selected);
   const previewCamera = sharedPreviewCamera([packet?.result].filter(Boolean));
+  const diagnosticViewOptions = (camera) => ({
+    projectionVersion: SURFACE_DETAIL_PROJECTION_VERSION,
+    ...(camera ? { camera } : {}),
+  });
   const compatibleComparison =
     pinned &&
     packet &&
@@ -503,7 +508,7 @@ function Workbench() {
               value={catalogue.id}
               data={packages.map((item) => ({
                 value: item.catalogue.id,
-                label: `${item.catalogue.id} v${item.catalogue.version}`,
+                label: `${authoringPackageLabel(item.catalogue)} · v${item.catalogue.version}`,
               }))}
               onChange={switchPackage}
             />
@@ -973,6 +978,11 @@ function Workbench() {
                             ? "unsupported"
                             : "awaiting resolve")}
                       </Badge>
+                      {selectedFact && consumerNotice && (
+                        <Text size="sm" c="orange" mt="sm">
+                          {consumerNotice}
+                        </Text>
+                      )}
                       {!!cause?.prerequisites.length && (
                         <>
                           <Text size="xs" fw={700} c="dimmed" mt="lg">
@@ -1042,9 +1052,9 @@ function Workbench() {
                       markup={drawAuthoringCreature(
                         packet.result,
                         selected,
-                        packet.result.graph.exterior
-                          ? { camera: previewCamera }
-                          : {},
+                        diagnosticViewOptions(
+                          packet.result.graph.exterior ? previewCamera : null,
+                        ),
                       )}
                     />
                   ) : (
@@ -1061,6 +1071,12 @@ function Workbench() {
                   </Text>
                   <Text size="xs" c="dimmed" mt="xs">
                     This structural diagram is not generated game art.
+                  </Text>
+                  <Text size="xs" c="dimmed" mt="xs">
+                    Display: {SURFACE_DETAIL_PROJECTION_VERSION}.{" "}
+                    {catalogue.ruleVersion === "developmental-analytic/1"
+                      ? "Broad graph assembly; face and covering modules are not modeled in this package."
+                      : "Narrow continuous-body calibration; this is not broad anatomy generation."}
                   </Text>
                   {packet && (
                     <Group mt="md" gap="xs">
@@ -1342,7 +1358,7 @@ function Workbench() {
                     markup={drawAuthoringCreature(
                       pinned.result,
                       null,
-                      comparisonCamera ? { camera: comparisonCamera } : {},
+                      diagnosticViewOptions(comparisonCamera),
                     )}
                     compact
                   />
@@ -1354,7 +1370,7 @@ function Workbench() {
                       markup={drawAuthoringCreature(
                         packet.result,
                         null,
-                        comparisonCamera ? { camera: comparisonCamera } : {},
+                        diagnosticViewOptions(comparisonCamera),
                       )}
                       compact
                     />

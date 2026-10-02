@@ -4,7 +4,13 @@ const escape = (value) =>
     .replaceAll("<", "&lt;")
     .replaceAll('"', "&quot;");
 const rounded = (value) => Number(value.toFixed(6));
-function namespace(graph) {
+export const SURFACE_DETAIL_PROJECTION_VERSION = "surface-detail/1";
+export function validateDisplayProjection(version) {
+  if (version !== undefined && version !== SURFACE_DETAIL_PROJECTION_VERSION)
+    throw new Error("Unsupported diagnostic display projection version.");
+  return version === SURFACE_DETAIL_PROJECTION_VERSION;
+}
+export function diagnosticGraphNamespace(graph) {
   let hash = 2166136261;
   for (const character of JSON.stringify(graph))
     hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
@@ -16,6 +22,9 @@ export function drawContinuousFamily(
   selected = null,
   viewOptions = {},
 ) {
+  const surfaceDetails = validateDisplayProjection(
+    viewOptions.projectionVersion,
+  );
   const graph = result.graph;
   if (
     result.status !== "resolved" ||
@@ -57,7 +66,7 @@ export function drawContinuousFamily(
   ];
   const polygon = (points) =>
     `<path d="${points.map((position, index) => `${index ? "L" : "M"}${point(position).join(",")}`).join(" ")}Z"/>`;
-  const prefix = namespace(graph);
+  const prefix = `${diagnosticGraphNamespace(graph)}${surfaceDetails ? "-surface-detail-1" : ""}`;
   let definitions = "";
   let shapes = "";
   const bodySurface = graph.surfaces.find(
@@ -99,7 +108,15 @@ export function drawContinuousFamily(
       )
         shapes += `<rect x="${mx - size / 2}" y="${my - height / 2}" width="${size}" height="${height}" fill="${pigment}" opacity="${mark.contrast}" transform="rotate(${(mark.orientation * 180) / Math.PI},${mx},${my})"/>`;
       else
-        shapes += `<ellipse cx="${mx}" cy="${my}" rx="${size}" ry="${size * 0.6}" fill="${pigment}" opacity="${mark.contrast}"/>`;
+        shapes += `<ellipse cx="${mx}" cy="${my}" rx="${size}" ry="${size * 0.6}" fill="${pigment}" opacity="${mark.contrast}"${surfaceDetails ? ` transform="rotate(${(mark.orientation * 180) / Math.PI},${mx},${my})"` : ""}/>`;
+    }
+    if (surfaceDetails && surface.texture === "fine-ridged") {
+      // Atlas-local diagnostic ridge strokes stay inside this surface's clip;
+      // their neutral contrast depicts texture rather than adding pigment loci.
+      for (let index = 1; index < 5; index++) {
+        const ridgeX = x + (index * width) / 5;
+        shapes += `<line data-texture="fine-ridged" x1="${ridgeX}" y1="${y}" x2="${ridgeX}" y2="${y + height}" stroke="#52625c" opacity=".25"/>`;
+      }
     }
     shapes += `</g><g fill="none" stroke="${highlighted ? "#d78932" : "#384d4c"}" stroke-width="${highlighted ? 4 : 1.5}">${outline}</g></g>`;
   }
@@ -160,7 +177,7 @@ export function drawContinuousFamily(
       shapes += `<line x1="${x}" x2="${x}" y1="${y - (node.dimensions[1] * scale) / 2}" y2="${y + (node.dimensions[1] * scale) / 2}" stroke="#d78932" stroke-width="2"/>`;
     }
   }
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="600" viewBox="0 0 1024 600" role="img" aria-label="Genome-derived continuous static creature"><defs>${definitions}</defs><rect width="1024" height="600" fill="#ffffff"/>${portrait ? `<g data-view="pageX=-Y,pageY=X" transform="translate(512,300) rotate(90) translate(-512,-300)">${shapes}</g>` : shapes}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="600" viewBox="0 0 1024 600" role="img" aria-label="Genome-derived continuous static creature"${surfaceDetails ? ` data-projection="${SURFACE_DETAIL_PROJECTION_VERSION}"` : ""}><defs>${definitions}</defs><rect width="1024" height="600" fill="#ffffff"/>${portrait ? `<g data-view="pageX=-Y,pageY=X" transform="translate(512,300) rotate(90) translate(-512,-300)">${shapes}</g>` : shapes}</svg>`;
 }
 
 export function continuousReference(result, identity) {

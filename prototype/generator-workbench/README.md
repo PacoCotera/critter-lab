@@ -4,6 +4,15 @@ Status: **provisional host authoring proof**, separate from the game and device 
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
+The initial **Generate creature** workspace now uses the broad authoring package,
+labeled **Anatomy-diversity diagnostic**. Its resolved graph can contain radial or
+bilateral volumes, articulated contacts, membranes and fins; it lacks coherent
+joined tissue and the narrow package's face/covering modules. The PET package is
+an explicit **Narrow face/material calibration**, not the general creature
+generator. Existing draft catalogues and retained PET records are preserved;
+switching packages is deliberate and never migrates their genomes. See the
+[source-and-output diversity diagnosis](evidence/diversity-diagnosis/README.md).
+
 ## Run and inspect
 
 Use the existing host Node runtime22.12 or later and pnpm11.19.0:
@@ -66,7 +75,7 @@ geometry and relative world scale. Comparisons use one common camera/scale;
 independent normalization must not hide proportion changes. Explain direct
 contributors and prerequisite influence when a selection highlights several
 regions. A larger diagram does not establish better morphology or art.
-The current continuous constructor requires bilateral organization, at least
+The opt-in continuous constructor requires bilateral organization, at least
 three axial stations and fins, without articulated limbs or membranes. That
 restricted construction explains much of the repeating silhouette. This UI
 repair makes its facts easier to inspect; it does not implement the liked
@@ -76,6 +85,30 @@ The [liked pet concept](evidence/art-reset/README.md) is separate proposed art
 direction, unbound to the selected genome. Do not present it as a resolved engine
 result or change it in response to copy edits. This repair adds no morphology
 engine, provider call, catalogue, game/device UI or deployment behavior.
+
+### Versioned diagnostic surface display
+
+The UI explicitly selects **`surface-detail/1`** for its structural previews and
+comparisons. This presentation version draws retained anisotropic patch
+orientation in both generic and continuous views. In continuous views,
+`fine-ridged` surfaces gain four evenly spaced neutral, quarter-opacity diagnostic
+strokes in each atlas domain, clipped to the solved outline. Existing palettes,
+mask boundaries, band behavior, facial modules and material construction remain
+unchanged. These strokes depict texture; they do not add pigment genes or tissue.
+Unknown display versions reject. Generic texture depiction was already present.
+
+Omitting `viewOptions.projectionVersion` preserves the prior default bytes.
+Stored diagnostic SVGs, canonical references, model results, digests and replay
+are unchanged. The UI labels its selected display version, independently of the
+packet's canonical drawing. Continuous-profile turn-control values and reserve-capacity values
+have no implemented consumer in their respective profiles; the inspector states
+that limitation instead of implying an applied visual or behavior effect.
+
+Focused verification is `node --test display-projection.test.mjs`. It checks
+default broad-package selection, exact existing diagnostic/reference bytes,
+isolated texture/orientation projection, unknown-version rejection and the actual
+contrasting broad seed1/seed21 role counts. This is a diagnostic correction,
+not finished character art, broad coherent surface construction or physical motion.
 The actual [selected editor](evidence/workbench-usability/final-editor-1280.jpg)
 shows both copy rows and their direct output together. Retained random captures
 show different inputs/results, not general morphology coverage or finished art.
@@ -84,20 +117,20 @@ The experiment inspector includes both a [coherent static family experiment](evi
 
 ## Module boundary and evidence
 
-| Module | Responsibility |
-| --- | --- |
-| `catalogue.mjs` | Versioned locus metadata, typed contribution vocabulary, eleven-family coverage/gaps |
-| `model.mjs` | Pure validation, shared inherited-copy resolution, explicit construction-profile dispatch, bounded generation/crossing and causal result |
-| `family-catalogue.mjs` / `family-construction.mjs` | Provisional continuous-body content; solved exterior, rooted fins, explicit ocular/oral geometry and body-local covering |
-| `family-presentation.mjs` / `family-fixtures.mjs` | Inspect solved family geometry and retain controlled copy-edit comparisons; never choose species or repair genomes |
-| `pet-catalogue.mjs` / `pet-construction.mjs` | New versioned face ratios and bounded rooted material elements, using the shared continuous solver with exact prior defaults |
-| `pet-fixtures.mjs` / `pet-projection.mjs` | Four same-face materials, one face-only copy edit, and lossless bounded source/coordinate dictionaries |
-| `authoring-adapter.mjs` | Host records/digests, replay, presentation and fact-derived art-template projection |
-| `presentation.mjs` | Diagnostic graph and fingerprint renderers; never reinterprets allele rules |
-| `geometry-reference.mjs` | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile |
-| `src/` | Framework forms, navigation and inspection of shared results |
-| `server.mjs` | Existing loopback HTTP boundary; legacy and authoring APIs |
-| `simulate.mjs` | Retained batch results/descriptions and calibration inputs |
+| Module                                             | Responsibility                                                                                                                           |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `catalogue.mjs`                                    | Versioned locus metadata, typed contribution vocabulary, eleven-family coverage/gaps                                                     |
+| `model.mjs`                                        | Pure validation, shared inherited-copy resolution, explicit construction-profile dispatch, bounded generation/crossing and causal result |
+| `family-catalogue.mjs` / `family-construction.mjs` | Provisional continuous-body content; solved exterior, rooted fins, explicit ocular/oral geometry and body-local covering                 |
+| `family-presentation.mjs` / `family-fixtures.mjs`  | Inspect solved family geometry and retain controlled copy-edit comparisons; never choose species or repair genomes                       |
+| `pet-catalogue.mjs` / `pet-construction.mjs`       | New versioned face ratios and bounded rooted material elements, using the shared continuous solver with exact prior defaults             |
+| `pet-fixtures.mjs` / `pet-projection.mjs`          | Four same-face materials, one face-only copy edit, and lossless bounded source/coordinate dictionaries                                   |
+| `authoring-adapter.mjs`                            | Host records/digests, replay, presentation and fact-derived art-template projection                                                      |
+| `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
+| `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |
+| `src/`                                             | Framework forms, navigation and inspection of shared results                                                                             |
+| `server.mjs`                                       | Existing loopback HTTP boundary; legacy and authoring APIs                                                                               |
+| `simulate.mjs`                                     | Retained batch results/descriptions and calibration inputs                                                                               |
 
 Run `pnpm test` for changed authoring behavior and preserved legacy/Pip boundaries, and `pnpm run build` for the framework bundle. `pnpm run simulate -- --out evidence/authoring` retains comparison inputs/results; the evidence manifest identifies exact examples and limits. [Evidence](evidence/README.md) distinguishes host validation, browser inspection and actual generated art from missing game/hardware proof.
 
@@ -121,7 +154,7 @@ The [family test report](evidence/critter-family/README.md) owns exact examples,
 
 ## Pet face and material experiment
 
-`genomic-pet-study@1` uses `continuous-pet/1`; previous catalogue/rule dispatch and retained result digests remain unchanged. The default authoring input is a compact three-station genome. The profile also accepts valid five-station inputs and rejects incompatible topology or impossible placement without repairing copies. It is a content-version choice, not a body preset or class selector.
+`genomic-pet-study@1` uses `continuous-pet/1`; previous catalogue/rule dispatch and retained result digests remain unchanged. Its retained calibration example is a compact three-station genome. The profile also accepts valid five-station inputs and rejects incompatible topology or impossible placement without repairing copies. It is a content-version choice, not a body preset or class selector.
 
 Four explicit contributors control leading-width ratio, ocular radius, ocular separation and pupil ratio. The simple oral ellipse is posterior to the ocular pair under a declared profile rule; absent oculars use a fixed baseline, so inactive placement does not affect it. Leaf-like fins, facial geometry and material roots are solved upstream. Presence gives no sensing, nutrition or behavior capability. No snout, jaw, teeth or gills are added.
 
@@ -186,11 +219,11 @@ distinct candidate loci in each priority family, not a quota or a claim of60–9
 executable genes. Other families retain their baseline definitions, applicability
 and explicit gaps while their detailed catalogue grows.
 
-| Priority family | Proposed coverage to develop |
-| --- | --- |
-| Structure | Organization, segmentation, proportions, support/flexibility, appendage arrangement and attachments, joint geometry, contact structures and optional silhouette features |
-| Appearance | Pigment contributions, palette relationships, marking placement/geometry/density, surface texture, transparency and visible emission where applicable |
-| Mechanics/movement | Eligible modes, coordination and gait, stride/cadence, joint excursion, balance, turning and maneuver control, matched-action effort and medium-specific constraints |
+| Priority family    | Proposed coverage to develop                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Structure          | Organization, segmentation, proportions, support/flexibility, appendage arrangement and attachments, joint geometry, contact structures and optional silhouette features |
+| Appearance         | Pigment contributions, palette relationships, marking placement/geometry/density, surface texture, transparency and visible emission where applicable                    |
+| Mechanics/movement | Eligible modes, coordination and gait, stride/cadence, joint excursion, balance, turning and maneuver control, matched-action effort and medium-specific constraints     |
 
 Each locus has a stable ID/version, human name and aliases, primary family and
 affected-family links, applicability, allele/copy definitions, inheritance and
@@ -240,12 +273,12 @@ work, not a sum of independent dimension scores or a new gene for every combinat
 
 ### Workbench views and framework
 
-| View | What the owner can inspect or do |
-| --- | --- |
-| Compendium | Browse/search all eleven families; manage names, taxonomy, loci, alleles and rules; see where-used references and draft/validated/deprecated state |
+| View                | What the owner can inspect or do                                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Compendium          | Browse/search all eleven families; manage names, taxonomy, loci, alleles and rules; see where-used references and draft/validated/deprecated state                        |
 | Foundation/baseline | Inspect source-supported fixed/variable contributors, developmental vocabulary, exclusions and complete baseline sequence/art; derived classes describe results afterward |
-| Genome experiment | Explore every applicable fixed/variable locus and baseline reference; inspect inherited copies, dependencies and a genotype sequence; compare related genomes |
-| Expression/creature | Inspect resolved values and causes, expressed sequence and genome art, anatomy/surface/motion preview, permitted expression sampling, comparison and prompt export |
+| Genome experiment   | Explore every applicable fixed/variable locus and baseline reference; inspect inherited copies, dependencies and a genotype sequence; compare related genomes             |
+| Expression/creature | Inspect resolved values and causes, expressed sequence and genome art, anatomy/surface/motion preview, permitted expression sampling, comparison and prompt export        |
 
 Implemented developer framework: **React + Mantine**, using Vite for the UI build. Mantine
 supplies established [layout](https://mantine.dev/core/app-shell/),

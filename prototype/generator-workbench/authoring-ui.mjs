@@ -8,6 +8,31 @@ export function scopedLoci(catalogue, dimension = "all", query = "") {
     return inDimension && searchable.includes(text);
   });
 }
+export function initialAuthoringInputs(data) {
+  return {
+    catalogue: data.catalogue,
+    genome: data.defaultGeneration.genome,
+    context: data.referenceContext,
+  };
+}
+export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "continuous-pet/1")
+    return "Narrow face/material calibration";
+  if (catalogue.ruleVersion === "continuous-static/1")
+    return "Narrow continuous-body calibration";
+  return "Anatomy-diversity diagnostic";
+}
+export function unconsumedOutputNotice(catalogue, locusId) {
+  if (
+    locusId === "energy.reserve-capacity" ||
+    (["continuous-pet/1", "continuous-static/1"].includes(
+      catalogue.ruleVersion,
+    ) &&
+      locusId === "movement.turn-control")
+  )
+    return "Retained resolved value; no implemented behavior or construction consumer in this profile.";
+  return "";
+}
 export function freshGenerationSeed(previousSeed, randomSeed) {
   if (
     !Number.isInteger(randomSeed) ||

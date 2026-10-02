@@ -4,7 +4,12 @@ const escape = (value) =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
-import { drawContinuousFamily } from "./family-presentation.mjs";
+import {
+  drawContinuousFamily,
+  validateDisplayProjection,
+  SURFACE_DETAIL_PROJECTION_VERSION,
+  diagnosticGraphNamespace,
+} from "./family-presentation.mjs";
 
 // Presentation consumes resolved graph/surface records; it never reads allele copies.
 export function describeAuthoringCreature(result) {
@@ -45,6 +50,9 @@ export function drawAuthoringCreature(
   selected = null,
   viewOptions = {},
 ) {
+  const surfaceDetails = validateDisplayProjection(
+    viewOptions.projectionVersion,
+  );
   if (
     ["continuous-static/1", "continuous-pet/1"].includes(
       result?.graph?.profile?.id,
@@ -54,6 +62,9 @@ export function drawAuthoringCreature(
   if (result?.status !== "resolved" || !result.graph?.nodes.length)
     throw new Error("Resolved constructed graph required.");
   const nodes = result.graph.nodes;
+  const clipPrefix = surfaceDetails
+    ? `${diagnosticGraphNamespace(result.graph)}-surface-detail-1-`
+    : "";
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const projected = (node) => [
     node.position[0],
@@ -110,8 +121,9 @@ export function drawAuthoringCreature(
       node.role === "membrane"
         ? `<path d="M${x - width / 2},${y} Q${x},${y - height / 2} ${x + width / 2},${y} Q${x},${y + height / 2} ${x - width / 2},${y}Z"/>`
         : `<ellipse cx="${x}" cy="${y}" rx="${width / 2}" ry="${height / 2}"/>`;
-    body += `<defs><clipPath id="clip-${node.id}">${shape}</clipPath></defs><g fill="${fill}" stroke="${stroke}" stroke-width="${stroke === "#edb366" ? 4 : 2}">${shape}</g>`;
-    body += `<g clip-path="url(#clip-${node.id})">`;
+    const clipId = `${clipPrefix}clip-${node.id}`;
+    body += `<defs><clipPath id="${clipId}">${shape}</clipPath></defs><g fill="${fill}" stroke="${stroke}" stroke-width="${stroke === "#edb366" ? 4 : 2}">${shape}</g>`;
+    body += `<g clip-path="url(#${clipId})">`;
     if (surface?.palette.length === 2)
       body += `<rect x="${x}" y="${y - height / 2}" width="${width / 2}" height="${height}" fill="${surface.palette[1]}"/>`;
     for (const [index, mark] of (surface?.markings ?? []).entries()) {
@@ -124,7 +136,7 @@ export function drawAuthoringCreature(
       )
         body += `<rect x="${mx - size / 2}" y="${my - height / 2}" width="${size}" height="${height}" fill="#e8dfc8" opacity="${mark.contrast}" transform="rotate(${(mark.orientation * 180) / Math.PI},${mx},${my})"/>`;
       else
-        body += `<ellipse cx="${mx}" cy="${my}" rx="${size}" ry="${size * 0.6}" fill="#e8dfc8" opacity="${mark.contrast}"/>`;
+        body += `<ellipse cx="${mx}" cy="${my}" rx="${size}" ry="${size * 0.6}" fill="#e8dfc8" opacity="${mark.contrast}"${surfaceDetails ? ` transform="rotate(${(mark.orientation * 180) / Math.PI},${mx},${my})"` : ""}/>`;
     }
     if (surface?.texture === "fine-ridged")
       for (let index = 1; index < 5; index++)
@@ -133,7 +145,7 @@ export function drawAuthoringCreature(
   }
   body +=
     '<text x="24" y="326" fill="#b4c7c3" font-family="sans-serif" font-size="13">Constructed diagnostic • static projection • no face or animation invented</text>';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 350" role="img" aria-label="Resolved construction diagnostic">${body}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 350" role="img" aria-label="Resolved construction diagnostic"${surfaceDetails ? ` data-projection="${SURFACE_DETAIL_PROJECTION_VERSION}"` : ""}>${body}</svg>`;
 }
 
 export function representations(catalogue, genome, result) {
