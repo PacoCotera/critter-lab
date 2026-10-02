@@ -86,6 +86,24 @@ regions, actuation and coordination, and medium-specific support. Numerical dept
 is useful only when these compose into perceptibly different coherent creatures.
 The earlier 60–90 candidate horizon is a planning aid, not a quota or breadth proof.
 
+## Shared graph exterior experiment
+
+The next reversible source proof uses a standalone `graph-source/1` construction
+projection after existing genetic resolution. It compares explicit inherited
+inputs for one dominant volume with bilateral articulated contacts and an axial
+multi-volume body with rooted fins, followed by a proportion variant. These are
+selected test inputs, not selectable organism classes. One constructor solves
+exterior geometry, body-local frames and appendage roots from the resolved graph;
+it retains the source node/locus traces and rejects unsupported composition.
+Prior evaluation, records, result digests and renderer projections stay exact.
+
+This first slice is limited to static bilateral axial relations, articulated
+contacts and fins. Radial, membrane and branched tissue require further declared
+operators. Neutral silhouettes and construction manifests test structural
+contrast; they are not finished pet art or proof of motion, physiology, all-locus
+coverage or game integration. Face and covering modules follow coherent exterior
+and local-frame construction rather than enlarging this structural experiment.
+
 ## Coherent static family implementation proof
 
 Owner authorized one complete static genome-derived family and two traceable

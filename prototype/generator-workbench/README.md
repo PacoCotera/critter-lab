@@ -15,6 +15,25 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Shared exterior construction experiment
+
+The standalone `graph-source/1` experiment tests structural breadth after existing
+genetic resolution. One constructor turns supported resolved graph relations into
+a continuous exterior, local surface domains and rooted appendages. It compares
+one dominant body volume with articulated contacts against an axial multi-volume
+body with fins, plus a proportion-only variant. These are selected genomic test
+inputs, not organism classes or generation presets. Prior evaluator, retained
+records, prompts and the default workbench UI remain unchanged.
+
+Run `node construct-source-proof.mjs --out evidence/graph-source-proof` from this directory with the existing Node
+host runtime. The outputs in `evidence/graph-source-proof/` retain original
+input/result identities separately from the new construction identity, with
+neutral common-scale silhouettes and construction manifests. See the evidence
+README for actual checks and remaining gaps. This projection is static structural
+evidence, not pet illustration, animation, physiology or game/device integration.
+Unsupported radial, membrane, branched or marked inputs reject explicitly in this
+first profile. Facial and covering construction remains subsequent work.
+
 Use the existing host Node runtime22.12 or later and pnpm11.19.0:
 
 ```sh
