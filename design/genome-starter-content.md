@@ -21,8 +21,7 @@ owns that dependency and the five-layer meaning.
 The previous 24-locus proposal varies one six-legged organization. More colors,
 limb lengths or gene names cannot supply a new topology or propulsion mechanism.
 Retain that proposal as one local calibration case, not the V1 catalogue or a
-ceiling on anatomy. The runnable workbench still has only five Pip loci; none of
-the broader construction/motion coverage below has been implemented.
+ceiling on anatomy. The workbench now has a provisional48-record connected-volume package alongside the preserved five-locus Pip reference. Its [implementation coverage](../prototype/generator-workbench/README.md) is narrower than the full breadth proposed here.
 
 Proposed pipeline: inherited developmental/module contributors → expression and
 compatible assembly → body/surface/control graph → legal movement and other
@@ -261,6 +260,4 @@ for the broader generator; they are not supplied by this local package. Exact
 topology operators need their own bounded implementation proof. Defer unrestricted
 hybrids, general linked groups/recombination, broad variable-copy reproduction,
 quantitative metabolism/vision, transformations, learned models, mutations,
-engineering gameplay and broad epigenetic networks. Framework
-and compendium implementation remains a bounded next task. This package proposal
-introduces no code, generated artwork, model calls, native builds or deployment.
+engineering gameplay and broad epigenetic networks. The framework/first compendium implementation is documented in the workbench. This older local package proposal is not its executable content or an approval of canonical biology. No native build or sandbox deployment follows from the host authoring proof.

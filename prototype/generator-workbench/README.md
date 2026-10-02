@@ -1,130 +1,52 @@
-# Generative backend workbench
+# Genome authoring and simulation workbench
 
-Status: runnable **developer scaffold**, separate from the game and device simulator.
-It reuses the existing versioned [Pip genetics proof](../genetics/README.md).
-It tests the causal chain, not a full critter generator or approved art direction.
+Status: **provisional host authoring proof**, separate from the game and device simulator. The shared catalogue/model constructs anatomy, resolves surface expression and derives guarded fictional movement. It does not choose a creature class first. The original [five-locus Pip proof](../genetics/README.md) is preserved as a legacy reference.
 
-![Actual diagnostic workbench: crown absent, steady movement, indirect contributors visible](evidence/workbench.jpg)
-
-[Review and browser evidence](evidence/README.md) distinguishes host validation
-from the missing production and hardware proof.
+The first catalogue has **48 records:42 executable and6 drafts**. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology. Developmental organization, structure, appearance, movement and supporting energy parameters are the first connected cluster.
 
 ## Run and inspect
 
-Use the existing installed Node runtime (22 or later), without installing packages:
+Use the existing host Node runtime22.12 or later and pnpm11.19.0:
 
 ```sh
-node prototype/generator-workbench/server.mjs
+cd prototype/generator-workbench
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm run build
+pnpm start
 ```
 
-Open **http://127.0.0.1:4381**. The server binds to loopback, with a small
-same-origin JSON API and fixed static-file allowlist. No database, remote provider,
-accounts, telemetry or game-save access is introduced.
+Open **http://127.0.0.1:4381**. React/Mantine/Vite provide the developer interface; this is not a device renderer. The same loopback server serves a built static UI and bounded same-origin JSON endpoints. No database service, account, telemetry, game-save access or per-frame model call is introduced. Device screens continue to use LVGL and their existing target toolchains.
 
-Try the connected journey:
+Connected authoring journey:
 
-1. Pin the reference candidate for comparison.
-2. Change markings from **Pp to pp**, then resolve. Carried variation becomes
-   expressed markings; schematic, factual entry and comparison change together.
-3. Change crown to **cc**. Crown and frill-display eligibility disappear together.
-4. Change movement to **mm**, keeping **Ee**. Efficient walking does not grant
-   burst movement. Energy is qualitative, compared for the same supported action.
-5. Select the unsupported juvenile context. The evaluator rejects it rather than
-   applying adult defaults. Restore the reference to continue.
-6. Export an experiment as visible, copyable JSON and validate/import it again.
-   No browser download is required. Imported outputs are ignored and
-   recomputed from the pinned inputs. Identical inputs produce identical output
-   hashes. Editing or rejecting input clears the current result.
+1. Browse all eleven families and inspect a locus's names, copies, operator, bounds, prerequisites and modeled/draft status.
+2. Generate a genome from a recorded seed. This samples inherited copies and accepts only a valid constructed graph, without species presets or mutation-based repair.
+3. Inspect every inherited copy and the separate baseline/inherited/resolved sequences and fingerprint fields. Display order is not a chromosome or linkage claim.
+4. Resolve changes, inspect anatomy/surfaces, derived movement and causal sources, and retain a candidate for comparison.
+5. Sample expression with a separate seed. Only permitted marking placement changes; inherited copies and anatomy remain unchanged. Suppressed markings cannot be activated through sampling.
+6. Export and replay a complete experiment. Embedded outputs are recomputed from retained inputs/content and checked against digests.
+7. Validate and export catalogue drafts. Released content and retained individuals are not rewritten by a naming edit.
+8. Export the [preset art template](art-template.md) filled from resolved facts. Large projections reject explicitly rather than discard body parts or constraints.
 
-All five information layers and eleven dimension families remain visible. The
-matrix distinguishes inherited baseline, direct/indirect contributors, exclusions
-and missing modeling. Only five two-copy loci vary. The reference sample supports
-two explicit candidates; other engine-valid laboratory drafts gain no sample,
-creation, ownership or breeding authorization.
+The legacy Pip interface remains at `/legacy` with its original evaluation route. It is a diagnostic reference, not the expanded engine or production artwork.
 
-## Big components and present implementation
+## Module boundary and evidence
 
-The intended system must translate the full genome through expression into a
-coherent creature, including interactions between expressed contributions.
-Structure, physiology, available actions and behavior cannot be independently
-randomized cosmetic attributes. This tool exposes the small existing example and
-missing boundaries rather than substituting it for the whole framework.
+| Module | Responsibility |
+| --- | --- |
+| `catalogue.mjs` | Versioned locus metadata, typed contribution vocabulary, eleven-family coverage/gaps |
+| `model.mjs` | Pure validation, inherited-copy resolution, bounded generation/crossing, construction/surface/movement and causal result |
+| `authoring-adapter.mjs` | Host records/digests, replay, presentation and fact-derived art-template projection |
+| `presentation.mjs` | Diagnostic graph and fingerprint renderers; never reinterprets allele rules |
+| `src/` | Framework forms, navigation and inspection of shared results |
+| `server.mjs` | Existing loopback HTTP boundary; legacy and authoring APIs |
+| `simulate.mjs` | Retained batch results/descriptions and calibration inputs |
 
-```mermaid
-flowchart LR
-  Library[Versioned class/locus/rule catalogue] --> Validator[Complete genome validation]
-  Genome[Inherited genome] --> Validator
-  Validator --> Expression[Expression and causal dependencies]
-  Context[Pinned modeled context] --> Expression
-  Expression --> Phenotype[Coherent phenotype and eligible capabilities]
-  Phenotype --> Construction[Body/features/rig construction]
-  Phenotype --> Facts[Fact projection]
-  Construction --> Assets[Sprites/animation/paper views]
-  Facts --> Entry[Encyclopedia]
-  Assets --> Artifact[Exact retained output artifact]
-  Entry --> Artifact
-  State[Separate lifetime state/history] --> Behavior[Eligible behavior]
-  Phenotype --> Behavior
-  Behavior --> Assets
-  Artifact --> Workbench[Diagnostic editor/compare/replay UI]
-```
+Run `pnpm test` for changed authoring behavior and preserved legacy/Pip boundaries, and `pnpm run build` for the framework bundle. `pnpm run simulate -- --out evidence/authoring` retains comparison inputs/results; the evidence manifest identifies exact examples and limits. [Evidence](evidence/README.md) distinguishes host validation, browser inspection and actual generated art from missing game/hardware proof.
 
-These are logical modules, **not selected microservices**. The complete product
-boundary is owned by [architecture](../../specs/architecture.md#creature-production-pipeline).
+The body graph is a finite connected-volume grammar with rooted articulated links, membranes and fins. It permits meaningful organization/attachment variation but does not yet span the owner's full microbial/animal breadth. Motion is a provisional analytic support rule, not aerodynamic/hydrodynamic validation or a working animation rig. No face contributors are modeled in this package; the first art calibration must not invent eyes or mouths. This cannot establish pet appeal.
 
-| Component | Scaffold today | Extension boundary |
-| --- | --- | --- |
-| Catalogue / genetic engine | Existing pinned Pip baseline, fixed/variable loci and four operators | Add declared content/operators with valid and invalid cases; never duplicate expression in presentation |
-| Evaluation adapter | Genome/context validation, expression, dependency closure, coverage and sample-support distinction | General regulatory and multi-expression rules need versioned definitions; no numeric trait invention |
-| Construction | Deterministic SVG from resolved crown/rings/markings and fixed six-legged plan | Replace diagnostic grammar with validated body/rig/style construction, without per-creature artists or prefinished portrait selection |
-| Encyclopedia | Structured resolved facts and sources | Derive wording/visuals from permitted facts; no fabricated ancestry or biology |
-| Experiment artifact | Exact input, content/context/generator version, output bytes and SHA-256 digests | Production also retains accepted subject/operation identity, origin/parents, configured incubation and construction/profile versions |
-| Lifetime / behavior | Explicitly unimplemented | Acquired state stays separate from inherited ability; behavior selects eligible actions before animation depicts them |
-| LLM expansion / search | Not connected | Candidate reusable content is validated before use; search cannot replace accepted genomes or parental inheritance |
-| Device / game consumer | Not connected | LVGL remains device presentation; this browser is not a hardware simulator |
-
-The relationship views expose existing constraints: structure enabling signaling,
-and movement alongside matched-action energy cost. **They do not implement a new
-emergent-trait solver.** Future emergence must come from explicit combinations of
-expression rules, with contributor traces and incompatibility checks. A combined
-description alone does not establish an emergent mechanic.
-
-Configured incubation remains the product generation trigger. Here one declared
-adult context is evaluated, not incubation sliders or a birth. Configuration
-effects, regulation, development, mutation policy, broad class generation,
-body/rig variability, sprite/animation generation and learned behavior are not
-implemented. These are experimental adapter interfaces, not a production API.
-
-## Interfaces and reproducibility
-
-- `GET /api/catalogue`: pinned definitions and default complete input.
-- `POST /api/evaluate`: `{ schemaVersion, genome, context }` yields a resolved
-  diagnostic artifact or rejection without generated output.
-- `evaluate.mjs`: boundary/projection; the existing engine owns genetic truth.
-- `schematic.mjs`: phenotype-only diagnostic construction; unknown traits fail.
-- `server.mjs`: local transport; no genetic rules in the server.
-- `app.mjs`: editor, stale-result safety, comparison, export/import; no genetic rules in the UI.
-
-Requests/imports are bounded to64KiB. Unknown envelope/genome fields, unsupported
-context and invalid genomes are rejected. Context key order may differ; values
-must match the reference exactly. Hashing sorts object keys and retains array
-order. Import recomputes from input and never trusts embedded SVG/facts. There
-are no timestamps or random portrait selections in replay.
-
-Checks:
-
-The path-scoped [Actions check](../../.github/workflows/generator-workbench.yml)
-runs these two suites on Node22 without dependencies, native builds or deployment.
-
-```sh
-node --test prototype/tests/generator-workbench.test.mjs prototype/tests/pip-genetics.test.mjs
-```
-
-The focused suite checks carried/expression differences, prerequisites, transitive
-causes, sample boundaries, repeatability, unknown construction values, malformed
-inputs and HTTP recovery. Browser inspection covers actual edit/resolve/compare,
-import/export and rejection/recovery. Host diagnostic evidence does not establish
-hardware, production art quality, gameplay enjoyment or complete biology.
+Configured incubation, general polygenic/epigenetic mechanics, large variable-copy reproduction, production sprite/animation generation, automatic encyclopedia writing and device integration remain future work. No generated output becomes an owned game individual through this tool.
 
 ## Authoring engine: next design
 
@@ -135,8 +57,7 @@ structured genome fingerprint art; sample permitted expressions; and derive a
 visual-generation prompt. The dimension count remains **eleven**, as corrected by
 the owner. The five-locus screen above does not fulfill that direction.
 
-The following is a proposed implementation sequence, not implemented functionality
-or approved new creature biology. Game development remains a separate consumer.
+The following defines the broader authoring direction. The first bounded implementation above covers only its stated cluster; the remaining breadth and biological/game decisions are proposals. Game development remains a separate consumer.
 
 ### Whole journey and module boundary
 
@@ -238,13 +159,12 @@ work, not a sum of independent dimension scores or a new gene for every combinat
 | Genome experiment | Explore every applicable fixed/variable locus and baseline reference; inspect inherited copies, dependencies and a genotype sequence; compare related genomes |
 | Expression/creature | Inspect resolved values and causes, expressed sequence and genome art, anatomy/surface/motion preview, permitted expression sampling, comparison and prompt export |
 
-Recommendation: **React + Mantine**, using Vite for the developer UI build. Mantine
+Implemented developer framework: **React + Mantine**, using Vite for the UI build. Mantine
 supplies established [layout](https://mantine.dev/core/app-shell/),
 [tree navigation](https://mantine.dev/core/tree/), forms and tables; React separates
 component state from domain evaluation. See [React's component/state guidance](https://react.dev/learn/thinking-in-react)
 and [Vite's supported templates/runtime requirements](https://vite.dev/guide/).
-No framework is installed in this revision. The installed host Node runtime was
-checked as24.19.0; concrete package versions and lockfile belong to implementation.
+The committed pnpm lockfile pins the implementation dependencies. Host Node24.19.0 was used locally; CI uses Node22. These are authoring-host results.
 Device screens continue to use LVGL.
 
 Use a searchable family/record explorer, a large central genome/creature workspace
@@ -355,5 +275,4 @@ more selectors. The60–90 candidate range guides compendium breadth; a meaningf
 compendium/connected-rule review need not wait for every planned record to exist.
 Missing records and unsupported rules must remain explicit. General anatomy/rule/style
 choices stay provisional until reviewed.
-This design revision does not implement the compendium, install a framework, make
-model calls, change game saves or deploy the sandbox.
+The first executable proof is described above. Further broad content, configured incubation and production generation are not supplied by the older local24-locus proposal. Game saves and sandbox remain unchanged.

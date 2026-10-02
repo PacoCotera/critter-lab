@@ -1,5 +1,11 @@
 # Generator workbench evidence
 
+## Current authoring proof
+
+See the [retained catalogue/simulation/browser/Gemini proof](authoring/README.md). The48-record shared model and framework interface are a host developer experiment. Both actual Gemini calibrations are retained and rejected for fidelity. The older reference below remains separate.
+
+## Preserved five-locus Pip reference
+
 Bounded developer scaffold,1October2026. The current source imports the existing
 Pip engine unchanged; no game/device source or saved state is altered.
 

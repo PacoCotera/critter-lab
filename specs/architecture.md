@@ -113,16 +113,9 @@ their own biological meaning merely because an LLM produced valid syntax.
 
 The owner-authorized [generator workbench](../prototype/generator-workbench/README.md)
 is the authoring and experiment surface for the game's generative engine. Its
-current runnable host scaffold inspects Pip inputs, expression, causal dependencies
-and diagnostic output using the existing genetics engine unchanged. The
-[expansion design](../prototype/generator-workbench/README.md#authoring-engine-next-design)
-adds locus/name/taxonomy management, complete baseline/genome/expression inspection,
-structured genome art/sequences, permitted expression sampling and visual-prompt
-export. These extensions are not implemented. Its browser UI is a developer tool,
-not a device renderer or game interface; shared content/engine contracts remain
-authoritative for future consumers. General emergent rules, configured incubation,
-body/rig generation, production sprites/animations and LLM connections remain
-unimplemented.
+current host proof uses a shared versioned48-record catalogue and pure validation/expression/construction model, with React/Mantine/Vite for complete authoring inspection. The preserved five-locus Pip reference remains separate. The [workbench](../prototype/generator-workbench/README.md) owns executable coverage, gaps, replay and retained simulation evidence. Its developer browser interface is not a device renderer; host JavaScript does not establish ESP32 feasibility. Constructed anatomy precedes derived classification and motion.
+
+The fact-derived [art template](../prototype/generator-workbench/art-template.md) is a concept calibration boundary. It cannot invent anatomy or establish finished sprites, rigs or animation. General emergent rules, configured incubation, broad body vocabulary and production art/encyclopedia generation remain unimplemented.
 
 The current logical boundary follows the1October automatic-production direction
 above. Workload placement, providers, paid API access and production topology

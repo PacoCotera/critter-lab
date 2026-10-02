@@ -1,0 +1,324 @@
+import { readFileSync } from "node:fs";
+import { canonicalJson, digest } from "./evaluate.mjs";
+import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
+import {
+  evaluateGenome,
+  generateGenome,
+  validateCatalogue,
+  isRecord,
+} from "./model.mjs";
+import {
+  representations,
+  drawAuthoringCreature,
+  drawGenomeField,
+  describeAuthoringCreature,
+} from "./presentation.mjs";
+
+export const PACKET_SCHEMA = "critter-authoring-record/1";
+const template = JSON.parse(
+  readFileSync(new URL("art-template.json", import.meta.url), "utf8"),
+);
+const reject = (code, message) => ({
+  status: "rejected",
+  errors: [{ code, path: "input", message }],
+});
+
+export function authoringCatalogue() {
+  return {
+    catalogue: structuredClone(AUTHORING_CATALOGUE),
+    defaultGeneration: generateGenome(AUTHORING_CATALOGUE, 1),
+    referenceContext: REFERENCE_CONTEXT,
+    schemaVersion: PACKET_SCHEMA,
+  };
+}
+
+export function resolveAuthoring(input) {
+  if (
+    !isRecord(input) ||
+    Object.keys(input).some(
+      (key) =>
+        !["catalogue", "genome", "context", "expressionSeed"].includes(key),
+    )
+  )
+    return reject(
+      "authoring-envelope",
+      "Only catalogue, genome, context and expressionSeed are supported.",
+    );
+  const catalogue = Object.hasOwn(input, "catalogue")
+    ? input.catalogue
+    : AUTHORING_CATALOGUE;
+  const context = Object.hasOwn(input, "context")
+    ? input.context
+    : REFERENCE_CONTEXT;
+  const result = evaluateGenome(catalogue, input.genome, context, {
+    expressionSeed: input.expressionSeed ?? null,
+  });
+  if (result.status !== "resolved") return result;
+  const retainedInput = {
+    catalogue: structuredClone(catalogue),
+    genome: structuredClone(input.genome),
+    context: structuredClone(context),
+    expressionSeed: input.expressionSeed ?? null,
+  };
+  const inputDigest = digest(retainedInput);
+  const resultDigest = digest(result);
+  const packet = {
+    status: "resolved",
+    schemaVersion: PACKET_SCHEMA,
+    contentId: catalogue.id,
+    contentVersion: catalogue.version,
+    ruleVersion: catalogue.ruleVersion,
+    recordId: `experiment-${inputDigest.slice(0, 20)}`,
+    input: retainedInput,
+    inputDigest,
+    resultDigest,
+    result,
+  };
+  packet.representations = representations(
+    catalogue,
+    retainedInput.genome,
+    result,
+  );
+  packet.diagnostic = drawAuthoringCreature(result);
+  packet.description = describeAuthoringCreature(result);
+  packet.fingerprints = Object.fromEntries(
+    ["baseline", "inherited", "expression"].map((kind) => [
+      kind,
+      drawGenomeField(catalogue, retainedInput.genome, result, kind),
+    ]),
+  );
+  try {
+    packet.prompt = projectArtPrompt(packet);
+  } catch (error) {
+    packet.prompt = {
+      status: "rejected",
+      error: error.message,
+      text: "",
+      limitations:
+        "Valid genetic result retained; art projection exceeded its contract or was unsupported. No content truncated.",
+    };
+  }
+  return packet;
+}
+
+export function replayAuthoring(record) {
+  if (
+    !isRecord(record) ||
+    record.schemaVersion !== PACKET_SCHEMA ||
+    typeof record.inputDigest !== "string" ||
+    typeof record.resultDigest !== "string"
+  )
+    return reject(
+      "replay-envelope",
+      "Retained authoring record/version/digests required.",
+    );
+  const regenerated = resolveAuthoring(record.input);
+  if (regenerated.status !== "resolved") return regenerated;
+  if (
+    regenerated.inputDigest !== record.inputDigest ||
+    regenerated.resultDigest !== record.resultDigest
+  )
+    return reject(
+      "replay-mismatch",
+      "Inputs/content or expression result differ from retained digests; no record replaced.",
+    );
+  return {
+    ...regenerated,
+    replay: { verified: true, clientArtifactsTrusted: false },
+  };
+}
+
+export function validateDraft(catalogue) {
+  return validateCatalogue(catalogue);
+}
+
+export function projectArtPrompt(packet) {
+  if (
+    packet?.status !== "resolved" ||
+    packet.result?.status !== "resolved" ||
+    !packet.recordId ||
+    digest(packet.input) !== packet.inputDigest ||
+    digest(packet.result) !== packet.resultDigest
+  )
+    throw new Error(
+      "Verified resolved retained packet required for art projection.",
+    );
+  const recomputed = evaluateGenome(
+    packet.input.catalogue,
+    packet.input.genome,
+    packet.input.context,
+    { expressionSeed: packet.input.expressionSeed },
+  );
+  if (
+    recomputed.status !== "resolved" ||
+    digest(recomputed) !== packet.resultDigest ||
+    packet.schemaVersion !== PACKET_SCHEMA ||
+    packet.contentId !== packet.input.catalogue.id ||
+    packet.contentVersion !== packet.input.catalogue.version ||
+    packet.ruleVersion !== packet.input.catalogue.ruleVersion ||
+    packet.recordId !== `experiment-${packet.inputDigest.slice(0, 20)}`
+  )
+    throw new Error(
+      "Art facts/metadata must match the shared engine replay, not client-supplied result hashes.",
+    );
+  const { graph, facts, motion, realization, limitations } = packet.result;
+  const subjectPacket = Object.fromEntries(
+    template.inputContract.required.map((key) => [key, packet[key]]),
+  );
+  subjectPacket.context = packet.input.context;
+  if (
+    Buffer.byteLength(JSON.stringify(subjectPacket), "utf8") >
+    template.limits.maxSubjectPacketBytes
+  )
+    throw new Error("Art subject packet exceeds the template byte limit.");
+  const quote = (value) => JSON.stringify(value);
+  const sourceGroups = {};
+  const internSources = (sources) => {
+    const existing = Object.entries(sourceGroups).find(
+      ([, values]) => canonicalJson(values) === canonicalJson(sources),
+    );
+    if (existing) return existing[0];
+    const id = `s${Object.keys(sourceGroups).length}`;
+    sourceGroups[id] = sources;
+    return id;
+  };
+  const trace = {
+    factColumns: ["outputId", "state", "sourceGroup", "prerequisiteGroup"],
+    facts: facts.map(({ id, sources, prerequisites, state }) => [
+      id,
+      state,
+      internSources(sources),
+      internSources(prerequisites),
+    ]),
+    bindingColumns: ["constructedId", "sourceGroup"],
+    nodes: graph.nodes.map(({ id, sources }) => [id, internSources(sources)]),
+    surfaces: graph.surfaces.map(({ id, sources }) => [
+      id,
+      internSources(sources),
+    ]),
+    sourceGroups,
+  };
+  const surfaceProfiles = {};
+  const markProfiles = {};
+  function internProfile(profiles, profile) {
+    const existing = Object.entries(profiles).find(
+      ([, value]) => canonicalJson(value) === canonicalJson(profile),
+    );
+    if (existing) return existing[0];
+    const id = `p${Object.keys(profiles).length}`;
+    profiles[id] = profile;
+    return id;
+  }
+  const projectedSurfaces = graph.surfaces.map(
+    ({ id, nodeId, region, axes, palette, partition, texture, markings }) => ({
+      id,
+      nodeId,
+      region,
+      profileRef: internProfile(surfaceProfiles, {
+        axes,
+        palette,
+        partition,
+        texture,
+      }),
+      markings: markings.map(
+        ({ id, u, v, scale, orientation, contrast, layout }) => ({
+          id,
+          u,
+          v,
+          profileRef: internProfile(markProfiles, {
+            scale,
+            orientation,
+            contrast,
+            layout,
+          }),
+        }),
+      ),
+    }),
+  );
+  const bindings = {
+    resultIdentity: quote({
+      recordId: packet.recordId,
+      contentId: packet.contentId,
+      contentVersion: packet.contentVersion,
+      ruleVersion: packet.ruleVersion,
+      inputDigest: packet.inputDigest,
+      resultDigest: packet.resultDigest,
+    }),
+    contextFacts: quote(packet.input.context),
+    anatomyFacts: quote({
+      nodes: graph.nodes.map(({ id, role }) => ({ id, role })),
+      edges: graph.edges.map(({ id, from, to, role }) => ({
+        id,
+        from,
+        to,
+        role,
+      })),
+      facialStructures:
+        "Not included in modeled construction; sensing is not inferred.",
+    }),
+    proportionFacts: quote(
+      graph.nodes.map(
+        ({
+          id,
+          position,
+          dimensions,
+          jointRange,
+          material,
+          flexibility,
+          deformation,
+        }) => ({
+          id,
+          position,
+          dimensions,
+          jointRange,
+          material,
+          flexibility,
+          deformation,
+        }),
+      ),
+    ),
+    surfaceFacts: quote({
+      coordinates:
+        "Each surface uses its actual node-local u/v atlas. Profile refs resolve to the dictionaries; all marking rows retain actual placement.",
+      realizationSeed: realization.seed,
+      surfaces: projectedSurfaces,
+      surfaceProfiles,
+      markProfiles,
+    }),
+    movementFacts: quote(motion.filter((item) => item.status === "supported")),
+    hardExclusions: quote([
+      ...limitations,
+      ...motion
+        .filter((item) => item.status !== "supported")
+        .map((item) => `${item.id}: unavailable; ${item.reasons.join(" ")}`),
+    ]),
+    factTrace: quote(trace),
+  };
+  for (const [id, value] of Object.entries(bindings))
+    if (value.length > template.limits.maxBindingCharacters)
+      throw new Error(
+        `Art binding ${id} exceeds ${template.limits.maxBindingCharacters} characters; no facts truncated.`,
+      );
+  const text = template.promptSections
+    .map((section) =>
+      section.text.replace(/\{\{([a-zA-Z]+)\}\}/g, (_, key) => {
+        if (!Object.hasOwn(bindings, key))
+          throw new Error(`Unknown art binding ${key}`);
+        return bindings[key];
+      }),
+    )
+    .join("\n\n");
+  if (text.includes("{{") || text.length > template.limits.maxPromptCharacters)
+    throw new Error(
+      "Art projection is incomplete or exceeds the template prompt limit.",
+    );
+  return {
+    templateId: template.id,
+    templateVersion: template.version,
+    status: "fact-derived calibration prompt; no provider called",
+    bindings,
+    text,
+  };
+}
+
+export { digest, canonicalJson };

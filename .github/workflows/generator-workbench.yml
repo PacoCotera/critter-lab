@@ -34,4 +34,11 @@ jobs:
         with:
           node-version: '22'
       - name: Check host genetic and generator boundaries
-        run: node --test prototype/tests/generator-workbench.test.mjs prototype/tests/pip-genetics.test.mjs
+        working-directory: prototype/generator-workbench
+        run: node --test authoring.test.mjs ../tests/generator-workbench.test.mjs ../tests/pip-genetics.test.mjs
+      - name: Install pinned authoring dependencies
+        working-directory: prototype/generator-workbench
+        run: npm exec --yes --package=pnpm@11.19.0 -- pnpm install --frozen-lockfile --ignore-scripts
+      - name: Build the framework workbench
+        working-directory: prototype/generator-workbench
+        run: npm exec --yes --package=pnpm@11.19.0 -- pnpm run build
