@@ -139,6 +139,21 @@ body {
 code {
   overflow-wrap: anywhere;
 }
+@media (max-width: 74.999em) {
+  .workbench-header {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+  }
+  .workbench-header-controls {
+    width: 100%;
+    gap: 12px;
+  }
+  .workbench-header-controls .mantine-Select-root {
+    width: 250px;
+  }
+}
 @media (max-width: 1120px) {
   .genome-layout {
     grid-template-columns: 200px minmax(0, 1fr);

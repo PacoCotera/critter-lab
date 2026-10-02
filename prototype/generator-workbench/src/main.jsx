@@ -646,12 +646,12 @@ function Workbench() {
 
   return (
     <AppShell
-      header={{ height: 74 }}
+      header={{ height: { base: 112, lg: 74 } }}
       navbar={{ width: 190, breakpoint: "sm" }}
       padding="lg"
     >
       <AppShell.Header px="lg">
-        <Group justify="space-between" h="100%">
+        <Group justify="space-between" h="100%" className="workbench-header">
           <div>
             <Title order={3}>Critter Lab · Genome authoring</Title>
             <Text size="xs" c="dimmed">
@@ -659,7 +659,7 @@ function Workbench() {
               unchanged
             </Text>
           </div>
-          <Group>
+          <Group className="workbench-header-controls">
             <Select
               size="xs"
               aria-label="Content package"
