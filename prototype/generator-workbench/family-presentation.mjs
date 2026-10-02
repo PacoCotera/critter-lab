@@ -11,17 +11,25 @@ function namespace(graph) {
   return `continuous-${(hash >>> 0).toString(16)}`;
 }
 
-export function drawContinuousFamily(result, selected = null) {
+export function drawContinuousFamily(
+  result,
+  selected = null,
+  viewOptions = {},
+) {
   const graph = result.graph;
   if (
     result.status !== "resolved" ||
     !graph.exterior?.points ||
-    graph.profile?.id !== "continuous-static/1"
+    !["continuous-static/1", "continuous-pet/1"].includes(graph.profile?.id)
   )
     throw new Error("Resolved continuous-static geometry required.");
   // One versioned world camera preserves proportion differences across relatives.
   const [minX, maxX, minY, maxY] = graph.profile.referenceCamera;
-  const scale = Math.min(880 / (maxX - minX), 456 / (maxY - minY));
+  const portrait =
+    viewOptions.portrait ?? graph.profile.id === "continuous-pet/1";
+  const scale = portrait
+    ? Math.min(456 / (maxX - minX), 880 / (maxY - minY))
+    : Math.min(880 / (maxX - minX), 456 / (maxY - minY));
   const offsetX = (1024 - scale * (minX + maxX)) / 2;
   const offsetY = (600 - scale * (minY + maxY)) / 2;
   const point = ([x, y]) => [
@@ -81,6 +89,22 @@ export function drawContinuousFamily(result, selected = null) {
     ...graph.exterior.sources,
     ...bodySurface.sources,
   ]);
+  for (const element of graph.covering.elements ?? []) {
+    const highlight = selected && graph.covering.sources.includes(selected);
+    const stroke = highlight ? "#d78932" : "#52625c";
+    const geometry = element.geometry;
+    const paths = geometry.filaments ?? geometry.vanes;
+    shapes += `<g data-element="${element.id}" data-locus="${escape(graph.covering.sources[0])}" fill="${element.pigment}" stroke="${stroke}" stroke-width="${highlight ? 2.5 : 1}">${paths.map(polygon).join("")}`;
+    if (geometry.shaft) {
+      const [a, b] = geometry.shaft.map(point);
+      shapes += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke-width="1.5"/>`;
+    }
+    for (const barb of geometry.barbs ?? []) {
+      const [a, b] = barb.map(point);
+      shapes += `<line data-barb="true" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke-width="1"/>`;
+    }
+    shapes += "</g>";
+  }
   for (const node of graph.nodes.filter((node) => node.shape)) {
     const surface = graph.surfaces.find((item) => item.nodeId === node.id);
     let outline;
@@ -96,6 +120,11 @@ export function drawContinuousFamily(result, selected = null) {
         (component) => component.kind === "pupil-circle",
       );
       shapes += `<circle data-component="${node.id}-pupil" cx="${x}" cy="${y}" r="${pupil.radius * scale}" fill="${pupil.pigment}"/>`;
+      const reflection = node.shape.components.find(
+        (component) => component.kind === "reflection-circle",
+      );
+      if (reflection)
+        shapes += `<circle data-component="${node.id}-reflection" cx="${x + reflection.offset[0] * scale}" cy="${y + reflection.offset[1] * scale}" r="${reflection.radius * scale}" fill="${reflection.pigment}"/>`;
     }
   }
   if (selected) {
@@ -112,13 +141,13 @@ export function drawContinuousFamily(result, selected = null) {
       shapes += `<line x1="${x}" x2="${x}" y1="${y - (node.dimensions[1] * scale) / 2}" y2="${y + (node.dimensions[1] * scale) / 2}" stroke="#d78932" stroke-width="2"/>`;
     }
   }
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="600" viewBox="0 0 1024 600" role="img" aria-label="Genome-derived continuous static creature"><defs>${definitions}</defs><rect width="1024" height="600" fill="#ffffff"/>${shapes}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="600" viewBox="0 0 1024 600" role="img" aria-label="Genome-derived continuous static creature"><defs>${definitions}</defs><rect width="1024" height="600" fill="#ffffff"/>${portrait ? `<g data-view="pageX=-Y,pageY=X" transform="translate(512,300) rotate(90) translate(-512,-300)">${shapes}</g>` : shapes}</svg>`;
 }
 
 export function continuousReference(result, identity) {
   return {
     status: "available",
-    svg: drawContinuousFamily(result),
+    svg: drawContinuousFamily(result, null, { portrait: false }),
     manifest: {
       schemaVersion: "critter-continuous-reference/1",
       identity: structuredClone(identity),
@@ -143,7 +172,9 @@ export function continuousReference(result, identity) {
       surfaces: structuredClone(result.graph.surfaces),
       covering: structuredClone(result.graph.covering),
       masks:
-        "palette0 local-u<0.5; palette1 local-u>=0.5 clipped to solved outlines; coordinate halves need not have equal physical area",
+        result.graph.profile.id === "continuous-pet/1"
+          ? "Body/scales use continuous local-u masks. Each fur/feather element retains the pigment of its root local-u; contour extent is not body-clipped."
+          : "palette0 local-u<0.5; palette1 local-u>=0.5 clipped to solved outlines; coordinate halves need not have equal physical area",
       limitations: [
         ...result.limitations,
         "Unshaded flat pigment reference; highlight overlays are inspection only.",
@@ -162,7 +193,26 @@ export function describeContinuousFamily(result) {
   const finPalette = graph.surfaces.find(
     (surface) => surface.region === "fin",
   ).palette;
-  return `A continuous bilateral body joins ${count("volume")} cross-section stations through ${count("tissue-join")} inherited necks. ${count("fin")} tapered fins root on its solved exterior; ${count("ocular")} ocular features and ${count("oral-aperture")} oral aperture(s) are present. Body pigments are ${bodyPalette.join("/")}; fin pigments are ${finPalette.join("/")}, with ${result.realization.markings.length} retained marking(s) and ${graph.covering.kind === "scales" ? `${graph.covering.plates.length} actual overlapping scale plates` : "skin covering"}. Supported fictional analytic media: ${
+  if (graph.profile.id === "continuous-pet/1") {
+    const elements = graph.covering.elements ?? [];
+    const fact = (id) => result.facts.find((item) => item.id === id)?.value;
+    const material =
+      graph.covering.kind === "skin"
+        ? "bare skin"
+        : graph.covering.kind === "scales"
+          ? `${graph.covering.plates.length} overlapping scale plates`
+          : graph.covering.kind === "fur"
+            ? `${elements.length} rooted tufts with ${elements.flatMap((element) => element.geometry.filaments).length} tapered filaments`
+            : `${elements.length} feathers with ${elements.length} shafts, ${elements.flatMap((element) => element.geometry.vanes).length} paired vanes and ${elements.flatMap((element) => element.geometry.barbs).length} oblique barb divisions`;
+    const ocular = graph.nodes.find((node) => node.role === "ocular");
+    return `A continuous bilateral body joins ${count("volume")} stations through ${count("tissue-join")} necks, with leading-width ratio ${fact("leadingWidthRatio")} relative to its neighbor. ${count("fin")} retained leaf-shaped fins root on that solved exterior; ${count("ocular")} ocular features and ${count("oral-aperture")} posterior oral aperture(s) are present. ${ocular ? `Each ocular radius is ${ocular.shape.radii[0]}, resolved from size ratio ${fact("ocularSize")}; lateral separation ratio is ${fact("ocularSeparation")} and pupil-to-ocular radius ratio is ${fact("pupilRatio")}.` : "Ocular geometry is absent; inherited ocular parameters remain inactive."} Body pigments ${bodyPalette.join("/")} and fin pigments ${finPalette.join("/")} accompany ${material}; rooted fur/feather elements inherit their root-local pigment while skin/scales use continuous masks. Supported fictional analytic media: ${
+      result.motion
+        .filter((item) => item.status === "supported")
+        .map((item) => item.medium)
+        .join(", ") || "none"
+    }; sensing, nutrition, physical motion and pet behavior are not established.`;
+  }
+  return `A continuous bilateral body joins ${count("volume")} cross-section stations through ${count("tissue-join")} inherited necks. ${count("fin")} tapered fins root on its solved exterior; ${count("ocular")} ocular features and ${count("oral-aperture")} oral aperture(s) are present. Body pigments are ${bodyPalette.join("/")}; fin pigments are ${finPalette.join("/")}, with ${result.realization.markings.length} retained marking(s) and ${graph.covering.kind === "scales" ? `${graph.covering.plates.length} actual overlapping scale plates` : graph.covering.elements ? `${graph.covering.elements.length} rooted ${graph.covering.kind} elements` : "skin covering"}. Supported fictional analytic media: ${
     result.motion
       .filter((motion) => motion.status === "supported")
       .map((motion) => motion.medium)

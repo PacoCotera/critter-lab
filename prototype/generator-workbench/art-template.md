@@ -243,3 +243,129 @@ outputs and fidelity/craft limits live in the
 [family evidence](evidence/critter-family/README.md). A source/reference pass
 does not approve warm pet character or production sprite craft; those must be
 judged on the actual illustrations independently from anatomy fidelity.
+
+## Pet face and material source proof
+
+**Owner review: rejected as game art.** The retained face comparison is a
+diagram, not the intended creature illustration. Its source passes and bounded
+calibration permission establish inspectable construction only. They do not
+approve the body, pet character, illustration style or a production art master.
+Close the already-started matched request as evidence; do not perform another
+source correction or provider retry under this proof.
+The retained built-in result uses painted material rather than the requested
+HiBit craft and does not establish exact source fidelity. Gemini returned SVG
+code with rewritten layouts instead of the requested raster illustration. The
+pair is failed production evidence, not a raster-model ranking.
+
+The owner authorized a bounded continuation after the family stills failed the
+desired pet character. A separately versioned `continuous-pet/1` profile makes
+facial proportions and real fur/feather construction explicit; retained older
+results and profiles remain exact. Selected compact three-station inputs are
+comparisons produced by inherited contributors. The profile also supports legal
+five-station inputs and varied ratios; it is not a species or fixed pet preset.
+
+Four additional provisional contributors govern leading-region width, relative
+ocular radius, ocular separation and pupil ratio. A declared radius denominator
+uses the smaller of leading width and station length; it is a construction rule,
+not opportunistic shrinking of a failed face. The simple oral aperture lies
+posterior to the ocular pair under the new local placement rule. Rounded fin
+outlines derive from actual chord/span/tip controls. Source geometry, feature
+containment, materials and highlights use the same retained solution; invalid
+layouts reject without relocation or invented anatomy. Neither a face nor its
+proportions imply mood, sensing, nutrition or a richer organ system.
+
+Skin/scales remain material constructions. Fur emits bounded rooted tapered
+tufts with actual contour extension and declared flow; interior hatch lines are
+insufficient. Feathers emit bounded shafts with paired vanes and retained
+orientation; they cannot be relabeled scale plates or generic fur strokes.
+Retain every element's root, shape, profile, orientation, exclusion region,
+pigment and contributing sources. Maximums are64fur tufts or48feather elements
+in this profile, with no truncation. Fur/feather whole-element pigment derives
+from its retained body-root local-u under an explicit new-profile mapping.
+Skin/scales preserve the whole-body local pigment split. Covering creates no
+flight, armor, insulation or other unmodeled physiology.
+
+Compare complete skin/scales/fur/feather specimens at shared camera/world scale
+and with a traced facial-proportion contrast. Inspect the actual sheet and a
+256px-wide whole-specimen rendering before provider production. The face-bearing
+region, eyes/pupils, distinct covering and appendage roots must be recognizable
+without reading labels. Material complexity must not hide the face or turn fur
+tufts/feathers into invented fins. Exact source inspection may identify regions
+and roots separately from plain art; authoring knowledge is not game knowledge.
+
+Art direction is friendly, curious pocket specimens: clear face hierarchy,
+coherent soft materials, expressive source silhouette and C18's intentional
+pixel clusters/contours/selective light. Declared reflective ocular highlights
+are material depiction, not additional genes or organs. Do not add eyelids,
+eyebrows, smile, nose, new pupils, anatomy or expressive behavior to satisfy the
+mood. If the fixed source projection remains impersonal, record that limitation;
+larger eyes or a valid construction alone do not pass pet appeal.
+
+For the retained comparison, an explicit90-degree in-plane portrait view maps
+pageX=-Y and pageY=X, with the leading region at top. This rotates the entire
+solved XY subject/materials at shared scale; it is not a frontal3D pose or an
+anatomical change. Declare the transform in the source manifest and apply it
+consistently to whole-subject views, selected-source highlights and comparisons.
+Corrected fur tufts use three retained tapered filaments; feather vanes include
+their retained rachis and separated barbs. Do not substitute a solid horn/arrow
+for fur or a diamond scale for a feather merely because its roots are valid.
+
+Use existing adult authoring inspection with a concise affected-output/material
+summary before raw JSON, retaining actual source links and separate baseline,
+inherited and expressed views. No device UI changes follow from this proof.
+After actual source craft review and coordinator approval, freeze one compact
+four-subject prompt with the same source/C18 references for an optional matched
+Gemini/built-in comparison. No automatic retries or provider anatomy repair.
+
+The pet fact projection retains constructed nodes and their IDs in
+`proportionFacts`; facial shape lookup uses those records rather than catalogue
+names. Compact covering geometry may use `coordinate-index/1`, with indices into
+the exact `proportionFacts.coveringCoordinateValues` dictionary. Surface entries
+and shared source/prerequisite dictionaries must preserve every value and order;
+invalid indices reject. This encoding compresses the verified facts, not anatomy.
+Canonical geometry references remain unrotated XY; the declared portrait view is
+a presentation of that same source for inspection and the retained calibration.
+
+### Proposed correction boundary, awaiting owner review
+
+Both morphology and depiction need correction. Three similar exposed bulges,
+leaf appendages and sparse decorative material motifs do not establish a
+coherent pet simply because counts match. Do not ask a provider to beautify this
+body or add anatomy. A subsequent source contract should distinguish
+developmental construction stations from expressed exterior segmentation and
+resolve a meaningful leading/support/posterior mass hierarchy, connective
+tissue, face-bearing surface and material coverage before illustration.
+
+Keep genome authority over connected topology, organ/appendage roles and counts,
+attachment domains, mass and proportion relationships, expressed external
+segmentation, palette, covering kind/coverage/flow/scale/exclusions, and modeled
+capabilities. An explicit versioned realization contract may govern continuous
+tissue contour between those facts, volume projection, permitted pose, pixel
+contours/light and seed-pinned micro strands/barbs. It may not erase an expressed
+neck, add fins, or turn sparse covering into a full coat. Current packets and
+their exact-stroke request remain unchanged; this proposal does not excuse their
+failures retroactively.
+
+One worked candidate for that review is a compact axial output with an expanded
+leading face-bearing mass, a slightly narrower support mass and a tapering
+posterior. Contributors resolve the continuous exterior and connective profile;
+six fin-role appendages retain three paired root domains and coherent rounded
+taper/thickness. A continuous short-fur coverage field would be a new expressed
+phenotype, with explicit extent/flow/scale and face/root exclusions, rather than
+repainting the current sparse tufts. Legible face presentation needs either
+declared surface/depth/orientation construction for a shallow three-quarter
+projection, or an openly stylized 2D depiction contract. The existing XY profile
+cannot establish a physical frontal view. These are proposed choices for review,
+not a canonical body, new physiology or an implementation instruction.
+
+C18 remains the selected interface/contour craft reference. It contains no
+complete pet illustration and cannot alone establish character, body-volume or
+material craft. Prepare one small semantically constrained creature art master
+for owner review before implementing another renderer or generating another
+comparison. Review the cohesive silhouette, face and material at the intended
+display size; only then calibrate the agreed HiBit treatment. This is a proposed
+next boundary, not a species preset or approved morphology.
+The reviewed master must calibrate reusable construction/depiction operators;
+it must not become a separately authored asset for one genome. A related
+proportion/face variation should demonstrate that the same renderer derives
+distinct, recognizable individuals from resolved contributors.

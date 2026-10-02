@@ -13,6 +13,12 @@ import {
   FAMILY_TARGETS,
 } from "./family-catalogue.mjs";
 import { constructContinuousFamily } from "./family-construction.mjs";
+import {
+  PET_CATALOGUE,
+  PET_RULE_VERSION,
+  PET_TARGETS,
+} from "./pet-catalogue.mjs";
+import { constructPetFamily } from "./pet-construction.mjs";
 
 export const isRecord = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value);
@@ -48,6 +54,7 @@ const applicability = [
   "axial-actuator",
   "ocular",
   "scales",
+  "covered",
 ];
 const executable = (catalogue) =>
   catalogue.loci.filter((locus) => locus.status === "validated");
@@ -86,8 +93,14 @@ function targetValueValid(target, value, targetSpecs = TARGETS) {
 
 export function validateCatalogue(catalogue) {
   const errors = [];
-  const familyProfile = catalogue?.ruleVersion === FAMILY_RULE_VERSION;
-  const targetSpecs = familyProfile ? FAMILY_TARGETS : TARGETS;
+  const petProfile = catalogue?.ruleVersion === PET_RULE_VERSION;
+  const familyProfile =
+    petProfile || catalogue?.ruleVersion === FAMILY_RULE_VERSION;
+  const targetSpecs = petProfile
+    ? PET_TARGETS
+    : familyProfile
+      ? FAMILY_TARGETS
+      : TARGETS;
   if (
     !exactKeys(catalogue, [
       "schemaVersion",
@@ -116,7 +129,9 @@ export function validateCatalogue(catalogue) {
     !boundedText(catalogue.id, 64) ||
     !Number.isInteger(catalogue.version) ||
     catalogue.version < 1 ||
-    ![RULE_VERSION, FAMILY_RULE_VERSION].includes(catalogue.ruleVersion)
+    ![RULE_VERSION, FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
+      catalogue.ruleVersion,
+    )
   )
     errors.push(
       error(
@@ -308,7 +323,9 @@ export function validateCatalogue(catalogue) {
     if (
       !operators.includes(locus.operator) ||
       !applicability.includes(locus.applicability) ||
-      (!familyProfile && ["ocular", "scales"].includes(locus.applicability)) ||
+      (!familyProfile &&
+        ["ocular", "scales", "covered"].includes(locus.applicability)) ||
+      (!petProfile && locus.applicability === "covered") ||
       locus.outputs?.length !== 1 ||
       !targetSpecs[locus.outputs[0]]
     ) {
@@ -447,8 +464,12 @@ export function validateCatalogue(catalogue) {
   if (
     stableJson(catalogue.constructionRules) !==
     stableJson(
-      (familyProfile ? FAMILY_CATALOGUE : AUTHORING_CATALOGUE)
-        .constructionRules,
+      (petProfile
+        ? PET_CATALOGUE
+        : familyProfile
+          ? FAMILY_CATALOGUE
+          : AUTHORING_CATALOGUE
+      ).constructionRules,
     )
   )
     errors.push(
@@ -659,7 +680,9 @@ function applicableTo(kind, value) {
       value.axialActuator &&
       value.axialCount > 1) ||
     (kind === "ocular" && value.ocularPair) ||
-    (kind === "scales" && value.coveringKind === "scales")
+    (kind === "scales" && value.coveringKind === "scales") ||
+    (kind === "covered" &&
+      ["scales", "fur", "feathers"].includes(value.coveringKind))
   );
 }
 
@@ -764,8 +787,12 @@ export function evaluateGenome(
       copies: [...genome.loci[locus.id]],
     };
   });
-  if (catalogue.ruleVersion === FAMILY_RULE_VERSION)
-    return constructContinuousFamily({
+  if ([FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(catalogue.ruleVersion))
+    return (
+      catalogue.ruleVersion === PET_RULE_VERSION
+        ? constructPetFamily
+        : constructContinuousFamily
+    )({
       catalogue,
       context,
       values: v,

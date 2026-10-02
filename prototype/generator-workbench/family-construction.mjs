@@ -23,6 +23,7 @@ export function constructContinuousFamily({
   from,
   expressionSeed,
   random,
+  pet = null,
 }) {
   if (
     v.symmetry !== "bilateral" ||
@@ -46,6 +47,8 @@ export function constructContinuousFamily({
         2,
     ),
   }));
+  if (pet)
+    stations[0].halfWidth = round(stations[1].halfWidth * v.leadingWidthRatio);
   const upper = [];
   for (let step = 0; step <= profile.capSegments / 2; step++) {
     const angle = Math.PI - (step * Math.PI) / profile.capSegments;
@@ -102,6 +105,7 @@ export function constructContinuousFamily({
     "taper",
     "spacing",
     "joinNeckRatio",
+    ...(pet ? ["leadingWidthRatio"] : []),
   );
   const perimeter = [
     ...upper,
@@ -190,6 +194,7 @@ export function constructContinuousFamily({
     "spacing",
     "taper",
     "joinNeckRatio",
+    ...(pet ? ["leadingWidthRatio"] : []),
   );
   if (v.attachmentGroups === 0)
     return reject(
@@ -222,7 +227,28 @@ export function constructContinuousFamily({
       ];
       const tipX = left + v.finTipPosition * chord;
       const tip = [tipX, halfWidthAt(tipX) + v.finSpan];
-      const points = [...base, tip].map(([px, py]) => [
+      let boundary = [tip];
+      if (pet) {
+        const curve = (a, b, control) =>
+          Array.from({ length: profile.finCurveSamples }, (_, i) => {
+            const t = (i + 1) / profile.finCurveSamples;
+            return [
+              (1 - t) ** 2 * a[0] + 2 * (1 - t) * t * control[0] + t * t * b[0],
+              (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * control[1] + t * t * b[1],
+            ];
+          });
+        boundary = [
+          ...curve(base.at(-1), tip, [
+            right + chord * 0.32,
+            tip[1] - v.finSpan * 0.35,
+          ]),
+          ...curve(tip, base[0], [
+            left - chord * 0.32,
+            tip[1] - v.finSpan * 0.35,
+          ]),
+        ];
+      }
+      const points = [...base, ...boundary].map(([px, py]) => [
         round(px),
         round(py * side),
       ]);
@@ -302,10 +328,21 @@ export function constructContinuousFamily({
         },
         {
           kind: "pupil-circle",
-          radius: round(rx * profile.ocularPupilRatio),
+          radius: round(rx * (pet ? v.pupilRatio : profile.ocularPupilRatio)),
           pigment: profile.featurePigment,
         },
       ];
+    if (pet && role === "ocular")
+      feature.shape.components.push({
+        kind: "reflection-circle",
+        radius: round(rx * profile.ocularReflection.radiusFraction),
+        offset: [
+          round(rx * profile.ocularReflection.offsetFraction),
+          round(rx * profile.ocularReflection.offsetFraction),
+        ],
+        pigment: profile.ocularReflection.pigment,
+        authority: profile.ocularReflection.authority,
+      });
     features.push(feature);
     graph.edges.push({
       id: `root-${id}`,
@@ -320,8 +357,10 @@ export function constructContinuousFamily({
     const x = -stationLength / 2 + v.ocularPlacement * stationLength;
     const radius =
       Math.min(stationLength, leading.halfWidth * 2) *
-      profile.ocularRadiusFraction;
-    const y = leading.halfWidth * profile.ocularLateralFraction;
+      (pet ? v.ocularSize : profile.ocularRadiusFraction);
+    const y =
+      leading.halfWidth *
+      (pet ? v.ocularSeparation : profile.ocularLateralFraction);
     const sources = from(
       "ocularPair",
       "ocularPlacement",
@@ -331,6 +370,9 @@ export function constructContinuousFamily({
       "taper",
       "spacing",
       "joinNeckRatio",
+      ...(pet
+        ? ["leadingWidthRatio", "ocularSize", "ocularSeparation", "pupilRatio"]
+        : []),
     );
     if (
       ![1, -1].every((side, index) =>
@@ -352,8 +394,14 @@ export function constructContinuousFamily({
       );
   }
   if (v.oralOpening) {
-    const x =
-      -stationLength / 2 + profile.oralLongitudinalFraction * stationLength;
+    const x = pet
+      ? -stationLength / 2 +
+        ((v.ocularPair
+          ? v.ocularPlacement
+          : profile.oralWithoutOcularBaseline) +
+          profile.oralPosteriorFraction) *
+          stationLength
+      : -stationLength / 2 + profile.oralLongitudinalFraction * stationLength;
     const sources = from(
       "oralOpening",
       "axialCount",
@@ -362,6 +410,13 @@ export function constructContinuousFamily({
       "taper",
       "spacing",
       "joinNeckRatio",
+      ...(pet
+        ? [
+            "leadingWidthRatio",
+            "ocularPair",
+            ...(v.ocularPair ? ["ocularPlacement"] : []),
+          ]
+        : []),
     );
     if (
       !addFeature(
@@ -462,7 +517,7 @@ export function constructContinuousFamily({
     }
     graph.surfaces.push(surface);
   }
-  const coveringSources = from(
+  let coveringSources = from(
     "coveringKind",
     ...(v.coveringKind === "scales"
       ? [
@@ -475,11 +530,17 @@ export function constructContinuousFamily({
           "joinNeckRatio",
           "axialCount",
           "ocularPair",
-          "ocularPlacement",
+          ...(pet && !v.ocularPair ? [] : ["ocularPlacement"]),
           "oralOpening",
           "attachmentGroups",
           "rootPosition",
           "finSpan",
+          ...(pet
+            ? [
+                "leadingWidthRatio",
+                ...(v.ocularPair ? ["ocularSize", "ocularSeparation"] : []),
+              ]
+            : []),
         ]
       : []),
   );
@@ -590,6 +651,20 @@ export function constructContinuousFamily({
         "This scale configuration produces no legal plate region; no generic texture substituted.",
         coveringSources,
       );
+  }
+  if (pet && ["fur", "feathers"].includes(v.coveringKind)) {
+    const material = pet.constructCovering({
+      graph,
+      values: v,
+      profile,
+      bounds,
+      features,
+      halfWidthAt,
+      from,
+    });
+    if (material.status === "rejected") return material;
+    graph.covering = material.covering;
+    coveringSources = material.covering.sources;
   }
   const load = round(v.bodyLength * v.bodyWidth * v.bodyHeight * v.density);
   const waterSupported =

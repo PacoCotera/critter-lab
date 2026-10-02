@@ -83,6 +83,7 @@ function Workbench() {
   const [catalogue, setCatalogue] = useState(null);
   const [packages, setPackages] = useState([]);
   const [familyExamples, setFamilyExamples] = useState([]);
+  const [petExamples, setPetExamples] = useState([]);
   const [draft, setDraft] = useState(null);
   const [genome, setGenome] = useState(null);
   const [context, setContext] = useState(null);
@@ -110,11 +111,12 @@ function Workbench() {
       .then((data) => {
         setPackages(data.packages ?? []);
         setFamilyExamples(data.familyExamples ?? []);
+        setPetExamples(data.petExamples ?? []);
         const initial =
           data.packages?.find(
-            (item) => item.catalogue.ruleVersion === "continuous-static/1",
+            (item) => item.catalogue.ruleVersion === "continuous-pet/1",
           ) ?? data;
-        const example = data.familyExamples?.[0];
+        const example = data.petExamples?.[0];
         setCatalogue(initial.catalogue);
         setDraft(clone(initial.catalogue));
         setGenome(example?.genome ?? initial.defaultGeneration.genome);
@@ -157,9 +159,11 @@ function Workbench() {
     setCatalogue(clone(item.catalogue));
     setDraft(clone(item.catalogue));
     const example =
-      item.catalogue.ruleVersion === "continuous-static/1"
-        ? familyExamples[0]
-        : null;
+      item.catalogue.ruleVersion === "continuous-pet/1"
+        ? petExamples[0]
+        : item.catalogue.ruleVersion === "continuous-static/1"
+          ? familyExamples[0]
+          : null;
     setGenome(clone(example?.genome ?? item.defaultGeneration.genome));
     setContext(
       example?.context ?? {
@@ -174,7 +178,9 @@ function Workbench() {
     setBatch([]);
   }
   function loadFamilyExample(name) {
-    const example = familyExamples.find((item) => item.name === name);
+    const example = [...familyExamples, ...petExamples].find(
+      (item) => item.name === name,
+    );
     if (!example || busy) return;
     invalidate();
     setGenome(clone(example.genome));
@@ -613,9 +619,14 @@ function Workbench() {
             <Group justify="space-between" mb="md">
               <div>
                 <Title order={2}>Genome → expression → construction</Title>
-                {catalogue.ruleVersion === "continuous-static/1" && (
+                {["continuous-static/1", "continuous-pet/1"].includes(
+                  catalogue.ruleVersion,
+                ) && (
                   <Group mt="sm">
-                    {familyExamples.map((example) => (
+                    {(catalogue.ruleVersion === "continuous-pet/1"
+                      ? petExamples
+                      : familyExamples
+                    ).map((example) => (
                       <Button
                         key={example.name}
                         size="xs"
@@ -718,6 +729,31 @@ function Workbench() {
                     <Badge color="gray">
                       Static analytic concept · no animation
                     </Badge>
+                    {selectedFact && (
+                      <Text size="sm" mt="sm">
+                        {selectedFact.id}:{" "}
+                        {typeof selectedFact.value === "object"
+                          ? pretty(selectedFact.value)
+                          : String(selectedFact.value)}{" "}
+                        {selectedFact.unit} ·{" "}
+                        {selectedFact.prerequisites.length} declared
+                        prerequisite(s)
+                      </Text>
+                    )}
+                    {packet?.ruleVersion === "continuous-pet/1" && (
+                      <Text size="sm" mt="sm">
+                        {packet.result.graph.covering.kind} ·{" "}
+                        {packet.result.graph.covering.elements?.length ??
+                          packet.result.graph.covering.plates.length}{" "}
+                        material elements ·{" "}
+                        {
+                          packet.result.graph.nodes.filter((node) =>
+                            node.sources.includes(selected),
+                          ).length
+                        }{" "}
+                        sourced body/feature targets
+                      </Text>
+                    )}
                   </Group>
                   {packet ? (
                     <SvgView
@@ -885,7 +921,10 @@ function Workbench() {
                       {packet.geometryReference?.status === "available" ? (
                         <>
                           <Text size="sm" mb="sm">
-                            {packet.ruleVersion === "continuous-static/1"
+                            {[
+                              "continuous-static/1",
+                              "continuous-pet/1",
+                            ].includes(packet.ruleVersion)
                               ? "Solved continuous exterior, rooted fin outlines and sourced feature/material geometry. One profile camera preserves relative proportions; no internal station lines in ordinary view."
                               : "Exact XY footprints; all nodes shown by inspection paint order. Neutral edges are graph annotations, not tissue. Texture is retained in the trace but not rendered."}
                           </Text>

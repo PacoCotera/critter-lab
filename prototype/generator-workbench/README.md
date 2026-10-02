@@ -2,7 +2,7 @@
 
 Status: **provisional host authoring proof**, separate from the game and device simulator. The shared catalogue/model constructs anatomy, resolves surface expression and derives guarded fictional movement. It does not choose a creature class first. The original [five-locus Pip proof](../genetics/README.md) is preserved as a legacy reference.
 
-The retained diagnostic catalogue has **48 records: 42 executable and 6 drafts**. The new continuous-family catalogue has **58 records: 50 executable and 8 drafts**, including explicit joining geometry, eye/mouth morphology and skin/scales covering. Fur and feather construction remain detailed drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology. Developmental organization, structure, appearance, movement and supporting energy parameters are the first connected cluster.
+Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 ## Run and inspect
 
@@ -40,6 +40,8 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `model.mjs` | Pure validation, shared inherited-copy resolution, explicit construction-profile dispatch, bounded generation/crossing and causal result |
 | `family-catalogue.mjs` / `family-construction.mjs` | Provisional continuous-body content; solved exterior, rooted fins, explicit ocular/oral geometry and body-local covering |
 | `family-presentation.mjs` / `family-fixtures.mjs` | Inspect solved family geometry and retain controlled copy-edit comparisons; never choose species or repair genomes |
+| `pet-catalogue.mjs` / `pet-construction.mjs` | New versioned face ratios and bounded rooted material elements, using the shared continuous solver with exact prior defaults |
+| `pet-fixtures.mjs` / `pet-projection.mjs` | Four same-face materials, one face-only copy edit, and lossless bounded source/coordinate dictionaries |
 | `authoring-adapter.mjs` | Host records/digests, replay, presentation and fact-derived art-template projection |
 | `presentation.mjs` | Diagnostic graph and fingerprint renderers; never reinterprets allele rules |
 | `geometry-reference.mjs` | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile |
@@ -66,6 +68,23 @@ node simulate.mjs --family --out evidence/critter-family
 ```
 
 The [family test report](evidence/critter-family/README.md) owns exact examples, matched image inputs/outputs, acceptance results, gaps and issues. Neither this profile nor its generated images approve canonical creature appearance, whole-organism breadth, production animation or device integration.
+
+## Pet face and material experiment
+
+`genomic-pet-study@1` uses `continuous-pet/1`; previous catalogue/rule dispatch and retained result digests remain unchanged. The default authoring input is a compact three-station genome. The profile also accepts valid five-station inputs and rejects incompatible topology or impossible placement without repairing copies. It is a content-version choice, not a body preset or class selector.
+
+Four explicit contributors control leading-width ratio, ocular radius, ocular separation and pupil ratio. The simple oral ellipse is posterior to the ocular pair under a declared profile rule; absent oculars use a fixed baseline, so inactive placement does not affect it. Leaf-like fins, facial geometry and material roots are solved upstream. Presence gives no sensing, nutrition or behavior capability. No snout, jaw, teeth or gills are added.
+
+The four material cases share identical facial copies. Skin emits no covering elements; scales retain overlapping plates. Fur retains three curved tapered filaments per rooted tuft, including actual contour extensions. Feathers retain a shaft, two tapered curved vanes and six oblique barb divisions per element. Budgets are 128 plates, 64 tufts or 48 feathers; empty/over-budget constructions reject rather than truncate. Fur/feather elements retain the body pigment at their root local-u, while skin/scales retain continuous body masks. Live growth, deformation and physiological benefits remain unsupported.
+
+The new profile display rotates the whole resolved subject by +90 degrees (`pageX=-Y, pageY=X`) with one shared camera/scale. This presentation mapping includes highlights and all material primitives; underlying retained geometry remains XY. Load `pet-face-variant` and pin a same-skin comparison to inspect an eye-size/pupil-only copy change without attributing it to material.
+
+```sh
+node simulate.mjs --pet --out evidence/pet-materials
+node --test pet.test.mjs
+```
+
+CLI emits retained records, source SVGs, trace manifests, descriptions, genome fields and bounded art prompts. Pet-only lossless dictionaries intern source/prerequisite IDs and exact coordinate numbers; point indices cross-reference `proportionFacts.coveringCoordinateValues`. Engine replay verifies authority before projection, dictionary roundtrips preserve every value, and the existing 64KiB subject / 8KiB binding / 32KiB prompt limits remain unchanged. Valid results survive unavailable projections. [Pet evidence](evidence/pet-materials/README.md) owns actual outputs, checks and remaining craft limitations; the [content contract](../../design/genome-starter-content.md#pet-face-and-material-implementation-proof) owns provisional ratios and operators.
 
 ## Authoring engine: next design
 

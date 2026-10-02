@@ -4,6 +4,14 @@ import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
 import { createGeometryReference } from "./geometry-reference.mjs";
 import { FAMILY_CATALOGUE, FAMILY_RULE_VERSION } from "./family-catalogue.mjs";
 import { familyCases } from "./family-fixtures.mjs";
+import { PET_CATALOGUE, PET_RULE_VERSION } from "./pet-catalogue.mjs";
+import { petCases } from "./pet-fixtures.mjs";
+import {
+  internPetSources,
+  expandPetSources,
+  internElementCoordinates,
+  expandElementCoordinates,
+} from "./pet-projection.mjs";
 import {
   drawContinuousFamily,
   continuousReference,
@@ -37,10 +45,12 @@ export function authoringCatalogue() {
     defaultGeneration: generateGenome(AUTHORING_CATALOGUE, 1),
     referenceContext: REFERENCE_CONTEXT,
     schemaVersion: PACKET_SCHEMA,
-    packages: [AUTHORING_CATALOGUE, FAMILY_CATALOGUE].map((catalogue) => ({
-      catalogue: structuredClone(catalogue),
-      defaultGeneration: generateGenome(catalogue, 1, { maxAttempts: 1024 }),
-    })),
+    packages: [AUTHORING_CATALOGUE, FAMILY_CATALOGUE, PET_CATALOGUE].map(
+      (catalogue) => ({
+        catalogue: structuredClone(catalogue),
+        defaultGeneration: generateGenome(catalogue, 1, { maxAttempts: 1024 }),
+      }),
+    ),
     familyExamples: familyCases().map(
       ({ name, genome, context, relationship }) => ({
         name,
@@ -49,6 +59,12 @@ export function authoringCatalogue() {
         relationship,
       }),
     ),
+    petExamples: petCases().map(({ name, genome, context, relationship }) => ({
+      name,
+      genome,
+      context,
+      relationship,
+    })),
   };
 }
 
@@ -99,10 +115,20 @@ export function resolveAuthoring(input) {
     retainedInput.genome,
     result,
   );
-  const continuous = catalogue.ruleVersion === FAMILY_RULE_VERSION;
+  const continuous = [FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
+    catalogue.ruleVersion,
+  );
   packet.diagnostic = continuous
     ? drawContinuousFamily(result)
     : drawAuthoringCreature(result);
+  if (catalogue.ruleVersion === PET_RULE_VERSION)
+    packet.presentation = {
+      view: "portrait",
+      mapping: "pageX=-Y,pageY=X",
+      rotationDegrees: 90,
+      canonicalGeometryReference: "orthographic XY, unrotated",
+      sharedCamera: result.graph.profile.referenceCamera,
+    };
   packet.description = continuous
     ? describeContinuousFamily(result)
     : describeAuthoringCreature(result);
@@ -202,8 +228,18 @@ export function projectArtPrompt(packet) {
     template.inputContract.required.map((key) => [key, packet[key]]),
   );
   subjectPacket.context = packet.input.context;
+  const boundedSubject =
+    packet.ruleVersion === PET_RULE_VERSION
+      ? internPetSources(subjectPacket)
+      : subjectPacket;
   if (
-    Buffer.byteLength(JSON.stringify(subjectPacket), "utf8") >
+    packet.ruleVersion === PET_RULE_VERSION &&
+    canonicalJson(expandPetSources(boundedSubject)) !==
+      canonicalJson(subjectPacket)
+  )
+    throw new Error("Lossless source projection mismatch.");
+  if (
+    Buffer.byteLength(JSON.stringify(boundedSubject), "utf8") >
     template.limits.maxSubjectPacketBytes
   )
     throw new Error("Art subject packet exceeds the template byte limit.");
@@ -271,6 +307,15 @@ export function projectArtPrompt(packet) {
       ),
     }),
   );
+  const elementCoordinates = graph.covering?.elements
+    ? internElementCoordinates(graph.covering.elements)
+    : null;
+  if (
+    elementCoordinates &&
+    canonicalJson(expandElementCoordinates(elementCoordinates)) !==
+      canonicalJson(graph.covering.elements.map((element) => element.geometry))
+  )
+    throw new Error("Lossless material coordinate projection mismatch.");
   const bindings = {
     resultIdentity: quote({
       recordId: packet.recordId,
@@ -289,16 +334,20 @@ export function projectArtPrompt(packet) {
         to,
         role,
       })),
-      facialStructures:
-        graph.profile?.id === FAMILY_RULE_VERSION
-          ? graph.nodes
-              .filter((node) => ["ocular", "oral-aperture"].includes(node.role))
-              .map(({ id, role }) => ({
-                id,
-                role,
-                geometryBinding: "proportionFacts.shape",
-              }))
-          : "Not included in modeled construction; sensing is not inferred.",
+      facialStructures: [FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
+        graph.profile?.id,
+      )
+        ? graph.nodes
+            .filter((node) => ["ocular", "oral-aperture"].includes(node.role))
+            .map(({ id, role }) => ({
+              id,
+              role,
+              geometryBinding:
+                packet.ruleVersion === PET_RULE_VERSION
+                  ? "proportionFacts.nodes: match constructed id, then shape"
+                  : "proportionFacts.shape",
+            }))
+        : "Not included in modeled construction; sensing is not inferred.",
       ...(graph.exterior
         ? {
             exterior: {
@@ -369,6 +418,44 @@ export function projectArtPrompt(packet) {
                   atlasU,
                 ],
               ),
+              ...(graph.covering.elements
+                ? {
+                    elementColumns: [
+                      "id",
+                      "root",
+                      "orientation",
+                      "atlasU",
+                      "contour",
+                      "pigment",
+                      "geometry",
+                    ],
+                    coordinateEncoding: elementCoordinates.encoding,
+                    coordinateValuesBinding:
+                      "proportionFacts.coveringCoordinateValues",
+                    elements: graph.covering.elements.map(
+                      (
+                        {
+                          id,
+                          root,
+                          orientation,
+                          atlasU,
+                          contour,
+                          pigment,
+                          geometry,
+                        },
+                        index,
+                      ) => [
+                        id,
+                        root,
+                        orientation,
+                        atlasU,
+                        contour,
+                        pigment,
+                        elementCoordinates.geometries[index],
+                      ],
+                    ),
+                  }
+                : {}),
             },
           }
         : {}),
@@ -382,6 +469,30 @@ export function projectArtPrompt(packet) {
     ]),
     factTrace: quote(trace),
   };
+  if (packet.ruleVersion === PET_RULE_VERSION) {
+    bindings.proportionFacts = quote({
+      nodes: JSON.parse(bindings.proportionFacts),
+      ...(elementCoordinates
+        ? {
+            coveringCoordinateValues: elementCoordinates.coordinateValues,
+            coordinateEncoding: elementCoordinates.encoding,
+          }
+        : {}),
+    });
+    const locusIds = [...new Set(Object.values(sourceGroups).flat())];
+    bindings.factTrace = quote({
+      ...trace,
+      locusIds,
+      sourceGroupEncoding:
+        "Each source-group integer indexes locusIds; group IDs remain shared by all bindings.",
+      sourceGroups: Object.fromEntries(
+        Object.entries(sourceGroups).map(([key, ids]) => [
+          key,
+          ids.map((id) => locusIds.indexOf(id)),
+        ]),
+      ),
+    });
+  }
   for (const [id, value] of Object.entries(bindings))
     if (value.length > template.limits.maxBindingCharacters)
       throw new Error(

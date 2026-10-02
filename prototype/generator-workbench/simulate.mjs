@@ -9,6 +9,8 @@ import { generateGenome, evaluateGenome, crossGenomes } from "./model.mjs";
 import { resolveAuthoring, digest } from "./authoring-adapter.mjs";
 import { familyCases } from "./family-fixtures.mjs";
 export { familyCases } from "./family-fixtures.mjs";
+import { petCases } from "./pet-fixtures.mjs";
+export { petCases } from "./pet-fixtures.mjs";
 
 // These are selected input comparisons, not selectable organism templates in the engine.
 export function simulationCases() {
@@ -102,9 +104,11 @@ async function main() {
     throw new Error("--out requires an explicit destination.");
   if (outputPath) await mkdir(resolve(outputPath), { recursive: true });
   const summaries = [];
-  const cases = process.argv.includes("--family")
-    ? familyCases()
-    : simulationCases();
+  const cases = process.argv.includes("--pet")
+    ? petCases()
+    : process.argv.includes("--family")
+      ? familyCases()
+      : simulationCases();
   const activeCatalogue = cases[0].catalogue ?? catalogue;
   for (const item of cases) {
     const packet = resolveAuthoring({

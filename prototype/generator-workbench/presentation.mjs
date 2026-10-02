@@ -41,7 +41,11 @@ export function describeAuthoringCreature(result) {
 }
 
 export function drawAuthoringCreature(result, selected = null) {
-  if (result?.graph?.profile?.id === "continuous-static/1")
+  if (
+    ["continuous-static/1", "continuous-pet/1"].includes(
+      result?.graph?.profile?.id,
+    )
+  )
     return drawContinuousFamily(result, selected);
   if (result?.status !== "resolved" || !result.graph?.nodes.length)
     throw new Error("Resolved constructed graph required.");
