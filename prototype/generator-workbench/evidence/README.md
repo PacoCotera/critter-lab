@@ -4,6 +4,8 @@
 
 See the [retained catalogue/simulation/browser/Gemini proof](authoring/README.md). The48-record shared model and framework interface are a host developer experiment. Both actual Gemini calibrations are retained and rejected for fidelity. The older reference below remains separate.
 
+The [matched geometry-guided benchmark](geometry-calibration/README.md) adds an engine-derived static reference and one Gemini/one Sol-directed image-tool output. Both preserve broad counts and pigment roles; neither establishes exact geometry or finished creature art. The framework preview, exact prompts, unedited outputs and trace/hash manifests are retained together.
+
 ## Preserved five-locus Pip reference
 
 Bounded developer scaffold,1October2026. The current source imports the existing

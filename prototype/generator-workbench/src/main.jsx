@@ -796,6 +796,45 @@ function Workbench() {
               <>
                 <Coverage catalogue={catalogue} packet={packet} />
                 <Accordion mt="md">
+                  <Accordion.Item value="geometry">
+                    <Accordion.Control>
+                      Projected geometry and pigment-mask reference
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                      {packet.geometryReference?.status === "available" ? (
+                        <>
+                          <Text size="sm" mb="sm">
+                            Exact XY footprints; all nodes shown by inspection
+                            paint order. Neutral edges are graph annotations,
+                            not tissue. Texture is retained in the trace but not
+                            rendered.
+                          </Text>
+                          <div
+                            className="svg-view"
+                            dangerouslySetInnerHTML={{
+                              __html: packet.geometryReference.svg,
+                            }}
+                          />
+                          <Text size="sm" mt="sm">
+                            {packet.geometryReference.manifest.counts.volumes}{" "}
+                            body volumes ·{" "}
+                            {packet.geometryReference.manifest.counts.fins}{" "}
+                            fins. Static diagnostic only; no physical z-order or
+                            whole 3D body claim.
+                          </Text>
+                          <Code block mt="sm">
+                            {pretty(packet.geometryReference.manifest)}
+                          </Code>
+                        </>
+                      ) : (
+                        <Text size="sm">
+                          Reference unavailable:{" "}
+                          {packet.geometryReference?.error ??
+                            "Not retained in this record; resolve to produce the bounded reference."}
+                        </Text>
+                      )}
+                    </Accordion.Panel>
+                  </Accordion.Item>
                   <Accordion.Item value="prompt">
                     <Accordion.Control>
                       Fact description and reusable art template · no provider

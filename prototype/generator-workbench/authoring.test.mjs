@@ -20,10 +20,89 @@ import {
 } from "./authoring-adapter.mjs";
 import { makeServer } from "./server.mjs";
 import { simulationCases } from "./simulate.mjs";
+import { createGeometryReference } from "./geometry-reference.mjs";
+
+test("geometry reference preserves axial counts, root identity, positions and local pigment masks", () => {
+  const item = simulationCases().find(
+    (candidate) => candidate.name === "axial-original",
+  );
+  const packet = resolveAuthoring({
+    catalogue,
+    genome: item.genome,
+    context: item.context,
+  });
+  const reference = packet.geometryReference;
+  assert.equal(reference.status, "available");
+  assert.deepEqual(reference.manifest.counts, {
+    volumes: 5,
+    fins: 6,
+    edges: 10,
+  });
+  assert.equal(reference.manifest.identity.resultDigest, packet.resultDigest);
+  const roots = reference.manifest.nodes
+    .filter((node) => node.role === "fin")
+    .map((node) => node.root.volumeId);
+  assert.deepEqual(roots, [
+    "volume-0",
+    "volume-0",
+    "volume-2",
+    "volume-2",
+    "volume-4",
+    "volume-4",
+  ]);
+  for (const node of reference.manifest.nodes) {
+    const original = packet.result.graph.nodes.find(
+      (source) => source.id === node.id,
+    );
+    assert.deepEqual(node.sourcePosition, original.position);
+    assert.deepEqual(node.sourceDimensions, original.dimensions);
+    const sourceSurface = packet.result.graph.surfaces.find(
+      (surface) => surface.nodeId === node.id,
+    );
+    assert.deepEqual(
+      node.masks.map((mask) => mask.color),
+      sourceSurface.palette,
+    );
+    if (node.role === "fin")
+      assert.deepEqual(
+        node.masks.map((mask) => mask.localU),
+        [
+          [0, 0.5],
+          [0.5, 1],
+        ],
+      );
+  }
+  assert.equal((reference.svg.match(/data-node="/g) ?? []).length, 11);
+  assert.equal((reference.svg.match(/data-edge="/g) ?? []).length, 10);
+  assert.equal((reference.svg.match(/id="geometry-reference-clip-/g) ?? []).length, 11);
+  assert.equal((reference.svg.match(/url\(#geometry-reference-clip-/g) ?? []).length, 11);
+  assert.ok(!reference.svg.includes('id="clip-'));
+  for (const node of reference.manifest.nodes)
+    assert.ok(reference.svg.includes(`url(#geometry-reference-clip-${node.id})`));
+  assert.ok(!reference.svg.includes("<text"));
+  const incompatible = structuredClone(packet.result);
+  incompatible.graph.nodes[0].role = "membrane";
+  assert.equal(createGeometryReference(incompatible).status, "rejected");
+  incompatible.graph.nodes[0].role = "volume";
+  incompatible.graph.surfaces[0].partition = "invented mask";
+  assert.equal(createGeometryReference(incompatible).status, "rejected");
+  for (const collection of ["nodes", "edges", "surfaces"]) {
+    const malformed = structuredClone(packet.result);
+    malformed.graph[collection][0] = null;
+    assert.equal(createGeometryReference(malformed).status, "rejected");
+  }
+  const missingSources = structuredClone(packet.result);
+  delete missingSources.graph.nodes[0].sources;
+  assert.equal(createGeometryReference(missingSources).status, "rejected");
+});
 
 test("creature descriptions project actual construction and supported channels", () => {
   for (const item of simulationCases()) {
-    const packet = resolveAuthoring({ catalogue, genome: item.genome, context: item.context });
+    const packet = resolveAuthoring({
+      catalogue,
+      genome: item.genome,
+      context: item.context,
+    });
     if (packet.status !== "resolved") continue;
     const { nodes } = packet.result.graph;
     for (const [role, caption] of [
@@ -31,9 +110,20 @@ test("creature descriptions project actual construction and supported channels",
       ["contact-link", "terminal contact(s)"],
       ["membrane", "membrane(s)"],
       ["fin", "fin(s)"],
-    ]) assert.ok(packet.description.includes(`${nodes.filter((node) => node.role === role).length} ${caption}`));
-    const media = packet.result.motion.filter((motion) => motion.status === "supported").map((motion) => motion.medium);
-    assert.ok(packet.description.includes(`movement channels: ${media.join(", ") || "none"};`));
+    ])
+      assert.ok(
+        packet.description.includes(
+          `${nodes.filter((node) => node.role === role).length} ${caption}`,
+        ),
+      );
+    const media = packet.result.motion
+      .filter((motion) => motion.status === "supported")
+      .map((motion) => motion.medium);
+    assert.ok(
+      packet.description.includes(
+        `movement channels: ${media.join(", ") || "none"};`,
+      ),
+    );
     assert.ok(packet.description.includes("physical motion is unvalidated"));
     assert.ok(packet.description.includes("Facial structures are not modeled"));
   }

@@ -126,6 +126,16 @@ async function main() {
       await write("json", JSON.stringify(packet, null, 2));
       if (packet.status === "resolved") {
         await write("description.txt", packet.description);
+        await write(
+          "geometry.json",
+          JSON.stringify(
+            packet.geometryReference.manifest ?? packet.geometryReference,
+            null,
+            2,
+          ),
+        );
+        if (packet.geometryReference.status === "available")
+          await write("geometry.svg", packet.geometryReference.svg);
         await write("svg", packet.diagnostic);
         await write("genome.svg", packet.fingerprints.inherited);
         await write(

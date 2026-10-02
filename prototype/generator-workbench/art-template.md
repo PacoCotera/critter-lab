@@ -91,3 +91,58 @@ repair depiction defects against the same facts; the operating agreement limits
 further rounds. Unsupported facts require engine/content correction, not an
 artist inventing a plausible body. Exact accepted individual artwork remains a
 later programmatic construction responsibility.
+
+## Geometry-guided static proof
+
+After the two rejected text-driven sheets, the owner authorized a materially
+different bounded experiment: one static `axial-original` subject, with a
+deterministic geometry/pigment reference attached before applying HiBit style.
+Use its retained input/result digests unchanged. This does not authorize new
+loci, faces, anatomy, an action pose or another three-subject sheet.
+
+The source graph has five body volumes and six fins, in opposed pairs rooted on
+volumes0,2and4. Body volumes have actual0.3normalized axial gaps; the fin envelopes
+overlap the body envelopes, especially at the central volume. These are model
+facts to expose, not defects an illustrator may silently repair. The graph does
+not yet specify a coherent complete3D anatomical surface or physical attachment
+depth. A style result cannot establish those missing properties.
+
+Use an exact orthographic XY projection with uniform scale and unchanged node
+positions/dimensions. Existing envelope glyphs are a declared diagnostic
+construction profile, not canonical organ shapes. Paint body envelopes first,
+then all six fin footprints, with neutral graph/root connectors visible so
+count and attachment can be inspected. This paint order shows overlapping
+records; it does not assert biological transparency, physical depth order or
+fins resting above a solid body. Preserve the gaps. Do not draw continuous flesh,
+extra tail, new appendages or membranes to make the diagram resemble a species.
+
+Body surfaces remain uniform russet `#ae674d`. Each fin has equal local masks:
+cream `#dfd2ae` for `u<0.5` and slate `#718489` for `u>=0.5`, clipped to the same
+fin footprint. This explicit longitudinal split belongs to the versioned
+projection profile; the retained surface contract declared equal masks but did
+not previously select their orientation. It does not change inherited copies,
+expression or the retained realization. No realized markings exist. Subtle
+fine-ridged texture is separate from pigment markings and must not obscure the
+mask boundary or countable shape.
+
+Keep input labels/IDs, if used, as diagnostic annotations separate from anatomy;
+the generated output remains free of text, UI and labels. Record every source
+node/root/surface ID and projected bounds in the reference manifest, together
+with projection/paint-order/mask rules and exact PNG/SVG hashes. Inspect the
+actual export before submission: five volume envelopes, six fins, correct root
+pairs, unchanged gaps/offsets, no clipped or hidden fin and correct masks. A
+misleading schematic cannot be promoted merely because its data trace is valid.
+
+The generation request identifies the geometry reference as structural authority
+and C18 as pixel-craft authority only. Preserve its silhouettes, gaps, roots and
+mask allocation while refining intentional pixel clusters, edge contrast and
+light/shading. Neutral connectors remain diagnostic lines; they cannot become
+tissue, organs or new structures. If those constraints prevent a coherent styled
+creature, report the model limitation rather than alter the subject.
+
+Assess geometry fidelity and selected craft separately on the actual result.
+Passing count/root/mask preservation would establish a geometry-guided static
+depiction experiment; it would not approve anatomy, pet appeal, production
+sprites, a rig, animation, physical locomotion or a complete generator. Retain
+the exact request, attached reference and output. Stop at the bounded result
+and its disposition; failures do not authorize provider/API/purchase migration.

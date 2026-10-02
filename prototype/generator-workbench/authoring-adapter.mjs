@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
 import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
+import { createGeometryReference } from "./geometry-reference.mjs";
 import {
   evaluateGenome,
   generateGenome,
@@ -81,6 +82,14 @@ export function resolveAuthoring(input) {
   );
   packet.diagnostic = drawAuthoringCreature(result);
   packet.description = describeAuthoringCreature(result);
+  packet.geometryReference = createGeometryReference(result, {
+    recordId: packet.recordId,
+    inputDigest,
+    resultDigest,
+    contentId: packet.contentId,
+    contentVersion: packet.contentVersion,
+    ruleVersion: packet.ruleVersion,
+  });
   packet.fingerprints = Object.fromEntries(
     ["baseline", "inherited", "expression"].map((kind) => [
       kind,

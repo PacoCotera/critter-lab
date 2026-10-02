@@ -30,6 +30,8 @@ Connected authoring journey:
 
 The legacy Pip interface remains at `/legacy` with its original evaluation route. It is a diagnostic reference, not the expanded engine or production artwork.
 
+The experiment inspector now includes a [geometry and pigment reference](evidence/geometry-calibration/README.md), with a trace manifest and CLI `.geometry.svg`/`.geometry.json` exports. The bounded projection supports volume/fin graphs and rejects unsupported projections without invalidating a valid genetic result. One matched Gemini/Sol-directed image-tool comparison preserves broad part counts and pigment roles, but does not establish exact geometry or finished creature art.
+
 ## Module boundary and evidence
 
 | Module | Responsibility |
@@ -38,6 +40,7 @@ The legacy Pip interface remains at `/legacy` with its original evaluation route
 | `model.mjs` | Pure validation, inherited-copy resolution, bounded generation/crossing, construction/surface/movement and causal result |
 | `authoring-adapter.mjs` | Host records/digests, replay, presentation and fact-derived art-template projection |
 | `presentation.mjs` | Diagnostic graph and fingerprint renderers; never reinterprets allele rules |
+| `geometry-reference.mjs` | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile |
 | `src/` | Framework forms, navigation and inspection of shared results |
 | `server.mjs` | Existing loopback HTTP boundary; legacy and authoring APIs |
 | `simulate.mjs` | Retained batch results/descriptions and calibration inputs |
