@@ -52,6 +52,13 @@ import {
   sharedSceneCamera,
   scenePreviewMarkup,
   sceneCausalSummary,
+  authoringPackageKey,
+  mergeOptionalPackages,
+  packageExamples,
+  packageInputs,
+  candidateStartupDecision,
+  retainedAuthoringFailure,
+  canPublishAuthoringResponse,
 } from "../authoring-ui.mjs";
 
 const clone = (value) => structuredClone(value);
@@ -128,15 +135,19 @@ function Workbench() {
   const [errorDetails, setErrorDetails] = useState("");
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [candidateStatus, setCandidateStatus] = useState("loading");
   const [json, setJson] = useState(null);
   const [jsonText, setJsonText] = useState("");
   const [batch, setBatch] = useState([]);
   const inputRevision = useRef(0);
   const processing = useRef(false);
+  const userIntent = useRef(false);
 
   useEffect(() => {
+    let active = true;
     request("/api/authoring/catalogue")
       .then((data) => {
+        if (!active) return;
         setPackages(data.packages ?? []);
         setFamilyExamples(data.familyExamples ?? []);
         setPetExamples(data.petExamples ?? []);
@@ -147,7 +158,7 @@ function Workbench() {
         setContext(initial.context);
         setEdited(pretty(initial.catalogue.loci[0]));
         setMessage(
-          "Ready to generate a creature. Known examples are also available.",
+          "Loading experimental pigment candidate… Choose an older package to use it now.",
         );
         try {
           setRecords(JSON.parse(localStorage.getItem(storageKey) ?? "[]"));
@@ -158,19 +169,54 @@ function Workbench() {
         }
         request("/api/module-scene/catalogue")
           .then((scenePackage) => {
-            setPackages((current) => [...current, scenePackage]);
-            setSceneExamples(scenePackage.sceneExamples ?? []);
+            if (!active) return;
+            const candidate = scenePackage.candidatePackage;
+            setPackages((current) =>
+              mergeOptionalPackages(current, [
+                scenePackage,
+                ...(candidate ? [candidate] : []),
+              ]),
+            );
+            setSceneExamples([
+              ...(scenePackage.sceneExamples ?? []),
+              ...(candidate?.sceneExamples ?? []),
+            ]);
+            const status = candidate ? "ready" : "unavailable";
+            setCandidateStatus(status);
+            if (
+              candidateStartupDecision(status, userIntent.current, active)
+                .selectCandidate
+            ) {
+              applyPackage(candidate, candidate.sceneExamples);
+              setMessage(
+                "Ready to generate an experimental pigment candidate.",
+              );
+            } else if (!candidate && !userIntent.current) {
+              setMessage(
+                "Experimental pigment candidate unavailable. Anatomy-diversity diagnostic is ready.",
+              );
+            }
           })
           .catch(() => {
+            if (!active) return;
+            setCandidateStatus("unavailable");
             setErrorDetails(
-              "Optional Body / eyes / skin-scales package unavailable. Existing packages remain usable.",
+              "Experimental pigment candidate unavailable. Existing packages remain usable.",
             );
+            if (!userIntent.current)
+              setMessage(
+                "Experimental pigment candidate unavailable. Anatomy-diversity diagnostic is ready.",
+              );
           });
       })
       .catch((error) => {
+        if (!active) return;
         setMessage(error.message);
         setFailed(true);
       });
+    return () => {
+      active = false;
+    };
   }, []);
 
   function selectLocus(id) {
@@ -214,7 +260,8 @@ function Workbench() {
     }
     setView(nextView);
   }
-  function invalidate() {
+  function invalidate(claimIntent = true) {
+    if (claimIntent) userIntent.current = true;
     inputRevision.current += 1;
     setPacket(null);
     setFailed(false);
@@ -223,39 +270,37 @@ function Workbench() {
       "Changes ready to preview. Resolve to update the current output.",
     );
   }
-  function switchPackage(id) {
-    const item = packages.find((item) => item.catalogue.id === id);
-    if (!item || busy) return;
-    invalidate();
-    setCatalogue(clone(item.catalogue));
-    setDraft(clone(item.catalogue));
-    const example =
-      item.catalogue.ruleVersion === "continuous-pet/1"
-        ? petExamples[0]
-        : item.catalogue.ruleVersion === "continuous-static/1"
-          ? familyExamples[0]
-          : item.catalogue.ruleVersion === "developmental-covering/1"
-            ? sceneExamples[0]
-            : null;
-    setGenome(clone(example?.genome ?? item.defaultGeneration.genome));
-    setContext(
-      example?.context ?? {
-        stage: "adult",
-        condition: "rested",
-        environment: "reference",
-        medium: "ground",
-      },
-    );
-    setSelected(item.catalogue.loci[0].id);
+  function applyPackage(item, examples) {
+    const input = packageInputs(item, examples);
+    invalidate(false);
+    setCatalogue(input.catalogue);
+    setDraft(clone(input.catalogue));
+    setGenome(input.genome);
+    setContext(input.context);
+    setExpressionSeed(input.expressionSeed ?? 7);
+    setSelected(input.catalogue.loci[0].id);
     setFamily("all");
     setSearch("");
-    setEdited(pretty(item.catalogue.loci[0]));
+    setEdited(pretty(input.catalogue.loci[0]));
     setBatch([]);
   }
-  function loadFamilyExample(name) {
-    const example = [...familyExamples, ...petExamples, ...sceneExamples].find(
-      (item) => item.name === name,
+  function switchPackage(key) {
+    const item = packages.find(
+      (item) => authoringPackageKey(item.catalogue) === key,
     );
+    if (!item || processing.current) return;
+    userIntent.current = true;
+    applyPackage(item, [...familyExamples, ...petExamples, ...sceneExamples]);
+    setMessage(
+      `${authoringPackageLabel(item.catalogue)} · v${item.catalogue.version} ready.`,
+    );
+  }
+  function loadFamilyExample(name) {
+    const example = packageExamples(catalogue, [
+      ...familyExamples,
+      ...petExamples,
+      ...sceneExamples,
+    ]).find((item) => item.name === name);
     if (!example || processing.current) return;
     invalidate();
     const revision = inputRevision.current;
@@ -263,7 +308,7 @@ function Workbench() {
       catalogue: clone(catalogue),
       genome: clone(example.genome),
       context: clone(example.context),
-      expressionSeed: null,
+      expressionSeed: example.expressionSeed ?? null,
     };
     setGenome(exactInput.genome);
     setContext(exactInput.context);
@@ -273,26 +318,38 @@ function Workbench() {
         exactInput,
       );
       if (revision !== inputRevision.current) return;
+      if (!isResolvedAuthoringPacket(data))
+        throw new Error("Example returned no verified creature preview.");
       setPacket(data);
       setMessage("Example loaded. Preview ready.");
     });
   }
-  async function run(operation) {
+  async function run(operation, { retentionKind = null } = {}) {
     if (processing.current) return;
     processing.current = true;
     setBusy(true);
     setFailed(false);
     setErrorDetails("");
     const revision = inputRevision.current;
+    const previousPacket = packet;
     try {
       await operation();
     } catch (error) {
       if (revision === inputRevision.current) {
-        setPacket(null);
+        const recovery = retentionKind
+          ? retainedAuthoringFailure(
+              previousPacket,
+              revision,
+              inputRevision.current,
+              retentionKind,
+            )
+          : null;
+        setPacket(recovery?.packet ?? null);
         setMessage(
-          error.code === "generation-exhausted"
-            ? "No valid creature found in this bounded search. Generate again for a new seed."
-            : error.message,
+          recovery?.message ??
+            (error.code === "generation-exhausted"
+              ? "No valid creature found in this bounded search. Generate again for a new seed."
+              : error.message),
         );
         setErrorDetails(
           error.generation
@@ -307,6 +364,7 @@ function Workbench() {
     }
   }
   async function resolve(expression = null) {
+    userIntent.current = true;
     const revision = inputRevision.current;
     setPacket(null);
     const data = await request(authoringRoute(catalogue, "evaluate"), {
@@ -321,21 +379,30 @@ function Workbench() {
   }
   function generateFresh() {
     if (processing.current) return;
+    userIntent.current = true;
     const randomSeed = crypto.getRandomValues(new Uint32Array(1))[0];
     const generationSeed = freshGenerationSeed(Number(seed), randomSeed);
     setSeed(generationSeed);
-    return run(() => generate(generationSeed));
+    return run(() => generate(generationSeed), { retentionKind: "generate" });
   }
   async function generate(generationSeed = Number(seed)) {
     const revision = inputRevision.current;
-    setPacket(null);
+    userIntent.current = true;
+    setMessage("Generating a valid candidate…");
     const data = await request(authoringRoute(catalogue, "generate"), {
       catalogue,
       seed: generationSeed,
       maxAttempts: 1024,
     });
     if (revision !== inputRevision.current) return;
-    if (!isResolvedAuthoringPacket(data))
+    if (
+      !canPublishAuthoringResponse(
+        data,
+        catalogue,
+        revision,
+        inputRevision.current,
+      )
+    )
       throw new Error(
         "Generation returned no resolved creature. Try a new seed.",
       );
@@ -357,13 +424,15 @@ function Workbench() {
     setJsonText(pretty(copyableAuthoringExport(value)));
   }
   function editCopy(locusId, index, value) {
-    if (!genome?.loci?.[locusId]) return;
+    if (processing.current || !genome?.loci?.[locusId]) return;
     const next = clone(genome);
     next.loci[locusId][index] = value;
     setGenome(next);
     invalidate();
   }
   async function saveDraftRecord() {
+    userIntent.current = true;
+    const revision = inputRevision.current;
     const item = JSON.parse(edited);
     const next = clone(draft);
     next.version = Math.max(catalogue.version + 1, next.version);
@@ -374,6 +443,7 @@ function Workbench() {
       );
     next.loci[index] = item;
     await request("/api/authoring/validate", next);
+    if (revision !== inputRevision.current) return;
     localStorage.setItem(draftKey, pretty(next));
     setDraft(next);
     setSelected(item.id);
@@ -385,6 +455,7 @@ function Workbench() {
     );
   }
   async function useDraft() {
+    userIntent.current = true;
     const revision = inputRevision.current;
     await request("/api/authoring/validate", draft);
     if (revision !== inputRevision.current) return;
@@ -415,6 +486,7 @@ function Workbench() {
     );
   }
   async function importRecord() {
+    userIntent.current = true;
     const revision = inputRevision.current;
     if (jsonText.length > 1000000)
       throw new Error("Import exceeds the one-megabyte local record limit.");
@@ -422,18 +494,20 @@ function Workbench() {
     if (imported.schemaVersion === "critter-catalogue/1") {
       await request("/api/authoring/validate", imported);
       if (revision !== inputRevision.current) return;
+      const nextSelected = scopedSelection(imported.loci, selected);
+      const selectedRecord = imported.loci.find(
+        (item) => item.id === nextSelected,
+      );
+      localStorage.setItem(draftKey, pretty(imported));
       setDraft(clone(imported));
       setFamily("all");
       setSearch("");
-      const nextSelected = scopedSelection(imported.loci, selected);
       setSelected(nextSelected);
-      setEdited(pretty(imported.loci.find((item) => item.id === nextSelected)));
-      localStorage.setItem(draftKey, pretty(imported));
+      setEdited(pretty(selectedRecord));
       setMessage(
         "Imported catalogue as separate draft; current experiment unchanged.",
       );
     } else {
-      setPacket(null);
       const replayEnvelope = imported.sceneProjectionVersion
         ? sceneReplayEnvelope(imported)
         : {
@@ -449,6 +523,26 @@ function Workbench() {
         replayEnvelope,
       );
       if (revision !== inputRevision.current) return;
+      if (!isResolvedAuthoringPacket(data))
+        throw new Error("Import returned no verified creature preview.");
+      setPackages((current) =>
+        current.some(
+          (item) =>
+            authoringPackageKey(item.catalogue) ===
+            authoringPackageKey(data.input.catalogue),
+        )
+          ? current
+          : [
+              ...current,
+              {
+                catalogue: data.input.catalogue,
+                defaultGeneration: {
+                  genome: data.input.genome,
+                  context: data.input.context,
+                },
+              },
+            ],
+      );
       setCatalogue(data.input.catalogue);
       setDraft(clone(data.input.catalogue));
       setGenome(data.input.genome);
@@ -469,6 +563,7 @@ function Workbench() {
     setJson(null);
   }
   async function runBatch() {
+    userIntent.current = true;
     const revision = inputRevision.current;
     const items = [];
     for (let index = 0; index < 6; index++)
@@ -533,6 +628,7 @@ function Workbench() {
         );
   }
   const setField = (key, value) => {
+    userIntent.current = true;
     try {
       const next = JSON.parse(edited);
       next[key] = value;
@@ -568,9 +664,9 @@ function Workbench() {
               size="xs"
               aria-label="Content package"
               disabled={busy}
-              value={catalogue.id}
+              value={authoringPackageKey(catalogue)}
               data={packages.map((item) => ({
-                value: item.catalogue.id,
+                value: authoringPackageKey(item.catalogue),
                 label: `${authoringPackageLabel(item.catalogue)} · v${item.catalogue.version}`,
               }))}
               onChange={switchPackage}
@@ -786,7 +882,10 @@ function Workbench() {
                       mt="md"
                       label="Complete record · copies, allele values/maps, applicability, bounds, examples and visual binding"
                       value={edited}
-                      onChange={setEdited}
+                      onChange={(value) => {
+                        userIntent.current = true;
+                        setEdited(value);
+                      }}
                       autosize
                       minRows={12}
                       maxRows={24}
@@ -796,7 +895,9 @@ function Workbench() {
                     <Group mt="md">
                       <Button
                         disabled={busy}
-                        onClick={() => run(saveDraftRecord)}
+                        onClick={() =>
+                          run(saveDraftRecord, { retentionKind: "save" })
+                        }
                       >
                         Validate & save record to draft
                       </Button>
@@ -830,435 +931,471 @@ function Workbench() {
                 </Text>
               </div>
               <Group>
-                <Button disabled={busy} onClick={generateFresh}>
-                  Generate creature
-                </Button>
                 <Button
-                  disabled={busy || !genome}
-                  variant="light"
-                  onClick={() => run(() => resolve(null))}
+                  disabled={
+                    busy ||
+                    candidateStartupDecision(
+                      candidateStatus,
+                      userIntent.current,
+                    ).generateDisabled
+                  }
+                  onClick={generateFresh}
                 >
-                  Resolve genome
+                  Generate creature
                 </Button>
               </Group>
             </Group>
-            <div className="genome-summaries">
-              <Paper withBorder p="sm">
-                <Text size="xs" c="dimmed">
-                  BASELINE FOUNDATION
-                </Text>
-                <Text size="sm" fw={600}>
-                  {catalogue.id} · v{catalogue.version}
-                </Text>
-                <Text size="xs">
-                  {
-                    catalogue.loci.filter((item) => item.status === "validated")
-                      .length
-                  }{" "}
-                  supported contributor definitions
-                </Text>
-              </Paper>
-              <Paper withBorder p="sm">
-                <Text size="xs" c="dimmed">
-                  INHERITED COPIES
-                </Text>
-                <Text size="sm" fw={600}>
-                  {Object.keys(genome?.loci ?? {}).length} recorded loci
-                </Text>
-                <Text size="xs">
-                  {Object.values(genome?.loci ?? {}).flat().length} retained
-                  copies, including inactive ones
-                </Text>
-              </Paper>
-              <Paper withBorder p="sm">
-                <Text size="xs" c="dimmed">
-                  RESOLVED EXPRESSION
-                </Text>
-                <Text size="sm" fw={600}>
-                  {packet
-                    ? `${packet.result.facts.filter((item) => item.state === "expressed").length} expressed outputs`
-                    : "Not resolved"}
-                </Text>
-                <Text size="xs">
-                  {packet
-                    ? `${packet.result.facts.filter((item) => item.state !== "expressed").length} inactive or suppressed outputs`
-                    : "Resolve to inspect the current inputs"}
-                </Text>
-              </Paper>
-            </div>
-            <div className="dimension-index" aria-label="Genome dimensions">
-              {[
-                { id: "all", label: "All" },
-                ...catalogue.families.map((item) => ({
-                  id: item.id,
-                  label: familyLabel(item.id),
-                })),
-              ].map((item) => (
-                <Button
-                  key={item.id}
-                  size="xs"
-                  variant={family === item.id ? "filled" : "light"}
-                  onClick={() => changeScope(item.id)}
-                >
-                  {item.label}
-                  <span className="dimension-count">
-                    {scopedLoci(catalogue, item.id).length}
-                  </span>
-                </Button>
-              ))}
-            </div>
-            <div className="genome-layout">
-              <Paper withBorder p="md" className="locus-browser">
-                <TextInput
-                  aria-label="Search genome loci"
-                  placeholder="Search names or loci"
-                  value={search}
-                  onChange={(event) => changeScope(family, event.target.value)}
-                />
-                <Group justify="space-between" my="sm">
-                  <Text size="sm" fw={600}>
-                    {family === "all" ? "Whole genome" : familyLabel(family)}
-                  </Text>
-                  <Text size="xs" c="dimmed">
-                    {genomeLoci.length} records
-                  </Text>
+            <div className="result-pair">
+              <Paper withBorder p="md" className="structural-preview">
+                <Group justify="space-between">
+                  <Title order={4}>Source illustration</Title>
+                  <Badge color="gray">Diagnostic geometry</Badge>
                 </Group>
-                <ScrollArea h={470}>
-                  <Stack gap="xs">
-                    {genomeLoci.map((item) => {
-                      const fact = packet?.result.facts.find(
-                        (entry) => entry.locusId === item.id,
-                      );
-                      const copies = copyLabels(item, genome);
-                      return (
-                        <button
-                          type="button"
-                          key={item.id}
-                          className={`locus-choice ${selected === item.id ? "selected" : ""}`}
-                          onClick={() => selectLocus(item.id)}
-                        >
-                          <span className="locus-title">{item.label}</span>
-                          <span className="locus-copy-labels">
-                            {copies.length
-                              ? copies.join(" / ")
-                              : "No executable copies"}
-                          </span>
-                          <span className="locus-state">
-                            {item.status === "draft"
-                              ? "Candidate"
-                              : (fact?.state ?? "Not resolved")}
-                          </span>
-                        </button>
-                      );
-                    })}
-                    {!genomeLoci.length && (
-                      <Text size="sm" c="dimmed">
-                        No records in this scope. Choose All or clear the
-                        search.
-                      </Text>
+                {packet && (
+                  <Text size="xs" c="dimmed" mt="xs">
+                    {packet.recordId} · {packet.contentId}@
+                    {packet.contentVersion}
+                    {packet.generation &&
+                      ` · Accepted seed ${packet.generation.winningSeed ?? packet.generation.seed}`}
+                    {busy && " · Last successful result"}
+                  </Text>
+                )}
+                {packet ? (
+                  <SvgView
+                    compact
+                    onSelect={selectLocus}
+                    markup={previewMarkup(
+                      packet,
+                      packet.scene
+                        ? null
+                        : packet.result.graph.exterior
+                          ? previewCamera
+                          : null,
                     )}
-                  </Stack>
-                </ScrollArea>
+                  />
+                ) : (
+                  <div className="empty-result">
+                    <Title order={3}>No current preview</Title>
+                    <Text size="sm">
+                      Generate a creature or load a known example.
+                    </Text>
+                  </div>
+                )}
+                <Text size="xs" c="dimmed">
+                  {packet?.scene
+                    ? "Inspect or edit genome shows module involvement; exact targets and source links remain in advanced scene inspection."
+                    : "Amber shows direct and dependency involvement in the retained construction."}
+                </Text>
+                <Text size="xs" c="dimmed" mt="xs">
+                  This structural diagram is not generated game art.
+                </Text>
+                <Text size="xs" c="dimmed" mt="xs">
+                  Display:{" "}
+                  {packet?.scene
+                    ? "module-scene/1"
+                    : SURFACE_DETAIL_PROJECTION_VERSION}
+                  .{" "}
+                  {catalogue.ruleVersion === "developmental-covering/1"
+                    ? "Verified body, optional eyes and skin/scales source experiment; unsupported construction rejects without changing copies."
+                    : catalogue.ruleVersion === "developmental-analytic/1"
+                      ? "Broad graph assembly; face and covering modules are not modeled in this package."
+                      : "Narrow continuous-body calibration; this is not broad anatomy generation."}
+                </Text>
+                {packet && (
+                  <Group mt="md" gap="xs">
+                    <Button
+                      size="xs"
+                      variant="light"
+                      onClick={() => setPinned(clone(packet))}
+                    >
+                      Pin comparison
+                    </Button>
+                    <Button
+                      size="xs"
+                      variant="light"
+                      onClick={() =>
+                        run(async () => saveRecord(), { retentionKind: "save" })
+                      }
+                    >
+                      Save record
+                    </Button>
+                    <Button
+                      size="xs"
+                      variant="light"
+                      onClick={() => exportJson("Retained experiment", packet)}
+                    >
+                      Export record
+                    </Button>
+                  </Group>
+                )}
+                {pinned && (
+                  <Button
+                    variant="subtle"
+                    size="xs"
+                    mt="sm"
+                    onClick={() => setView("compare")}
+                  >
+                    Open retained comparison
+                  </Button>
+                )}
               </Paper>
-              <div className="selected-preview">
-                <Paper withBorder p="md" className="selected-editor">
-                  {locus ? (
-                    <>
+              <Paper withBorder p="md">
+                <Group justify="space-between" mb="sm">
+                  <Title order={4}>Gemini prompt</Title>
+                  <CopyButton
+                    key={packet?.recordId ?? "unresolved"}
+                    value={currentPrompt}
+                  >
+                    {({ copied, copy }) => (
+                      <Button
+                        size="xs"
+                        variant="light"
+                        disabled={!currentPrompt || busy}
+                        onClick={copy}
+                      >
+                        {copied ? "Copied" : "Copy prompt"}
+                      </Button>
+                    )}
+                  </CopyButton>
+                </Group>
+                {packet?.prompt?.error ? (
+                  <Alert color="orange" title="Prompt unavailable">
+                    {packet.prompt.error}
+                  </Alert>
+                ) : currentPrompt ? (
+                  <Textarea
+                    aria-label="Gemini prompt"
+                    readOnly
+                    autosize
+                    minRows={6}
+                    maxRows={10}
+                    value={currentPrompt}
+                  />
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    Generate or resolve a creature to view its current prompt.
+                  </Text>
+                )}
+              </Paper>
+            </div>
+            <Accordion mt="md" variant="separated">
+              <Accordion.Item value="genome-editor">
+                <Accordion.Control>Inspect or edit genome</Accordion.Control>
+                <Accordion.Panel>
+                  <Button
+                    mb="md"
+                    disabled={busy || !genome}
+                    variant="light"
+                    onClick={() => run(() => resolve(null))}
+                  >
+                    Resolve genome
+                  </Button>
+                  <div className="genome-summaries">
+                    <Paper withBorder p="sm">
                       <Text size="xs" c="dimmed">
-                        SELECTED LOCUS · {familyLabel(locus.family)}
+                        BASELINE FOUNDATION
                       </Text>
-                      <Title order={3} mt="xs">
-                        {locus.label}
-                      </Title>
-                      <Text size="sm" mt="sm">
-                        {locus.purpose}
+                      <Text size="sm" fw={600}>
+                        {catalogue.id} · v{catalogue.version}
                       </Text>
-                      {locus.status === "validated" ? (
-                        <div className="allele-editor">
-                          {Array.from(
-                            { length: locus.copyCount ?? 2 },
-                            (_, index) => (
-                              <div key={index} className="allele-choice-row">
-                                <Text size="sm" fw={600}>
-                                  Copy {index + 1}
-                                </Text>
-                                <Group gap={4}>
-                                  {locus.alleles.map((allele) => (
-                                    <Button
-                                      key={allele.id}
-                                      size="xs"
-                                      px="xs"
-                                      variant={
-                                        genome?.loci[locus.id]?.[index] ===
-                                        allele.id
-                                          ? "filled"
-                                          : "light"
-                                      }
-                                      disabled={busy || !genome?.loci[locus.id]}
-                                      aria-pressed={
-                                        genome?.loci[locus.id]?.[index] ===
-                                        allele.id
-                                      }
-                                      onClick={() =>
-                                        editCopy(locus.id, index, allele.id)
-                                      }
+                      <Text size="xs">
+                        {
+                          catalogue.loci.filter(
+                            (item) => item.status === "validated",
+                          ).length
+                        }{" "}
+                        supported contributor definitions
+                      </Text>
+                    </Paper>
+                    <Paper withBorder p="sm">
+                      <Text size="xs" c="dimmed">
+                        INHERITED COPIES
+                      </Text>
+                      <Text size="sm" fw={600}>
+                        {Object.keys(genome?.loci ?? {}).length} recorded loci
+                      </Text>
+                      <Text size="xs">
+                        {Object.values(genome?.loci ?? {}).flat().length}{" "}
+                        retained copies, including inactive ones
+                      </Text>
+                    </Paper>
+                    <Paper withBorder p="sm">
+                      <Text size="xs" c="dimmed">
+                        RESOLVED EXPRESSION
+                      </Text>
+                      <Text size="sm" fw={600}>
+                        {packet
+                          ? `${packet.result.facts.filter((item) => item.state === "expressed").length} expressed outputs`
+                          : "Not resolved"}
+                      </Text>
+                      <Text size="xs">
+                        {packet
+                          ? `${packet.result.facts.filter((item) => item.state !== "expressed").length} inactive or suppressed outputs`
+                          : "Resolve to inspect the current inputs"}
+                      </Text>
+                    </Paper>
+                  </div>
+                  <div
+                    className="dimension-index"
+                    aria-label="Genome dimensions"
+                  >
+                    {[
+                      { id: "all", label: "All" },
+                      ...catalogue.families.map((item) => ({
+                        id: item.id,
+                        label: familyLabel(item.id),
+                      })),
+                    ].map((item) => (
+                      <Button
+                        key={item.id}
+                        size="xs"
+                        variant={family === item.id ? "filled" : "light"}
+                        onClick={() => changeScope(item.id)}
+                      >
+                        {item.label}
+                        <span className="dimension-count">
+                          {scopedLoci(catalogue, item.id).length}
+                        </span>
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="genome-layout">
+                    <Paper withBorder p="md" className="locus-browser">
+                      <TextInput
+                        aria-label="Search genome loci"
+                        placeholder="Search names or loci"
+                        value={search}
+                        onChange={(event) =>
+                          changeScope(family, event.target.value)
+                        }
+                      />
+                      <Group justify="space-between" my="sm">
+                        <Text size="sm" fw={600}>
+                          {family === "all"
+                            ? "Whole genome"
+                            : familyLabel(family)}
+                        </Text>
+                        <Text size="xs" c="dimmed">
+                          {genomeLoci.length} records
+                        </Text>
+                      </Group>
+                      <ScrollArea h={470}>
+                        <Stack gap="xs">
+                          {genomeLoci.map((item) => {
+                            const fact = packet?.result.facts.find(
+                              (entry) => entry.locusId === item.id,
+                            );
+                            const copies = copyLabels(item, genome);
+                            return (
+                              <button
+                                type="button"
+                                key={item.id}
+                                className={`locus-choice ${selected === item.id ? "selected" : ""}`}
+                                onClick={() => selectLocus(item.id)}
+                              >
+                                <span className="locus-title">
+                                  {item.label}
+                                </span>
+                                <span className="locus-copy-labels">
+                                  {copies.length
+                                    ? copies.join(" / ")
+                                    : "No executable copies"}
+                                </span>
+                                <span className="locus-state">
+                                  {item.status === "draft"
+                                    ? "Candidate"
+                                    : (fact?.state ?? "Not resolved")}
+                                </span>
+                              </button>
+                            );
+                          })}
+                          {!genomeLoci.length && (
+                            <Text size="sm" c="dimmed">
+                              No records in this scope. Choose All or clear the
+                              search.
+                            </Text>
+                          )}
+                        </Stack>
+                      </ScrollArea>
+                    </Paper>
+                    <div className="selected-preview">
+                      <Paper withBorder p="md" className="selected-editor">
+                        {locus ? (
+                          <>
+                            <Text size="xs" c="dimmed">
+                              SELECTED LOCUS · {familyLabel(locus.family)}
+                            </Text>
+                            <Title order={3} mt="xs">
+                              {locus.label}
+                            </Title>
+                            <Text size="sm" mt="sm">
+                              {locus.purpose}
+                            </Text>
+                            {locus.status === "validated" ? (
+                              <div className="allele-editor">
+                                {Array.from(
+                                  { length: locus.copyCount ?? 2 },
+                                  (_, index) => (
+                                    <div
+                                      key={index}
+                                      className="allele-choice-row"
                                     >
-                                      {allele.label}
+                                      <Text size="sm" fw={600}>
+                                        Copy {index + 1}
+                                      </Text>
+                                      <Group gap={4}>
+                                        {locus.alleles.map((allele) => (
+                                          <Button
+                                            key={allele.id}
+                                            size="xs"
+                                            px="xs"
+                                            variant={
+                                              genome?.loci[locus.id]?.[
+                                                index
+                                              ] === allele.id
+                                                ? "filled"
+                                                : "light"
+                                            }
+                                            disabled={
+                                              busy || !genome?.loci[locus.id]
+                                            }
+                                            aria-pressed={
+                                              genome?.loci[locus.id]?.[
+                                                index
+                                              ] === allele.id
+                                            }
+                                            onClick={() =>
+                                              editCopy(
+                                                locus.id,
+                                                index,
+                                                allele.id,
+                                              )
+                                            }
+                                          >
+                                            {allele.label}
+                                          </Button>
+                                        ))}
+                                      </Group>
+                                    </div>
+                                  ),
+                                )}
+                                {!genome?.loci[locus.id] && (
+                                  <Text size="sm" c="orange">
+                                    Copies are missing from this input. Generate
+                                    a genome for this package.
+                                  </Text>
+                                )}
+                              </div>
+                            ) : (
+                              <Alert color="gray" mt="sm">
+                                Candidate record · no executable copy or
+                                expressed output.
+                              </Alert>
+                            )}
+                            <Divider my="md" />
+                            <Text size="xs" fw={700} c="dimmed">
+                              DIRECT OUTPUT
+                            </Text>
+                            <Text fw={600} mt="xs">
+                              {outputText(selectedFact)}
+                            </Text>
+                            <Badge
+                              mt="xs"
+                              color={
+                                selectedFact?.state === "expressed"
+                                  ? "sage"
+                                  : "gray"
+                              }
+                            >
+                              {selectedFact?.state ??
+                                (locus.status === "draft"
+                                  ? "unsupported"
+                                  : "awaiting resolve")}
+                            </Badge>
+                            {selectedFact && consumerNotice && (
+                              <Text size="sm" c="orange" mt="sm">
+                                {consumerNotice}
+                              </Text>
+                            )}
+                            {!!cause?.prerequisites.length && (
+                              <>
+                                <Text size="xs" fw={700} c="dimmed" mt="lg">
+                                  PREREQUISITES THIS OUTPUT USES
+                                </Text>
+                                <Group gap="xs" mt="xs">
+                                  {cause.prerequisites.map((item) => (
+                                    <Button
+                                      size="compact-xs"
+                                      variant="subtle"
+                                      key={item.id}
+                                      onClick={() => selectLocus(item.id)}
+                                    >
+                                      {item.label}
                                     </Button>
                                   ))}
                                 </Group>
-                              </div>
-                            ),
-                          )}
-                          {!genome?.loci[locus.id] && (
-                            <Text size="sm" c="orange">
-                              Copies are missing from this input. Generate a
-                              genome for this package.
+                              </>
+                            )}
+                            {packet && (
+                              <>
+                                <Text size="xs" fw={700} c="dimmed" mt="lg">
+                                  DOWNSTREAM INVOLVEMENT
+                                </Text>
+                                <Text size="sm" mt="xs">
+                                  {cause?.targets.length ?? 0} body/feature
+                                  nodes include this locus in their trace.
+                                </Text>
+                                {cause?.coveringInvolvement && (
+                                  <Text size="sm" mt="xs">
+                                    {cause.coveringContext
+                                      ? "Covering uses this locus as an exclusion or geometry dependency."
+                                      : `The ${packet.result.graph.covering.kind} covering includes this locus in its material trace.`}
+                                  </Text>
+                                )}
+                                {sceneCause?.ocular && (
+                                  <Text size="sm" mt="xs">
+                                    Eye construction uses this locus;{" "}
+                                    {sceneCause.ocularTargets} visible eye
+                                    targets. An absent pair retains its presence
+                                    gate.
+                                  </Text>
+                                )}
+                                {sceneCause?.covering && (
+                                  <Text size="sm" mt="xs">
+                                    Body material construction uses this locus;{" "}
+                                    {sceneCause.coveringKind},{" "}
+                                    {sceneCause.coveringTargets} plate targets.
+                                    Geometry dependencies and direct material
+                                    causes remain in the scene trace.
+                                  </Text>
+                                )}
+                                {!!cause?.dependents.length && (
+                                  <Text size="xs" c="dimmed" mt="xs">
+                                    Other dependent outputs:{" "}
+                                    {cause.dependents.slice(0, 5).join(", ")}
+                                    {cause.dependents.length > 5
+                                      ? ` +${cause.dependents.length - 5} more in advanced inspection`
+                                      : ""}
+                                  </Text>
+                                )}
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <Title order={3}>Choose a locus</Title>
+                            <Text size="sm" mt="sm">
+                              This dimension has no matching records. All keeps
+                              the complete catalogue reachable.
                             </Text>
-                          )}
-                        </div>
-                      ) : (
-                        <Alert color="gray" mt="sm">
-                          Candidate record · no executable copy or expressed
-                          output.
-                        </Alert>
-                      )}
-                      <Divider my="md" />
-                      <Text size="xs" fw={700} c="dimmed">
-                        DIRECT OUTPUT
-                      </Text>
-                      <Text fw={600} mt="xs">
-                        {outputText(selectedFact)}
-                      </Text>
-                      <Badge
-                        mt="xs"
-                        color={
-                          selectedFact?.state === "expressed" ? "sage" : "gray"
-                        }
-                      >
-                        {selectedFact?.state ??
-                          (locus.status === "draft"
-                            ? "unsupported"
-                            : "awaiting resolve")}
-                      </Badge>
-                      {selectedFact && consumerNotice && (
-                        <Text size="sm" c="orange" mt="sm">
-                          {consumerNotice}
-                        </Text>
-                      )}
-                      {!!cause?.prerequisites.length && (
-                        <>
-                          <Text size="xs" fw={700} c="dimmed" mt="lg">
-                            PREREQUISITES THIS OUTPUT USES
-                          </Text>
-                          <Group gap="xs" mt="xs">
-                            {cause.prerequisites.map((item) => (
-                              <Button
-                                size="compact-xs"
-                                variant="subtle"
-                                key={item.id}
-                                onClick={() => selectLocus(item.id)}
-                              >
-                                {item.label}
-                              </Button>
-                            ))}
-                          </Group>
-                        </>
-                      )}
-                      {packet && (
-                        <>
-                          <Text size="xs" fw={700} c="dimmed" mt="lg">
-                            DOWNSTREAM INVOLVEMENT
-                          </Text>
-                          <Text size="sm" mt="xs">
-                            {cause?.targets.length ?? 0} body/feature nodes
-                            include this locus in their trace.
-                          </Text>
-                          {cause?.coveringInvolvement && (
-                            <Text size="sm" mt="xs">
-                              {cause.coveringContext
-                                ? "Covering uses this locus as an exclusion or geometry dependency."
-                                : `The ${packet.result.graph.covering.kind} covering includes this locus in its material trace.`}
-                            </Text>
-                          )}
-                          {sceneCause?.ocular && (
-                            <Text size="sm" mt="xs">
-                              Eye construction uses this locus;{" "}
-                              {sceneCause.ocularTargets} visible eye targets. An
-                              absent pair retains its presence gate.
-                            </Text>
-                          )}
-                          {sceneCause?.covering && (
-                            <Text size="sm" mt="xs">
-                              Body material construction uses this locus;{" "}
-                              {sceneCause.coveringKind},{" "}
-                              {sceneCause.coveringTargets} plate targets.
-                              Geometry dependencies and direct material causes
-                              remain in the scene trace.
-                            </Text>
-                          )}
-                          {!!cause?.dependents.length && (
-                            <Text size="xs" c="dimmed" mt="xs">
-                              Other dependent outputs:{" "}
-                              {cause.dependents.slice(0, 5).join(", ")}
-                              {cause.dependents.length > 5
-                                ? ` +${cause.dependents.length - 5} more in advanced inspection`
-                                : ""}
-                            </Text>
-                          )}
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <Title order={3}>Choose a locus</Title>
-                      <Text size="sm" mt="sm">
-                        This dimension has no matching records. All keeps the
-                        complete catalogue reachable.
-                      </Text>
-                    </>
-                  )}
-                </Paper>
-                <Stack gap="md">
-                  <Paper withBorder p="md" className="structural-preview">
-                    <Group justify="space-between">
-                      <Title order={4}>Structural preview</Title>
-                      <Badge color="gray">Diagnostic geometry</Badge>
-                    </Group>
-                    {packet ? (
-                      <SvgView
-                        compact
-                        onSelect={selectLocus}
-                        markup={previewMarkup(
-                          packet,
-                          packet.scene
-                            ? null
-                            : packet.result.graph.exterior
-                              ? previewCamera
-                              : null,
+                          </>
                         )}
-                      />
-                    ) : (
-                      <div className="empty-result">
-                        <Title order={3}>No current preview</Title>
-                        <Text size="sm">
-                          Generate a creature or load a known example.
-                        </Text>
-                      </div>
-                    )}
-                    <Text size="xs" c="dimmed">
-                      {packet?.scene
-                        ? "Selected module involvement is listed beside the preview; exact targets and source links remain in advanced scene inspection."
-                        : "Amber shows direct and dependency involvement in the retained construction."}
-                    </Text>
-                    <Text size="xs" c="dimmed" mt="xs">
-                      This structural diagram is not generated game art.
-                    </Text>
-                    <Text size="xs" c="dimmed" mt="xs">
-                      Display:{" "}
-                      {packet?.scene
-                        ? "module-scene/1"
-                        : SURFACE_DETAIL_PROJECTION_VERSION}
-                      .{" "}
-                      {catalogue.ruleVersion === "developmental-covering/1"
-                        ? "Verified body, optional eyes and skin/scales source experiment; unsupported construction rejects without changing copies."
-                        : catalogue.ruleVersion === "developmental-analytic/1"
-                          ? "Broad graph assembly; face and covering modules are not modeled in this package."
-                          : "Narrow continuous-body calibration; this is not broad anatomy generation."}
-                    </Text>
-                    {packet?.scene && packet.generation && (
-                      <Text size="xs" c="dimmed" mt="xs">
-                        Requested seed {packet.generation.requestedSeed};
-                        winning seed {packet.generation.winningSeed}, draw{" "}
-                        {packet.generation.attempts}/
-                        {packet.generation.maxAttempts}. Rejected: genetic{" "}
-                        {packet.generation.rejected.genetic}, body{" "}
-                        {packet.generation.rejected.body}, eyes{" "}
-                        {packet.generation.rejected.ocular}, material{" "}
-                        {packet.generation.rejected.covering}. Full accounting
-                        is retained in the record.
-                      </Text>
-                    )}
-                    {packet && (
-                      <Group mt="md" gap="xs">
-                        <Button
-                          size="xs"
-                          variant="light"
-                          onClick={() => setPinned(clone(packet))}
-                        >
-                          Pin comparison
-                        </Button>
-                        <Button
-                          size="xs"
-                          variant="light"
-                          onClick={() => run(async () => saveRecord())}
-                        >
-                          Save record
-                        </Button>
-                        <Button
-                          size="xs"
-                          variant="light"
-                          onClick={() =>
-                            exportJson("Retained experiment", packet)
-                          }
-                        >
-                          Export record
-                        </Button>
-                      </Group>
-                    )}
-                    {pinned && (
-                      <Button
-                        variant="subtle"
-                        size="xs"
-                        mt="sm"
-                        onClick={() => setView("compare")}
-                      >
-                        Open retained comparison
-                      </Button>
-                    )}
-                  </Paper>
-                  <Paper withBorder p="md">
-                    <Group justify="space-between" mb="sm">
-                      <Title order={4}>Gemini prompt</Title>
-                      <CopyButton
-                        key={packet?.recordId ?? "unresolved"}
-                        value={currentPrompt}
-                      >
-                        {({ copied, copy }) => (
-                          <Button
-                            size="xs"
-                            variant="light"
-                            disabled={!currentPrompt || busy}
-                            onClick={copy}
-                          >
-                            {copied ? "Copied" : "Copy prompt"}
-                          </Button>
-                        )}
-                      </CopyButton>
-                    </Group>
-                    {packet?.prompt?.error ? (
-                      <Alert color="orange" title="Prompt unavailable">
-                        {packet.prompt.error}
-                      </Alert>
-                    ) : currentPrompt ? (
-                      <Textarea
-                        aria-label="Gemini prompt"
-                        readOnly
-                        autosize
-                        minRows={6}
-                        maxRows={10}
-                        value={currentPrompt}
-                      />
-                    ) : (
-                      <Text size="sm" c="dimmed">
-                        Generate or resolve a creature to view its current
-                        prompt.
-                      </Text>
-                    )}
-                  </Paper>
-                </Stack>
-              </div>
-            </div>
+                      </Paper>
+                    </div>
+                  </div>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
             <Accordion mt="md" variant="separated">
               <Accordion.Item value="examples">
                 <Accordion.Control>
@@ -1266,14 +1403,11 @@ function Workbench() {
                 </Accordion.Control>
                 <Accordion.Panel>
                   <Group>
-                    {(catalogue.ruleVersion === "continuous-pet/1"
-                      ? petExamples
-                      : catalogue.ruleVersion === "continuous-static/1"
-                        ? familyExamples
-                        : catalogue.ruleVersion === "developmental-covering/1"
-                          ? sceneExamples
-                          : []
-                    ).map((example) => (
+                    {packageExamples(catalogue, [
+                      ...familyExamples,
+                      ...petExamples,
+                      ...sceneExamples,
+                    ]).map((example) => (
                       <Button
                         key={example.name}
                         size="sm"
@@ -1315,7 +1449,11 @@ function Workbench() {
                     <Button
                       disabled={busy}
                       variant="light"
-                      onClick={() => run(() => generate(Number(seed)))}
+                      onClick={() =>
+                        run(() => generate(Number(seed)), {
+                          retentionKind: "generate",
+                        })
+                      }
                     >
                       Generate with this seed
                     </Button>
@@ -1349,6 +1487,11 @@ function Workbench() {
                       {packet.generation.attempts} unmodified draws. Exact
                       copies and result are retained for replay.
                     </Text>
+                  )}
+                  {packet?.scene && packet.generation && (
+                    <Code block className="sequence" mt="sm">
+                      {pretty(packet.generation)}
+                    </Code>
                   )}
                 </Accordion.Panel>
               </Accordion.Item>
@@ -1587,6 +1730,7 @@ function Workbench() {
               <Title order={2}>Saved experiments</Title>
               <Button
                 onClick={() => {
+                  userIntent.current = true;
                   setJson("Import experiment or draft");
                   setJsonText("");
                 }}
@@ -1633,20 +1777,32 @@ function Workbench() {
             <Divider my="md" />
             <Button
               variant="light"
-              onClick={() =>
-                run(async () => {
+              onClick={() => {
+                userIntent.current = true;
+                const revision = inputRevision.current;
+                return run(async () => {
                   const stored = JSON.parse(
                     localStorage.getItem(draftKey) ?? "null",
                   );
                   if (!stored) throw new Error("No saved draft.");
                   await request("/api/authoring/validate", stored);
+                  if (revision !== inputRevision.current) return;
+                  const nextSelected = scopedSelection(stored.loci, selected);
+                  setSelected(nextSelected);
+                  setFamily("all");
+                  setSearch("");
+                  setEdited(
+                    pretty(
+                      stored.loci.find((item) => item.id === nextSelected),
+                    ),
+                  );
                   setDraft(stored);
                   setView("compendium");
                   setMessage(
                     "Restored separate catalogue draft; experiment unchanged.",
                   );
-                })
-              }
+                });
+              }}
             >
               Restore saved catalogue draft
             </Button>
@@ -1724,7 +1880,10 @@ function Workbench() {
             maxRows={24}
           />
           <Group mt="md">
-            <Button disabled={busy} onClick={() => run(importRecord)}>
+            <Button
+              disabled={busy}
+              onClick={() => run(importRecord, { retentionKind: "import" })}
+            >
               Validate inputs & replay / import draft
             </Button>
             <Text size="xs" c="dimmed">

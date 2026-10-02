@@ -16,6 +16,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.id === "genomic-covering-pigment-candidate")
+    return "Experimental pigment candidate";
   if (catalogue.ruleVersion === "developmental-covering/1")
     return "Body / eyes / skin-scales experiment";
   if (catalogue.ruleVersion === "continuous-pet/1")
@@ -23,6 +25,110 @@ export function authoringPackageLabel(catalogue) {
   if (catalogue.ruleVersion === "continuous-static/1")
     return "Narrow continuous-body calibration";
   return "Anatomy-diversity diagnostic";
+}
+
+export function authoringPackageKey(catalogue) {
+  return `${catalogue.id}@${catalogue.version}`;
+}
+
+export function mergeOptionalPackages(current, incoming) {
+  const merged = [...current];
+  const keys = new Set(
+    current.map((item) => authoringPackageKey(item.catalogue)),
+  );
+  for (const item of incoming) {
+    const key = authoringPackageKey(item.catalogue);
+    if (!keys.has(key)) {
+      keys.add(key);
+      merged.push(item);
+    }
+  }
+  return merged;
+}
+
+export function packageExamples(catalogue, examples) {
+  return examples.filter(
+    (example) =>
+      example.genome?.contentId === catalogue.id &&
+      example.genome?.contentVersion === catalogue.version,
+  );
+}
+
+export function packageInputs(descriptor, examples = []) {
+  const example = packageExamples(descriptor.catalogue, examples)[0];
+  const source = example ?? descriptor.defaultGeneration;
+  if (
+    source.genome?.contentId !== descriptor.catalogue.id ||
+    source.genome?.contentVersion !== descriptor.catalogue.version
+  )
+    throw new Error(
+      "Package inputs must name the exact selected content/version.",
+    );
+  return structuredClone({
+    catalogue: descriptor.catalogue,
+    genome: source.genome,
+    context: source.context ??
+      descriptor.referenceContext ?? {
+        stage: "adult",
+        condition: "rested",
+        environment: "reference",
+        medium: "ground",
+      },
+    expressionSeed: source.expressionSeed ?? null,
+  });
+}
+
+export function candidateStartupDecision(status, userIntent, active = true) {
+  return {
+    selectCandidate: active && status === "ready" && !userIntent,
+    generateDisabled: status === "loading" && !userIntent,
+  };
+}
+
+export function retainedAuthoringFailure(
+  previousPacket,
+  requestRevision,
+  currentRevision,
+  operation = "generate",
+) {
+  const retained =
+    requestRevision === currentRevision &&
+    isResolvedAuthoringPacket(previousPacket);
+  const messages = {
+    generate: retained
+      ? "No new creature generated. Last successful result retained."
+      : "No new creature generated. Try again with a fresh seed.",
+    import: retained
+      ? "Import failed. Last successful result retained."
+      : "Import failed.",
+    save: retained
+      ? "Save failed. Last successful result retained."
+      : "Save failed.",
+  };
+  if (!Object.hasOwn(messages, operation))
+    throw new Error(
+      "Only generation, import and save preserve a current result.",
+    );
+  return {
+    packet: retained ? previousPacket : null,
+    message: messages[operation],
+  };
+}
+
+export function canPublishAuthoringResponse(
+  packet,
+  catalogue,
+  requestRevision,
+  currentRevision,
+) {
+  return (
+    requestRevision === currentRevision &&
+    isResolvedAuthoringPacket(packet) &&
+    packet.input?.catalogue?.id === catalogue.id &&
+    packet.input?.catalogue?.version === catalogue.version &&
+    packet.input?.genome?.contentId === catalogue.id &&
+    packet.input?.genome?.contentVersion === catalogue.version
+  );
 }
 export function unconsumedOutputNotice(catalogue, locusId) {
   if (

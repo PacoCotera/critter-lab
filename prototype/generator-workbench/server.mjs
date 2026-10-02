@@ -11,6 +11,7 @@ import {
 } from "./authoring-adapter.mjs";
 import { AUTHORING_CATALOGUE } from "./catalogue.mjs";
 import { generateGenome } from "./model.mjs";
+import { pigmentWorkbenchPackage } from "./pigment-workbench-package.mjs";
 import {
   moduleSceneCatalogue,
   resolveModuleSceneAuthoring,
@@ -55,7 +56,10 @@ export function makeServer() {
         request.method === "GET" &&
         request.url === "/api/module-scene/catalogue"
       )
-        return json(200, moduleSceneCatalogue());
+        return json(200, {
+          ...moduleSceneCatalogue(),
+          candidatePackage: pigmentWorkbenchPackage(),
+        });
       const operations = [
         "/api/evaluate",
         "/api/authoring/evaluate",

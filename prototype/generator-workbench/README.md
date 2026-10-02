@@ -4,10 +4,14 @@ Status: **provisional host authoring proof**, separate from the game and device 
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
-The initial **Generate creature** workspace now uses the broad authoring package,
-labeled **Anatomy-diversity diagnostic**. Its resolved graph can contain radial or
-bilateral volumes, articulated contacts, membranes and fins; it lacks coherent
-joined tissue and the narrow package's face/covering modules. The PET package is
+The initial **Generate creature** workspace loads the separate **Experimental
+pigment candidate · v2** package, then uses one action to sample a valid genome
+and constructed source scene. Its source illustration and exact copyable Gemini
+prompt appear together before the initially collapsed genome editor. This is an
+authoring experiment, not a new game resident or canonical palette selection.
+The original **Anatomy-diversity diagnostic** remains available. Its resolved graph
+can contain radial or bilateral volumes, articulated contacts, membranes and fins;
+it lacks coherent joined tissue and the narrow package's face/covering modules. The PET package is
 an explicit **Narrow face/material calibration**, not the general creature
 generator. Existing draft catalogues and retained PET records are preserved;
 switching packages is deliberate and never migrates their genomes. See the
@@ -22,7 +26,12 @@ additional body hues and four secondary-module hues beside the exact legacy
 controls. The separate [candidate host experiment](evidence/inherited-pigment-experiment/README.md)
 uses the existing two pigment loci, partition operator and construction rules.
 It retains controlled colour-only variants and bounded random-generation results;
-canonical colours, the default workbench package and game residents are unchanged.
+canonical colours and game residents are unchanged. Candidate v2 is the preferred
+authoring startup package; old packages retain their exact catalogues and records.
+Initial Generate waits for candidate loading. Deliberately selecting an older
+package or importing a record prevents a late candidate response from switching
+its source. If optional candidate loading fails, the labelled older fallback is
+available; there is no silent migration or replacement creature.
 
 Run `node --test pigment-proof.test.mjs` and
 `node pigment-proof.mjs --out evidence/inherited-pigment-experiment` with the
@@ -32,7 +41,7 @@ The diagnostics demonstrate expressed colour ownership, not production pet art.
 Validated partition-map records with one known palette output support at most
 ten alleles, with an exact typed map for every unordered pair. Other loci retain
 the four-allele ceiling and their existing stricter operator checks. This bounded
-vocabulary extension does not change old foundations, maps or default content.
+vocabulary extension does not change old foundations or maps.
 
 ### Reversible tree/string experiment
 
@@ -119,8 +128,9 @@ and Gemini prompt consumers explicitly defer for it rather than omitting feature
 ### Connected scene authoring experiment
 
 The connected experiment adds the 54-record covering catalogue as an optional package
-in the existing React/Mantine interface. The default diagnostic and three existing
-packages remain independently replayable. One post-resolution scene aggregates
+in the existing React/Mantine interface. The original diagnostic, calibration and
+covering packages remain independently replayable beside the separately versioned
+pigment candidate. One post-resolution scene aggregates
 the solved body, optional eyes and body-local skin/scales without rewriting the
 genetic graph. Its source identities, full construction artifact and renderer
 projection have separate versions and digests.
@@ -195,11 +205,17 @@ Baseline is the declared content
 baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
-advanced inspection. The **Gemini prompt** appears below the structural preview
+advanced inspection. The **Gemini prompt** appears beside the structural preview
 as read-only, scrollable text with one **Copy prompt** action. Both use the exact
-current resolved packet text, without rewriting or truncation. Editing or
-rejecting inputs clears the prompt with the preview; an unavailable projection
+current resolved packet text, without rewriting or truncation. Editing inputs
+clears the prompt with the preview. A failed Generate against unchanged inputs
+retains the last successful result and its prompt, reports that no new creature
+was generated, and keeps its accepted seed distinct from the failed request's
+seed. An unavailable projection
 shows its actual error and disables copying. This panel makes no provider call.
+Failed import or save also preserves the unchanged verified current result;
+unverified imported outputs never replace it. A changed input has no current
+result to restore.
 
 Template version4 makes that text a self-contained pixel-art illustration brief,
 followed by compact semantic body, appendage and material descriptions. Diagnostic

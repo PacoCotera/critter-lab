@@ -38,9 +38,18 @@ body {
 }
 .selected-preview {
   display: grid;
-  grid-template-columns: minmax(230px, 0.8fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+}
+.result-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.result-pair > * {
+  min-width: 0;
 }
 .locus-choice {
   display: grid;
@@ -144,6 +153,9 @@ code {
   .selected-preview,
   .genome-summaries,
   .batch-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-pair {
     grid-template-columns: 1fr;
   }
   .form-grid {
