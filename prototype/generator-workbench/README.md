@@ -186,6 +186,11 @@ The legacy Pip interface remains at `/legacy` with its original evaluation route
 
 ## Authoring inspection contract
 
+The [candidate flow browser evidence](evidence/candidate-workbench-flow/README.md)
+records actual Generate, prompt paste, old-version import, edit invalidation and
+unavailable-backend recovery. The final narrow-header correction received actual
+UX inspection at800px and1280px; source diagnostics remain separate from pet art.
+
 Actual revised captures passed the bounded layout/hierarchy review, including
 the selected editor at1280px and two different random results. This is mediated
 visual review plus source inspection; coordinator-operated browser actions and
