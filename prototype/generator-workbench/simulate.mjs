@@ -6,7 +6,9 @@ import {
   REFERENCE_CONTEXT,
 } from "./catalogue.mjs";
 import { generateGenome, evaluateGenome, crossGenomes } from "./model.mjs";
-import { resolveAuthoring } from "./authoring-adapter.mjs";
+import { resolveAuthoring, digest } from "./authoring-adapter.mjs";
+import { familyCases } from "./family-fixtures.mjs";
+export { familyCases } from "./family-fixtures.mjs";
 
 // These are selected input comparisons, not selectable organism templates in the engine.
 export function simulationCases() {
@@ -100,13 +102,35 @@ async function main() {
     throw new Error("--out requires an explicit destination.");
   if (outputPath) await mkdir(resolve(outputPath), { recursive: true });
   const summaries = [];
-  for (const item of simulationCases()) {
+  const cases = process.argv.includes("--family")
+    ? familyCases()
+    : simulationCases();
+  const activeCatalogue = cases[0].catalogue ?? catalogue;
+  for (const item of cases) {
     const packet = resolveAuthoring({
-      catalogue,
+      catalogue: item.catalogue ?? catalogue,
       genome: item.genome,
       context: item.context,
       expressionSeed: item.expressionSeed ?? null,
     });
+    if (item.relationship) {
+      const base = cases.find(
+        (candidate) => candidate.name === item.relationship.base,
+      );
+      packet.relationship = {
+        ...item.relationship,
+        ...(base
+          ? {
+              baseGenomeDigest: digest(base.genome),
+              changes: item.relationship.changedLoci.map((id) => ({
+                locusId: id,
+                before: base.genome.loci[id],
+                after: item.genome.loci[id],
+              })),
+            }
+          : {}),
+      };
+    }
     summaries.push({
       name: item.name,
       status: packet.status,
@@ -118,6 +142,7 @@ async function main() {
       inputDigest: packet.inputDigest,
       resultDigest: packet.resultDigest,
       promptStatus: packet.prompt?.status,
+      relationship: packet.relationship,
       errors: packet.errors,
     });
     if (outputPath) {
@@ -151,9 +176,9 @@ async function main() {
       resolve(outputPath, "manifest.json"),
       JSON.stringify(
         {
-          contentId: catalogue.id,
-          contentVersion: catalogue.version,
-          ruleVersion: catalogue.ruleVersion,
+          contentId: activeCatalogue.id,
+          contentVersion: activeCatalogue.version,
+          ruleVersion: activeCatalogue.ruleVersion,
           limitation:
             "Static fictional analytic constructions; no physical motion, production art or game permission",
           cases: summaries,
@@ -165,8 +190,8 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        records: catalogue.loci.length,
-        executable: catalogue.loci.filter(
+        records: activeCatalogue.loci.length,
+        executable: activeCatalogue.loci.filter(
           (locus) => locus.status === "validated",
         ).length,
         cases: summaries,

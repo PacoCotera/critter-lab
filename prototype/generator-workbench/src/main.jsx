@@ -81,6 +81,8 @@ function SvgView({ markup, onSelect, compact = false }) {
 
 function Workbench() {
   const [catalogue, setCatalogue] = useState(null);
+  const [packages, setPackages] = useState([]);
+  const [familyExamples, setFamilyExamples] = useState([]);
   const [draft, setDraft] = useState(null);
   const [genome, setGenome] = useState(null);
   const [context, setContext] = useState(null);
@@ -106,13 +108,20 @@ function Workbench() {
   useEffect(() => {
     request("/api/authoring/catalogue")
       .then((data) => {
-        setCatalogue(data.catalogue);
-        setDraft(clone(data.catalogue));
-        setGenome(data.defaultGeneration.genome);
-        setContext(data.referenceContext);
-        setEdited(pretty(data.catalogue.loci[0]));
+        setPackages(data.packages ?? []);
+        setFamilyExamples(data.familyExamples ?? []);
+        const initial =
+          data.packages?.find(
+            (item) => item.catalogue.ruleVersion === "continuous-static/1",
+          ) ?? data;
+        const example = data.familyExamples?.[0];
+        setCatalogue(initial.catalogue);
+        setDraft(clone(initial.catalogue));
+        setGenome(example?.genome ?? initial.defaultGeneration.genome);
+        setContext(example?.context ?? data.referenceContext);
+        setEdited(pretty(initial.catalogue.loci[0]));
         setMessage(
-          "Pinned authoring catalogue · 48 records / 42 executable / 6 draft. Resolve or generate an experiment.",
+          `Pinned ${initial.catalogue.id} · ${initial.catalogue.loci.length} records / ${initial.catalogue.loci.filter((item) => item.status === "validated").length} executable. Resolve or generate an experiment.`,
         );
         try {
           setRecords(JSON.parse(localStorage.getItem(storageKey) ?? "[]"));
@@ -139,6 +148,39 @@ function Workbench() {
     setFailed(false);
     setMessage(
       "Inputs changed · current output/export cleared. Pinned comparison is retained.",
+    );
+  }
+  function switchPackage(id) {
+    const item = packages.find((item) => item.catalogue.id === id);
+    if (!item || busy) return;
+    invalidate();
+    setCatalogue(clone(item.catalogue));
+    setDraft(clone(item.catalogue));
+    const example =
+      item.catalogue.ruleVersion === "continuous-static/1"
+        ? familyExamples[0]
+        : null;
+    setGenome(clone(example?.genome ?? item.defaultGeneration.genome));
+    setContext(
+      example?.context ?? {
+        stage: "adult",
+        condition: "rested",
+        environment: "reference",
+        medium: "ground",
+      },
+    );
+    setSelected(item.catalogue.loci[0].id);
+    setEdited(pretty(item.catalogue.loci[0]));
+    setBatch([]);
+  }
+  function loadFamilyExample(name) {
+    const example = familyExamples.find((item) => item.name === name);
+    if (!example || busy) return;
+    invalidate();
+    setGenome(clone(example.genome));
+    setContext(clone(example.context));
+    setMessage(
+      `${name}: controlled authoring input; ${example.relationship.kind}. Resolve to inspect.`,
     );
   }
   async function run(operation) {
@@ -262,6 +304,11 @@ function Workbench() {
       setGenome(data.input.genome);
       setContext(data.input.context);
       setPacket(data);
+      const retainedSelected =
+        data.input.catalogue.loci.find((item) => item.id === selected) ??
+        data.input.catalogue.loci[0];
+      setSelected(retainedSelected.id);
+      setEdited(pretty(retainedSelected));
       setView("experiment");
       setMessage(
         "Digest replay verified from inputs. Embedded output/SVG/prompt was not trusted.",
@@ -336,6 +383,17 @@ function Workbench() {
             </Text>
           </div>
           <Group>
+            <Select
+              size="xs"
+              aria-label="Content package"
+              disabled={busy}
+              value={catalogue.id}
+              data={packages.map((item) => ({
+                value: item.catalogue.id,
+                label: `${item.catalogue.id} v${item.catalogue.version}`,
+              }))}
+              onChange={switchPackage}
+            />
             <Badge variant="light">
               {catalogue.id} v{catalogue.version}
             </Badge>
@@ -372,8 +430,15 @@ function Workbench() {
           ))}
           <Divider />
           <Text size="xs" c="dimmed">
-            48 proposed records. Catalogue validation means engine/schema
-            support, not canonical biology.
+            {catalogue.loci.length} proposed records ·{" "}
+            {
+              catalogue.loci.filter((item) => item.status === "validated")
+                .length
+            }{" "}
+            executable ·{" "}
+            {catalogue.loci.filter((item) => item.status === "draft").length}{" "}
+            draft. Catalogue validation means engine/schema support, not
+            canonical biology.
           </Text>
           <Text size="xs" c="dimmed">
             Classes describe generated outcomes; no species or body-preset
@@ -548,6 +613,21 @@ function Workbench() {
             <Group justify="space-between" mb="md">
               <div>
                 <Title order={2}>Genome → expression → construction</Title>
+                {catalogue.ruleVersion === "continuous-static/1" && (
+                  <Group mt="sm">
+                    {familyExamples.map((example) => (
+                      <Button
+                        key={example.name}
+                        size="xs"
+                        variant="light"
+                        disabled={busy}
+                        onClick={() => loadFamilyExample(example.name)}
+                      >
+                        {example.name.replaceAll("-", " ")}
+                      </Button>
+                    ))}
+                  </Group>
+                )}
                 <Text c="dimmed">
                   Complete executable copies, including inactive and suppressed
                   contributors.
@@ -642,6 +722,7 @@ function Workbench() {
                   {packet ? (
                     <SvgView
                       compact
+                      onSelect={selectLocus}
                       markup={drawAuthoringCreature(packet.result, selected)}
                     />
                   ) : (
@@ -804,10 +885,9 @@ function Workbench() {
                       {packet.geometryReference?.status === "available" ? (
                         <>
                           <Text size="sm" mb="sm">
-                            Exact XY footprints; all nodes shown by inspection
-                            paint order. Neutral edges are graph annotations,
-                            not tissue. Texture is retained in the trace but not
-                            rendered.
+                            {packet.ruleVersion === "continuous-static/1"
+                              ? "Solved continuous exterior, rooted fin outlines and sourced feature/material geometry. One profile camera preserves relative proportions; no internal station lines in ordinary view."
+                              : "Exact XY footprints; all nodes shown by inspection paint order. Neutral edges are graph annotations, not tissue. Texture is retained in the trace but not rendered."}
                           </Text>
                           <div
                             className="svg-view"
@@ -869,9 +949,28 @@ function Workbench() {
             <Text c="dimmed">
               The retained pin survives edits, rejection and catalogue drafts.
             </Text>
-            {pinned && <SvgView markup={pinned.diagnostic} />}
+            {pinned && (
+              <div className="batch-grid">
+                <div>
+                  <Text size="sm">Pinned · {pinned.ruleVersion}</Text>
+                  <SvgView markup={pinned.diagnostic} />
+                </div>
+                {packet && (
+                  <div>
+                    <Text size="sm">Current · {packet.ruleVersion}</Text>
+                    <SvgView markup={packet.diagnostic} />
+                  </div>
+                )}
+              </div>
+            )}
             {!pinned && <Text>Pin a resolved experiment first.</Text>}
-            {pinned && packet && (
+            {pinned && packet && pinned.ruleVersion !== packet.ruleVersion && (
+              <Alert color="orange" mt="sm">
+                Different construction profiles; these are separate inspections,
+                not compatible family or inherited-output comparison.
+              </Alert>
+            )}
+            {pinned && packet && pinned.ruleVersion === packet.ruleVersion && (
               <Table striped>
                 <Table.Thead>
                   <Table.Tr>

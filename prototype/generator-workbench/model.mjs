@@ -7,6 +7,12 @@ import {
   FAMILY_IDS,
   REFERENCE_CONTEXT,
 } from "./catalogue.mjs";
+import {
+  FAMILY_CATALOGUE,
+  FAMILY_RULE_VERSION,
+  FAMILY_TARGETS,
+} from "./family-catalogue.mjs";
+import { constructContinuousFamily } from "./family-construction.mjs";
 
 export const isRecord = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value);
@@ -40,6 +46,8 @@ const applicability = [
   "bilateral",
   "marked",
   "axial-actuator",
+  "ocular",
+  "scales",
 ];
 const executable = (catalogue) =>
   catalogue.loci.filter((locus) => locus.status === "validated");
@@ -54,8 +62,8 @@ const stableJson = (value) =>
           .join(",")}}`
       : JSON.stringify(value);
 
-function targetValueValid(target, value) {
-  const spec = TARGETS[target];
+function targetValueValid(target, value, targetSpecs = TARGETS) {
+  const spec = targetSpecs[target];
   if (!spec) return false;
   if (spec.type === "boolean") return typeof value === "boolean";
   if (spec.type === "enum") return spec.values.includes(value);
@@ -78,6 +86,8 @@ function targetValueValid(target, value) {
 
 export function validateCatalogue(catalogue) {
   const errors = [];
+  const familyProfile = catalogue?.ruleVersion === FAMILY_RULE_VERSION;
+  const targetSpecs = familyProfile ? FAMILY_TARGETS : TARGETS;
   if (
     !exactKeys(catalogue, [
       "schemaVersion",
@@ -106,7 +116,7 @@ export function validateCatalogue(catalogue) {
     !boundedText(catalogue.id, 64) ||
     !Number.isInteger(catalogue.version) ||
     catalogue.version < 1 ||
-    catalogue.ruleVersion !== RULE_VERSION
+    ![RULE_VERSION, FAMILY_RULE_VERSION].includes(catalogue.ruleVersion)
   )
     errors.push(
       error(
@@ -298,8 +308,9 @@ export function validateCatalogue(catalogue) {
     if (
       !operators.includes(locus.operator) ||
       !applicability.includes(locus.applicability) ||
+      (!familyProfile && ["ocular", "scales"].includes(locus.applicability)) ||
       locus.outputs?.length !== 1 ||
-      !TARGETS[locus.outputs[0]]
+      !targetSpecs[locus.outputs[0]]
     ) {
       errors.push(
         error(
@@ -322,11 +333,11 @@ export function validateCatalogue(catalogue) {
     targets.add(target);
     if (
       !isRecord(locus.bounds) ||
-      locus.bounds.type !== TARGETS[target].type ||
-      locus.bounds.min !== TARGETS[target].min ||
-      locus.bounds.max !== TARGETS[target].max ||
+      locus.bounds.type !== targetSpecs[target].type ||
+      locus.bounds.min !== targetSpecs[target].min ||
+      locus.bounds.max !== targetSpecs[target].max ||
       JSON.stringify(locus.bounds.values) !==
-        JSON.stringify(TARGETS[target].values)
+        JSON.stringify(targetSpecs[target].values)
     )
       errors.push(
         error(
@@ -337,8 +348,10 @@ export function validateCatalogue(catalogue) {
       );
     if (locus.operator === "copy-mean") {
       if (
-        !["number"].includes(TARGETS[target].type) ||
-        locus.alleles.some((allele) => !targetValueValid(target, allele.value))
+        !["number"].includes(targetSpecs[target].type) ||
+        locus.alleles.some(
+          (allele) => !targetValueValid(target, allele.value, targetSpecs),
+        )
       )
         errors.push(
           error(
@@ -351,7 +364,7 @@ export function validateCatalogue(catalogue) {
       ["dominant-enable", "recessive-enable"].includes(locus.operator)
     ) {
       if (
-        TARGETS[target].type !== "boolean" ||
+        targetSpecs[target].type !== "boolean" ||
         locus.alleles.length !== 2 ||
         !locus.alleles.some((allele) => allele.value === false) ||
         !locus.alleles.some((allele) => allele.value === true)
@@ -373,10 +386,10 @@ export function validateCatalogue(catalogue) {
         expected.some(
           (key) =>
             !Object.hasOwn(locus.pairMap, key) ||
-            !targetValueValid(target, locus.pairMap[key]),
+            !targetValueValid(target, locus.pairMap[key], targetSpecs),
         ) ||
         (locus.operator === "partition-map" &&
-          TARGETS[target].type !== "palette")
+          targetSpecs[target].type !== "palette")
       )
         errors.push(
           error(
@@ -387,7 +400,7 @@ export function validateCatalogue(catalogue) {
         );
     }
   }
-  for (const target of Object.keys(TARGETS))
+  for (const target of Object.keys(targetSpecs))
     if (!targets.has(target))
       errors.push(
         error(
@@ -433,7 +446,10 @@ export function validateCatalogue(catalogue) {
   for (const id of nodes.keys()) visit(id);
   if (
     stableJson(catalogue.constructionRules) !==
-    stableJson(AUTHORING_CATALOGUE.constructionRules)
+    stableJson(
+      (familyProfile ? FAMILY_CATALOGUE : AUTHORING_CATALOGUE)
+        .constructionRules,
+    )
   )
     errors.push(
       error(
@@ -639,7 +655,11 @@ function applicableTo(kind, value) {
     (kind === "fin" && value.fins) ||
     (kind === "bilateral" && value.symmetry === "bilateral") ||
     (kind === "marked" && value.markings) ||
-    (kind === "axial-actuator" && value.axialActuator && value.axialCount > 1)
+    (kind === "axial-actuator" &&
+      value.axialActuator &&
+      value.axialCount > 1) ||
+    (kind === "ocular" && value.ocularPair) ||
+    (kind === "scales" && value.coveringKind === "scales")
   );
 }
 
@@ -744,6 +764,16 @@ export function evaluateGenome(
       copies: [...genome.loci[locus.id]],
     };
   });
+  if (catalogue.ruleVersion === FAMILY_RULE_VERSION)
+    return constructContinuousFamily({
+      catalogue,
+      context,
+      values: v,
+      facts,
+      from,
+      expressionSeed,
+      random: randomStream(expressionSeed ?? 0),
+    });
   const graph = { nodes: [], edges: [], surfaces: [] };
   const bodySources = from(
     "axialCount",

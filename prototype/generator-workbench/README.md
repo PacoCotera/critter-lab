@@ -2,7 +2,7 @@
 
 Status: **provisional host authoring proof**, separate from the game and device simulator. The shared catalogue/model constructs anatomy, resolves surface expression and derives guarded fictional movement. It does not choose a creature class first. The original [five-locus Pip proof](../genetics/README.md) is preserved as a legacy reference.
 
-The first catalogue has **48 records:42 executable and6 drafts**. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology. Developmental organization, structure, appearance, movement and supporting energy parameters are the first connected cluster.
+The retained diagnostic catalogue has **48 records: 42 executable and 6 drafts**. The new continuous-family catalogue has **58 records: 50 executable and 8 drafts**, including explicit joining geometry, eye/mouth morphology and skin/scales covering. Fur and feather construction remain detailed drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology. Developmental organization, structure, appearance, movement and supporting energy parameters are the first connected cluster.
 
 ## Run and inspect
 
@@ -30,14 +30,16 @@ Connected authoring journey:
 
 The legacy Pip interface remains at `/legacy` with its original evaluation route. It is a diagnostic reference, not the expanded engine or production artwork.
 
-The experiment inspector now includes a [geometry and pigment reference](evidence/geometry-calibration/README.md), with a trace manifest and CLI `.geometry.svg`/`.geometry.json` exports. The bounded projection supports volume/fin graphs and rejects unsupported projections without invalidating a valid genetic result. One matched Gemini/Sol-directed image-tool comparison preserves broad part counts and pigment roles, but does not establish exact geometry or finished creature art.
+The experiment inspector includes both a [coherent static family experiment](evidence/critter-family/README.md) and the retained [geometry and pigment reference](evidence/geometry-calibration/README.md), with a trace manifest and CLI `.geometry.svg`/`.geometry.json` exports. The bounded projection supports volume/fin graphs and rejects unsupported projections without invalidating a valid genetic result. One matched Gemini/Sol-directed image-tool comparison preserves broad part counts and pigment roles, but does not establish exact geometry or finished creature art.
 
 ## Module boundary and evidence
 
 | Module | Responsibility |
 | --- | --- |
 | `catalogue.mjs` | Versioned locus metadata, typed contribution vocabulary, eleven-family coverage/gaps |
-| `model.mjs` | Pure validation, inherited-copy resolution, bounded generation/crossing, construction/surface/movement and causal result |
+| `model.mjs` | Pure validation, shared inherited-copy resolution, explicit construction-profile dispatch, bounded generation/crossing and causal result |
+| `family-catalogue.mjs` / `family-construction.mjs` | Provisional continuous-body content; solved exterior, rooted fins, explicit ocular/oral geometry and body-local covering |
+| `family-presentation.mjs` / `family-fixtures.mjs` | Inspect solved family geometry and retain controlled copy-edit comparisons; never choose species or repair genomes |
 | `authoring-adapter.mjs` | Host records/digests, replay, presentation and fact-derived art-template projection |
 | `presentation.mjs` | Diagnostic graph and fingerprint renderers; never reinterprets allele rules |
 | `geometry-reference.mjs` | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile |
@@ -47,9 +49,23 @@ The experiment inspector now includes a [geometry and pigment reference](evidenc
 
 Run `pnpm test` for changed authoring behavior and preserved legacy/Pip boundaries, and `pnpm run build` for the framework bundle. `pnpm run simulate -- --out evidence/authoring` retains comparison inputs/results; the evidence manifest identifies exact examples and limits. [Evidence](evidence/README.md) distinguishes host validation, browser inspection and actual generated art from missing game/hardware proof.
 
-The body graph is a finite connected-volume grammar with rooted articulated links, membranes and fins. It permits meaningful organization/attachment variation but does not yet span the owner's full microbial/animal breadth. Motion is a provisional analytic support rule, not aerodynamic/hydrodynamic validation or a working animation rig. No face contributors are modeled in this package; the first art calibration must not invent eyes or mouths. This cannot establish pet appeal.
+The body graph is a finite connected-volume grammar with rooted articulated links, membranes and fins. It permits meaningful organization/attachment variation but does not yet span the owner's full microbial/animal breadth. Motion is a provisional analytic support rule, not aerodynamic/hydrodynamic validation or a working animation rig. The original diagnostic profile has no face contributors. The new continuous profile constructs explicit eye-pair presence/placement and an oral aperture; those shapes confer no sensing or feeding capability. It does not yet construct snouts, noses, jaws, teeth or gills. Static morphology and generated illustration do not establish pet interaction or human attachment.
 
 Configured incubation, general polygenic/epigenetic mechanics, large variable-copy reproduction, production sprite/animation generation, automatic encyclopedia writing and device integration remain future work. No generated output becomes an owned game individual through this tool.
+
+## Coherent family experiment
+
+The content-package selector switches between the retained diagnostic profile and the provisional continuous-body profile. It is a construction-version choice, not a creature-class selector. Start with the explicit base input, resolve it, select a contributor and inspect the affected geometry beside the complete baseline, inherited copies and expression field. Load a controlled proportion variant or fin/material variant for comparison; these are recorded copy edits, not biological offspring. Saved records replay their retained content and inputs.
+
+The engine solves continuous shoulders/caps, tissue joins, fin-root anchors, eye components, oral geometry and body-local scale plates. SVG, inspection highlights and fact-derived prompts consume the same retained solution. Invalid topology/placement rejects without changing inherited copies. Skin is executable; scales have bounded generated plate geometry with facial/root exclusions. Fur and feathers remain non-executable candidates with missing operators recorded in the compendium.
+
+Export this selected family separately from the original thirteen cases:
+
+```sh
+node simulate.mjs --family --out evidence/critter-family
+```
+
+The [family test report](evidence/critter-family/README.md) owns exact examples, matched image inputs/outputs, acceptance results, gaps and issues. Neither this profile nor its generated images approve canonical creature appearance, whole-organism breadth, production animation or device integration.
 
 ## Authoring engine: next design
 

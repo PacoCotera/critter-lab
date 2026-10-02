@@ -4,6 +4,7 @@ const escape = (value) =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+import { drawContinuousFamily } from "./family-presentation.mjs";
 
 // Presentation consumes resolved graph/surface records; it never reads allele copies.
 export function describeAuthoringCreature(result) {
@@ -40,6 +41,8 @@ export function describeAuthoringCreature(result) {
 }
 
 export function drawAuthoringCreature(result, selected = null) {
+  if (result?.graph?.profile?.id === "continuous-static/1")
+    return drawContinuousFamily(result, selected);
   if (result?.status !== "resolved" || !result.graph?.nodes.length)
     throw new Error("Resolved constructed graph required.");
   const nodes = result.graph.nodes;

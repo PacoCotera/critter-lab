@@ -2,6 +2,13 @@ import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
 import { AUTHORING_CATALOGUE, REFERENCE_CONTEXT } from "./catalogue.mjs";
 import { createGeometryReference } from "./geometry-reference.mjs";
+import { FAMILY_CATALOGUE, FAMILY_RULE_VERSION } from "./family-catalogue.mjs";
+import { familyCases } from "./family-fixtures.mjs";
+import {
+  drawContinuousFamily,
+  continuousReference,
+  describeContinuousFamily,
+} from "./family-presentation.mjs";
 import {
   evaluateGenome,
   generateGenome,
@@ -30,6 +37,18 @@ export function authoringCatalogue() {
     defaultGeneration: generateGenome(AUTHORING_CATALOGUE, 1),
     referenceContext: REFERENCE_CONTEXT,
     schemaVersion: PACKET_SCHEMA,
+    packages: [AUTHORING_CATALOGUE, FAMILY_CATALOGUE].map((catalogue) => ({
+      catalogue: structuredClone(catalogue),
+      defaultGeneration: generateGenome(catalogue, 1, { maxAttempts: 1024 }),
+    })),
+    familyExamples: familyCases().map(
+      ({ name, genome, context, relationship }) => ({
+        name,
+        genome,
+        context,
+        relationship,
+      }),
+    ),
   };
 }
 
@@ -80,16 +99,24 @@ export function resolveAuthoring(input) {
     retainedInput.genome,
     result,
   );
-  packet.diagnostic = drawAuthoringCreature(result);
-  packet.description = describeAuthoringCreature(result);
-  packet.geometryReference = createGeometryReference(result, {
+  const continuous = catalogue.ruleVersion === FAMILY_RULE_VERSION;
+  packet.diagnostic = continuous
+    ? drawContinuousFamily(result)
+    : drawAuthoringCreature(result);
+  packet.description = continuous
+    ? describeContinuousFamily(result)
+    : describeAuthoringCreature(result);
+  const geometryIdentity = {
     recordId: packet.recordId,
     inputDigest,
     resultDigest,
     contentId: packet.contentId,
     contentVersion: packet.contentVersion,
     ruleVersion: packet.ruleVersion,
-  });
+  };
+  packet.geometryReference = continuous
+    ? continuousReference(result, geometryIdentity)
+    : createGeometryReference(result, geometryIdentity);
   packet.fingerprints = Object.fromEntries(
     ["baseline", "inherited", "expression"].map((kind) => [
       kind,
@@ -263,7 +290,37 @@ export function projectArtPrompt(packet) {
         role,
       })),
       facialStructures:
-        "Not included in modeled construction; sensing is not inferred.",
+        graph.profile?.id === FAMILY_RULE_VERSION
+          ? graph.nodes
+              .filter((node) => ["ocular", "oral-aperture"].includes(node.role))
+              .map(({ id, role }) => ({
+                id,
+                role,
+                geometryBinding: "proportionFacts.shape",
+              }))
+          : "Not included in modeled construction; sensing is not inferred.",
+      ...(graph.exterior
+        ? {
+            exterior: {
+              id: graph.exterior.id,
+              profileId: graph.exterior.profileId,
+              points: graph.exterior.points,
+              stations: graph.exterior.stations,
+              sourceGroup: internSources(graph.exterior.sources),
+            },
+            rootAnchors: graph.rootAnchors.map(
+              ({ id, nodeId, volumeId, position, chord, sources }) => ({
+                id,
+                nodeId,
+                volumeId,
+                position,
+                chord,
+                sourceGroup: internSources(sources),
+              }),
+            ),
+            constructionProfile: graph.profile,
+          }
+        : {}),
     }),
     proportionFacts: quote(
       graph.nodes.map(
@@ -275,6 +332,7 @@ export function projectArtPrompt(packet) {
           material,
           flexibility,
           deformation,
+          shape,
         }) => ({
           id,
           position,
@@ -283,6 +341,7 @@ export function projectArtPrompt(packet) {
           material,
           flexibility,
           deformation,
+          shape,
         }),
       ),
     ),
@@ -293,6 +352,26 @@ export function projectArtPrompt(packet) {
       surfaces: projectedSurfaces,
       surfaceProfiles,
       markProfiles,
+      ...(graph.covering
+        ? {
+            covering: {
+              kind: graph.covering.kind,
+              atlas: graph.covering.atlas,
+              elementProfile: graph.covering.elementProfile,
+              exclusions: graph.covering.exclusions,
+              sourceGroup: internSources(graph.covering.sources),
+              plateColumns: ["id", "center", "points", "atlasU"],
+              plates: graph.covering.plates.map(
+                ({ id, center, points, atlasU }) => [
+                  id,
+                  center,
+                  points,
+                  atlasU,
+                ],
+              ),
+            },
+          }
+        : {}),
     }),
     movementFacts: quote(motion.filter((item) => item.status === "supported")),
     hardExclusions: quote([

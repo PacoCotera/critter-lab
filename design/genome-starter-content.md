@@ -77,6 +77,99 @@ regions, actuation and coordination, and medium-specific support. Numerical dept
 is useful only when these compose into perceptibly different coherent creatures.
 The earlier 60–90 candidate horizon is a planning aid, not a quota or breadth proof.
 
+## Coherent static family implementation proof
+
+Owner authorized one complete static genome-derived family and two traceable
+variants. This is a reversible host authoring proof, not canonical biology,
+full organism diversity, game creation/breeding permission or physical motion.
+The earlier disconnected-volume package and its retained records stay exact.
+
+The new `genomic-continuous-study@1` content uses a separately dispatched
+`continuous-static/1` construction rule/profile. Content selects implemented
+operators and valid contributor contracts; it does not choose a species or body
+preset. The first profile supports bilateral multi-volume axial organization
+with fins, without articulated limbs or membranes. Incompatible expressed
+contributors reject with reasons; they are never overwritten to fit a family.
+Related inputs are selected genome comparisons, not renderer templates.
+
+Existing cross-section, proportions, attachment, span, surface and energy
+contributors remain inherited. Five additional provisional contributors make
+new geometry inspectable: join-neck ratio, fin-tip position, ocular-pair
+presence, ocular placement and oral-opening presence. Join and tip ratios use
+declared bounded copy contributions, not universal biological scores. An
+enabled ocular module constructs exactly two circular features; an enabled
+oral module constructs one oval aperture. Their fixed primitive/material
+profile is explicit content, with dimensions derived from the local exterior.
+These visible structures establish neither vision nor feeding physiology.
+Their shape/module selection is a provisional implementation choice within the
+owner-authorized outcome, not owner approval of a canonical face or species.
+
+This slice does **not** model snouts, noses, jaws, teeth, gills, varied ocular
+construction or their functional physiology. Prioritized future extensions are:
+
+- Oral/jaw construction and then teeth: aperture shape/support first, compatible
+  articulated jaw and contact geometry next, tooth count/placement only on an
+  eligible support. An opening or tooth label grants no feeding capability.
+- Snout/nose organization: inherited extension, attachment and opening geometry
+  on the actual expressed body, without imposing a mammalian head. Olfactory
+  function requires separate compatible sensing contributors and context.
+- Ocular morphology and then sensing: supported count/size/placement/material
+  variants before modality, sensitivity or discrimination. A visible eye alone
+  does not establish usable vision or an observation-based gene inference.
+- Gill morphology and then respiration: actual exchange-surface/attachment
+  construction before declared medium, regulation and energy-support rules.
+  A gill-shaped surface does not automatically enable underwater respiration.
+
+These are dependency notes, not implementation in the current family or new
+canonical anatomy. Expressive and functional facial variety remains a content
+gap even if the simple paired circles and aperture are constructed correctly.
+
+The engine solves one closed exterior from station half-widths, declared caps
+and bounded joins. Neck width depends on the inherited join ratio and neighboring
+station widths. Fin roots lie on that solved boundary, with a tapered outline
+derived from actual chord, span and tip-position contributors. Solved points,
+root anchors, surfaces, masks and source traces are retained in the phenotype;
+the SVG, description and art template consume them rather than independently
+reconstructing anatomy. Inspection highlights station contributions and roots
+without drawing fictional seam organs into the plain creature image.
+
+Ocular features belong to the leading-volume domain, with placement inherited
+within it. They must remain inside the exterior with declared rim clearance;
+the oral aperture stays toward the leading cap and separate from both ocular
+features. Invalid geometry rejects without shifting features or repairing
+copies. No smile, eyelid, eyebrow, extra appendage or organ is authorized by
+style alone. Material highlights are depiction, not additional genetic markings.
+
+The provisional surface extension distinguishes continuous skin from an actual
+scale covering; it does not rename smooth/ridged texture as fur or scales.
+Three contributor outputs select skin/scales, body-local coverage extent and
+element scale or pitch. The profile declares plate overlap and orientation,
+with at most 128 deterministic elements retained in the solved body atlas.
+Their layout is clipped to the exterior and explicit facial/root exclusion
+domains. This first covering applies to the body, not automatically to fins or
+facial modules. Source traces and the retained layout explain its appearance;
+scales imply no armor, insulation or other physiology. Fur and feathers remain
+inspectable candidate records requiring strand/tuft or rachis/vane construction,
+placement and any declared outer-contour effects before execution. Painting
+lines inside skin is not an implemented fur covering.
+
+Rounded caps and any nested ocular/pupil geometry are declared provisional
+construction-profile outputs, retained upstream with their materials and
+dimensions. The same solved cap boundary governs attachment and containment;
+the renderer cannot round a failed shape or relocate a feature to improve mood.
+
+One base individual, a proportion/join variant and a fin-tip/span variant must
+show recognizable relatedness plus real contributor-driven change. All use
+the same reusable construction and surface operators. Baseline/module records,
+inherited copies and resolved output remain separately inspectable; carried
+marking copies survive suppression. Classification follows construction and
+cannot supply anatomy or compatibility. Old content/rule versions continue
+to reproduce their original result digests; new outputs obtain new retained
+input identities. Tests cover causality, invalid geometry, exact replay,
+permitted expression sampling, old-record regression and framework integration.
+One matched art comparison evaluates fidelity to these solved facts; it does
+not approve whole V1 breadth, pet attachment, animation or canonical designs.
+
 ## Local six-legged calibration package
 
 Propose a separately versioned worked package using flexible support, three

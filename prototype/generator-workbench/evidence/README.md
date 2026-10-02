@@ -2,6 +2,8 @@
 
 ## Current authoring proof
 
+The [coherent family battery](critter-family/README.md) tests a new versioned static exterior, explicit facial morphology, skin/scales and controlled variants. Its report separates technical construction, actual authoring interaction and illustration/pet appeal; pending checks are not passes.
+
 See the [retained catalogue/simulation/browser/Gemini proof](authoring/README.md). The48-record shared model and framework interface are a host developer experiment. Both actual Gemini calibrations are retained and rejected for fidelity. The older reference below remains separate.
 
 The [matched geometry-guided benchmark](geometry-calibration/README.md) adds an engine-derived static reference and one Gemini/one Sol-directed image-tool output. Both preserve broad counts and pigment roles; neither establishes exact geometry or finished creature art. The framework preview, exact prompts, unedited outputs and trace/hash manifests are retained together.
