@@ -32,7 +32,10 @@ The legacy Pip interface remains at `/legacy` with its original evaluation route
 
 ## Authoring inspection contract
 
-Agreed bounded UI repair; actual final browser review is pending. The primary
+Actual revised captures passed the bounded layout/hierarchy review, including
+the selected editor at1280px and two different random results. This is mediated
+visual review plus source inspection; coordinator-operated browser actions and
+technical validation are separate evidence. The primary
 task is **Generate creature**: one fresh random valid genome and its structural
 result, then whole-genome orientation → dimension → locus → copies and resolved
 trait. Selected-copy editing is optional after generation, not a design-from-
@@ -73,6 +76,9 @@ The [liked pet concept](evidence/art-reset/README.md) is separate proposed art
 direction, unbound to the selected genome. Do not present it as a resolved engine
 result or change it in response to copy edits. This repair adds no morphology
 engine, provider call, catalogue, game/device UI or deployment behavior.
+The actual [selected editor](evidence/workbench-usability/final-editor-1280.jpg)
+shows both copy rows and their direct output together. Retained random captures
+show different inputs/results, not general morphology coverage or finished art.
 
 The experiment inspector includes both a [coherent static family experiment](evidence/critter-family/README.md) and the retained [geometry and pigment reference](evidence/geometry-calibration/README.md), with a trace manifest and CLI `.geometry.svg`/`.geometry.json` exports. The bounded projection supports volume/fin graphs and rejects unsupported projections without invalidating a valid genetic result. One matched Gemini/Sol-directed image-tool comparison preserves broad part counts and pigment roles, but does not establish exact geometry or finished creature art.
 
