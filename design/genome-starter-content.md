@@ -29,23 +29,16 @@ lists or a technical phenotype wall. The complete genome and construction data
 remain inspectable separately. These requirements apply to new scene briefs;
 historical submitted prompts retain their exact provenance.
 
-Owner's subsequent Gemini transformations establish the depiction target:
-an appealing digital pet with softened volumes, a readable expressive face
-when supplied by the phenotype, and a welcoming composed gesture. Unfamiliar
-radial or axial anatomy can retain its identity and still feel companionable.
-The orange/charcoal examples show that appeal requires character treatment,
-not only new hues. Render briefs lead with this positive pet direction and
-explicit pixel craft; anatomy and pigments follow as concise concrete facts.
-Faces absent from a source package remain a construction gap to resolve in
-that package. Toy frames, care icons and backgrounds in these references do
-not select device hardware or game UI.
+Owner's retained [Gemini pet transformations](../prototype/generator-workbench/evidence/owner-pet-transformations/README.md)
+establish the depiction target: appealing digital pets that retain unfamiliar
+organization. The owner explicitly requests art director, pixel artist and
+genomics discussion, with outline → illustration → pet treatment → animation
+as a proposed sequence. Their [considered stage proposal](../prototype/generator-workbench/art-template.md#proposed-multi-pass-pet-production)
+distinguishes faithful portrayal from art-first redesign, permits visual
+exploration before coding, and keeps the outline/extra passes optional.
 
-The owner's isolated colourful example further demonstrates purple/cyan/gold
-pigments with readable limb spacing, simplified material strokes and a friendly
-face while retaining an elongated unfamiliar body. Expand inherited pigment
-choices to support such variation. The catalogue's current charcoal/russet and
-cream/slate vocabulary is narrower than this target; exact new allele values
-and mixing policy remain provisional visual experiments.
+Inherited palette vocabulary remains narrower than the colourful target;
+exact new alleles, regions and mixing policy remain provisional experiments.
 
 Short inherited-genome and expressed-creature lookup fingerprints connect a
 new renderer brief to its retained record. They preserve full hashes separately,

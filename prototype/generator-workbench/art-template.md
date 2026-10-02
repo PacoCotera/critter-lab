@@ -79,6 +79,57 @@ of returned images; prompt/source tests alone cannot approve pet artwork.
 
 ## Module scene projection
 
+### Proposed multi-pass pet production
+
+Owner's [actual Gemini transformations](evidence/owner-pet-transformations/README.md)
+motivate a specialist-led proposal: outline → illustration → pet treatment →
+animation. Art direction, pixel art and genomics considered the same images and
+source records. This is a reversible design proposal; no new generated output,
+stage implementation or canonical creature is approved here.
+
+| Stage | Purpose and handoff |
+| --- | --- |
+| Outline, when useful | Clarify silhouette, continuous body, appendage roots and overlap spacing with a flat shape and a few attachment cues. Use it when those are uncertain; schematic seams and texture need not be traced. |
+| Illustration | Turn the resolved shape into connected volumes with deliberate pixel clusters, coherent light, material treatment and recognizable expressed pigment fields. |
+| Pet treatment | Establish inviting character through the actual or explicitly proposed face, form hierarchy and composed gesture. Preserve unfamiliar organization. Illustration and pet treatment may be one request. |
+| Animation, after pet selection | Explore one specific response loop from the selected pet master, preserving identity across frames. A concept loop does not establish a legal locomotion mode or reusable runtime rig. |
+
+These stages answer different questions rather than require four generation
+calls. A supplied useful illustration may go directly to pet treatment. The
+art director owns depiction and the pixel artist its craft; genomics defines
+source meaning and checks actual phenotype changes. Coordination integrates
+their decisions and evidence.
+
+Two legitimate experiment types must remain clear. **Same-source portrayal**
+preserves organization, relative proportions, rooted part roles, feature
+availability, pigment/material ownership and expression identity, while allowing
+coherent light, selective detail and presentation. **Art-first redesign** may
+explore faces, proportions, colours and markings before implementation; retain
+its source and a short changed-trait list, leaving a resulting expression ID
+absent until those changes have a resolved source. A conceptual redesign is not
+an unchanged specimen or an offspring. The colourful owner image is useful
+evidence of this second route.
+
+The director recommends one combined illustration/pet experiment on retained
+`axial-scales` **#GAA74F886E586 / #E1495F780380B**: three connected regions,
+six fins, supplied eyes, charcoal/slate body and cream fins, actual scales,
+no expressed markings or mouth. Compare source and pet at the same apparent
+scale. The outline is needed only if attachment clarity is unresolved.
+
+Proposed positive brief:
+
+> Turn this unusual creature into an appealing digital pet, shown alone in rich high-bit pixel art. Give its connected body softly modeled rounded volume and a graceful overall rhythm. Make its supplied eye pair the character focus with compact reflective light. Use clear stepped contours, deliberate light and shadow clusters, and selective overlapping scale detail following the body. Its three-region charcoal body, six cream fins and forward scale field remain recognizable. Give every fin comfortable space in a welcoming whole-body composition.
+
+Checks stay beside the drawing brief: inspect an actual returned image for
+coherent form, attachment/overlap readability, source features and pigments,
+material identity and pet appeal. Scale detail can use selected edges/light
+within its actual field rather than force every diagnostic primitive into an
+outlined stamp; preserve coverage, flow and contour. Any changed anatomy or
+pigment is a recorded proposal, not an unnoticed repair. Retain exact stage
+prompt/references, source IDs, output bytes/hash and disposition using existing
+artifact records. Animation follows a selected still and a concrete motion
+question. No automatic second commission or four-pass sequence is required.
+
 The optional connected scene experiment uses a separate `module-scene-art/1`
 projection of verified body, ocular and skin/scales constructors. The owner's
 latest correction requires a compact, self-contained drawing brief: describe
