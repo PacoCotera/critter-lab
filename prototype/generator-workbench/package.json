@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1 --port 4382 --strictPort",
     "build": "vite build",
     "start": "node server.mjs",
-    "test": "node --test authoring.test.mjs family.test.mjs pet.test.mjs ../tests/generator-workbench.test.mjs ../tests/pip-genetics.test.mjs",
+    "test": "node --test authoring.test.mjs family.test.mjs pet.test.mjs authoring-ui.test.mjs ../tests/generator-workbench.test.mjs ../tests/pip-genetics.test.mjs",
     "simulate": "node simulate.mjs"
   },
   "dependencies": {

@@ -9,31 +9,87 @@ body {
   grid-template-columns: 300px minmax(0, 1fr);
   gap: 20px;
 }
-.experiment-layout {
-  display: grid;
-  grid-template-columns: 240px minmax(380px, 1fr) 260px;
-  gap: 18px;
-  align-items: start;
-}
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
-.copy-row {
-  padding: 8px 6px;
-  border: 1px solid transparent;
-  border-bottom-color: #394540;
-}
-.copy-row.selected {
-  border-color: #b98c4d;
-  border-radius: 6px;
-}
-.copy-controls {
+.genome-summaries {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.dimension-index {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  margin-top: 4px;
+  margin-bottom: 16px;
+}
+.dimension-count {
+  margin-left: 6px;
+  opacity: 0.7;
+}
+.genome-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.selected-preview {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.8fr) minmax(280px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.locus-choice {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #394540;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.locus-choice:hover {
+  background: #293730;
+}
+.locus-choice.selected {
+  border-color: #d78932;
+  background: #31392f;
+}
+.locus-choice:focus-visible {
+  outline: 2px solid #d78932;
+  outline-offset: 2px;
+}
+.locus-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.locus-copy-labels,
+.locus-state {
+  font-size: 12px;
+  opacity: 0.75;
+}
+.allele-editor {
+  margin-top: 16px;
+}
+.allele-choice-row {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+.allele-choice-row button {
+  min-height: 30px;
+}
+.genome-summaries > *,
+.selected-preview > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .svg-view {
   width: 100%;
@@ -74,17 +130,19 @@ body {
 code {
   overflow-wrap: anywhere;
 }
-@media (max-width: 1300px) {
-  .experiment-layout {
-    grid-template-columns: 220px minmax(350px, 1fr);
+@media (max-width: 1120px) {
+  .genome-layout {
+    grid-template-columns: 200px minmax(0, 1fr);
   }
-  .experiment-layout > :last-child {
-    grid-column: 1 / -1;
+  .selected-preview {
+    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 850px) {
   .catalogue-layout,
-  .experiment-layout,
+  .genome-layout,
+  .selected-preview,
+  .genome-summaries,
   .batch-grid {
     grid-template-columns: 1fr;
   }

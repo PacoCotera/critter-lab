@@ -374,6 +374,8 @@ distinct, recognizable individuals from resolved contributors.
 
 ## Art-first reset: proposed pet and related variations
 
+Owner likes the corrected pet direction. This accepts the character direction for further development, not an implemented genomic rendering grammar or every proposed anatomical detail. Owner separately rejects the current workbench usability and repetitive diagnostic diagrams; those require authoring UX and preview work, not reassignment of these concept PNGs to unrelated resolved genomes.
+
 The owner authorized a bounded art-first reset after rejecting the diagnostic
 face comparison. The original
 [Companion field-partner concept](../../design/companion-promise/field-partner-concept.png)

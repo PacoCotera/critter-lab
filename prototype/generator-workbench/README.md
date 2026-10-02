@@ -19,16 +19,60 @@ Open **http://127.0.0.1:4381**. React/Mantine/Vite provide the developer interfa
 
 Connected authoring journey:
 
-1. Browse all eleven families and inspect a locus's names, copies, operator, bounds, prerequisites and modeled/draft status.
-2. Generate a genome from a recorded seed. This samples inherited copies and accepts only a valid constructed graph, without species presets or mutation-based repair.
-3. Inspect every inherited copy and the separate baseline/inherited/resolved sequences and fingerprint fields. Display order is not a chromosome or linkage claim.
-4. Resolve changes, inspect anatomy/surfaces, derived movement and causal sources, and retain a candidate for comparison.
+1. Generate a random creature in one action. A fresh retained seed samples inherited copies and accepts only a model-valid constructed graph, without species presets or mutation-based repair. The current visual result is a structural diagnostic, not broad or finished pet art.
+2. Inspect the resulting whole genome, choose one of eleven dimensions, and select a locus to see its copies and expressed trait. All records and modeled/draft gaps remain accessible.
+3. Optionally edit a selected copy, then resolve its changed input. Inspect separate baseline/inherited/resolved summaries, sequences and fingerprint fields. Display order is not a chromosome or linkage claim.
+4. Inspect anatomy/surfaces, derived movement and causal sources, and retain a candidate for comparison. Catalogue authoring is a separate advanced task, not required to create a valid random input.
 5. Sample expression with a separate seed. Only permitted marking placement changes; inherited copies and anatomy remain unchanged. Suppressed markings cannot be activated through sampling.
 6. Export and replay a complete experiment. Embedded outputs are recomputed from retained inputs/content and checked against digests.
 7. Validate and export catalogue drafts. Released content and retained individuals are not rewritten by a naming edit.
 8. Export the [preset art template](art-template.md) filled from resolved facts. Large projections reject explicitly rather than discard body parts or constraints.
 
 The legacy Pip interface remains at `/legacy` with its original evaluation route. It is a diagnostic reference, not the expanded engine or production artwork.
+
+## Authoring inspection contract
+
+Agreed bounded UI repair; actual final browser review is pending. The primary
+task is **Generate creature**: one fresh random valid genome and its structural
+result, then whole-genome orientation → dimension → locus → copies and resolved
+trait. Selected-copy editing is optional after generation, not a design-from-
+scratch prerequisite. Keep all eleven dimensions visible,
+including modeled/draft gaps. Dimension filtering, All and search must retain
+access to every locus. Navigation grouping is not chromosome or linkage topology.
+
+Show the selected locus's purpose, labeled copy values, editing controls,
+resolved value/unit/state and prerequisites together. A scoped locus list should
+not become a wall of simultaneous copy forms. Use visible variant buttons or
+segmented choices for Copy 1 and Copy 2; do not require repeated dropdown opening.
+Baseline is the declared content
+baseline; inherited copies are the current genome; expression is the last
+resolved output. Keep their summaries and whole-map inspector readily accessible.
+Raw JSON, exact sequences, source records and art prompts remain available in
+collapsed advanced inspection rather than occupying the main reading path.
+
+Editing copies invalidates the current result, highlight and export. Resolve
+edits differs from generating a new creature. Generation uses a fresh seed and
+the existing bounded valid sampler; retain the seed for replay. A known example
+loads and resolves in one action using its explicit inputs, without a stale
+state closure. The retained pin survives edits. Comparison
+puts changed values/states first, with unchanged outputs available explicitly.
+
+The result is a **structural diagnostic**, not finished creature art. Improve
+framing with a shared inspector zoom while preserving aspect ratio, retained
+geometry and relative world scale. Comparisons use one common camera/scale;
+independent normalization must not hide proportion changes. Explain direct
+contributors and prerequisite influence when a selection highlights several
+regions. A larger diagram does not establish better morphology or art.
+The current continuous constructor requires bilateral organization, at least
+three axial stations and fins, without articulated limbs or membranes. That
+restricted construction explains much of the repeating silhouette. This UI
+repair makes its facts easier to inspect; it does not implement the liked
+novel pet's body/limb grammar or the owner's intended broad organism variety.
+
+The [liked pet concept](evidence/art-reset/README.md) is separate proposed art
+direction, unbound to the selected genome. Do not present it as a resolved engine
+result or change it in response to copy edits. This repair adds no morphology
+engine, provider call, catalogue, game/device UI or deployment behavior.
 
 The experiment inspector includes both a [coherent static family experiment](evidence/critter-family/README.md) and the retained [geometry and pigment reference](evidence/geometry-calibration/README.md), with a trace manifest and CLI `.geometry.svg`/`.geometry.json` exports. The bounded projection supports volume/fin graphs and rejects unsupported projections without invalidating a valid genetic result. One matched Gemini/Sol-directed image-tool comparison preserves broad part counts and pigment roles, but does not establish exact geometry or finished creature art.
 
@@ -294,17 +338,19 @@ idea. Its24connected six-legged records are one local calibration case, not
 the V1 catalogue. Classes describe expressed results; they are not anatomy presets.
 This is proposed content design, not implemented or canonical biology.
 
-1. Establish the framework-based compendium manager and full eleven-family
-   inventory, with the deep priority-family draft catalogue and complete records.
-   Validate one connected structural/appearance/movement cluster within that
-   catalogue before promoting large batches to executable packages.
+1. Extend the existing framework compendium and eleven-family inventory beyond
+   the current narrow executable construction profile. Empty families and draft
+   candidates are visible; their presence does not imply supported expression.
+   Validate connected structural/appearance/movement clusters before promoting
+   more records to executable packages.
 2. Expand expression/construction across developmental/topology contributors:
    different coherent organizations and legal ground/air/water motion, plus
    within-organization body/surface/control variation, with clear exclusions,
    causal traces and whole-baseline/genome/expression views. Preserve the existing
    Pip package as a reference instead of silently rewriting it.
-3. Add declared expression sampling, structured genome art/sequence comparison
-   and fact-derived prompt output. Inspect contrasting generated organizations, related variants and rejection
+3. Extend the existing expression sampling, genome representations, sequence
+   comparison and fact-derived prompt output to those broader constructions.
+   Inspect contrasting generated organizations, related variants and rejection
    cases before integrating the game. Classification follows expression; it
    must never choose a body or repair the genome.
 

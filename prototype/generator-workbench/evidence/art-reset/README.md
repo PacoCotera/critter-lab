@@ -16,6 +16,8 @@ The prior [failed pet diagnostic/provider proof](../pet-materials/README.md) is 
 
 ## Corrected result and review
 
+Owner likes the latest critters and supplied [this Midjourney animation](owner-midjourney-animation.gif) of the initial family. [Its manifest](owner-midjourney-animation.json) retains the original GIF hash and frame/timing metadata. This provides an owner-made illustration-to-animation reference, not a proven current-engine genome-to-animation pipeline; temporal anatomy/identity fidelity remains to be reviewed. Workbench usability and its diagnostic diagrams were separately rejected.
+
 [Corrected raster 02](gemini-family-02.png) and [its browser capture](gemini-browser-02.jpg) retain the actual second Gemini response. The correction removed text and added richer fur clusters. All three still read as related pets, with visible longer limbs/larger face in the center and feather covering on the right. It restored the cream chest on the first two only.
 
 Independent art and genetics inspection agree: this is useful for owner character/style review, but **brief fidelity remains HOLD**. The feather subject still lacks the invariant cream chest pigment. Foot striations on the fur subjects could be read as digits, which were not specified. Exact face/body ratios and complete attachment geometry are not established by the images. No invented rule that feathers suppress pigmentation excuses the missing marking. Pixel detail is improved but does not yet establish the original reference's full HiBit richness.

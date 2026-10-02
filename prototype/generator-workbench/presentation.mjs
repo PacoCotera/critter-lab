@@ -40,13 +40,17 @@ export function describeAuthoringCreature(result) {
   ].join(" ");
 }
 
-export function drawAuthoringCreature(result, selected = null) {
+export function drawAuthoringCreature(
+  result,
+  selected = null,
+  viewOptions = {},
+) {
   if (
     ["continuous-static/1", "continuous-pet/1"].includes(
       result?.graph?.profile?.id,
     )
   )
-    return drawContinuousFamily(result, selected);
+    return drawContinuousFamily(result, selected, viewOptions);
   if (result?.status !== "resolved" || !result.graph?.nodes.length)
     throw new Error("Resolved constructed graph required.");
   const nodes = result.graph.nodes;

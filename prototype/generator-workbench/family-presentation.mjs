@@ -24,14 +24,33 @@ export function drawContinuousFamily(
   )
     throw new Error("Resolved continuous-static geometry required.");
   // One versioned world camera preserves proportion differences across relatives.
-  const [minX, maxX, minY, maxY] = graph.profile.referenceCamera;
+  const camera = viewOptions.camera ?? graph.profile.referenceCamera;
+  if (
+    !Array.isArray(camera) ||
+    camera.length !== 4 ||
+    !camera.every(Number.isFinite) ||
+    camera[1] <= camera[0] ||
+    camera[3] <= camera[2]
+  )
+    throw new Error("Display camera requires finite positive bounds.");
+  const [minX, maxX, minY, maxY] = camera;
+  const horizontalSpan = maxX - minX;
+  const verticalSpan = maxY - minY;
+  if (![horizontalSpan, verticalSpan].every(Number.isFinite))
+    throw new Error("Display camera requires finite positive bounds.");
   const portrait =
     viewOptions.portrait ?? graph.profile.id === "continuous-pet/1";
   const scale = portrait
-    ? Math.min(456 / (maxX - minX), 880 / (maxY - minY))
-    : Math.min(880 / (maxX - minX), 456 / (maxY - minY));
+    ? Math.min(456 / horizontalSpan, 880 / verticalSpan)
+    : Math.min(880 / horizontalSpan, 456 / verticalSpan);
   const offsetX = (1024 - scale * (minX + maxX)) / 2;
   const offsetY = (600 - scale * (minY + maxY)) / 2;
+  if (
+    !Number.isFinite(scale) ||
+    scale <= 0 ||
+    ![offsetX, offsetY].every(Number.isFinite)
+  )
+    throw new Error("Display camera requires finite positive bounds.");
   const point = ([x, y]) => [
     rounded(offsetX + x * scale),
     rounded(offsetY + y * scale),
