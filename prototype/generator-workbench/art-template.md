@@ -326,7 +326,9 @@ invalid indices reject. This encoding compresses the verified facts, not anatomy
 Canonical geometry references remain unrotated XY; the declared portrait view is
 a presentation of that same source for inspection and the retained calibration.
 
-### Proposed correction boundary, awaiting owner review
+### Art-first correction boundary, visual proof authorized
+
+Owner authorized a bounded art-first proof on 1 October 2026: one appealing generated pet and two related genomic variants, compared with the original [Companion concept](../../design/companion-promise/field-partner-concept.png). Anatomy, body organization, proportions, appendages, face and covering remain explicit proposed phenotype facts; diagnostic construction strokes do not dictate the illustration contour. Actual images, genomic differences and independent art/genetics assessment precede further generator implementation. This authorizes a reversible visual study, not canonical morphology or game integration. The previous failed evidence stays unchanged.
 
 Both morphology and depiction need correction. Three similar exposed bulges,
 leaf appendages and sparse decorative material motifs do not establish a
@@ -369,3 +371,47 @@ The reviewed master must calibrate reusable construction/depiction operators;
 it must not become a separately authored asset for one genome. A related
 proportion/face variation should demonstrate that the same renderer derives
 distinct, recognizable individuals from resolved contributors.
+
+## Art-first reset: proposed pet and related variations
+
+The owner authorized a bounded art-first reset after rejecting the diagnostic
+face comparison. The original
+[Companion field-partner concept](../../design/companion-promise/field-partner-concept.png)
+supplies friendly character, cohesive body and HiBit material craft. Its foxlike
+anatomy, hardware and interface are not creature or product rules to copy.
+
+This visual proposal uses a continuous rounded torso, a smaller forward/upward
+face-bearing region, four broad-footed limbs, two short flattened rounded crown
+fronds rooted low on the crown, two pupil-bearing oculars and one curved oral
+slit; no tail, nose, ears or wings. Base palette partitions are teal body, cream
+face/small chest/smooth feet, and coral frond tips. Dense short body fur has
+explicit face/foot exclusions. The first related variation increases relative
+face-bearing size and limb reach. The second retains base proportions/topology/
+palette and replaces only body fur with short overlapping feather coverage.
+These are proposed semantic phenotype values, not current engine results,
+compiled genomes, an approved species or a fixed pet preset.
+
+Macro roles/counts/root domains, proportion relationships, segmentation,
+palette and covering fields remain phenotype authority. Stylized realization
+may draw coherent tissue curvature, a declared 2D three-quarter presentation,
+optical material highlights and clustered micro fur/barb detail. It cannot add
+anatomy, erase an expressed region or change coverage. Fronds have no inferred
+ear/sensing function; feathers imply no flight/insulation; static grounded poses
+establish no gait or physical support validation.
+
+Art and independent genetics inspected both actual rasters retained in
+[reset evidence](evidence/art-reset/README.md). The
+[corrected raster](evidence/art-reset/gemini-family-02.png) has cohesive bodies,
+readable faces, grounded feet, family resemblance and richer clustered fur.
+Text is removed; fur and feather coverings differ visibly, and the center's
+longer limbs are clear. Four feet/two fronds/two oculars/one slit remain visible
+per subject. Exact face/body ratios and all 3D root connections are unverified.
+
+Final brief fidelity remains **HOLD**: the feather subject lacks the shared cream
+chest field, and foot-edge striations on the fur cases may read as unmodeled
+digits. Do not explain missing pigment as feather suppression without a new
+explicit rule. These are real generated concept illustrations assessed from
+their pixels; they are not outputs of the current genome engine or proof of
+lawful inheritance. Stop after this bounded correction for owner review of
+direction and the remaining defects. No further provider retry, canonical
+morphology, finished sprites or dependent implementation is approved.
