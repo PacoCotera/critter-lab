@@ -1,4 +1,8 @@
 import {
+  GRAPH_MODULE_RULE_VERSION,
+  GRAPH_MODULE_TARGETS,
+} from "./graph-module-catalogue.mjs";
+import {
   AUTHORING_CATALOGUE,
   CATALOGUE_SCHEMA,
   GENOME_SCHEMA,
@@ -96,11 +100,14 @@ export function validateCatalogue(catalogue) {
   const petProfile = catalogue?.ruleVersion === PET_RULE_VERSION;
   const familyProfile =
     petProfile || catalogue?.ruleVersion === FAMILY_RULE_VERSION;
-  const targetSpecs = petProfile
-    ? PET_TARGETS
-    : familyProfile
-      ? FAMILY_TARGETS
-      : TARGETS;
+  const moduleProfile = catalogue?.ruleVersion === GRAPH_MODULE_RULE_VERSION;
+  const targetSpecs = moduleProfile
+    ? GRAPH_MODULE_TARGETS
+    : petProfile
+      ? PET_TARGETS
+      : familyProfile
+        ? FAMILY_TARGETS
+        : TARGETS;
   if (
     !exactKeys(catalogue, [
       "schemaVersion",
@@ -129,9 +136,12 @@ export function validateCatalogue(catalogue) {
     !boundedText(catalogue.id, 64) ||
     !Number.isInteger(catalogue.version) ||
     catalogue.version < 1 ||
-    ![RULE_VERSION, FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
-      catalogue.ruleVersion,
-    )
+    ![
+      RULE_VERSION,
+      FAMILY_RULE_VERSION,
+      PET_RULE_VERSION,
+      GRAPH_MODULE_RULE_VERSION,
+    ].includes(catalogue.ruleVersion)
   )
     errors.push(
       error(
@@ -324,7 +334,8 @@ export function validateCatalogue(catalogue) {
       !operators.includes(locus.operator) ||
       !applicability.includes(locus.applicability) ||
       (!familyProfile &&
-        ["ocular", "scales", "covered"].includes(locus.applicability)) ||
+        ["ocular", "scales", "covered"].includes(locus.applicability) &&
+        !(moduleProfile && locus.applicability === "ocular")) ||
       (!petProfile && locus.applicability === "covered") ||
       locus.outputs?.length !== 1 ||
       !targetSpecs[locus.outputs[0]]
@@ -1220,6 +1231,12 @@ export function evaluateGenome(
   }));
   return {
     status: "resolved",
+    ...(catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION
+      ? {
+          baseGraphRuleVersion: RULE_VERSION,
+          ocularModuleRuleVersion: "ocular-module/1",
+        }
+      : {}),
     graph,
     facts,
     motion,
@@ -1239,7 +1256,9 @@ export function evaluateGenome(
     },
     limitations: [
       "Provisional normalized construction; no physical locomotion validation or finished animation",
-      "No eyes/mouth or sensing anatomy included in modeled construction; sensing remains unmodeled",
+      catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION
+        ? "Ocular module facts require the separate ocular-module/1 constructor; sensing and mouth anatomy remain unmodeled"
+        : "No eyes/mouth or sensing anatomy included in modeled construction; sensing remains unmodeled",
       "No game individual, sample/ownership/incubation/breeding authorization",
       "Lifetime state, learning, nutrition/recovery, epigenetics and incubation effects not simulated",
       "Distributed volume networks, transparency and burst/recovery candidates remain draft",

@@ -88,7 +88,7 @@ The earlier 60–90 candidate horizon is a planning aid, not a quota or breadth 
 
 ## Shared graph exterior experiment
 
-The next reversible source proof uses a standalone `graph-source/1` construction
+The retained reversible source proof uses a standalone `graph-source/1` construction
 projection after existing genetic resolution. It compares explicit inherited
 inputs for one dominant volume with bilateral articulated contacts and an axial
 multi-volume body with rooted fins, followed by a proportion variant. These are
@@ -103,6 +103,32 @@ operators. Neutral silhouettes and construction manifests test structural
 contrast; they are not finished pet art or proof of motion, physiology, all-locus
 coverage or game integration. Face and covering modules follow coherent exterior
 and local-frame construction rather than enlarging this structural experiment.
+
+### Ocular module on the broad graph
+
+Architecture and art direction selected a bounded face-first experiment after
+the shared exterior proof. Three inherited contributors control an optional eye
+pair, longitudinal placement and relative size. They extend the broad catalogue;
+the narrow PET topology gate is not transferred. The new genetic rule retains
+the unchanged broad body convention separately from its ocular-module version.
+Existing genetic packages and replay identities remain exact.
+
+The module constructs declared circles and pupils inside the leading volume's
+actual local domain, on both contact and fin organizations. Radius derives from
+inherited size and the smaller leading width/length; inherited placement sets the
+longitudinal center. Pupil ratio and two pigments are explicit provisional profile
+constants. Containment, rim clearance, pair and attachment overlap reject invalid
+construction; no consumer shrinks or moves features to repair a genome. Presence
+off retains placement/size as inactive contributors and constructs no eye geometry.
+
+The standalone scene proof compares both organizations, size-only and
+placement-only variants, plus absent-eye inputs with different latent parameters.
+Actual common-scale256px inspection is required for feature legibility. This is
+static source construction, not finished pet art, vision physiology, animation or
+canonical anatomy. Oral features, coverings and other body organizations follow
+separate declared operators. The default workbench package list is unchanged;
+generic diagnostics and Gemini prompts explicitly defer for this new package
+until a faithful projection consumes the module.
 
 ## Coherent static family implementation proof
 

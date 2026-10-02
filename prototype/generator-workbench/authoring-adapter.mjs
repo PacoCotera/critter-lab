@@ -1,3 +1,4 @@
+import { GRAPH_MODULE_RULE_VERSION } from "./graph-module-catalogue.mjs";
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
 import { describeRendererSubject } from "./art-brief.mjs";
@@ -119,9 +120,18 @@ export function resolveAuthoring(input) {
   const continuous = [FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
     catalogue.ruleVersion,
   );
-  packet.diagnostic = continuous
-    ? drawContinuousFamily(result)
-    : drawAuthoringCreature(result);
+  const ocularModule = catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION;
+  if (ocularModule)
+    packet.presentation = {
+      status: "unsupported",
+      reason:
+        "Requires the ocular-module/1 scene consumer; the existing diagnostic cannot depict this module.",
+    };
+  packet.diagnostic = ocularModule
+    ? ""
+    : continuous
+      ? drawContinuousFamily(result)
+      : drawAuthoringCreature(result);
   if (catalogue.ruleVersion === PET_RULE_VERSION)
     packet.presentation = {
       view: "portrait",
@@ -130,9 +140,11 @@ export function resolveAuthoring(input) {
       canonicalGeometryReference: "orthographic XY, unrotated",
       sharedCamera: result.graph.profile.referenceCamera,
     };
-  packet.description = continuous
-    ? describeContinuousFamily(result)
-    : describeAuthoringCreature(result);
+  packet.description = ocularModule
+    ? "Broad body expression and inherited ocular facts are retained. Use the ocular-module/1 scene consumer for the constructed ocular pair; sensing is not modeled."
+    : continuous
+      ? describeContinuousFamily(result)
+      : describeAuthoringCreature(result);
   const geometryIdentity = {
     recordId: packet.recordId,
     inputDigest,
@@ -141,9 +153,15 @@ export function resolveAuthoring(input) {
     contentVersion: packet.contentVersion,
     ruleVersion: packet.ruleVersion,
   };
-  packet.geometryReference = continuous
-    ? continuousReference(result, geometryIdentity)
-    : createGeometryReference(result, geometryIdentity);
+  packet.geometryReference = ocularModule
+    ? {
+        status: "rejected",
+        error:
+          "Requires the ocular-module/1 scene consumer; the existing body-only reference omits the inherited module.",
+      }
+    : continuous
+      ? continuousReference(result, geometryIdentity)
+      : createGeometryReference(result, geometryIdentity);
   packet.fingerprints = Object.fromEntries(
     ["baseline", "inherited", "expression"].map((kind) => [
       kind,
@@ -223,6 +241,10 @@ export function projectArtPrompt(packet) {
   )
     throw new Error(
       "Art facts/metadata must match the shared engine replay, not client-supplied result hashes.",
+    );
+  if (packet.ruleVersion === GRAPH_MODULE_RULE_VERSION)
+    throw new Error(
+      "Unsupported ocular-module/1 art projection: a module-aware renderer brief is required.",
     );
   const { graph, facts, motion, realization, limitations } = packet.result;
   const subjectPacket = Object.fromEntries(

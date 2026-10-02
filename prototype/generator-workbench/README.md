@@ -34,6 +34,29 @@ evidence, not pet illustration, animation, physiology or game/device integration
 Unsupported radial, membrane, branched or marked inputs reject explicitly in this
 first profile. Facial and covering construction remains subsequent work.
 
+### Ocular module experiment
+
+A separate 51-record package extends the broad graph with three inherited
+contributors: eye-pair presence, placement and size. `developmental-ocular/1`
+retains `developmental-analytic/1` as the body convention and `ocular-module/1`
+as the feature constructor. One full genome controls both; this does not use the
+narrow PET gate or choose a species. The three existing browser packages and their
+records stay exact.
+
+Run `node construct-module-proof.mjs --out evidence/graph-ocular-proof` from
+this directory. The scene combines the verified body construction with optional
+eye geometry in the leading local domain. Unsupported placement or clearance
+rejects without changing anatomy. Common-scale comparisons show contact and fin
+bodies, size-only and placement-only changes, and two eye-absent genomes whose
+latent parameter differences do not change visible geometry.
+
+This package is a standalone static construction proof. It is not added to the
+default UI package list; generic diagnostic and Gemini prompt outputs explicitly
+defer for it rather than implying that they depict its new loci. See
+[the evidence](evidence/graph-ocular-proof/README.md) for actual validation and
+thumbnail legibility. Coverings, oral features, vision physiology, finished pet
+illustration, animation and game/device integration remain outside this slice.
+
 Use the existing host Node runtime22.12 or later and pnpm11.19.0:
 
 ```sh
