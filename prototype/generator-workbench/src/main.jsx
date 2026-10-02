@@ -7,6 +7,7 @@ import {
   Badge,
   Button,
   Code,
+  CopyButton,
   Divider,
   Group,
   JsonInput,
@@ -454,6 +455,10 @@ function Workbench() {
   const filtered = scopedLoci(draft, family, search);
   const genomeLoci = scopedLoci(catalogue, family, search);
   const cause = causalSummary(catalogue, packet?.result, selected);
+  const currentPrompt =
+    isResolvedAuthoringPacket(packet) && !packet.prompt?.error
+      ? (packet.prompt?.text ?? "")
+      : "";
   const consumerNotice = unconsumedOutputNotice(catalogue, selected);
   const previewCamera = sharedPreviewCamera([packet?.result].filter(Boolean));
   const diagnosticViewOptions = (camera) => ({
@@ -1040,82 +1045,123 @@ function Workbench() {
                     </>
                   )}
                 </Paper>
-                <Paper withBorder p="md" className="structural-preview">
-                  <Group justify="space-between">
-                    <Title order={4}>Structural preview</Title>
-                    <Badge color="gray">Diagnostic geometry</Badge>
-                  </Group>
-                  {packet ? (
-                    <SvgView
-                      compact
-                      onSelect={selectLocus}
-                      markup={drawAuthoringCreature(
-                        packet.result,
-                        selected,
-                        diagnosticViewOptions(
-                          packet.result.graph.exterior ? previewCamera : null,
-                        ),
-                      )}
-                    />
-                  ) : (
-                    <div className="empty-result">
-                      <Title order={3}>No current preview</Title>
-                      <Text size="sm">
-                        Generate a creature or load a known example.
-                      </Text>
-                    </div>
-                  )}
-                  <Text size="xs" c="dimmed">
-                    Amber shows direct and dependency involvement in the
-                    retained construction.
-                  </Text>
-                  <Text size="xs" c="dimmed" mt="xs">
-                    This structural diagram is not generated game art.
-                  </Text>
-                  <Text size="xs" c="dimmed" mt="xs">
-                    Display: {SURFACE_DETAIL_PROJECTION_VERSION}.{" "}
-                    {catalogue.ruleVersion === "developmental-analytic/1"
-                      ? "Broad graph assembly; face and covering modules are not modeled in this package."
-                      : "Narrow continuous-body calibration; this is not broad anatomy generation."}
-                  </Text>
-                  {packet && (
-                    <Group mt="md" gap="xs">
-                      <Button
-                        size="xs"
-                        variant="light"
-                        onClick={() => setPinned(clone(packet))}
-                      >
-                        Pin comparison
-                      </Button>
-                      <Button
-                        size="xs"
-                        variant="light"
-                        onClick={() => run(async () => saveRecord())}
-                      >
-                        Save record
-                      </Button>
-                      <Button
-                        size="xs"
-                        variant="light"
-                        onClick={() =>
-                          exportJson("Retained experiment", packet)
-                        }
-                      >
-                        Export record
-                      </Button>
+                <Stack gap="md">
+                  <Paper withBorder p="md" className="structural-preview">
+                    <Group justify="space-between">
+                      <Title order={4}>Structural preview</Title>
+                      <Badge color="gray">Diagnostic geometry</Badge>
                     </Group>
-                  )}
-                  {pinned && (
-                    <Button
-                      variant="subtle"
-                      size="xs"
-                      mt="sm"
-                      onClick={() => setView("compare")}
-                    >
-                      Open retained comparison
-                    </Button>
-                  )}
-                </Paper>
+                    {packet ? (
+                      <SvgView
+                        compact
+                        onSelect={selectLocus}
+                        markup={drawAuthoringCreature(
+                          packet.result,
+                          selected,
+                          diagnosticViewOptions(
+                            packet.result.graph.exterior ? previewCamera : null,
+                          ),
+                        )}
+                      />
+                    ) : (
+                      <div className="empty-result">
+                        <Title order={3}>No current preview</Title>
+                        <Text size="sm">
+                          Generate a creature or load a known example.
+                        </Text>
+                      </div>
+                    )}
+                    <Text size="xs" c="dimmed">
+                      Amber shows direct and dependency involvement in the
+                      retained construction.
+                    </Text>
+                    <Text size="xs" c="dimmed" mt="xs">
+                      This structural diagram is not generated game art.
+                    </Text>
+                    <Text size="xs" c="dimmed" mt="xs">
+                      Display: {SURFACE_DETAIL_PROJECTION_VERSION}.{" "}
+                      {catalogue.ruleVersion === "developmental-analytic/1"
+                        ? "Broad graph assembly; face and covering modules are not modeled in this package."
+                        : "Narrow continuous-body calibration; this is not broad anatomy generation."}
+                    </Text>
+                    {packet && (
+                      <Group mt="md" gap="xs">
+                        <Button
+                          size="xs"
+                          variant="light"
+                          onClick={() => setPinned(clone(packet))}
+                        >
+                          Pin comparison
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="light"
+                          onClick={() => run(async () => saveRecord())}
+                        >
+                          Save record
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="light"
+                          onClick={() =>
+                            exportJson("Retained experiment", packet)
+                          }
+                        >
+                          Export record
+                        </Button>
+                      </Group>
+                    )}
+                    {pinned && (
+                      <Button
+                        variant="subtle"
+                        size="xs"
+                        mt="sm"
+                        onClick={() => setView("compare")}
+                      >
+                        Open retained comparison
+                      </Button>
+                    )}
+                  </Paper>
+                  <Paper withBorder p="md">
+                    <Group justify="space-between" mb="sm">
+                      <Title order={4}>Gemini prompt</Title>
+                      <CopyButton
+                        key={packet?.recordId ?? "unresolved"}
+                        value={currentPrompt}
+                      >
+                        {({ copied, copy }) => (
+                          <Button
+                            size="xs"
+                            variant="light"
+                            disabled={!currentPrompt || busy}
+                            onClick={copy}
+                          >
+                            {copied ? "Copied" : "Copy prompt"}
+                          </Button>
+                        )}
+                      </CopyButton>
+                    </Group>
+                    {packet?.prompt?.error ? (
+                      <Alert color="orange" title="Prompt unavailable">
+                        {packet.prompt.error}
+                      </Alert>
+                    ) : currentPrompt ? (
+                      <Textarea
+                        aria-label="Gemini prompt"
+                        readOnly
+                        autosize
+                        minRows={6}
+                        maxRows={10}
+                        value={currentPrompt}
+                      />
+                    ) : (
+                      <Text size="sm" c="dimmed">
+                        Generate or resolve a creature to view its current
+                        prompt.
+                      </Text>
+                    )}
+                  </Paper>
+                </Stack>
               </div>
             </div>
             <Accordion mt="md" variant="separated">
@@ -1309,25 +1355,6 @@ function Workbench() {
                                 {item.reasons.join(" ")}
                               </Text>
                             ))}
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                        <Accordion.Item value="prompt">
-                          <Accordion.Control>
-                            Preset art projection
-                          </Accordion.Control>
-                          <Accordion.Panel>
-                            {packet.prompt?.error && (
-                              <Alert color="orange">
-                                {packet.prompt.error}
-                              </Alert>
-                            )}
-                            <Textarea
-                              readOnly
-                              autosize
-                              minRows={6}
-                              maxRows={16}
-                              value={packet.prompt?.text ?? ""}
-                            />
                           </Accordion.Panel>
                         </Accordion.Item>
                       </Accordion>

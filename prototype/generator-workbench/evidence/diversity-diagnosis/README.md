@@ -89,3 +89,21 @@ examples still have three axial volume nodes. Actual-artifact review passed
 only the diagnostic correction and truthful scope. Disconnected primitives,
 overlap and missing coherent tissue remain. No pet appeal or finished game-art
 acceptance is claimed.
+
+## Visible Gemini prompt
+
+The existing resolved prompt is now directly beneath the structural preview,
+with a read-only scrolling field and the framework Copy prompt action. It uses
+the exact retained prompt text; templates, model, exports and providers are
+unchanged. The duplicate nested Advanced pane was removed.
+
+The [actual browser capture](browser-gemini-prompt.jpg) shows this entry point.
+Browser checks confirmed unresolved copying disabled, a complete 15,183-character
+prompt field, Copied feedback after the action, and an inherited-copy edit
+removing the stale field and disabling copy. Regeneration restored a current
+13,707-character field. Source review verified identical display/copy strings
+and real projection-error handling; the framework build passed.
+
+External clipboard paste was not verified: the browser-control tool reads its
+separate empty virtual clipboard and blocked paste through that bridge. Copied
+feedback is an observed UI result, not evidence of a paste into Gemini.

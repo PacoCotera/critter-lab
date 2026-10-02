@@ -59,8 +59,12 @@ segmented choices for Copy 1 and Copy 2; do not require repeated dropdown openin
 Baseline is the declared content
 baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
-Raw JSON, exact sequences, source records and art prompts remain available in
-collapsed advanced inspection rather than occupying the main reading path.
+Raw JSON, exact sequences and source records remain available in collapsed
+advanced inspection. The **Gemini prompt** appears below the structural preview
+as read-only, scrollable text with one **Copy prompt** action. Both use the exact
+current resolved packet text, without rewriting or truncation. Editing or
+rejecting inputs clears the prompt with the preview; an unavailable projection
+shows its actual error and disables copying. This panel makes no provider call.
 
 Editing copies invalidates the current result, highlight and export. Resolve
 edits differs from generating a new creature. Generation uses a fresh seed and
