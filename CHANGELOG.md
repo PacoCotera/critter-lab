@@ -2,6 +2,15 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [13:30] — Critter Lab website and future product vision
+
+[PR98](https://github.com/PacoCotera/critter-lab/pull/98) · hosting source `1a9cde0` · native game remains `720c1e6`
+
+- Restored Critter Lab branding and the intended Companion → Lab → individual/family → Caddy/paper story. Planned features remain part of that vision.
+- Added genome authoring, source-derived short art briefs and source-bound retained proposals, with clear separation from game residents.
+- Paired the retained original ecosystem concept with current native Research evidence; corrected historical gallery labels and preserved full family/Caddy framing.
+
+[Website assessment and actual publication evidence](website/evidence/vision-refresh/README.md) retain desktop/phone captures, image provenance, independent review and live source/native receipts. Existing host, routes, native binary and saved-world configuration retained; no reset, new tests, discretionary test runs, CI expansion or native build.
 ## 2026-10-03 [12:47] — Website and genome workbench on the project domain
 
 [PR97](https://github.com/PacoCotera/critter-lab/pull/97) · hosting source `ad192ef` · native game remains `720c1e6`
