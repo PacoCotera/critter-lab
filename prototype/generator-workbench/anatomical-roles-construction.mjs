@@ -2,6 +2,7 @@ import { add, sub, mul, dot, cross, unit } from "./anatomical-source-constructio
 import { constructCompositionalVocabulary, localVector, meshEnvelope, worldPoint } from "./compositional-vocabulary-construction.mjs";
 import { ROLES_CONTENT } from "./anatomical-roles-package.mjs";
 import { COAT_CONTENT } from "./coherent-coat-package.mjs";
+import { MARKING_CONTENT } from "./marking-field-package.mjs";
 
 function addFace(owner, points, coordinates, outward) {
   const normal = unit(cross(sub(points[1], points[0]), sub(points[2], points[0])));
@@ -44,8 +45,9 @@ function skinPrism(front, extrusion) {
 }
 
 export function constructAnatomicalRoles(values, facts, profileVersion = ROLES_CONTENT.constructionProfile) {
-  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role construction profile");
-  const content = profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
+  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile, MARKING_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role construction profile");
+  const content = profileVersion === MARKING_CONTENT.constructionProfile ? MARKING_CONTENT :
+    profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
   // The old primary, head, chain and sheet mathematics remains literal. Only
   // the new source selects this wrapper and its additional role operators.
   const scene = constructCompositionalVocabulary(values, facts, "compositional-source/4");

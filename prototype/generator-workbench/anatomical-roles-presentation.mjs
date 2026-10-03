@@ -3,6 +3,7 @@ import { localPoint } from "./compositional-vocabulary-construction.mjs";
 import { realizeVocabularyMaterials } from "./compositional-vocabulary-presentation.mjs";
 import { ROLES_CONTENT } from "./anatomical-roles-package.mjs";
 import { COAT_CONTENT } from "./coherent-coat-package.mjs";
+import { MARKING_CONTENT } from "./marking-field-package.mjs";
 
 function clipOwnerField(points, owner, threshold, below) {
   const coordinate = (point) => (localPoint(owner, point)[0] / owner.radii[0] + 1) / 2;
@@ -114,8 +115,9 @@ function shade(hex, amount) {
 }
 
 export function anatomicalRolesReference(scene, profileVersion = ROLES_CONTENT.constructionProfile) {
-  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role reference profile");
-  const content = profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
+  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile, MARKING_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role reference profile");
+  const marked = profileVersion === MARKING_CONTENT.constructionProfile;
+  const content = marked ? MARKING_CONTENT : profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
   if (scene.status !== "constructed" || scene.profileVersion !== content.constructionProfile ||
       scene.covering.profileVersion !== content.materialProfile) throw new Error("Unsupported anatomical role reference identity");
   const polygons = [];
@@ -132,8 +134,12 @@ export function anatomicalRolesReference(scene, profileVersion = ROLES_CONTENT.c
     // inferring them from the whole object's center would invert the bowl.
     if (!fragment.directedNormal && dot(normal, sub(center, owner.center ?? centroid(owner.mesh.vertices))) < 0) normal = mul(normal, -1);
     if (dot(normal, towardViewer) <= 0) continue;
-    const fill = shade(fragment.basePigment, 0.75 + 0.25 * Math.max(0, dot(normal, light)));
-    polygons.push({ points: points.map(project), depth: dot(center, towardViewer), fill, owner: owner.id, material: fragment.material ?? "smooth" });
+    const lighting = 0.75 + 0.25 * Math.max(0, dot(normal, light));
+    const fill = shade(fragment.basePigment, lighting);
+    polygons.push({ points: points.map(project), depth: dot(center, towardViewer), fill, owner: owner.id, material: fragment.material ?? "smooth",
+      ...(marked ? { overlays: (fragment.markingOverlays ?? []).map((overlay) => ({
+        ...overlay, fill: shade(overlay.ink, lighting), components: overlay.components.map((component) => component.map(project)),
+      })) } : {}) });
   }
   const projected = scene.nodes.flatMap((owner) => [...owner.mesh.vertices, ...owner.surfaceFragments.flatMap((fragment) => fragment.points)].map(project));
   const minimumX = Math.min(...projected.map((point) => point[0])), maximumX = Math.max(...projected.map((point) => point[0]));
@@ -146,7 +152,16 @@ export function anatomicalRolesReference(scene, profileVersion = ROLES_CONTENT.c
     const outlined = ["scales", "fur"].includes(polygon.material);
     const mantle = polygon.material === "fur-mantle";
     const points = polygon.points.map(([x, y]) => `${(x * scale + offsetX).toFixed(3)},${(y * scale + offsetY).toFixed(3)}`).join(" ");
-    return `<polygon data-owner="${polygon.owner}" data-material="${polygon.material}" points="${points}" fill="${polygon.fill}" stroke="${mantle ? "none" : outlined ? shade(polygon.fill, 0.8) : polygon.fill}" stroke-width="${mantle ? 0 : outlined ? 0.7 : 0.4}" stroke-linejoin="round"/>`;
+    const base = `<polygon data-owner="${polygon.owner}" data-material="${polygon.material}" points="${points}" fill="${polygon.fill}" stroke="${mantle ? "none" : outlined ? shade(polygon.fill, 0.8) : polygon.fill}" stroke-width="${mantle ? 0 : outlined ? 0.7 : 0.4}" stroke-linejoin="round"/>`;
+    if (!marked) return base;
+    const overlays = polygon.overlays.map((overlay) => {
+      // A compound nonzero path paints the union of this logical mask's seam
+      // copies once. Parent grouping preserves the existing occlusion order.
+      const path = overlay.components.map((component) => component.map(([x, y], index) =>
+        `${index === 0 ? "M" : "L"}${(x * scale + offsetX).toFixed(3)},${(y * scale + offsetY).toFixed(3)}`).join(" ") + " Z").join(" ");
+      return `<path data-mark="${overlay.logicalId}" data-kind="${overlay.kind}" d="${path}" fill="${overlay.fill}" fill-rule="nonzero" opacity="${overlay.opacity}" stroke="none"/>`;
+    }).join("");
+    return `<g data-owner="${polygon.owner}" data-parent-material="${polygon.material}">${base}${overlays}</g>`;
   }).join("");
   return {
     status: "constructed", profileVersion: content.referenceProfile,

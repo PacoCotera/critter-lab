@@ -2,7 +2,7 @@
 // changes source anatomy or trusts a prompt embedded in an imported record.
 const SUMMARY_VERSION = "art-prompt-summary/1";
 const PET_INSTRUCTION = "Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.";
-const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6"];
+const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6", "compositional-source/7"];
 import { isCompositionalDraft } from "./compositional-draft-format.mjs";
 
 function counted(count, singular, plural = `${singular}s`) {
@@ -15,15 +15,16 @@ function joined(items) {
 }
 
 export function unavailableArtPromptSummary(packet, error) {
+  const version = packet?.sceneProjectionVersion === "compositional-source/7" ? "art-prompt-summary/2" : SUMMARY_VERSION;
   const reason = error instanceof Error ? error.message : "The source description could not be derived.";
   return {
-    version: SUMMARY_VERSION,
+    version,
     status: "unavailable",
     text: "",
     reason,
     error: reason,
     audit: {
-      version: SUMMARY_VERSION,
+      version,
       sourceRecordId: packet.recordId,
       sceneDigest: packet.sceneDigest,
       sourceProfile: packet.sceneProjectionVersion,
@@ -36,9 +37,11 @@ export function unavailableArtPromptSummary(packet, error) {
 export function artPromptSummary(packet) {
   const scene = packet?.scene;
   const catalogue = packet?.input?.catalogue;
-  const coat = packet?.sceneProjectionVersion === "compositional-source/6";
+  const marking = packet?.sceneProjectionVersion === "compositional-source/7";
+  const version = marking ? "art-prompt-summary/2" : SUMMARY_VERSION;
+  const coat = marking || packet?.sceneProjectionVersion === "compositional-source/6";
   const roles = coat || packet?.sceneProjectionVersion === "compositional-source/5";
-  const catalogueVersion = coat ? 4 : roles ? 3 : 2;
+  const catalogueVersion = marking ? 5 : coat ? 4 : roles ? 3 : 2;
   if (packet?.status !== "resolved" || packet.result?.status !== "resolved" ||
       packet.ruleVersion !== `developmental-compositional-source/${catalogueVersion}` ||
       !CURRENT_PROFILES.includes(packet.sceneProjectionVersion) ||
@@ -47,7 +50,7 @@ export function artPromptSummary(packet) {
       !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === catalogueVersion) ||
         (isCompositionalDraft(catalogue) && catalogue.authoredRecipe.parent.version === catalogueVersion)) ||
       !catalogue.foundationPin || !packet.recordId || !packet.sceneDigest) {
-    throw new Error("A resolved source3/4/5/6 with its matching pinned foundation is required for the pet summary.");
+    throw new Error("A resolved source3/4/5/6/7 with its matching pinned foundation is required for the pet summary.");
   }
 
   const nodes = scene.nodes;
@@ -192,14 +195,33 @@ export function artPromptSummary(packet) {
     modular = clause(`its smooth ${noun} have ${palette.words} local colour fields`, modularOwners,
       ["appearance.modulePalette", "appearance.bodyPalette"], palette);
   }
-  const description = `${anatomy} ${material}${modular ? `; ${modular}` : ""}.`;
+  let markings = "";
+  if (marking && scene.covering.markings?.enabled) {
+    const field = scene.covering.markings;
+    if (field.profile !== "primary-local-marking-field/1" || field.owners.length !== primary.length) {
+      throw new Error("Primary marking field witnesses are incomplete.");
+    }
+    const descriptions = field.owners.map((owner) => {
+      const bands = owner.logical.filter((mask) => mask.kind === "band" && mask.emittedPolygons > 0).length;
+      const patches = owner.logical.filter((mask) => mask.kind === "patch" && mask.emittedPolygons > 0).length;
+      return joined([...(bands ? [counted(bands, "band")] : []), ...(patches ? [counted(patches, "patch", "patches")] : [])]);
+    });
+    if (!descriptions[0] || descriptions.some((description) => description !== descriptions[0])) {
+      throw new Error("Painted marking counts need an explicit owner summary convention.");
+    }
+    markings = clause(`${primary.length > 1 ? "Each body region carries" : "Its body carries"} ${descriptions[0]}`, primary,
+      ["markings.enabled", "markings.layout", "markings.extent", "markings.scale", "markings.orientation", "markings.contrast"],
+      { fieldProfile: field.profile, ownerMasks: field.owners.map((owner) => ({ owner: owner.owner,
+        logical: owner.logical.map(({ id, kind, emittedPolygons }) => ({ id, kind, emittedPolygons })) })) });
+  }
+  const description = `${anatomy} ${material}${modular ? `; ${modular}` : ""}.${markings ? ` ${markings}.` : ""}`;
   return {
-    version: SUMMARY_VERSION,
+    version,
     status: "ready",
     text: `${PET_INSTRUCTION} ${description}`,
     description,
     audit: {
-      version: SUMMARY_VERSION,
+      version,
       sourceRecordId: packet.recordId,
       sceneDigest: packet.sceneDigest,
       sourceProfile: packet.sceneProjectionVersion,
@@ -209,7 +231,8 @@ export function artPromptSummary(packet) {
           { label: "ears / hearing", reason: "Head projections have no ear-organ or hearing consumer." },
           { label: "tail", reason: "Generic primary child regions do not establish a tail." }
         ]),
-        { label: "rings / stripes", reason: "Ordered pigment fields are not implemented marking geometry." },
+        ...(marking ? [{ label: "rings / coloured pigment halves", reason: "Only the traced primary band/patch fields are markings; ordered pigment halves are not marks or new solids." }] :
+          [{ label: "rings / stripes", reason: "Ordered pigment fields are not implemented marking geometry." }]),
         { label: "species / walking / flight", reason: "Static roles do not establish classification or physical capabilities." }
       ]
     }

@@ -3,6 +3,7 @@ import { VOCABULARY_CATALOGUE, VOCABULARY_FOUNDATION, compositionalVocabularyPac
 import { COMPOSITIONAL_DRAFT_SCHEMA, COMPOSITIONAL_DRAFT_ID } from "./compositional-draft-format.mjs";
 import { ROLES_CATALOGUE, ROLES_FOUNDATION, anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
 import { COAT_CATALOGUE, COAT_FOUNDATION, coherentCoatPackage } from "./coherent-coat-package.mjs";
+import { MARKING_CATALOGUE, MARKING_FOUNDATION, markingFieldPackage } from "./marking-field-package.mjs";
 
 function requireCondition(condition, message) {
   if (!condition) throw new Error(message);
@@ -102,9 +103,10 @@ export function compileCompositionalDraft(input) {
   closedObject(input, ["schemaVersion", "parent", "forkId", "revision", "records", "startingCopies", "baselineMetadata", "definitionPin"], "authoring delta");
   const roles = same(input.parent, ROLES_FOUNDATION);
   const coat = same(input.parent, COAT_FOUNDATION);
-  requireCondition(input.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA && (coat || roles || same(input.parent, VOCABULARY_FOUNDATION)),
-    "An exact published catalogue2, catalogue3 or catalogue4 parent pin is required.");
-  const baseCatalogue = coat ? COAT_CATALOGUE : roles ? ROLES_CATALOGUE : VOCABULARY_CATALOGUE;
+  const marking = same(input.parent, MARKING_FOUNDATION);
+  requireCondition(input.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA && (marking || coat || roles || same(input.parent, VOCABULARY_FOUNDATION)),
+    "An exact published catalogue2, catalogue3, catalogue4 or catalogue5 parent pin is required.");
+  const baseCatalogue = marking ? MARKING_CATALOGUE : coat ? COAT_CATALOGUE : roles ? ROLES_CATALOGUE : VOCABULARY_CATALOGUE;
   requireCondition(Number.isInteger(input.revision) && input.revision > 0, "A positive authored revision is required.");
   requireCondition(typeof input.forkId === "string" && /^[0-9a-f]{16}$/.test(input.forkId), "An explicit16-digit fork identity is required.");
   requireCondition(Array.isArray(input.records) && input.records.length <= baseCatalogue.loci.length,
@@ -155,7 +157,7 @@ export function compileCompositionalDraft(input) {
   catalogue.authoredRecipe = { ...recipe, definitionPin: foundation };
   requireCondition(Buffer.byteLength(JSON.stringify(catalogue.authoredRecipe), "utf8") <= 65536,
     "Pinned authoring delta exceeds64KiB. Reduce the edited-definition payload.");
-  const descriptor = coat ? coherentCoatPackage() : roles ? anatomicalRolesPackage() : compositionalVocabularyPackage();
+  const descriptor = marking ? markingFieldPackage() : coat ? coherentCoatPackage() : roles ? anatomicalRolesPackage() : compositionalVocabularyPackage();
   const genome = descriptor.defaultGeneration.genome;
   genome.contentId = catalogue.id;
   genome.contentVersion = catalogue.version;

@@ -2,7 +2,54 @@
 
 The owner rejected the working anatomical V1 outputs because their fixed bilateral head/core/neck and four/six-support baseline still produced the same organization. Changing its proportions did not address that requirement. V1 remains a retained limited experiment with exact records and replay; it must not be overwritten or represented as broad creature diversity.
 
-The current default uses `genomic-compositional-source-experiment@4`, baseline4, rule `developmental-compositional-source/4`, construction `compositional-source/6`, material `compositional-surface-fields/4`, reference `compositional-reference/6` and packet `compositional-authoring-record/4`. Its separately pinned foundation retains the exact111 ordered locus definitions and copies from [anatomical-role content](anatomical-roles-content.json); the changed ear and coat conventions are representation operators, not new genes. Actual source6 inspection keeps coat and ear craft HOLD: the mantle reads smooth and the ears remain weak blades. The [single pet-return evidence](../../prototype/generator-workbench/evidence/coherent-coat/README.md) records positive downstream material/ear craft with explicit appearance drift; it remains a proposal. Catalogue3/source5 stays literal: its tail has a narrow readability pass, while ear and coat craft remain provisional/HOLD. The [original compositional content](compositional-content.json) remains immutable for catalogue1 and exact construction/reference `/1` and `/2` recovery. Retained [vocabulary content](compositional-vocabulary-content.json) supplies catalogue2/source3–4. All old saved recipes, authored parent2/3 forks and literal reference versions remain available. No old input gains missing alleles or silently migrates. The [genomic framework](../../specs/genetics.md) owns the eleven genomic layers and five separate record stages. Classification follows construction and never chooses a body preset.
+The retained coat/ear foundation uses `genomic-compositional-source-experiment@4`, baseline4, rule `developmental-compositional-source/4`, construction `compositional-source/6`, material `compositional-surface-fields/4`, reference `compositional-reference/6` and packet `compositional-authoring-record/4`. Its separately pinned foundation retains the exact111 ordered locus definitions and copies from [anatomical-role content](anatomical-roles-content.json); the changed ear and coat conventions are representation operators, not new genes. Actual source6 inspection keeps coat and ear craft HOLD: the mantle reads smooth and the ears remain weak blades. The [single pet-return evidence](../../prototype/generator-workbench/evidence/coherent-coat/README.md) records positive downstream material/ear craft with explicit appearance drift; it remains a proposal. Catalogue3/source5 stays literal: its tail has a narrow readability pass, while ear and coat craft remain provisional/HOLD. The [original compositional content](compositional-content.json) remains immutable for catalogue1 and exact construction/reference `/1` and `/2` recovery. Retained [vocabulary content](compositional-vocabulary-content.json) supplies catalogue2/source3–4. All old saved recipes, authored parent2/3 forks and literal reference versions remain available. No old input gains missing alleles or silently migrates. The [genomic framework](../../specs/genetics.md) owns the eleven genomic layers and five separate record stages. Classification follows construction and never chooses a body preset.
+
+## Primary owner-local markings
+
+The current default is catalogue5/baseline5/rule5/source7/material5/reference7,
+with `compositional-authoring-record/5` and strict authored-parent5
+`compositional-authored-record/4`. It retains every111 definition and ordered
+copy from catalogue4, adding no locus, allele, anatomy or base pigment.
+Baseline5 appends `primary-local-marking-field/1`. Catalogue4/source6 and all
+earlier saved recipes remain literal; new parent5 inputs are explicit and have
+a separate draft slot. This closes six carried Appearance consumers, not the
+remaining eleven-domain gaps.
+
+The existing recessive marking switch controls primary owners only. OFF keeps
+the other five contributions resolved/inactive. ON consumes exact layout,
+extent, scale, orientation and contrast: logical count is
+`max(1,round(10*extent))`, two-to-five per owner. Bands/patches/mixed retain the
+declared pair maps; mixed uses even bands and odd patches. Original local
+`u=(x/Rx+1)/2` and wrapped `v=atan2(z/Rz,y/Ry)/(2π)` define a provisional
+normalized atlas. Fragment azimuths unwrap to the nearest period of the first
+non-pole point; poles use the mean non-pole azimuth. Mantle masks use audited
+original points paired to the same displaced surface.
+
+Logical placement i of n has center `((i+1)/(n+1),(i+.5)/n)`. A band is a
+scale-wide, one-period rectangle; a patch has16 fixed vertices and radii
+`(scale,.6*scale)`. Exact orientation rotates either mask in the normalized
+atlas. Three periodic images −1/0/+1 handle wrapping without increasing logical
+count. Convex clipping interpolates atlas, original and actual3D coordinates
+together within each existing parent fragment. A compound nonzero path applies
+each logical mask's opacity once per parent; nested base/paint groups share
+parent depth, normal and light. Other owners and the opaque underlying base
+remain unchanged. No independent coplanar sorting, relief or global overlay is
+introduced.
+
+Ink `#e8dfc8` reuses the diagnostic constant in `presentation.mjs`; exact
+contrast is opacity, not a new pigment gene or canonical palette. Separate
+limits are35 logical masks/105 periodic components,20160 clipped polygons per
+owner/141120 total and20 vertices per polygon. Bounds culling and empty or
+zero-area clipping are audited; overflow rejects without dropping masks or
+repairing copies. Logical IDs, kinds, centers, parameters, six causes, inherited
+values and actual clipped positions remain retained. Natural occlusion or weak
+contrast does not move or recolour a field. Actual readability remains a
+separate inspection gate.
+
+Source7 uses `art-prompt-summary/2`, adding only constructed primary-owner bands
+and patches/counts. Old summary1 bytes remain unchanged. Ordered pigment halves
+still are not markings. New source bindings cannot display an earlier source's
+retained pet proposal; proposal storage itself is unchanged.
 
 ## Continuous coat mantle and broad ear profile
 
@@ -108,17 +155,17 @@ The immediate deliverable is the usable Generate platform drawing actual revised
 
 ## Compatible authored foundations
 
-The compendium supports a separate `compositional-authoring-delta/1` fork against the exact published catalogue2,3 or4 pin. Parent2 reconstructs104 pairs; parent3/4 reconstruct111, all with six unsupported drafts and the eleven-family index. Its explicit fork identity and increasing local revision name a `genomic-compositional-source-draft-<forkId>` catalogue; a `compositional-authored-foundation/1` pin binds the compiled definition. Catalogue1/2/3 and source1–5 saved recipes remain exact; no stock recipe silently selects a draft and no fork silently changes parent.
+The compendium supports a separate `compositional-authoring-delta/1` fork against the exact published catalogue2,3,4 or5 pin. Parent2 reconstructs104 pairs; parent3/4/5 reconstruct111, all with six unsupported drafts and the eleven-family index. Its explicit fork identity and increasing local revision name a `genomic-compositional-source-draft-<forkId>` catalogue; a `compositional-authored-foundation/1` pin binds the compiled definition. Catalogue1/2/3 and source1–5 saved recipes remain exact; no stock recipe silently selects a draft and no fork silently changes parent.
 
 Edit record labels/aliases/purpose, supported numeric contributions and complete existing pair maps. IDs, allele IDs/order, copy count, target/operator/units, families, guards/applicability/dependencies/status and runtime budgets remain immutable. Numeric edits use the original record bounds, or original finite-allele minimum/maximum where no bounds are supplied; every homozygous and mixed outcome must remain valid. Cross exponents must be pair-closed in2/3/4, with no snapping. Categorical outputs stay within the original consumer enum and booleans remain booleans. Ten body/six secondary pigment values and partition maps remain exact; their metadata names can change. Six draft definitions cannot gain a copy/phenotype consumer by changing status. Edited records receive higher versions, exact definition digests and source-recipe provenance with their original references retained as ancestry.
 
-Baseline runtime operator references, geometry/material equations and budgets stay fixed to the exact parent. The editable baseline contains only label/description metadata and a complete parent-sized starting-copy dictionary. Validate/save keeps separate parent2/3/4 browser draft slots without changing the active experiment or replacing legacy catalogue storage. Use draft explicitly selects its compiled definitions while retaining current copies, updating their content/version references and clearing stale output. Load active draft starting copies is a separate deliberate action feeding Resolve. Generate samples the compiled edited alleles/maps under the unchanged founder policy and first-eligible ceiling; it never treats the starting genome as a fixed creature template or repairs invalid copies.
+Baseline runtime operator references, geometry/material equations and budgets stay fixed to the exact parent. The editable baseline contains only label/description metadata and a complete parent-sized starting-copy dictionary. Validate/save keeps separate parent2/3/4/5 browser draft slots without changing the active experiment or replacing legacy catalogue storage. Use draft explicitly selects its compiled definitions while retaining current copies, updating their content/version references and clearing stale output. Load active draft starting copies is a separate deliberate action feeding Resolve. Generate samples the compiled edited alleles/maps under the unchanged founder policy and first-eligible ceiling; it never treats the starting genome as a fixed creature template or repairs invalid copies.
 
-The compact recipe retains its exact parent, edited definitions, baseline metadata, starting copies and new pin. Compile/evaluate/generate/replay reconstruct it deterministically after restart; no ephemeral server registry is required. Authored parent2 uses exact `compositional-authored-record/1` source4/material2/reference4; parent3 uses `compositional-authored-record/2` source5/material3/reference5; parent4 uses `compositional-authored-record/3` source6/material4/reference6. Crossed parent/schema/profile combinations reject. The definition pin hashes the compiled catalogue before derived `foundationPin` and `authoredRecipe` are attached; the catalogue includes the exact recipe digest. Full retained-catalogue/tree hashes cover derived fields separately. API, export and replay keep64KiB, with explicit errors when recipe plus genome exceeds it. Imported outputs/prompts are recomputed. This finite editor is not unrestricted content authoring or full eleven-layer implementation.
+The compact recipe retains its exact parent, edited definitions, baseline metadata, starting copies and new pin. Compile/evaluate/generate/replay reconstruct it deterministically after restart; no ephemeral server registry is required. Authored parent2 uses exact `compositional-authored-record/1` source4/material2/reference4; parent3 uses `compositional-authored-record/2` source5/material3/reference5; parent4 uses `compositional-authored-record/3` source6/material4/reference6; parent5 uses `compositional-authored-record/4` source7/material5/reference7. Crossed parent/schema/profile combinations reject. The definition pin hashes the compiled catalogue before derived `foundationPin` and `authoredRecipe` are attached; the catalogue includes the exact recipe digest. Full retained-catalogue/tree hashes cover derived fields separately. API, export and replay keep64KiB, with explicit errors when recipe plus genome exceeds it. Imported outputs/prompts are recomputed. This finite editor is not unrestricted content authoring or full eleven-layer implementation.
 
 ## Source-derived pet brief
 
-Current source `/6` and retained source `/3`, `/4` and `/5` use the pure wording consumer `art-prompt-summary/1`. It starts with: “Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.” A short factual description follows, targeting25–45 words without deleting major expressed counts or material ownership to meet a cutoff. Older unrelated profiles retain their existing handoff.
+Retained source `/3`, `/4`, `/5` and `/6` use the pure wording consumer `art-prompt-summary/1`; current source `/7` uses summary2 with only the added factual marking clause. It starts with: “Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.” A short factual description follows, targeting25–45 words without deleting major expressed counts or material ownership to meet a cutoff. Older unrelated profiles retain their existing handoff.
 
 The summary reads actual primary shapes/organization, typed heads/muzzles, eye rims with pupils, head projections, chains/terminal forms, flaps, material owners and pinned pigment labels. Source5/6 add rounded/pointed smooth ears and a smooth tapered tail from actual typed nodes/contact witnesses. Source3/4 text/audits remain exact and infer no ears/tail. Count chains once at their attachment. “Jointed legs” requires bilateral contact chains with actual terminals and endpoints below roots in their owner's up frame; other contacts are limbs, free chains tapered jointed appendages. Source5/6 secondary-colour clauses names only its actual jointed legs or jointed limbs and any flat flaps; it does not use the broad “appendages” noun that could include smooth body-pigment-owned ears/tail. Fur belongs to primary regions; head/ears/tail/limbs/flaps stay smooth. Ordered colour fields are local, never rings or an inferred underside. Static roles do not infer species, hearing, walking or flight. Numeric mixed copies receive no undeclared long/short thresholds.
 

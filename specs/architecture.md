@@ -93,6 +93,15 @@ only their permitted facts, not a hidden full genome with an instruction to igno
 
 ### Current authoring evidence and unsolved construction range
 
+The default catalogue5/rule5/source7/material5/reference7 adds a thin owner-local
+marking consumer after the unchanged source6 material. Exact six carried
+Appearance records drive primary surface masks; paired original/current
+coordinates and nested per-parent paint groups preserve underlying geometry,
+palette, lighting and occlusion. The [marking contract](../design/anatomical-source-prototype/compositional-contract.md#primary-owner-local-markings)
+owns budgets/audit and summary2 semantics. Parent5 authoring/replay is explicit;
+all old stock/authored paths remain literal. No pet-store/service change or
+full-genome implementation claim follows.
+
 The host workbench can manually retain returned pet bitmaps as source-bound
 proposals through a separate bounded browser-only IndexedDB store. No server
 image API, genome-storage change, automatic provider or accepted-pet lifecycle

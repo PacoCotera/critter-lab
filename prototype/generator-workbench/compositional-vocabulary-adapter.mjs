@@ -21,6 +21,8 @@ import { constructAnatomicalRoles } from "./anatomical-roles-construction.mjs";
 import { realizeAnatomicalRoleMaterials, anatomicalRolesReference } from "./anatomical-roles-presentation.mjs";
 import { COAT_CONTENT, COAT_CATALOGUE, COAT_FOUNDATION, coherentCoatPackage } from "./coherent-coat-package.mjs";
 import { realizeCoherentCoatMaterials } from "./coherent-coat-material.mjs";
+import { MARKING_CONTENT, MARKING_CATALOGUE, MARKING_FOUNDATION, MARKING_TARGETS, markingFieldPackage } from "./marking-field-package.mjs";
+import { realizeMarkingFieldMaterials } from "./marking-field-material.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const plain = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -91,6 +93,13 @@ function consumerGuard(locusId, values) {
 // Only declared internal consumers select a configuration. HTTP input cannot
 // supply operators/functions or change the old stock resolver's defaults.
 function consumerConfiguration(consumer) {
+  if (consumer === "marking-field") return {
+    catalogue: MARKING_CATALOGUE, foundation: MARKING_FOUNDATION,
+    content: { ...COMPOSITIONAL_CONTENT, baseline: MARKING_CONTENT.baseline, materialProfile: MARKING_CONTENT.materialProfile, ruleVersion: MARKING_CONTENT.ruleVersion },
+    structural: new Set([...structuralIds, ...ROLES_CONTENT.loci.map((locus) => locus.id), ...Object.keys(MARKING_TARGETS)]),
+    package: markingFieldPackage, profile: MARKING_CONTENT.constructionProfile,
+    packetSchema: "compositional-authoring-record/5", authoredSchema: "compositional-authored-record/4"
+  };
   if (consumer === "vocabulary") return {
     catalogue: COMPOSITIONAL_CATALOGUE, foundation: COMPOSITIONAL_FOUNDATION,
     content: COMPOSITIONAL_CONTENT, structural: structuralIds,
@@ -122,6 +131,7 @@ function roleGuard(locusId, values) {
 function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null, consumer = "vocabulary") {
   try {
     const configuration = consumerConfiguration(consumer), content = configuration.content;
+    const marking = consumer === "marking-field";
     const roles = consumer !== "vocabulary", coat = consumer === "coherent-coat", activeStructuralIds = configuration.structural;
     if (!(roles ? [configuration.profile] : [VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE]).includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
@@ -150,7 +160,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       let resolved;
       if (locus.operator === "copy-mean") {
         resolved = (contributions[0] + contributions[1]) / 2;
-        if (!activeStructuralIds.has(locus.id)) resolved = Math.round(resolved * 1e6) / 1e6;
+        if (!activeStructuralIds.has(locus.id) || marking && Object.hasOwn(MARKING_TARGETS, locus.id)) resolved = Math.round(resolved * 1e6) / 1e6;
       } else if (locus.operator === "dominant-enable") resolved = contributions.some(Boolean);
       else if (locus.operator === "recessive-enable") resolved = contributions.every(Boolean);
       else {
@@ -160,14 +170,17 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       }
       if (typeof resolved === "number" && !Number.isFinite(resolved)) throw new Error("Non-finite resolved contribution");
       const imported = ANATOMICAL_CONTENT.importedLoci.find((reference2) => reference2.id === locus.id);
-      const structural = activeStructuralIds.has(locus.id), target = structural ? imported?.target ?? locus.target : `broader.${locus.outputs[0]}`;
+      const structural = activeStructuralIds.has(locus.id), target = marking && Object.hasOwn(MARKING_TARGETS, locus.id)
+        ? MARKING_TARGETS[locus.id] : structural ? imported?.target ?? locus.target : `broader.${locus.outputs[0]}`;
       values[target] = resolved;
       facts.push({ id: target, locusId: locus.id, recordVersion: locus.version, copies: [...copies], sources: [
         locus.id
       ], operator: locus.operator, target, value: resolved, unit: locus.units ?? locus.bounds?.unit ?? "", copyResolution: "resolved", state: structural ? "expressed" : "unimplemented", prerequisites: locus.requires ?? [], sourceReferences, reasons: [`Exact retained ${locus.operator} copy contribution.`, ...!structural ? ["This old consumer's geometry, motion or physiology is not implemented by the compositional source; the value is retained, not asserted as a phenotype."] : []] });
     }
     for (const fact of facts.filter((fact2) => activeStructuralIds.has(fact2.locusId))) {
-      const [active, reason] = roles ? roleGuard(fact.locusId, values) : consumerGuard(fact.locusId, values);
+      const [active, reason] = marking && Object.hasOwn(MARKING_TARGETS, fact.locusId)
+        ? [fact.locusId === "appearance.marking-switch" || values["markings.enabled"], "enabled primary marking field"]
+        : roles ? roleGuard(fact.locusId, values) : consumerGuard(fact.locusId, values);
       if (!active) {
         fact.state = "inactive";
         fact.reasons.push(`Carried and resolved; inactive because there is no ${reason}.`);
@@ -176,7 +189,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
         fact.reasons.push("In this profile, inherited lift seeds the head direction; actual parent/head facet extents determine final center separation.");
       }
     }
-    const scene = (coat ? realizeCoherentCoatMaterials : roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
+    const scene = (marking ? realizeMarkingFieldMaterials : coat ? realizeCoherentCoatMaterials : roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
       realizePigmentFields(roles ? constructAnatomicalRoles(values, facts, profileVersion) : constructCompositionalVocabulary(values, facts, profileVersion)),
       values,
       facts
@@ -186,7 +199,9 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       fact.consumers = [
         ...scene.nodes.filter((node) => node.sources.includes(fact.locusId)).map((node) => node.id),
         ...scene.nodes.flatMap((node) => node.surfaceFragments.flatMap((fragment, index) => fragment.sources?.includes(fact.locusId) ? [`${node.id}:surface-fragment:${index}`] : [])),
-        ...scene.covering.sources.includes(fact.locusId) ? ["primary-material-field"] : []
+        ...scene.covering.sources.includes(fact.locusId) ? ["primary-material-field"] : [],
+        ...(marking && scene.covering.markings.enabled && Object.hasOwn(MARKING_TARGETS, fact.locusId)
+          ? scene.covering.markings.owners.map((owner) => `${owner.owner}:primary-marking-field`) : [])
       ];
     }
     const coverage = catalogue.families.map((family) => {

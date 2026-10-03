@@ -1,5 +1,13 @@
 # Genetics framework
 
+The current host marking consumer closes six existing carried Appearance uses
+through separately pinned catalogue5/source7, retaining every111 definition and
+ordered copy. The recessive switch leaves five resolved contributions inactive
+when OFF; ON applies exact bands/patches/mixed, extent-as-count, scale, angle and
+contrast to primary owners only. The [marking contract](../design/anatomical-source-prototype/compositional-contract.md#primary-owner-local-markings)
+owns the provisional atlas/ink and finite representation. This changes no base
+pigment or anatomy and does not supply missing genomic domains or physiology.
+
 Status: accepted framework with eleven genomic layers (the domain families listed below), structured abilities and separate inherited, expressed and acquired information. Five record stages preserve those information roles; they are not the genomic coverage count. Fictional genetics, not a biological simulation. Detailed rules, examples, production schema and canonical designs remain proposed unless stated otherwise.
 
 ## Agreed direction and open decisions

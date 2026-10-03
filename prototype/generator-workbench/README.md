@@ -13,13 +13,13 @@ accessories and proportions do not satisfy genome-derived organization.
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v4** package, then uses one action to sample a valid genome
+source experiment · v5** package, then uses one action to sample a valid genome
 and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
-not upload it. Current source6 and retained source3/4/5 derive their pet instruction plus a
+not upload it. Current source7 (summary2) and retained source3/4/5/6 (summary1) derive their pet instruction plus a
 short shape, extremity, owner-material and named-colour description through
-`art-prompt-summary/1`. Clause witnesses and unsupported semantic labels stay
+the versioned `art-prompt-summary` consumer. Clause witnesses and unsupported semantic labels stay
 in Advanced inspection. Older unrelated profiles retain their original short
 handoff and full semantic audit. Compact scene export retains inputs and expected
 hashes; verified import rebuilds the source and derives the current summary,
@@ -36,6 +36,21 @@ switching packages is deliberate and never migrates their genomes. See the
 [source-and-output diversity diagnosis](evidence/diversity-diagnosis/README.md).
 
 ## Run and inspect
+
+### Primary markings
+
+The default catalogue5/source7/material5/reference7 consumes the six already
+carried marking records on primary regions only. Author the recessive switch
+and exact bands/patches/mixed, count, scale, orientation and contrast copies;
+Generate/Resolve produces traced owner-local paint fields and a factual
+summary2 clause. Its111 pairs/six drafts/all eleven branches remain unchanged.
+The [marking contract](../../design/anatomical-source-prototype/compositional-contract.md#primary-owner-local-markings)
+owns normalized atlas/mask semantics, fixed diagnostic ink, finite clipping and
+parent-group occlusion. No anatomy, base palette or coat/ear correction is
+included. Actual source-readability inspection is pending.
+Catalogue1–4 and all prior stock/authored recipes remain selectable and literal;
+parent5 drafts use a separate slot. Returned pet proposals remain bound to their
+original source/prompt and do not follow a newly marked source.
 
 ### Retain a manually returned pet proposal
 
@@ -62,10 +77,10 @@ inherited-fidelity claim, gene change, automatic provider call or animation.
 
 ### Compositional Generate and all eleven genomic branches
 
-`genomic-compositional-source-experiment@4` uses separately pinned
-`developmental-compositional-source/4`, `compositional-source/6`,
-`compositional-surface-fields/4` and `compositional-reference/6` rules. All
-retained version1/2/3 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+`genomic-compositional-source-experiment@5` uses separately pinned
+`developmental-compositional-source/5`, `compositional-source/7`,
+`compositional-surface-fields/5` and `compositional-reference/7` rules. All
+retained version1/2/3/4 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
 resolve serial or branched region graphs, depth, bilateral/radial frames,
