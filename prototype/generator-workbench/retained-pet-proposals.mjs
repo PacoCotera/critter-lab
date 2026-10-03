@@ -89,7 +89,7 @@ export async function readPetProposals(binding, signal) {
   }
 }
 
-export async function retainPetProposal(file, binding, providerLabel, signal) {
+export async function retainPetProposal(file, binding, providerLabel, signal, apiProvenance = null) {
   assertActive(signal);
   if (!(file instanceof Blob) || !ALLOWED_MIME.has(file.type) || !file.size || file.size > MAX_BYTES) {
     throw new Error("Choose a PNG, JPEG or WebP bitmap of at most4MiB.");
@@ -122,6 +122,7 @@ export async function retainPetProposal(file, binding, providerLabel, signal) {
   const promptSha256 = await sha256(new TextEncoder().encode(binding.promptText));
   const proposalId = `pet-proposal-${await sha256(new TextEncoder().encode(canonical({
     binding, promptSha256, imageSha256,
+    ...(apiProvenance ? { apiProvenance } : {}),
   })))}`;
   assertActive(signal);
   const metadata = {
@@ -132,6 +133,7 @@ export async function retainPetProposal(file, binding, providerLabel, signal) {
     promptSha256,
     image: { sha256: imageSha256, width, height, mime: file.type, bytes: file.size },
     providerLabel: label,
+    ...(apiProvenance ? { apiProvenance: structuredClone(apiProvenance) } : {}),
   };
   const entry = { proposalId, bindingKey: proposalBindingKey(binding), metadata, imageBlob: file.slice(0, file.size, file.type) };
   const database = await openDatabase();

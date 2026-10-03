@@ -29,6 +29,7 @@ import {
 import "@mantine/core/styles.css";
 import "./workbench.css";
 import ReturnedPetPanel from "./ReturnedPetPanel.jsx";
+import { sourcePng } from "../source-png.mjs";
 import {
   drawAuthoringCreature,
   drawGenomeField,
@@ -484,22 +485,9 @@ function Workbench() {
   async function downloadSourcePng() {
     const handoff = imageLedPetHandoff(packet);
     if (!handoff.referenceSvg) throw new Error("No current verified source image to download.");
-    const svgUrl = URL.createObjectURL(new Blob([handoff.referenceSvg], { type: "image/svg+xml;charset=utf-8" }));
     let pngUrl = null;
     try {
-      const image = new Image();
-      await new Promise((resolve, reject) => {
-        image.onload = resolve;
-        image.onerror = () => reject(new Error("The current source image could not be prepared for download."));
-        image.src = svgUrl;
-      });
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const painter = canvas.getContext("2d");
-      if (!painter) throw new Error("PNG export is unavailable in this browser.");
-      painter.drawImage(image, 0, 0, canvas.width, canvas.height);
-      const png = await new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("PNG export failed.")), "image/png"));
+      const png = await sourcePng(handoff.referenceSvg);
       pngUrl = URL.createObjectURL(png);
       const link = document.createElement("a");
       link.href = pngUrl;
@@ -509,7 +497,6 @@ function Workbench() {
       link.remove();
       setMessage("Source PNG download requested. Its record ID is retained in the filename.");
     } finally {
-      URL.revokeObjectURL(svgUrl);
       if (pngUrl) window.setTimeout(() => URL.revokeObjectURL(pngUrl), 60000);
     }
   }

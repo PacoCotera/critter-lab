@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Badge, Button, FileInput, Group, Paper, Stack, Text, TextInput, Title } from "@mantine/core";
 import { isResolvedAuthoringPacket, sceneReplayEnvelope } from "../authoring-ui.mjs";
+import ApiPetRenderPanel from "./ApiPetRenderPanel.jsx";
 import {
   downloadProposalBlob,
   proposalBindingKey,
@@ -127,6 +128,10 @@ export default function ReturnedPetPanel({ packet, handoff, revision, sourceBusy
         Attach the returned bitmap and retain it explicitly. It stays linked to the shown source and prompt;
         model changes are unaccepted proposals and never change inherited traits.
       </Text>
+      <ApiPetRenderPanel binding={source.binding} referenceSvg={handoff.referenceSvg} revision={revision}
+        onRetained={(entry) => setRetained((previous) => ({ key: activeKey, entries: [
+          ...(previous.key === activeKey ? previous.entries.filter((item) => item.proposalId !== entry.proposalId) : []), entry,
+        ] }))} />
       {!source.binding ? <Text size="sm" mt="sm">{source.reason}</Text> : (
         <Stack gap="sm" mt="sm">
           <Text size="xs" c="dimmed">Source: {source.binding.sourceRecordId}</Text>

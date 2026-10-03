@@ -8,7 +8,8 @@ and this base instruction, followed by a short factual source description:
 The latest owner direction adds actual shape, extremity counts/forms,
 body-owned covering and named colours to the earlier
 [image-led example](evidence/owner-simple-pet/README.md). The pure
-`art-prompt-summary/1` consumer derives this brief for source3/4/5/6; its
+`art-prompt-summary/1` consumer derives this brief for source3/4/5/6; source7
+uses summary2 with its factual marking clause. The
 [contract](../../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 defines supported meanings and clause witnesses. The description targets25–45
 words without hiding major expressed anatomy or material ownership. Detailed
@@ -24,7 +25,12 @@ The workbench's [manual returned-pet panel](README.md#retain-a-manually-returned
 retains a supplied bitmap alongside its exact source/prompt binding in this
 browser. Its linked export includes the compact source recipe; the native image
 remains unchanged. Status is always proposal, never accepted phenotype or
-inherited fidelity. This supplies no provider integration or animation.
+inherited fidelity. The optional [API rendering panel](README.md#render-a-pet-through-an-api)
+reuses that same verified source SVG as a512px PNG and sends the exact derived
+short brief, with no additional creative wrapper or genome JSON. API candidates
+retain complete source/prompt/job provenance and remain unaccepted proposals.
+Manual return stays available. No automatic refinement, animation or accepted
+art lifecycle is supplied.
 
 The [versioned template](art-template.json) retains verified expression as a
 semantic audit/export brief. Historical prompt bytes and replay identities remain

@@ -82,6 +82,70 @@ Catalogue1–4 and all prior stock/authored recipes remain selectable and litera
 parent5 drafts use a separate slot. Returned pet proposals remain bound to their
 original source/prompt and do not follow a newly marked source.
 
+### Render a pet through an API
+
+The optional **Render a pet via API** panel offers NanoBanana (Google) first and
+OpenAI Images separately. It displays the server-selected model and availability
+before **Render pet**. Supply the rendering operator token in the password field;
+it stays in component memory, never browser storage or exports. No provider API
+key belongs in this UI. Rendering sends the exact current512px source PNG and
+server-recomputed short brief. The complete record/input/result binding matters:
+Cognition edits can leave the source scene unchanged.
+
+The server uses existing Node22 built-ins, fixed provider endpoints and these
+environment settings. Keep credentials outside source control and public files.
+
+| Setting | Purpose |
+| --- | --- |
+| `CRITTER_RENDER_TOKEN` | Separate operator bearer secret for paid jobs/status/images/recovery |
+| `CRITTER_RENDER_STORE` | Writable dedicated durable job directory; one server process owns it |
+| `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) | Server-only Google Gemini API key from [AI Studio](https://aistudio.google.com/apikey) |
+| `CRITTER_NANOBANANA_MODEL` | Default `gemini-3.1-flash-image` |
+| `OPENAI_API_KEY` | Optional server-only OpenAI key; provider unavailable without it |
+| `CRITTER_OPENAI_IMAGE_MODEL` | Default `gpt-image-2.5-sunburst` |
+
+Configuration availability reports presence/writable storage, not verified
+account billing or model access. Google uses the [Interactions image contract](https://ai.google.dev/gemini-api/docs/image-generation),
+text plus inline PNG, `response_format` image/png and `store=false`; final image
+bytes come from model-output steps. OpenAI uses [Images edits](https://developers.openai.com/api/docs/guides/image-generation),
+multipart image[] plus exact prompt, one PNG output and base64 bytes. No arbitrary
+URLs/endpoints/models from the client, conversation, prompt optimization,
+grounding, automatic fallback or retry is supplied.
+
+Public `/api/rendering/config` exposes model/availability only. Other rendering
+routes require the bearer token. `render-request/1` binds a UUID, provider, exact
+compact replay, full expected source binding and hashed source PNG. Admission
+replays and verifies the source/prompt and persists inputs before dispatch;
+identical request IDs recover their original job and conflicting payloads reject.
+One provider request is active globally; eight server jobs maximum, no eviction.
+Source PNGs are≤1MiB/512×512; returned images≤4MiB. The dedicated rendering POST
+limit is2MiB; genetic replay remains64KiB. Source SVG and supplied PNG hashes are
+retained separately: the client PNG hash does **not** establish pixel equivalence
+with the verified SVG.
+
+Jobs retain pending/running/completed/failed/interrupted state, timestamps,
+provider/model/request identity, exact prompt, source bindings and actual output
+hash/MIME/usage/revised prompt where returned. Restart marks pending/running jobs
+interrupted without resubmission. The provider deadline is180seconds; failure or
+interruption may have incurred a charge, and exactly-once execution is not claimed.
+Polling/recovery never invokes a provider. Known-ID recovery fetches the retained
+image only. After a reload, **Find retained jobs for this source** explicitly
+reads the authenticated bounded list of eight job metadata records, filters the
+complete current source/prompt binding and offers matching recovery actions.
+It never starts a provider request or attaches art to a different source.
+**Stop waiting** stops the browser wait, not the server job.
+After a lost submission response, **Recover submission** resends the identical
+request ID/payload rather than requesting a new candidate.
+
+A completed candidate is automatically retained through the existing bounded
+browser proposal store with full API provenance only when its exact source and
+prompt still match. Changing source prevents attachment. Quota/reload failures
+leave the server candidate recoverable when that original source is reopened.
+Manual retention remains available. All images are unaccepted proposals; no
+genome mutation, fidelity approval, refinement, animation or acceptance lifecycle
+is added. Source implementation awaits independent review, deployment and actual
+configured API use; no provider output or successful account access is claimed.
+
 ### Retain a manually returned pet proposal
 
 After resolving a current source and its short prompt, choose the returned

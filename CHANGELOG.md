@@ -2,6 +2,16 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [14:19] — Optional genome-derived innate profile
+
+[PR99](https://github.com/PacoCotera/critter-lab/pull/99) · hosting source `50d5a7a` · native game remains `720c1e6`
+
+- The authoring bench now carries114 ordered pairs and six drafts. Three provisional Cognition contributors resolve an optional static profile: presence, exploration tendency and reference-cue threshold.
+- OFF retains all copies and witnesses; changing the profile does not change source geometry, material or the short art brief. Old111-pair records keep their original versions.
+- This is partial eleven-layer authoring data, without live behavior or improved creature silhouettes. Four domains still lack executable contracts.
+
+Independent source/domain review, unchanged automatic CI and normal exact clean pushed-source VM build passed. Existing website, native binary and saves retained; no reset or increased testing scope.
+
 ## 2026-10-03 [13:30] — Critter Lab website and future product vision
 
 [PR98](https://github.com/PacoCotera/critter-lab/pull/98) · hosting source `1a9cde0` · native game remains `720c1e6`

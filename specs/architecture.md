@@ -102,11 +102,20 @@ owns budgets/audit and summary2 semantics. Parent5 authoring/replay is explicit;
 all old stock/authored paths remain literal. No pet-store/service change or
 full-genome implementation claim follows.
 
-The host workbench can manually retain returned pet bitmaps as source-bound
-proposals through a separate bounded browser-only IndexedDB store. No server
-image API, genome-storage change, automatic provider or accepted-pet lifecycle
-is supplied. The [retention contract](../prototype/generator-workbench/README.md#retain-a-manually-returned-pet-proposal)
-owns exact bindings, finite limits, cancellation and paired bitmap/metadata export.
+The host workbench retains returned pet bitmaps as source-bound proposals through
+a separate bounded browser-only IndexedDB store. Manual return remains available;
+an optional operator-token-gated [API rendering path](../prototype/generator-workbench/README.md#render-a-pet-through-an-api)
+replays the exact source, derives the current short prompt and sends its client
+rasterized512px PNG to fixed Google Interactions or OpenAI Images edit endpoints.
+Google is selected first; missing provider keys disable that route. Eight durable
+server jobs, one active provider request, explicit recovery and optional API
+provenance preserve the original source/prompt; restart never retries a provider.
+The source PNG hash proves client bytes, not equivalence with the verified SVG.
+The [retention contract](../prototype/generator-workbench/README.md#retain-a-manually-returned-pet-proposal)
+owns browser bindings, limits, cancellation and bitmap/metadata export. No genome
+storage change, automatic refinement, animation or accepted-pet lifecycle is supplied.
+Configured provider execution and returned-art fidelity remain separate evidence
+gates, not established by source integration.
 
 The [genome workbench](../prototype/generator-workbench/README.md) is a host
 authoring experiment with one-click valid-genome generation, optional editing,
