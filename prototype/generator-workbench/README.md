@@ -27,6 +27,24 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Body organization experiment
+
+The separately versioned [source experiment](evidence/body-organization/README.md)
+adds inherited regional-growth and join-width contributors. It addresses the
+equal regional lengths and fixed narrow joins that produce repeated bulb chains.
+New `developmental-regional-growth/1` expression and `graph-source/2`
+construction retain unequal station dimensions, roots and pigment ownership.
+Older rules, saved records and `graph-source/1` retain their original behavior.
+
+Run `node --test body-organization.test.mjs` and
+`node construct-body-organization-proof.mjs --out evidence/body-organization`
+with the existing host runtime. The body-only proof compares compact contact
+and continuous tapered fin organizations, a growth-only inherited contrast,
+an inactive single-body control and eight fixed random searches. Eyes are
+explicitly off; this is source geometry, not finished pet art. The workbench's
+current Generate action still uses the earlier pigment package until a
+separate integration receives actual output review.
+
 ### Candidate inherited pigments
 
 The [colour comparison](evidence/pigment-vocabulary/README.md) proposes eight

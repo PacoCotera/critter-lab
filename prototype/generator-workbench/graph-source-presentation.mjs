@@ -45,7 +45,7 @@ export function drawGraphSource(
 ) {
   if (
     construction?.status !== "constructed" ||
-    construction.profile?.id !== "graph-source/1"
+    !["graph-source/1", "graph-source/2"].includes(construction.profile?.id)
   )
     throw new Error("An explicit graph-source/1 construction is required.");
   const { constructionDigest, ...retained } = construction;

@@ -3,6 +3,11 @@ import {
   GRAPH_COVERING_TARGETS,
 } from "./graph-covering-catalogue.mjs";
 import {
+  BODY_ORGANIZATION_RULE,
+  BODY_ORGANIZATION_TARGETS,
+  REGIONAL_GROWTH_FIELDS,
+} from "./body-organization-catalogue.mjs";
+import {
   GRAPH_MODULE_RULE_VERSION,
   GRAPH_MODULE_TARGETS,
 } from "./graph-module-catalogue.mjs";
@@ -104,18 +109,22 @@ export function validateCatalogue(catalogue) {
   const petProfile = catalogue?.ruleVersion === PET_RULE_VERSION;
   const familyProfile =
     petProfile || catalogue?.ruleVersion === FAMILY_RULE_VERSION;
+  const regionalProfile = catalogue?.ruleVersion === BODY_ORGANIZATION_RULE;
   const moduleProfile = catalogue?.ruleVersion === GRAPH_MODULE_RULE_VERSION;
   const coveringProfile =
     catalogue?.ruleVersion === GRAPH_COVERING_RULE_VERSION;
-  const targetSpecs = coveringProfile
-    ? GRAPH_COVERING_TARGETS
-    : moduleProfile
-      ? GRAPH_MODULE_TARGETS
-      : petProfile
-        ? PET_TARGETS
-        : familyProfile
-          ? FAMILY_TARGETS
-          : TARGETS;
+  const targetSpecs =
+    catalogue?.ruleVersion === BODY_ORGANIZATION_RULE
+      ? BODY_ORGANIZATION_TARGETS
+      : coveringProfile
+        ? GRAPH_COVERING_TARGETS
+        : moduleProfile
+          ? GRAPH_MODULE_TARGETS
+          : petProfile
+            ? PET_TARGETS
+            : familyProfile
+              ? FAMILY_TARGETS
+              : TARGETS;
   if (
     !exactKeys(catalogue, [
       "schemaVersion",
@@ -150,6 +159,7 @@ export function validateCatalogue(catalogue) {
       PET_RULE_VERSION,
       GRAPH_MODULE_RULE_VERSION,
       GRAPH_COVERING_RULE_VERSION,
+      BODY_ORGANIZATION_RULE,
     ].includes(catalogue.ruleVersion)
   )
     errors.push(
@@ -355,10 +365,13 @@ export function validateCatalogue(catalogue) {
       (!familyProfile &&
         ["ocular", "scales", "covered"].includes(locus.applicability) &&
         !(
-          (moduleProfile || coveringProfile) &&
+          (moduleProfile || coveringProfile || regionalProfile) &&
           locus.applicability === "ocular"
         ) &&
-        !(coveringProfile && locus.applicability === "scales")) ||
+        !(
+          (coveringProfile || regionalProfile) &&
+          locus.applicability === "scales"
+        )) ||
       (!petProfile && locus.applicability === "covered") ||
       locus.outputs?.length !== 1 ||
       !targetSpecs[locus.outputs[0]]
@@ -836,6 +849,59 @@ export function evaluateGenome(
       random: randomStream(expressionSeed ?? 0),
     });
   const graph = { nodes: [], edges: [], surfaces: [] };
+  const regional = catalogue.ruleVersion === BODY_ORGANIZATION_RULE;
+  const growthActive = regional && v.axialCount > 1;
+  let regionalAllocation = null;
+  if (regional) {
+    const fields = v.regionalGrowth
+      .split("-")
+      .map((name) => REGIONAL_GROWTH_FIELDS[name]);
+    const knots = (channel) =>
+      [0, 1, 2].map(
+        (index) =>
+          fields.reduce((sum, field) => sum + field[channel][index], 0) /
+          fields.length,
+      );
+    const sample = (field, index) => {
+      const position = (index / (v.axialCount - 1)) * 2;
+      const left = Math.min(1, Math.floor(position));
+      return field[left] + (field[left + 1] - field[left]) * (position - left);
+    };
+    const lengthKnots = knots("length"),
+      widthKnots = knots("width");
+    const rawLengths = Array.from({ length: v.axialCount }, (_, index) =>
+      growthActive ? sample(lengthKnots, index) : 1,
+    );
+    const rawWidths = Array.from({ length: v.axialCount }, (_, index) =>
+      growthActive ? sample(widthKnots, index) : 1,
+    );
+    const total = rawLengths.reduce((sum, length) => sum + length, 0);
+    const maximumWidth = Math.max(...rawWidths);
+    const lengthWeights = rawLengths.map((length) => length / total);
+    const widths = rawWidths.map((width) => width / maximumWidth);
+    const lengths = lengthWeights.map((weight) => v.bodyLength * weight);
+    const centers = [0];
+    for (let index = 1; index < v.axialCount; index++)
+      centers.push(
+        centers[index - 1] +
+          lengths[index - 1] / 2 +
+          v.spacing +
+          lengths[index] / 2,
+      );
+    regionalAllocation = {
+      state: growthActive ? "expressed" : "inactive",
+      field: v.regionalGrowth,
+      lengthKnots,
+      widthKnots,
+      rawLengths,
+      rawWidths,
+      lengthWeights,
+      widthFactors: widths,
+      lengths,
+      centers,
+      sources: growthActive ? from("regionalGrowth", "spacing") : [],
+    };
+  }
   const bodySources = from(
     "axialCount",
     "bodyLength",
@@ -845,21 +911,31 @@ export function evaluateGenome(
     "spacing",
     "density",
     "axialActuator",
+    ...(growthActive ? ["regionalGrowth"] : []),
   );
   for (let index = 0; index < v.axialCount; index++) {
     const width =
       v.bodyWidth *
+      (growthActive ? regionalAllocation.widthFactors[index] : 1) *
       (1 - v.taper * Math.abs((index + 0.5) / v.axialCount - 0.5));
     graph.nodes.push({
       id: `volume-${index}`,
       role: "volume",
       position: [
-        round(index * (v.bodyLength / v.axialCount + v.spacing)),
+        round(
+          regional
+            ? regionalAllocation.centers[index]
+            : index * (v.bodyLength / v.axialCount + v.spacing),
+        ),
         0,
         0,
       ],
       dimensions: [
-        round(v.bodyLength / v.axialCount),
+        round(
+          regional
+            ? regionalAllocation.lengths[index]
+            : v.bodyLength / v.axialCount,
+        ),
         round(width),
         v.bodyHeight,
       ],
@@ -876,7 +952,12 @@ export function evaluateGenome(
         from: `volume-${index - 1}`,
         to: `volume-${index}`,
         role: "connected-volume",
-        sources: from("axialCount", "spacing", "axialActuator"),
+        sources: from(
+          "axialCount",
+          "spacing",
+          "axialActuator",
+          ...(growthActive ? ["regionalGrowth"] : []),
+        ),
       });
   }
   const copiesAround = v.symmetry === "bilateral" ? 2 : 3;
@@ -929,6 +1010,7 @@ export function evaluateGenome(
             "jointRange",
             "contactWidth",
             "rootPosition",
+            ...(growthActive ? ["regionalGrowth", "spacing"] : []),
           ),
         };
         graph.nodes.push(node);
@@ -963,6 +1045,7 @@ export function evaluateGenome(
             role === "membrane" ? "membranes" : "fins",
             role === "membrane" ? "membraneSpan" : "finSpan",
             ...(role === "membrane" ? ["membraneFlexibility"] : []),
+            ...(growthActive ? ["regionalGrowth", "spacing"] : []),
           ),
         };
         graph.nodes.push(node);
@@ -1254,6 +1337,13 @@ export function evaluateGenome(
   }));
   return {
     status: "resolved",
+    ...(regional
+      ? {
+          sourceRuleVersion: BODY_ORGANIZATION_RULE,
+          bodyConstructionProfileVersion: "graph-source/2",
+          regionalAllocation,
+        }
+      : {}),
     ...(catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION
       ? {
           baseGraphRuleVersion: RULE_VERSION,

@@ -1,4 +1,8 @@
 import { digest } from "./evaluate.mjs";
+import {
+  BODY_ORGANIZATION_RULE,
+  REGIONAL_GROWTH_FIELDS,
+} from "./body-organization-catalogue.mjs";
 
 export const GRAPH_SOURCE_PROFILE = Object.freeze({
   id: "graph-source/1",
@@ -40,17 +44,23 @@ function rejection(code, message, nodeIds = [], locusIds = []) {
 }
 
 function validateSource(result, options) {
+  const regionalProfile =
+    isRecord(options) &&
+    options.profileVersion === "graph-source/2" &&
+    options.sourceRuleVersion === BODY_ORGANIZATION_RULE;
   if (
     !isRecord(options) ||
-    options.profileVersion !== GRAPH_SOURCE_PROFILE.id ||
-    options.sourceRuleVersion !== GRAPH_SOURCE_PROFILE.sourceRuleVersion ||
+    (!regionalProfile &&
+      (options.profileVersion !== GRAPH_SOURCE_PROFILE.id ||
+        options.sourceRuleVersion !==
+          GRAPH_SOURCE_PROFILE.sourceRuleVersion)) ||
     Object.keys(options).some(
       (key) => !["profileVersion", "sourceRuleVersion"].includes(key),
     )
   )
     return rejection(
       "unsupported-profile",
-      "Only the explicit graph-source/1 profile is supported.",
+      "Only explicit matching graph-source/1 or graph-source/2 conventions are supported.",
     );
   if (
     !isRecord(result) ||
@@ -61,6 +71,16 @@ function validateSource(result, options) {
     return rejection(
       "resolved-source",
       "A resolved graph and copied expression facts are required.",
+    );
+  if (
+    (regionalProfile &&
+      (result.sourceRuleVersion !== BODY_ORGANIZATION_RULE ||
+        result.bodyConstructionProfileVersion !== "graph-source/2")) ||
+    (!regionalProfile && result.sourceRuleVersion === BODY_ORGANIZATION_RULE)
+  )
+    return rejection(
+      "source-rule-mismatch",
+      "Regional source requires its actual graph-source/2 convention.",
     );
   const { nodes, edges, surfaces } = result.graph;
   if (
@@ -335,7 +355,12 @@ function validateSource(result, options) {
   return { status: "valid", orderedVolumes, byId };
 }
 
-function buildBody(volumes, graph) {
+function buildBody(
+  volumes,
+  graph,
+  neckRatio = GRAPH_SOURCE_PROFILE.neckRatio,
+  inheritedSources = [],
+) {
   const centerY = volumes[0].position[1];
   const controls = [];
   for (let index = 0; index < volumes.length; index++) {
@@ -345,9 +370,7 @@ function buildBody(volumes, graph) {
     if (next)
       controls.push([
         (node.position[0] + next.position[0]) / 2,
-        (GRAPH_SOURCE_PROFILE.neckRatio *
-          Math.min(node.dimensions[1], next.dimensions[1])) /
-          2,
+        (neckRatio * Math.min(node.dimensions[1], next.dimensions[1])) / 2,
       ]);
   }
   const lowerEnvelope = [];
@@ -396,6 +419,7 @@ function buildBody(volumes, graph) {
     .filter((edge) => edge.role === "connected-volume")
     .map((edge) => edge.id);
   const sources = uniqueSources(
+    inheritedSources,
     ...volumes.map((node) => node.sources),
     ...graph.edges
       .filter((edge) => edge.role === "connected-volume")
@@ -708,13 +732,199 @@ function conflictingAppendages(appendages) {
   return null;
 }
 
+function validateRegionalField(result, volumes) {
+  const ids = [
+    "regionalGrowth",
+    "joinNeckRatio",
+    "bodyLength",
+    "bodyWidth",
+    "taper",
+    "spacing",
+  ];
+  const facts = Object.fromEntries(
+    ids.map((id) => [
+      id,
+      result.facts.find((item) => isRecord(item) && item.id === id),
+    ]),
+  );
+  const allocation = result.regionalAllocation;
+  const active = volumes.length > 1;
+  const fieldNames =
+    typeof facts.regionalGrowth?.value === "string"
+      ? facts.regionalGrowth.value.split("-")
+      : [];
+  if (
+    !isRecord(allocation) ||
+    ![
+      "even",
+      "central",
+      "anterior",
+      "even-central",
+      "even-anterior",
+      "central-anterior",
+    ].includes(facts.regionalGrowth?.value) ||
+    fieldNames.some((name) => !Object.hasOwn(REGIONAL_GROWTH_FIELDS, name)) ||
+    ids.some(
+      (id) =>
+        !isRecord(facts[id]) ||
+        !sourceList(facts[id].sources) ||
+        !sourceList(facts[id].prerequisites),
+    ) ||
+    facts.regionalGrowth.state !== (active ? "expressed" : "inactive") ||
+    facts.joinNeckRatio.state !== (active ? "expressed" : "inactive") ||
+    !["bodyLength", "bodyWidth", "taper"].every(
+      (id) =>
+        facts[id].state === "expressed" && Number.isFinite(facts[id].value),
+    ) ||
+    facts.spacing?.state !== (active ? "expressed" : "inactive") ||
+    !Number.isFinite(facts.spacing?.value) ||
+    !Number.isFinite(facts.joinNeckRatio.value) ||
+    facts.joinNeckRatio.value < 0.65 ||
+    facts.joinNeckRatio.value > 0.95 ||
+    allocation.state !== (active ? "expressed" : "inactive") ||
+    allocation.field !== facts.regionalGrowth.value
+  )
+    return rejection(
+      "regional-field-facts",
+      "Valid actual regional growth/join and active geometry facts are required.",
+    );
+  if (!sourceList(allocation.sources))
+    return rejection(
+      "regional-field-shape",
+      "Retained field sources must be string IDs.",
+    );
+  const names = [
+    "rawLengths",
+    "rawWidths",
+    "lengthWeights",
+    "widthFactors",
+    "lengths",
+    "centers",
+  ];
+  if (
+    names.some(
+      (name) =>
+        !Array.isArray(allocation[name]) ||
+        allocation[name].length !== volumes.length ||
+        allocation[name].some((value) => !Number.isFinite(value)),
+    ) ||
+    allocation.rawLengths.some((value) => value <= 0) ||
+    allocation.rawWidths.some((value) => value <= 0)
+  )
+    return rejection(
+      "regional-field-shape",
+      "Regional arrays must retain finite positive sampled fields at every station.",
+    );
+  const near = (a, b) => Math.abs(a - b) <= 2e-6;
+  const knots = (channel) =>
+    [0, 1, 2].map(
+      (index) =>
+        fieldNames.reduce(
+          (sum, name) => sum + REGIONAL_GROWTH_FIELDS[name][channel][index],
+          0,
+        ) / fieldNames.length,
+    );
+  const sample = (values, index) => {
+    if (!active) return 1;
+    const position = (index / (volumes.length - 1)) * 2;
+    const left = Math.min(1, Math.floor(position));
+    return values[left] + (values[left + 1] - values[left]) * (position - left);
+  };
+  if (
+    !["length", "width"].every(
+      (channel) =>
+        Array.isArray(allocation[channel + "Knots"]) &&
+        allocation[channel + "Knots"].length === 3 &&
+        allocation[channel + "Knots"].every(
+          (value, index) =>
+            Number.isFinite(value) && near(value, knots(channel)[index]),
+        ),
+    )
+  )
+    return rejection(
+      "regional-field-mismatch",
+      "Retained knot fields must match the expressed contributor.",
+    );
+  const rawLength = volumes.map((_, index) => sample(knots("length"), index));
+  const rawWidth = volumes.map((_, index) => sample(knots("width"), index));
+  const total = rawLength.reduce((sum, value) => sum + value, 0);
+  const maximum = Math.max(...rawWidth);
+  let center = 0;
+  for (let index = 0; index < volumes.length; index++) {
+    const weight = rawLength[index] / total;
+    const length = facts.bodyLength.value * weight;
+    if (index)
+      center +=
+        (facts.bodyLength.value * rawLength[index - 1]) / total / 2 +
+        facts.spacing.value +
+        length / 2;
+    const widthFactor = rawWidth[index] / maximum;
+    const width =
+      facts.bodyWidth.value *
+      widthFactor *
+      (1 - facts.taper.value * Math.abs((index + 0.5) / volumes.length - 0.5));
+    if (
+      ![
+        [allocation.rawLengths[index], rawLength[index]],
+        [allocation.rawWidths[index], rawWidth[index]],
+        [allocation.lengthWeights[index], weight],
+        [allocation.widthFactors[index], widthFactor],
+        [allocation.lengths[index], length],
+        [allocation.centers[index], center],
+        [volumes[index].dimensions[0], length],
+        [volumes[index].dimensions[1], width],
+        [volumes[index].position[0], center],
+      ].every(([a, b]) => near(a, b))
+    )
+      return rejection(
+        "regional-field-mismatch",
+        "Allocated source stations must match retained inherited fields without repair.",
+        [volumes[index].id],
+      );
+  }
+  return {
+    status: "valid",
+    neckRatio: active
+      ? facts.joinNeckRatio.value
+      : GRAPH_SOURCE_PROFILE.neckRatio,
+    sources: active
+      ? uniqueSources(
+          facts.joinNeckRatio.sources,
+          facts.joinNeckRatio.prerequisites,
+        )
+      : [],
+  };
+}
+
 export function constructGraphSource(result, options = {}) {
   const validation = validateSource(result, options);
   if (validation.status === "rejected") return validation;
   try {
     const { orderedVolumes, byId } = validation;
     const graph = result.graph;
-    const body = buildBody(orderedVolumes, graph);
+    const regional = options.profileVersion === "graph-source/2";
+    const regionalCheck = regional
+      ? validateRegionalField(result, orderedVolumes)
+      : null;
+    if (regionalCheck?.status === "rejected") return regionalCheck;
+    const profile = regional
+      ? {
+          ...GRAPH_SOURCE_PROFILE,
+          id: "graph-source/2",
+          sourceRuleVersion: BODY_ORGANIZATION_RULE,
+          neckRatio: regionalCheck.neckRatio,
+          neckAuthority:
+            "Inherited join-neck-ratio; inactive for a single station.",
+        }
+      : GRAPH_SOURCE_PROFILE;
+    const body = buildBody(
+      orderedVolumes,
+      graph,
+      profile.neckRatio,
+      regionalCheck?.sources ?? [],
+    );
+    if (regional)
+      body.inheritedBodyField = structuredClone(result.regionalAllocation);
     if (
       body.lowerEnvelope.some(
         (p, index) => index && p[0] <= body.lowerEnvelope[index - 1][0],
@@ -858,7 +1068,7 @@ export function constructGraphSource(result, options = {}) {
     const construction = {
       status: "constructed",
       schemaVersion: "critter-graph-source/1",
-      profile: { ...GRAPH_SOURCE_PROFILE },
+      profile: { ...profile },
       sourceResultDigest: digest(result),
       bodyExteriors: [body],
       localFrames: appendages.map((item) => ({
@@ -872,12 +1082,12 @@ export function constructGraphSource(result, options = {}) {
         sourceNodeIds: [...item.sourceNodeIds],
         sourceEdgeIds: [...item.sourceEdgeIds],
         locusIds: [...item.sources],
-        constructionProfile: GRAPH_SOURCE_PROFILE.id,
+        constructionProfile: profile.id,
       })),
       bounds: boundsOf(allPoints),
       limitations: [
         "Static planar construction proof; no physical tissue, motion, rig, pose validity or finished art is established.",
-        "Rounded joins and nearest-station material domains are provisional graph-source/1 construction rules.",
+        `Rounded joins and nearest-station material domains are provisional ${profile.id} construction rules.`,
         "Original node centers remain source evidence; downstream endpoints are new solved positions.",
         "Height and source Z coordinates remain retained facts; the exported view is an XY projection.",
         "Membranes, radial symmetry, branches, deformation and marked-surface projection are unsupported in this slice.",

@@ -1,4 +1,5 @@
 import { GRAPH_COVERING_RULE_VERSION } from "./graph-covering-catalogue.mjs";
+import { BODY_ORGANIZATION_RULE } from "./body-organization-catalogue.mjs";
 import { GRAPH_MODULE_RULE_VERSION } from "./graph-module-catalogue.mjs";
 import { readFileSync } from "node:fs";
 import { canonicalJson, digest } from "./evaluate.mjs";
@@ -128,13 +129,19 @@ export function resolveAuthoring(input) {
   const coveringModule = catalogue.ruleVersion === GRAPH_COVERING_RULE_VERSION;
   const ocularModule =
     catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION || coveringModule;
-  const requiredScene = coveringModule ? "body-covering/1" : "ocular-module/1";
+  const regionalProfile = catalogue.ruleVersion === BODY_ORGANIZATION_RULE;
+  const unsupportedPresentation = ocularModule || regionalProfile;
+  const requiredScene = regionalProfile
+    ? "graph-source/2 body-only"
+    : coveringModule
+      ? "body-covering/1"
+      : "ocular-module/1";
   if (ocularModule)
     packet.presentation = {
       status: "unsupported",
       reason: `Requires the ${requiredScene} scene consumer; the existing diagnostic cannot depict this module.`,
     };
-  packet.diagnostic = ocularModule
+  packet.diagnostic = unsupportedPresentation
     ? ""
     : continuous
       ? drawContinuousFamily(result)
@@ -147,7 +154,7 @@ export function resolveAuthoring(input) {
       canonicalGeometryReference: "orthographic XY, unrotated",
       sharedCamera: result.graph.profile.referenceCamera,
     };
-  packet.description = ocularModule
+  packet.description = unsupportedPresentation
     ? coveringModule
       ? `Broad body expression and inherited module facts are retained. Use the ${requiredScene} scene consumer; physiology is not modeled.`
       : "Broad body expression and inherited ocular facts are retained. Use the ocular-module/1 scene consumer for the constructed ocular pair; sensing is not modeled."
@@ -162,7 +169,7 @@ export function resolveAuthoring(input) {
     contentVersion: packet.contentVersion,
     ruleVersion: packet.ruleVersion,
   };
-  packet.geometryReference = ocularModule
+  packet.geometryReference = unsupportedPresentation
     ? {
         status: "rejected",
         error: `Requires the ${requiredScene} scene consumer; the existing body-only reference omits the inherited module.`,
@@ -177,6 +184,20 @@ export function resolveAuthoring(input) {
     ]),
   );
   packet.identity = authoringIdentity(packet);
+  if (catalogue.ruleVersion === BODY_ORGANIZATION_RULE) {
+    packet.presentation = {
+      status: "unsupported",
+      reason:
+        "Requires graph-source/2 body-only construction; ocular and covering modules are not depicted.",
+    };
+    packet.diagnostic = "";
+    packet.geometryReference = {
+      status: "rejected",
+      error: packet.presentation.reason,
+    };
+    packet.description =
+      "Inherited regional body growth and all carried module facts are retained. Use the graph-source/2 body-only source proof.";
+  }
   try {
     packet.prompt = projectArtPrompt(packet);
   } catch (error) {
@@ -254,6 +275,10 @@ export function projectArtPrompt(packet) {
   if (packet.ruleVersion === GRAPH_COVERING_RULE_VERSION)
     throw new Error(
       "Unsupported body-covering/1 art projection: a module-aware renderer brief is required.",
+    );
+  if (packet.ruleVersion === BODY_ORGANIZATION_RULE)
+    throw new Error(
+      "Unsupported regional-growth art projection: requires graph-source/2 body-only construction; module depiction is not supplied.",
     );
   if (packet.ruleVersion === GRAPH_MODULE_RULE_VERSION)
     throw new Error(
