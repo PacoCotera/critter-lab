@@ -1082,3 +1082,21 @@ footer {
 .future-world .play-features { margin-top:25px; }
 
 .native-portrait img { max-width:360px; margin:0 auto; }
+
+/* Concept and native evidence retain their original proportions. */
+.vision { background:var(--paper); }
+.vision-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; margin-top:45px; align-items:start; }
+.vision-comparison figure { padding:20px; background:var(--stone); border-radius:6px; }
+.vision-comparison img { border-radius:4px; }
+.vision-comparison figcaption { font-size:.9375rem; line-height:1.5; margin-top:18px; }
+.vision-comparison figcaption strong { display:block; margin-bottom:8px; }
+@media(max-width:600px) {
+  .vision-comparison { grid-template-columns:1fr; gap:25px; }
+  .vision-comparison figure { padding:16px; }
+}
+
+/* Show the entire family, including its shared Caddy. */
+.hero-image img { aspect-ratio:auto; object-fit:contain; }
+.vision .genomics-heading { grid-template-columns:1fr; gap:30px; }
+.vision .genomics-heading > p { max-width:800px; }
+.concept-gallery > figure:first-of-type { grid-column:1 / -1; }

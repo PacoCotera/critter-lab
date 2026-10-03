@@ -1,9 +1,8 @@
-# Beecho Lab
+# Critter Lab
 
 Explore outside. Investigate a mystery. Meet a Beecho of your own.
 
-Formerly Critter Lab; repository URLs and original references retain that name.
-Beecho Lab is a creature-research game built around physical instruments, with
+Critter Lab is a creature-research game built around physical instruments, with
 one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 [Meet the game](docs/players/README.md) or [run the software](docs/builders/getting-started.md).
 

@@ -1,5 +1,5 @@
 {
-  "boundary": "Unchanged actual native C17 host captures from isolated saved worlds. Internally reviewed prototype; no physical or human-playtest evidence.",
+  "boundary": "Actual host-native software captures and unchanged retained concept references. Per-asset labels distinguish provenance; no physical or human-playtest evidence.",
   "assets": [
     {
       "asset": "dist/assets/native-home.png",
@@ -48,6 +48,48 @@
       "source": "docs/evidence/polished-core-v1/A-dock-offline-restart.png",
       "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
       "sha256": "bc6940a77855d265704273f1648bd29e91696ac616c86ec107658f4b5d651f8f"
+    },
+    {
+      "asset": "dist/assets/original-ecosystem.png",
+      "source": "design/references/ecosystem.png",
+      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
+      "sha256": "d54d9414c92f475a95bcf4ff0dca30b82faa013145e88465c0df7caf06cd94d3",
+      "boundary": "Retained original concept; separate Probe, phone-led layout and Lab printer are superseded."
+    },
+    {
+      "asset": "dist/assets/research-current.png",
+      "source": "docs/evidence/research-workpiece/complete-coat.png",
+      "sourceRevision": "ff5616bd3bbadc2ac167cc6a20a5acec75a2dd60",
+      "sha256": "754896f501659b717855194235ebdab81f1e4d360e49254837d8e61acf723cb9",
+      "boundary": "Actual LVGL host framebuffer from synthetic retained fixture. Historical Beecho Lab label preserved in original pixels."
+    },
+    {
+      "asset": "dist/assets/critter-lab-family.png",
+      "source": "design/lab-controls/combined-family-materials.png",
+      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
+      "sha256": "16c78c7301c120997d35bab734cd615fdcd1565905943b4dd46c60967fa69ca5",
+      "boundary": "Retained concept reference; not physical hardware or current native UI."
+    },
+    {
+      "asset": "dist/assets/companion-concept.png",
+      "source": "design/lab-controls/combined-companion.png",
+      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
+      "sha256": "50d0ca8e0ac73ef7a23514b3084bf4ae6f1954fecf0799c25e045b0fc8027a31",
+      "boundary": "Retained concept reference; not physical hardware or current native UI."
+    },
+    {
+      "asset": "dist/assets/concept-probe.png",
+      "source": "design/companion-connected-art/03-usage-preview-450x600.png",
+      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
+      "sha256": "64389732495f6a0205ea23c1e9ba3783a6920bbc51a58edeab1e85623b456c01",
+      "boundary": "Retained concept reference; not physical hardware or current native UI."
+    },
+    {
+      "asset": "dist/assets/concept-reception.png",
+      "source": "design/companion-connected-art/07-usage-preview-1024x600.png",
+      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
+      "sha256": "73ec9f833c9e28d4d9894929ed3834290a97b462fd7f57cea2f249df3f29c979",
+      "boundary": "Retained concept reference; not physical hardware or current native UI."
     }
   ]
 }
