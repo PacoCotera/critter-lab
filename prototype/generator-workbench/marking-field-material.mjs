@@ -25,10 +25,15 @@ function originalAtlas(owner, originalPoints, actualPoints) {
   }
   const coordinates = originalPoints.map((point) => {
     const local = localPoint(owner, point);
+    const u = (local[0] / owner.radii[0] + 1) / 2;
     const y = local[1] / owner.radii[1], z = local[2] / owner.radii[2];
-    const pole = Math.hypot(y, z) <= EPSILON;
+    // Barrel endpoint arithmetic can retain a tiny transverse residue. The
+    // original longitudinal cap still has no independent azimuth; preserve
+    // its actual3D point and use the declared mean non-pole cap coordinate.
+    const cap = Math.abs(u) <= EPSILON || Math.abs(u - 1) <= EPSILON;
+    const pole = cap || Math.hypot(y, z) <= EPSILON;
     const angle = Math.atan2(z, y) / (2 * Math.PI);
-    return { u: (local[0] / owner.radii[0] + 1) / 2, v: (angle + 1) % 1, pole };
+    return { u, v: (angle + 1) % 1, pole };
   });
   const anchor = coordinates.find((point) => !point.pole)?.v;
   if (anchor === undefined) throw new Error(`Marking atlas has no non-pole frame on ${owner.id}`);
