@@ -1,7 +1,7 @@
 
 import { add, sub, mul, dot, cross, unit } from "./anatomical-source-construction.mjs";
 import { realizeMaterialFields } from "./compositional-source-presentation.mjs";
-import { meshEnvelope, localPoint, localVector, worldPoint } from "./compositional-vocabulary-construction.mjs";
+import { meshEnvelope, localPoint, localVector, worldPoint, FUR_DEPICTION_PROFILE } from "./compositional-vocabulary-construction.mjs";
 import { VOCABULARY_CONTENT, VOCABULARY_PROFILE } from "./compositional-vocabulary-package.mjs";
 function clipLocalU(points, owner, threshold, below) {
   const u = (point) => (localPoint(owner, point)[0] / owner.radii[0] + 1) / 2;
@@ -151,7 +151,27 @@ function vocabularySourceReference(scene) {
     framing: "own-source and visible material bounds"
   }, mapping: { scale, offsetX, offsetY }, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>Provisional compositional vocabulary source</title><rect width="512" height="512" fill="#f7f3e8"/>${shapes}</svg>` };
 }
+function vocabularyFurReference(scene) {
+  if (scene.status !== "constructed" || scene.profileVersion !== FUR_DEPICTION_PROFILE || scene.covering.profileVersion !== VOCABULARY_CONTENT.materialProfile) {
+    throw new Error("Unsupported fur depiction source/reference identity");
+  }
+  // Reuse the original trusted renderer without changing its geometry, camera
+  // or light. Only its exact generated fur-polygon attributes are transformed.
+  const original = vocabularySourceReference({ ...scene, profileVersion: VOCABULARY_PROFILE });
+  const expectedFurPolygons = (original.svg.match(/data-material="fur"/g) ?? []).length;
+  let changedFurPolygons = 0;
+  const furPolygon = /(<polygon data-owner="[a-z0-9-]+" data-material="fur" points="[^"]+" fill="(#[0-9a-f]{6})" )stroke="\2" stroke-width="0\.4"( stroke-linejoin="round"\/>)/g;
+  const svg = original.svg.replace(furPolygon, (_, prefix, fill, suffix) => {
+    changedFurPolygons++;
+    return `${prefix}stroke="${shade(fill, 0.8)}" stroke-width="0.7"${suffix}`;
+  });
+  if (changedFurPolygons !== expectedFurPolygons) {
+    throw new Error("Unsupported generated fur-polygon attributes");
+  }
+  return { ...original, profileVersion: "compositional-reference/4", svg };
+}
 export {
   realizeVocabularyMaterials,
-  vocabularySourceReference
+  vocabularySourceReference,
+  vocabularyFurReference
 };

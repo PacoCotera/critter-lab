@@ -17,6 +17,7 @@ function frameAlong(direction) {
 }
 const rotateX = (point, angle) => [point[0], point[1] * Math.cos(angle) - point[2] * Math.sin(angle), point[1] * Math.sin(angle) + point[2] * Math.cos(angle)];
 const MESH_CONTACT_PROFILE = VOCABULARY_PROFILE;
+const FUR_DEPICTION_PROFILE = "compositional-source/4";
 function meshEnvelope(owner) {
   const planes = owner.mesh.faces.map((face, facetIndex) => {
     const points = face.vertices.map((index) => owner.mesh.vertices[index]);
@@ -203,7 +204,7 @@ function buildCompositionalSource(values, facts, profileVersion) {
     let realizedStart = start;
     let realizedEnd = end;
     let meshContact = null;
-    if (profileVersion === MESH_CONTACT_PROFILE) {
+    if ([MESH_CONTACT_PROFILE, FUR_DEPICTION_PROFILE].includes(profileVersion)) {
       const parentContact = meshContactGeometry(parent, direction);
       const childContact = meshContactGeometry(child, mul(direction, -1));
       if (penetration >= Math.min(parentContact.distance, childContact.distance)) throw new Error("Narrow contact penetration exceeds owner interior");
@@ -531,11 +532,15 @@ function buildCompositionalSource(values, facts, profileVersion) {
     groundPlane: "none; contact chains retain only their local contact convention"
   } };
 }
-function constructCompositionalVocabulary(values, facts) {
-  return buildCompositionalSource(values, facts, VOCABULARY_PROFILE);
+function constructCompositionalVocabulary(values, facts, profileVersion = VOCABULARY_PROFILE) {
+  if (![VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE].includes(profileVersion)) {
+    throw new Error("Unsupported vocabulary construction profile");
+  }
+  return buildCompositionalSource(values, facts, profileVersion);
 }
 export {
   constructCompositionalVocabulary,
+  FUR_DEPICTION_PROFILE,
   localPoint,
   localVector,
   meshEnvelope,

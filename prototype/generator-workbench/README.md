@@ -38,8 +38,8 @@ switching packages is deliberate and never migrates their genomes. See the
 ### Compositional Generate and all eleven genomic branches
 
 `genomic-compositional-source-experiment@2` uses separately pinned
-`developmental-compositional-source/2`, `compositional-source/3`,
-`compositional-surface-fields/2` and `compositional-reference/3` rules. The
+`developmental-compositional-source/2`, `compositional-source/4`,
+`compositional-surface-fields/2` and `compositional-reference/4` rules. The
 retained version1 package remains selectable with its original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
@@ -75,8 +75,15 @@ Original `compositional-source/1` records also retain their exact builder and
 the visible retained mesh for narrow contacts; `/1` used analytic ellipsoid
 roots that could leave a visible gap. Version1 Generate and Resolve retain `/2` and
 `compositional-reference/2`. Current version2 Generate and Resolve use the new
-104-pair foundation and `/3` construction/reference; no old input acquires the
+104-pair foundation and `/4` construction/reference; no old input acquires the
 new vocabulary automatically. Reopening an old record does not silently upgrade it.
+
+Original vocabulary `/3` construction/reference records remain exactly replayable.
+The `/4` reference changes only fur outlines to .80 times their already-lit fill
+and .70px width at512; geometry, material2, copied pigments, light, camera and
+clipping stay unchanged. Actual `/3` inspection withheld fur-readability acceptance
+because its ribbons blended into smooth skin. Revised `/4` readability awaits
+actual-image review; neither reference is approved finished pet art.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared

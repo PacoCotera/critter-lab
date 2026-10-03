@@ -92,6 +92,14 @@ kind, extent, scale and flow; it must not install another anatomy graph.
   no fur consumer and keeps its original material path. See the exact
   [vocabulary contract](compositional-contract.md#current-shape-terminal-and-covering-vocabulary).
 
+Actual reference `/3` inspection found the authored fur field visually blended
+into smooth skin, so fur readability was withheld. Current reference `/4` retains
+those exact roots, fill, facet lighting, masks and camera, and adds only fur edges
+at .80 times the already-lit fill with .70px width at512. It adds no fibres, solid
+tufts, glints or base-skin triangulation. Original `/3` output remains exact for
+saved recipes. This bounded depiction correction awaits actual-image acceptance;
+it is not finished pet-art approval.
+
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base
 pigments. A local split repeats per owning surface; it is neither averaged colour

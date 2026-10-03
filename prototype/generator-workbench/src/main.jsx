@@ -533,7 +533,7 @@ function Workbench() {
     );
   }
   function saveRecord() {
-    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(packet.sceneProjectionVersion)
+    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion)
       ? { ...sceneReplayEnvelope(packet), recordId: packet.recordId, savedLabel: packet.result.classification.labels.join(" · ") }
       : clone(packet);
     const next = [
@@ -578,7 +578,7 @@ function Workbench() {
             resultDigest: imported.resultDigest,
           };
       const data = await request(
-        ["compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(imported.sceneProjectionVersion)
+        ["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(imported.sceneProjectionVersion)
           ? "/api/compositional-source/replay"
           : imported.sceneProjectionVersion === "anatomical-source/1"
           ? "/api/anatomical-source/replay"

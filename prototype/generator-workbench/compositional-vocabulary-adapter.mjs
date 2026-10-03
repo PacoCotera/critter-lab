@@ -12,9 +12,9 @@ import {
   compositionalVocabularyPackage
 } from "./compositional-vocabulary-package.mjs";
 const COMPOSITIONAL_CONTENT = { ...RETAINED_CONTENT, baseline: VOCABULARY_CONTENT.baseline, loci: [...RETAINED_CONTENT.loci, ...VOCABULARY_CONTENT.loci], materialProfile: VOCABULARY_CONTENT.materialProfile };
-import { constructCompositionalVocabulary } from "./compositional-vocabulary-construction.mjs";
+import { constructCompositionalVocabulary, FUR_DEPICTION_PROFILE } from "./compositional-vocabulary-construction.mjs";
 import { realizePigmentFields } from "./compositional-source-presentation.mjs";
-import { realizeVocabularyMaterials, vocabularySourceReference } from "./compositional-vocabulary-presentation.mjs";
+import { realizeVocabularyMaterials, vocabularySourceReference, vocabularyFurReference } from "./compositional-vocabulary-presentation.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const modeled = COMPOSITIONAL_CATALOGUE.loci.filter((locus) => locus.status === "validated");
@@ -83,9 +83,9 @@ function consumerGuard(locusId, values) {
   if (locusId.startsWith("growth.wing-")) return [values["modules.wingPair"], "independent thin-surface owner"];
   return guards[locusId] ?? [true, "compatible construction consumer"];
 }
-function resolveCompositionalVocabulary(input, profileVersion = VOCABULARY_PROFILE) {
+function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE) {
   try {
-    if (profileVersion !== VOCABULARY_PROFILE) throw new Error("Unsupported compositional construction profile");
+    if (![VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE].includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
     const catalogue = exactCatalogue(input.catalogue), genome = input.genome;
     envelope(genome, ["schemaVersion", "contentId", "contentVersion", "loci", "recordVersions", "baselineReferences", "origin"]);
@@ -135,11 +135,11 @@ function resolveCompositionalVocabulary(input, profileVersion = VOCABULARY_PROFI
       }
     }
     const scene = realizeVocabularyMaterials(
-      realizePigmentFields(constructCompositionalVocabulary(values, facts)),
+      realizePigmentFields(constructCompositionalVocabulary(values, facts, profileVersion)),
       values,
       facts
     );
-    const reference = vocabularySourceReference(scene);
+    const reference = profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
     for (const fact of facts.filter((entry) => structuralIds.has(entry.locusId))) {
       fact.consumers = [
         ...scene.nodes.filter((node) => node.sources.includes(fact.locusId)).map((node) => node.id),
@@ -225,7 +225,7 @@ function generateCompositionalVocabulary(input) {
 function replayCompositionalVocabulary(record) {
   try {
     envelope(record, ["schemaVersion", "sceneProjectionVersion", "materialProfileVersion", "sceneRecordId", "input", "inputDigest", "resultDigest", "sceneDigest"]);
-    if (record.schemaVersion !== COMPOSITIONAL_PACKET_SCHEMA || record.sceneProjectionVersion !== VOCABULARY_PROFILE || record.materialProfileVersion !== COMPOSITIONAL_CONTENT.materialProfile) throw new Error("Unsupported compositional record/profile");
+    if (record.schemaVersion !== COMPOSITIONAL_PACKET_SCHEMA || ![VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE].includes(record.sceneProjectionVersion) || record.materialProfileVersion !== COMPOSITIONAL_CONTENT.materialProfile) throw new Error("Unsupported compositional record/profile");
     const packet = resolveCompositionalVocabulary(record.input, record.sceneProjectionVersion);
     if (packet.status !== "resolved") return packet;
     if (["inputDigest", "resultDigest", "sceneDigest", "sceneRecordId"].some((key) => record[key] !== packet[key]))

@@ -136,7 +136,10 @@ contributors rather than selecting named examples. Pigment partitions and
 smooth/scales and whole-primary fur fields have explicit surface owners. The
 separately pinned catalogue2 adds six shape/terminal/fur contributors, actual
 convex-ring facet roots and contact-terminal envelopes through source3,
-material2 and reference3. Catalogue1 and exact source/reference1/2 paths remain
+material2 and reference3. Current source4/reference4 keeps that geometry and
+material while changing only fur-edge contrast; exact source3/reference3 recovery
+remains available. The actual source3 fur-readability review was withheld, and
+the revised depiction awaits image acceptance. Catalogue1 and exact source/reference1/2 paths remain
 available; dispatch never upgrades an old input or supplies missing alleles. Coarse low-poly depiction
 communicates volume and occlusion; it does not establish finished pet art,
 biology or motion. Tail, hoof/toe anatomy, partial coats, emission, broader organism range
