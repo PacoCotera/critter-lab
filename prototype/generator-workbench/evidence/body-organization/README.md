@@ -24,8 +24,10 @@ envelopes, not finished organic limbs or pet art.
 Art direction and the production artist inspected this actual sheet: the
 organization difference survives removal of pigments, all six roots are visibly
 attached and no clipping is visible. That is a source-organization pass only.
-The workbench's current Generate action still uses the earlier package; these
-images do not imply the new profile is already active there.
+These images are the body-only proof. The separate [full-scene workbench
+integration](../regional-scene-workbench/README.md) connects the same inherited
+geometry to Generate, actual optional eyes and skin/scales; it preserves these
+body-only records unchanged.
 
 ## Retained inputs and uncurated generation
 

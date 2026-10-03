@@ -1,3 +1,4 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { describeCoveringField } from "./art-brief.mjs";
 import { resolve } from "node:path";
@@ -13,7 +14,12 @@ import {
 import { generateGenome, validateCatalogue, isRecord } from "./model.mjs";
 import { GRAPH_COVERING_CATALOGUE } from "./graph-covering-catalogue.mjs";
 import { bodyCoveringProofCases } from "./construct-covering-proof.mjs";
-import { constructModuleScene, MODULE_SCENE_VERSION } from "./module-scene.mjs";
+import {
+  constructModuleScene,
+  MODULE_SCENE_VERSION,
+  REGIONAL_SCENE_VERSION,
+  sceneVersionForRule,
+} from "./module-scene.mjs";
 import {
   drawBodyCoveringScene,
   drawBodyCoveringComparison,
@@ -69,7 +75,7 @@ function sceneReference(scene) {
   });
   return {
     status: "constructed",
-    profileVersion: MODULE_SCENE_VERSION,
+    profileVersion: scene.profileVersion,
     sceneDigest: scene.sceneDigest,
     svg,
     svgDigest: digest(svg),
@@ -300,11 +306,17 @@ function verifiedSource(packet) {
   if (
     packet?.status !== "resolved" ||
     packet.schemaVersion !== PACKET_SCHEMA ||
-    packet.sceneProjectionVersion !== MODULE_SCENE_VERSION
+    ![MODULE_SCENE_VERSION, REGIONAL_SCENE_VERSION].includes(
+      packet.sceneProjectionVersion,
+    )
   )
     throw new Error("A current resolved module scene packet is required.");
   const artVersion = packet.sceneProjection?.artVersion;
-  if (!supportedArtVersions.includes(artVersion))
+  if (
+    !supportedArtVersions.includes(artVersion) ||
+    (packet.sceneProjectionVersion === REGIONAL_SCENE_VERSION &&
+      artVersion !== SCENE_ART_VERSION)
+  )
     throw new Error(
       "Only declared scene-art /2 and /3 projections are supported.",
     );
@@ -322,15 +334,18 @@ function verifiedSource(packet) {
     throw new Error(
       "Scene inputs and metadata must match independent genetic replay.",
     );
+  const profileVersion = sceneVersionForRule(source.ruleVersion);
+  if (packet.sceneProjectionVersion !== profileVersion)
+    throw new Error("Scene rule and consumer profile must match.");
   const scene = constructModuleScene(source.result, {
-    profileVersion: MODULE_SCENE_VERSION,
+    profileVersion,
   });
-  const projectionId = `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion }).slice(0, 20)}`;
+  const projectionId = `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion, artVersion }).slice(0, 20)}`;
   if (
     scene.status !== "constructed" ||
     digest(scene) !== digest(packet.scene) ||
     packet.sceneProjection?.recordId !== projectionId ||
-    packet.sceneProjection?.profileVersion !== MODULE_SCENE_VERSION
+    packet.sceneProjection?.profileVersion !== profileVersion
   )
     throw new Error(
       "Scene artifact/profile must match independently reconstructed consumers.",
@@ -353,7 +368,7 @@ export function projectModuleScenePrompt(packet) {
     }),
     sceneArtifactReference: JSON.stringify({
       path: "scene",
-      profileVersion: MODULE_SCENE_VERSION,
+      profileVersion: scene.profileVersion,
       body: scene.body.constructionDigest,
       ocular: scene.ocular.moduleDigest,
       covering: scene.covering.coveringDigest,
@@ -396,8 +411,9 @@ export function resolveModuleSceneAuthoring(input) {
 function resolveScenePresentation(input, artVersion) {
   const source = resolveAuthoring(input);
   if (source.status !== "resolved") return { ...source, stage: "genetic" };
+  const profileVersion = sceneVersionForRule(source.ruleVersion);
   const scene = constructModuleScene(source.result, {
-    profileVersion: MODULE_SCENE_VERSION,
+    profileVersion,
   });
   if (scene.status !== "constructed")
     return {
@@ -409,16 +425,16 @@ function resolveScenePresentation(input, artVersion) {
     };
   const packet = {
     ...source,
-    sceneProjectionVersion: MODULE_SCENE_VERSION,
+    sceneProjectionVersion: profileVersion,
     scene,
     sceneProjection: {
-      recordId: `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion }).slice(0, 20)}`,
-      profileVersion: MODULE_SCENE_VERSION,
+      recordId: `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion, artVersion }).slice(0, 20)}`,
+      profileVersion,
       artVersion,
     },
     presentation: {
       status: "constructed",
-      profileVersion: MODULE_SCENE_VERSION,
+      profileVersion,
       view: "Orthographic XY source inspection, not finished game art.",
     },
     reference: sceneReference(scene),
@@ -471,7 +487,9 @@ export function replayModuleSceneAuthoring(envelope) {
     Object.keys(envelope).some((key) => !allowed.includes(key)) ||
     allowed.some((key) => !Object.hasOwn(envelope, key)) ||
     envelope.schemaVersion !== PACKET_SCHEMA ||
-    envelope.sceneProjectionVersion !== MODULE_SCENE_VERSION ||
+    ![MODULE_SCENE_VERSION, REGIONAL_SCENE_VERSION].includes(
+      envelope.sceneProjectionVersion,
+    ) ||
     allowed
       .filter((key) => key.endsWith("Digest"))
       .some((key) => !/^[a-f0-9]{64}$/.test(envelope[key]))
@@ -485,7 +503,10 @@ export function replayModuleSceneAuthoring(envelope) {
       "scene-replay-transport",
       "Compact scene replay exceeds the unchanged 64 KiB transport bound.",
     );
-  for (const artVersion of supportedArtVersions) {
+  for (const artVersion of envelope.sceneProjectionVersion ===
+  REGIONAL_SCENE_VERSION
+    ? [SCENE_ART_VERSION]
+    : supportedArtVersions) {
     const packet = resolveScenePresentation(envelope.input, artVersion);
     if (packet.status !== "resolved") return packet;
     const actual = compactSceneReplayEnvelope(packet);
@@ -521,7 +542,9 @@ export function generateModuleSceneAuthoring(catalogue, seed, options = {}) {
   const checked = validateCatalogue(catalogue);
   if (!checked.valid) return { status: "rejected", errors: checked.errors };
   if (
-    catalogue.ruleVersion !== "developmental-covering/1" ||
+    !["developmental-covering/1", REGIONAL_SCENE_RULE].includes(
+      catalogue.ruleVersion,
+    ) ||
     !Number.isInteger(seed) ||
     seed < 0 ||
     seed > 0xffffffff ||

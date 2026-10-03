@@ -1,3 +1,4 @@
+import { regionalSceneWorkbenchPackage } from "./regional-scene-workbench-package.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
@@ -59,6 +60,7 @@ export function makeServer() {
         return json(200, {
           ...moduleSceneCatalogue(),
           candidatePackage: pigmentWorkbenchPackage(),
+          regionalPackage: regionalSceneWorkbenchPackage(),
         });
       const operations = [
         "/api/evaluate",

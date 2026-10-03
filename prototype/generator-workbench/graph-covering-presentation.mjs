@@ -25,10 +25,13 @@ export function drawBodyCoveringScene(
   const { moduleDigest, ...ocularRetained } = ocular ?? {};
   if (
     covering?.status !== "constructed" ||
-    covering.profile?.id !== "body-covering/1" ||
+    !["body-covering/1", "body-covering/2"].includes(covering.profile?.id) ||
     digest(retained) !== coveringDigest ||
     ocular?.status !== "constructed" ||
-    ocular.profile?.id !== "ocular-module/2" ||
+    ocular.profile?.id !==
+      (covering.profile.id === "body-covering/2"
+        ? "ocular-module/3"
+        : "ocular-module/2") ||
     digest(ocularRetained) !== moduleDigest ||
     covering.ocularModuleDigest !== moduleDigest ||
     covering.bodyConstructionDigest !== body?.constructionDigest ||

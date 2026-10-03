@@ -1,3 +1,5 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
+import { BODY_ORGANIZATION_RULE } from "./body-organization-catalogue.mjs";
 import { digest } from "./evaluate.mjs";
 import { constructGraphSource } from "./graph-source-construction.mjs";
 import { constructOcularModule } from "./graph-module-construction.mjs";
@@ -231,9 +233,19 @@ export function constructBodyCovering(
   ocularModule,
   options = {},
 ) {
+  const profile =
+    options?.profileVersion === "body-covering/2"
+      ? {
+          ...BODY_COVERING_PROFILE,
+          id: "body-covering/2",
+          sourceRuleVersion: REGIONAL_SCENE_RULE,
+          baseGraphRuleVersion: BODY_ORGANIZATION_RULE,
+          ocularModuleRuleVersion: "ocular-module/3",
+        }
+      : BODY_COVERING_PROFILE;
   if (
     !isRecord(options) ||
-    options.profileVersion !== BODY_COVERING_PROFILE.id ||
+    options.profileVersion !== profile.id ||
     Object.keys(options).some((key) => key !== "profileVersion")
   )
     return rejected(
@@ -243,12 +255,10 @@ export function constructBodyCovering(
   if (
     !isRecord(result) ||
     result.status !== "resolved" ||
-    result.sourceRuleVersion !== BODY_COVERING_PROFILE.sourceRuleVersion ||
-    result.baseGraphRuleVersion !==
-      BODY_COVERING_PROFILE.baseGraphRuleVersion ||
-    result.ocularModuleRuleVersion !==
-      BODY_COVERING_PROFILE.ocularModuleRuleVersion ||
-    result.coveringModuleRuleVersion !== BODY_COVERING_PROFILE.id ||
+    result.sourceRuleVersion !== profile.sourceRuleVersion ||
+    result.baseGraphRuleVersion !== profile.baseGraphRuleVersion ||
+    result.ocularModuleRuleVersion !== profile.ocularModuleRuleVersion ||
+    result.coveringModuleRuleVersion !== profile.id ||
     !Array.isArray(result.facts)
   )
     return rejected(
@@ -256,7 +266,8 @@ export function constructBodyCovering(
       "Exact full-source and consumer rule metadata is required.",
     );
   const body = constructGraphSource(result, {
-    profileVersion: "graph-source/1",
+    profileVersion:
+      profile.id === "body-covering/2" ? "graph-source/2" : "graph-source/1",
     sourceRuleVersion: result.baseGraphRuleVersion,
   });
   if (
@@ -358,7 +369,7 @@ export function constructBodyCovering(
     kind.value === "scales"
       ? unique(kind.sources, extent.sources, scale.sources)
       : [...kind.sources];
-  const dependencyLocusIds =
+  let dependencyLocusIds =
     kind.value === "scales"
       ? unique(
           kind.prerequisites,
@@ -370,6 +381,19 @@ export function constructBodyCovering(
           surfaces.flatMap((surface) => surface.sources),
         ).filter((id) => !directLocusIds.includes(id))
       : [];
+  if (profile.id === "body-covering/2") {
+    const inactiveRegional = result.facts
+      .filter(
+        (fact) =>
+          isRecord(fact) &&
+          ["regionalGrowth", "joinNeckRatio"].includes(fact.id) &&
+          fact.state === "inactive",
+      )
+      .map((fact) => fact.locusId);
+    dependencyLocusIds = dependencyLocusIds.filter(
+      (id) => !inactiveRegional.includes(id),
+    );
+  }
   const plates = [],
     excludedCandidates = [];
   const counts = {
@@ -399,20 +423,19 @@ export function constructBodyCovering(
       bodyMaximumX: maximumX,
     };
     const halfWidth = scale.value * width.value;
-    const halfHeight = halfWidth * BODY_COVERING_PROFILE.plateHalfHeightRatio;
-    const pitchX = halfWidth * BODY_COVERING_PROFILE.pitchXRatio,
-      pitchY = halfWidth * BODY_COVERING_PROFILE.pitchYRatio;
+    const halfHeight = halfWidth * profile.plateHalfHeightRatio;
+    const pitchX = halfWidth * profile.pitchXRatio,
+      pitchY = halfWidth * profile.pitchYRatio;
     const localOutline = Array.from(
-      { length: BODY_COVERING_PROFILE.contourSamples },
+      { length: profile.contourSamples },
       (_, index) => {
-        const angle =
-          (index * 2 * Math.PI) / BODY_COVERING_PROFILE.contourSamples;
+        const angle = (index * 2 * Math.PI) / profile.contourSamples;
         return [
           halfWidth * Math.cos(angle),
           halfHeight *
             Math.sin(angle) *
-            (BODY_COVERING_PROFILE.contourTaperBase +
-              BODY_COVERING_PROFILE.contourTaperAmplitude * Math.cos(angle)),
+            (profile.contourTaperBase +
+              profile.contourTaperAmplitude * Math.cos(angle)),
         ];
       },
     );
@@ -436,7 +459,7 @@ export function constructBodyCovering(
         counts,
       );
     counts.plannedCandidates = rows * columns;
-    if (counts.plannedCandidates > BODY_COVERING_PROFILE.maximumCandidates)
+    if (counts.plannedCandidates > profile.maximumCandidates)
       return rejected(
         "candidate-budget",
         "The complete lattice exceeds its candidate budget; no truncated field is returned.",
@@ -487,7 +510,7 @@ export function constructBodyCovering(
               (total, fragment) => total + area(fragment.polygon),
               0,
             ) - area(outline),
-          ) > BODY_COVERING_PROFILE.tolerance
+          ) > profile.tolerance
         )
           return rejected(
             "pigment-domain",
@@ -495,7 +518,7 @@ export function constructBodyCovering(
             counts,
           );
         counts.accepted++;
-        if (counts.accepted > BODY_COVERING_PROFILE.maximumPlates)
+        if (counts.accepted > profile.maximumPlates)
           return rejected(
             "plate-budget",
             "The complete eligible field exceeds the plate budget; no truncated field is returned.",
@@ -524,7 +547,7 @@ export function constructBodyCovering(
   const covering = {
     status: "constructed",
     schemaVersion: "critter-body-covering/1",
-    profile: { ...BODY_COVERING_PROFILE },
+    profile: { ...profile },
     sourceResultDigest: digest(result),
     bodyConstructionDigest: body.constructionDigest,
     ocularModuleDigest: ocular.moduleDigest,

@@ -1,3 +1,4 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
 import {
   GRAPH_COVERING_RULE_VERSION,
   GRAPH_COVERING_TARGETS,
@@ -109,22 +110,24 @@ export function validateCatalogue(catalogue) {
   const petProfile = catalogue?.ruleVersion === PET_RULE_VERSION;
   const familyProfile =
     petProfile || catalogue?.ruleVersion === FAMILY_RULE_VERSION;
-  const regionalProfile = catalogue?.ruleVersion === BODY_ORGANIZATION_RULE;
+  const regionalProfile = [
+    BODY_ORGANIZATION_RULE,
+    REGIONAL_SCENE_RULE,
+  ].includes(catalogue?.ruleVersion);
   const moduleProfile = catalogue?.ruleVersion === GRAPH_MODULE_RULE_VERSION;
   const coveringProfile =
     catalogue?.ruleVersion === GRAPH_COVERING_RULE_VERSION;
-  const targetSpecs =
-    catalogue?.ruleVersion === BODY_ORGANIZATION_RULE
-      ? BODY_ORGANIZATION_TARGETS
-      : coveringProfile
-        ? GRAPH_COVERING_TARGETS
-        : moduleProfile
-          ? GRAPH_MODULE_TARGETS
-          : petProfile
-            ? PET_TARGETS
-            : familyProfile
-              ? FAMILY_TARGETS
-              : TARGETS;
+  const targetSpecs = regionalProfile
+    ? BODY_ORGANIZATION_TARGETS
+    : coveringProfile
+      ? GRAPH_COVERING_TARGETS
+      : moduleProfile
+        ? GRAPH_MODULE_TARGETS
+        : petProfile
+          ? PET_TARGETS
+          : familyProfile
+            ? FAMILY_TARGETS
+            : TARGETS;
   if (
     !exactKeys(catalogue, [
       "schemaVersion",
@@ -160,6 +163,7 @@ export function validateCatalogue(catalogue) {
       GRAPH_MODULE_RULE_VERSION,
       GRAPH_COVERING_RULE_VERSION,
       BODY_ORGANIZATION_RULE,
+      REGIONAL_SCENE_RULE,
     ].includes(catalogue.ruleVersion)
   )
     errors.push(
@@ -849,7 +853,9 @@ export function evaluateGenome(
       random: randomStream(expressionSeed ?? 0),
     });
   const graph = { nodes: [], edges: [], surfaces: [] };
-  const regional = catalogue.ruleVersion === BODY_ORGANIZATION_RULE;
+  const regional = [BODY_ORGANIZATION_RULE, REGIONAL_SCENE_RULE].includes(
+    catalogue.ruleVersion,
+  );
   const growthActive = regional && v.axialCount > 1;
   let regionalAllocation = null;
   if (regional) {
@@ -1339,7 +1345,14 @@ export function evaluateGenome(
     status: "resolved",
     ...(regional
       ? {
-          sourceRuleVersion: BODY_ORGANIZATION_RULE,
+          sourceRuleVersion: catalogue.ruleVersion,
+          ...(catalogue.ruleVersion === REGIONAL_SCENE_RULE
+            ? {
+                baseGraphRuleVersion: BODY_ORGANIZATION_RULE,
+                ocularModuleRuleVersion: "ocular-module/3",
+                coveringModuleRuleVersion: "body-covering/2",
+              }
+            : {}),
           bodyConstructionProfileVersion: "graph-source/2",
           regionalAllocation,
         }

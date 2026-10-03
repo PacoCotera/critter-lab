@@ -4,8 +4,8 @@ Status: **provisional host authoring proof**, separate from the game and device 
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
-The initial **Generate creature** workspace loads the separate **Experimental
-pigment candidate · v2** package, then uses one action to sample a valid genome
+The initial **Generate creature** workspace loads the separate **Regional body /
+eyes / skin-scales experiment · v1** package, then uses one action to sample a valid genome
 and constructed source scene. Its clean canonical source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
@@ -41,9 +41,24 @@ Run `node --test body-organization.test.mjs` and
 with the existing host runtime. The body-only proof compares compact contact
 and continuous tapered fin organizations, a growth-only inherited contrast,
 an inactive single-body control and eight fixed random searches. Eyes are
-explicitly off; this is source geometry, not finished pet art. The workbench's
-current Generate action still uses the earlier pigment package until a
-separate integration receives actual output review.
+explicitly off in that body-only proof; this is source geometry, not finished
+pet art.
+
+The separately identified `developmental-regional-scene/1` foundation carries
+the same 50 executable contributors into the existing Generate workspace.
+Its complete `module-scene/2` reference combines that body with actual inherited
+optional eyes and skin/scales through `ocular-module/3` and `body-covering/2`.
+Consumers independently reconstruct the source and reject incompatible or
+overlapping geometry. They do not move eyes, repair plates or turn genes off
+to obtain a winner. The short Gemini sentence is unchanged.
+
+Run `node --test regional-scene.test.mjs` for the changed tuple, actual HTTP
+transport and exact old-record replay checks. The [retained full-scene proof](evidence/regional-scene-workbench/README.md)
+contains an eyes-on skin/scales contrast and one bounded random search. Earlier
+packages remain selectable and keep their exact saved inputs, scenes and
+prompts. Broad body diversity is still incomplete: this joined source path
+supports axial organization; the original diagnostic radial graph does not
+yet produce an equivalent complete source scene.
 
 ### Candidate inherited pigments
 
@@ -52,9 +67,10 @@ additional body hues and four secondary-module hues beside the exact legacy
 controls. The separate [candidate host experiment](evidence/inherited-pigment-experiment/README.md)
 uses the existing two pigment loci, partition operator and construction rules.
 It retains controlled colour-only variants and bounded random-generation results;
-canonical colours and game residents are unchanged. Candidate v2 is the preferred
-authoring startup package; old packages retain their exact catalogues and records.
-Initial Generate waits for candidate loading. Deliberately selecting an older
+canonical colours and game residents are unchanged. Candidate v2 remains
+selectable; its inherited pigment vocabulary also feeds the new regional
+scene experiment. Old packages retain their exact catalogues and records.
+Initial Generate waits for optional package loading. Deliberately selecting an older
 package or importing a record prevents a late candidate response from switching
 its source. If optional candidate loading fails, the labelled older fallback is
 available; there is no silent migration or replacement creature.

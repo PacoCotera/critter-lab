@@ -159,7 +159,7 @@ function Workbench() {
         setContext(initial.context);
         setEdited(pretty(initial.catalogue.loci[0]));
         setMessage(
-          "Loading experimental pigment candidate… Choose an older package to use it now.",
+          "Loading regional body experiment… Choose an older package to use it now.",
         );
         try {
           setRecords(JSON.parse(localStorage.getItem(storageKey) ?? "[]"));
@@ -172,29 +172,35 @@ function Workbench() {
           .then((scenePackage) => {
             if (!active) return;
             const candidate = scenePackage.candidatePackage;
+            const regional = scenePackage.regionalPackage;
+            const preferred = regional ?? candidate;
             setPackages((current) =>
               mergeOptionalPackages(current, [
                 scenePackage,
                 ...(candidate ? [candidate] : []),
+                ...(regional ? [regional] : []),
               ]),
             );
             setSceneExamples([
               ...(scenePackage.sceneExamples ?? []),
               ...(candidate?.sceneExamples ?? []),
+              ...(regional?.sceneExamples ?? []),
             ]);
-            const status = candidate ? "ready" : "unavailable";
+            const status = preferred ? "ready" : "unavailable";
             setCandidateStatus(status);
             if (
               candidateStartupDecision(status, userIntent.current, active)
                 .selectCandidate
             ) {
-              applyPackage(candidate, candidate.sceneExamples);
+              applyPackage(preferred, preferred.sceneExamples);
               setMessage(
-                "Ready to generate an experimental pigment candidate.",
+                regional
+                  ? "Ready to generate a complete regional body scene."
+                  : "Regional body experiment unavailable. Experimental pigment package is ready.",
               );
-            } else if (!candidate && !userIntent.current) {
+            } else if (!preferred && !userIntent.current) {
               setMessage(
-                "Experimental pigment candidate unavailable. Anatomy-diversity diagnostic is ready.",
+                "Regional body experiment unavailable. Anatomy-diversity diagnostic is ready.",
               );
             }
           })
@@ -202,7 +208,7 @@ function Workbench() {
             if (!active) return;
             setCandidateStatus("unavailable");
             setErrorDetails(
-              "Experimental pigment candidate unavailable. Existing packages remain usable.",
+              "Regional body experiment unavailable. Existing packages remain usable.",
             );
             if (!userIntent.current)
               setMessage(
@@ -418,7 +424,9 @@ function Workbench() {
   }
   function exportJson(kind, value) {
     setJson(
-      value?.sceneProjectionVersion === "module-scene/1"
+      ["module-scene/1", "module-scene/2"].includes(
+        value?.sceneProjectionVersion,
+      )
         ? `${kind} — compact scene replay`
         : kind,
     );
@@ -979,8 +987,14 @@ function Workbench() {
                 </Text>
                 <Text size="xs" c="dimmed" mt="xs">
                   Display:{" "}
-                  {packet?.scene ? "module-scene/1" : "Canonical diagnostic"}.{" "}
-                  {catalogue.ruleVersion === "developmental-covering/1"
+                  {packet?.scene
+                    ? packet.sceneProjectionVersion
+                    : "Canonical diagnostic"}
+                  .{" "}
+                  {[
+                    "developmental-covering/1",
+                    "developmental-regional-scene/1",
+                  ].includes(catalogue.ruleVersion)
                     ? "Verified body, optional eyes and skin/scales source experiment; unsupported construction rejects without changing copies."
                     : catalogue.ruleVersion === "developmental-analytic/1"
                       ? "Broad graph assembly; face and covering modules are not modeled in this package."
@@ -1340,6 +1354,12 @@ function Workbench() {
                                     {cause.coveringContext
                                       ? "Covering uses this locus as an exclusion or geometry dependency."
                                       : `The ${packet.result.graph.covering.kind} covering includes this locus in its material trace.`}
+                                  </Text>
+                                )}
+                                {sceneCause?.body && (
+                                  <Text size="sm" mt="xs">
+                                    Solved body exterior uses this locus;{" "}
+                                    {sceneCause.bodyTargets} exterior target.
                                   </Text>
                                 )}
                                 {sceneCause?.ocular && (

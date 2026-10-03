@@ -1,3 +1,5 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
+import { BODY_ORGANIZATION_RULE } from "./body-organization-catalogue.mjs";
 import { digest } from "./evaluate.mjs";
 import { constructGraphSource } from "./graph-source-construction.mjs";
 
@@ -79,13 +81,20 @@ function localHalfWidth(body, x) {
 
 export function constructOcularModule(result, bodyConstruction, options = {}) {
   const profile =
-    options?.profileVersion === "ocular-module/2"
+    options?.profileVersion === "ocular-module/3"
       ? {
           ...OCULAR_MODULE_PROFILE,
-          id: "ocular-module/2",
-          sourceRuleVersion: "developmental-covering/1",
+          id: "ocular-module/3",
+          sourceRuleVersion: REGIONAL_SCENE_RULE,
+          baseGraphRuleVersion: BODY_ORGANIZATION_RULE,
         }
-      : OCULAR_MODULE_PROFILE;
+      : options?.profileVersion === "ocular-module/2"
+        ? {
+            ...OCULAR_MODULE_PROFILE,
+            id: "ocular-module/2",
+            sourceRuleVersion: "developmental-covering/1",
+          }
+        : OCULAR_MODULE_PROFILE;
   if (
     !isRecord(options) ||
     options.profileVersion !== profile.id ||
@@ -112,8 +121,19 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
         : "Resolved developmental-ocular/1 metadata and facts are required.",
     );
   // Reconstruct from the source rather than trusting a rehashed caller-supplied exterior.
+  if (
+    profile.id === "ocular-module/3" &&
+    (result.sourceRuleVersion !== REGIONAL_SCENE_RULE ||
+      result.coveringModuleRuleVersion !== "body-covering/2" ||
+      result.bodyConstructionProfileVersion !== "graph-source/2")
+  )
+    return reject(
+      "unsupported-source",
+      "Exact regional-scene source metadata is required.",
+    );
   const expectedBody = constructGraphSource(result, {
-    profileVersion: "graph-source/1",
+    profileVersion:
+      profile.id === "ocular-module/3" ? "graph-source/2" : "graph-source/1",
     sourceRuleVersion: result.baseGraphRuleVersion,
   });
   if (
@@ -172,7 +192,7 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
       "module-state",
       "Presence and dependent expression states must agree.",
     );
-  const sources = presence.value
+  let sources = presence.value
     ? [
         ...new Set(
           [presence, placement, size].flatMap((fact) => [
@@ -182,6 +202,17 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
         ),
       ]
     : [...presence.sources];
+  if (profile.id === "ocular-module/3") {
+    const inactiveRegional = result.facts
+      .filter(
+        (fact) =>
+          isRecord(fact) &&
+          ["regionalGrowth", "joinNeckRatio"].includes(fact.id) &&
+          fact.state === "inactive",
+      )
+      .map((fact) => fact.locusId);
+    sources = sources.filter((id) => !inactiveRegional.includes(id));
+  }
   const features = [];
   let geometryRule = null;
   if (presence.value) {
@@ -292,9 +323,11 @@ export function constructOcularModule(result, bodyConstruction, options = {}) {
   const module = {
     status: "constructed",
     schemaVersion:
-      profile.id === "ocular-module/2"
-        ? "critter-ocular-module/2"
-        : "critter-ocular-module/1",
+      profile.id === "ocular-module/3"
+        ? "critter-ocular-module/3"
+        : profile.id === "ocular-module/2"
+          ? "critter-ocular-module/2"
+          : "critter-ocular-module/1",
     profile: { ...profile },
     sourceResultDigest: digest(result),
     bodyConstructionDigest: expectedBody.constructionDigest,

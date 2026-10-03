@@ -1,3 +1,4 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
 import { GRAPH_COVERING_RULE_VERSION } from "./graph-covering-catalogue.mjs";
 import { BODY_ORGANIZATION_RULE } from "./body-organization-catalogue.mjs";
 import { GRAPH_MODULE_RULE_VERSION } from "./graph-module-catalogue.mjs";
@@ -126,7 +127,10 @@ export function resolveAuthoring(input) {
   const continuous = [FAMILY_RULE_VERSION, PET_RULE_VERSION].includes(
     catalogue.ruleVersion,
   );
-  const coveringModule = catalogue.ruleVersion === GRAPH_COVERING_RULE_VERSION;
+  const coveringModule = [
+    GRAPH_COVERING_RULE_VERSION,
+    REGIONAL_SCENE_RULE,
+  ].includes(catalogue.ruleVersion);
   const ocularModule =
     catalogue.ruleVersion === GRAPH_MODULE_RULE_VERSION || coveringModule;
   const regionalProfile = catalogue.ruleVersion === BODY_ORGANIZATION_RULE;
@@ -134,7 +138,9 @@ export function resolveAuthoring(input) {
   const requiredScene = regionalProfile
     ? "graph-source/2 body-only"
     : coveringModule
-      ? "body-covering/1"
+      ? catalogue.ruleVersion === REGIONAL_SCENE_RULE
+        ? "body-covering/2"
+        : "body-covering/1"
       : "ocular-module/1";
   if (ocularModule)
     packet.presentation = {
@@ -276,7 +282,9 @@ export function projectArtPrompt(packet) {
     throw new Error(
       "Unsupported body-covering/1 art projection: a module-aware renderer brief is required.",
     );
-  if (packet.ruleVersion === BODY_ORGANIZATION_RULE)
+  if (
+    [BODY_ORGANIZATION_RULE, REGIONAL_SCENE_RULE].includes(packet.ruleVersion)
+  )
     throw new Error(
       "Unsupported regional-growth art projection: requires graph-source/2 body-only construction; module depiction is not supplied.",
     );

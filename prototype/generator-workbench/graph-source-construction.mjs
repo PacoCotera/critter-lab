@@ -1,3 +1,4 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
 import { digest } from "./evaluate.mjs";
 import {
   BODY_ORGANIZATION_RULE,
@@ -74,9 +75,18 @@ function validateSource(result, options) {
     );
   if (
     (regionalProfile &&
-      (result.sourceRuleVersion !== BODY_ORGANIZATION_RULE ||
+      (![BODY_ORGANIZATION_RULE, REGIONAL_SCENE_RULE].includes(
+        result.sourceRuleVersion,
+      ) ||
+        (result.sourceRuleVersion === REGIONAL_SCENE_RULE &&
+          (result.baseGraphRuleVersion !== BODY_ORGANIZATION_RULE ||
+            result.ocularModuleRuleVersion !== "ocular-module/3" ||
+            result.coveringModuleRuleVersion !== "body-covering/2")) ||
         result.bodyConstructionProfileVersion !== "graph-source/2")) ||
-    (!regionalProfile && result.sourceRuleVersion === BODY_ORGANIZATION_RULE)
+    (!regionalProfile &&
+      [BODY_ORGANIZATION_RULE, REGIONAL_SCENE_RULE].includes(
+        result.sourceRuleVersion,
+      ))
   )
     return rejection(
       "source-rule-mismatch",
@@ -1068,6 +1078,9 @@ export function constructGraphSource(result, options = {}) {
     const construction = {
       status: "constructed",
       schemaVersion: "critter-graph-source/1",
+      ...(result.sourceRuleVersion === REGIONAL_SCENE_RULE
+        ? { sourceRuleVersion: REGIONAL_SCENE_RULE }
+        : {}),
       profile: { ...profile },
       sourceResultDigest: digest(result),
       bodyExteriors: [body],

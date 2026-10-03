@@ -1,9 +1,16 @@
+import { REGIONAL_SCENE_RULE } from "./regional-scene-catalogue.mjs";
 import { digest } from "./evaluate.mjs";
 import { constructGraphSource } from "./graph-source-construction.mjs";
 import { constructOcularModule } from "./graph-module-construction.mjs";
 import { constructBodyCovering } from "./graph-covering-construction.mjs";
 
 export const MODULE_SCENE_VERSION = "module-scene/1";
+export const REGIONAL_SCENE_VERSION = "module-scene/2";
+export function sceneVersionForRule(rule) {
+  return rule === REGIONAL_SCENE_RULE
+    ? REGIONAL_SCENE_VERSION
+    : MODULE_SCENE_VERSION;
+}
 
 // The scene is a post-resolution consumer. It never installs modules into the genome.
 export function constructModuleScene(result, options = {}) {
@@ -25,13 +32,22 @@ export function constructModuleScene(result, options = {}) {
     ]);
   }
   const { profileVersion } = options;
+  const regional = profileVersion === REGIONAL_SCENE_VERSION;
+  const sourceRule = regional
+    ? REGIONAL_SCENE_RULE
+    : "developmental-covering/1";
   if (
-    profileVersion !== MODULE_SCENE_VERSION ||
+    ![MODULE_SCENE_VERSION, REGIONAL_SCENE_VERSION].includes(profileVersion) ||
     result?.status !== "resolved" ||
-    result.sourceRuleVersion !== "developmental-covering/1" ||
-    result.baseGraphRuleVersion !== "developmental-analytic/1" ||
-    result.ocularModuleRuleVersion !== "ocular-module/2" ||
-    result.coveringModuleRuleVersion !== "body-covering/1"
+    result.sourceRuleVersion !== sourceRule ||
+    result.baseGraphRuleVersion !==
+      (regional
+        ? "developmental-regional-growth/1"
+        : "developmental-analytic/1") ||
+    result.ocularModuleRuleVersion !==
+      (regional ? "ocular-module/3" : "ocular-module/2") ||
+    result.coveringModuleRuleVersion !==
+      (regional ? "body-covering/2" : "body-covering/1")
   ) {
     return rejected("source", [
       {
@@ -43,7 +59,7 @@ export function constructModuleScene(result, options = {}) {
     ]);
   }
   const body = constructGraphSource(result, {
-    profileVersion: "graph-source/1",
+    profileVersion: regional ? "graph-source/2" : "graph-source/1",
     sourceRuleVersion: result.baseGraphRuleVersion,
   });
   if (body.status !== "constructed") return rejected("body", body.errors);

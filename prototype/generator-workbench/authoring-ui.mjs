@@ -16,6 +16,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "developmental-regional-scene/1")
+    return "Regional body / eyes / skin-scales experiment";
   if (catalogue.id === "genomic-covering-pigment-candidate")
     return "Experimental pigment candidate";
   if (catalogue.ruleVersion === "developmental-covering/1")
@@ -124,6 +126,8 @@ export function canPublishAuthoringResponse(
   return (
     requestRevision === currentRevision &&
     isResolvedAuthoringPacket(packet) &&
+    (catalogue.ruleVersion !== "developmental-regional-scene/1" ||
+      packet.sceneProjectionVersion === "module-scene/2") &&
     packet.input?.catalogue?.id === catalogue.id &&
     packet.input?.catalogue?.version === catalogue.version &&
     packet.input?.genome?.contentId === catalogue.id &&
@@ -154,8 +158,13 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
-    (packet.ruleVersion !== "developmental-covering/1" ||
-      (packet.sceneProjectionVersion === "module-scene/1" &&
+    (!["developmental-covering/1", "developmental-regional-scene/1"].includes(
+      packet.ruleVersion,
+    ) ||
+      (packet.sceneProjectionVersion ===
+        (packet.ruleVersion === "developmental-regional-scene/1"
+          ? "module-scene/2"
+          : "module-scene/1") &&
         packet.scene?.status === "constructed" &&
         packet.reference?.status === "constructed"))
   );
@@ -190,7 +199,7 @@ export function imageLedPetHandoff(packet) {
 }
 
 export function authoringRoute(catalogue, operation) {
-  return `/api/${catalogue?.ruleVersion === "developmental-covering/1" ? "module-scene" : "authoring"}/${operation}`;
+  return `/api/${["developmental-covering/1", "developmental-regional-scene/1"].includes(catalogue?.ruleVersion) ? "module-scene" : "authoring"}/${operation}`;
 }
 
 export function sceneReplayEnvelope(packet) {
@@ -207,7 +216,9 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return value?.sceneProjectionVersion === "module-scene/1"
+  return ["module-scene/1", "module-scene/2"].includes(
+    value?.sceneProjectionVersion,
+  )
     ? sceneReplayEnvelope(value)
     : value;
 }
@@ -218,7 +229,9 @@ export function sharedSceneCamera(packets) {
     packets.some(
       (packet) =>
         !isResolvedAuthoringPacket(packet) ||
-        packet.sceneProjectionVersion !== "module-scene/1",
+        !["module-scene/1", "module-scene/2"].includes(
+          packet.sceneProjectionVersion,
+        ),
     )
   )
     return null;
@@ -269,7 +282,16 @@ export function sceneCausalSummary(scene, locusId) {
       ...(trace.directLocusIds ?? []),
       ...(trace.dependencyLocusIds ?? []),
     ].includes(locusId);
+  const bodyTargets =
+    scene.profileVersion === "module-scene/2"
+      ? scene.body.bodyExteriors.filter((body) =>
+          body.sources.includes(locusId),
+        ).length
+      : 0;
   return {
+    ...(scene.profileVersion === "module-scene/2"
+      ? { body: bodyTargets > 0, bodyTargets }
+      : {}),
     ocular: scene.ocular.traces.some(involved),
     ocularTargets: scene.ocular.traces.some(involved)
       ? scene.ocular.features.length
