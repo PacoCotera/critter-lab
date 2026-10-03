@@ -1,8 +1,8 @@
-# Meet Beecho Lab
+# Meet Critter Lab
 
 Explore, investigate and get to know unusual creatures. Pursue a beautiful
 combination, a rare discovery or a useful ability: there is no single ideal
-Beecho everyone must create. Formerly Critter Lab; earlier references keep that name.
+Beecho everyone must create.
 
 ![Current Lab, combined Companion and shared printer/summary Caddy.](../../design/lab-controls/combined-family-materials.png)
 
