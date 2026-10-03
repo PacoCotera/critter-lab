@@ -138,12 +138,22 @@ separately pinned catalogue2 adds six shape/terminal/fur contributors, actual
 convex-ring facet roots and contact-terminal envelopes through source3,
 material2 and reference3. Current source4/reference4 keeps that geometry and
 material while changing only fur-edge contrast; exact source3/reference3 recovery
-remains available. The actual source3 fur-readability review was withheld, and
-the revised depiction awaits image acceptance. Catalogue1 and exact source/reference1/2 paths remain
+remains available. Actual source3/4 fur material craft remains HOLD: the revised
+outlines read as scattered dashes rather than a coherent coat. Catalogue1 and exact source/reference1/2 paths remain
 available; dispatch never upgrades an old input or supplies missing alleles. Coarse low-poly depiction
 communicates volume and occlusion; it does not establish finished pet art,
 biology or motion. Tail, hoof/toe anatomy, partial coats, emission, broader organism range
 and automatic animation remain gaps; the content is not canonical anatomy.
+
+The current vocabulary's separate `art-prompt-summary/1` consumer reads actual
+source3/4 roles, expressed facts, material owners and pinned pigment names for
+the short image-led pet brief. Server and UI derive it independently from the
+verified source; imported wording is untrusted. Clause witnesses and source
+binding stay in Advanced inspection. The
+[brief contract](../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
+owns aliases and limits; it changes no input/result/scene identity or anatomy.
+Individual allele edits remain supported, but compositional catalogue-draft
+authoring and complete genomic content implementation remain unfinished.
 
 Only after meaningful structure exists, compare a low-poly reference in a
 shallow three-quarter view with a flat reference of the same source. Volume,

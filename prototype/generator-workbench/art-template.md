@@ -1,12 +1,21 @@
 # Genome-first art template
 
-The practical pet handoff uses one current source image and this short instruction:
+The current compositional vocabulary pet handoff uses one verified source image
+and this base instruction, followed by a short factual source description:
 
-> Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.
+> Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.
 
-The owner's [image-led example](evidence/owner-simple-pet/README.md) establishes
-this correction. Art direction and genomics agree that the detailed audit stays
-outside the creative instruction. The model can explore an inviting portrayal;
+The latest owner direction adds actual shape, extremity counts/forms,
+body-owned covering and named colours to the earlier
+[image-led example](evidence/owner-simple-pet/README.md). The pure
+`art-prompt-summary/1` consumer derives this brief for source3/4; its
+[contract](../../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
+defines supported meanings and clause witnesses. The description targets25–45
+words without hiding major expressed anatomy or material ownership. Detailed
+source/version witnesses and unsupported semantic labels stay in Advanced
+inspection, outside the creative text. Older unrelated profiles retain their
+original instruction. No geometry or saved source identities change.
+The model can explore an inviting portrayal;
 recognizable ancestry, proposed changes and unverified fidelity are recorded
 after output. Added anatomy is useful proposed design, not automatically a
 resolved inherited trait. This change supplies no new canonical anatomy.

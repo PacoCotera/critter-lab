@@ -447,7 +447,7 @@ function Workbench() {
   }
   async function downloadSourcePng() {
     const handoff = imageLedPetHandoff(packet);
-    if (handoff.status !== "ready") throw new Error("No current verified source image to download.");
+    if (!handoff.referenceSvg) throw new Error("No current verified source image to download.");
     const svgUrl = URL.createObjectURL(new Blob([handoff.referenceSvg], { type: "image/svg+xml;charset=utf-8" }));
     let pngUrl = null;
     try {
@@ -1025,7 +1025,7 @@ function Workbench() {
                     {busy && " · Last successful result"}
                   </Text>
                 )}
-                {petHandoff.status === "ready" ? (
+                {petHandoff.referenceSvg ? (
                   <SvgView compact markup={petHandoff.referenceSvg} />
                 ) : (
                   <div className="empty-result">
@@ -1066,7 +1066,7 @@ function Workbench() {
                   <Group mt="md" gap="xs">
                     <Button
                       size="xs"
-                      disabled={busy || petHandoff.status !== "ready"}
+                      disabled={busy || !petHandoff.referenceSvg}
                       onClick={() => run(downloadSourcePng)}
                     >
                       Download source PNG
@@ -1136,7 +1136,7 @@ function Workbench() {
                     readOnly
                     autosize
                     minRows={3}
-                    maxRows={3}
+                    maxRows={6}
                     value={currentPrompt}
                   />
                 ) : (
@@ -1146,7 +1146,7 @@ function Workbench() {
                 )}
                 <Text size="sm" c="dimmed" mt="sm">
                   Attach the shown source image in Gemini, then paste this
-                  sentence. Returned feature changes are pet proposals; the
+                  brief. Returned feature changes are pet proposals; the
                   genome audit stays in Advanced inspection.
                 </Text>
               </Paper>
@@ -1647,6 +1647,13 @@ function Workbench() {
                   {packet ? (
                     <>
                       <Coverage catalogue={catalogue} packet={packet} />
+                      {petHandoff.summary && (
+                        <Paper withBorder p="md" mt="md">
+                          <Title order={4}>Pet brief source audit</Title>
+                          <Text size="sm" c="dimmed">Derived from the current verified source. Clause witnesses and unsupported labels stay outside the creative prompt.</Text>
+                          <Code block className="sequence" mt="sm">{pretty(petHandoff.summary.audit)}</Code>
+                        </Paper>
+                      )}
                       {packet.informationStages && (
                         <Paper withBorder p="md" mt="md">
                           <Title order={4}>Information stages</Title>

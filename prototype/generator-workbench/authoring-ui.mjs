@@ -1,3 +1,5 @@
+import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summary.mjs";
+
 export function canonicalGenomicFamily(id) {
   return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
 }
@@ -247,12 +249,23 @@ export function imageLedPetHandoff(packet) {
       reason: "Generate or resolve a creature with a current source image.",
     };
   }
+  let summary = null;
+  if (["compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion)) {
+    try {
+      summary = artPromptSummary(packet);
+    } catch (error) {
+      summary = unavailableArtPromptSummary(packet, error);
+      return { version, status: "unavailable", text: "", referenceSvg,
+        sourceRecordId: packet.recordId, reason: summary.reason, summary };
+    }
+  }
   return {
     version,
     status: "ready",
-    text: "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.",
+    text: summary?.text ?? "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.",
     referenceSvg,
     sourceRecordId: packet.recordId,
+    ...(summary ? { summary } : {}),
   };
 }
 

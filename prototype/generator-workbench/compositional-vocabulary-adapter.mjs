@@ -15,6 +15,7 @@ const COMPOSITIONAL_CONTENT = { ...RETAINED_CONTENT, baseline: VOCABULARY_CONTEN
 import { constructCompositionalVocabulary, FUR_DEPICTION_PROFILE } from "./compositional-vocabulary-construction.mjs";
 import { realizePigmentFields } from "./compositional-source-presentation.mjs";
 import { realizeVocabularyMaterials, vocabularySourceReference, vocabularyFurReference } from "./compositional-vocabulary-presentation.mjs";
+import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summary.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const modeled = COMPOSITIONAL_CATALOGUE.loci.filter((locus) => locus.status === "validated");
@@ -160,7 +161,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     ), resultDigest = digest(result), sceneDigest = digest(scene), recordId = `compositional-${digest(
       { inputDigest, resultDigest, sceneDigest }
     ).slice(0, 20)}`;
-    return {
+    const packet = {
       status: "resolved",
       schemaVersion: COMPOSITIONAL_PACKET_SCHEMA,
       ruleVersion: COMPOSITIONAL_RULE,
@@ -186,10 +187,16 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       },
       representations: { baseline: JSON.stringify({ baseline: catalogue.baseline, sourceDefinitions: catalogue.sourceDefinitions }, null, 2), inherited: JSON.stringify(modeled.map((locus) => ({ locusId: locus.id, recordVersion: locus.version, copies: genome.loci[locus.id] })), null, 2), expression: JSON.stringify(facts, null, 2) },
       description: `${scene.conventions.primaryCount} connected primary regions; ${scene.conventions.wholeAssemblySymmetry}. Optional parts follow their actual copied owner guards. Static source; physiology and motion remain unmodeled.`,
-      prompt: {
-        text: "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art."
-      }
     };
+    // Wording must never change source validity or Generate's first-eligible
+    // choice. Keep the resolved source and its digests if its brief is unavailable.
+    let prompt;
+    try {
+      prompt = artPromptSummary(packet);
+    } catch (error) {
+      prompt = unavailableArtPromptSummary(packet, error);
+    }
+    return { ...packet, prompt };
   } catch (error) {
     return rejected(error);
   }

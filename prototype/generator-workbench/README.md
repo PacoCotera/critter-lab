@@ -17,12 +17,14 @@ source experiment · v2** package, then uses one action to sample a valid genome
 and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
-not upload it. The `image-led-pet/1` sentence is separate from the retained full
-semantic prompt, which remains in Advanced inspection and the retained packet.
-Compact scene export retains inputs and expected hashes; verified import
-reconstructs its exact semantic prompt. An
-audit-prompt overflow does not block this handoff when a resolved source image
-exists. Returned feature changes are creative pet proposals, not inherited facts.
+not upload it. Current vocabulary source3/4 derives its pet instruction plus a
+short shape, extremity, owner-material and named-colour description through
+`art-prompt-summary/1`. Clause witnesses and unsupported semantic labels stay
+in Advanced inspection. Older unrelated profiles retain their original short
+handoff and full semantic audit. Compact scene export retains inputs and expected
+hashes; verified import rebuilds the source and derives the current summary,
+never trusting imported prompt text. Returned feature changes are creative pet
+proposals, not inherited facts.
 This is an
 authoring experiment, not a new game resident or canonical palette selection.
 The original **Anatomy-diversity diagnostic** remains available. Its resolved graph
@@ -82,8 +84,10 @@ Original vocabulary `/3` construction/reference records remain exactly replayabl
 The `/4` reference changes only fur outlines to .80 times their already-lit fill
 and .70px width at512; geometry, material2, copied pigments, light, camera and
 clipping stay unchanged. Actual `/3` inspection withheld fur-readability acceptance
-because its ribbons blended into smooth skin. Revised `/4` readability awaits
-actual-image review; neither reference is approved finished pet art.
+because its ribbons blended into smooth skin. Actual `/4` inspection found
+visible scattered dashes rather than a coherent coat; fur material craft remains
+HOLD. Neither reference is approved finished pet art. The factual primary-body
+fur cue remains available to the pet brief without changing the source again.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared
@@ -408,15 +412,27 @@ baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
 advanced inspection. The **Gemini prompt** appears beside the structural preview
-as the exact short `image-led-pet/1` sentence with one **Copy prompt** action.
+with one **Copy prompt** action. Current vocabulary source3/4 uses the base
+“Turn the attached critter into a cute pet, shown alone in rich high-bit pixel
+art.” followed by an actual-source description, targeting25–45 words without
+truncating major enabled counts or owner materials. The
+[brief contract](../../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
+owns exact role aliases and limits. Other packages keep their original sentence.
 Its image is the current scene reference or the old package's canonical diagnostic,
 without selected-locus amber highlights. Editing inputs
 clears the prompt with the preview. A failed Generate against unchanged inputs
 retains the last successful result and its prompt, reports that no new creature
 was generated, and keeps its accepted seed distinct from the failed request's
 seed. A missing or unresolved source image disables copying. Semantic projection
-errors remain in Advanced inspection and do not block the image-led sentence
-when a verified source image exists. This panel makes no provider call.
+errors from older full audit projections remain in Advanced inspection; a missing
+current vocabulary summary disables prompt copying with an explicit reason,
+while its valid source and verified image remain available for display/download.
+Wording failure never rejects a constructed source or changes candidate selection.
+This panel makes no provider call. Summary version, sourceRecordId, sceneDigest
+and clause witnesses are outside the copied text. The wording consumer changes
+no input, result, scene or replay identity. Whole-catalogue draft editing remains
+unsupported for compositional packages; individual allele edits are not complete
+content authoring.
 Failed import or save also preserves the unchanged verified current result;
 unverified imported outputs never replace it. A changed input has no current
 result to restore.
@@ -501,6 +517,7 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `authoring-adapter.mjs`                            | Host records/digests, replay, presentation and fact-derived art-template projection                                                      |
 | `module-scene.mjs` / `module-scene-authoring.mjs`   | Optional verified body/ocular/covering aggregate, bounded unmodified generation, compact replay and positive renderer projection |
 | `authoring-identity.mjs`                           | Separate inherited/expression full digests and short lookup references; not reversible genome payloads |
+| `art-prompt-summary.mjs`                           | Pure source3/4 pet wording from constructed roles, active facts and pinned pigment labels; separate clause/source audit |
 | `genome-tree.mjs` / `genome-codec.mjs`              | Lossless layered packet mapping, exact ordered allele packing and bounded versioned string encode/decode |
 | `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
 | `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |

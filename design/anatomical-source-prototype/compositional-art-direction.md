@@ -97,8 +97,9 @@ into smooth skin, so fur readability was withheld. Current reference `/4` retain
 those exact roots, fill, facet lighting, masks and camera, and adds only fur edges
 at .80 times the already-lit fill with .70px width at512. It adds no fibres, solid
 tufts, glints or base-skin triangulation. Original `/3` output remains exact for
-saved recipes. This bounded depiction correction awaits actual-image acceptance;
-it is not finished pet-art approval.
+saved recipes. Actual inspection of the bounded correction found visible
+scattered dashes rather than a coherent coat.
+Fur material craft remains HOLD; this is not finished pet-art approval.
 
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base
@@ -115,9 +116,18 @@ the connected outline, not only in colour, feature decoration or a different
 camera. Preserve old V1 inputs/outputs under their original version. No class
 selector, curated output replacement or resampling for attractive bodies.
 
-The practical creative instruction remains exactly:
+The current vocabulary source3/4 creative instruction starts with:
 
-> Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.
+> Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.
+
+Follow it with a short factual description from the actual source: counted body
+shape/organization, enabled head/eye/projection modules, attached chains and end
+forms, flat flaps, body-owned covering and named local pigment fields. The
+[semantic brief contract](compositional-contract.md#source-derived-pet-brief)
+owns exact aliases and witnesses. Head projections are not ears, child regions
+are not tails, and two local colours are not rings. The factual furry-body cue
+does not reverse the source4 material-craft HOLD. Older unrelated source profiles
+keep their original handoff; the full audit remains outside the creative text.
 
 The source audit stays separate. This handoff requests no new tests, comparison
 campaign, provider output or asset batch. Working static source construction does
