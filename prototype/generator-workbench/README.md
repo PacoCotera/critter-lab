@@ -50,7 +50,9 @@ The browser-only `retained-pet-proposal/1` record binds the exact source record,
 input/result/scene digests, consumer versions/foundation, prompt text and SHA256,
 unchanged bitmap bytes and SHA256, dimensions/MIME, provider label and compact
 source replay recipe. Download the native bitmap and linked JSON metadata as
-two files. This is export portability, without a new image-import service.
+two files. **Copy linked metadata** copies the identical indented JSON when a
+browser cannot confirm downloads; local feedback reports clipboard success or
+failure. This is export portability, without a new image-import service.
 The separate IndexedDB `proposalBlobs` store holds eight distinct proposals;
 a ninth rejects without eviction. Files are at most4MiB,4096px on the long side
 and16million decoded pixels. Existing localStorage genome slots are unchanged.

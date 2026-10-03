@@ -64,7 +64,14 @@ and the ears have visible interiors. The output remains **a proposal**:
 This positive drawing result does not approve the procedural source coat/ears
 or silently change inherited traits. The [manual retention contract](../../README.md#retain-a-manually-returned-pet-proposal)
 keeps returned bitmaps beside exact source/prompt bindings, always as proposals.
-Actual retention/reopening evidence is added after the clean pushed panel is activated.
+The clean pushed panel at `1ee9cbc6f75d90fed0562837239c411276e61040`
+retained the native image as proposal
+`pet-proposal-b7dac63cb31933d1a03f8ff2a02d249b8d1478b5e9984fad0e1f627fbbf89b79`.
+After a fresh page load and exact-input replay, the same source recovered the
+same linked proposal. [Retained panel](pet-retained-workbench.png) and
+[reopened state](pet-reopened-state.txt) preserve that actual journey.
+The browser did not confirm its native metadata download; the panel's copy
+control supplies the same linked JSON without changing this proposal.
 
 111 carried pairs, six unsupported drafts and eleven branch headings remain a
 limited experiment. Five genomic branches lack contracts; other consumers are

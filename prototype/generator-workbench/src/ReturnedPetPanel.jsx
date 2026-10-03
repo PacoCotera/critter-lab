@@ -109,6 +109,17 @@ export default function ReturnedPetPanel({ packet, handoff, revision, sourceBusy
     }
   }
 
+  async function copyMetadata(entry) {
+    const key = activeKey;
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard access is unavailable in this browser.");
+      await navigator.clipboard.writeText(JSON.stringify(entry.metadata, null, 2));
+      if (currentKey.current === key) setNotice({ key, text: "Linked metadata copied, including the exact source replay recipe.", error: false });
+    } catch (error) {
+      if (currentKey.current === key) setNotice({ key, text: `Could not copy linked metadata: ${error.message}`, error: true });
+    }
+  }
+
   return (
     <Paper withBorder p="md" mt="md">
       <Group justify="space-between"><Title order={4}>Returned pet art</Title><Badge color="orange">Proposal only</Badge></Group>
@@ -142,6 +153,7 @@ export default function ReturnedPetPanel({ packet, handoff, revision, sourceBusy
               <Group mt="xs">
                 <Button size="xs" variant="light" onClick={() => download(entry, false)}>Download returned bitmap</Button>
                 <Button size="xs" variant="light" onClick={() => download(entry, true)}>Download linked metadata</Button>
+                <Button size="xs" variant="light" onClick={() => copyMetadata(entry)}>Copy linked metadata</Button>
               </Group>
             </Paper>
           ))}

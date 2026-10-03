@@ -84,6 +84,14 @@
       "bytes": 296627,
       "sha256": "437a6c3efa416ef98ab6b1ab4ccbac0d857d52e3e330d3731e61f85299c9992d"
     },
+    "pet-reopened-state.txt": {
+      "bytes": 9512,
+      "sha256": "31a748b8d397bc3aed152abaed658ec13f24e493acd5def4c2d13c6e5956fd35"
+    },
+    "pet-retained-workbench.png": {
+      "bytes": 156641,
+      "sha256": "3fb1fd486f068ef6155a62c0eb2caa9fce5eade33250df3cd064da4a16bf8102"
+    },
     "source5-replay.txt": {
       "bytes": 5867,
       "sha256": "03842fde4d1e895cbb29b82dda21355ab367a54a695e138a78890280e098f10f"
