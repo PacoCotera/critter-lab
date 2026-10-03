@@ -6,8 +6,16 @@ Three independently replayable packages remain available: the diagnostic catalog
 
 The initial **Generate creature** workspace loads the separate **Experimental
 pigment candidate · v2** package, then uses one action to sample a valid genome
-and constructed source scene. Its source illustration and exact copyable Gemini
-prompt appear together before the initially collapsed genome editor. This is an
+and constructed source scene. Its clean canonical source illustration and short
+copyable image-led Gemini instruction appear together before the initially
+collapsed genome editor. Attach the shown image separately; the workbench does
+not upload it. The `image-led-pet/1` sentence is separate from the retained full
+semantic prompt, which remains in Advanced inspection and the retained packet.
+Compact scene export retains inputs and expected hashes; verified import
+reconstructs its exact semantic prompt. An
+audit-prompt overflow does not block this handoff when a resolved source image
+exists. Returned feature changes are creative pet proposals, not inherited facts.
+This is an
 authoring experiment, not a new game resident or canonical palette selection.
 The original **Anatomy-diversity diagnostic** remains available. Its resolved graph
 can contain radial or bilateral volumes, articulated contacts, membranes and fins;
@@ -215,18 +223,20 @@ baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
 advanced inspection. The **Gemini prompt** appears beside the structural preview
-as read-only, scrollable text with one **Copy prompt** action. Both use the exact
-current resolved packet text, without rewriting or truncation. Editing inputs
+as the exact short `image-led-pet/1` sentence with one **Copy prompt** action.
+Its image is the current scene reference or the old package's canonical diagnostic,
+without selected-locus amber highlights. Editing inputs
 clears the prompt with the preview. A failed Generate against unchanged inputs
 retains the last successful result and its prompt, reports that no new creature
 was generated, and keeps its accepted seed distinct from the failed request's
-seed. An unavailable projection
-shows its actual error and disables copying. This panel makes no provider call.
+seed. A missing or unresolved source image disables copying. Semantic projection
+errors remain in Advanced inspection and do not block the image-led sentence
+when a verified source image exists. This panel makes no provider call.
 Failed import or save also preserves the unchanged verified current result;
 unverified imported outputs never replace it. A changed input has no current
 result to restore.
 
-Template version4 makes that text a self-contained pixel-art illustration brief,
+Template version4 keeps the full semantic audit text as a self-contained pixel-art illustration brief,
 followed by compact semantic body, appendage and material descriptions. Diagnostic
 polygons and surface samples are construction aids; they do not prescribe every
 finished contour or describe scales as detached objects. Available appendage
@@ -265,8 +275,9 @@ engine, provider call, catalogue, game/device UI or deployment behavior.
 
 ### Versioned diagnostic surface display
 
-The UI explicitly selects **`surface-detail/1`** for its structural previews and
-comparisons. This presentation version draws retained anisotropic patch
+Advanced selected-locus inspection and comparisons use **`surface-detail/1`**.
+The primary source image uses the retained canonical drawing bytes. This
+inspection presentation version draws retained anisotropic patch
 orientation in both generic and continuous views. In continuous views,
 `fine-ridged` surfaces gain four evenly spaced neutral, quarter-opacity diagnostic
 strokes in each atlas domain, clipped to the solved outline. Existing palettes,
@@ -276,8 +287,8 @@ Unknown display versions reject. Generic texture depiction was already present.
 
 Omitting `viewOptions.projectionVersion` preserves the prior default bytes.
 Stored diagnostic SVGs, canonical references, model results, digests and replay
-are unchanged. The UI labels its selected display version, independently of the
-packet's canonical drawing. Continuous-profile turn-control values and reserve-capacity values
+are unchanged. The inspection display is independent of the packet's canonical
+drawing. Continuous-profile turn-control values and reserve-capacity values
 have no implemented consumer in their respective profiles; the inspector states
 that limitation instead of implying an applied visual or behavior effect.
 

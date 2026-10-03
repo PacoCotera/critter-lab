@@ -43,6 +43,7 @@ import {
   sharedPreviewCamera,
   freshGenerationSeed,
   isResolvedAuthoringPacket,
+  imageLedPetHandoff,
   initialAuthoringInputs,
   authoringPackageLabel,
   unconsumedOutputNotice,
@@ -596,10 +597,8 @@ function Workbench() {
   const genomeLoci = scopedLoci(catalogue, family, search);
   const cause = causalSummary(catalogue, packet?.result, selected);
   const sceneCause = sceneCausalSummary(packet?.scene, selected);
-  const currentPrompt =
-    isResolvedAuthoringPacket(packet) && !packet.prompt?.error
-      ? (packet.prompt?.text ?? "")
-      : "";
+  const petHandoff = imageLedPetHandoff(packet);
+  const currentPrompt = petHandoff.text;
   const consumerNotice = unconsumedOutputNotice(catalogue, selected);
   const previewCamera = sharedPreviewCamera([packet?.result].filter(Boolean));
   const diagnosticViewOptions = (camera) => ({
@@ -960,19 +959,8 @@ function Workbench() {
                     {busy && " · Last successful result"}
                   </Text>
                 )}
-                {packet ? (
-                  <SvgView
-                    compact
-                    onSelect={selectLocus}
-                    markup={previewMarkup(
-                      packet,
-                      packet.scene
-                        ? null
-                        : packet.result.graph.exterior
-                          ? previewCamera
-                          : null,
-                    )}
-                  />
+                {petHandoff.status === "ready" ? (
+                  <SvgView compact markup={petHandoff.referenceSvg} />
                 ) : (
                   <div className="empty-result">
                     <Title order={3}>No current preview</Title>
@@ -984,17 +972,14 @@ function Workbench() {
                 <Text size="xs" c="dimmed">
                   {packet?.scene
                     ? "Inspect or edit genome shows module involvement; exact targets and source links remain in advanced scene inspection."
-                    : "Amber shows direct and dependency involvement in the retained construction."}
+                    : "Selected-locus highlights remain in Advanced inspection."}
                 </Text>
                 <Text size="xs" c="dimmed" mt="xs">
                   This structural diagram is not generated game art.
                 </Text>
                 <Text size="xs" c="dimmed" mt="xs">
                   Display:{" "}
-                  {packet?.scene
-                    ? "module-scene/1"
-                    : SURFACE_DETAIL_PROJECTION_VERSION}
-                  .{" "}
+                  {packet?.scene ? "module-scene/1" : "Canonical diagnostic"}.{" "}
                   {catalogue.ruleVersion === "developmental-covering/1"
                     ? "Verified body, optional eyes and skin/scales source experiment; unsupported construction rejects without changing copies."
                     : catalogue.ruleVersion === "developmental-analytic/1"
@@ -1058,24 +1043,29 @@ function Workbench() {
                     )}
                   </CopyButton>
                 </Group>
-                {packet?.prompt?.error ? (
+                {packet && petHandoff.status === "unavailable" ? (
                   <Alert color="orange" title="Prompt unavailable">
-                    {packet.prompt.error}
+                    {petHandoff.reason}
                   </Alert>
                 ) : currentPrompt ? (
                   <Textarea
                     aria-label="Gemini prompt"
                     readOnly
                     autosize
-                    minRows={6}
-                    maxRows={10}
+                    minRows={3}
+                    maxRows={3}
                     value={currentPrompt}
                   />
                 ) : (
                   <Text size="sm" c="dimmed">
-                    Generate or resolve a creature to view its current prompt.
+                    {petHandoff.reason}
                   </Text>
                 )}
+                <Text size="sm" c="dimmed" mt="sm">
+                  Attach the shown source image in Gemini, then paste this
+                  sentence. Returned feature changes are pet proposals; the
+                  genome audit stays in Advanced inspection.
+                </Text>
               </Paper>
             </div>
             <Accordion mt="md" variant="separated">
@@ -1561,6 +1551,14 @@ function Workbench() {
                             Selected output and dependencies
                           </Accordion.Control>
                           <Accordion.Panel>
+                            <SvgView
+                              compact
+                              onSelect={selectLocus}
+                              markup={previewMarkup(
+                                packet,
+                                packet.scene ? null : previewCamera,
+                              )}
+                            />
                             <Code block className="sequence">
                               {pretty({
                                 fact: selectedFact,
@@ -1591,6 +1589,26 @@ function Workbench() {
                           </Accordion.Control>
                           <Accordion.Panel>
                             <Text size="sm">{packet.description}</Text>
+                            <Text size="sm" fw={700} mt="md">
+                              Full semantic art projection
+                            </Text>
+                            {packet.prompt?.error ? (
+                              <Alert
+                                color="orange"
+                                title="Semantic projection unavailable"
+                              >
+                                {packet.prompt.error}
+                              </Alert>
+                            ) : (
+                              <Textarea
+                                aria-label="Full semantic art projection"
+                                readOnly
+                                autosize
+                                minRows={6}
+                                maxRows={14}
+                                value={packet.prompt?.text ?? ""}
+                              />
+                            )}
                             {packet.result.motion.map((item) => (
                               <Text key={item.id} size="sm" mt="xs">
                                 {item.medium}: {item.status} ·{" "}

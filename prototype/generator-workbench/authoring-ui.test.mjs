@@ -5,6 +5,10 @@ import { PET_CATALOGUE } from "./pet-catalogue.mjs";
 import { drawAuthoringCreature } from "./presentation.mjs";
 import { drawContinuousFamily } from "./family-presentation.mjs";
 import {
+  resolveModuleSceneAuthoring,
+  compactSceneReplayEnvelope,
+} from "./module-scene-authoring.mjs";
+import {
   scopedLoci,
   scopedSelection,
   copyLabels,
@@ -13,6 +17,7 @@ import {
   sharedPreviewCamera,
   freshGenerationSeed,
   isResolvedAuthoringPacket,
+  imageLedPetHandoff,
 } from "./authoring-ui.mjs";
 
 const retained = (name) =>
@@ -22,6 +27,97 @@ const retained = (name) =>
       "utf8",
     ),
   );
+
+test("image-led pet handoff uses the exact short sentence and canonical scene/old reference without mutation", () => {
+  const oldScene = JSON.parse(
+    readFileSync(
+      new URL(
+        "evidence/inherited-pigment-experiment/mixed-fields.packet.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  const currentScene = resolveModuleSceneAuthoring(oldScene.input);
+  const broad = JSON.parse(
+    readFileSync(
+      new URL(
+        "evidence/diversity-diagnosis/broad-seed-1.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  for (const packet of [oldScene, currentScene, broad, retained("pet-skin")]) {
+    const before = JSON.stringify(packet);
+    const envelope = compactSceneReplayEnvelope(packet);
+    const handoff = imageLedPetHandoff(packet);
+    assert.equal(handoff.version, "image-led-pet/1");
+    assert.equal(handoff.status, "ready");
+    assert.equal(
+      handoff.text,
+      "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.",
+    );
+    assert.equal(
+      handoff.referenceSvg,
+      packet.scene ? packet.reference.svg : packet.diagnostic,
+    );
+    assert.equal(handoff.sourceRecordId, packet.recordId);
+    assert.equal(JSON.stringify(packet), before);
+    assert.deepEqual(compactSceneReplayEnvelope(packet), envelope);
+  }
+  assert.equal(oldScene.prompt.projectionVersion, "module-scene-art/2");
+  assert.equal(currentScene.prompt.projectionVersion, "module-scene-art/3");
+});
+
+test("image-led pet handoff blocks missing/unresolved images but audit overflow does not block a resolved source", () => {
+  const scene = JSON.parse(
+    readFileSync(
+      new URL(
+        "evidence/inherited-pigment-experiment/mixed-fields.packet.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  for (const packet of [
+    null,
+    { status: "rejected" },
+    { ...scene, result: { status: "rejected" } },
+    { ...scene, scene: { status: "rejected" } },
+    { ...scene, reference: { status: "constructed", svg: "" } },
+    { ...scene, reference: { status: "constructed", svg: "not an SVG" } },
+  ]) {
+    const unavailable = imageLedPetHandoff(packet);
+    assert.equal(unavailable.status, "unavailable");
+    assert.equal(unavailable.text, "");
+    assert.equal(unavailable.referenceSvg, "");
+  }
+  const overflow = {
+    ...scene,
+    prompt: {
+      status: "rejected",
+      error: "Semantic binding exceeds its bound",
+      text: "",
+    },
+  };
+  assert.equal(imageLedPetHandoff(overflow).status, "ready");
+  assert.equal(imageLedPetHandoff(overflow).referenceSvg, scene.reference.svg);
+  const noOldImage = { ...retained("pet-skin"), diagnostic: " " };
+  assert.equal(imageLedPetHandoff(noOldImage).status, "unavailable");
+});
+
+test("image-led pet handoff clears on invalidation and uses only the replacement current record", () => {
+  const original = retained("pet-skin");
+  const replacement = retained("pet-fur");
+  assert.equal(imageLedPetHandoff(original).referenceSvg, original.diagnostic);
+  assert.equal(imageLedPetHandoff(null).text, "");
+  assert.equal(imageLedPetHandoff(null).referenceSvg, "");
+  const changed = imageLedPetHandoff(replacement);
+  assert.equal(changed.sourceRecordId, replacement.recordId);
+  assert.equal(changed.referenceSvg, replacement.diagnostic);
+  assert.notEqual(changed.referenceSvg, original.diagnostic);
+});
 test("fresh generation seeds distinguish repeat presses and publication requires resolved output", () => {
   assert.equal(freshGenerationSeed(7, 7), 8);
   assert.equal(freshGenerationSeed(7, 91), 91);

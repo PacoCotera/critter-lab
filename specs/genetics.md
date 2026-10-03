@@ -114,6 +114,15 @@ inherited pigment vocabulary and inspect its expressed combinations; colour
 must still come from genomic expression, not a renderer overriding the palette.
 Exact palette families and mixing rules remain provisional until visual review.
 
+Owner generator direction: use a short image-led instruction for creative pet
+portrayal, with full genome and expression records kept outside the drawing
+prompt. Assess recognizable ancestry, proposed changes and unverified fidelity
+after output. Generated anatomy or recolouring is a design proposal until its
+own resolved source exists; it does not silently amend the retained genome.
+The [active art handoff](../prototype/generator-workbench/art-template.md) and
+[owner example](../prototype/generator-workbench/evidence/owner-simple-pet/README.md)
+retain the actual instruction and evidence.
+
 Owner explicitly requires future polygenic and cross-dimension traits: movement,
 energy physiology and environmental response can jointly shape locomotion,
 sensory performance or metabolism. Model several inherited contributions to a

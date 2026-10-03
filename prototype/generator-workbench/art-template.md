@@ -1,7 +1,19 @@
 # Genome-first art template
 
-The [versioned template](art-template.json) presents verified expression as a
-positive drawing brief. The owner's [form and skin example](evidence/owner-semantic-surface/README.md)
+The practical pet handoff uses one current source image and this short instruction:
+
+> Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.
+
+The owner's [image-led example](evidence/owner-simple-pet/README.md) establishes
+this correction. Art direction and genomics agree that the detailed audit stays
+outside the creative instruction. The model can explore an inviting portrayal;
+recognizable ancestry, proposed changes and unverified fidelity are recorded
+after output. Added anatomy is useful proposed design, not automatically a
+resolved inherited trait. This change supplies no new canonical anatomy.
+
+The [versioned template](art-template.json) retains verified expression as a
+semantic audit/export brief. Historical prompt bytes and replay identities remain
+unchanged. The owner's [form and skin example](evidence/owner-semantic-surface/README.md)
 establishes the active correction: diagnostic envelopes and covering glyphs
 communicate construction and material meaning; they do not prescribe every
 finished contour or turn skin texture into attached objects.
@@ -118,14 +130,21 @@ body-hierarchy generation was held after the latest owner feedback. A subsequent
 uses the repaired handoff and explicit per-region pigment ownership. It retains
 recognizable source meaning but remains below pet-master acceptance: repeated
 lighting amplifies the source's repeated masses. That one-output experiment is
-stopped. A controlled light/edge comparison is the next proposed way to separate
-depiction from morphology, before changing inherited form. Animation and game
+stopped. The [controlled lighting comparison](evidence/lighting-study/README.md)
+is also complete: continuous light reduces repeated hotspot cues but stays
+diagram-like and weak as a pet. No further lighting correction is planned.
+The [random diversity diagnosis](evidence/random-diversity/README.md) independently
+identifies narrow construction vocabulary and visual eligibility filtering;
+another art prompt does not broaden source construction. Animation and game
 integration remain dependent on a selected master and their own acceptance gates.
 
 ## Retained evidence
 
 | Evidence | What it establishes |
 | --- | --- |
+| [Owner image-led pet](evidence/owner-simple-pet/README.md) | Exact short submission, original source/output, stronger pet presence and proposed anatomy; audit separate from drawing text |
+| [Random diversity diagnosis](evidence/random-diversity/README.md) | All16 retained winners, exact inputs, measured rejection causes and source vocabulary; no new sampling policy |
+| [Controlled lighting](evidence/lighting-study/README.md) | Same source with two lighting treatments; useful learning, still weak pet presence |
 | [Semantic candidate calibration](evidence/semantic-candidate-pet/README.md) | Actual candidate source, concise clarified stage brief and returned PNG; repeated local colours recognizable, pet-master HOLD |
 | [Emitted semantic briefs](evidence/semantic-brief/README.md) | Actual template4 axial/contact/PET prose, lengths and preserved source identities; no new image |
 | [Owner form/skin example](evidence/owner-semantic-surface/README.md) | Better integrated volume/material; new anatomy/pigment are proposed, smooth finish is not pixel craft |

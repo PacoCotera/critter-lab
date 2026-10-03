@@ -161,6 +161,34 @@ export function isResolvedAuthoringPacket(packet) {
   );
 }
 
+export function imageLedPetHandoff(packet) {
+  const version = "image-led-pet/1";
+  const referenceSvg = packet?.scene
+    ? packet.reference?.svg
+    : packet?.diagnostic;
+  if (
+    !isResolvedAuthoringPacket(packet) ||
+    typeof referenceSvg !== "string" ||
+    !/^\s*<svg(?:\s|>)/i.test(referenceSvg) ||
+    !/<\/svg>\s*$/i.test(referenceSvg)
+  ) {
+    return {
+      version,
+      status: "unavailable",
+      text: "",
+      referenceSvg: "",
+      reason: "Generate or resolve a creature with a current source image.",
+    };
+  }
+  return {
+    version,
+    status: "ready",
+    text: "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.",
+    referenceSvg,
+    sourceRecordId: packet.recordId,
+  };
+}
+
 export function authoringRoute(catalogue, operation) {
   return `/api/${catalogue?.ruleVersion === "developmental-covering/1" ? "module-scene" : "authoring"}/${operation}`;
 }
