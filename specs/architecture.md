@@ -114,13 +114,15 @@ contract. Source validity, reference usefulness and pet-art quality are separate
 gates.
 
 Bear, cat, cow and firefly exemplify the owner's desired range; labels must not
-select complete body presets. The new [anatomical content contract](../design/anatomical-source-prototype/genomic-contract.md)
-defines a separate provisional bilateral subset: typed head/core/neck volumes,
-exterior eye anchors, four or six jointed core-rooted supports and shaped
-terminals, plus independently inherited muzzle/jaw, crown, posterior and wing
-modules. Its 34 carried locus pairs resolve through a dedicated adapter,
-construction and presentation boundary in the existing host workbench. These
-new records do not rename the older fifty contributors as organs.
+select complete body presets. The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md)
+defines a separate 34-pair bilateral subset. Its dimensions, pigments and optional
+modules are inherited, but the implemented head/core/neck and four/six-support
+organization is hardcoded. The owner rejects that result. It violates the existing
+genome-derived construction requirement; accessory variation is not structural
+range. Keep the exact V1 constructor/catalogue for old records. The replacement
+must resolve the connected organization and attachment roles from inherited
+contributors and expose all five information layers, the complete declared loci
+and each contributor's implemented, inactive or unimplemented status.
 
 The [anatomical Generate guide](../prototype/generator-workbench/README.md#anatomical-generate)
 owns current operation and its limits. Compact, lean and wing-bearing copy sets

@@ -7,12 +7,13 @@ and [image-led art handoff](art-template.md). The current diagrams and finite
 construction grammar do not satisfy the owner's reference-quality or
 bear/cat/cow/firefly anatomical-range brief. Valid records, replay and source
 geometry are delivered parts; a useful general creature and pet generator is
-still unfinished. The newest radial scene is held, not loaded in the workbench.
+still unfinished. The fixed anatomical V1 baseline was also rejected: inherited
+accessories and proportions do not satisfy genome-derived organization.
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
-The initial **Generate creature** workspace uses the separate **Anatomical source
-experiment · v1** package, then uses one action to sample a valid genome
+The initial **Generate creature** workspace uses the separate **Compositional
+source experiment · v1** package, then uses one action to sample a valid genome
 and constructed source scene. Its clean canonical source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
@@ -33,6 +34,48 @@ switching packages is deliberate and never migrates their genomes. See the
 [source-and-output diversity diagnosis](evidence/diversity-diagnosis/README.md).
 
 ## Run and inspect
+
+### Compositional Generate and all eleven genomic branches
+
+`genomic-compositional-source-experiment@1` uses separately pinned
+`developmental-compositional-source/1`, `compositional-source/1` and
+`compositional-surface-fields/1` rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
+replace the universal head/neck/torso/support rig. Ordered inherited contributors
+resolve serial or branched region graphs, depth, bilateral/radial frames,
+unequal growth, bend, broad/narrow joins, optional head/face modules, distinct
+free/contact chains and independently rooted thin surfaces. Zero chains and
+headless bodies are legitimate. A class name never selects an assembly.
+
+The current foundation carries **98 ordered locus pairs**: the broader declared
+50-record inheritance vector plus the 50-record structural overlay, sharing
+the two exact pigment definitions once. Six draft definitions remain visible
+without invented allele copies. All eleven genomic branches appear in the
+current authoring record, including branches whose locus/capability contracts
+are still missing. Each record retains its exact source/version, contributions
+and expressed, inactive or unimplemented consumer status. Fifty construction
+contributors are not the whole project genome, and 98 carried vectors do not
+mean 98 implemented phenotype features. Unimplemented movement, physiology or
+other branches are not assigned zero capability or inferred from appearance.
+
+The separate five-stage record inspector preserves foundation, inherited,
+expression, phenotype and lifetime information. It does not replace the eleven
+genomic branches or make lifetime state inheritable. Part, root, pigment and
+material causes refer to retained contributors. New compact request/replay
+recipes pin the exact registry definition before its derived top-level
+`foundationPin` is attached. A full retained-catalogue/tree codec digest includes
+that metadata and is deliberately a different hash boundary. Recovery rejects a mismatched foundation or
+source digest rather than substituting another version. Anatomical V1 and all
+older packages remain available under their original rules.
+
+Founder generation samples categorical/presence states explicitly, avoiding the
+earlier 75% ON bias; numeric/pigment copies remain independent. All declared
+mixed-copy maps remain valid for editing and inheritance. Generate keeps the
+first eligible complete input within the declared ceiling, without ranking
+appearance, imposing animal quotas or repairing genes. The actual reference
+uses owned local pigments and smooth/scales fields on the composed 3D source.
+It is a low-poly static construction reference, not finished HiBit pet art,
+animation, a physical movement model or full organism-range acceptance.
 
 ### Anatomical Generate
 
@@ -65,9 +108,12 @@ instruction. Save/export retain the new version and complete copies; reopening
 reconstructs from those inputs. Earlier packages and records continue through
 their original rules. Catalogue source definitions live in the versioned content
 file; individual copy editing does not rewrite the content library. The
-framework's broader eleven families remain available in the older diagnostics.
+framework's broader eleven branches are visible alongside the construction
+subset in the newer compositional package.
 
-This is a static bilateral anatomical subset. It does not yet provide tails,
+This retained V1 hardcodes a head, neck, core and four/six supports. The owner
+rejects that fixed organization; it is kept for exact older-record recovery.
+It does not yet provide tails,
 hoof/toe details, fur, antennae, emission, motion, swimming, biomechanical
 performance or every requested animal form. The shown source is not finished
 HiBit pet art. Creative model output remains a separate portrayal; automatic

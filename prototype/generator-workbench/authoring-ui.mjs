@@ -1,7 +1,19 @@
+export function canonicalGenomicFamily(id) {
+  return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
+}
+
+// Only this new immutable registry uses a pinned foundation request. Older
+// catalogue payloads and replay records retain their original API semantics.
+export function authoringRequest(input) {
+  if (input.catalogue?.ruleVersion !== "developmental-compositional-source/1") return input;
+  return { ...input, catalogue: input.catalogue.foundationPin };
+}
+
 export function scopedLoci(catalogue, dimension = "all", query = "") {
   const text = query.trim().toLowerCase();
   return (catalogue?.loci ?? []).filter((locus) => {
-    const inDimension = dimension === "all" || locus.family === dimension;
+    const inDimension = dimension === "all" || locus.family === dimension ||
+      (catalogue?.ruleVersion === "developmental-compositional-source/1" && canonicalGenomicFamily(locus.family) === dimension);
     const searchable = [locus.id, locus.label, ...(locus.aliases ?? [])]
       .join(" ")
       .toLowerCase();
@@ -16,6 +28,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "developmental-compositional-source/1")
+    return "Compositional genome / eleven branches";
   if (catalogue.ruleVersion === "developmental-anatomical-source/1")
     return "Head / jointed supports / wings experiment";
   if (catalogue.ruleVersion === "developmental-regional-scene/1")
@@ -162,6 +176,13 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
+    (packet.ruleVersion !== "developmental-compositional-source/1" ||
+      (packet.schemaVersion === "compositional-authoring-record/1" &&
+        packet.sceneProjectionVersion === "compositional-source/1" &&
+        packet.materialProfileVersion === "compositional-surface-fields/1" &&
+        packet.scene?.status === "constructed" &&
+        packet.scene?.profileVersion === "compositional-source/1" &&
+        packet.reference?.status === "constructed")) &&
     (packet.ruleVersion !== "developmental-anatomical-source/1" ||
       (packet.schemaVersion === "anatomical-authoring-record/1" &&
         packet.sceneProjectionVersion === "anatomical-source/1" &&
@@ -212,12 +233,25 @@ export function imageLedPetHandoff(packet) {
 }
 
 export function authoringRoute(catalogue, operation) {
+  if (catalogue?.ruleVersion === "developmental-compositional-source/1")
+    return `/api/compositional-source/${operation}`;
   if (catalogue?.ruleVersion === "developmental-anatomical-source/1")
     return `/api/anatomical-source/${operation}`;
   return `/api/${["developmental-covering/1", "developmental-regional-scene/1"].includes(catalogue?.ruleVersion) ? "module-scene" : "authoring"}/${operation}`;
 }
 
 export function sceneReplayEnvelope(packet) {
+  if (packet.sceneProjectionVersion === "compositional-source/1")
+    return {
+      schemaVersion: packet.schemaVersion,
+      sceneProjectionVersion: packet.sceneProjectionVersion,
+      materialProfileVersion: packet.materialProfileVersion,
+      sceneRecordId: packet.sceneRecordId,
+      input: authoringRequest(packet.input),
+      inputDigest: packet.inputDigest,
+      resultDigest: packet.resultDigest,
+      sceneDigest: packet.sceneDigest,
+    };
   if (packet.sceneProjectionVersion === "anatomical-source/1")
     return {
       schemaVersion: packet.schemaVersion,
@@ -242,7 +276,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -320,7 +354,7 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
-  if (scene.profileVersion === "anatomical-source/1") {
+  if (["anatomical-source/1", "compositional-source/1"].includes(scene.profileVersion)) {
     const targets = scene.nodes.filter(node => node.sources.includes(locusId));
     return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
   }
@@ -363,6 +397,8 @@ export function copyLabels(locus, genome) {
 }
 export function outputText(fact) {
   if (!fact) return "Not resolved";
+  if (fact.state === "unimplemented" && !Object.hasOwn(fact, "value"))
+    return "Unimplemented copy/phenotype contract; no value invented.";
   let value;
   if (typeof fact.value === "boolean")
     value = fact.value ? "present" : "absent";
@@ -400,7 +436,7 @@ export function causalSummary(catalogue, result, id) {
 export function geometryBounds(result) {
   // Anatomical source solids use their retained three-dimensional camera.
   // The older diagnostic node/dimensions camera cannot interpret that graph.
-  if (result?.profileVersion === "anatomical-source/1") return null;
+  if (["anatomical-source/1", "compositional-source/1"].includes(result?.profileVersion)) return null;
   if (result?.status !== "resolved" || !result.graph?.nodes?.length)
     return null;
   const graph = result.graph;

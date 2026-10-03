@@ -1,12 +1,12 @@
 # Genetics framework
 
-Status: accepted framework with five information layers, eleven dimension families, structured abilities and separate inherited, expressed and acquired information. Fictional genetics, not a biological simulation. Detailed rules, examples, production schema and canonical designs remain proposed unless stated otherwise.
+Status: accepted framework with eleven genomic layers (the domain families listed below), structured abilities and separate inherited, expressed and acquired information. Five record stages preserve those information roles; they are not the genomic coverage count. Fictional genetics, not a biological simulation. Detailed rules, examples, production schema and canonical designs remain proposed unless stated otherwise.
 
 ## Agreed direction and open decisions
 
 - Generate recognizable, extensively varied creatures entirely from their genomes and expressed contributors. Classes are emergent descriptions of results, not hardcoded inputs. V1 requires ground, flying and swimming coverage and widely different body organizations. Organism examples express desired range, not a mandatory biological taxonomy; traits need subdivisions.
 - Owner correction, 2 October: repeated chained bulb silhouettes do not satisfy this range. Prompt simplification and retained-locus audits do not fix body organization. The next generator experiment must change the forced geometry and demonstrate distinctly organized source creatures; limb roles, skin/material and expressed colours must be understandable in the reference. Art direction, pixel art and genomics own the considered handoff together. New construction controls remain provisional until steered as canonical content.
-- The provisional [anatomical authoring contract](../design/anatomical-source-prototype/genomic-contract.md) defines a new bilateral subset with 34 carried locus pairs, typed head/core relationships, exterior facial anchors, four or six core-rooted support chains, conditional posterior/crown/muzzle/wing modules and owned pigment/material fields. It preserves dormant copies and rejects unconstructible inputs without repair. This new content does not replace the broader framework, reinterpret older records as organs or establish biomechanical capability; [workbench operation](../prototype/generator-workbench/README.md#anatomical-generate) distinguishes executable construction from remaining range and art gaps.
+- The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md) is a 34-pair bilateral subset. Its implementation inherits dimensions, pigments and accessory gates but hardcodes a head, neck, core and four/six supports. The owner rejects that fixed organization: it violates the existing genome-derived construction requirement and does not deliver the requested range. Preserve V1 for exact saved-record recovery, not as the broad generator's foundation. The correction must derive connected region organization and attachment roles from expressed contributors, retain the five-layer record and complete declared loci/coverage, and expose unimplemented fields honestly rather than counting them as working features.
 - Selective breeding is central: heritable variation can become a faster or more reliable lineage under comparable conditions. Inherited contributors and expression establish tendencies; a class label never assigns performance.
 - Affinities describe environments, elements and foods that support or hinder thriving. Skills/abilities need inherited structure; the exact tree or network remains open.
 - Jobs must not determine genomics. Future games interpret expressed properties for potentially many activities. Playful contests and a larger crowd of critters are future game direction, not genetic categories.
@@ -19,9 +19,16 @@ Developmental transformations/class sequences, damaging exposures, lifespan/deat
 
 ## Accepted framework: layers and dimensions
 
-A **layer** explains the role of information: inherited, resolved or acquired. A **dimension** describes a particular property within that structure. These are accepted domain boundaries, not a production schema or implementation architecture.
+A **genomic layer** is one of the eleven domain branches listed below. A
+**dimension** describes a property within a branch. Separately, five **record
+stages** distinguish foundation, inherited, resolved and acquired information.
+Authoring must expose all eleven genomic branches and their complete declared
+loci; a five-stage record inspector or anatomy-only subset cannot replace that
+coverage. Each contributor must have an explicit implemented, inactive or
+unimplemented status. These are domain boundaries, not a production schema or
+implementation architecture.
 
-| Layer | Contents | What it does not mean |
+| Record stage | Contents | What it does not mean |
 | --- | --- | --- |
 | 1. Genomic foundation and developmental vocabulary | Versioned reusable construction/expression operators, source-baseline constraints, contributor definitions and declared inheritance contracts | A hardcoded class/species body template, individual allele assignment, job or universal cap on improvement |
 | 2. Individual genome | Loci (hereditary positions), variants, copy counts, provenance and regulatory variants; inherited from parents or established at lab creation; optional linked groups | Current speed, hunger, experience or one gene per dimension |
@@ -29,13 +36,13 @@ A **layer** explains the role of information: inherited, resolved or acquired. A
 | 4. Resolved phenotype | Appearance, intrinsic capabilities, affinity profiles and available abilities, with context and reasons | A job profile, battle power score or identity |
 | 5. Lifetime state and history | Age, current condition/resources, experience, injuries, exposures and transformation events | Automatically inheritable changes |
 
-Identity, lineage, permissions and evidence accompany all layers rather than becoming genes. Regulatory variants belong to layer 2; rules interpreting them belong to layer 3. Temporary environment and condition feed evaluation without silently rewriting the inherited genome. Distinguish a reference-condition phenotype from current effective performance so a rested adult and a tired juvenile can be compared honestly.
+Identity, lineage, permissions and evidence accompany all record stages rather than becoming genes. Regulatory variants belong to stage 2; rules interpreting them belong to stage 3. Temporary environment and condition feed evaluation without silently rewriting the inherited genome. Distinguish a reference-condition phenotype from current effective performance so a rested adult and a tired juvenile can be compared honestly.
 
 Use **phenotype** in domain records for what we have called the expressed genome. It includes functional properties, not just visible appearance. Player-facing terminology remains a UX choice.
 
 ### Reversible layered representation — accepted direction
 
-Represent the five layers as branches of a versioned creature record. Store each
+Represent the five record stages as distinct sections of a versioned creature record, with all eleven genomic layers indexed across the inherited definitions and their effects. Store each
 inherited locus and its ordered copies once; dimension views and polygenic
 relationships reference those records rather than duplicating or flattening
 them. Preserve foundation/rule versions, regulatory information, provenance,

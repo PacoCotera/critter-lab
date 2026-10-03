@@ -1,5 +1,7 @@
 import { regionalSceneWorkbenchPackage } from "./regional-scene-workbench-package.mjs";
 import { anatomicalSourcePackage } from "./anatomical-source-package.mjs";
+import { compositionalSourcePackage } from "./compositional-source-package.mjs";
+import { resolveCompositionalSource, generateCompositionalSource, replayCompositionalSource } from "./compositional-source-adapter.mjs";
 import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
@@ -52,6 +54,8 @@ export function makeServer() {
         return json(200, catalogue());
       if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
         return json(200, anatomicalSourcePackage());
+      if (request.method === "GET" && request.url === "/api/compositional-source/catalogue")
+        return json(200, compositionalSourcePackage());
       if (
         request.method === "GET" &&
         request.url === "/api/authoring/catalogue"
@@ -78,6 +82,9 @@ export function makeServer() {
         "/api/anatomical-source/evaluate",
         "/api/anatomical-source/generate",
         "/api/anatomical-source/replay",
+        "/api/compositional-source/evaluate",
+        "/api/compositional-source/generate",
+        "/api/compositional-source/replay",
       ];
       if (request.method === "POST" && operations.includes(request.url)) {
         const chunks = [];
@@ -106,6 +113,12 @@ export function makeServer() {
         }
         let result;
         if (request.url === "/api/evaluate") result = evaluate(input);
+        else if (request.url === "/api/compositional-source/evaluate")
+          result = resolveCompositionalSource(input);
+        else if (request.url === "/api/compositional-source/generate")
+          result = generateCompositionalSource(input);
+        else if (request.url === "/api/compositional-source/replay")
+          result = replayCompositionalSource(input);
         else if (request.url === "/api/anatomical-source/evaluate")
           result = resolveAnatomicalSource(input);
         else if (request.url === "/api/anatomical-source/generate")

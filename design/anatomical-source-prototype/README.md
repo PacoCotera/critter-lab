@@ -1,5 +1,12 @@
 # Proposed anatomical source construction
 
+The fixed head/core/neck/support V1 implementation is retained for exact saved
+records and was rejected as the general generator. The current correction is
+the [compositional content](compositional-contract.md) and [source-art handoff](compositional-art-direction.md):
+organization derives from inherited contributors, and the authoring record
+exposes all eleven genomic branches. The drawings below are narrower design
+inputs, not acceptance of that range.
+
 Two parameter-driven source-art examples introduce a head, projecting muzzle and
 lower jaw, neck and trunk, exterior eye anchors, fore/hind paired jointed supports,
 distinct terminal masses and paired head surfaces. They share the same operators;
