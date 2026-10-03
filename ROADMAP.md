@@ -8,6 +8,12 @@ implementation. Architecture and game design are being revisited under the
 Existing software, concepts and authoring results are evidence, not approval of
 the new baseline. Preserve accepted unchanged direction and original references.
 
+The [connected review packet](design/probe-bench-review.md#read-this-checkpoint-first)
+is ready for owner steering. Its recommended first slice is a responsive encounter
+feeding an accepted haul and retained research relationship; the alternative
+emphasis is a reciprocal Companion interaction. Neither is an implementation
+assignment until the affected design choices are recorded.
+
 ## Milestones and feature tracking
 
 GitHub issues carry task state and acceptance; this page is the outcome map.

@@ -1,6 +1,8 @@
 # Connected discovery: Probe, genomic research and companionship
 
-**Owner-directed design discussion, 1 October 2026. Coding remains paused.**
+**Owner review packet, 3 October 2026. Design preparation is complete; decisions
+remain open in [M0 / issue 105](https://github.com/PacoCotera/critter-lab/issues/105).
+Coding remains paused.**
 Research is the visual/content backbone; worthwhile expeditions supply it, and
 its outcomes become companions the player wants to know and interact with.
 Companion is the ongoing bond, not merely a collection terminal. The child-facing
@@ -13,6 +15,133 @@ Lab accepts actual cargo once; current outgoing quantities clear and received
 history remains. Away Companion does not know live Lab state. See [gameplay](../specs/gameplay.md),
 [genetics](../specs/genetics.md), [the genetic engine](../specs/genetic-engine.md)
 and [creation/identity boundaries](../specs/sample-to-critter-contract.md).
+
+## Read this checkpoint first
+
+The outcome is a game about pursuing a curiosity, understanding a relationship,
+and meeting an individual whose appearance and capabilities follow from it.
+This packet carries forward the selected genome-field feeling, C18 visual grammar,
+responsive procedural encounters and automatic creature production. It does not
+restart those choices. Paco steers architecture, game rules, UI and all art;
+this comparison does not approve final screens or creature designs.
+
+### One sample, across the whole kit
+
+| Moment | Input, visible result and retained consequence |
+| --- | --- |
+| Explore | Companion directions navigate disclosed legal ground. A fresh named action changes a responsive situation; explicit collection takes an actual offer. Proposed contrast: a movable obstruction makes Move useful in one generated state; another state has an open route and no Move. Preview grants nothing. |
+| Bring home | Cargo shows actual whole supplies and the sample. One fresh Send seals the manifest and stops gathering; no normal second Send review. Separate Lab Accept credits it once. Entering a view or docking does not transfer it. |
+| Investigate | Research opens the same sample. Directions focus a neighborhood; scope and Needs/Have precede deliberate Start. Findings change the visible workpiece and supported relationships. Known inspection and leaving are free. |
+| Return later | A shortage preserves findings and stock. Another outing supplies the same ongoing research; it does not replace the sample or reset knowledge. |
+| Create | Complete required knowledge permits supported full comparisons. Selection is a reversible draft; separate Create spends the reviewed inputs and retains one individual. Incubation, Ready and deliberate Open are distinct. |
+| Live together | The same individual appears on Companion. Entry is safe; a deliberate interaction produces a response. Proposed Invite over varies with actual movement eligibility, condition and remembered familiarity. A portrait/visit count does not establish this behavior. |
+| Glance and print | Caddy shows accepted records or a dated cache, and paper preserves the same identity and permitted facts. Neither browsing nor scanning grants ownership or breeding rights. |
+
+Lab uses directions, Home/Research/Library/Habitat keys, Back and Confirm;
+Companion uses directions/Back/Confirm; Caddy uses Previous/OK/Next. Screen pixels
+are not controls. Old knob imagery and older two-step Send captures are retained
+references, not instructions for new work.
+
+**Worked A example, matching the concept sequence.** Initial stock 4 Data / 4 Energy /
+0 Essence plus an accepted haul 2/2/4 gives 6/6/4. Establishing heritage and comparing
+the coat spend 4 Data and 4 Essence, leaving 2/6/0. Plain coat with pale variation
+carried and pale markings expressed are both supported references; movement is
+still unknown. Movement research spends 4 Energy. A later haul 3/3/5 brings stock
+from 2/2/0 to 5/5/5; illustrative creation spends 5 each and uses the sample once.
+The 27 available items equal 27 spent. These are legacy fixture quantities, not
+approved prices, guaranteed yields or a final consumption policy.
+
+B supplies the necessary contrast: one established relationship exposes
+steady/lower walking effort versus burst/baseline effort under matched conditions,
+removing a redundant movement study. Attractive halves cannot be recombined into
+an unsupported third result. Research must follow useful relationships, not a
+fixed number of paid tiles. Pip and these two profiles do not define the eventual
+body catalogue or prove broad generation.
+
+**Interrupted return.** Before Lab acceptance, incoming supplies cannot fund
+research. If Lab accepts and its receipt is lost, its stock stays credited once.
+A separate Companion that has not received that receipt cannot know acceptance:
+it keeps the sealed non-spendable sent record, reports delivery unknown and
+recovers the same operation. Reconciliation clears the matching outgoing record
+and makes a new outing available; it cannot grant stock again. The current
+single-process simulator can update both views together, so its immediate
+zero-outgoing capture is not evidence of independent-device knowledge. Back
+changes the view, not the submitted transfer. A held input is consumed through
+release before another fresh action.
+
+### System boundary and the architecture choice
+
+```mermaid
+flowchart LR
+  Companion[Companion: outing and sealed cargo] -->|stable haul operation| Core[Local core: acceptance and retained world]
+  Core -->|same-operation receipt| Companion
+  Lab[Lab: research and creation] <--> Core
+  Core -->|accepted or dated cached projection| Caddy[Caddy: summary and paper]
+  Core <-->|optional global operations| Cloud[Domain cloud services]
+  Authoring[Genome and art authoring] -.->|candidate versioned content| Core
+```
+
+Core is a responsibility, not a selected server. The actual native prototype is
+one Linux process; the separate saved-replica transfer experiment is not radio or
+physical power-loss proof. Hosting the website, authoring workbench and simulator
+together does not make them a shared runtime. Authoring edits/provider images
+remain candidates with source identity and exact prompts; they cannot silently
+become accepted residents. Core research and creation must work without a phone,
+Cloud Pass or remote generation. Exact local generation coverage and unavailable
+output presentation remain later decisions before dependent creation work.
+
+| Local authority alternative | Player consequence | Tradeoff |
+| --- | --- | --- |
+| A. Lab accepts home-world changes | Companion retains outing/activity records; Lab accepts inventory, research, creation and resident-history effects. Caddy shows projections. | Fits existing home acceptance. Lab absence delays acceptance of shared changes; immediate away activity rights still need definition. |
+| B. Authority delegated by operation | Companion can accept explicitly delegated field/resident activity while Lab owns home operations. | Enables richer independent away progress, but needs bounded handover, player switching, revocation and conflict rules. It does not mean unrestricted multi-device writes. |
+
+Recommend A as the design assumption for the first proof, with durable field
+records and an explicit unresolved boundary for away companionship. Paco may
+choose B if independent away development is essential at this stage. Neither
+choice selects hardware, transport, a cloud provider or a new service. Device-loss
+recovery, nearby-kit authorization and global reconciliation are not proved here.
+
+### Visual review: intent beside actual implementation
+
+The boards below are retained **future concepts**, not one played save or final
+UI/art. Their missing states remain missing. Native captures use separate fixture
+identities, quantities and source revisions.
+
+![Future Companion collection, cargo and same-individual concept](grounded-screen-concepts/companion-journey.png)
+
+![Future Lab acceptance, partial findings, supported forms and creation review](grounded-screen-concepts/lab-journey.png)
+
+![Actual native partial coat research fixture](../docs/evidence/research-workpiece/partial-coat-default.png)
+
+The concepts have graphite depth, connected blue frames, saturated subjects and
+warm focus from [C18](game-art-proposals/35-vault-composition/18-c-refined.png).
+The actual native result above preserves carried versus expressed meaning but
+does not yet deliver the selected surrounding genome field. Carry the
+[original woven-field/local-unfolding reference](references/genome-field/01-genome-field-v1.png)
+into the existing visual grammar; its old controls, prices and single-candidate
+genotype presentation remain superseded.
+
+The [Caddy concept](grounded-screen-concepts/caddy-summary.png) completes the
+identity trail, with used sample, zero remaining stock and explicit cache time.
+The [native B contrast](../docs/evidence/research-workpiece/complete-B.png) and
+[corrected return capture](three-device-playability-audit/repair-accepted-offline-companion.png)
+show bounded implemented meaning, not final visual quality. Concept Library focus
+must not imply creation authority; final research/Library destination treatment
+needs steering.
+
+### Three decisions for Paco
+
+| Decision | Recommendation and meaningful alternative |
+| --- | --- |
+| First feature emphasis | Prove one responsive encounter → accepted haul → retained research relationship, with two contrasting causal states. Alternative: prioritize one reciprocal Companion interaction if forming the bond is the immediate uncertainty. Keep the whole journey as context either way. |
+| Local authority | Use A for the first proof, keeping away activity durable and its shared effects bounded. Choose B now only if independently accepted away development is necessary for the desired play. Both preserve standalone core play. |
+| Research composition and art emphasis | Keep the woven field visible while a selected neighborhood unfolds inside C18; give the finding/local change the main visual emphasis. Alternative: a focused study workspace with a persistent miniature field and clear return. Both retain the selected genome-map feeling and current controls. Paco steers composition, ornament density, creature depiction and resulting actual assets before they become canonical. |
+
+The next visual proof must show A before/review/after/return and the B relationship,
+including Needs/Have, shortage, pending and receipt recovery. Incubation/Ready/Open,
+reciprocal individual response and stale Caddy are explicit later gaps. No new
+image has been generated or passed off as approved art in this packet; the
+retained concepts have semantic/UX inspection, not independent art acceptance.
 
 ## What the research supports
 
@@ -58,7 +187,7 @@ needed. No reflex deadline, held-input replay, automatic pickup or result dismis
 Observation is not hidden-genome knowledge, ownership or a captured parent.
 
 LLMs expand reusable definitions, relations, causal operators and presentation
-within the [generation boundary](../specs/architecture.md#content-management-boundary).
+within the [generation boundary](../specs/architecture.md#content-validation-and-management).
 They do not decide truth through free prose. General operator/rule design needs
 validation; ordinary compatible outputs must not require individually authored
 scenarios. Genetic-algorithm search can improve valid diversity; it is not the
@@ -198,28 +327,24 @@ or capability and its observed expression. Behavior alone does not prove an
 unknown allele. Deeper Lineage/Genome/Attributes/History remains one free layer;
 the default stays playful. Exact interaction/learning rates are still proposals.
 
-## Discussion and next proof
+## Next proof and stopping condition
 
-Game, UX and generative architecture/art boundary contributors discussed the
-actual revised proposal. Coordinator challenged script-library generation and
-interchangeable pet clips. Both objections are integrated: generated causal state,
-derived affordances, creature initiative and actual retained learning. The
-configured-incubation amendment replaces individual manual art/content production
-with general-rule design and automatic per-creature outputs. This is paper design,
-not a generator run, rendered storyboard, playtest or production quality verdict.
+After Paco selects the emphasis, refine only that next feature under
+[connected play](https://github.com/PacoCotera/critter-lab/issues/44): approved
+controls, one ordinary/interrupted journey, actual retained state and the named
+visual gaps needed to inspect it. For the recommended discovery slice, stop at
+two rule-derived field states feeding one useful retained research relationship.
+Reference the existing downstream creation/identity/Caddy contracts without
+quietly implementing their missing breadth. Art and final interaction acceptance
+remain owner reviews; numeric balance remains proposed.
 
-Next proof has two bounded stages, not simultaneous ecosystem implementation:
-first generate contrasting states under the same encounter rules and show actual
-different useful choices; then prove genome-derived organizations and legal
-ground/air/water motion under shared construction/style rules, with variation
-within each. Classes describe expressed results, never select body templates.
-The [diversity proposal](genome-starter-content.md#v1-diversity-and-genome-first-construction)
-owns these comparative outputs. Complete genomes produce body, legal animation/
-still and encyclopedia from configured incubation. Include carried/expressed and capability differences,
-invalid-output rejection and stable saved replay. Reuse unchanged parental
-inheritance evidence. Configuration effects, exact progression and quality
-calibration remain design work. Existing portraits are reference/legacy fixture
-assets, not proof of automatic creature production.
+Genome-derived organizations, legal motion across ground/air/water and automatic
+retained art remain a separate horizon in the
+[diversity proposal](genome-starter-content.md#v1-diversity-and-genome-first-construction)
+and [creature-generation feature](https://github.com/PacoCotera/critter-lab/issues/60).
+Classes describe expressed results, never select body templates. General rules
+and configured incubation must produce individuals without per-creature manual
+authorship. Existing portraits do not prove this production pipeline.
 
 No game code, new generated assets, services, API calls, hardware or purchases in
 this design round. The architect checks target/framework/workload boundaries before
