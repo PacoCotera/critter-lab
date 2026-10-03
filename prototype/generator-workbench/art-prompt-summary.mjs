@@ -41,12 +41,13 @@ export function artPromptSummary(packet) {
   const version = marking ? "art-prompt-summary/2" : SUMMARY_VERSION;
   const coat = marking || packet?.sceneProjectionVersion === "compositional-source/6";
   const roles = coat || packet?.sceneProjectionVersion === "compositional-source/5";
-  const catalogueVersion = marking ? 5 : coat ? 4 : roles ? 3 : 2;
+  const innate = marking && packet?.ruleVersion === "developmental-compositional-source/6";
+  const catalogueVersion = innate ? 6 : marking ? 5 : coat ? 4 : roles ? 3 : 2;
   if (packet?.status !== "resolved" || packet.result?.status !== "resolved" ||
       packet.ruleVersion !== `developmental-compositional-source/${catalogueVersion}` ||
       !CURRENT_PROFILES.includes(packet.sceneProjectionVersion) ||
       scene?.status !== "constructed" || scene.profileVersion !== packet.sceneProjectionVersion ||
-      scene.covering?.profileVersion !== `compositional-surface-fields/${catalogueVersion}` ||
+      scene.covering?.profileVersion !== `compositional-surface-fields/${innate ? 5 : catalogueVersion}` ||
       !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === catalogueVersion) ||
         (isCompositionalDraft(catalogue) && catalogue.authoredRecipe.parent.version === catalogueVersion)) ||
       !catalogue.foundationPin || !packet.recordId || !packet.sceneDigest) {

@@ -2,8 +2,8 @@ import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summ
 import { isCompositionalDraft, COMPOSITIONAL_DRAFT_PACKET } from "./compositional-draft-format.mjs";
 
 export function supportsCompositionalAuthoring(catalogue) {
-  return ["developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4", "developmental-compositional-source/5"].includes(catalogue?.ruleVersion) &&
-    ((catalogue.id === "genomic-compositional-source-experiment" && [2, 3, 4, 5].includes(catalogue.version) &&
+  return ["developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4", "developmental-compositional-source/5", "developmental-compositional-source/6"].includes(catalogue?.ruleVersion) &&
+    ((catalogue.id === "genomic-compositional-source-experiment" && [2, 3, 4, 5, 6].includes(catalogue.version) &&
       catalogue.ruleVersion === `developmental-compositional-source/${catalogue.version}`) || isCompositionalDraft(catalogue));
 }
 
@@ -11,7 +11,7 @@ export function canonicalGenomicFamily(id) {
   return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
 }
 export function isCompositionalRule(ruleVersion) {
-  return ["developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4", "developmental-compositional-source/5"].includes(ruleVersion);
+  return ["developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4", "developmental-compositional-source/5", "developmental-compositional-source/6"].includes(ruleVersion);
 }
 
 // Only this new immutable registry uses a pinned foundation request. Older
@@ -43,6 +43,8 @@ export function initialAuthoringInputs(data) {
 }
 export function authoringPackageLabel(catalogue) {
   if (isCompositionalDraft(catalogue)) return "Authored composition · eleven branches";
+  if (catalogue.ruleVersion === "developmental-compositional-source/6")
+    return "Optional innate profile · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/5")
     return "Primary bands / patches · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/4")
@@ -201,7 +203,18 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
-    (packet.sceneProjectionVersion !== "compositional-source/7" || packet.ruleVersion === "developmental-compositional-source/5") &&
+    (packet.sceneProjectionVersion !== "compositional-source/7" || ["developmental-compositional-source/5", "developmental-compositional-source/6"].includes(packet.ruleVersion)) &&
+    (packet.ruleVersion !== "developmental-compositional-source/6" ||
+      (((packet.schemaVersion === "compositional-authoring-record/6" && packet.input?.catalogue?.id === "genomic-compositional-source-experiment" && packet.input?.catalogue?.version === 6) ||
+        (packet.schemaVersion === "compositional-authored-record/5" && isCompositionalDraft(packet.input?.catalogue) && packet.input.catalogue.authoredRecipe.parent.version === 6)) &&
+       packet.input?.catalogue?.ruleVersion === packet.ruleVersion &&
+       packet.sceneProjectionVersion === "compositional-source/7" && packet.materialProfileVersion === "compositional-surface-fields/5" &&
+       packet.scene?.status === "constructed" && packet.scene.profileVersion === packet.sceneProjectionVersion &&
+       packet.scene.covering?.profileVersion === packet.materialProfileVersion &&
+       packet.result.profileVersion === packet.sceneProjectionVersion && packet.result.graph?.profileVersion === packet.sceneProjectionVersion &&
+       packet.informationStages?.phenotype?.profileVersion === packet.sceneProjectionVersion &&
+       packet.result.innateProfile?.profileVersion === "innate-response-profile/1" &&
+       packet.reference?.profileVersion === "compositional-reference/7" && packet.reference.status === "constructed")) &&
     (packet.ruleVersion !== "developmental-compositional-source/5" ||
       (((packet.schemaVersion === "compositional-authoring-record/5" && packet.input?.catalogue?.id === "genomic-compositional-source-experiment" && packet.input?.catalogue?.version === 5) ||
         (packet.schemaVersion === "compositional-authored-record/4" && isCompositionalDraft(packet.input?.catalogue) && packet.input.catalogue.authoredRecipe.parent.version === 5)) &&
@@ -517,7 +530,7 @@ export function outputText(fact) {
     return "Unimplemented copy/phenotype contract; no value invented.";
   let value;
   if (typeof fact.value === "boolean")
-    value = fact.value ? "present" : "absent";
+    value = fact.target === "innate.enabled" ? (fact.value ? "enabled" : "disabled") : fact.value ? "present" : "absent";
   else if (Array.isArray(fact.value)) value = fact.value.join(" / ");
   else if (typeof fact.value === "object") value = JSON.stringify(fact.value);
   else value = String(fact.value);
@@ -530,6 +543,7 @@ export function causalSummary(catalogue, result, id) {
     catalogue.loci.find((item) => item.id === key)?.label ?? key;
   return {
     locus,
+    innate: result?.innateProfile?.witnesses.some((fact) => fact.locusId === id) ? result.innateProfile : null,
     fact: result?.facts.find((item) => item.locusId === id),
     prerequisites: (locus.requires ?? []).map((key) => ({
       id: key,
