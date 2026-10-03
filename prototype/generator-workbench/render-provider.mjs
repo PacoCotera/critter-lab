@@ -3,6 +3,11 @@ import { createHash } from "node:crypto";
 export const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const maximumOutputBytes = 4 * 1024 * 1024;
 
+export const providerTransports = Object.freeze({
+  nanobanana: "google-generate-content/1",
+  openai: "openai-image-edits/1",
+});
+
 export const providerFailureMessages = Object.freeze({
   HTTP_ERROR: "Provider rejected the request",
   NO_IMAGE: "Provider response contained no image",
@@ -93,11 +98,19 @@ async function boundedJson(response, maximum = 7 * 1024 * 1024) {
 export async function renderProvider(provider, settings, sourcePng, prompt) {
   let endpoint, headers, body;
   if (provider === "nanobanana") {
-    endpoint = "https://generativelanguage.googleapis.com/v1beta/interactions";
+    if (typeof settings.model !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(settings.model)) {
+      throw new Error("Google model must be a bounded model identifier");
+    }
+    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(settings.model)}:generateContent`;
     headers = { "x-goog-api-key": settings.key, "Content-Type": "application/json" };
-    body = JSON.stringify({ model: settings.model, store: false,
-      input: [{ type: "text", text: prompt }, { type: "image", mime_type: "image/png", data: sourcePng.toString("base64") }],
-      response_format: { type: "image", mime_type: "image/png" } });
+    body = JSON.stringify({
+      store: false,
+      contents: [{
+        role: "user",
+        parts: [{ text: prompt }, { inlineData: { mimeType: "image/png", data: sourcePng.toString("base64") } }],
+      }],
+      generationConfig: { responseModalities: ["IMAGE"] },
+    });
   } else if (provider === "openai") {
     endpoint = "https://api.openai.com/v1/images/edits";
     headers = { Authorization: `Bearer ${settings.key}` };
@@ -130,16 +143,27 @@ export async function renderProvider(provider, settings, sourcePng, prompt) {
     mime = "image/png";
     revisedPrompt = typeof result?.data?.[0]?.revised_prompt === "string" ? result.data[0].revised_prompt.slice(0, 20000) : null;
   } else {
-    const images = (Array.isArray(result?.steps) ? result.steps : []).filter((step) => step?.type === "model_output")
-      .flatMap((step) => Array.isArray(step.content) ? step.content : []).filter((content) => content?.type === "image");
+    const images = (Array.isArray(result?.candidates) ? result.candidates : [])
+      .flatMap((candidate) => Array.isArray(candidate?.content?.parts) ? candidate.content.parts : [])
+      .filter((part) => part?.thought !== true && typeof part?.inlineData?.mimeType === "string" &&
+        part.inlineData.mimeType.startsWith("image/"));
     const image = images.at(-1);
-    base64 = image?.data;
-    mime = image?.mime_type;
+    base64 = image?.inlineData?.data;
+    mime = image?.inlineData?.mimeType;
   }
   if (typeof base64 !== "string" || !base64.length) throw controlledFailure("NO_IMAGE", response, requestId);
   let bytes;
   try { bytes = imageBytes(base64, mime); }
   catch { throw controlledFailure("INVALID_IMAGE", response, requestId); }
+  if (provider === "nanobanana") {
+    const usageMetadata = result?.usageMetadata ?? null;
+    const responseId = result?.responseId ?? null;
+    if (Buffer.byteLength(JSON.stringify(usageMetadata), "utf8") > 32768 ||
+        (responseId !== null && (typeof responseId !== "string" || responseId.length > 256))) {
+      throw controlledFailure("METADATA_LIMIT", response, requestId);
+    }
+    return { bytes, mime, sha256: sha256(bytes), providerRequestId: requestId, responseId, usageMetadata };
+  }
   const usage = result?.usage ?? null;
   if (JSON.stringify(usage).length > 32768) throw controlledFailure("METADATA_LIMIT", response, requestId);
   return { bytes, mime, sha256: sha256(bytes), providerRequestId: requestId,

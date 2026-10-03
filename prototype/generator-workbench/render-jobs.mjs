@@ -5,7 +5,7 @@ import { randomUUID, timingSafeEqual } from "node:crypto";
 import { digest } from "./authoring-adapter.mjs";
 import { imageLedPetHandoff, isResolvedAuthoringPacket, sceneReplayEnvelope } from "./authoring-ui.mjs";
 import { proposalSourceBinding } from "./retained-pet-proposals.mjs";
-import { imageBytes, providerSettings, renderProvider, providerFailureMessages, sha256 } from "./render-provider.mjs";
+import { imageBytes, providerSettings, providerTransports, renderProvider, providerFailureMessages, sha256 } from "./render-provider.mjs";
 
 const jobIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const now = () => new Date().toISOString();
@@ -149,6 +149,7 @@ export function createRenderJobs(replay, environment = process.env) {
     active = true;
     const job = { schemaVersion: guided ? "render-job/2" : "render-job/1", status: "proposal", jobId: randomUUID(), requestId: input.requestId,
       requestDigest, provider: input.provider, model: providers[input.provider].model, state: "pending",
+      providerTransport: providerTransports[input.provider],
       createdAt: now(), updatedAt: now(), sourceBinding: binding,
       sourceSvgSha256: sha256(handoff.referenceSvg), sourcePngSha256: sha256(png), sourcePngBytes: png.length,
       sourcePngVerification: "client-rendered; hash and dimensions checked, pixel equivalence to verified SVG not established",

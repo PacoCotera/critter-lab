@@ -113,9 +113,12 @@ environment settings. Keep credentials outside source control and public files.
 | `CRITTER_OPENAI_IMAGE_MODEL` | Default `gpt-image-2.5-sunburst` |
 
 Configuration availability reports presence/writable storage, not verified
-account billing or model access. Google uses the [Interactions image contract](https://ai.google.dev/gemini-api/docs/image-generation),
-text plus inline PNG, `response_format` image/png and `store=false`; final image
-bytes come from model-output steps. OpenAI uses [Images edits](https://developers.openai.com/api/docs/guides/image-generation),
+account billing or model access. Google uses the [generateContent REST contract](https://ai.google.dev/api/generate-content)
+at the fixed `v1beta/models/{model}:generateContent` route with a validated,
+encoded server-selected model identifier. One user content contains the literal
+prompt and inline PNG; `responseModalities` is `IMAGE` and `store=false` disables
+request logging. Final image bytes come from candidate content `inlineData`,
+excluding thought parts. OpenAI uses [Images edits](https://developers.openai.com/api/docs/guides/image-generation),
 multipart image[] plus exact prompt, one PNG output and base64 bytes. No arbitrary
 URLs/endpoints/models from the client, conversation, prompt optimization,
 grounding, automatic fallback or retry is supplied.
@@ -139,7 +142,11 @@ with the verified SVG.
 
 Jobs retain pending/running/completed/failed/interrupted state, timestamps,
 provider/model/request identity, exact prompt, source bindings and actual output
-hash/MIME/usage/revised prompt where returned. Restart marks pending/running jobs
+hash/MIME/usage/revised prompt where returned. New jobs record `providerTransport`
+as `google-generate-content/1` or `openai-image-edits/1`. Google output retains
+`responseId` (at most256 characters) and `usageMetadata` (at most32KiB UTF-8);
+historical Interactions jobs retain their original `interactionId` and `usage`
+without relabeling. Restart marks pending/running jobs
 interrupted without resubmission. The provider deadline is180seconds; failure or
 interruption may have incurred a charge, and exactly-once execution is not claimed.
 Failed jobs retain a numeric `providerHttpStatus` independently of the optional
