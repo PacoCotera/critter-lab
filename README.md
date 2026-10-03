@@ -6,6 +6,18 @@ Critter Lab is a creature-research game built around physical instruments, with
 one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 [Meet the game](docs/players/README.md) or [run the software](docs/builders/getting-started.md).
 
+## Design before the next implementation
+
+The connected player journey leads the current architecture and game-design
+overhaul. The project owner has final say on changed game rules, architecture,
+UI/UX and all art direction and acceptance before dependent implementation.
+Involve the owner during direction selection and review actual resulting screens
+and assets at their intended sizes. Existing approved
+direction remains reusable; prototypes, reviewed concepts, merged source and
+passing checks are evidence with stated limits, not approval of a new baseline.
+[Architecture](specs/architecture.md), [gameplay](specs/gameplay.md) and
+[experience](specs/experience.md) retain accepted direction and open decisions.
+
 The hosted destinations are [the website](https://critterlab.basicberry.com/),
 [genome workbench](https://critterlab.basicberry.com/genome/) and
 [game simulator](https://critterlab.basicberry.com/sandbox/).
@@ -24,7 +36,9 @@ sealed sample. Lab Explore shows received expedition records. The
 [actual native walkthrough](docs/evidence/playable-expeditions/README.md) passed
 the connected journey and independent game/UX review; the original
 [map study](design/expedition-map-study/README.md) remains its design reference.
-The sandbox release endpoint identifies the currently activated version.
+The native `/api/release` identifies the running game; `/api/platform-release`
+identifies the separate website/workbench hosting source.
+[Deployment notes](CHANGELOG.md) distinguish the two releases.
 
 ## Playable software today
 
@@ -32,7 +46,7 @@ The [three-device native simulator](native/selected-lab/README.md#three-device-m
 connects Companion gathering and Cargo return with explicit Lab reception,
 resource-funded research, genome selection, incubation, deliberate reveal and
 habitat visits. Native C17 owns rules, saved state and physical focus; LVGL renders
-migrated screens into native framebuffers. The browser transports those frames
+all current connected screen families into native framebuffers. The browser transports those frames
 and the depicted physical controls. The devices are logical contexts in
 one Linux host process, with simulated wireless links.
 
@@ -46,7 +60,7 @@ use this framework. The [complete Dock LVGL family and portable display boundary
 passed native output and independent review. The [Companions preview proof](docs/evidence/native-companion-resident-preview/README.md)
 shows retained saved portraits/properties and offline inspection without a visit.
 The [resident list/visit proof](docs/evidence/native-companion-resident-actions/README.md)
-records save-once visits and shared counts. [Lab Home and workspace previews](docs/evidence/native-lab-home/README.md) now use retained LVGL, with native routes, controls and independent review checked. [Connected Lab reception and received records](docs/evidence/native-lab-reception/README.md) also use LVGL. [Sample research and Library](docs/evidence/native-lab-research/README.md) now share a retained family with copied knowledge, costs and original-size portraits. Creation/incubation and resident/habitat actions still need migration. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
+records save-once visits and shared counts. [Lab Home and workspace previews](docs/evidence/native-lab-home/README.md) now use retained LVGL, with native routes, controls and independent review checked. [Connected Lab reception and received records](docs/evidence/native-lab-reception/README.md) also use LVGL. [Sample research and Library](docs/evidence/native-lab-research/README.md) now share a retained family with copied knowledge, costs and original-size portraits. Creation/incubation and resident/habitat actions also use retained LVGL; [action evidence](docs/evidence/native-lab-actions/README.md) records their boundaries. The [Caddy shared UI compile](docs/evidence/native-dock-lvgl/ESP32.md)
 and [current Companion UI](docs/evidence/native-companion-esp/README.md)
 now link under ESP-IDF; neither headless target establishes physical operation. Final HiBit
 artwork and human playability remain open.
@@ -62,15 +76,26 @@ Owner permits complete re-layout under the [Companion direction](specs/experienc
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the
 [actual native screen gallery](design/connected-device-review/native/README.md).
-The [live sandbox](https://critterlab.basicberry.com) reports its running revision.
+The [live sandbox](https://critterlab.basicberry.com/sandbox/) reports its running revision.
 Its reset control preserves a recoverable saved-world backup.
 
 This is a bounded playable Core V1 prototype. Shared retained Gemini resource and
 resident art, expedition scenery and illustrated A/B research are integrated and
 passed focused actual review. [The native walkthrough](docs/evidence/polished-core-v1/README.md)
 shows the connected loop and corrected screens. Timing, chance and content remain
-provisional. [Status](STATUS.md) records evidence and remaining work. Each newly
-deployed sandbox version starts a fresh shared game.
+provisional. [Status](STATUS.md) records evidence and remaining work. Native
+gameplay releases start a fresh shared game; hosting-only website/workbench
+activations preserve the native release and its saved world.
+
+The separate [genome workbench](prototype/generator-workbench/README.md) provides
+guided inherited-trait editing, explicit structure refresh, Before/Current
+comparison and deliberate rendering with retained variants. Its current default
+carries 114 copied pairs, six drafts and eleven named layers, with four domains
+still lacking executable contracts. [Actual hosted use](prototype/generator-workbench/evidence/guided-authoring/README.md)
+and [two retained Google images](prototype/generator-workbench/evidence/api-rendering/README.md)
+show literal source/prompt retention. Returned art is not an accepted
+source-faithful master. Broad organism range, full genomic coverage, animation,
+sharing and game integration remain unfinished; OpenAI is unconfigured.
 
 ## The whole product
 
@@ -107,7 +132,7 @@ and source art. Concepts and unfinished studies retain their provenance and
 approval status. It is not a complete buildable physical kit. [Earlier host experiments](prototype/README.md) remain
 useful studies with separate saves and limits.
 
-Beecho Lab is a project of **Dirty Pawz Press**. Software uses AGPL-3.0-only,
+Critter Lab is a project of **Dirty Pawz Press**. Software uses AGPL-3.0-only,
 hardware sources CERN-OHL-S-2.0, and documentation/eligible artwork CC-BY-SA-4.0.
 See [licensing](LICENSING.md), [branding](BRANDING.md),
 [contributing](CONTRIBUTING.md) and [versioning](releases/README.md).
