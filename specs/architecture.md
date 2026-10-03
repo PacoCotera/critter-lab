@@ -107,7 +107,7 @@ a separate bounded browser-only IndexedDB store. Manual return remains available
 an optional operator-token-gated [API rendering path](../prototype/generator-workbench/README.md#render-a-pet-through-an-api)
 replays the exact source and verifies the current derived brief binding.
 Guided render-request2 retains a separately edited prompt/hash and sends that
-exact text with the client-rasterized512px PNG to fixed Google Interactions or
+exact text with the client-rasterized512px PNG to fixed Google generateContent or
 OpenAI Images edit endpoints; retained request1 behavior stays literal.
 Google is selected first; missing provider keys disable that route. Eight durable
 server jobs, one active provider request, explicit recovery and optional API
