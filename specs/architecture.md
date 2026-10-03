@@ -129,31 +129,41 @@ The [compositional Generate guide](../prototype/generator-workbench/README.md#co
 owns current operation and its limits. Its [content contract](../design/anatomical-source-prototype/compositional-contract.md)
 derives serial/fan region graphs, bilateral/radial frames, optional heads, distinct
 free/contact chains and independent thin surfaces from retained copies. It
-retains 104 ordered pairs and six draft definitions with all eleven branches
+retains111 ordered pairs and six draft definitions with all eleven branches
 visible. That is the complete declared experimental union, not complete locus
 content or implemented physiology for every branch. Generation samples the
 contributors rather than selecting named examples. Pigment partitions and
 smooth/scales and whole-primary fur fields have explicit surface owners. The
 separately pinned catalogue2 adds six shape/terminal/fur contributors, actual
 convex-ring facet roots and contact-terminal envelopes through source3,
-material2 and reference3. Current source4/reference4 keeps that geometry and
+material2 and reference3. Retained source4/reference4 keeps that geometry and
 material while changing only fur-edge contrast; exact source3/reference3 recovery
 remains available. Actual source3/4 fur material craft remains HOLD: the revised
 outlines read as scattered dashes rather than a coherent coat. Catalogue1 and exact source/reference1/2 paths remain
 available; dispatch never upgrades an old input or supplies missing alleles. Coarse low-poly depiction
 communicates volume and occlusion; it does not establish finished pet art,
-biology or motion. Tail, hoof/toe anatomy, partial coats, emission, broader organism range
-and automatic animation remain gaps; the content is not canonical anatomy.
+biology or motion. Current catalogue3/rule3/source5/material3/reference5 adds
+seven explicit ear/tail contributors. A thin versioned wrapper reuses the old
+primary/head/chain/sheet mathematics, then appends head-facet-rooted concave ears
+and one six-station/eight-ring axial tail. SERIAL's terminal primary or FAN's root
+owns that local+X sweep; roots and finite positive parent/child tissue witnesses
+remain recorded. Material3 reuses48 primary roots and copied fur length/flow,
+with three overlapping tapered/fringed pieces per root and1008 fragment limit.
+Opaque base, pigment clipping and bounded scale coverage remain. This coat is
+an actual-output review hypothesis, not a material pass. All old source1–4 and
+authored-parent2 recipe paths remain literal; no missing alleles are supplied.
+Hoof/toe anatomy, partial coats, emission, hearing, broader organism range and
+automatic animation remain gaps; the content is not canonical anatomy.
 
 The current vocabulary's separate `art-prompt-summary/1` consumer reads actual
-source3/4 roles, expressed facts, material owners and pinned pigment names for
+source3/4/5 roles, expressed facts, material owners and pinned pigment names for
 the short image-led pet brief. Server and UI derive it independently from the
 verified source; imported wording is untrusted. Clause witnesses and source
 binding stay in Advanced inspection. The
 [brief contract](../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 owns aliases and limits; it changes no input/result/scene identity or anatomy.
 The existing compendium now compiles compatible compositional authoring deltas
-against exact catalogue2, with unique fork/revision identity, new definition pins
+against exact catalogue2 or3, with unique fork/revision identity, new definition pins
 and truthful edited-record provenance. Shared resolution consumes the compiled
 definitions; published stock paths retain their exact meaning. Compact recipes
 support restart/import without a server-only registry or larger API body cap.

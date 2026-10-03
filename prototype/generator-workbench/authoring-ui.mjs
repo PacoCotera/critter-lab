@@ -2,15 +2,16 @@ import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summ
 import { isCompositionalDraft, COMPOSITIONAL_DRAFT_PACKET } from "./compositional-draft-format.mjs";
 
 export function supportsCompositionalAuthoring(catalogue) {
-  return catalogue?.ruleVersion === "developmental-compositional-source/2" &&
-    ((catalogue.id === "genomic-compositional-source-experiment" && catalogue.version === 2) || isCompositionalDraft(catalogue));
+  return ["developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue?.ruleVersion) &&
+    ((catalogue.id === "genomic-compositional-source-experiment" && [2, 3].includes(catalogue.version) &&
+      catalogue.ruleVersion === `developmental-compositional-source/${catalogue.version}`) || isCompositionalDraft(catalogue));
 }
 
 export function canonicalGenomicFamily(id) {
   return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
 }
 export function isCompositionalRule(ruleVersion) {
-  return ["developmental-compositional-source/1", "developmental-compositional-source/2"].includes(ruleVersion);
+  return ["developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(ruleVersion);
 }
 
 // Only this new immutable registry uses a pinned foundation request. Older
@@ -42,6 +43,8 @@ export function initialAuthoringInputs(data) {
 }
 export function authoringPackageLabel(catalogue) {
   if (isCompositionalDraft(catalogue)) return "Authored composition · eleven branches";
+  if (catalogue.ruleVersion === "developmental-compositional-source/3")
+    return "Ears / axial tail / primary coat · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/2")
     return "Region forms / terminals / coverings · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/1")
@@ -194,6 +197,17 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
+    (packet.sceneProjectionVersion !== "compositional-source/5" || packet.ruleVersion === "developmental-compositional-source/3") &&
+    (packet.ruleVersion !== "developmental-compositional-source/3" ||
+      (((packet.schemaVersion === "compositional-authoring-record/3" && packet.input?.catalogue?.id === "genomic-compositional-source-experiment" && packet.input?.catalogue?.version === 3) ||
+        (packet.schemaVersion === "compositional-authored-record/2" && isCompositionalDraft(packet.input?.catalogue) && packet.input.catalogue.authoredRecipe.parent.version === 3)) &&
+       packet.input?.catalogue?.ruleVersion === packet.ruleVersion &&
+       packet.sceneProjectionVersion === "compositional-source/5" && packet.materialProfileVersion === "compositional-surface-fields/3" &&
+       packet.scene?.status === "constructed" && packet.scene.profileVersion === packet.sceneProjectionVersion &&
+       packet.scene.covering?.profileVersion === packet.materialProfileVersion &&
+       packet.result.profileVersion === packet.sceneProjectionVersion && packet.result.graph?.profileVersion === packet.sceneProjectionVersion &&
+       packet.informationStages?.phenotype?.profileVersion === packet.sceneProjectionVersion &&
+       packet.reference?.profileVersion === "compositional-reference/5" && packet.reference.status === "constructed")) &&
     (!["compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion) || packet.ruleVersion === "developmental-compositional-source/2") &&
     (packet.ruleVersion !== "developmental-compositional-source/2" ||
       (((packet.schemaVersion === "compositional-authoring-record/2" &&
@@ -262,7 +276,7 @@ export function imageLedPetHandoff(packet) {
     };
   }
   let summary = null;
-  if (["compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion)) {
+  if (["compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(packet.sceneProjectionVersion)) {
     try {
       summary = artPromptSummary(packet);
     } catch (error) {
@@ -290,7 +304,7 @@ export function authoringRoute(catalogue, operation) {
 }
 
 export function sceneReplayEnvelope(packet) {
-  if (["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion)) {
+  if (["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(packet.sceneProjectionVersion)) {
     const envelope = {
       schemaVersion: packet.schemaVersion,
       sceneProjectionVersion: packet.sceneProjectionVersion,
@@ -331,7 +345,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -409,7 +423,7 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
-  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(scene.profileVersion)) {
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(scene.profileVersion)) {
     const targets = scene.nodes.filter(node => node.sources.includes(locusId));
     return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
   }
@@ -491,7 +505,7 @@ export function causalSummary(catalogue, result, id) {
 export function geometryBounds(result) {
   // Anatomical source solids use their retained three-dimensional camera.
   // The older diagnostic node/dimensions camera cannot interpret that graph.
-  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(result?.profileVersion)) return null;
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(result?.profileVersion)) return null;
   if (result?.status !== "resolved" || !result.graph?.nodes?.length)
     return null;
   const graph = result.graph;

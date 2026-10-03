@@ -13,11 +13,11 @@ accessories and proportions do not satisfy genome-derived organization.
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v2** package, then uses one action to sample a valid genome
+source experiment · v3** package, then uses one action to sample a valid genome
 and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
-not upload it. Current vocabulary source3/4 derives its pet instruction plus a
+not upload it. Current source5 and retained vocabulary source3/4 derive their pet instruction plus a
 short shape, extremity, owner-material and named-colour description through
 `art-prompt-summary/1`. Clause witnesses and unsupported semantic labels stay
 in Advanced inspection. Older unrelated profiles retain their original short
@@ -39,10 +39,10 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ### Compositional Generate and all eleven genomic branches
 
-`genomic-compositional-source-experiment@2` uses separately pinned
-`developmental-compositional-source/2`, `compositional-source/4`,
-`compositional-surface-fields/2` and `compositional-reference/4` rules. The
-retained version1 package remains selectable with its original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+`genomic-compositional-source-experiment@3` uses separately pinned
+`developmental-compositional-source/3`, `compositional-source/5`,
+`compositional-surface-fields/3` and `compositional-reference/5` rules. Both
+retained version1/2 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
 resolve serial or branched region graphs, depth, bilateral/radial frames,
@@ -50,16 +50,16 @@ unequal growth, bend, broad/narrow joins, optional head/face modules, distinct
 free/contact chains and independently rooted thin surfaces. Zero chains and
 headless bodies are legitimate. A class name never selects an assembly.
 
-The current foundation carries **104 ordered locus pairs**: the retained
-98-pair union plus six new region-shape, terminal and fur contributors. The
+The current foundation carries **111 ordered locus pairs**: the retained
+98-pair union plus six region-shape/terminal/fur and seven ear/tail contributors. The
 original union combines the broader 50 and structural 50 records, sharing
 the two exact pigment definitions once. Six draft definitions remain visible
 without invented allele copies. All eleven genomic branches appear in the
 current authoring record, including branches whose locus/capability contracts
 are still missing. Each record retains its exact source/version, contributions
-and expressed, inactive or unimplemented consumer status. Fifty-six potential construction
-contributors are not the whole project genome, and 104 carried vectors do not
-mean 104 implemented phenotype features. Unimplemented movement, physiology or
+and expressed, inactive or unimplemented consumer status. Sixty-three potential construction
+contributors are not the whole project genome, and111 carried vectors do not
+mean111 implemented phenotype features. Unimplemented movement, physiology or
 other branches are not assigned zero capability or inferred from appearance.
 
 The separate five-stage record inspector preserves foundation, inherited,
@@ -76,9 +76,10 @@ Original `compositional-source/1` records also retain their exact builder and
 `compositional-reference/1` output. The corrected `/2` constructor intersects
 the visible retained mesh for narrow contacts; `/1` used analytic ellipsoid
 roots that could leave a visible gap. Version1 Generate and Resolve retain `/2` and
-`compositional-reference/2`. Current version2 Generate and Resolve use the new
-104-pair foundation and `/4` construction/reference; no old input acquires the
-new vocabulary automatically. Reopening an old record does not silently upgrade it.
+`compositional-reference/2`. Retained version2 uses its104-pair foundation and
+`/4` construction/reference. Current version3 requires111 explicit pairs and
+`/5` construction/reference; no old input acquires missing copies or changes its
+consumer. Reopening an old record never silently upgrades it.
 
 Original vocabulary `/3` construction/reference records remain exactly replayable.
 The `/4` reference changes only fur outlines to .80 times their already-lit fill
@@ -87,7 +88,18 @@ clipping stay unchanged. Actual `/3` inspection withheld fur-readability accepta
 because its ribbons blended into smooth skin. Actual `/4` inspection found
 visible scattered dashes rather than a coherent coat; fur material craft remains
 HOLD. Neither reference is approved finished pet art. The factual primary-body
-fur cue remains available to the pet brief without changing the source again.
+fur cue remains available to that retained profile's pet brief.
+
+Source5 adds optional typed head-rooted concave ear sheets and one true continuous
+axial tail, independently gated by seven exact new pairs. SERIAL uses its terminal
+primary owner; FAN uses its root. Actual facet roots, directed surface normals,
+owner frames and shared parent/child tissue witnesses remain inspectable. Ears
+and tail are smooth body-pigment owners; they imply no hearing or motion. Fur's
+new material3 consumer replaces each of48 primary roots with one overlapping
+three-piece tapered/fringed cluster, at most1008 material fragments over seven
+owners. It preserves inherited potential length/flow, exact local pigment clips
+and complete opaque skin. The new coat depiction awaits actual-output craft
+review; neither a source build nor agreed geometry establishes a readable coat.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared
@@ -98,9 +110,9 @@ uses owned local pigments and smooth/scales or whole-primary fur fields on
 the composed 3D source. Primary envelopes resolve inherited ovoid/barrel/tapered
 profiles and bilateral p2/p3/p4 cross-sections; radial cross-sections remain
 circular. Contact terminals resolve rounded/pad/wedge forms in their own frame,
-with no ground or locomotion claim. Fur is a bounded facet-rooted ribbon field
-over opaque skin, with inherited length/flow, exact pigment clipping and
-336-ribbon maximum separate from 128 scale cells.
+with no ground or locomotion claim. Fur remains a bounded facet-rooted material
+field over opaque skin, separate from128 scale cells. Retained material2 keeps
+its336 ribbons; current material3 has the declared1008-fragment cluster bound.
 It is a low-poly static construction reference, not finished HiBit pet art,
 animation, a physical movement model or full organism-range acceptance.
 
@@ -412,7 +424,7 @@ baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
 advanced inspection. The **Gemini prompt** appears beside the structural preview
-with one **Copy prompt** action. Current vocabulary source3/4 uses the base
+with one **Copy prompt** action. Current source5 and retained source3/4 use the base
 “Turn the attached critter into a cute pet, shown alone in rich high-bit pixel
 art.” followed by an actual-source description, targeting25–45 words without
 truncating major enabled counts or owner materials. The
@@ -452,7 +464,7 @@ The [actual authoring evidence](evidence/compositional-authoring/README.md)
 retains this definition edit, its changed source, one ordinary Generate draw,
 exact prompt and page-reload/import recovery.
 
-Baseline label/description metadata and all104 explicit starting pairs can be
+Baseline label/description metadata and the exact parent's104 or111 starting pairs can be
 saved separately. **Load active draft starting copies** deliberately replaces
 the experiment's copies for Resolve; Generate never inherits that template.
 Runtime operator references, IDs/allele order, targets, families, guards,
@@ -461,12 +473,13 @@ Each mixed pair must remain inside the original domain; cross exponent values
 must be pair-closed in2/3/4. Unsupported records remain unsupported.
 
 Export/import/restore retains `compositional-authoring-delta/1` plus its compiled
-definition pin. The full104+6 foundation and edited-source provenance are rebuilt
+definition pin. The full parent-specific104 or111 pair union plus six drafts and edited-source provenance are rebuilt
 against the exact published parent, so a restart needs no temporary registry.
 Requests/replay use the compact recipe; recipe plus genome must fit64KiB or fail
-explicitly. Compositional drafts use their own local-storage slot, preserving
-saved legacy catalogue drafts. The eight creature-record slots are unchanged.
-Published catalogue1/2 and exact source1–4 recipes remain selectable/replayable.
+explicitly. Parent2/3 drafts use separate local-storage slots, preserving both
+earlier compositional and saved legacy catalogue drafts. The eight creature-record
+slots are unchanged. Published catalogue1/2 and exact source1–4 recipes remain
+selectable/replayable; parent3 never supplies missing copies to those recipes.
 See the [authoring contract](../../design/anatomical-source-prototype/compositional-contract.md#compatible-authored-foundations).
 Failed import or save also preserves the unchanged verified current result;
 unverified imported outputs never replace it. A changed input has no current
@@ -552,7 +565,8 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `authoring-adapter.mjs`                            | Host records/digests, replay, presentation and fact-derived art-template projection                                                      |
 | `module-scene.mjs` / `module-scene-authoring.mjs`   | Optional verified body/ocular/covering aggregate, bounded unmodified generation, compact replay and positive renderer projection |
 | `authoring-identity.mjs`                           | Separate inherited/expression full digests and short lookup references; not reversible genome payloads |
-| `art-prompt-summary.mjs`                           | Pure source3/4 pet wording from constructed roles, active facts and pinned pigment labels; separate clause/source audit |
+| `art-prompt-summary.mjs`                           | Pure source3/4/5 pet wording from constructed roles, active facts and pinned pigment labels; separate clause/source audit |
+| `anatomical-roles-{package,construction,presentation,adapter}.mjs` | Separately pinned111-pair source5: finite concave ears, graph-owned tail and bounded primary coat; strict old-version preservation |
 | `genome-tree.mjs` / `genome-codec.mjs`              | Lossless layered packet mapping, exact ordered allele packing and bounded versioned string encode/decode |
 | `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
 | `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |

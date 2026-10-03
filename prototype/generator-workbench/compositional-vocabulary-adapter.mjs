@@ -16,6 +16,9 @@ import { constructCompositionalVocabulary, FUR_DEPICTION_PROFILE } from "./compo
 import { realizePigmentFields } from "./compositional-source-presentation.mjs";
 import { realizeVocabularyMaterials, vocabularySourceReference, vocabularyFurReference } from "./compositional-vocabulary-presentation.mjs";
 import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summary.mjs";
+import { ROLES_CONTENT, ROLES_CATALOGUE, ROLES_FOUNDATION, anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
+import { constructAnatomicalRoles } from "./anatomical-roles-construction.mjs";
+import { realizeAnatomicalRoleMaterials, anatomicalRolesReference } from "./anatomical-roles-presentation.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const plain = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -83,20 +86,47 @@ function consumerGuard(locusId, values) {
   if (locusId.startsWith("growth.wing-")) return [values["modules.wingPair"], "independent thin-surface owner"];
   return guards[locusId] ?? [true, "compatible construction consumer"];
 }
-function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null) {
+// Only declared internal consumers select a configuration. HTTP input cannot
+// supply operators/functions or change the old stock resolver's defaults.
+function consumerConfiguration(consumer) {
+  if (consumer === "vocabulary") return {
+    catalogue: COMPOSITIONAL_CATALOGUE, foundation: COMPOSITIONAL_FOUNDATION,
+    content: COMPOSITIONAL_CONTENT, structural: structuralIds,
+    package: compositionalVocabularyPackage, profile: FUR_DEPICTION_PROFILE,
+    packetSchema: COMPOSITIONAL_PACKET_SCHEMA, authoredSchema: "compositional-authored-record/1"
+  };
+  if (consumer !== "anatomical-roles") throw new Error("Unsupported internal source consumer");
+  return {
+    catalogue: ROLES_CATALOGUE, foundation: ROLES_FOUNDATION,
+    content: { ...COMPOSITIONAL_CONTENT, baseline: ROLES_CONTENT.baseline, materialProfile: ROLES_CONTENT.materialProfile, ruleVersion: ROLES_CONTENT.ruleVersion },
+    structural: new Set([...structuralIds, ...ROLES_CONTENT.loci.map((locus) => locus.id)]),
+    package: anatomicalRolesPackage, profile: ROLES_CONTENT.constructionProfile,
+    packetSchema: "compositional-authoring-record/3", authoredSchema: "compositional-authored-record/2"
+  };
+}
+function roleGuard(locusId, values) {
+  if (locusId === "anatomy.auricular-presence") return [values["modules.typedHead"], "typed head owner"];
+  if (["anatomy.auricular-form", "growth.auricular-length-ratio"].includes(locusId)) return [values["modules.typedHead"] && values["ears.enabled"], "enabled head-owned ears"];
+  if (locusId.startsWith("growth.axial-tail-")) return [values["tail.enabled"], "enabled axial tail"];
+  return consumerGuard(locusId, values);
+}
+function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null, consumer = "vocabulary") {
   try {
-    if (![VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE].includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
+    const configuration = consumerConfiguration(consumer), content = configuration.content;
+    const roles = consumer === "anatomical-roles", activeStructuralIds = configuration.structural;
+    if (!(roles ? [configuration.profile] : [VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE]).includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
-    const catalogue = authoredPackage?.catalogue ?? exactCatalogue(input.catalogue), genome = input.genome;
+    if (roles && !authoredPackage && ![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error("Exact pinned catalogue3 foundation required");
+    const catalogue = authoredPackage?.catalogue ?? (roles ? configuration.catalogue : exactCatalogue(input.catalogue)), genome = input.genome;
     if (authoredPackage && digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
     const modeled = catalogue.loci.filter((locus) => locus.status === "validated");
-    const foundation = authoredPackage?.foundation ?? COMPOSITIONAL_FOUNDATION;
+    const foundation = authoredPackage?.foundation ?? configuration.foundation;
     envelope(genome, ["schemaVersion", "contentId", "contentVersion", "loci", "recordVersions", "baselineReferences", "origin"]);
     if (genome.schemaVersion !== "compositional-genome/1" || genome.contentId !== catalogue.id || genome.contentVersion !== catalogue.version) throw new Error("Wrong compositional genome/version");
-    if (digest(genome.recordVersions) !== digest(Object.fromEntries(modeled.map((locus) => [locus.id, locus.version]))) || digest(genome.baselineReferences) !== digest(COMPOSITIONAL_CONTENT.baseline.references)) throw new Error("Required full locus versions/baseline differ");
+    if (digest(genome.recordVersions) !== digest(Object.fromEntries(modeled.map((locus) => [locus.id, locus.version]))) || digest(genome.baselineReferences) !== digest(content.baseline.references)) throw new Error("Required full locus versions/baseline differ");
     if (!plain(genome.loci) || Object.keys(genome.loci).length !== modeled.length) throw new Error("The full inherited union is required");
-    const context = input.context ?? COMPOSITIONAL_CONTENT.context;
-    if (digest(context) !== digest(COMPOSITIONAL_CONTENT.context)) throw new Error("Only the declared static compositional context is supported");
+    const context = input.context ?? content.context;
+    if (digest(context) !== digest(content.context)) throw new Error("Only the declared static compositional context is supported");
     if (input.expressionSeed !== void 0 && input.expressionSeed !== null) throw new Error("This compositional profile uses deterministic expression");
     const values = {}, facts = [];
     for (const locus of catalogue.loci) {
@@ -111,7 +141,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       let resolved;
       if (locus.operator === "copy-mean") {
         resolved = (contributions[0] + contributions[1]) / 2;
-        if (!structuralIds.has(locus.id)) resolved = Math.round(resolved * 1e6) / 1e6;
+        if (!activeStructuralIds.has(locus.id)) resolved = Math.round(resolved * 1e6) / 1e6;
       } else if (locus.operator === "dominant-enable") resolved = contributions.some(Boolean);
       else if (locus.operator === "recessive-enable") resolved = contributions.every(Boolean);
       else {
@@ -121,14 +151,14 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       }
       if (typeof resolved === "number" && !Number.isFinite(resolved)) throw new Error("Non-finite resolved contribution");
       const imported = ANATOMICAL_CONTENT.importedLoci.find((reference2) => reference2.id === locus.id);
-      const structural = structuralIds.has(locus.id), target = structural ? imported?.target ?? locus.target : `broader.${locus.outputs[0]}`;
+      const structural = activeStructuralIds.has(locus.id), target = structural ? imported?.target ?? locus.target : `broader.${locus.outputs[0]}`;
       values[target] = resolved;
       facts.push({ id: target, locusId: locus.id, recordVersion: locus.version, copies: [...copies], sources: [
         locus.id
       ], operator: locus.operator, target, value: resolved, unit: locus.units ?? locus.bounds?.unit ?? "", copyResolution: "resolved", state: structural ? "expressed" : "unimplemented", prerequisites: locus.requires ?? [], sourceReferences, reasons: [`Exact retained ${locus.operator} copy contribution.`, ...!structural ? ["This old consumer's geometry, motion or physiology is not implemented by the compositional source; the value is retained, not asserted as a phenotype."] : []] });
     }
-    for (const fact of facts.filter((fact2) => structuralIds.has(fact2.locusId))) {
-      const [active, reason] = consumerGuard(fact.locusId, values);
+    for (const fact of facts.filter((fact2) => activeStructuralIds.has(fact2.locusId))) {
+      const [active, reason] = roles ? roleGuard(fact.locusId, values) : consumerGuard(fact.locusId, values);
       if (!active) {
         fact.state = "inactive";
         fact.reasons.push(`Carried and resolved; inactive because there is no ${reason}.`);
@@ -137,13 +167,13 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
         fact.reasons.push("In this profile, inherited lift seeds the head direction; actual parent/head facet extents determine final center separation.");
       }
     }
-    const scene = realizeVocabularyMaterials(
-      realizePigmentFields(constructCompositionalVocabulary(values, facts, profileVersion)),
+    const scene = (roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
+      realizePigmentFields(roles ? constructAnatomicalRoles(values, facts) : constructCompositionalVocabulary(values, facts, profileVersion)),
       values,
       facts
     );
-    const reference = profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
-    for (const fact of facts.filter((entry) => structuralIds.has(entry.locusId))) {
+    const reference = roles ? anatomicalRolesReference(scene) : profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
+    for (const fact of facts.filter((entry) => activeStructuralIds.has(entry.locusId))) {
       fact.consumers = [
         ...scene.nodes.filter((node) => node.sources.includes(fact.locusId)).map((node) => node.id),
         ...scene.nodes.flatMap((node) => node.surfaceFragments.flatMap((fragment, index) => fragment.sources?.includes(fact.locusId) ? [`${node.id}:surface-fragment:${index}`] : [])),
@@ -165,12 +195,12 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     ).slice(0, 20)}`;
     const packet = {
       status: "resolved",
-      schemaVersion: authoredPackage ? "compositional-authored-record/1" : COMPOSITIONAL_PACKET_SCHEMA,
-      ruleVersion: COMPOSITIONAL_RULE,
+      schemaVersion: authoredPackage ? configuration.authoredSchema : configuration.packetSchema,
+      ruleVersion: roles ? ROLES_CONTENT.ruleVersion : COMPOSITIONAL_RULE,
       contentId: catalogue.id,
       contentVersion: catalogue.version,
       sceneProjectionVersion: profileVersion,
-      materialProfileVersion: COMPOSITIONAL_CONTENT.materialProfile,
+      materialProfileVersion: content.materialProfile,
       recordId,
       sceneRecordId: recordId,
       input: retainedInput,
@@ -203,19 +233,21 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     return rejected(error);
   }
 }
-function generateCompositionalVocabulary(input, authoredPackage = null) {
+function generateCompositionalVocabulary(input, authoredPackage = null, consumer = "vocabulary") {
   try {
+    const configuration = consumerConfiguration(consumer), content = configuration.content;
     envelope(input, ["catalogue", "seed", "maxAttempts"]);
     if (authoredPackage) {
       if (digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
-    } else exactCatalogue(input.catalogue);
-    const modeled = (authoredPackage?.catalogue ?? COMPOSITIONAL_CATALOGUE).loci.filter((locus) => locus.status === "validated");
+    } else if (consumer === "vocabulary") exactCatalogue(input.catalogue);
+    else if (![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error("Exact pinned catalogue3 foundation required");
+    const modeled = (authoredPackage?.catalogue ?? configuration.catalogue).loci.filter((locus) => locus.status === "validated");
     if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 4294967295) throw new Error("Generation seed must be uint32");
     const attempts = input.maxAttempts ?? 1024;
     if (!Number.isInteger(attempts) || attempts < 1 || attempts > 1024) throw new Error("Candidate attempts must be 1 through 1024");
     const random = randomStream(input.seed), failures = {};
     for (let attempt = 1; attempt <= attempts; attempt++) {
-      const descriptor = authoredPackage ? structuredClone(authoredPackage) : compositionalVocabularyPackage(), genome = descriptor.defaultGeneration.genome;
+      const descriptor = authoredPackage ? structuredClone(authoredPackage) : configuration.package(), genome = descriptor.defaultGeneration.genome;
       for (const locus of modeled) {
         const choose = () => locus.alleles[Math.floor(random() * locus.alleles.length)].id;
         if (locus.operator === "pair-map" || locus.operator.endsWith("enable")) {
@@ -223,8 +255,8 @@ function generateCompositionalVocabulary(input, authoredPackage = null) {
           genome.loci[locus.id] = [allele, allele];
         } else genome.loci[locus.id] = [choose(), choose()];
       }
-      genome.origin = { kind: "experiment", seed: input.seed, attempt, algorithmVersion: "mulberry32/1", founderProfile: COMPOSITIONAL_CONTENT.founderSampling.id, baseline: COMPOSITIONAL_CONTENT.baseline.id };
-      const packet = resolveCompositionalVocabulary({ catalogue: authoredPackage?.foundation ?? COMPOSITIONAL_FOUNDATION, genome, context: descriptor.referenceContext, expressionSeed: null }, FUR_DEPICTION_PROFILE, authoredPackage);
+      genome.origin = { kind: "experiment", seed: input.seed, attempt, algorithmVersion: "mulberry32/1", founderProfile: content.founderSampling.id, baseline: content.baseline.id };
+      const packet = resolveCompositionalVocabulary({ catalogue: authoredPackage?.foundation ?? configuration.foundation, genome, context: descriptor.referenceContext, expressionSeed: null }, configuration.profile, authoredPackage, consumer);
       if (packet.status === "resolved") return { ...packet, generation: { seed: input.seed, winningSeed: input.seed, attempts: attempt, algorithmVersion: "mulberry32/1", candidateSequenceVersion: COMPOSITIONAL_CONTENT.founderSampling.id, priorFailures: failures } };
       const reason = packet.errors[0].message;
       failures[reason] = (failures[reason] ?? 0) + 1;

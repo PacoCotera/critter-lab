@@ -1,6 +1,7 @@
 import { compileCompositionalDraft } from "./compositional-draft-package.mjs";
 import { COMPOSITIONAL_DRAFT_PACKET } from "./compositional-draft-format.mjs";
 import { resolveCompositionalVocabulary, generateCompositionalVocabulary } from "./compositional-vocabulary-adapter.mjs";
+import { resolveAnatomicalRoles, generateAnatomicalRoles } from "./anatomical-roles-adapter.mjs";
 
 function rejected(error) {
   return { status: "rejected", errors: [{ code: "compositional-authoring", path: "input", message: error.message }] };
@@ -17,6 +18,9 @@ function draftOperation(input, generate) {
     if (!input?.catalogue?.definitionPin) throw new Error("A validated authored definition pin is required.");
     const descriptor = compileCompositionalDraft(input.catalogue);
     const request = { ...input, catalogue: descriptor.foundation };
+    if (descriptor.catalogue.ruleVersion === "developmental-compositional-source/3") {
+      return generate ? generateAnatomicalRoles(request, descriptor) : resolveAnatomicalRoles(request, descriptor);
+    }
     return generate ? generateCompositionalVocabulary(request, descriptor) :
       resolveCompositionalVocabulary(request, "compositional-source/4", descriptor);
   } catch (error) {
@@ -29,11 +33,15 @@ export const generateCompositionalDraft = (input) => draftOperation(input, true)
 export function replayCompositionalDraft(record) {
   try {
     const keys = ["schemaVersion", "sceneProjectionVersion", "materialProfileVersion", "sceneRecordId", "input", "inputDigest", "resultDigest", "sceneDigest"];
-    if (!record || Object.keys(record).some((key) => !keys.includes(key)) ||
-        record.schemaVersion !== COMPOSITIONAL_DRAFT_PACKET || record.sceneProjectionVersion !== "compositional-source/4" ||
-        record.materialProfileVersion !== "compositional-surface-fields/2") throw new Error("Unsupported authored replay identity.");
+    const roles = record?.schemaVersion === "compositional-authored-record/2" &&
+      record?.sceneProjectionVersion === "compositional-source/5" && record?.materialProfileVersion === "compositional-surface-fields/3";
+    const vocabulary = record?.schemaVersion === COMPOSITIONAL_DRAFT_PACKET &&
+      record?.sceneProjectionVersion === "compositional-source/4" && record?.materialProfileVersion === "compositional-surface-fields/2";
+    if (!record || Object.keys(record).some((key) => !keys.includes(key)) || !(roles || vocabulary)) throw new Error("Unsupported authored replay identity.");
     const packet = resolveCompositionalDraft(record.input);
     if (packet.status !== "resolved") return packet;
+    if (packet.schemaVersion !== record.schemaVersion || packet.sceneProjectionVersion !== record.sceneProjectionVersion ||
+        packet.materialProfileVersion !== record.materialProfileVersion) throw new Error("Authored parent and replay profile differ.");
     if (["inputDigest", "resultDigest", "sceneDigest", "sceneRecordId"].some((key) => record[key] !== packet[key])) {
       throw new Error("Authored recipe or source digest differs.");
     }

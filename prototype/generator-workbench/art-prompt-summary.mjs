@@ -2,7 +2,7 @@
 // changes source anatomy or trusts a prompt embedded in an imported record.
 const SUMMARY_VERSION = "art-prompt-summary/1";
 const PET_INSTRUCTION = "Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.";
-const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4"];
+const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4", "compositional-source/5"];
 import { isCompositionalDraft } from "./compositional-draft-format.mjs";
 
 function counted(count, singular, plural = `${singular}s`) {
@@ -36,14 +36,17 @@ export function unavailableArtPromptSummary(packet, error) {
 export function artPromptSummary(packet) {
   const scene = packet?.scene;
   const catalogue = packet?.input?.catalogue;
+  const roles = packet?.sceneProjectionVersion === "compositional-source/5";
+  const catalogueVersion = roles ? 3 : 2;
   if (packet?.status !== "resolved" || packet.result?.status !== "resolved" ||
-      packet.ruleVersion !== "developmental-compositional-source/2" ||
+      packet.ruleVersion !== `developmental-compositional-source/${roles ? 3 : 2}` ||
       !CURRENT_PROFILES.includes(packet.sceneProjectionVersion) ||
       scene?.status !== "constructed" || scene.profileVersion !== packet.sceneProjectionVersion ||
-      scene.covering?.profileVersion !== "compositional-surface-fields/2" ||
-      !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === 2) || isCompositionalDraft(catalogue)) ||
+      scene.covering?.profileVersion !== `compositional-surface-fields/${roles ? 3 : 2}` ||
+      !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === catalogueVersion) ||
+        (isCompositionalDraft(catalogue) && catalogue.authoredRecipe.parent.version === catalogueVersion)) ||
       !catalogue.foundationPin || !packet.recordId || !packet.sceneDigest) {
-    throw new Error("A resolved vocabulary source3/4 with its pinned foundation is required for the pet summary.");
+    throw new Error("A resolved source3/4/5 with its matching pinned foundation is required for the pet summary.");
   }
 
   const nodes = scene.nodes;
@@ -118,6 +121,18 @@ export function artPromptSummary(packet) {
     if (!["rounded", "pointed"].includes(form)) throw new Error("Head-projection form witness is missing.");
     features.push(clause(counted(crowns.length, `${form} head projection`), crowns, ["crown.form"]));
   }
+  if (roles) {
+    const ears = nodes.filter((node) => node.role === "auricular-sheet" && byId.get(node.parent)?.role === "typed-head");
+    if (ears.length) {
+      if (ears.length !== 2 || ears.some((ear) => !["rounded", "pointed"].includes(ear.form) || !ear.auricular || !ear.attachment?.witness)) throw new Error("Auricular role witnesses are incomplete.");
+      features.push(clause(counted(ears.length, `${ears[0].form} smooth ear`), ears, ["ears.enabled", "ears.form", "ears.lengthOverHeadRz"]));
+    }
+    const tails = nodes.filter((node) => node.role === "axial-tail");
+    if (tails.length) {
+      if (tails.length !== 1 || !tails[0].sweep || !tails[0].attachment?.witness) throw new Error("Axial tail witnesses are incomplete.");
+      features.push(clause("one smooth tapered tail", tails, ["tail.enabled", "tail.lengthOverOwnerRx", "tail.baseRadiusOverOwnerCross", "tail.bendRadians"], { ownerRule: tails[0].sweep.ownerRule, selectedOwner: tails[0].parent }));
+    }
+  }
 
   const chainRoots = nodes.filter((node) => ["contact-chain", "free-chain"].includes(node.role) &&
     node.attachment?.owner === node.parent && byId.get(node.parent)?.role === "primary-region");
@@ -185,8 +200,10 @@ export function artPromptSummary(packet) {
       sourceProfile: packet.sceneProjectionVersion,
       clauseWitnesses: witnesses,
       unsupportedLabels: [
-        { label: "ears / hearing", reason: "Head projections have no ear-organ or hearing consumer." },
-        { label: "tail", reason: "Generic primary child regions do not establish a tail." },
+        ...(roles ? [{ label: "hearing", reason: "Static auricular surfaces do not establish hearing." }] : [
+          { label: "ears / hearing", reason: "Head projections have no ear-organ or hearing consumer." },
+          { label: "tail", reason: "Generic primary child regions do not establish a tail." }
+        ]),
         { label: "rings / stripes", reason: "Ordered pigment fields are not implemented marking geometry." },
         { label: "species / walking / flight", reason: "Static roles do not establish classification or physical capabilities." }
       ]

@@ -6,6 +6,8 @@ import { compositionalVocabularyPackage } from "./compositional-vocabulary-packa
 import { resolveCompositionalVocabulary, generateCompositionalVocabulary, replayCompositionalVocabulary } from "./compositional-vocabulary-adapter.mjs";
 import { validateCompositionalDraft, resolveCompositionalDraft, generateCompositionalDraft, replayCompositionalDraft } from "./compositional-draft-adapter.mjs";
 import { COMPOSITIONAL_DRAFT_SCHEMA } from "./compositional-draft-format.mjs";
+import { anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
+import { resolveAnatomicalRoles, generateAnatomicalRoles, replayAnatomicalRoles } from "./anatomical-roles-adapter.mjs";
 import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
@@ -39,6 +41,9 @@ function compositionOperations(input, replay = false) {
   if (foundation?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) {
     return { evaluate: resolveCompositionalDraft, generate: generateCompositionalDraft, replay: replayCompositionalDraft };
   }
+  if (foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 3) {
+    return { evaluate: resolveAnatomicalRoles, generate: generateAnatomicalRoles, replay: replayAnatomicalRoles };
+  }
   const vocabulary = foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 2;
   return vocabulary
     ? { evaluate: resolveCompositionalVocabulary, generate: generateCompositionalVocabulary, replay: replayCompositionalVocabulary }
@@ -69,7 +74,7 @@ export function makeServer() {
       if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
         return json(200, anatomicalSourcePackage());
       if (request.method === "GET" && request.url === "/api/compositional-source/catalogue")
-        return json(200, { ...compositionalVocabularyPackage(), retainedPackages: [compositionalSourcePackage()] });
+        return json(200, { ...anatomicalRolesPackage(), retainedPackages: [compositionalVocabularyPackage(), compositionalSourcePackage()] });
       if (
         request.method === "GET" &&
         request.url === "/api/authoring/catalogue"

@@ -1,6 +1,7 @@
 import { digest } from "./authoring-adapter.mjs";
 import { VOCABULARY_CATALOGUE, VOCABULARY_FOUNDATION, compositionalVocabularyPackage } from "./compositional-vocabulary-package.mjs";
 import { COMPOSITIONAL_DRAFT_SCHEMA, COMPOSITIONAL_DRAFT_ID } from "./compositional-draft-format.mjs";
+import { ROLES_CATALOGUE, ROLES_FOUNDATION, anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
 
 function requireCondition(condition, message) {
   if (!condition) throw new Error(message);
@@ -98,18 +99,20 @@ function validateRecord(record, original) {
 
 export function compileCompositionalDraft(input) {
   closedObject(input, ["schemaVersion", "parent", "forkId", "revision", "records", "startingCopies", "baselineMetadata", "definitionPin"], "authoring delta");
-  requireCondition(input.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA && same(input.parent, VOCABULARY_FOUNDATION),
-    "An exact published catalogue2 parent pin is required.");
+  const roles = same(input.parent, ROLES_FOUNDATION);
+  requireCondition(input.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA && (roles || same(input.parent, VOCABULARY_FOUNDATION)),
+    "An exact published catalogue2 or catalogue3 parent pin is required.");
+  const baseCatalogue = roles ? ROLES_CATALOGUE : VOCABULARY_CATALOGUE;
   requireCondition(Number.isInteger(input.revision) && input.revision > 0, "A positive authored revision is required.");
   requireCondition(typeof input.forkId === "string" && /^[0-9a-f]{16}$/.test(input.forkId), "An explicit16-digit fork identity is required.");
-  requireCondition(Array.isArray(input.records) && input.records.length <= VOCABULARY_CATALOGUE.loci.length,
+  requireCondition(Array.isArray(input.records) && input.records.length <= baseCatalogue.loci.length,
     "Changed records must be a bounded list.");
   closedObject(input.baselineMetadata, ["label", "description"], "baseline metadata");
   requireCondition(Object.values(input.baselineMetadata).every((value) => metadataText(value, 2000)), "Invalid baseline metadata.");
   const recipe = structuredClone(input);
   delete recipe.definitionPin;
   requireCondition(Buffer.byteLength(JSON.stringify(recipe), "utf8") <= 65536, "Authoring delta exceeds the existing64KiB limit.");
-  const catalogue = structuredClone(VOCABULARY_CATALOGUE);
+  const catalogue = structuredClone(baseCatalogue);
   delete catalogue.foundationPin;
   catalogue.id = `${COMPOSITIONAL_DRAFT_ID}-${recipe.forkId}`;
   catalogue.version = recipe.revision;
@@ -118,7 +121,7 @@ export function compileCompositionalDraft(input) {
     const index = catalogue.loci.findIndex((locus) => locus.id === record.id);
     requireCondition(index >= 0 && !changedIds.has(record.id), "Unknown or duplicate edited locus.");
     changedIds.add(record.id);
-    const original = VOCABULARY_CATALOGUE.loci[index];
+    const original = baseCatalogue.loci[index];
     validateRecord(record, original);
     catalogue.loci[index] = structuredClone(record);
     const reference = {
@@ -128,14 +131,14 @@ export function compileCompositionalDraft(input) {
       locusId: record.id,
       recordVersion: record.version,
       recordDigest: digest(record),
-      parentReferences: structuredClone(VOCABULARY_CATALOGUE.recordSources[record.id])
+      parentReferences: structuredClone(baseCatalogue.recordSources[record.id])
     };
     catalogue.recordSources[record.id] = [reference];
     catalogue.sourceDefinitions.push({ ...reference, definition: structuredClone(record) });
   }
   const modeled = catalogue.loci.filter((locus) => locus.status === "validated");
   closedObject(recipe.startingCopies, modeled.map((locus) => locus.id), "starting copies");
-  requireCondition(Object.keys(recipe.startingCopies).length === modeled.length, "All104 starting-copy pairs are required.");
+  requireCondition(Object.keys(recipe.startingCopies).length === modeled.length, `All${modeled.length} starting-copy pairs are required.`);
   for (const locus of modeled) {
     const copies = recipe.startingCopies[locus.id];
     requireCondition(Array.isArray(copies) && copies.length === 2 && copies.every((copy) => locus.alleles.some((allele) => allele.id === copy)),
@@ -150,7 +153,7 @@ export function compileCompositionalDraft(input) {
   catalogue.authoredRecipe = { ...recipe, definitionPin: foundation };
   requireCondition(Buffer.byteLength(JSON.stringify(catalogue.authoredRecipe), "utf8") <= 65536,
     "Pinned authoring delta exceeds64KiB. Reduce the edited-definition payload.");
-  const descriptor = compositionalVocabularyPackage();
+  const descriptor = roles ? anatomicalRolesPackage() : compositionalVocabularyPackage();
   const genome = descriptor.defaultGeneration.genome;
   genome.contentId = catalogue.id;
   genome.contentVersion = catalogue.version;

@@ -50,11 +50,11 @@ there is no minimum leg quota, automatic grounding of free chains or hidden four
 | Contact chain | The same link/joint operators plus a distinct attached terminal volume with declared dimensions and parent frame. No toes, hoof split or locomotion follows from the end shape. |
 | Independent surface gate | A rooted thin sheet with declared chord, span, orientation and taper. It may coexist with chains; its surface extent must read differently from a rod and it receives no contact foot or extra chain by resemblance. A sheet does not establish flight. |
 
-The current ellipsoid, tapered-link and thin-surface operators suffice for this
-bounded increment if their parameters and local frames are driven by the graph.
+The retained ellipsoid, tapered-link and thin-surface operators describe the
+earlier bounded graph when parameters and local frames are driven by it.
 The visible ends, links and surface spans must remain distinct in silhouette.
-New tissue meshes or a generic physics solver are unnecessary for the static
-source. Natural occlusion is permitted; a separate part/root trace can expose
+Current source5 adds the finite auricular bowl and continuous axial sweep below;
+no generic physics solver is supplied. Natural occlusion is permitted; a separate part/root trace can expose
 hidden attachments without making primary skin transparent.
 
 Exterior eyes attach only when expressed, to the designated leading or central
@@ -74,6 +74,22 @@ not a ground plane. These are provisional source forms, not paws, hoof clefts,
 toes, friction or locomotion. Actual changed-source inspection still decides
 silhouette/material clarity; adding operators is not an art-quality pass.
 
+## Typed ears and tail
+
+Catalogue3/source5 appends genuine roles rather than renaming crown projections
+or generic rear regions. Optional ears are two head-facet-rooted shallow concave
+skins with rounded/pointed rims, inherited length and directed inner/outer
+normals. They retain their head-local bilateral frame and body pigment; no cream
+inner patch, fur or hearing follows. Crown remains independently expressed.
+
+An optional axial tail is one closed6×8 tapered sweep with inherited arc length,
+base width and owner-local XZ bend. SERIAL chooses its terminal primary owner;
+FAN chooses its root. The actual+X facet port, local transform, source causes and
+positive tissue overlap remain inspectable. No screen-space rear selection,
+free-chain/foot relabeling, rings or collision-free movement is implied. Ears
+and tail must read as attached anatomy in actual output; source agreement is
+not that craft pass.
+
 ## Material fields and pigments
 
 Geometry supplies solid anatomy. Covering supplies a surface field with material
@@ -84,7 +100,7 @@ kind, extent, scale and flow; it must not install another anatomy graph.
 - Scales: an overlapping material field, indicated by selective edge/light
   clusters at its actual extent and flow. Samples are not detached armour plates
   or mandatory stamps. Do not expand sparse coverage into a full coat.
-- Current catalogue2 fur is a whole-primary surface override over complete
+- Retained catalogue2 fur is a whole-primary surface override over complete
   opaque skin. Forty-eight actual facet-rooted thin ribbons per owner retain
   inherited length/tangent flow, root pigment and visible clipping; max 336 is a
   separate material budget. No solids, spikes, detached tufts or new anatomy
@@ -93,13 +109,23 @@ kind, extent, scale and flow; it must not install another anatomy graph.
   [vocabulary contract](compositional-contract.md#current-shape-terminal-and-covering-vocabulary).
 
 Actual reference `/3` inspection found the authored fur field visually blended
-into smooth skin, so fur readability was withheld. Current reference `/4` retains
+into smooth skin, so fur readability was withheld. Retained reference `/4` preserves
 those exact roots, fill, facet lighting, masks and camera, and adds only fur edges
 at .80 times the already-lit fill with .70px width at512. It adds no fibres, solid
 tufts, glints or base-skin triangulation. Original `/3` output remains exact for
 saved recipes. Actual inspection of the bounded correction found visible
 scattered dashes rather than a coherent coat.
 Fur material craft remains HOLD; this is not finished pet-art approval.
+
+Source5/material3 now consumes the same48 actual primary facet roots with a
+cohesive overlapping three-piece tapered/fringed cluster per root, max1008
+material fragments. Its shared broad base/splayed fringe is a bounded depiction
+hypothesis; three parallel scratches would fail the intended coat read. Copied
+potential length/flow, root pigment and exact tissue/pigment clipping stay
+retained, with complete opaque skin. No solid spikes, extra anatomy, random
+scatter or new colours. Head, ears, tail and other non-primary owners remain
+smooth. Actual revised output must establish attached ears, continuous tail and
+coherent coat before any narrow material acceptance; the old fur HOLD remains.
 
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base
@@ -116,7 +142,7 @@ the connected outline, not only in colour, feature decoration or a different
 camera. Preserve old V1 inputs/outputs under their original version. No class
 selector, curated output replacement or resampling for attractive bodies.
 
-The current vocabulary source3/4 creative instruction starts with:
+The current source5 and retained source3/4 creative instruction starts with:
 
 > Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.
 
@@ -124,8 +150,9 @@ Follow it with a short factual description from the actual source: counted body
 shape/organization, enabled head/eye/projection modules, attached chains and end
 forms, flat flaps, body-owned covering and named local pigment fields. The
 [semantic brief contract](compositional-contract.md#source-derived-pet-brief)
-owns exact aliases and witnesses. Head projections are not ears, child regions
-are not tails, and two local colours are not rings. The factual furry-body cue
+owns exact aliases and witnesses. Source5 alone adds ears/tail from actual typed
+nodes; head projections and generic child regions do not become those roles.
+Two local colours are not rings. The factual furry-body cue
 does not reverse the source4 material-craft HOLD. Older unrelated source profiles
 keep their original handoff; the full audit remains outside the creative text.
 
