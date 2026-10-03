@@ -105,11 +105,22 @@ full-genome implementation claim follows.
 The host workbench retains returned pet bitmaps as source-bound proposals through
 a separate bounded browser-only IndexedDB store. Manual return remains available;
 an optional operator-token-gated [API rendering path](../prototype/generator-workbench/README.md#render-a-pet-through-an-api)
-replays the exact source, derives the current short prompt and sends its client
-rasterized512px PNG to fixed Google Interactions or OpenAI Images edit endpoints.
+replays the exact source and verifies the current derived brief binding.
+Guided render-request2 retains a separately edited prompt/hash and sends that
+exact text with the client-rasterized512px PNG to fixed Google Interactions or
+OpenAI Images edit endpoints; retained request1 behavior stays literal.
 Google is selected first; missing provider keys disable that route. Eight durable
 server jobs, one active provider request, explicit recovery and optional API
-provenance preserve the original source/prompt; restart never retries a provider.
+provenance preserve each original source/prompt; restart never retries a provider.
+The guided workspace shows a persistent eleven-layer genome tree with attributes
+under each layer, visible counts/gaps and per-attribute consumer status. Search
+never hides the layer headings; selecting an attribute expands its parent.
+It keeps the last structure while inherited edits are pending,
+requires explicit refresh before rendering, compares before/current sources and
+shows one deduplicated image gallery. A bounded browser working-creature index
+associates exact source versions by user UUID and first inputDigest; it is not
+verified ancestry or a genome identity. Authenticated server images remain
+viewable when browser proposal storage fails. No provider submission is automatic.
 The source PNG hash proves client bytes, not equivalence with the verified SVG.
 The [retention contract](../prototype/generator-workbench/README.md#retain-a-manually-returned-pet-proposal)
 owns browser bindings, limits, cancellation and bitmap/metadata export. No genome

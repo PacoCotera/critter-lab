@@ -64,7 +64,7 @@ function openDatabase() {
   });
 }
 
-export async function readPetProposals(binding, signal) {
+export async function readPetProposals(binding, signal, workingCreature = null) {
   assertActive(signal);
   const database = await openDatabase();
   try {
@@ -77,7 +77,17 @@ export async function readPetProposals(binding, signal) {
       transaction.oncomplete = () => {
         signal?.removeEventListener("abort", cancel);
         const key = proposalBindingKey(binding);
-        resolve(request.result.filter((entry) => entry.bindingKey === key));
+        resolve(request.result.filter((entry) => {
+          const association = entry.metadata.workingCreature;
+          if (association && workingCreature) return association.id === workingCreature.id &&
+            association.originalGenomeId === workingCreature.originalGenomeId;
+          if (entry.bindingKey === key) return true;
+          if (!workingCreature) return false;
+          // Earlier literal metadata is shown only by a known exact-source reference.
+          return workingCreature.sourceVersions.some((source) =>
+            source.sourceRecordId === entry.metadata.sourceBinding.sourceRecordId &&
+            source.inputDigest === entry.metadata.sourceBinding.inputDigest);
+        }));
       };
       transaction.onabort = transaction.onerror = () => {
         signal?.removeEventListener("abort", cancel);
@@ -89,7 +99,7 @@ export async function readPetProposals(binding, signal) {
   }
 }
 
-export async function retainPetProposal(file, binding, providerLabel, signal, apiProvenance = null) {
+export async function retainPetProposal(file, binding, providerLabel, signal, apiProvenance = null, workingCreature = null) {
   assertActive(signal);
   if (!(file instanceof Blob) || !ALLOWED_MIME.has(file.type) || !file.size || file.size > MAX_BYTES) {
     throw new Error("Choose a PNG, JPEG or WebP bitmap of at most4MiB.");
@@ -119,10 +129,12 @@ export async function retainPetProposal(file, binding, providerLabel, signal, ap
   }
   assertActive(signal);
   const imageSha256 = await sha256(imageBytes);
-  const promptSha256 = await sha256(new TextEncoder().encode(binding.promptText));
+  const submittedPrompt = apiProvenance?.schemaVersion === "render-job/2" ? apiProvenance.promptText : binding.promptText;
+  const promptSha256 = await sha256(new TextEncoder().encode(submittedPrompt));
   const proposalId = `pet-proposal-${await sha256(new TextEncoder().encode(canonical({
     binding, promptSha256, imageSha256,
     ...(apiProvenance ? { apiProvenance } : {}),
+    ...(!apiProvenance && workingCreature ? { workingCreature } : {}),
   })))}`;
   assertActive(signal);
   const metadata = {
@@ -134,6 +146,10 @@ export async function retainPetProposal(file, binding, providerLabel, signal, ap
     image: { sha256: imageSha256, width, height, mime: file.type, bytes: file.size },
     providerLabel: label,
     ...(apiProvenance ? { apiProvenance: structuredClone(apiProvenance) } : {}),
+    ...((apiProvenance?.workingCreature ?? workingCreature) ? {
+      workingCreature: structuredClone(apiProvenance?.workingCreature ?? workingCreature),
+      associationAuthority: "user-authoring grouping; not verified ancestry",
+    } : {}),
   };
   const entry = { proposalId, bindingKey: proposalBindingKey(binding), metadata, imageBlob: file.slice(0, file.size, file.type) };
   const database = await openDatabase();

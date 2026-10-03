@@ -26,9 +26,16 @@ retains a supplied bitmap alongside its exact source/prompt binding in this
 browser. Its linked export includes the compact source recipe; the native image
 remains unchanged. Status is always proposal, never accepted phenotype or
 inherited fidelity. The optional [API rendering panel](README.md#render-a-pet-through-an-api)
-reuses that same verified source SVG as a512px PNG and sends the exact derived
-short brief, with no additional creative wrapper or genome JSON. API candidates
+reuses that same verified source SVG as a512px PNG. The guided workbench seeds
+an editable render draft from the derived short brief, then sends the user's
+exact submitted text with no additional creative wrapper or genome JSON.
+`render-request/2` retains derived and submitted text/hashes separately; the
+unchanged expected source binding is verified by replay. Retained request1 jobs
+still use their literal source-derived brief. API candidates
 retain complete source/prompt/job provenance and remain unaccepted proposals.
+The visible gallery groups explicitly associated structure/prompt revisions
+without changing each image's original binding. Selecting **Edit this prompt**
+is a user action, not an automatic refinement or gene change.
 Manual return stays available. No automatic refinement, animation or accepted
 art lifecycle is supplied.
 

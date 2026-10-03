@@ -37,7 +37,7 @@ export function createRenderJobs(replay, environment = process.env) {
     for (const id of await readdir(store)) {
       if (!jobIdPattern.test(id)) continue;
       const job = JSON.parse(await readFile(join(store, id, "job.json"), "utf8"));
-      if (job.jobId !== id || job.schemaVersion !== "render-job/1") throw new Error("Render store identity is invalid");
+      if (job.jobId !== id || !["render-job/1", "render-job/2"].includes(job.schemaVersion)) throw new Error("Render store identity is invalid");
       if (["pending", "running"].includes(job.state)) {
         job.state = "interrupted";
         job.updatedAt = now();
@@ -73,7 +73,8 @@ export function createRenderJobs(replay, environment = process.env) {
       job.state = "running";
       job.updatedAt = now();
       await persist(job);
-      const result = await renderProvider(job.provider, providers[job.provider], png, job.sourceBinding.promptText);
+      const result = await renderProvider(job.provider, providers[job.provider], png,
+        job.schemaVersion === "render-job/2" ? job.promptText : job.sourceBinding.promptText);
       await durableFile(join(store, job.jobId, "output.image"), result.bytes);
       const { bytes, ...provenance } = result;
       const completed = { ...job, output: { ...provenance, bytes: bytes.length }, state: "completed", updatedAt: now() };
@@ -89,9 +90,11 @@ export function createRenderJobs(replay, environment = process.env) {
     } finally { active = false; }
   }
   async function createRequest(input) {
-    closed(input, ["schemaVersion", "requestId", "provider", "replay", "expectedBinding", "sourcePng"]);
+    const guided = input?.schemaVersion === "render-request/2";
+    closed(input, ["schemaVersion", "requestId", "provider", "replay", "expectedBinding", "sourcePng",
+      ...(guided ? ["promptText", "workingCreature"] : [])]);
     closed(input.sourcePng, ["base64", "sha256"]);
-    if (input.schemaVersion !== "render-request/1" || !jobIdPattern.test(input.requestId) || !Object.hasOwn(providers, input.provider)) {
+    if (!["render-request/1", "render-request/2"].includes(input.schemaVersion) || !jobIdPattern.test(input.requestId) || !Object.hasOwn(providers, input.provider)) {
       throw failure("Unsupported rendering request identity");
     }
     const requestDigest = digest(input);
@@ -110,18 +113,41 @@ export function createRenderJobs(replay, environment = process.env) {
     if (handoff.status !== "ready") throw failure("Verified source prompt is unavailable");
     const binding = proposalSourceBinding(packet, handoff.text, sceneReplayEnvelope(packet));
     if (digest(binding) !== digest(input.expectedBinding)) throw failure("Current source and rendering binding differ", 409);
+    if (guided) {
+      if (typeof input.promptText !== "string" || !input.promptText.trim() || Buffer.byteLength(input.promptText, "utf8") > 4096) {
+        throw failure("Render prompt must be nonempty and at most4096 UTF-8 bytes");
+      }
+      const group = input.workingCreature;
+      closed(group, ["schemaVersion", "id", "originalGenomeId", "sourceVersions"]);
+      if (group.schemaVersion !== "working-creature-association/1" || !jobIdPattern.test(group.id) ||
+          !/^[0-9a-f]{64}$/.test(group.originalGenomeId) || !Array.isArray(group.sourceVersions) ||
+          !group.sourceVersions.length || group.sourceVersions.length > 64) throw failure("Invalid user-authoring association");
+      const known = new Map();
+      for (const source of group.sourceVersions) {
+        closed(source, ["sourceRecordId", "inputDigest"]);
+        if (typeof source.sourceRecordId !== "string" || source.sourceRecordId.length > 128 ||
+            !/^[0-9a-f]{64}$/.test(source.inputDigest) ||
+            (known.has(source.sourceRecordId) && known.get(source.sourceRecordId) !== source.inputDigest)) throw failure("Invalid association source reference");
+        known.set(source.sourceRecordId, source.inputDigest);
+      }
+      if (!group.sourceVersions.some((source) => source.inputDigest === group.originalGenomeId) ||
+          known.get(binding.sourceRecordId) !== binding.inputDigest) throw failure("Association must name its original input and this exact source");
+    }
     const png = imageBytes(input.sourcePng.base64, "image/png", 1024 * 1024);
     if (png.length < 24 || png.toString("ascii", 12, 16) !== "IHDR" ||
         png.readUInt32BE(16) !== 512 || png.readUInt32BE(20) !== 512 || sha256(png) !== input.sourcePng.sha256) {
       throw failure("Source must be a hashed512×512 PNG");
     }
     active = true;
-    const job = { schemaVersion: "render-job/1", status: "proposal", jobId: randomUUID(), requestId: input.requestId,
+    const job = { schemaVersion: guided ? "render-job/2" : "render-job/1", status: "proposal", jobId: randomUUID(), requestId: input.requestId,
       requestDigest, provider: input.provider, model: providers[input.provider].model, state: "pending",
       createdAt: now(), updatedAt: now(), sourceBinding: binding,
       sourceSvgSha256: sha256(handoff.referenceSvg), sourcePngSha256: sha256(png), sourcePngBytes: png.length,
       sourcePngVerification: "client-rendered; hash and dimensions checked, pixel equivalence to verified SVG not established",
-      promptSha256: sha256(handoff.text), output: null };
+      promptSha256: sha256(guided ? input.promptText : handoff.text), output: null,
+      ...(guided ? { derivedPromptText: handoff.text, derivedPromptSha256: sha256(handoff.text),
+        promptText: input.promptText, workingCreature: structuredClone(input.workingCreature),
+        associationAuthority: "user-authoring grouping; not verified ancestry or genome identity" } : {}) };
     try {
       await mkdir(join(store, job.jobId), { mode: 0o700 });
       await durableFile(join(store, job.jobId, "source.png"), png);
