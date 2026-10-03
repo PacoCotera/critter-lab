@@ -11,8 +11,8 @@ still unfinished. The newest radial scene is held, not loaded in the workbench.
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
-The initial **Generate creature** workspace loads the separate **Regional body /
-eyes / skin-scales experiment · v1** package, then uses one action to sample a valid genome
+The initial **Generate creature** workspace uses the separate **Anatomical source
+experiment · v1** package, then uses one action to sample a valid genome
 and constructed source scene. Its clean canonical source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
@@ -33,6 +33,45 @@ switching packages is deliberate and never migrates their genomes. See the
 [source-and-output diversity diagnosis](evidence/diversity-diagnosis/README.md).
 
 ## Run and inspect
+
+### Anatomical Generate
+
+The new `genomic-anatomical-source-experiment@1` package uses
+`developmental-anatomical-source/1` expression and `anatomical-source/1`
+construction. Its [content and authoring contract](../../design/anatomical-source-prototype/genomic-contract.md)
+defines 34 carried locus pairs: 32 new anatomical/material contributors and two
+exact pigment imports. Each copy is retained, including contributors whose
+owning module is off. Numeric means, presence operators and complete pair maps
+resolve before any geometry or descriptive classification is chosen.
+
+One common composition connects a head and support-bearing core through a neck.
+Independent presence contributions add a muzzle/jaw, paired head surfaces,
+posterior region, exterior eyes and rooted wings. Two or three paired core
+stations produce four or six genuine two-link support chains with shaped
+terminal volumes. Head/core proportions, support span and splay, terminal size
+and wing envelopes alter geometry; compact/lean/wing-bearing examples are authored
+copy sets, never random-generation targets or species presets.
+
+The existing ten body and six secondary pigment alleles remain independently
+sampleable. Unlike pigment copies create surface-local fields, not an averaged
+colour or an artist-selected recolour. Smooth/scales kind, scale coverage and
+scale size have explicit surface owners; their patches belong to the skin.
+Scales are not new attached body objects. The reference uses opaque coarse
+three-dimensional volume and a consistent light, with no construction labels
+painted into the model-facing image.
+
+Generate displays the actual resulting source beside the unchanged short Gemini
+instruction. Save/export retain the new version and complete copies; reopening
+reconstructs from those inputs. Earlier packages and records continue through
+their original rules. Catalogue source definitions live in the versioned content
+file; individual copy editing does not rewrite the content library. The
+framework's broader eleven families remain available in the older diagnostics.
+
+This is a static bilateral anatomical subset. It does not yet provide tails,
+hoof/toe details, fur, antennae, emission, motion, swimming, biomechanical
+performance or every requested animal form. The shown source is not finished
+HiBit pet art. Creative model output remains a separate portrayal; automatic
+production assets and animation remain later pipeline consumers.
 
 ### Complete radial source scene
 

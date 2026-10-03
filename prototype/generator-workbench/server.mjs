@@ -1,4 +1,6 @@
 import { regionalSceneWorkbenchPackage } from "./regional-scene-workbench-package.mjs";
+import { anatomicalSourcePackage } from "./anatomical-source-package.mjs";
+import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
@@ -48,6 +50,8 @@ export function makeServer() {
     try {
       if (request.method === "GET" && request.url === "/api/catalogue")
         return json(200, catalogue());
+      if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
+        return json(200, anatomicalSourcePackage());
       if (
         request.method === "GET" &&
         request.url === "/api/authoring/catalogue"
@@ -71,6 +75,9 @@ export function makeServer() {
         "/api/module-scene/evaluate",
         "/api/module-scene/generate",
         "/api/module-scene/replay",
+        "/api/anatomical-source/evaluate",
+        "/api/anatomical-source/generate",
+        "/api/anatomical-source/replay",
       ];
       if (request.method === "POST" && operations.includes(request.url)) {
         const chunks = [];
@@ -99,6 +106,12 @@ export function makeServer() {
         }
         let result;
         if (request.url === "/api/evaluate") result = evaluate(input);
+        else if (request.url === "/api/anatomical-source/evaluate")
+          result = resolveAnatomicalSource(input);
+        else if (request.url === "/api/anatomical-source/generate")
+          result = generateAnatomicalSource(input);
+        else if (request.url === "/api/anatomical-source/replay")
+          result = replayAnatomicalSource(input);
         else if (request.url === "/api/module-scene/evaluate")
           result = resolveModuleSceneAuthoring(input);
         else if (request.url === "/api/module-scene/replay")

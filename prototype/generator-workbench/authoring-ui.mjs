@@ -16,6 +16,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "developmental-anatomical-source/1")
+    return "Head / jointed supports / wings experiment";
   if (catalogue.ruleVersion === "developmental-regional-scene/1")
     return "Regional body / eyes / skin-scales experiment";
   if (catalogue.id === "genomic-covering-pigment-candidate")
@@ -160,6 +162,13 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
+    (packet.ruleVersion !== "developmental-anatomical-source/1" ||
+      (packet.schemaVersion === "anatomical-authoring-record/1" &&
+        packet.sceneProjectionVersion === "anatomical-source/1" &&
+        packet.materialProfileVersion === "anatomical-surface-fields/1" &&
+        packet.scene?.status === "constructed" &&
+        packet.scene?.profileVersion === "anatomical-source/1" &&
+        packet.reference?.status === "constructed")) &&
     (!["developmental-covering/1", "developmental-regional-scene/1"].includes(
       packet.ruleVersion,
     ) ||
@@ -203,10 +212,23 @@ export function imageLedPetHandoff(packet) {
 }
 
 export function authoringRoute(catalogue, operation) {
+  if (catalogue?.ruleVersion === "developmental-anatomical-source/1")
+    return `/api/anatomical-source/${operation}`;
   return `/api/${["developmental-covering/1", "developmental-regional-scene/1"].includes(catalogue?.ruleVersion) ? "module-scene" : "authoring"}/${operation}`;
 }
 
 export function sceneReplayEnvelope(packet) {
+  if (packet.sceneProjectionVersion === "anatomical-source/1")
+    return {
+      schemaVersion: packet.schemaVersion,
+      sceneProjectionVersion: packet.sceneProjectionVersion,
+      materialProfileVersion: packet.materialProfileVersion,
+      sceneRecordId: packet.sceneRecordId,
+      input: packet.input,
+      inputDigest: packet.inputDigest,
+      resultDigest: packet.resultDigest,
+      sceneDigest: packet.sceneDigest,
+    };
   return {
     schemaVersion: packet.schemaVersion,
     sceneProjectionVersion: packet.sceneProjectionVersion,
@@ -220,7 +242,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2", "module-scene/3"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -298,6 +320,10 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
+  if (scene.profileVersion === "anatomical-source/1") {
+    const targets = scene.nodes.filter(node => node.sources.includes(locusId));
+    return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
+  }
   const involved = (trace) =>
     [
       ...(trace.locusIds ?? []),
@@ -372,6 +398,9 @@ export function causalSummary(catalogue, result, id) {
 }
 // A display camera consumes retained geometry; it never repairs anatomy.
 export function geometryBounds(result) {
+  // Anatomical source solids use their retained three-dimensional camera.
+  // The older diagnostic node/dimensions camera cannot interpret that graph.
+  if (result?.profileVersion === "anatomical-source/1") return null;
   if (result?.status !== "resolved" || !result.graph?.nodes?.length)
     return null;
   const graph = result.graph;

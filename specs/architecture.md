@@ -101,7 +101,7 @@ reversible transport; fingerprint art, QR/sharing UI and production incarnation
 are future consumers. A saved seed or short lookup hash does not carry the full
 genome.
 
-Current construction combines generic volumes, regional proportions, rooted
+Earlier construction combines generic volumes, regional proportions, rooted
 links/fins, optional eye glyphs, skin/scales and inherited pigment domains.
 The [regional scene](../prototype/generator-workbench/evidence/regional-scene-workbench/README.md)
 has actual browser evidence. The newer [radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
@@ -114,15 +114,23 @@ contract. Source validity, reference usefulness and pet-art quality are separate
 gates.
 
 Bear, cat, cow and firefly exemplify the owner's desired range; labels must not
-select complete body presets. Art direction and genomics propose the next
-experiment; pixel feasibility and implementation architecture remain open. It is
-one shared head–muzzle–trunk graph with exterior eye anchors, four articulated
-fore/hind supports, shaped contact ends and an optional paired head-surface
-module. Compact/stocky and lean/projecting relatives should differ through
-explicit inherited proportions and one mixed-copy comparison. Four supports
-need a new explicit pairing contract; the existing 0/1/3-group map cannot supply
-them. Tail, hoof-specific anatomy and wing-bearing insect regions remain named
-gaps. These are proposed contracts, not implemented or canonical anatomy.
+select complete body presets. The new [anatomical content contract](../design/anatomical-source-prototype/genomic-contract.md)
+defines a separate provisional bilateral subset: typed head/core/neck volumes,
+exterior eye anchors, four or six jointed core-rooted supports and shaped
+terminals, plus independently inherited muzzle/jaw, crown, posterior and wing
+modules. Its 34 carried locus pairs resolve through a dedicated adapter,
+construction and presentation boundary in the existing host workbench. These
+new records do not rename the older fifty contributors as organs.
+
+The [anatomical Generate guide](../prototype/generator-workbench/README.md#anatomical-generate)
+owns current operation and its limits. Compact, lean and wing-bearing copy sets
+exercise common operators; generation samples contributors rather than selecting
+those examples. Pigment partitions and smooth/scales fields have explicit
+surface owners. Typed attachment conventions address source meaning, while
+coarse low-poly depiction communicates volume and occlusion. Neither layer
+establishes finished pet art, biology or motion. Tail, hoof/toe anatomy, fur,
+emission, broader body organizations and automatic animation remain gaps; the
+new content is not canonical anatomy.
 
 Only after meaningful structure exists, compare a low-poly reference in a
 shallow three-quarter view with a flat reference of the same source. Volume,

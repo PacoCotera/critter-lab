@@ -160,7 +160,7 @@ function Workbench() {
         setContext(initial.context);
         setEdited(pretty(initial.catalogue.loci[0]));
         setMessage(
-          "Loading regional body experiment… Choose an older package to use it now.",
+          "Loading anatomical experiment… Choose an older package to use it now.",
         );
         try {
           setRecords(JSON.parse(localStorage.getItem(storageKey) ?? "[]"));
@@ -169,23 +169,25 @@ function Workbench() {
             "Local records could not be read; current catalogue remains available.",
           );
         }
-        request("/api/module-scene/catalogue")
-          .then((scenePackage) => {
+        Promise.all([request("/api/module-scene/catalogue").catch(() => ({})), request("/api/anatomical-source/catalogue").catch(() => null)])
+          .then(([scenePackage, anatomy]) => {
             if (!active) return;
             const candidate = scenePackage.candidatePackage;
             const regional = scenePackage.regionalPackage;
-            const preferred = regional ?? candidate;
+            const preferred = anatomy ?? regional ?? candidate;
             setPackages((current) =>
               mergeOptionalPackages(current, [
                 scenePackage,
                 ...(candidate ? [candidate] : []),
                 ...(regional ? [regional] : []),
+                ...(anatomy ? [anatomy] : []),
               ]),
             );
             setSceneExamples([
               ...(scenePackage.sceneExamples ?? []),
               ...(candidate?.sceneExamples ?? []),
               ...(regional?.sceneExamples ?? []),
+              ...(anatomy?.sceneExamples ?? []),
             ]);
             const status = preferred ? "ready" : "unavailable";
             setCandidateStatus(status);
@@ -195,7 +197,9 @@ function Workbench() {
             ) {
               applyPackage(preferred, preferred.sceneExamples);
               setMessage(
-                regional
+                anatomy
+                  ? "Ready to generate a new anatomical source. Optional parts, supports, colours and materials are inherited independently."
+                  : regional
                   ? "Ready to generate a complete regional body scene."
                   : "Regional body experiment unavailable. Experimental pigment package is ready.",
               );
@@ -433,6 +437,36 @@ function Workbench() {
     );
     setJsonText(pretty(copyableAuthoringExport(value)));
   }
+  async function downloadSourcePng() {
+    const handoff = imageLedPetHandoff(packet);
+    if (handoff.status !== "ready") throw new Error("No current verified source image to download.");
+    const svgUrl = URL.createObjectURL(new Blob([handoff.referenceSvg], { type: "image/svg+xml;charset=utf-8" }));
+    let pngUrl = null;
+    try {
+      const image = new Image();
+      await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = () => reject(new Error("The current source image could not be prepared for download."));
+        image.src = svgUrl;
+      });
+      const canvas = document.createElement("canvas");
+      canvas.width = 512;
+      canvas.height = 512;
+      const painter = canvas.getContext("2d");
+      if (!painter) throw new Error("PNG export is unavailable in this browser.");
+      painter.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const png = await new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("PNG export failed.")), "image/png"));
+      pngUrl = URL.createObjectURL(png);
+      const link = document.createElement("a");
+      link.href = pngUrl;
+      link.download = `${handoff.sourceRecordId}-source.png`;
+      link.click();
+      setMessage("Downloaded the current source PNG. Its record ID is retained in the filename.");
+    } finally {
+      URL.revokeObjectURL(svgUrl);
+      if (pngUrl) window.setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+    }
+  }
   function editCopy(locusId, index, value) {
     if (processing.current || !genome?.loci?.[locusId]) return;
     const next = clone(genome);
@@ -441,6 +475,8 @@ function Workbench() {
     invalidate();
   }
   async function saveDraftRecord() {
+    if (catalogue.ruleVersion === "developmental-anatomical-source/1")
+      throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
     const item = JSON.parse(edited);
@@ -465,6 +501,8 @@ function Workbench() {
     );
   }
   async function useDraft() {
+    if (catalogue.ruleVersion === "developmental-anatomical-source/1")
+      throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
     await request("/api/authoring/validate", draft);
@@ -485,8 +523,11 @@ function Workbench() {
     );
   }
   function saveRecord() {
+    const retained = packet.sceneProjectionVersion === "anatomical-source/1"
+      ? { ...sceneReplayEnvelope(packet), recordId: packet.recordId, savedLabel: packet.result.classification.labels.join(" · ") }
+      : clone(packet);
     const next = [
-      clone(packet),
+      retained,
       ...records.filter((item) => item.recordId !== packet.recordId),
     ].slice(0, 8);
     localStorage.setItem(storageKey, JSON.stringify(next));
@@ -527,7 +568,9 @@ function Workbench() {
             resultDigest: imported.resultDigest,
           };
       const data = await request(
-        imported.sceneProjectionVersion
+        imported.sceneProjectionVersion === "anatomical-source/1"
+          ? "/api/anatomical-source/replay"
+          : imported.sceneProjectionVersion
           ? "/api/module-scene/replay"
           : "/api/authoring/replay",
         replayEnvelope,
@@ -773,11 +816,14 @@ function Workbench() {
                 >
                   Export draft
                 </Button>
-                <Button disabled={busy} onClick={() => run(useDraft)}>
+                <Button disabled={busy || catalogue.ruleVersion === "developmental-anatomical-source/1"} onClick={() => run(useDraft)}>
                   Use draft in experiment
                 </Button>
               </Group>
             </Group>
+            {catalogue.ruleVersion === "developmental-anatomical-source/1" && (
+              <Text size="sm" c="dimmed" mb="md">This provisional catalogue is read-only. Change inherited allele copies in Inspect or edit genome, then Resolve.</Text>
+            )}
             <div className="catalogue-layout">
               <Paper withBorder p="md">
                 <Stack>
@@ -901,7 +947,7 @@ function Workbench() {
                     />
                     <Group mt="md">
                       <Button
-                        disabled={busy}
+                        disabled={busy || catalogue.ruleVersion === "developmental-anatomical-source/1"}
                         onClick={() =>
                           run(saveDraftRecord, { retentionKind: "save" })
                         }
@@ -956,7 +1002,7 @@ function Workbench() {
               <Paper withBorder p="md" className="structural-preview">
                 <Group justify="space-between">
                   <Title order={4}>Source illustration</Title>
-                  <Badge color="gray">Diagnostic geometry</Badge>
+                  <Badge color="gray">{catalogue.ruleVersion === "developmental-anatomical-source/1" ? "Provisional anatomical source" : "Diagnostic geometry"}</Badge>
                 </Group>
                 {packet && (
                   <Text size="xs" c="dimmed" mt="xs">
@@ -991,7 +1037,9 @@ function Workbench() {
                     ? packet.sceneProjectionVersion
                     : "Canonical diagnostic"}
                   .{" "}
-                  {[
+                  {catalogue.ruleVersion === "developmental-anatomical-source/1"
+                    ? "Inherited head/core, jointed supports, optional modules and owned skin/scales fields; static source, not finished pet art."
+                    : [
                     "developmental-covering/1",
                     "developmental-regional-scene/1",
                   ].includes(catalogue.ruleVersion)
@@ -1002,6 +1050,13 @@ function Workbench() {
                 </Text>
                 {packet && (
                   <Group mt="md" gap="xs">
+                    <Button
+                      size="xs"
+                      disabled={busy || petHandoff.status !== "ready"}
+                      onClick={() => run(downloadSourcePng)}
+                    >
+                      Download source PNG
+                    </Button>
                     <Button
                       size="xs"
                       variant="light"
@@ -1362,6 +1417,12 @@ function Workbench() {
                                     {sceneCause.bodyTargets} exterior target.
                                   </Text>
                                 )}
+                                {sceneCause?.anatomy && (
+                                  <Text size="sm" mt="xs">
+                                    {sceneCause.targets.length} anatomical owners consume this contributor.
+                                    {sceneCause.material && ` The ${sceneCause.coveringKind} field retains its exact local coverage and exclusions.`}
+                                  </Text>
+                                )}
                                 {sceneCause?.ocular && (
                                   <Text size="sm" mt="xs">
                                     Eye construction uses this locus;{" "}
@@ -1441,7 +1502,7 @@ function Workbench() {
                   <Group align="end">
                     <Select
                       label="Reference medium"
-                      disabled={busy}
+                      disabled={busy || catalogue.ruleVersion === "developmental-anatomical-source/1"}
                       data={["ground", "air", "water"]}
                       value={context.medium}
                       onChange={(medium) => {
@@ -1469,7 +1530,7 @@ function Workbench() {
                     </Button>
                     <NumberInput
                       label="Expression seed"
-                      disabled={busy}
+                      disabled={busy || catalogue.ruleVersion === "developmental-anatomical-source/1"}
                       value={expressionSeed}
                       min={0}
                       max={4294967295}
@@ -1479,7 +1540,7 @@ function Workbench() {
                       }}
                     />
                     <Button
-                      disabled={busy || !genome}
+                      disabled={busy || !genome || catalogue.ruleVersion === "developmental-anatomical-source/1"}
                       variant="light"
                       onClick={() => run(() => resolve(Number(expressionSeed)))}
                     >
@@ -1487,9 +1548,9 @@ function Workbench() {
                     </Button>
                   </Group>
                   <Text size="sm" c="dimmed" mt="sm">
-                    Genome generation samples inherited copies. Expression
+                    {catalogue.ruleVersion === "developmental-anatomical-source/1" ? "This source uses one static reference context and deterministic expression. Generate samples independent inherited copies; Resolve applies edited copies without rerolling them." : <>Genome generation samples inherited copies. Expression
                     sampling changes permitted marking placement only; inherited
-                    copies and other expression stay fixed.
+                    copies and other expression stay fixed.</>}
                   </Text>
                   {packet?.generation && (
                     <Text size="xs" c="dimmed" mt="sm">
@@ -1801,7 +1862,7 @@ function Workbench() {
                 <div>
                   <Text fw={700}>{item.recordId}</Text>
                   <Text size="xs">
-                    {item.result.classification.labels.join(" · ")}
+                    {item.savedLabel ?? item.result.classification.labels.join(" · ")}
                   </Text>
                 </div>
                 <Group>
@@ -1883,7 +1944,7 @@ function Workbench() {
             <div className="batch-grid">
               {batch.map((item) => (
                 <Paper key={item.recordId} withBorder p="md">
-                  <SvgView markup={item.diagnostic} />
+                  <SvgView markup={item.reference?.svg ?? item.diagnostic} />
                   <Text size="sm" fw={700}>
                     {item.result.classification.labels.join(" · ")}
                   </Text>
