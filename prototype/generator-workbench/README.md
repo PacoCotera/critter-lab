@@ -12,12 +12,18 @@ accessories and proportions do not satisfy genome-derived organization.
 
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
-The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v6** package, then uses one action to sample a valid genome
-and constructed source scene. Its retained source illustration and short
-copyable image-led Gemini instruction appear together before the initially
-collapsed genome editor. Attach the shown image separately; the workbench does
-not upload it. Current source7 (summary2) and retained source3/4/5/6 (summary1) derive their pet instruction plus a
+The default **Create a creature** workspace uses **Compositional source
+experiment · v6**. Its connected journey is **New random genome → edit inherited
+traits → Refresh structure → compare Before/Current → edit render prompt →
+Render creature / Render another version → inspect retained renders**. All
+eleven genome layers stay visible in a persistent tree, with their attributes
+nested underneath. Every heading retains its full count and current gaps;
+search filters attributes without hiding layers. Selection expands the parent
+layer and edits the same ordered copies. Consumed traits appear first within
+each layer; inactive, unimplemented and draft badges remain on their attributes,
+without moving them into a disconnected list. Package selection, catalogue
+definition editing, legacy references, raw inspection, saved imports/replay and
+batch tools remain under **Advanced tools**. Current source7 (summary2) and retained source3/4/5/6 (summary1) derive their pet instruction plus a
 short shape, extremity, owner-material and named-colour description through
 the versioned `art-prompt-summary` consumer. Clause witnesses and unsupported semantic labels stay
 in Advanced inspection. Older unrelated profiles retain their original short
@@ -79,17 +85,18 @@ included. The actual [OFF/ON pair](evidence/marking-fields/README.md) shows a
 visible field difference; triangular paint seams keep polished reference craft
 on HOLD, and both patches cannot be separately counted from this view.
 Catalogue1–4 and all prior stock/authored recipes remain selectable and literal;
-parent5 drafts use a separate slot. Returned pet proposals remain bound to their
-original source/prompt and do not follow a newly marked source.
+parent5 drafts use a separate slot. Earlier pet proposals keep their original
+source/prompt even when displayed beside a newly marked version in one workspace.
 
 ### Render a pet through an API
 
-The optional **Render a pet via API** panel offers NanoBanana (Google) first and
+The explicit **Render creature** panel offers NanoBanana (Google) first and
 OpenAI Images separately. It displays the server-selected model and availability
-before **Render pet**. Supply the rendering operator token in the password field;
+before **Render creature**. Supply the rendering operator token in the password field;
 it stays in component memory, never browser storage or exports. No provider API
 key belongs in this UI. Rendering sends the exact current512px source PNG and
-server-recomputed short brief. The complete record/input/result binding matters:
+your exact editable prompt, separately from the server-recomputed source brief.
+The complete record/input/result binding matters:
 Cognition edits can leave the source scene unchanged.
 
 The server uses existing Node22 built-ins, fixed provider endpoints and these
@@ -113,9 +120,15 @@ URLs/endpoints/models from the client, conversation, prompt optimization,
 grounding, automatic fallback or retry is supplied.
 
 Public `/api/rendering/config` exposes model/availability only. Other rendering
-routes require the bearer token. `render-request/1` binds a UUID, provider, exact
-compact replay, full expected source binding and hashed source PNG. Admission
-replays and verifies the source/prompt and persists inputs before dispatch;
+routes require the bearer token. Retained `render-request/1` binds a UUID,
+provider, exact compact replay, full expected source binding and hashed source
+PNG, and still sends its literal derived brief. Guided `render-request/2` adds a
+nonempty exact `promptText` of at most4096 UTF-8 bytes and a
+`working-creature-association/1`. Its expected binding remains unedited:
+admission replays and verifies the genome-derived source/brief before checking
+the separate submitted text and persisting inputs. Job2 retains both derived
+and submitted text/hashes, while the provider receives the submitted text
+unchanged. No optimizer or hidden prompt substitution is supplied;
 identical request IDs recover their original job and conflicting payloads reject.
 One provider request is active globally; eight server jobs maximum, no eviction.
 Source PNGs are≤1MiB/512×512; returned images≤4MiB. The dedicated rendering POST
@@ -128,19 +141,23 @@ provider/model/request identity, exact prompt, source bindings and actual output
 hash/MIME/usage/revised prompt where returned. Restart marks pending/running jobs
 interrupted without resubmission. The provider deadline is180seconds; failure or
 interruption may have incurred a charge, and exactly-once execution is not claimed.
-Polling/recovery never invokes a provider. Known-ID recovery fetches the retained
-image only. After a reload, **Find retained jobs for this source** explicitly
-reads the authenticated bounded list of eight job metadata records, filters the
-complete current source/prompt binding and offers matching recovery actions.
-It never starts a provider request or attaches art to a different source.
+Polling/recovery never invokes a provider. After token entry, the gallery reads
+the authenticated bounded job list and polls only retained pending/running jobs.
+Known-ID and **Find retained jobs for this creature** recovery remain under
+Advanced recovery. Matching declared working-creature IDs/original input IDs
+show earlier structure/prompt versions without rebinding them. Ungrouped older
+jobs appear only by exact binding or a known exact record/input reference.
 **Stop waiting** stops the browser wait, not the server job.
 After a lost submission response, **Recover submission** resends the identical
 request ID/payload rather than requesting a new candidate.
 
-A completed candidate is automatically retained through the existing bounded
-browser proposal store with full API provenance only when its exact source and
-prompt still match. Changing source prevents attachment. Quota/reload failures
-leave the server candidate recoverable when that original source is reopened.
+A completed candidate can be retained through the bounded browser store with
+its own original source/prompt provenance, even after another structure refresh
+within the same working creature. Another working creature cannot acquire it.
+The single visible gallery deduplicates browser/server copies by job ID and
+displays server-completed images when browser storage fails. Image details show
+the original genome ID, actual input/source version and exact submitted prompt;
+**Edit this prompt** explicitly copies it into the current render draft.
 Manual retention remains available. All images are unaccepted proposals; no
 genome mutation, fidelity approval, refinement, animation or acceptance lifecycle
 is added. Source implementation awaits independent review, deployment and actual
@@ -148,11 +165,12 @@ configured API use; no provider output or successful account access is claimed.
 
 ### Retain a manually returned pet proposal
 
-After resolving a current source and its short prompt, choose the returned
-PNG/JPEG/WebP in **Returned pet art**, enter a provider label and explicitly
-select **Retain pet proposal**. Reopening that exact source/prompt in the same
-browser shows its linked proposals. Editing, generating or changing the source
-clears the selected file and hides previous art; pending work is cancelled.
+After resolving a source, open **Advanced · attach a manually returned image**,
+choose PNG/JPEG/WebP, enter a provider label and explicitly select
+**Retain pet proposal**. Manual attachment records the source-derived brief;
+API jobs retain their separate submitted text. Editing or refreshing clears any
+selected file and cancels that retention operation. Earlier images stay visible
+by their original bindings in the working-creature gallery.
 Errors stay inside the panel and preserve the resolved source preview.
 
 The browser-only `retained-pet-proposal/1` record binds the exact source record,
@@ -168,6 +186,30 @@ and16million decoded pixels. Existing localStorage genome slots are unchanged.
 Browser storage can be unavailable, full or cleared; keep exported files for
 durable retention. All returned art remains **proposal**, with no acceptance,
 inherited-fidelity claim, gene change, automatic provider call or animation.
+
+### Working creature and pending edits
+
+Inherited-copy edits keep the last successful structure and values visible with
+**Changes pending**. Only explicit **Refresh structure** applies them; rejection
+preserves edits and preview, and provider submission stays disabled. Successful
+refresh keeps the previous structure for comparison, uses compatible shared
+camera/world scale, and resets the editable prompt to the new derived brief
+with a notice. Different projection profiles retain separate framing.
+Successful New random genome starts another authoring group; failed generation
+does not replace the current group or preview.
+
+A separate bounded localStorage index retains up to eight working-creature
+associations and their exact current/previous replay recipes, with up to64 exact
+source record/input references per group. `originalGenomeId` is the first
+resolved inputDigest; the UUID is user authoring association, never ancestry or
+a replacement genome identity. Reload verifies the active recipe before
+reopening. Existing genome slots and older group data are preserved.
+The guided header's **Saved creatures** selector reopens earlier groups through
+exact current/previous recipe replay, preserving their own gallery bindings.
+Capacity, unreadable storage and quota errors leave the new source usable in-session and
+tell the operator to export it; no group is silently dropped or evicted.
+Unsubmitted prompt drafts are session state; completed render text remains in
+its immutable job/proposal metadata.
 
 ### Compositional Generate and all eleven genomic branches
 
@@ -529,14 +571,12 @@ Open **http://127.0.0.1:4381**. React/Mantine/Vite provide the developer interfa
 
 Connected authoring journey:
 
-1. Generate a random creature in one action. A fresh retained seed samples inherited copies and accepts only a model-valid constructed graph, without species presets or mutation-based repair. The current visual result is a structural diagnostic, not broad or finished pet art.
-2. Inspect the resulting whole genome, choose one of eleven dimensions, and select a locus to see its copies and expressed trait. All records and modeled/draft gaps remain accessible.
-3. Optionally edit a selected copy, then resolve its changed input. Inspect separate baseline/inherited/resolved summaries, sequences and fingerprint fields. Display order is not a chromosome or linkage claim.
-4. Inspect anatomy/surfaces, derived movement and causal sources, and retain a candidate for comparison. Catalogue authoring is a separate advanced task, not required to create a valid random input.
-5. Sample expression with a separate seed. Only permitted marking placement changes; inherited copies and anatomy remain unchanged. Suppressed markings cannot be activated through sampling.
-6. Export and replay a complete experiment. Embedded outputs are recomputed from retained inputs/content and checked against digests.
-7. Validate and export catalogue drafts. Released content and retained individuals are not rewritten by a naming edit.
-8. Export the [preset art template](art-template.md) filled from resolved facts. Large projections reject explicitly rather than discard body parts or constraints.
+1. Create a random valid genome without species presets or copy repair.
+2. Expand a layer in the eleven-layer genome tree and edit an attribute's inherited copies. Search retains every layer heading/count/gap. The last successful structure stays visible while changes are pending.
+3. Refresh explicitly and compare Before/Current. Invalid refresh preserves the working edits and earlier structure; it never silently repairs copies.
+4. Edit the render prompt, choose a configured provider and explicitly render. Refreshing or changing text never submits a paid request.
+5. Inspect the creature's retained image versions, original genomes and exact submitted prompts. Earlier jobs remain recoverable across refreshes/reload, with their own immutable source bindings.
+6. Use Advanced tools for compatible definition drafts, package selection, exact import/replay/export, pinned comparison and permitted legacy expression sampling. These capabilities and older records remain available.
 
 The legacy Pip interface remains at `/legacy` with its original evaluation route. It is a diagnostic reference, not the expanded engine or production artwork.
 
@@ -566,16 +606,16 @@ Baseline is the declared content
 baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
-advanced inspection. The **Gemini prompt** appears beside the structural preview
-with one **Copy prompt** action. Current source6 and retained source3/4/5 use the base
+advanced inspection. The **Render prompt** starts from the source-derived brief
+and has explicit copy/reset actions. Current source7/6 and retained source3/4/5 use the base
 “Turn the attached critter into a cute pet, shown alone in rich high-bit pixel
 art.” followed by an actual-source description, targeting25–45 words without
 truncating major enabled counts or owner materials. The
 [brief contract](../../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 owns exact role aliases and limits. Other packages keep their original sentence.
 Its image is the current scene reference or the old package's canonical diagnostic,
-without selected-locus amber highlights. Editing inputs
-clears the prompt with the preview. A failed Generate against unchanged inputs
+without selected-locus amber highlights. Editing inputs keeps the last
+successful preview visible and blocks rendering until refresh. A failed Generate against unchanged inputs
 retains the last successful result and its prompt, reports that no new creature
 was generated, and keeps its accepted seed distinct from the failed request's
 seed. A missing or unresolved source image disables copying. Semantic projection
@@ -583,7 +623,7 @@ errors from older full audit projections remain in Advanced inspection; a missin
 current vocabulary summary disables prompt copying with an explicit reason,
 while its valid source and verified image remain available for display/download.
 Wording failure never rejects a constructed source or changes candidate selection.
-This panel makes no provider call. Summary version, sourceRecordId, sceneDigest
+Only the explicit Render action calls a provider. Summary version, sourceRecordId, sceneDigest
 and clause witnesses are outside the copied text. The wording consumer changes
 no input, result, scene or replay identity. Compatible compositional definition
 drafts are now supported as separate authored foundations; new loci, operators,

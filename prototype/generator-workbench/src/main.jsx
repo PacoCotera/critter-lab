@@ -29,6 +29,8 @@ import {
 import "@mantine/core/styles.css";
 import "./workbench.css";
 import ReturnedPetPanel from "./ReturnedPetPanel.jsx";
+import GuidedCreatureWorkspace from "./GuidedCreatureWorkspace.jsx";
+import { activeWorkingCreature, retainedWorkingCreatures, workingCreatureFor, retainWorkingCreature } from "../working-creature.mjs";
 import { sourcePng } from "../source-png.mjs";
 import {
   drawAuthoringCreature,
@@ -136,6 +138,12 @@ function SvgView({ markup, onSelect, compact = false }) {
   );
 }
 
+function retainedReplayRoute(replay) {
+  if (replay.sceneProjectionVersion?.startsWith("compositional-source/")) return "/api/compositional-source/replay";
+  if (replay.sceneProjectionVersion === "anatomical-source/1") return "/api/anatomical-source/replay";
+  return replay.sceneProjectionVersion ? "/api/module-scene/replay" : "/api/authoring/replay";
+}
+
 function Workbench() {
   const [catalogue, setCatalogue] = useState(null);
   const [packages, setPackages] = useState([]);
@@ -146,9 +154,19 @@ function Workbench() {
   const [genome, setGenome] = useState(null);
   const [context, setContext] = useState(null);
   const [packet, setPacket] = useState(null);
+  const [lastResolved, setLastResolved] = useState(null);
+  const [beforeRefresh, setBeforeRefresh] = useState(null);
+  const [dirty, setDirty] = useState(true);
+  const [renderPrompt, setRenderPrompt] = useState("");
+  const [workingGroup, setWorkingGroup] = useState(null);
+  const [savedCreatures, setSavedCreatures] = useState([]);
+  const [persistenceNotice, setPersistenceNotice] = useState("");
+  const resolvedRef = useRef(null);
+  const workingGroupRef = useRef(null);
   const [pinned, setPinned] = useState(null);
   const [records, setRecords] = useState([]);
-  const [view, setView] = useState("experiment");
+  const [view, setView] = useState("guided");
+  const [advanced, setAdvanced] = useState(false);
   const [family, setFamily] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("development.axial-repeat");
@@ -234,6 +252,25 @@ function Workbench() {
                   ? "Ready to generate a complete regional body scene."
                   : "Regional body experiment unavailable. Experimental pigment package is ready.",
               );
+              try {
+                setSavedCreatures(retainedWorkingCreatures());
+                const saved = activeWorkingCreature();
+                if (saved?.currentReplay) {
+                  request(retainedReplayRoute(saved.currentReplay), saved.currentReplay).then((data) => {
+                    if (!active || userIntent.current) return;
+                    installResolvedInputs(data, "reopen", saved);
+                    setMessage("Working creature reopened from its exact saved recipe. Rendering still requires an explicit action.");
+                    if (saved.previousReplay) {
+                      const previous = saved.previousReplay;
+                      request(retainedReplayRoute(previous), previous).then((before) => {
+                        if (active && !userIntent.current && resolvedRef.current?.recordId === data.recordId && isResolvedAuthoringPacket(before)) setBeforeRefresh(before);
+                      }).catch((error) => {
+                        if (active && !userIntent.current) setPersistenceNotice(`Current creature reopened; earlier comparison could not replay: ${error.message}. Retained recipes were preserved.`);
+                      });
+                    }
+                  }).catch((error) => { if (active) setPersistenceNotice(`Working creature could not reopen: ${error.message}. Retained records were preserved.`); });
+                }
+              } catch (error) { setPersistenceNotice(error.message); }
             } else if (!preferred && !userIntent.current) {
               setMessage(
                 "Regional body experiment unavailable. Anatomy-diversity diagnostic is ready.",
@@ -267,8 +304,9 @@ function Workbench() {
       (item) => item.id === id,
     );
     if (!current) return;
-    if (family !== "all" && family !== current.family)
-      setFamily(current.family);
+    const selectedFamily = view === "guided" ? canonicalGenomicFamily(current.family) : current.family;
+    if (family !== "all" && family !== selectedFamily)
+      setFamily(selectedFamily);
     if (!scopedLoci({ loci: [current] }, "all", search).length) setSearch("");
     setSelected(id);
     const locus = draft?.loci.find((item) => item.id === id);
@@ -307,11 +345,78 @@ function Workbench() {
     if (claimIntent) userIntent.current = true;
     inputRevision.current += 1;
     setPacket(null);
+    setDirty(true);
     setFailed(false);
     setErrorDetails("");
     setMessage(
-      "Changes ready to preview. Resolve to update the current output.",
+      "Changes pending. Refresh structure to apply them; the last successful structure remains visible.",
     );
+  }
+  function publishResolved(data, mode = "refresh", knownGroup = workingGroupRef.current) {
+    if (!isResolvedAuthoringPacket(data)) throw new Error("No verified structure returned");
+    if (mode !== "refresh") {
+      const preferred = data.input.catalogue.loci.find((entry) => entry.id === "organization.region-depth") ??
+        data.input.catalogue.loci.find((entry) => entry.status === "validated" &&
+          data.result.facts.some((fact) => fact.locusId === entry.id && fact.state !== "unimplemented"));
+      if (preferred) { setSelected(preferred.id); setFamily("all"); setSearch(""); setEdited(pretty(preferred)); }
+    }
+    setBeforeRefresh(mode === "refresh" ? resolvedRef.current : null);
+    setPacket(data);
+    setLastResolved(data);
+    resolvedRef.current = data;
+    setDirty(false);
+    setRenderPrompt(imageLedPetHandoff(data).text);
+    let group;
+    try { group = workingCreatureFor(data, knownGroup, mode); }
+    catch (error) {
+      group = workingCreatureFor(data, mode === "refresh" ? workingGroupRef.current : null, mode === "refresh" ? "refresh" : "fresh");
+      setPersistenceNotice(`${error.message}. Current structure remains usable in this session.`);
+    }
+    try {
+      group = retainWorkingCreature(group, sceneReplayEnvelope(data));
+      setSavedCreatures(retainedWorkingCreatures());
+      setPersistenceNotice("");
+    } catch (error) {
+      group.currentReplay = sceneReplayEnvelope(data);
+      setPersistenceNotice(`${error.message}. Export the source recipe for durable retention.`);
+    }
+    workingGroupRef.current = group;
+    setWorkingGroup(group);
+  }
+  function installResolvedInputs(data, mode = "reopen", knownGroup = workingGroupRef.current) {
+    if (!isResolvedAuthoringPacket(data)) throw new Error("Retained recipe returned no verified structure");
+    setPackages((current) => mergeOptionalPackages(current, [{ catalogue: data.input.catalogue,
+      defaultGeneration: { genome: data.input.genome, context: data.input.context } }]));
+    setCatalogue(data.input.catalogue);
+    setDraft(clone(data.input.catalogue));
+    setGenome(data.input.genome);
+    setContext(data.input.context);
+    setStartingCopiesText(pretty(data.input.catalogue.authoredRecipe?.startingCopies ?? data.input.genome.loci));
+    setBaselineMetadataText(pretty(data.input.catalogue.authoredRecipe?.baselineMetadata ?? {}));
+    setSelected(data.input.catalogue.loci[0].id);
+    setFamily("all"); setSearch(""); setEdited(pretty(data.input.catalogue.loci[0]));
+    publishResolved(data, mode, knownGroup);
+  }
+  function reopenWorkingCreature(id) {
+    if (!id || processing.current) return;
+    userIntent.current = true;
+    const revision = inputRevision.current;
+    return run(async () => {
+      const saved = retainedWorkingCreatures().find((entry) => entry.association.id === id);
+      if (!saved?.currentReplay) throw new Error("This creature has no retained source recipe. Existing source remains available.");
+      const data = await request(retainedReplayRoute(saved.currentReplay), saved.currentReplay);
+      if (revision !== inputRevision.current) return;
+      installResolvedInputs(data, "reopen", saved);
+      if (saved.previousReplay) {
+        try {
+          const before = await request(retainedReplayRoute(saved.previousReplay), saved.previousReplay);
+          if (revision === inputRevision.current && resolvedRef.current?.recordId === data.recordId && isResolvedAuthoringPacket(before)) setBeforeRefresh(before);
+        } catch (error) {
+          setPersistenceNotice(`Creature reopened; earlier comparison could not replay: ${error.message}. Retained recipes were preserved.`);
+        }
+      }
+      setMessage("Saved creature reopened from its exact recipe. Rendering requires an explicit action.");
+    });
   }
   function applyPackage(item, examples) {
     const input = packageInputs(item, examples);
@@ -365,7 +470,7 @@ function Workbench() {
       if (revision !== inputRevision.current) return;
       if (!isResolvedAuthoringPacket(data))
         throw new Error("Example returned no verified creature preview.");
-      setPacket(data);
+      publishResolved(data, "reopen");
       setMessage("Example loaded. Preview ready.");
     });
   }
@@ -410,17 +515,20 @@ function Workbench() {
   }
   async function resolve(expression = null) {
     userIntent.current = true;
+    setDirty(true);
     const revision = inputRevision.current;
-    setPacket(null);
-    const data = await request(authoringRoute(catalogue, "evaluate"), {
-      catalogue,
-      genome,
-      context,
-      expressionSeed: expression,
-    });
+    let data;
+    try {
+      data = await request(authoringRoute(catalogue, "evaluate"), {
+        catalogue, genome, context, expressionSeed: expression,
+      });
+    } catch (error) {
+      if (revision === inputRevision.current) setDirty(true);
+      throw error;
+    }
     if (revision !== inputRevision.current) return;
-    setPacket(data);
-    setMessage("Preview updated.");
+    publishResolved(data);
+    setMessage("Structure refreshed. Render prompt reset to the new source brief; earlier renders retain their original text.");
   }
   function generateFresh() {
     if (processing.current) return;
@@ -453,7 +561,7 @@ function Workbench() {
       );
     setGenome(data.input.genome);
     setContext(data.input.context);
-    setPacket(data);
+    publishResolved(data, "fresh");
     setMessage(
       data.scene
         ? `New scene ready after ${data.generation.attempts} unmodified draws.`
@@ -711,7 +819,7 @@ function Workbench() {
       setBaselineMetadataText(pretty(data.input.catalogue.authoredRecipe?.baselineMetadata ?? {}));
       setGenome(data.input.genome);
       setContext(data.input.context);
-      setPacket(data);
+      publishResolved(data, "reopen");
       const retainedSelected =
         data.input.catalogue.loci.find((item) => item.id === selected) ??
         data.input.catalogue.loci[0];
@@ -719,7 +827,7 @@ function Workbench() {
       setFamily("all");
       setSearch("");
       setEdited(pretty(retainedSelected));
-      setView("experiment");
+      setView("guided");
       setMessage(
         "Digest replay verified from inputs. Embedded output/SVG/prompt was not trusted.",
       );
@@ -810,7 +918,7 @@ function Workbench() {
   return (
     <AppShell
       header={{ height: { base: 112, lg: 74 } }}
-      navbar={{ width: 190, breakpoint: "sm" }}
+      navbar={{ width: 190, breakpoint: "sm", collapsed: { desktop: !advanced, mobile: !advanced } }}
       padding="lg"
     >
       <AppShell.Header px="lg">
@@ -818,12 +926,11 @@ function Workbench() {
           <div>
             <Title order={3}>Critter Lab · Genome authoring</Title>
             <Text size="xs" c="dimmed">
-              Adult developer tool · provisional shared engine · game/device UI
-              unchanged
+              Create, edit and render source-bound creature proposals
             </Text>
           </div>
           <Group className="workbench-header-controls">
-            <Select
+            {advanced && <Select
               size="xs"
               aria-label="Content package"
               disabled={busy}
@@ -833,11 +940,11 @@ function Workbench() {
                 label: `${authoringPackageLabel(item.catalogue)} · v${item.catalogue.version}`,
               }))}
               onChange={switchPackage}
-            />
-            <Badge variant="light">
+            />}
+            {advanced && <Badge variant="light">
               {catalogue.id} v{catalogue.version}
-            </Badge>
-            <Button
+            </Badge>}
+            {advanced && <Button
               component="a"
               href={`${import.meta.env.BASE_URL}legacy`}
               target="_blank"
@@ -845,7 +952,11 @@ function Workbench() {
               size="xs"
             >
               Preserved Pip proof
-            </Button>
+            </Button>}
+            <Button size="xs" variant="light" onClick={() => {
+              setAdvanced(!advanced);
+              if (advanced) setView("guided");
+            }}>{advanced ? "Return to creature" : "Advanced tools"}</Button>
           </Group>
         </Group>
       </AppShell.Header>
@@ -861,6 +972,7 @@ function Workbench() {
             AUTHOR & INVESTIGATE
           </Text>
           {[
+            ["guided", "Create a creature"],
             ["experiment", "Genome"],
             ["compendium", "Compendium"],
             ["compare", "Pinned comparison"],
@@ -918,6 +1030,13 @@ function Workbench() {
             </Accordion.Item>
           </Accordion>
         )}
+        {view === "guided" && <GuidedCreatureWorkspace catalogue={catalogue} genome={genome}
+          resolved={lastResolved} before={beforeRefresh} dirty={dirty} busy={busy} family={family} search={search}
+          selected={selected} onScope={changeScope} onSelect={selectLocus} onCopy={editCopy}
+          onGenerate={generateFresh} onRefresh={() => run(() => resolve())} renderPrompt={renderPrompt}
+          onPrompt={(text) => { userIntent.current = true; setRenderPrompt(text); }}
+          group={workingGroup} savedCreatures={savedCreatures} onReopen={reopenWorkingCreature}
+          revision={inputRevision.current} persistenceNotice={persistenceNotice} />}
         {view === "compendium" && (
           <>
             <Group justify="space-between" mb="md">

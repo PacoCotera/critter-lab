@@ -180,3 +180,38 @@ code {
 .creature-view svg {
   max-height: 400px;
 }
+.guided-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  gap: 20px;
+  align-items: start;
+}
+.guided-journey { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.guided-structure .mantine-Accordion-panel { overflow-wrap: anywhere; }
+.guided-workspace > *, .guided-traits > * { min-width: 0; }
+.guided-structure { position: sticky; top: 130px; }
+.guided-source { width: 100%; min-height: 350px; display: grid; align-items: center; }
+.guided-source svg { display: block; width: 100%; max-height: 440px; height: auto; }
+.guided-comparison .guided-source { min-height: 0; }
+.guided-comparison .guided-source svg { max-height: 230px; }
+.guided-traits { display: grid; grid-template-columns: minmax(140px, 38fr) minmax(0, 62fr); gap: 14px; }
+.guided-trait-detail { padding-top: 16px; overflow-wrap: anywhere; position: sticky; top: 130px; align-self: start; }
+.guided-layer-tree { margin-top: 16px; min-width: 0; }
+.guided-layer-gap { padding: 0 12px 10px; overflow-wrap: anywhere; }
+.guided-layer-tree .mantine-Accordion-panel { padding-left: 12px; border-left: 2px solid #59766a; margin-left: 12px; }
+.guided-layer-tree .locus-choice .mantine-Badge-root { margin-top: 5px; max-width: 100%; }
+.render-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.render-gallery img { max-height: 200px !important; margin: auto; }
+.render-detail { overflow-wrap: anywhere; }
+.render-detail.expanded { grid-column: 1 / -1; }
+.render-gallery .render-detail.expanded img { max-height: 480px !important; }
+@media (max-width: 960px) {
+  .guided-journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .guided-workspace { grid-template-columns: 1fr; }
+  .guided-structure { position: static; }
+}
+@media (max-width: 560px) {
+  .guided-traits { grid-template-columns: 1fr; }
+  .guided-trait-detail { position: static; grid-row: 1; }
+  .guided-source { min-height: 260px; }
+}
