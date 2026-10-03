@@ -241,7 +241,8 @@ test("existing HTTP routes generate, evaluate and replay exact candidate/old sou
       `${base}/api/module-scene/catalogue`,
     );
     assert.equal(descriptorResponse.status, 200);
-    const { candidatePackage, ...original } = await descriptorResponse.json();
+    const { candidatePackage, regionalPackage, ...original } =
+      await descriptorResponse.json();
     assert.deepEqual(original, moduleSceneCatalogue());
     assert.deepEqual(candidatePackage, pigmentWorkbenchPackage());
     const generateInput = {
