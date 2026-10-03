@@ -13,7 +13,7 @@ The website introduces the intended game before its available software previews:
 
 No percentage or delivery date is supported. The concept is substantially broader than the playable prototype. The current source/prompt/retained-proposal bench advances its authoring pipeline; it does not yet deliver the broad living creature vision.
 
-The original ecosystem illustration remains unchanged. Its separate Probe, required-looking phone layout and Lab printer are historical roles; the combined Companion and shared Caddy govern current direction. The current native comparison is an actual LVGL host framebuffer using a synthetic retained sample, with historical Beecho Lab lettering preserved. Neither image is physical proof. Exact source paths/revisions/hashes are in [the website asset manifest](../../assets.json).
+The original ecosystem illustration remains unchanged. Its separate Probe, required-looking phone layout and Lab printer are historical roles; the combined Companion and shared Caddy govern current direction. The current native comparison is an actual LVGL host framebuffer using a synthetic retained sample, with historical Beecho Lab lettering preserved. Neither image is physical proof. Exact source paths/revisions/hashes are in [the publication-revision asset manifest](https://github.com/PacoCotera/critter-lab/blob/1a9cde04295d14b5d5e0b20b711f67272f35ae87/website/assets.json).
 
 ## Inspection evidence
 

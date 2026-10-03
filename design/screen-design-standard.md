@@ -28,6 +28,10 @@ errors visible; removing tutorials must not hide consequences or recovery state.
 
 Approval establishes visual direction, composition grammar and hierarchy. It does not establish exact sampled color tokens, font licensing, native sprite masters, motion, physical-display performance or implemented navigation. Author reusable assets and compact variants faithfully; verify them against this baseline rather than redesigning them independently per screen. Decorative biological imagery is not genomic data. Resource colors must not imply relationships to unrelated traits.
 
+## Current grounded concept packet
+
+Owner requested new future screens and updated product renders on 3 October 2026, grounded in the connected game loop and consistently named Critter Lab. The [grounded screen packet](grounded-screen-concepts/README.md) carries the selected C18 direction into eight illustrative moments across Companion, Lab and Caddy, plus revised product renders. It replaces older images in the website presentation. Original references and actual native evidence remain preserved; these new concepts are not implemented screenshots or owner-approved final compositions. The packet owns the worked content, control transitions and actual-art review boundary.
+
 ## Across the device family
 
 - **Lab:** a landscape research workbench with visible sample/topic, useful findings, unknowns, stock, study cost and explicit commitment. Illustration supports an activity rather than displacing it.

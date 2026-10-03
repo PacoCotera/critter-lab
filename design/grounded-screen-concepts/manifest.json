@@ -1,0 +1,83 @@
+{
+  "status": "Future concepts; owner review pending; originals unchanged",
+  "reviewedProductBase": "57db139",
+  "method": "Built-in image generation; initial concepts and one targeted clarity correction round",
+  "references": [
+    {
+      "source": "design/game-art-proposals/35-vault-composition/18-c-refined.png",
+      "width": 65536,
+      "height": 4292542531,
+      "sha256": "889745d74ae7bcd7c80ef5737258b3fdf0357423c1d2362a3630925ca07a632b"
+    },
+    {
+      "source": "design/v1-pip/pip-carried.png",
+      "width": 261,
+      "height": 289,
+      "sha256": "38b0fa7fc24ffea47cb128fdcaf46f701a2396bd3bfcbb81e3d86f962f262534"
+    },
+    {
+      "source": "design/v1-pip/pip-marked.png",
+      "width": 261,
+      "height": 289,
+      "sha256": "39336d1bf4f9cf540d1d5a1ed47a42ccc72fff02376eb98e7b88cf51d3859190"
+    },
+    {
+      "source": "design/lab-controls/combined-family-materials.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "16c78c7301c120997d35bab734cd615fdcd1565905943b4dd46c60967fa69ca5"
+    },
+    {
+      "source": "design/lab-controls/combined-companion.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "50d0ca8e0ac73ef7a23514b3084bf4ae6f1954fecf0799c25e045b0fc8027a31"
+    }
+  ],
+  "outputs": [
+    {
+      "source": "design/grounded-screen-concepts/family-render.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f1d081dab08968d779d3fe777b20ad19f94a489784ada89f12bd64ca9e347b25",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
+    },
+    {
+      "source": "design/grounded-screen-concepts/companion-render.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f2b69b20713ca12652643efb993c6e118d518cdc46bece8dbbd0450fe7c26fde",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
+    },
+    {
+      "source": "design/grounded-screen-concepts/lab-journey.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "7aa077c2bfb94cc9bb7a59beb149e7aa1a6a678b0a04ac5ac5229600b8333bf6",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
+    },
+    {
+      "source": "design/grounded-screen-concepts/companion-journey.png",
+      "width": 1882,
+      "height": 836,
+      "sha256": "ed64e2d2c8ca6b83070d36dffc8bd35fd6bbed9dbb7615494458ecad8a93806d",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
+    },
+    {
+      "source": "design/grounded-screen-concepts/caddy-summary.png",
+      "width": 2138,
+      "height": 735,
+      "sha256": "f11000b36ba60d2ec3ef62270e1dae671e12919590e80e0ba5fb851fad29a77f",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
+    }
+  ],
+  "prompts": [
+    "design/grounded-screen-concepts/caddy-summary-prompt.txt",
+    "design/grounded-screen-concepts/companion-journey-correction-prompt.txt",
+    "design/grounded-screen-concepts/companion-journey-prompt.txt",
+    "design/grounded-screen-concepts/companion-render-prompt.txt",
+    "design/grounded-screen-concepts/family-render-prompt.txt",
+    "design/grounded-screen-concepts/lab-journey-correction-prompt.txt",
+    "design/grounded-screen-concepts/lab-journey-prompt.txt"
+  ]
+}
