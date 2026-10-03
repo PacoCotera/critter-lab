@@ -90,7 +90,7 @@ async function request(path, input) {
     throw new Error("The authored request, including recipe and genome, exceeds64KiB. Reduce the edited-definition payload; the API limit remains unchanged.");
   }
   const response = await fetch(
-    path,
+    `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`,
     input === undefined
       ? {}
       : {
@@ -850,7 +850,7 @@ function Workbench() {
             </Badge>
             <Button
               component="a"
-              href="/legacy"
+              href={`${import.meta.env.BASE_URL}legacy`}
               target="_blank"
               variant="subtle"
               size="xs"
@@ -862,6 +862,12 @@ function Workbench() {
       </AppShell.Header>
       <AppShell.Navbar p="md">
         <Stack gap="xs">
+          <Group gap="xs" aria-label="Platform destinations">
+            <Button component="a" size="compact-xs" variant="subtle"
+              href={import.meta.env.BASE_URL === "/genome/" ? "/" : "https://critterlab.basicberry.com/"}>Website</Button>
+            <Button component="a" size="compact-xs" variant="subtle"
+              href={import.meta.env.BASE_URL === "/genome/" ? "/sandbox/" : "https://critterlab.basicberry.com/sandbox/"}>Simulator</Button>
+          </Group>
           <Text size="xs" fw={700} c="dimmed">
             AUTHOR & INVESTIGATE
           </Text>

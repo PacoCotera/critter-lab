@@ -127,7 +127,7 @@ async function resolveInput(input) {
   const previousDisabled = controls.map((control) => control.disabled);
   controls.forEach((control) => { control.disabled = true; });
   try {
-    const response = await fetch("/api/evaluate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+    const response = await fetch(new URL("api/evaluate", import.meta.url), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
     const evaluated = await response.json();
     if (!response.ok || evaluated.status !== "resolved") {
       invalidate();
@@ -171,7 +171,7 @@ byId("import").addEventListener("click", () => {
 });
 
 try {
-  const response = await fetch("/api/catalogue");
+  const response = await fetch(new URL("api/catalogue", import.meta.url));
   if (!response.ok) throw new Error("Catalogue unavailable");
   catalogue = await response.json();
   for (const locus of catalogue.variableLoci) {

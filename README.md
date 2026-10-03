@@ -7,6 +7,13 @@ Beecho Lab is a creature-research game built around physical instruments, with
 one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 [Meet the game](docs/players/README.md) or [run the software](docs/builders/getting-started.md).
 
+The hosted destinations are [the website](https://critterlab.basicberry.com/),
+[genome workbench](https://critterlab.basicberry.com/genome/) and
+[game simulator](https://critterlab.basicberry.com/sandbox/).
+The [platform source boundary](prototype/platform-server/README.md) keeps their
+processes/releases separate and documents browser-origin retention limits;
+source integration alone is not activation evidence.
+
 ![Current family: sage home Lab, stone combined Companion and shared printer/summary caddy.](design/lab-controls/combined-family-materials.png)
 
 *Selected family appearance, not a manufactured kit or measured hardware design.

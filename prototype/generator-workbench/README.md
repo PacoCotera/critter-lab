@@ -37,6 +37,14 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+For the public `/genome/` mount, build with `CRITTER_BENCH_BASE=/genome/`;
+unset keeps standalone `/`. The [platform gateway](../platform-server/README.md)
+keeps website, workbench and simulator routes separate and preserves native
+release/authentication. Browser storage from loopback does not automatically
+move to HTTPS: export/import exact source/draft recipes with the existing UI,
+and keep returned bitmap/linked metadata exports separately. No automatic pet
+image import or saved-world migration is supplied.
+
 ### Primary markings
 
 The default catalogue5/source7/material5/reference7 consumes the six already

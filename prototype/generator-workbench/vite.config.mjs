@@ -1,6 +1,10 @@
 import { defineConfig } from "vite";
 
+const base = process.env.CRITTER_BENCH_BASE ?? "/";
+if (!["/", "/genome/"].includes(base)) throw new Error("CRITTER_BENCH_BASE must be / or /genome/");
+
 export default defineConfig({
+  base,
   esbuild: { jsx: "automatic" },
   build: { outDir: "dist", emptyOutDir: true },
   server: {

@@ -6,6 +6,12 @@ The connected story introduces the home Lab (Raspberry Pi 4 development referenc
 
 Serve `dist/` with a static HTTP server; no dependencies or build step. Existing device tabs support arrows, Home and End; without JavaScript all device descriptions are visible. FAQs and the science detail use native disclosures. No game behavior or simulator controls are implemented by this website.
 
+The [platform gateway](../prototype/platform-server/README.md) mounts this static
+website at `https://critterlab.basicberry.com/`, the genome workbench at
+`/genome/` and the simulator at `/sandbox/`. Navigation links keep these distinct
+destinations visible. Gateway integration does not change game behavior or
+establish activation; hosting and native releases have separate metadata.
+
 ## Artwork and software evidence
 
 Original references remain unchanged. `dist/assets/` contains copies of:
