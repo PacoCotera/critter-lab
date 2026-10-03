@@ -132,7 +132,7 @@ shared pinned pigment seams/caps and inherited fibre length/flow. Finite limits
 are672 refined triangles and1344 clipped polygons per owner,4704/9408 total.
 Broad ears use the same copied length/root with explicit .90L width, .20L
 recess and mirrored15° head-local yaw. The [current representation contract](../../design/anatomical-source-prototype/compositional-contract.md#continuous-coat-mantle-and-broad-ear-profile)
-owns the equations and limits. Actual source6 craft is pending; oldsource5
+owns the equations and limits. Actual source6 coat/ear craft remains HOLD; [one returned pet proposal](evidence/coherent-coat/README.md) has stronger material/ear read with explicit pigment/details/prop drift. Oldsource5
 records and authored-parent3 forks remain literal. Parent4 drafts have their own
 storage slot and compile/replay source6 without migrating parent2/3 inputs.
 Founder generation samples categorical/presence states explicitly, avoiding the

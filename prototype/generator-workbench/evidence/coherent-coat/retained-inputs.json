@@ -39,6 +39,13 @@
     "retention": "Native copied PNG, unchanged bytes; not a confirmed full-size download.",
     "actualDisposition": "Positive primary-body fur and rounded ear read; proposal only. Pigment placement, added nose/mouth/toe details, rug and fourth-leg occlusion remain unresolved."
   },
+  "manualRetention": {
+    "sourceRevision": "370fd7cf6269d2e060341b9c23b634555596ff64",
+    "ciRun": 37134953239,
+    "proposalId": "pet-proposal-b7dac63cb31933d1a03f8ff2a02d249b8d1478b5e9984fad0e1f627fbbf89b79",
+    "metadataFile": "pet-proposal.metadata.json",
+    "actualJourney": "Explicit attach and retain; fresh page load; original-input replay recovers same proposal; visible Copy linked metadata supplies exact retained JSON."
+  },
   "files": {
     "authored-workbench.png": {
       "bytes": 262318,
@@ -84,9 +91,21 @@
       "bytes": 296627,
       "sha256": "437a6c3efa416ef98ab6b1ab4ccbac0d857d52e3e330d3731e61f85299c9992d"
     },
+    "pet-copied-state.txt": {
+      "bytes": 400,
+      "sha256": "bf2c3bd8280896febf49d8f5cde7ff500502639b1dbdfb55b8d1385b912ad22d"
+    },
+    "pet-proposal.metadata.json": {
+      "bytes": 32220,
+      "sha256": "383dd6e1960d4227352e7f1031474b070611dee6410c244cb5a745e759b3526c"
+    },
     "pet-reopened-state.txt": {
       "bytes": 9512,
       "sha256": "31a748b8d397bc3aed152abaed658ec13f24e493acd5def4c2d13c6e5956fd35"
+    },
+    "pet-reopened-workbench.png": {
+      "bytes": 157490,
+      "sha256": "0879db10709cf1a02b39684552e59dce4dc6f3c4fc788ee889e84d3f1426f066"
     },
     "pet-retained-workbench.png": {
       "bytes": 156641,

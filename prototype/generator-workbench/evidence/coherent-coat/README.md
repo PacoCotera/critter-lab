@@ -72,6 +72,13 @@ same linked proposal. [Retained panel](pet-retained-workbench.png) and
 [reopened state](pet-reopened-state.txt) preserve that actual journey.
 The browser did not confirm its native metadata download; the panel's copy
 control supplies the same linked JSON without changing this proposal.
+The final copy control at `370fd7cf6269d2e060341b9c23b634555596ff64`
+passed its unchanged [automatic CI](https://github.com/PacoCotera/critter-lab/actions/runs/37134953239).
+[Actual copied metadata](pet-proposal.metadata.json), [visible copy result](pet-copied-state.txt)
+and [reopened panel](pet-reopened-workbench.png) retain exact prompt/source/recipe,
+PNG hash, 1024×1024 dimensions and proposal status. Stored bytes match the native
+copied provider PNG. This establishes local retention and metadata copying;
+native file downloads, cross-browser import and accepted phenotype are not confirmed.
 
 111 carried pairs, six unsupported drafts and eleven branch headings remain a
 limited experiment. Five genomic branches lack contracts; other consumers are

@@ -168,7 +168,7 @@ representation operators. A separate bounded mantle module consumes actual
 facets, original48 root witnesses and pinned local pigment masks; the oldsource5
 cluster renderer stays literal. Broad ear geometry recomputes its true-root
 basal witness. The [current representation contract](../design/anatomical-source-prototype/compositional-contract.md#continuous-coat-mantle-and-broad-ear-profile)
-owns equations/budgets; actual craft remains pending. Shared resolution and
+owns equations/budgets; [actual source6 craft remains HOLD](../prototype/generator-workbench/evidence/coherent-coat/README.md). One returned pet improves material/ear read but stays a proposal with documented appearance drift. Shared resolution and
 strict parent4 replay add no missing copies, palette, camera or lighting change.
 The current vocabulary's separate `art-prompt-summary/1` consumer reads actual
 source3/4/5/6 roles, expressed facts, material owners and pinned pigment names for
