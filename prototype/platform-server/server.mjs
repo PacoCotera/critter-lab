@@ -46,19 +46,19 @@ function validateExternalRequest(request, platformHost, port) {
   if (!["GET", "HEAD"].includes(request.method) && origin === undefined) throw new Error("Mutation Origin required");
 }
 
-async function benchBody(request) {
+async function benchBody(request, maximum = maximumBenchBody) {
   const declared = request.headers["content-length"];
-  if (declared !== undefined && (!/^\d+$/.test(declared) || Number(declared) > maximumBenchBody)) {
+  if (declared !== undefined && (!/^\d+$/.test(declared) || Number(declared) > maximum)) {
     request.resume();
-    throw Object.assign(new Error("Workbench request exceeds64KiB"), { status: 413 });
+    throw Object.assign(new Error("Workbench request exceeds its route body limit"), { status: 413 });
   }
   let size = 0;
   const chunks = [];
   for await (const chunk of request.iterator({ destroyOnReturn: false })) {
     size += chunk.length;
-    if (size > maximumBenchBody) {
+    if (size > maximum) {
       request.resume();
-      throw Object.assign(new Error("Workbench request exceeds64KiB"), { status: 413 });
+      throw Object.assign(new Error("Workbench request exceeds its route body limit"), { status: 413 });
     }
     chunks.push(chunk);
   }
@@ -199,7 +199,8 @@ export function makePlatformServer(environment = process.env) {
         return response.end(request.method === "HEAD" ? undefined : JSON.stringify(release));
       }
       if (pathname.startsWith("/genome/")) {
-        const body = await benchBody(request);
+        const renderingUpload = request.method === "POST" && ["/genome/api/rendering/jobs", "/genome/api/rendering/recovery"].includes(pathname);
+        const body = await benchBody(request, renderingUpload ? 2 * 1024 * 1024 : maximumBenchBody);
         return proxy(request, response, pathname.slice("/genome".length) + query, "bench", body);
       }
       if (pathname.startsWith("/sandbox/")) return proxy(request, response, pathname.slice("/sandbox".length) + query, "native");

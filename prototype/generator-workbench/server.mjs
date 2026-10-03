@@ -19,6 +19,7 @@ import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { createRenderJobs } from "./render-jobs.mjs";
 import { catalogue, evaluate } from "./evaluate.mjs";
 import {
   authoringCatalogue,
@@ -66,6 +67,14 @@ function compositionOperations(input, replay = false) {
 }
 
 export function makeServer() {
+  const renderJobs = createRenderJobs((record) => {
+    if (["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6", "compositional-source/7"].includes(record?.sceneProjectionVersion)) {
+      return compositionOperations(record, true).replay(record);
+    }
+    if (record?.sceneProjectionVersion === "anatomical-source/1") return replayAnatomicalSource(record);
+    if (record?.sceneProjectionVersion?.startsWith("module-scene/")) return replayModuleSceneAuthoring(record);
+    return replayAuthoring(record);
+  });
   return createServer(async (request, response) => {
     const send = (status, type, content) => {
       response.writeHead(status, {
@@ -84,6 +93,43 @@ export function makeServer() {
     if (request.headers.origin && request.headers.origin !== `http://${host}`)
       return json(403, { error: "Same-origin request required" });
     try {
+      if (request.url?.startsWith("/api/rendering/")) {
+        try {
+          if (request.method === "GET" && request.url === "/api/rendering/config") return json(200, await renderJobs.config());
+          await renderJobs.authorize(request.headers.authorization);
+          if (request.method === "GET" && request.url === "/api/rendering/jobs") return json(200, { jobs: renderJobs.list() });
+          const match = /^\/api\/rendering\/jobs\/([0-9a-f-]{36})(\/image)?$/.exec(request.url);
+          if (request.method === "GET" && match) {
+            if (!match[2]) return json(200, renderJobs.get(match[1]));
+            const image = await renderJobs.image(match[1]);
+            return send(200, image.mime, image.bytes);
+          }
+          if (request.method === "POST" && ["/api/rendering/jobs", "/api/rendering/recovery"].includes(request.url)) {
+            const chunks = [];
+            let size = 0;
+            for await (const chunk of request.iterator({ destroyOnReturn: false })) {
+              size += chunk.length;
+              if (size > 2 * 1024 * 1024) {
+                request.resume();
+                return json(413, { error: "Rendering request exceeds2MiB" });
+              }
+              chunks.push(chunk);
+            }
+            let input;
+            try { input = JSON.parse(Buffer.concat(chunks).toString("utf8")); }
+            catch { return json(400, { error: "Invalid rendering JSON" }); }
+            if (request.url === "/api/rendering/recovery") {
+              if (!input || Object.keys(input).length !== 1 || typeof input.jobId !== "string") return json(422, { error: "Known jobId required" });
+              return json(200, renderJobs.get(input.jobId));
+            }
+            return json(202, await renderJobs.create(input));
+          }
+          return json(404, { error: "Rendering route not found" });
+        } catch (error) {
+          request.resume();
+          return json(error.status ?? 503, { error: error.status ? error.message : "Rendering service unavailable" });
+        }
+      }
       if (request.method === "GET" && request.url === "/api/catalogue")
         return json(200, catalogue());
       if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
