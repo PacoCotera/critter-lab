@@ -13,8 +13,8 @@ accessories and proportions do not satisfy genome-derived organization.
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v1** package, then uses one action to sample a valid genome
-and constructed source scene. Its clean canonical source illustration and short
+source experiment · v2** package, then uses one action to sample a valid genome
+and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
 not upload it. The `image-led-pet/1` sentence is separate from the retained full
@@ -37,9 +37,10 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ### Compositional Generate and all eleven genomic branches
 
-`genomic-compositional-source-experiment@1` uses separately pinned
-`developmental-compositional-source/1`, current `compositional-source/2` and
-`compositional-surface-fields/1` rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+`genomic-compositional-source-experiment@2` uses separately pinned
+`developmental-compositional-source/2`, `compositional-source/3`,
+`compositional-surface-fields/2` and `compositional-reference/3` rules. The
+retained version1 package remains selectable with its original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
 resolve serial or branched region graphs, depth, bilateral/radial frames,
@@ -47,15 +48,16 @@ unequal growth, bend, broad/narrow joins, optional head/face modules, distinct
 free/contact chains and independently rooted thin surfaces. Zero chains and
 headless bodies are legitimate. A class name never selects an assembly.
 
-The current foundation carries **98 ordered locus pairs**: the broader declared
-50-record inheritance vector plus the 50-record structural overlay, sharing
+The current foundation carries **104 ordered locus pairs**: the retained
+98-pair union plus six new region-shape, terminal and fur contributors. The
+original union combines the broader 50 and structural 50 records, sharing
 the two exact pigment definitions once. Six draft definitions remain visible
 without invented allele copies. All eleven genomic branches appear in the
 current authoring record, including branches whose locus/capability contracts
 are still missing. Each record retains its exact source/version, contributions
-and expressed, inactive or unimplemented consumer status. Fifty construction
-contributors are not the whole project genome, and 98 carried vectors do not
-mean 98 implemented phenotype features. Unimplemented movement, physiology or
+and expressed, inactive or unimplemented consumer status. Fifty-six potential construction
+contributors are not the whole project genome, and 104 carried vectors do not
+mean 104 implemented phenotype features. Unimplemented movement, physiology or
 other branches are not assigned zero capability or inferred from appearance.
 
 The separate five-stage record inspector preserves foundation, inherited,
@@ -71,16 +73,23 @@ older packages remain available under their original rules.
 Original `compositional-source/1` records also retain their exact builder and
 `compositional-reference/1` output. The corrected `/2` constructor intersects
 the visible retained mesh for narrow contacts; `/1` used analytic ellipsoid
-roots that could leave a visible gap. New Generate and Resolve use `/2` and
-`compositional-reference/2` without changing the catalogue, ordered copies or
-context. Reopening an old record does not silently upgrade it.
+roots that could leave a visible gap. Version1 Generate and Resolve retain `/2` and
+`compositional-reference/2`. Current version2 Generate and Resolve use the new
+104-pair foundation and `/3` construction/reference; no old input acquires the
+new vocabulary automatically. Reopening an old record does not silently upgrade it.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared
 mixed-copy maps remain valid for editing and inheritance. Generate keeps the
 first eligible complete input within the declared ceiling, without ranking
 appearance, imposing animal quotas or repairing genes. The actual reference
-uses owned local pigments and smooth/scales fields on the composed 3D source.
+uses owned local pigments and smooth/scales or whole-primary fur fields on
+the composed 3D source. Primary envelopes resolve inherited ovoid/barrel/tapered
+profiles and bilateral p2/p3/p4 cross-sections; radial cross-sections remain
+circular. Contact terminals resolve rounded/pad/wedge forms in their own frame,
+with no ground or locomotion claim. Fur is a bounded facet-rooted ribbon field
+over opaque skin, with inherited length/flow, exact pigment clipping and
+336-ribbon maximum separate from 128 scale cells.
 It is a low-poly static construction reference, not finished HiBit pet art,
 animation, a physical movement model or full organism-range acceptance.
 

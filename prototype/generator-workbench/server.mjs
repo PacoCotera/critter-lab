@@ -2,6 +2,8 @@ import { regionalSceneWorkbenchPackage } from "./regional-scene-workbench-packag
 import { anatomicalSourcePackage } from "./anatomical-source-package.mjs";
 import { compositionalSourcePackage } from "./compositional-source-package.mjs";
 import { resolveCompositionalSource, generateCompositionalSource, replayCompositionalSource } from "./compositional-source-adapter.mjs";
+import { compositionalVocabularyPackage } from "./compositional-vocabulary-package.mjs";
+import { resolveCompositionalVocabulary, generateCompositionalVocabulary, replayCompositionalVocabulary } from "./compositional-vocabulary-adapter.mjs";
 import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
@@ -30,6 +32,13 @@ const files = new Map([
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
 ]);
 const maximumBodyBytes = 65536;
+function compositionOperations(input, replay = false) {
+  const foundation = replay ? input?.input?.catalogue : input?.catalogue;
+  const vocabulary = foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 2;
+  return vocabulary
+    ? { evaluate: resolveCompositionalVocabulary, generate: generateCompositionalVocabulary, replay: replayCompositionalVocabulary }
+    : { evaluate: resolveCompositionalSource, generate: generateCompositionalSource, replay: replayCompositionalSource };
+}
 
 export function makeServer() {
   return createServer(async (request, response) => {
@@ -55,7 +64,7 @@ export function makeServer() {
       if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
         return json(200, anatomicalSourcePackage());
       if (request.method === "GET" && request.url === "/api/compositional-source/catalogue")
-        return json(200, compositionalSourcePackage());
+        return json(200, { ...compositionalVocabularyPackage(), retainedPackages: [compositionalSourcePackage()] });
       if (
         request.method === "GET" &&
         request.url === "/api/authoring/catalogue"
@@ -114,11 +123,11 @@ export function makeServer() {
         let result;
         if (request.url === "/api/evaluate") result = evaluate(input);
         else if (request.url === "/api/compositional-source/evaluate")
-          result = resolveCompositionalSource(input);
+          result = compositionOperations(input).evaluate(input);
         else if (request.url === "/api/compositional-source/generate")
-          result = generateCompositionalSource(input);
+          result = compositionOperations(input).generate(input);
         else if (request.url === "/api/compositional-source/replay")
-          result = replayCompositionalSource(input);
+          result = compositionOperations(input, true).replay(input);
         else if (request.url === "/api/anatomical-source/evaluate")
           result = resolveAnatomicalSource(input);
         else if (request.url === "/api/anatomical-source/generate")

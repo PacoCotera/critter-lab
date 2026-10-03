@@ -12,7 +12,9 @@ direction, not final species, style or pigment selection.
 Resolve the connected region graph before drawing features. Primary depth1/2/3
 resolves a serial chain or a root with two bilateral / three radial arms of
 depth minus one. Region count is derived from that graph, not capped at five or
-used as an animal selector. Existing ellipsoids supply volumes, but their growth,
+used as an animal selector. The current separately pinned vocabulary supplies ovoid/barrel/tapered primary
+ring volumes and bilateral rounded/rounded-square cross-sections (mixed p3);
+radial sections stay circular. Retained catalogue1 ellipsoids remain exact. Their growth,
 frames, connections and layout must produce the organization. A single region is a complete source;
 it need not receive a head, neck, tail or appendages.
 
@@ -65,6 +67,13 @@ Muzzle, jaw and paired crown forms are optional declared modules; none is suppli
 to repair an unfamiliar silhouette. Diagnostic depth slices are not exterior
 eyes. Keep absent, inactive and unprojected modules distinct in retained facts.
 
+Contact terminals in catalogue2 use rounded masses, blunt p4 pads or convex
+wedge envelopes. Inherited Rx/Rz remain exact; pad width is explicitly derived.
+The terminal center/positive endpoint witness follows the local chain frame,
+not a ground plane. These are provisional source forms, not paws, hoof clefts,
+toes, friction or locomotion. Actual changed-source inspection still decides
+silhouette/material clarity; adding operators is not an art-quality pass.
+
 ## Material fields and pigments
 
 Geometry supplies solid anatomy. Covering supplies a surface field with material
@@ -75,10 +84,13 @@ kind, extent, scale and flow; it must not install another anatomy graph.
 - Scales: an overlapping material field, indicated by selective edge/light
   clusters at its actual extent and flow. Samples are not detached armour plates
   or mandatory stamps. Do not expand sparse coverage into a full coat.
-- Fur remains unmodeled in this increment; no allele or consumer is added. Future
-  fur needs a surface-attached directional fibre field with declared coverage and
-  length. Short grouped strokes can depict it; do not replace fibres with solid
-  spikes or substitute smooth skin when that consumer is absent.
+- Current catalogue2 fur is a whole-primary surface override over complete
+  opaque skin. Forty-eight actual facet-rooted thin ribbons per owner retain
+  inherited length/tangent flow, root pigment and visible clipping; max 336 is a
+  separate material budget. No solids, spikes, detached tufts or new anatomy
+  nodes. Other owners stay smooth; partial coats are deferred. Catalogue1 has
+  no fur consumer and keeps its original material path. See the exact
+  [vocabulary contract](compositional-contract.md#current-shape-terminal-and-covering-vocabulary).
 
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base

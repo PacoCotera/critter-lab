@@ -63,6 +63,7 @@ import {
   canPublishAuthoringResponse,
   authoringRequest,
   canonicalGenomicFamily,
+  isCompositionalRule,
 } from "../authoring-ui.mjs";
 
 const clone = (value) => structuredClone(value);
@@ -183,7 +184,7 @@ function Workbench() {
                 ...(candidate ? [candidate] : []),
                 ...(regional ? [regional] : []),
                 ...(anatomy ? [anatomy] : []),
-                ...(composition ? [composition] : []),
+                ...(composition ? [composition, ...(composition.retainedPackages ?? [])] : []),
               ]),
             );
             setSceneExamples([
@@ -192,6 +193,7 @@ function Workbench() {
               ...(regional?.sceneExamples ?? []),
               ...(anatomy?.sceneExamples ?? []),
               ...(composition?.sceneExamples ?? []),
+              ...(composition?.retainedPackages ?? []).flatMap(item => item.sceneExamples ?? []),
             ]);
             const status = preferred ? "ready" : "unavailable";
             setCandidateStatus(status);
@@ -202,7 +204,7 @@ function Workbench() {
               applyPackage(preferred, preferred.sceneExamples);
               setMessage(
                 composition
-                  ? "Ready to generate variable body composition. All eleven genomic branches remain available with their actual consumer status."
+                  ? "Ready to generate inherited region forms, terminals and coverings. All eleven genomic branches retain their actual consumer status."
                   : anatomy
                   ? "Ready to generate a new anatomical source. Optional parts, supports, colours and materials are inherited independently."
                   : regional
@@ -483,7 +485,7 @@ function Workbench() {
     invalidate();
   }
   async function saveDraftRecord() {
-    if (["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion))
+    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
@@ -509,7 +511,7 @@ function Workbench() {
     );
   }
   async function useDraft() {
-    if (["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion))
+    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
@@ -531,7 +533,7 @@ function Workbench() {
     );
   }
   function saveRecord() {
-    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(packet.sceneProjectionVersion)
+    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(packet.sceneProjectionVersion)
       ? { ...sceneReplayEnvelope(packet), recordId: packet.recordId, savedLabel: packet.result.classification.labels.join(" · ") }
       : clone(packet);
     const next = [
@@ -576,7 +578,7 @@ function Workbench() {
             resultDigest: imported.resultDigest,
           };
       const data = await request(
-        ["compositional-source/1", "compositional-source/2"].includes(imported.sceneProjectionVersion)
+        ["compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(imported.sceneProjectionVersion)
           ? "/api/compositional-source/replay"
           : imported.sceneProjectionVersion === "anatomical-source/1"
           ? "/api/anatomical-source/replay"
@@ -772,7 +774,7 @@ function Workbench() {
               catalogue.loci.filter((item) => item.status === "validated")
                 .length
             }{" "}
-            {catalogue.ruleVersion === "developmental-compositional-source/1" ? "defined copy contracts" : "executable"} ·{" "}
+            {isCompositionalRule(catalogue.ruleVersion) ? "defined copy contracts" : "executable"} ·{" "}
             {catalogue.loci.filter((item) => item.status === "draft").length}{" "}
             draft candidates
           </Text>
@@ -826,12 +828,12 @@ function Workbench() {
                 >
                   Export draft
                 </Button>
-                <Button disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)} onClick={() => run(useDraft)}>
+                <Button disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)} onClick={() => run(useDraft)}>
                   Use draft in experiment
                 </Button>
               </Group>
             </Group>
-            {["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion) && (
+            {["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion) && (
               <Text size="sm" c="dimmed" mb="md">This provisional catalogue is read-only. Change inherited allele copies in Inspect or edit genome, then Resolve.</Text>
             )}
             <div className="catalogue-layout">
@@ -957,7 +959,7 @@ function Workbench() {
                     />
                     <Group mt="md">
                       <Button
-                        disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)}
+                        disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)}
                         onClick={() =>
                           run(saveDraftRecord, { retentionKind: "save" })
                         }
@@ -1012,7 +1014,7 @@ function Workbench() {
               <Paper withBorder p="md" className="structural-preview">
                 <Group justify="space-between">
                   <Title order={4}>Source illustration</Title>
-                  <Badge color="gray">{["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion) ? "Provisional anatomical source" : "Diagnostic geometry"}</Badge>
+                  <Badge color="gray">{["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion) ? "Provisional anatomical source" : "Diagnostic geometry"}</Badge>
                 </Group>
                 {packet && (
                   <Text size="xs" c="dimmed" mt="xs">
@@ -1047,9 +1049,9 @@ function Workbench() {
                     ? packet.sceneProjectionVersion
                     : "Canonical diagnostic"}
                   .{" "}
-                  {catalogue.ruleVersion === "developmental-compositional-source/1"
+                  {isCompositionalRule(catalogue.ruleVersion)
                     ? "Connected regions and independent optional parts follow copied composition rules. All eleven genomic branches are retained; source consumers and missing physiology are explicit."
-                    : ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)
+                    : ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)
                     ? "Inherited head/core, jointed supports, optional modules and owned skin/scales fields; static source, not finished pet art."
                     : [
                     "developmental-covering/1",
@@ -1149,7 +1151,7 @@ function Workbench() {
                 </Text>
               </Paper>
             </div>
-            {catalogue.ruleVersion === "developmental-compositional-source/1" && (
+            {isCompositionalRule(catalogue.ruleVersion) && (
               <GenomicBranches catalogue={catalogue} genome={genome} packet={packet} onSelect={selectLocus} />
             )}
             <Accordion mt="md" variant="separated">
@@ -1178,7 +1180,7 @@ function Workbench() {
                             (item) => item.status === "validated",
                           ).length
                         }{" "}
-                        {catalogue.ruleVersion === "developmental-compositional-source/1" ? "defined copy contracts; construction consumers are separate" : "supported contributor definitions"}
+                        {isCompositionalRule(catalogue.ruleVersion) ? "defined copy contracts; construction consumers are separate" : "supported contributor definitions"}
                       </Text>
                     </Paper>
                     <Paper withBorder p="sm">
@@ -1203,7 +1205,7 @@ function Workbench() {
                           : "Not resolved"}
                       </Text>
                       <Text size="xs">
-                        {packet && catalogue.ruleVersion === "developmental-compositional-source/1"
+                        {packet && isCompositionalRule(catalogue.ruleVersion)
                           ? `${packet.result.facts.filter(item => item.state === "inactive").length} inactive · ${packet.result.facts.filter(item => item.state === "unimplemented").length} unimplemented consumers/definitions`
                           : packet
                           ? `${packet.result.facts.filter((item) => item.state !== "expressed").length} inactive or suppressed outputs`
@@ -1519,7 +1521,7 @@ function Workbench() {
                   <Group align="end">
                     <Select
                       label="Reference medium"
-                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)}
+                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)}
                       data={["ground", "air", "water"]}
                       value={context.medium}
                       onChange={(medium) => {
@@ -1547,7 +1549,7 @@ function Workbench() {
                     </Button>
                     <NumberInput
                       label="Expression seed"
-                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)}
+                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)}
                       value={expressionSeed}
                       min={0}
                       max={4294967295}
@@ -1557,7 +1559,7 @@ function Workbench() {
                       }}
                     />
                     <Button
-                      disabled={busy || !genome || ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(catalogue.ruleVersion)}
+                      disabled={busy || !genome || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)}
                       variant="light"
                       onClick={() => run(() => resolve(Number(expressionSeed)))}
                     >
@@ -1565,7 +1567,7 @@ function Workbench() {
                     </Button>
                   </Group>
                   <Text size="sm" c="dimmed" mt="sm">
-                    {catalogue.ruleVersion === "developmental-compositional-source/1"
+                    {isCompositionalRule(catalogue.ruleVersion)
                       ? "This source uses one static reference context and deterministic expression. Founder categories and presence gates sample one declared homozygous state; numeric and pigment copies sample independently. Resolve applies edited copies, including mixed categories, without rerolling."
                       : catalogue.ruleVersion === "developmental-anatomical-source/1" ? "This source uses one static reference context and deterministic expression. Generate samples independent inherited copies; Resolve applies edited copies without rerolling them." : <>Genome generation samples inherited copies. Expression
                     sampling changes permitted marking placement only; inherited
@@ -2090,7 +2092,7 @@ function Coverage({ catalogue, packet }) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Family</Table.Th>
-            <Table.Th>{packet.ruleVersion === "developmental-compositional-source/1" ? "Active / inactive / unimplemented" : "Active / inactive / draft"}</Table.Th>
+            <Table.Th>{isCompositionalRule(packet.ruleVersion) ? "Active / inactive / unimplemented" : "Active / inactive / draft"}</Table.Th>
             <Table.Th>Boundary</Table.Th>
           </Table.Tr>
         </Table.Thead>

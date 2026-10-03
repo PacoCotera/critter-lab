@@ -129,13 +129,17 @@ The [compositional Generate guide](../prototype/generator-workbench/README.md#co
 owns current operation and its limits. Its [content contract](../design/anatomical-source-prototype/compositional-contract.md)
 derives serial/fan region graphs, bilateral/radial frames, optional heads, distinct
 free/contact chains and independent thin surfaces from retained copies. It
-retains 98 ordered pairs and six draft definitions with all eleven branches
+retains 104 ordered pairs and six draft definitions with all eleven branches
 visible. That is the complete declared experimental union, not complete locus
 content or implemented physiology for every branch. Generation samples the
 contributors rather than selecting named examples. Pigment partitions and
-smooth/scales fields have explicit surface owners. Coarse low-poly depiction
+smooth/scales and whole-primary fur fields have explicit surface owners. The
+separately pinned catalogue2 adds six shape/terminal/fur contributors, actual
+convex-ring facet roots and contact-terminal envelopes through source3,
+material2 and reference3. Catalogue1 and exact source/reference1/2 paths remain
+available; dispatch never upgrades an old input or supplies missing alleles. Coarse low-poly depiction
 communicates volume and occlusion; it does not establish finished pet art,
-biology or motion. Tail, hoof/toe anatomy, fur, emission, broader organism range
+biology or motion. Tail, hoof/toe anatomy, partial coats, emission, broader organism range
 and automatic animation remain gaps; the content is not canonical anatomy.
 
 Only after meaningful structure exists, compare a low-poly reference in a

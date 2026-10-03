@@ -1,11 +1,14 @@
 export function canonicalGenomicFamily(id) {
   return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
 }
+export function isCompositionalRule(ruleVersion) {
+  return ["developmental-compositional-source/1", "developmental-compositional-source/2"].includes(ruleVersion);
+}
 
 // Only this new immutable registry uses a pinned foundation request. Older
 // catalogue payloads and replay records retain their original API semantics.
 export function authoringRequest(input) {
-  if (input.catalogue?.ruleVersion !== "developmental-compositional-source/1") return input;
+  if (!isCompositionalRule(input.catalogue?.ruleVersion)) return input;
   return { ...input, catalogue: input.catalogue.foundationPin };
 }
 
@@ -13,7 +16,7 @@ export function scopedLoci(catalogue, dimension = "all", query = "") {
   const text = query.trim().toLowerCase();
   return (catalogue?.loci ?? []).filter((locus) => {
     const inDimension = dimension === "all" || locus.family === dimension ||
-      (catalogue?.ruleVersion === "developmental-compositional-source/1" && canonicalGenomicFamily(locus.family) === dimension);
+      (isCompositionalRule(catalogue?.ruleVersion) && canonicalGenomicFamily(locus.family) === dimension);
     const searchable = [locus.id, locus.label, ...(locus.aliases ?? [])]
       .join(" ")
       .toLowerCase();
@@ -28,6 +31,8 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (catalogue.ruleVersion === "developmental-compositional-source/2")
+    return "Region forms / terminals / coverings · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/1")
     return "Compositional genome / eleven branches";
   if (catalogue.ruleVersion === "developmental-anatomical-source/1")
@@ -176,6 +181,21 @@ export function isResolvedAuthoringPacket(packet) {
   return (
     packet?.status === "resolved" &&
     packet?.result?.status === "resolved" &&
+    (packet.sceneProjectionVersion !== "compositional-source/3" || packet.ruleVersion === "developmental-compositional-source/2") &&
+    (packet.ruleVersion !== "developmental-compositional-source/2" ||
+      (packet.schemaVersion === "compositional-authoring-record/2" &&
+        packet.input?.catalogue?.id === "genomic-compositional-source-experiment" &&
+        packet.input?.catalogue?.version === 2 &&
+        packet.sceneProjectionVersion === "compositional-source/3" &&
+        packet.materialProfileVersion === "compositional-surface-fields/2" &&
+        packet.scene?.status === "constructed" &&
+        packet.scene.profileVersion === packet.sceneProjectionVersion &&
+        packet.scene.covering?.profileVersion === packet.materialProfileVersion &&
+        packet.result.profileVersion === packet.sceneProjectionVersion &&
+        packet.result.graph?.profileVersion === packet.sceneProjectionVersion &&
+        packet.informationStages?.phenotype?.profileVersion === packet.sceneProjectionVersion &&
+        packet.reference?.profileVersion === "compositional-reference/3" &&
+        packet.reference.status === "constructed")) &&
     (packet.ruleVersion !== "developmental-compositional-source/1" ||
       (packet.schemaVersion === "compositional-authoring-record/1" &&
         ["compositional-source/1", "compositional-source/2"].includes(packet.sceneProjectionVersion) &&
@@ -237,7 +257,7 @@ export function imageLedPetHandoff(packet) {
 }
 
 export function authoringRoute(catalogue, operation) {
-  if (catalogue?.ruleVersion === "developmental-compositional-source/1")
+  if (isCompositionalRule(catalogue?.ruleVersion))
     return `/api/compositional-source/${operation}`;
   if (catalogue?.ruleVersion === "developmental-anatomical-source/1")
     return `/api/anatomical-source/${operation}`;
@@ -245,7 +265,7 @@ export function authoringRoute(catalogue, operation) {
 }
 
 export function sceneReplayEnvelope(packet) {
-  if (["compositional-source/1", "compositional-source/2"].includes(packet.sceneProjectionVersion))
+  if (["compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(packet.sceneProjectionVersion))
     return {
       schemaVersion: packet.schemaVersion,
       sceneProjectionVersion: packet.sceneProjectionVersion,
@@ -280,7 +300,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -358,7 +378,7 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
-  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(scene.profileVersion)) {
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(scene.profileVersion)) {
     const targets = scene.nodes.filter(node => node.sources.includes(locusId));
     return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
   }
@@ -440,7 +460,7 @@ export function causalSummary(catalogue, result, id) {
 export function geometryBounds(result) {
   // Anatomical source solids use their retained three-dimensional camera.
   // The older diagnostic node/dimensions camera cannot interpret that graph.
-  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(result?.profileVersion)) return null;
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3"].includes(result?.profileVersion)) return null;
   if (result?.status !== "resolved" || !result.graph?.nodes?.length)
     return null;
   const graph = result.graph;
