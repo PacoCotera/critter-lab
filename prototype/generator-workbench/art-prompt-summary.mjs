@@ -137,6 +137,7 @@ export function artPromptSummary(packet) {
   const chainRoots = nodes.filter((node) => ["contact-chain", "free-chain"].includes(node.role) &&
     node.attachment?.owner === node.parent && byId.get(node.parent)?.role === "primary-region");
   const chainOwners = [];
+  const chainColourNouns = [];
   for (const role of ["contact-chain", "free-chain"]) {
     const roots = chainRoots.filter((node) => node.role === role);
     if (!roots.length) continue;
@@ -152,6 +153,7 @@ export function artPromptSummary(packet) {
     const noun = role === "free-chain" ? "tapered jointed appendage" : legs ? "jointed leg" : "jointed limb";
     const owners = roots.flatMap((root) => [root, ...descendantsOf(root)]);
     chainOwners.push(...owners);
+    chainColourNouns.push(legs ? "jointed legs" : "jointed limbs");
     let text = counted(roots.length, noun);
     if (role === "contact-chain") {
       if (terminals.some((terminal) => !terminal?.terminalForm)) throw new Error("Contact-terminal witness is missing.");
@@ -183,7 +185,9 @@ export function artPromptSummary(packet) {
   let modular = "";
   if (modularOwners.length) {
     const palette = paletteClause(modularOwners);
-    const noun = chainOwners.length && flaps.length ? "limbs and flaps" : chainOwners.length ? "appendages" : "flaps";
+    const noun = roles
+      ? joined([...new Set(chainColourNouns), ...(flaps.length ? ["flat flaps"] : [])])
+      : chainOwners.length && flaps.length ? "limbs and flaps" : chainOwners.length ? "appendages" : "flaps";
     modular = clause(`its smooth ${noun} have ${palette.words} local colour fields`, modularOwners,
       ["appearance.modulePalette", "appearance.bodyPalette"], palette);
   }
