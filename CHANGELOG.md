@@ -1,6 +1,16 @@
 # Sandbox deployment changelog
 
-Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
+Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
+
+## 2026-10-03 [12:47] — Website and genome workbench on the project domain
+
+[PR97](https://github.com/PacoCotera/critter-lab/pull/97) · hosting source `ad192ef` · native game remains `720c1e6`
+
+- **Website:** the project introduction is at [the domain root](https://critterlab.basicberry.com/), with direct links to the workbench and simulator.
+- **Genome workbench:** [the hosted bench](https://critterlab.basicberry.com/genome/) exposes current authoring, genome-derived source, exact short Gemini prompt, browser retention and replay. It remains an incomplete eleven-layer developer prototype.
+- **Simulator:** the existing Lab, Companion and Dock moved to `/sandbox/`. Native binary, release and save configuration are unchanged; no reset was invoked. Hosting revision metadata is separate from native release metadata.
+
+[Actual public-origin evidence](docs/evidence/hosted-platform/README.md) retains screenshots, source, prompt and reopened record. Localhost browser records require explicit export/import to the HTTPS origin. The owner restored the name Critter Lab and assigned the website content/concept refresh separately after this hosting activation.
 
 ## 2026-10-01 [14:49] — Research inquiry and retained findings
 
