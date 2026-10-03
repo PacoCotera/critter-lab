@@ -448,7 +448,9 @@ definitions under the same founder policy. No stock catalogue is rewritten.
 For example, `growth.region-taper` gentle .85→.70 stays within its original
 [.45,.85] domain. At depthtwo its changed mean scales actual child geometry;
 strong/gentle resolves .575. At depthone the carried value remains inactive.
-These are contract examples; actual UI evidence is a separate integration gate.
+The [actual authoring evidence](evidence/compositional-authoring/README.md)
+retains this definition edit, its changed source, one ordinary Generate draw,
+exact prompt and page-reload/import recovery.
 
 Baseline label/description metadata and all104 explicit starting pairs can be
 saved separately. **Load active draft starting copies** deliberately replaces
