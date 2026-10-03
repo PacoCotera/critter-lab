@@ -30,9 +30,12 @@ depth. A graph without a continuous exterior is not silently joined into one.
 Sparse fur/feather coverage retains its field, flow, contour effect and visible
 gaps; semantic prose must not replace it with a full coat.
 
-Current body pigmentation offers only charcoal/slate and russet. Plain colour
-names, hex values and ownership clarify those expressions. Broader inherited
-colour variety requires a separate versioned pigment-content proposal; a style
+The original covering package offers charcoal/slate and russet body pigments.
+The separate [experimental pigment candidate](evidence/inherited-pigment-experiment/README.md)
+adds proposed inherited colours without making them canonical game content.
+Plain names, hex values and surface ownership clarify each expression. Where
+local fields repeat on several body surfaces, say **each body region**; a local
+front/rear split is not a single split across the entire creature. A style
 instruction is not the source of a new palette.
 
 ## Pixel craft and acceptance
@@ -103,14 +106,20 @@ One focused correction may address an actual image defect. After two failed
 rounds, diagnose framing before a third request. The prior two-pass experiment
 is stopped. The subsequent single-source result improves observable orientation
 and material fidelity but remains below pet-master acceptance. The planned
-body-hierarchy generation was held after the latest owner feedback; semantic
-handoff repair precedes another illustration. Animation and game integration
-remain dependent on a selected master and their own concrete acceptance gates.
+body-hierarchy generation was held after the latest owner feedback. A subsequent
+[semantic candidate calibration](evidence/semantic-candidate-pet/README.md)
+uses the repaired handoff and explicit per-region pigment ownership. It retains
+recognizable source meaning but remains below pet-master acceptance: repeated
+lighting amplifies the source's repeated masses. That one-output experiment is
+stopped. A controlled light/edge comparison is the next proposed way to separate
+depiction from morphology, before changing inherited form. Animation and game
+integration remain dependent on a selected master and their own acceptance gates.
 
 ## Retained evidence
 
 | Evidence | What it establishes |
 | --- | --- |
+| [Semantic candidate calibration](evidence/semantic-candidate-pet/README.md) | Actual candidate source, concise clarified stage brief and returned PNG; repeated local colours recognizable, pet-master HOLD |
 | [Emitted semantic briefs](evidence/semantic-brief/README.md) | Actual template4 axial/contact/PET prose, lengths and preserved source identities; no new image |
 | [Owner form/skin example](evidence/owner-semantic-surface/README.md) | Better integrated volume/material; new anatomy/pigment are proposed, smooth finish is not pixel craft |
 | [Single-source experiment](evidence/single-source-pet/README.md) | Actual returned PNG, observable macro fidelity improved; pet master HOLD, exact profile fidelity unverified |
