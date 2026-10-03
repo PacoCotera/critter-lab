@@ -18,8 +18,13 @@ import {
   constructModuleScene,
   MODULE_SCENE_VERSION,
   REGIONAL_SCENE_VERSION,
-  sceneVersionForRule,
+  sceneVersionForResult,
 } from "./module-scene.mjs";
+import { RADIAL_SCENE_VERSION } from "./radial-scene.mjs";
+import {
+  radialSceneReference,
+  describeRadialScene,
+} from "./radial-scene-presentation.mjs";
 import {
   drawBodyCoveringScene,
   drawBodyCoveringComparison,
@@ -57,6 +62,8 @@ export function moduleSceneCatalogue() {
 }
 
 function sceneReference(scene) {
+  if (scene.profileVersion === RADIAL_SCENE_VERSION)
+    return radialSceneReference(scene);
   const camera = scene.body.bounds;
   const size = 512;
   const scale = Math.min(
@@ -92,6 +99,8 @@ export function describeModuleScene(scene) {
 }
 
 function describeScenePresentation(scene, artVersion) {
+  if (scene.profileVersion === RADIAL_SCENE_VERSION)
+    return describeRadialScene(scene);
   const stations = scene.body.bodyExteriors[0].stations;
   const unit = stations[0].dimensions[1];
   const regionName = (id) => {
@@ -306,15 +315,19 @@ function verifiedSource(packet) {
   if (
     packet?.status !== "resolved" ||
     packet.schemaVersion !== PACKET_SCHEMA ||
-    ![MODULE_SCENE_VERSION, REGIONAL_SCENE_VERSION].includes(
-      packet.sceneProjectionVersion,
-    )
+    ![
+      MODULE_SCENE_VERSION,
+      REGIONAL_SCENE_VERSION,
+      RADIAL_SCENE_VERSION,
+    ].includes(packet.sceneProjectionVersion)
   )
     throw new Error("A current resolved module scene packet is required.");
   const artVersion = packet.sceneProjection?.artVersion;
   if (
     !supportedArtVersions.includes(artVersion) ||
-    (packet.sceneProjectionVersion === REGIONAL_SCENE_VERSION &&
+    ([REGIONAL_SCENE_VERSION, RADIAL_SCENE_VERSION].includes(
+      packet.sceneProjectionVersion,
+    ) &&
       artVersion !== SCENE_ART_VERSION)
   )
     throw new Error(
@@ -334,7 +347,7 @@ function verifiedSource(packet) {
     throw new Error(
       "Scene inputs and metadata must match independent genetic replay.",
     );
-  const profileVersion = sceneVersionForRule(source.ruleVersion);
+  const profileVersion = sceneVersionForResult(source.result);
   if (packet.sceneProjectionVersion !== profileVersion)
     throw new Error("Scene rule and consumer profile must match.");
   const scene = constructModuleScene(source.result, {
@@ -408,10 +421,10 @@ export function resolveModuleSceneAuthoring(input) {
 
 // Only replay may reconstruct the exact known historical recipe. Public resolution
 // always emits the current version and has no caller-selected presentation flag.
-function resolveScenePresentation(input, artVersion) {
+function resolveScenePresentation(input, artVersion, replayProfile = null) {
   const source = resolveAuthoring(input);
   if (source.status !== "resolved") return { ...source, stage: "genetic" };
-  const profileVersion = sceneVersionForRule(source.ruleVersion);
+  const profileVersion = replayProfile ?? sceneVersionForResult(source.result);
   const scene = constructModuleScene(source.result, {
     profileVersion,
   });
@@ -435,7 +448,10 @@ function resolveScenePresentation(input, artVersion) {
     presentation: {
       status: "constructed",
       profileVersion,
-      view: "Orthographic XY source inspection, not finished game art.",
+      view:
+        profileVersion === RADIAL_SCENE_VERSION
+          ? "Orthographic YZ from negative X, diagnostic ocular slice; not exterior tissue or finished game art."
+          : "Orthographic XY source inspection, not finished game art.",
     },
     reference: sceneReference(scene),
   };
@@ -487,9 +503,11 @@ export function replayModuleSceneAuthoring(envelope) {
     Object.keys(envelope).some((key) => !allowed.includes(key)) ||
     allowed.some((key) => !Object.hasOwn(envelope, key)) ||
     envelope.schemaVersion !== PACKET_SCHEMA ||
-    ![MODULE_SCENE_VERSION, REGIONAL_SCENE_VERSION].includes(
-      envelope.sceneProjectionVersion,
-    ) ||
+    ![
+      MODULE_SCENE_VERSION,
+      REGIONAL_SCENE_VERSION,
+      RADIAL_SCENE_VERSION,
+    ].includes(envelope.sceneProjectionVersion) ||
     allowed
       .filter((key) => key.endsWith("Digest"))
       .some((key) => !/^[a-f0-9]{64}$/.test(envelope[key]))
@@ -503,11 +521,17 @@ export function replayModuleSceneAuthoring(envelope) {
       "scene-replay-transport",
       "Compact scene replay exceeds the unchanged 64 KiB transport bound.",
     );
-  for (const artVersion of envelope.sceneProjectionVersion ===
-  REGIONAL_SCENE_VERSION
+  for (const artVersion of [
+    REGIONAL_SCENE_VERSION,
+    RADIAL_SCENE_VERSION,
+  ].includes(envelope.sceneProjectionVersion)
     ? [SCENE_ART_VERSION]
     : supportedArtVersions) {
-    const packet = resolveScenePresentation(envelope.input, artVersion);
+    const packet = resolveScenePresentation(
+      envelope.input,
+      artVersion,
+      envelope.sceneProjectionVersion,
+    );
     if (packet.status !== "resolved") return packet;
     const actual = compactSceneReplayEnvelope(packet);
     const matches = allowed

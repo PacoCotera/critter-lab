@@ -2,6 +2,15 @@
 
 ## Current authoring proof
 
+Current implemented authoring, pipeline and caveats are indexed in the
+[workbench guide](../README.md) and
+[production architecture](../../../specs/architecture.md#current-authoring-evidence-and-unsolved-construction-range).
+The [regional scene/browser evidence](regional-scene-workbench/README.md)
+establishes one-click source/replay interaction. The
+[held radial integration](radial-scene-workbench/README.md) adds diagnostic source
+geometry; it is not activated or accepted pet reference art. Older evidence
+below remains preserved with its own limits and is not the current full outcome.
+
 The [coherent family battery](critter-family/README.md) tests a new versioned static exterior, explicit facial morphology, skin/scales and controlled variants. Its report separates technical construction, actual authoring interaction and illustration/pet appeal; pending checks are not passes.
 
 See the [retained catalogue/simulation/browser/Gemini proof](authoring/README.md). The48-record shared model and framework interface are a host developer experiment. Both actual Gemini calibrations are retained and rejected for fidelity. The older reference below remains separate.

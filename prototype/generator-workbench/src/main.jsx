@@ -51,6 +51,7 @@ import {
   sceneReplayEnvelope,
   copyableAuthoringExport,
   sharedSceneCamera,
+  comparisonUsesSharedCamera,
   scenePreviewMarkup,
   sceneCausalSummary,
   authoringPackageKey,
@@ -424,7 +425,7 @@ function Workbench() {
   }
   function exportJson(kind, value) {
     setJson(
-      ["module-scene/1", "module-scene/2"].includes(
+      ["module-scene/1", "module-scene/2", "module-scene/3"].includes(
         value?.sceneProjectionVersion,
       )
         ? `${kind} — compact scene replay`
@@ -613,14 +614,13 @@ function Workbench() {
     projectionVersion: SURFACE_DETAIL_PROJECTION_VERSION,
     ...(camera ? { camera } : {}),
   });
-  const compatibleComparison =
-    pinned &&
-    packet &&
-    pinned.ruleVersion === packet.ruleVersion &&
-    (Boolean(packet.result.graph.exterior) ||
-      Boolean(packet.scene && pinned.scene));
   const sceneComparisonCamera =
     pinned?.scene && packet?.scene ? sharedSceneCamera([pinned, packet]) : null;
+  const compatibleComparison = comparisonUsesSharedCamera(
+    pinned,
+    packet,
+    sceneComparisonCamera,
+  );
   const comparisonCamera = compatibleComparison
     ? sharedPreviewCamera([pinned.result, packet.result])
     : null;
@@ -1594,6 +1594,18 @@ function Workbench() {
                             Complete geometry manifest
                           </Accordion.Control>
                           <Accordion.Panel>
+                            {packet.reference?.depthInspector && (
+                              <>
+                                <Text size="sm">
+                                  Separate longitudinal depth inspection; not
+                                  the pet reference attachment.
+                                </Text>
+                                <SvgView
+                                  compact
+                                  markup={packet.reference.depthInspector}
+                                />
+                              </>
+                            )}
                             <Code block className="sequence">
                               {pretty(
                                 packet.scene ??

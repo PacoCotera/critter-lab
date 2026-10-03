@@ -91,7 +91,49 @@ Child-facing entries emphasize visual structure/capabilities and short factual
 descriptions; optional inspection exposes depth. Partial research views receive
 only their permitted facts, not a hidden full genome with an instruction to ignore it.
 
-### Content management boundary
+### Current authoring evidence and unsolved construction range
+
+The [genome workbench](../prototype/generator-workbench/README.md) is a host
+authoring experiment with one-click valid-genome generation, optional editing,
+source inspection, retained versioned records and exact replay. Its separate
+[tree/string codec](../prototype/generator-workbench/codec-contract.md) proves
+reversible transport; fingerprint art, QR/sharing UI and production incarnation
+are future consumers. A saved seed or short lookup hash does not carry the full
+genome.
+
+Current construction combines generic volumes, regional proportions, rooted
+links/fins, optional eye glyphs, skin/scales and inherited pigment domains.
+The [regional scene](../prototype/generator-workbench/evidence/regional-scene-workbench/README.md)
+has actual browser evidence. The newer [radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
+is held source integration, not activated or accepted pet art. Neither proves
+the desired anatomical range. Missing typed head/muzzle/jaw/trunk relationships,
+exterior facial anchors, shoulder/hip attachment frames, shaped terminal limbs,
+tail and insect region/wing relationships leave the output generic. A resolved
+membrane with no usable consumer is also distinct from a missing inherited organ
+contract. Source validity, reference usefulness and pet-art quality are separate
+gates.
+
+Bear, cat, cow and firefly exemplify the owner's desired range; labels must not
+select complete body presets. Art direction and genomics propose the next
+experiment; pixel feasibility and implementation architecture remain open. It is
+one shared head–muzzle–trunk graph with exterior eye anchors, four articulated
+fore/hind supports, shaped contact ends and an optional paired head-surface
+module. Compact/stocky and lean/projecting relatives should differ through
+explicit inherited proportions and one mixed-copy comparison. Four supports
+need a new explicit pairing contract; the existing 0/1/3-group map cannot supply
+them. Tail, hoof-specific anatomy and wing-bearing insect regions remain named
+gaps. These are proposed contracts, not implemented or canonical anatomy.
+
+Only after meaningful structure exists, compare a low-poly reference in a
+shallow three-quarter view with a flat reference of the same source. Volume,
+attachment and skin material are the hypotheses; another faceted ellipse is
+not the anatomical correction. Preserve expressed pigment owners and retained
+source identities. Do not install a new toolchain or migrate providers for this
+bounded reference experiment. The [art handoff](../prototype/generator-workbench/art-template.md)
+owns the short image-led instruction and staged reference/illustration/pet/
+animation acceptance. No new provider output or animation is established here.
+
+### Content validation and management
 
 LLMs expand candidate locus/baseline definitions, relationships, rule combinations,
 visual construction parameters and concise factual presentation. Algorithms

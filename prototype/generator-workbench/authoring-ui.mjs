@@ -127,7 +127,9 @@ export function canPublishAuthoringResponse(
     requestRevision === currentRevision &&
     isResolvedAuthoringPacket(packet) &&
     (catalogue.ruleVersion !== "developmental-regional-scene/1" ||
-      packet.sceneProjectionVersion === "module-scene/2") &&
+      ["module-scene/2", "module-scene/3"].includes(
+        packet.sceneProjectionVersion,
+      )) &&
     packet.input?.catalogue?.id === catalogue.id &&
     packet.input?.catalogue?.version === catalogue.version &&
     packet.input?.genome?.contentId === catalogue.id &&
@@ -161,10 +163,12 @@ export function isResolvedAuthoringPacket(packet) {
     (!["developmental-covering/1", "developmental-regional-scene/1"].includes(
       packet.ruleVersion,
     ) ||
-      (packet.sceneProjectionVersion ===
-        (packet.ruleVersion === "developmental-regional-scene/1"
-          ? "module-scene/2"
-          : "module-scene/1") &&
+      ((packet.ruleVersion === "developmental-regional-scene/1"
+        ? ["module-scene/2", "module-scene/3"].includes(
+            packet.sceneProjectionVersion,
+          )
+        : packet.sceneProjectionVersion === "module-scene/1") &&
+        packet.scene?.profileVersion === packet.sceneProjectionVersion &&
         packet.scene?.status === "constructed" &&
         packet.reference?.status === "constructed"))
   );
@@ -216,7 +220,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -229,9 +233,17 @@ export function sharedSceneCamera(packets) {
     packets.some(
       (packet) =>
         !isResolvedAuthoringPacket(packet) ||
-        !["module-scene/1", "module-scene/2"].includes(
+        !["module-scene/1", "module-scene/2", "module-scene/3"].includes(
           packet.sceneProjectionVersion,
         ),
+    )
+  )
+    return null;
+  if (
+    packets.some(
+      (packet) =>
+        (packet.sceneProjectionVersion === "module-scene/3") !==
+        (packets[0].sceneProjectionVersion === "module-scene/3"),
     )
   )
     return null;
@@ -251,6 +263,16 @@ export function sharedSceneCamera(packets) {
     minimumY: (minimumY + maximumY - side) / 2,
     side,
   };
+}
+
+export function comparisonUsesSharedCamera(pinned, current, sceneCamera) {
+  if (!pinned || !current) return false;
+  if (pinned.scene || current.scene)
+    return Boolean(pinned.scene && current.scene && sceneCamera);
+  return (
+    pinned.ruleVersion === current.ruleVersion &&
+    Boolean(current.result.graph.exterior)
+  );
 }
 
 // Reframe only the outer viewport of the server's verified SVG. Inner geometry is unchanged.
@@ -287,9 +309,11 @@ export function sceneCausalSummary(scene, locusId) {
       ? scene.body.bodyExteriors.filter((body) =>
           body.sources.includes(locusId),
         ).length
-      : 0;
+      : scene.profileVersion === "module-scene/3"
+        ? Number(scene.body.body.sources.includes(locusId))
+        : 0;
   return {
-    ...(scene.profileVersion === "module-scene/2"
+    ...(["module-scene/2", "module-scene/3"].includes(scene.profileVersion)
       ? { body: bodyTargets > 0, bodyTargets }
       : {}),
     ocular: scene.ocular.traces.some(involved),

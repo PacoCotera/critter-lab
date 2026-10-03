@@ -3,6 +3,7 @@ import { digest } from "./evaluate.mjs";
 import { constructGraphSource } from "./graph-source-construction.mjs";
 import { constructOcularModule } from "./graph-module-construction.mjs";
 import { constructBodyCovering } from "./graph-covering-construction.mjs";
+import { constructRadialScene, RADIAL_SCENE_VERSION } from "./radial-scene.mjs";
 
 export const MODULE_SCENE_VERSION = "module-scene/1";
 export const REGIONAL_SCENE_VERSION = "module-scene/2";
@@ -10,6 +11,14 @@ export function sceneVersionForRule(rule) {
   return rule === REGIONAL_SCENE_RULE
     ? REGIONAL_SCENE_VERSION
     : MODULE_SCENE_VERSION;
+}
+export function sceneVersionForResult(result) {
+  return result?.sourceRuleVersion === REGIONAL_SCENE_RULE &&
+    result.facts?.some(
+      (fact) => fact.id === "symmetry" && fact.value === "radial",
+    )
+    ? RADIAL_SCENE_VERSION
+    : sceneVersionForRule(result?.sourceRuleVersion);
 }
 
 // The scene is a post-resolution consumer. It never installs modules into the genome.
@@ -32,6 +41,8 @@ export function constructModuleScene(result, options = {}) {
     ]);
   }
   const { profileVersion } = options;
+  if (profileVersion === RADIAL_SCENE_VERSION)
+    return constructRadialScene(result, options);
   const regional = profileVersion === REGIONAL_SCENE_VERSION;
   const sourceRule = regional
     ? REGIONAL_SCENE_RULE

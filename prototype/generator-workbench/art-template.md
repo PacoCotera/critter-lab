@@ -104,11 +104,20 @@ breeding permission.
 
 ## Proposed multi-pass pet production
 
+The current flat source diagrams are not accepted as useful illustration
+references. The primary next correction is anatomical meaning, not stronger
+rendering constraints or low-poly polish of the same generic primitives. The
+[production architecture](../../specs/architecture.md#current-authoring-evidence-and-unsolved-construction-range)
+records implemented evidence, missing anatomy and the proposed bounded common
+grammar experiment. A low-poly reference is a later representation hypothesis,
+with the same source and short sentence; it does not add inherited organs.
+
 Art direction, pixel art and genomics define the handoff together. The stages
 answer different questions; they do not require four generation calls.
 
 | Stage | Purpose |
 | --- | --- |
+| Anatomical source and reference | Resolve meaningful parts, attachments and surfaces; inspect whether a flat or low-poly reference communicates them |
 | Outline, when useful | Clarify organization, roots and overlap spacing; label the diagram as a construction/material aid |
 | Illustration | Finish connected volume, appendage form, material and expressed pigment with deliberate pixel craft |
 | Pet treatment | Establish inviting character through actual or explicitly proposed form, face and gesture; may combine with illustration |

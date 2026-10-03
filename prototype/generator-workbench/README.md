@@ -2,6 +2,13 @@
 
 Status: **provisional host authoring proof**, separate from the game and device simulator. The shared catalogue/model constructs anatomy, resolves surface expression and derives guarded fictional movement. It does not choose a creature class first. The original [five-locus Pip proof](../genetics/README.md) is preserved as a legacy reference.
 
+Start with the [production pipeline and current gaps](../../specs/architecture.md#current-authoring-evidence-and-unsolved-construction-range)
+and [image-led art handoff](art-template.md). The current diagrams and finite
+construction grammar do not satisfy the owner's reference-quality or
+bear/cat/cow/firefly anatomical-range brief. Valid records, replay and source
+geometry are delivered parts; a useful general creature and pet generator is
+still unfinished. The newest radial scene is held, not loaded in the workbench.
+
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace loads the separate **Regional body /
@@ -27,6 +34,25 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Complete radial source scene
+
+The [radial scene experiment](evidence/radial-scene-workbench/README.md) connects
+eligible resolved radial anatomy to the same Generate and verified-replay path.
+`module-scene/3` retains the existing catalogue and inherited source, adds a
+declared diagnostic eye slice at its actual longitudinal X depth, and maps
+skin/scales over the ellipsoid's X/circumferential surface. The clean end-on
+reference shows front fragments; a separate Advanced inspector exposes depth.
+Axial regional anatomy continues to use scene2. Historical scene1/2 records
+reconstruct their exact original recipes.
+
+The controlled eyes-on skin/scales pair demonstrates source integration, not
+random variety or finished pet art. Eye circles are diagnostic modules rather
+than exterior tissue; conservative patch exclusions and the existing geometry
+budgets can reject valid genetic sources. Fins, membranes and broader radial
+topologies remain unsupported. No sampler quota or repaired genome supplies a
+winner. The practical image-led sentence remains unchanged and separate from
+the full audit. Run `node --test radial-scene.test.mjs` for the changed risks.
+
 ### Central radial source proof
 
 The standalone [radial proof](evidence/radial-source-proof/README.md) adds
@@ -40,8 +66,9 @@ Run `node --test graph-radial.test.mjs` and
 `node construct-radial-proof.mjs --out evidence/radial-source-proof` with the
 existing host runtime. This contacts-only proof retains eyes and covering facts
 as **not projected**. It does not change the catalogue, sampler, current Generate
-scene or saved records. Full radial features, physical depth and finished pet
-portrayal remain unfinished.
+scene or saved records by itself. The complete diagnostic scene above is a
+separate consumer; physical exterior features and finished pet portrayal remain
+unfinished.
 
 ### Body organization experiment
 
@@ -72,9 +99,9 @@ Run `node --test regional-scene.test.mjs` for the changed tuple, actual HTTP
 transport and exact old-record replay checks. The [retained full-scene proof](evidence/regional-scene-workbench/README.md)
 contains an eyes-on skin/scales contrast and one bounded random search. Earlier
 packages remain selectable and keep their exact saved inputs, scenes and
-prompts. Broad body diversity is still incomplete: this joined source path
-supports axial organization; the original diagnostic radial graph does not
-yet produce an equivalent complete source scene.
+prompts. Broad body diversity is still incomplete: this scene2 source path
+supports axial organization; eligible radial anatomy now uses the separate
+scene3 consumer described above.
 
 ### Candidate inherited pigments
 

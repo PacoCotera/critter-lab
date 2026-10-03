@@ -133,9 +133,33 @@ vocabulary, source envelopes or the broad creature range. The separate
 [radial contact source proof](../prototype/generator-workbench/evidence/radial-source-proof/README.md)
 constructs one existing central volume and three inherited contact chains in a
 declared YZ view. Its height-only and latent-pigment controls are causal source
-evidence; eyes and coverings remain retained but not projected. It does not
-change Generate eligibility or add a species preset. Complete radial features,
-membrane, deformation and marked-surface consumers remain unfinished.
+evidence; that standalone proof retains eyes and coverings without projection.
+The separately versioned [complete radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
+connects eligible radial sources to Generate and exact replay without changing
+the inherited catalogue. It retains eye placement as longitudinal depth through
+a declared diagnostic slice and maps scale footprints on the actual surface;
+hidden portions remain in the record. This is not exterior-eye tissue or
+finished pet art. Conservative exclusions and unchanged budgets remain explicit.
+Broad random diversity, membrane, deformation and marked-surface consumers
+remain unfinished; no species preset or repaired genome supplies a winner.
+
+The owner rejects the current flat diagrams as illustration references and
+proposes testing a low-poly 3D reference. Compare the same retained creature and
+same short image-led prompt before selecting a new reference technique.
+Volume, attachment and skin/material cues must communicate clearly; structural
+envelopes are not finished limb anatomy, and material glyphs are not separate
+surface objects. This is a reversible reference-quality experiment, not a
+canonical anatomy change or evidence of production pet art.
+
+The more fundamental owner correction is anatomical range: generated sources
+must be capable of meaningful organizations exemplified by bear, cat, cow and
+firefly. Variations of connected generic volumes are insufficient. Evaluate
+head/body relationships, actual limb form and joint attachment, terminals such
+as paws/hooves, ears/tail, insect regions and wing attachment, together with
+covering and expressed pigments. These examples test the common construction
+grammar; a species label must not select a preset body or repair inherited
+copies. Improve missing structural meaning before choosing 2D or low-poly 3D
+as the illustration-reference technique.
 
 Owner explicitly requires future polygenic and cross-dimension traits: movement,
 energy physiology and environmental response can jointly shape locomotion,
