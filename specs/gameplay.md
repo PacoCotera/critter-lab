@@ -92,6 +92,15 @@ Early return is an end, not completion of every timed discovery threshold. It ca
 
 Supplies are fungible within their own class and indivisible. A Data card can
 substitute for another Data card, but not for an Energy crystal or Essence drop.
+
+Owner requires each class to have an understandable experimental/genomic job,
+not serve as an arbitrary colored payment. The [current design discussion](../design/probe-bench-review.md#resource-meaning--accepted-broad-roles-open-economy)
+keeps exact resource fiction and new recipes provisional; current fixture prices
+do not establish those meanings. Retained knowledge is not a consumable supply.
+Owner clarification,1October: an investigation requires an amount of Data related
+to its complexity; more complex research needs more Data. This does not select
+numerical costs or erase previously learned information. Research is the rich
+visual/content backbone linking expedition outcomes to player-created companions.
 Inventory records whole collected items. Current field collection is an explicit
 whole-unit Take, resolved and saved immediately. Arrival, inspection, elapsed time
 and animation grant nothing. A source exposes its exact retained quantity; a
@@ -178,7 +187,30 @@ Characteristic-related resources can occur as qualitatively very rare exploratio
 
 A recipe tree and a supporting app view are proposed presentations; Lab access must stand alone. Contextual recipes do not themselves prevent published guides, brute force or manipulated inputs. Exact relationships, costs, context factors and variability need a coherent small content set before expansion.
 
+## Procedural encounters and automatic creature production
+
+Owner selected responsive encounters with procedural/generative content. Generate
+entities/states/relations and derive useful actions from their rules; a shuffled
+library of whole scripted scenarios is insufficient. LLMs expand reusable ideas
+and definitions under validated game/genetic constraints. The [connected design](../design/probe-bench-review.md)
+owns the player sequence and considered causal examples.
+
+A fully decoded genome seeds a critter generator triggered by configured
+incubation. All creature art, sprites, animations and encyclopedia are generated
+programmatically from the genome and expression results, with no per-creature
+editors/copywriters/illustrators. [Architecture](architecture.md#creature-production-pipeline)
+owns generation and validation; configuration effects are not yet selected.
+Existing portrait fixtures are not proof this generator is implemented.
+
 ## Equipment and progression
+
+Owner direction,1October: complexity is gated through eventual virtual Probe and
+Lab tiers plus boosters. Early play begins with simple genomes; later play reaches
+much more complex genomes requiring longer research. Progression must unlock
+meaningful analytical relationships and field opportunities, not merely larger
+resource prices. Longer studies can progress in the background during expeditions
+or creature interaction; there is no return to preparation waits in gathering.
+Exact tiers, booster jobs, timing, stacking and offline completion remain open.
 
 Accepted: Lab, Probe and Companion can eventually support upgrades such as greater capacity, speed or processing capability. In-game upgrades cannot increase physical RAM/CPU, radio capability or cloud capacity. Device-specific systems need separate definition.
 
@@ -192,7 +224,7 @@ Start with three research resources prepared by the Probe from its gathering. Th
 
 Rare findings can enable retained research methods that make new genomic information analyzable. Ordinary resources fund subsequent studies; capsules supply the unknown information. Acquiring a method does not reveal its findings automatically or change genes. Major progression should combine deliberate pursuit with surprise rather than depend exclusively on indefinite rare-drop luck. Its relationship to reusable virtual research chips, consumption and exact gates remains open.
 
-Findings should normally be proportional to player progress; much more complex genomes should be absent from ordinary early discovery or appear only as low-probability exceptions. Probe tiers with range, capacity and detection are a proposed way to express field capabilities. They do not increase physical hardware capabilities or reveal a capsule's genotype. The [gathering design](../design/probe-sampling.md#progress-proportional-discovery-and-probe-tiers) develops field eligibility versus Lab analysis, attainable upgrade paths and remaining choices. Complexity is not a universal power ranking, and existing samples never reroll on upgrade.
+Findings should normally be proportional to player progress; much more complex genomes should be absent from ordinary early discovery or appear only as low-probability exceptions. Probe tiers are selected progression direction; range, capacity and detection remain proposed effects. They do not increase physical hardware capabilities or reveal a capsule's genotype. The [gathering design](../design/probe-sampling.md#progress-proportional-discovery-and-probe-tiers) develops field eligibility versus Lab analysis, attainable upgrade paths and remaining choices. Complexity is not a universal power ranking, and existing samples never reroll on upgrade.
 ## Breeding and lifecycle
 
 Breeding uses actual parents and the shared genetics framework. Whether every breeding requires a sample, and whether samples can enhance it, remain proposed. Founder creation must not fabricate parent records. Starter acquisition, incubation timing and breeding costs remain open.

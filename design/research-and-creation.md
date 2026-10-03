@@ -2,7 +2,18 @@
 
 **Design proposal for owner review.** Accepted foundations come from [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [Probe](../specs/probe.md) and [creation terms](creation-terms.md). The recommended capsule preparation, field-point meaning, example resources/profiles and progression model below are proposals. No numerical economy, final screen, genome encoding or hardware design is approved by this document.
 
-## Discovery proposal — 30 September 2026
+## Current design discussion
+
+Owner selected a very visual child-facing genome map: region selection,
+resource-funded experiments, progressive opening and branching expressions.
+The [current Probe/bench brief](probe-bench-review.md#current-visual-research-brief)
+and [original artwork](references/genome-field/README.md) govern the design work.
+Detailed genetics serves deeper parent inspection. Exact encoding, content,
+interaction and balance remain provisional; the retained A/B workpiece is an
+implementation foundation, not accepted discovery play. The trial below must
+not be treated as an instruction to resume paid-question coding.
+
+## Retained discovery trial
 
 Joined game-design, genomics and UX proposal; methods, costs and pacing remain
 for owner steering. The current native loop now retains authored A/B findings,
@@ -26,8 +37,8 @@ sample workbench have distinct subjects. Known findings stay free to inspect.
 
 Sample A has a stable neutral capsule/pattern and origin. It supports exactly two
 Pip-proof configurations, `Cc/Rr/Pp/Mm/Ee` and `Cc/Rr/pp/Mm/Ee`, under the pinned
-baseline. This is proposed versioned sample content, not current native support
-or a hidden already-living creature. No portrait or secret candidate count is
+baseline. These configurations are now current versioned native support, not
+a hidden already-living creature. No portrait or secret candidate count is
 shown before the relevant evidence exists. Full genotype notation stays secondary
 to readable feature language.
 

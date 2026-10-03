@@ -7,10 +7,11 @@ source and art, but cannot yet produce a complete physical kit.
 | Component | Available evidence/source | Remaining boundary |
 | --- | --- | --- |
 | Connected game | Native C17 Lab/Companion/Dock host simulation; gathering, reception, research, genome selection, incubation, reveal, habitat visits and durable saves | Provisional Pip content/balance; broader studies, capture/training, ecology and independent device authority |
-| Native presentation | Native frames and physical-control transport; every known Companion host screen and complete Dock family use LVGL with checked output | Every Lab family still needs migration; current target compilation, art and human usability remain separate gates |
+| Native presentation | All current connected Lab, Companion and Dock families use LVGL with native-frame and physical-control evidence | Physical target runtime, final art and human usability remain separate gates |
 | Lab platform | Linux x86-64 executable built with GCC/CMake/Ninja; Raspberry Pi4 development reference | ARM build, HDMI/input integration, board performance and physical evidence |
 | Portable firmware | Legacy nRF52840 Probe scaffold; current Companion shared-UI ESP32-S3 headless compile/link proof | Runtime allocation/profile remains unresolved; panel/input/game/save/radio integration and board validation absent |
 | Caddy | Complete retained LVGL four-gray host family; same shared UI compiled/linked in headless ESP32-S3 target | Real input/state/radio, display/printer drivers, charging and bench evidence |
+| Genome/art authoring | Hosted guided workspace, pinned source/replay, explicit Google rendering and retained original prompts/images | Partial genomic consumers and broad anatomy; source-faithful masters, animation, sharing and game integration unfinished; OpenAI unconfigured |
 | Earlier experiments | Pinned Node/browser studies and genetic/transfer fixtures | Separate studies do not form another integrated product |
 | Cloud and mobile | Product roles, contracts and explicit fallback direction | Production services, authentication, synchronization and mobile game implementation |
 | Website | Public website source under `website/` | A website is not the game client or physical-kit proof |
@@ -24,8 +25,16 @@ ESP-IDF; the [Companion target](native/companion/README.md) now registers curren
 shared LVGL UI, with [compile/link validation](docs/evidence/native-companion-esp/README.md). The Caddy has a headless shared-UI compile target, with no physical
 panel or game authority adapter. Every product screen must
 use LVGL; [architecture coverage](specs/architecture.md#current-migration-coverage-and-target-evidence)
-records the incomplete migration. Native host checks establish software behavior, not flashed-device or
+records completed current host coverage and unverified physical target paths. Native host checks establish software behavior, not flashed-device or
 physical-display performance.
+
+The [owner design decision boundary](README.md#design-before-the-next-implementation)
+precedes dependent architecture/game/UI/art changes. Buildable prototypes remain
+evidence, not approval of those designs. [Guided authoring evidence](prototype/generator-workbench/evidence/guided-authoring/README.md)
+and [actual API images](prototype/generator-workbench/evidence/api-rendering/README.md)
+record the separate host authoring proof. Hosting-only website/workbench
+activation preserves native game saves; [deployment notes](CHANGELOG.md) keep
+hosting and native releases distinct.
 
 The [native guide](native/README.md) contains build commands and the existing
 CI bundle path. The [play guide](native/selected-lab/V1.md) owns fixture limits,

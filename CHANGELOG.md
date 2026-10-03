@@ -1,6 +1,82 @@
 # Sandbox deployment changelog
 
-Major changes in the [playable sandbox](https://critterlab.basicberry.com/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
+Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
+
+## 2026-10-03 [16:45] — Google API images with literal prompt provenance
+
+[PR104](https://github.com/PacoCotera/critter-lab/pull/104) · hosting source `a78454e` · native game remains `720c1e6`
+
+Google rendering uses its fixed generateContent endpoint after two retained Interactions failures. Two subsequent deliberate requests completed with the same genome/source and separately retained exact prompts. The actual gallery shows both unchanged images; reload and switching creatures preserved them without another provider call. [Images, prompts, jobs and independent pixel assessment](prototype/generator-workbench/evidence/api-rendering/README.md), [guided authoring and visible layer evidence](prototype/generator-workbench/evidence/guided-authoring/README.md).
+
+Architect/coder/independent source review, unchanged automatic CI37159330235 and normal exact clean pushed-source builds passed. Native release and saves retained, no reset or new tests. Transport and retention are delivered; source-faithful art is HOLD, complete eleven-layer content/broad anatomy/animation remain open, and OpenAI remains unconfigured.
+## 2026-10-03 [16:28] — Reachable authoring controls and useful render failures
+
+[PR103](https://github.com/PacoCotera/critter-lab/pull/103) · hosting source `084732d` · native game remains `720c1e6`
+
+- Before generation the workspace says Not generated, without false previous-source or pending-locus claims. The source card scrolls normally so identity and Before/Current controls remain reachable.
+- All eleven genome layer headings and counts remain in the main workspace; detailed gaps expand with their nested attributes. Empty layers have a short implementation label.
+- Failed renders retain safe HTTP/status/reason diagnostics even when the provider omits a request ID. Original source, prompt and explicit-only submission remain unchanged; no raw provider error text or credentials are retained.
+
+Focused architect and independent genomic review, unchanged automatic CI37158420596 and exact clean pushed-source builds passed. Website concepts, native release, saved creatures and prior render jobs remain retained. Successful Google image delivery remains under actual-use investigation; no new tests, discretionary suites or increased testing scope.
+
+## 2026-10-03 [15:59] — Guided genome authoring and render variants
+
+[PR102](https://github.com/PacoCotera/critter-lab/pull/102) · hosting source `cbcbfd7` · native game remains `720c1e6`
+
+- The default workbench follows random genome, inherited-attribute editing, explicit structure refresh, Before/Current inspection and editable render prompts. All eleven genome layers and their attributes remain visible in the main editor.
+- Saved creatures reopens exact retained source recipes. One gallery keeps results across prompt and structure revisions, with each image bound to its original genome/source and literal submitted prompt.
+- Render and Render another version are explicit provider actions. Editing, generation, refresh and retained-image recovery do not start a render. Newer website concept assets remain included.
+
+Architect and independent genomic source review, unchanged automatic CI37156708307 and exact clean pushed-source builds passed. Actual hosted use exposed first-use text and oversized source-card presentation defects, which are being corrected. The first explicit Google request retained a failed job; successful image delivery is still unresolved. This does not complete four missing genomic domains, broad body range or accepted pet art. No new tests or increased testing scope.
+
+## 2026-10-03 [15:46] — Grounded Critter Lab screen concepts
+
+[PR101](https://github.com/PacoCotera/critter-lab/pull/101) · hosting source `37dc2ee` · native game remains `720c1e6`
+
+- The website uses eight new future screen moments and refreshed family/Companion renders, consistently branded Critter Lab and grounded in the connected sample-to-resident loop.
+- Partial findings, complete free reference comparison, explicit creation cost, the same saved Pip and cached Caddy status retain their distinct meaning. These are concepts for future implementation; the native interface remains unchanged.
+- Original references and software captures remain preserved and linked separately. [Concept packet](design/grounded-screen-concepts/README.md), [actual page captures and receipt](website/evidence/grounded-screen-concepts/README.md).
+
+Game-design/UX actual-export inspection and desktop/phone webpage inspection support delivery as concepts. Exact pushed-source normal VM build/activation passed, retaining native release and saves without reset. No new tests, discretionary CI, native build or physical approval.
+
+## 2026-10-03 [15:10] — Programmatic pet-rendering API transport
+
+[PR100](https://github.com/PacoCotera/critter-lab/pull/100) · hosting source `57db139` · native game remains `720c1e6`
+
+- The workbench can submit its retained 512px source image and short brief to a selected image-provider API, keeping returned candidates linked to exact source, prompt and provider/job metadata.
+- Google is configured first. OpenAI has an adapter and remains unavailable until configured. Requests require an explicit Render action; provider polling and recovery do not generate again.
+- Durable server storage keeps completed results recoverable after browser loss. The original API presentation still needs the owner-requested editable prompt, creature gallery and guided authoring overhaul; this release establishes transport, not completed usability or accepted pet art.
+
+Independent genomic/pixel-source and technical inspection, unchanged automatic CI37153443058 and exact clean pushed-source VM builds passed. Existing website, simulator, native binary and saves retained; no reset, new tests or increased testing scope. No actual API-generated image had been requested at activation.
+
+## 2026-10-03 [14:19] — Optional genome-derived innate profile
+
+[PR99](https://github.com/PacoCotera/critter-lab/pull/99) · hosting source `50d5a7a` · native game remains `720c1e6`
+
+- The authoring bench now carries114 ordered pairs and six drafts. Three provisional Cognition contributors resolve an optional static profile: presence, exploration tendency and reference-cue threshold.
+- OFF retains all copies and witnesses; changing the profile does not change source geometry, material or the short art brief. Old111-pair records keep their original versions.
+- This is partial eleven-layer authoring data, without live behavior or improved creature silhouettes. Four domains still lack executable contracts.
+
+Independent source/domain review, unchanged automatic CI and normal exact clean pushed-source VM build passed. Existing website, native binary and saves retained; no reset or increased testing scope.
+
+## 2026-10-03 [13:30] — Critter Lab website and future product vision
+
+[PR98](https://github.com/PacoCotera/critter-lab/pull/98) · hosting source `1a9cde0` · native game remains `720c1e6`
+
+- Restored Critter Lab branding and the intended Companion → Lab → individual/family → Caddy/paper story. Planned features remain part of that vision.
+- Added genome authoring, source-derived short art briefs and source-bound retained proposals, with clear separation from game residents.
+- Paired the retained original ecosystem concept with current native Research evidence; corrected historical gallery labels and preserved full family/Caddy framing.
+
+[Website assessment and actual publication evidence](website/evidence/vision-refresh/README.md) retain desktop/phone captures, image provenance, independent review and live source/native receipts. Existing host, routes, native binary and saved-world configuration retained; no reset, new tests, discretionary test runs, CI expansion or native build.
+## 2026-10-03 [12:47] — Website and genome workbench on the project domain
+
+[PR97](https://github.com/PacoCotera/critter-lab/pull/97) · hosting source `ad192ef` · native game remains `720c1e6`
+
+- **Website:** the project introduction is at [the domain root](https://critterlab.basicberry.com/), with direct links to the workbench and simulator.
+- **Genome workbench:** [the hosted bench](https://critterlab.basicberry.com/genome/) exposes current authoring, genome-derived source, exact short Gemini prompt, browser retention and replay. It remains an incomplete eleven-layer developer prototype.
+- **Simulator:** the existing Lab, Companion and Dock moved to `/sandbox/`. Native binary, release and save configuration are unchanged; no reset was invoked. Hosting revision metadata is separate from native release metadata.
+
+[Actual public-origin evidence](docs/evidence/hosted-platform/README.md) retains screenshots, source, prompt and reopened record. Localhost browser records require explicit export/import to the HTTPS origin. The owner restored the name Critter Lab and assigned the website content/concept refresh separately after this hosting activation.
 
 ## 2026-10-01 [14:49] — Research inquiry and retained findings
 
@@ -55,3 +131,4 @@ Research enjoyment and wider sample variety remain open gameplay work.
 - **Sandbox:** activation starts fresh Lab, Companion and Dock saves.
 
 **Still open:** the incubator canister is rejected artwork awaiting replacement. Final art quality, discovery depth and hardware behavior remain under development.
+

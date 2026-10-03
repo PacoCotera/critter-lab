@@ -2,12 +2,18 @@
 
 These documents describe Critter Lab's product rules and engineering boundaries. They are the authoritative product specification; experiments are evidence for a limited implementation, not substitutes for the design.
 
+Changed architecture and game-design direction requires the owner's decision
+before dependent implementation; UI and creature-art direction also retain owner
+steering. The [current design decision boundary](../README.md#design-before-the-next-implementation)
+distinguishes that open review from existing accepted requirements and bounded
+prototype evidence.
+
 For orientation rather than requirements, use the [documentation map](../docs/README.md), [player introduction](../docs/players/README.md) or [builder starting guide](../docs/builders/getting-started.md).
 
 | Subsystem | Specification |
 | --- | --- |
 | Ecosystem and generation | [Architecture](architecture.md) |
-| Content tools, app/site and backend boundaries | [Architecture](architecture.md#content-management-boundary) |
+| Content tools, app/site and backend boundaries | [Content validation](architecture.md#content-validation-and-management) and [app/site boundaries](architecture.md#app-website-and-backend) |
 | Research, resources, crafting and progression | [Gameplay](gameplay.md) |
 | Players, shared equipment, consent and discovery | [Players and social play](players-social.md) |
 | Heredity, expression, development and behavior | [Genetics](genetics.md) |

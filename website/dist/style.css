@@ -1027,7 +1027,7 @@ footer {
 
 .play-modes .section-heading p { color:var(--ink); }
 
-/* Screen galleries keep concept direction and actual native evidence distinct. */
+/* Current concept boards retain full-image links and readable adjacent context. */
 .concept-gallery {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1051,34 +1051,38 @@ footer {
 }
 .concept-gallery .concept-wide { grid-column:1 / -1; }
 .concept-wide img { max-width:1024px; }
-.concept-gallery figcaption,
-.native-family figcaption,
-.native-gallery figcaption {
+.concept-gallery figcaption {
   margin-top:20px;
   font-size:.9375rem;
   line-height:1.5;
 }
-.concept-gallery figcaption strong,
-.native-family figcaption strong,
-.native-gallery figcaption strong {
+.concept-gallery figcaption strong {
   display:block;
   margin-bottom:6px;
 }
-.native-family { margin-top:55px; }
-.native-family img { border-radius:5px; }
-.native-gallery {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:28px;
-  margin-top:35px;
-}
-.native-gallery img { border:1px solid var(--ink); border-radius:4px; }
 @media(max-width:600px) {
-  .concept-gallery,.native-gallery { grid-template-columns:1fr; gap:25px; }
+  .concept-gallery { grid-template-columns:1fr; gap:25px; }
   .concept-gallery figure { padding:16px; }
 }
 
 .future-world { margin-top:55px; }
 .future-world .play-features { margin-top:25px; }
 
-.native-portrait img { max-width:360px; margin:0 auto; }
+/* Concept boards retain their original proportions. */
+.vision { background:var(--paper); }
+
+/* Show the entire family, including its shared Caddy. */
+.hero-image img { aspect-ratio:auto; object-fit:contain; }
+.vision .genomics-heading { grid-template-columns:1fr; gap:30px; }
+.vision .genomics-heading > p { max-width:800px; }
+.concept-gallery > figure:first-of-type { grid-column:1 / -1; }
+
+.screen-concept { margin-top:36px; padding:20px; background:var(--stone); border-radius:6px; }
+.screen-concept img { border-radius:4px; }
+.screen-concept figcaption { margin-top:18px; font-size:1rem; line-height:1.6; }
+.screen-concept figcaption strong { display:block; margin-bottom:8px; }
+.screen-transition { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px; margin-top:24px; }
+@media (max-width:700px) {
+  .screen-concept { padding:12px; }
+  .screen-transition { grid-template-columns:1fr; gap:16px; }
+}

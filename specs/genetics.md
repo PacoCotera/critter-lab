@@ -1,15 +1,29 @@
 # Genetics framework
 
-Status: accepted framework with five information layers, eleven dimension families, structured abilities and separate inherited, expressed and acquired information. Fictional genetics, not a biological simulation. Detailed rules, examples, production schema and canonical designs remain proposed unless stated otherwise.
+The current host marking consumer closes six existing carried Appearance uses
+through separately pinned catalogue5/source7, retaining every111 definition and
+ordered copy. The recessive switch leaves five resolved contributions inactive
+when OFF; ON applies exact bands/patches/mixed, extent-as-count, scale, angle and
+contrast to primary owners only. The [marking contract](../design/anatomical-source-prototype/compositional-contract.md#primary-owner-local-markings)
+owns the provisional atlas/ink and finite representation. This changes no base
+pigment or anatomy and does not supply missing genomic domains or physiology.
+
+Status: accepted framework with eleven genomic layers (the domain families listed below), structured abilities and separate inherited, expressed and acquired information. Five record stages preserve those information roles; they are not the genomic coverage count. Fictional genetics, not a biological simulation. Detailed rules, examples, production schema and canonical designs remain proposed unless stated otherwise.
 
 ## Agreed direction and open decisions
 
-- Generate recognizable creatures first, with capacity for thousands of classes and extensive individual variation. Body plans must cover animal-like creatures, plants, insects, bacteria and ghosts. Traits need subdivisions.
-- Selective breeding is central: unusual heritable variation in a normally slow class can become a faster, more reliable lineage. Classes establish tendencies without fixing every individual's performance.
+- Generate recognizable, extensively varied creatures entirely from their genomes and expressed contributors. Classes are emergent descriptions of results, not hardcoded inputs. V1 requires ground, flying and swimming coverage and widely different body organizations. Organism examples express desired range, not a mandatory biological taxonomy; traits need subdivisions.
+- The provisional [compatible authoring fork](../design/anatomical-source-prototype/compositional-contract.md#compatible-authored-foundations) edits actual supported copy contributions/maps under immutable typed consumer domains, with exact versioned provenance and restartable recipes. Exact parent2 reconstructs104 modeled pairs, parent3/4 reconstruct111; all retain six unsupported drafts and eleven-domain gaps. Authored starting copies are explicit inputs, not species presets or Generate templates. Published foundations and retained individuals never acquire definition edits silently; this is bounded authoring support, not a complete genomic catalogue or a new physiology model.
+- The guided workbench exposes all eleven genome layers as a persistent tree with attributes underneath, preserving counts and inactive/unimplemented/draft status during search. Detailed gaps remain inspectable inside each expanded layer; zero-attribute headings keep a brief empty label. Selecting an attribute expands its parent and edits its actual ordered copies. Working inherited edits stay separate from the last verified structure and require explicit refresh. Editable render text is a separate submitted prompt, never a rewritten source brief or genetic fact. Image galleries retain each original input/result/scene identity; working-creature UUID grouping is user authoring association, not hereditary ancestry.
+- Owner correction, 2 October: repeated chained bulb silhouettes do not satisfy this range. Prompt simplification and retained-locus audits do not fix body organization. The next generator experiment must change the forced geometry and demonstrate distinctly organized source creatures; limb roles, skin/material and expressed colours must be understandable in the reference. Art direction, pixel art and genomics own the considered handoff together. New construction controls remain provisional until steered as canonical content.
+- The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md) is a 34-pair bilateral subset. Its implementation inherits dimensions, pigments and accessory gates but hardcodes a head, neck, core and four/six supports. The owner rejects that fixed organization: it violates the existing genome-derived construction requirement and does not deliver the requested range. Preserve V1 for exact saved-record recovery, not as the broad generator's foundation. The correction must derive connected region organization and attachment roles from expressed contributors, retain the five record stages and complete declared loci across all eleven genomic layers, and expose unimplemented fields honestly rather than counting them as working features.
+- The separately pinned [compositional vocabulary](../design/anatomical-source-prototype/compositional-contract.md#current-shape-terminal-and-covering-vocabulary) adds six provisional region/terminal/fur pairs to the retained 98-pair union. Numeric means and complete categorical maps resolve before geometry; actual local facets and roots consume those values. The104 modeled pairs plus six drafts remain eleven-domain authoring coverage, not 104 implemented phenotype features. Old versions recover exactly; no missing-copy migration or animal preset is supplied. Static fur fields do not establish physiology or finished pet-art quality.
+- The current separately pinned [anatomical roles](../design/anatomical-source-prototype/compositional-contract.md#ear-tail-and-primary-coat-operators) append seven ear/tail copied pairs to that union, for111 modeled pairs plus the same six drafts. Head-owned ears have an independent gate/form/length; an independently gated continuous tail has graph-selected owner, length/base-width/bend. Coherent primary-coat depiction consumes existing fur length/flow and exact pigments, never a new hair-count gene. Catalogue4/source6 retains those exact111 definitions and copies with separately pinned representation operators: .10L normal rise/.35L tangent lean are a mantle envelope, not new hair-length/thickness genes. Oldsource5 stays literal. Static typed anatomy does not infer hearing, motion, viability or species; actual source6 coat/ear craft is HOLD. [One returned pet proposal](../prototype/generator-workbench/evidence/coherent-coat/README.md) has stronger material/ear read but unaccepted pigment/detail/prop changes; local source-bound retention never changes inherited traits. Five genomic branches still have no locus contracts.
+- Selective breeding is central: heritable variation can become a faster or more reliable lineage under comparable conditions. Inherited contributors and expression establish tendencies; a class label never assigns performance.
 - Affinities describe environments, elements and foods that support or hinder thriving. Skills/abilities need inherited structure; the exact tree or network remains open.
 - Jobs must not determine genomics. Future games interpret expressed properties for potentially many activities. Playful contests and a larger crowd of critters are future game direction, not genetic categories.
-- Adjacent classes should cross, potentially producing non-viable or exceptional offspring. Adjacency, outcomes and probabilities need definition.
-- Structured genetic imagery should represent class or individual information. Encoding and visual style are deferred until concrete examples help. It is not an identity or permission system.
+- Compatible genomes may cross, potentially producing non-viable or exceptional offspring. Compatibility must follow declared inherited/reproductive/developmental contracts; taxonomic adjacency or appearance alone cannot authorize a cross. Outcomes and probabilities need definition.
+- Structured genetic imagery should represent inherited or expressed information. The owner requests a reversible, versioned encoding of the layered tree as a string, providing a foundation for fingerprint art, QR transport and sharing. Exact codec and visual style remain proposed; encoding is not an ownership or permission system.
 - Individual identity differs from class, genome and expression. Public scanning grants neither ownership nor breeding permission. Preserve records and finished art; see [identity and rights](players-social.md).
 - The explore probe gathers environmental signals and points into a sample that needs research and can ultimately yield a lab-created specimen without parents. Such founders enter the same genetics framework as bred offspring. Detailed signal mappings and research mechanics are not yet selected.
 
@@ -17,27 +31,81 @@ Developmental transformations/class sequences, damaging exposures, lifespan/deat
 
 ## Accepted framework: layers and dimensions
 
-A **layer** explains the role of information: inherited, resolved or acquired. A **dimension** describes a particular property within that structure. These are accepted domain boundaries, not a production schema or implementation architecture.
+A **genomic layer** is one of the eleven domain branches listed below. A
+**dimension** describes a property within a branch. Separately, five **record
+stages** distinguish foundation, inherited, resolved and acquired information.
+Authoring must expose all eleven genomic branches and their complete declared
+loci; a five-stage record inspector or anatomy-only subset cannot replace that
+coverage. Each contributor must have an explicit implemented, inactive or
+unimplemented status. These are domain boundaries, not a production schema or
+implementation architecture.
 
-| Layer | Contents | What it does not mean |
+| Record stage | Contents | What it does not mean |
 | --- | --- | --- |
-| 1. Class and body-plan definition | Recognizable structural grammar, applicable dimensions, founding variation, reproduction contract and possible developmental forms | A fixed stat sheet, job, individual genome or universal cap on improvement |
+| 1. Genomic foundation and developmental vocabulary | Versioned reusable construction/expression operators, source-baseline constraints, contributor definitions and declared inheritance contracts | A hardcoded class/species body template, individual allele assignment, job or universal cap on improvement |
 | 2. Individual genome | Loci (hereditary positions), variants, copy counts, provenance and regulatory variants; inherited from parents or established at lab creation; optional linked groups | Current speed, hunger, experience or one gene per dimension |
 | 3. Expression and development | Versioned rules resolving inherited interactions, life stage, context and recorded developmental outcomes | A second independently inherited genome or permission to reroll a saved birth |
 | 4. Resolved phenotype | Appearance, intrinsic capabilities, affinity profiles and available abilities, with context and reasons | A job profile, battle power score or identity |
 | 5. Lifetime state and history | Age, current condition/resources, experience, injuries, exposures and transformation events | Automatically inheritable changes |
 
-Identity, lineage, permissions and evidence accompany all layers rather than becoming genes. Regulatory variants belong to layer 2; rules interpreting them belong to layer 3. Temporary environment and condition feed evaluation without silently rewriting the inherited genome. Distinguish a reference-condition phenotype from current effective performance so a rested adult and a tired juvenile can be compared honestly.
+Identity, lineage, permissions and evidence accompany all record stages rather than becoming genes. Regulatory variants belong to stage 2; rules interpreting them belong to stage 3. Temporary environment and condition feed evaluation without silently rewriting the inherited genome. Distinguish a reference-condition phenotype from current effective performance so a rested adult and a tired juvenile can be compared honestly.
 
 Use **phenotype** in domain records for what we have called the expressed genome. It includes functional properties, not just visible appearance. Player-facing terminology remains a UX choice.
 
-A class describes structural membership and founder distributions. Those distributions need not be re-applied as a fresh class average at every birth. Class membership rules should preserve recognizable anatomy without automatically reclassifying every unusually fast individual. Hybrids may remain explicitly unclassified until a versioned classification rule applies; similarity of appearance alone does not define reproductive compatibility.
+### Reversible layered representation — accepted direction
+
+Represent the five record stages as distinct sections of a versioned creature record, with all eleven genomic layers indexed across the inherited definitions and their effects. Store each
+inherited locus and its ordered copies once; dimension views and polygenic
+relationships reference those records rather than duplicating or flattening
+them. Preserve foundation/rule versions, regulatory information, provenance,
+expression context and realization, resolved phenotype, and modeled lifetime
+state in their respective branches. A genome-only payload and a whole-creature
+payload must declare their different contents.
+
+The owner requests deterministic binary packing followed by a reversible text
+encoding. Decoding must recover the declared tree without silently truncating
+branches. Compact mode may reference an exact shared, version-pinned catalogue;
+portable mode must carry the foundation needed for reconstruction. A payload
+must explicitly distinguish embedded, exactly reconstructable and unmodeled
+information. A random seed alone is insufficient unless every dependency and
+generation rule is pinned and available.
+
+Short hash references identify retained records and check integrity; they are
+not the recoverable payload. The current workbench's `#G` and `#E` references
+remain lookup fingerprints. Measure encoded size on actual records before
+choosing display length or QR use. Packing does not make acquired lifetime
+history heritable, and a genome need not determine later experience. Exact
+The separate [tree/string host proof](../prototype/generator-workbench/codec-contract.md)
+now implements a bounded lossless mapping with inherited G and complete supplied
+T snapshots, shared or embedded foundations and exact numeric preservation.
+Its measured files establish reconstruction of current records, not a canonical
+production schema, QR transport or validity of imported biological behavior.
+Further field layout, catalogue availability and compatibility policy remain
+bounded design work.
+
+Owner clarification: **genome → expression/development → anatomy and capabilities
+→ optional class description**. Organization, segmentation, attachments and
+support/actuation are resolved from inspectable genomic contributors under
+reusable compatible-assembly rules. These rules are finite and versioned; they
+are not a table selecting a finished fish, insect or mammal. Baselines may constrain
+actual source-supported combinations but cannot substitute a hidden class preset
+for the genome's modeled construction decisions.
+
+Classification is a downstream view with its own version/reference conditions,
+not authority over anatomy, inheritance, copy counts, behavior or compatibility.
+It must not rewrite a creature when a name or taxonomy changes. The workbench
+manages contributor/module vocabulary and derived classification together;
+organism examples do not impose heads, limbs or one universal genome scheme.
+The [diversity proposal](../design/genome-starter-content.md#v1-diversity-and-genome-first-construction)
+compares different construction/motion outcomes and variation within each.
+Existing Pip and other bounded class-first examples remain pinned legacy proofs,
+not implementations of this broader direction.
 
 ## Behavioral model — accepted direction and proposed implementations
 
 The behavioral direction links genomes to the available behavior model, with phenotypes weighting state transitions. This establishes the direction of a genotype-linked behavioral model, not an executable state graph or numerical balance.
 
-Proposed mapping within the accepted layers: class/body-plan rules supply the applicable behavioral vocabulary and constraints; an individual's genome resolves through expression into capabilities and behavioral tendencies. Those expressed properties influence eligible transitions and their weights. Environment, current condition and learned history also influence the next action without becoming inherited genes. A shared class does not require identical behavior from every individual, and a genome is not a species identifier.
+Proposed mapping within the accepted layers: reusable operators interpret the individual genome into anatomy, eligible actions and behavioral tendencies; expressed prerequisites select applicable behavioral rules. Those expressed properties influence eligible transitions and their weights. Environment, current condition and learned history also influence the next action without becoming inherited genes. A shared class does not require identical behavior from every individual, and a genome is not a species identifier.
 
 Keep transition eligibility separate from weighting: an unavailable capability cannot be acquired merely through a favorable random choice. Exact states, guards, timing, weighting and deterministic versus stochastic selection remain design work. This is the creature's behavioral model, not the device navigation model or merely an animation controller; presentation depicts its actions while preserving individual identity.
 
@@ -61,6 +129,84 @@ These are the accepted initial domain families, not a requirement to implement e
 
 Quantitative dimensions may be influenced by multiple loci; one variant may affect several dimensions. Polygenicity, epistasis and pleiotropy motivate this proposal. They do not require us to simulate molecules or give every improvement a penalty.
 
+Owner appearance direction: the generated range must include lively, coherent
+pet colours rather than repeatedly dull brown/grey combinations. Expand the
+inherited pigment vocabulary and inspect its expressed combinations; colour
+must still come from genomic expression, not a renderer overriding the palette.
+Exact palette families and mixing rules remain provisional until visual review.
+
+Owner generator direction: use a short image-led instruction for creative pet
+portrayal, with full genome and expression records kept outside the drawing
+prompt. Assess recognizable ancestry, proposed changes and unverified fidelity
+after output. Generated anatomy or recolouring is a design proposal until its
+own resolved source exists; it does not silently amend the retained genome.
+The [active art handoff](../prototype/generator-workbench/art-template.md) and
+[owner example](../prototype/generator-workbench/evidence/owner-simple-pet/README.md)
+retain the actual instruction and evidence.
+
+Current provisional host evidence: the [regional scene workbench](../prototype/generator-workbench/evidence/regional-scene-workbench/README.md)
+uses inherited regional growth and join width instead of mandatory equal bulb
+regions, and publishes actual optional eyes and skin/scales with the same source.
+Two ordinary Generate results and exact new/older replay are retained. This
+is a measured partial construction result, not approval of its finite allele
+vocabulary, source envelopes or the broad creature range. The separate
+[radial contact source proof](../prototype/generator-workbench/evidence/radial-source-proof/README.md)
+constructs one existing central volume and three inherited contact chains in a
+declared YZ view. Its height-only and latent-pigment controls are causal source
+evidence; that standalone proof retains eyes and coverings without projection.
+The separately versioned [complete radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
+connects eligible radial sources to Generate and exact replay without changing
+the inherited catalogue. It retains eye placement as longitudinal depth through
+a declared diagnostic slice and maps scale footprints on the actual surface;
+hidden portions remain in the record. This is not exterior-eye tissue or
+finished pet art. Conservative exclusions and unchanged budgets remain explicit.
+Broad random diversity, membrane, deformation and marked-surface consumers
+remain unfinished; no species preset or repaired genome supplies a winner.
+
+The owner rejects the current flat diagrams as illustration references and
+proposes testing a low-poly 3D reference. Compare the same retained creature and
+same short image-led prompt before selecting a new reference technique.
+Volume, attachment and skin/material cues must communicate clearly; structural
+envelopes are not finished limb anatomy, and material glyphs are not separate
+surface objects. This is a reversible reference-quality experiment, not a
+canonical anatomy change or evidence of production pet art.
+
+The more fundamental owner correction is anatomical range: generated sources
+must be capable of meaningful organizations exemplified by bear, cat, cow and
+firefly. Variations of connected generic volumes are insufficient. Evaluate
+head/body relationships, actual limb form and joint attachment, terminals such
+as paws/hooves, ears/tail, insect regions and wing attachment, together with
+covering and expressed pigments. These examples test the common construction
+grammar; a species label must not select a preset body or repair inherited
+copies. Improve missing structural meaning before choosing 2D or low-poly 3D
+as the illustration-reference technique.
+
+Owner explicitly requires future polygenic and cross-dimension traits: movement,
+energy physiology and environmental response can jointly shape locomotion,
+sensory performance or metabolism. Model several inherited contributions to a
+shared trait separately from interactions between resolved traits. Inherited
+affinity/response properties differ from the actual environment supplied as
+expression context. Structural and capability prerequisites still apply; a
+favorable environment cannot invent eyes, limbs or an unavailable locomotion mode.
+Catalogue records must allow multiple contributors, interaction/context rules and
+per-output reasons from the outset. Exact operators, probabilities and quantitative
+physiology remain design work, not an implemented general solver.
+
+Owner also requires future **epigenetic regulation**. Proposed fictional modeling
+keeps locus/region regulatory marks distinct from inherited allele copies. Marks
+affect expression through declared rules; record their scope, trigger, affected
+operator, establishment/removal, persistence and reproduction reset/transmission
+policy. Inherited regulatory alleles remain layer2; mark interpretation/development
+belongs to layer3 and acquired mark state/history to layer5. This adds neither a
+twelfth dimension nor a replacement genome. Temporary fatigue, learned behavior
+and an ordinary context response are not automatically epigenetic. Same-genome
+experiments compare declared marks/context and their consequences; no marks are
+automatically copied to offspring or treated as mutations. Exact mark mechanics
+remain proposed. Biological inspiration: [NHGRI Epigenomics Fact Sheet](https://www.genome.gov/about-genomics/fact-sheets/Epigenomics-Fact-Sheet)
+distinguishes sequence-preserving regulation and conditional transmission from
+the widespread resetting of marks during reproduction. The game remains fictional
+genetics, not a molecular simulation.
+
 ### Abilities are structured capabilities
 
 Use an extensible ability vocabulary alongside the dimensions, rather than inventing a new genomic layer for every power. Each ability definition states its inherited prerequisites, required structures/resources, activation conditions, parameters, costs, effects, recovery conditions and possible failure. A tree can present it simply; the underlying prerequisites may form a network.
@@ -77,7 +223,7 @@ Examples for discussion: burrowing, light production, chemical secretion, regene
 
 ## Inheritance and selective breeding
 
-Recommended first model: explicitly declared two-parent, two-copy inheritance for a small compatible class set. It is a tractable fictional subset, not a claim that bacteria, plants and ghosts share one real reproductive system. Preserve room for other copy counts and asexual/copy-based modes without implementing them speculatively.
+Recommended first inheritance proof: explicitly declared two-parent, two-copy inheritance for a small compatible genome-contract set. It is a tractable fictional subset, not a claim that bacteria, plants and ghosts share one real reproductive system. Preserve room for other copy counts and asexual/copy-based modes without implementing them speculatively.
 
 - Use discrete variants for some visible features, small sets of contributing loci for quantitative traits, and a few explicit interactions. Dominance describes expression between variants, not which is better.
 - Begin with independent loci only where stated. Later linked groups and recombination can explain traits that tend to travel together.
@@ -89,7 +235,7 @@ Heritability is a population/environment statistic, not a per-individual transfe
 
 ### Crossing, viability and classification
 
-Product direction permits adjacent-class crossing. Proposed adjacency is a reproductive compatibility relationship, not a position in a list or an appearance score. Evaluate in stages: compatible inputs → inherited combination → developmental viability → resolved offspring → reproductive capability. Viable but infertile is distinct from non-viable.
+Product direction permits compatible crossing. Evaluate the actual inherited representation, reproductive systems and developmental constraints; a derived class label, a position in a taxonomy or an appearance score cannot supply compatibility. Evaluate in stages: compatible inputs → inherited combination → developmental viability → resolved offspring → reproductive capability. Viable but infertile is distinct from non-viable.
 
 Compatible components can produce ordinary or exceptional combinations; incompatible interactions can prevent development. Both should be explained by versioned rules. Exceptional F1 performance and a combination that breeds true are different; later generations may split the combination. Hybrid class assignment, non-viability presentation, costs and forecast disclosure remain product choices.
 
@@ -120,7 +266,7 @@ Reserve linkage/provenance now at the conceptual level; do not equate dimension 
 
 ## Genome baseline, collected sample and phenotype — accepted distinction
 
-A **genome baseline** is the reusable genetic foundation for a compatible kind of critter: body-plan constraints, required systems and permitted variation within the existing five-layer framework. It is not a complete individual genome or a class average freshly imposed on every offspring.
+A **genome baseline** records a source-supported genetic foundation: known/invariant contributors, required systems, applicable rule vocabulary and permitted variation across the eleven genomic layers. The five record stages keep inherited, expressed and acquired information distinct. It is not a finished species body template, a complete individual allele assignment or a class average freshly imposed on offspring. Modeled topology decisions remain inspectable genomic inputs; expression constructs the body and any class description follows afterward.
 
 A **collected sample** is a particular stable discovery carrying genomic information and supported possibilities consistent with a valid foundation. Research can reveal that foundation and variants distinguishing this sample from others. The sample is not merely a visible-trait fragment. It need not be tissue from an existing individual: tissue is one possible fictional origin, not a universal assumption across all critter classes. Sample provenance does not automatically create a donor parent or ancestry relationship.
 
@@ -137,11 +283,32 @@ Environmental similarity does not establish identical genomes or individual iden
 
 ### Genome imagery and progression
 
+Owner direction, 1 October 2026: the child-facing Lab experience is a very visual
+genome map. Players select regions, deliberately contribute resources to research,
+progressively reveal their contents and explore supported expression branches.
+Detailed genetic information serves optional deeper inspection for parents;
+the main experience must convey discovery through imagery and response, rather
+than walls of labels, messages or a school lesson. Reuse the [original genome-field
+artwork](../design/references/genome-field/README.md) as visual lineage. Exact
+region mapping, expression imagery, experimentation rules, costs and animation
+remain design work. Revealing information does not install genes or mutate a
+sample; supported branches need not be independently combinable.
+
 Unknown regions represent undiscovered information, never a locked permission or purchased unlock. The player can retain several partially decoded genome research records and choose among them. Resources determine which studies can currently run; they do not make known regions become unknown when spent elsewhere. Zones are a promising owner-supported organizing direction, with visual encoding and exact biological/content mapping still to develop; zones are not automatically the five information layers or one study each.
 
 Accepted: research progressively decodes parts of a genome. A fully decoded genome is required before a critter can be incubated; incubation cannot fill unknown regions or bypass research. The Lab must show which parts are decoded, which remain unknown and the research progress toward completeness. Decoding reveals knowledge and supported possibilities, not mutation of an existing individual.
 
 Genomes vary in complexity, and the game has progression from simpler genomes toward more complex ones. The small V1 worked genome is an introductory example, not a universal study count or ceiling. Exact progression gates, complexity measures and research requirements remain open; do not invent levels, thresholds or assume complexity is merely more pixels.
+
+Owner direction,1October: the genome is the research centerpiece and the causal
+connection from a fully researched sample to a parentless founder, then actual-parent
+breeding, lineage and variable descendants. Players should learn their creatures
+through visible expression, interaction and optional detailed inspection.
+Virtual Probe/Lab tiers and boosters gate progression toward much more complex,
+longer investigations. Their exact effects/costs remain open. Long research must
+preserve useful partial discoveries; completeness still governs founder creation.
+The [connected design review](../design/probe-bench-review.md) proposes how this
+feels without substituting new canonical genetic rules.
 
 Accepted: unresolved bitmap regions represent genuinely unresolved required information; findings reveal or annotate them; supported configurations have explainable visual differences. Known carried-but-unexpressed variants must differ from unknown regions. A created individual’s genome view must relate to its actual genome; decorative pixels cannot claim genetic meaning. Encoding, region mapping and minigames remain open.
 
@@ -155,9 +322,9 @@ Unsupported dimensions are unmodeled, not zero biology. The fixture retains one 
 
 ## Worked bridge: traits, alleles, research and phenotype
 
-**Proposed teaching example, not canonical anatomy or balance.** This applies the existing five-layer/eleven-family framework. Crown, eye rings and pale markings reuse the bounded fixture's allele rules; the movement/energy extension below is a new proposal. A small example does not replace the complete framework or authorize production incubation with unmodeled required information.
+**Proposed teaching example, not canonical anatomy or balance.** This applies the eleven genomic layers with five separate record stages. Crown, eye rings and pale markings reuse the bounded fixture's allele rules; the movement/energy extension below is a new proposal. A small example does not replace the complete framework or authorize production incubation with unmodeled required information.
 
-### Vocabulary and the five layers in one individual
+### Vocabulary and the five record stages in one individual
 
 A **trait** is a describable property, such as crown presence or locomotion efficiency. A **locus** is a hereditary position; an **allele** is a variant at that position. The **genotype** records the allele copies. **Expression rules** resolve their interactions under a declared life stage/context into the **phenotype**. Current condition and learned behavior can change performance without changing the genotype. A trait need not have one locus, and one locus may influence several traits.
 
@@ -169,7 +336,7 @@ A **trait** is a describable property, such as crown presence or locomotion effi
 | 4 Resolved phenotype | Crown present, eye rings present, pale markings absent; p is carried but unexpressed | The portrait must agree with this result. A carried allele is known hereditary information, not a faint marking or an unknown region |
 | 5 Lifetime state/history | Same individual can later be tired, trained or injured | Current performance and acquired experience remain distinct from inherited potential and are not filled in by decoding a sample |
 
-Research knowledge is an overlay describing which facts the player has established about these layers; it is not a sixth genomic layer. Before creation the record describes a sample and its supported complete configurations. A chosen configuration becomes the individual genome only through the accepted creation boundary. Studying does not rewrite alleles to improve the result.
+Research knowledge is an overlay describing which facts the player has established about these record stages; it is not an additional genomic layer. Before creation the record describes a sample and its supported complete configurations. A chosen configuration becomes the individual genome only through the accepted creation boundary. Studying does not rewrite alleles to improve the result.
 
 ### Traceable trait cards
 
@@ -185,7 +352,7 @@ These are fictional qualitative rules for a worked proposal. IDs, inheritance sc
 
 ### Genome zones are views into this structure
 
-Proposed knowledge zones: **form** can link the crown locus and body-plan constraints; **markings** can link rings/markings loci; **movement** can link drive and efficiency, with an explicit relation to energy. These are information groupings, not chromosomes, the five layers, or proof that one study corresponds to one zone. A locus may contribute to several displayed traits without being duplicated in the genome.
+Proposed knowledge zones: **form** can link the crown locus and body-plan constraints; **markings** can link rings/markings loci; **movement** can link drive and efficiency, with an explicit relation to energy. These are information groupings, not chromosomes, record stages, or proof that one study corresponds to one zone. A locus may contribute to several displayed traits without being duplicated in the genome.
 
 For a markings example, the research sequence could be:
 
@@ -233,15 +400,31 @@ These class-baseline facts still need explicit inherited contributors and expres
 
 ### Proposed genetic engine and content library
 
-Owner requests a genetic engine capable of generating valid genomes and managing a locus library, with LLM-assisted and algorithmic generation to reduce baseline-authoring burden. This is a design objective, not an approved implementation scope, technology choice or API-spending authorization.
+Owner requests a genetic engine capable of generating valid genomes and managing a locus library, with LLM-assisted and algorithmic generation to reduce baseline-authoring burden. The separate developer workbench is its authoring and experiment surface: it must manage the locus compendium, naming and taxonomy, with deep Structure/Appearance/Movement content, complete baseline/genome/expression inspection, structured genome art and sequence representations, genome-constrained expression sampling and resolved visual-prompt export. Eleven dimension families remain authoritative. The [workbench expansion design](../prototype/generator-workbench/README.md#authoring-engine-next-design) owns the proposed tooling journey and incremental boundaries; current five-locus implementation does not fulfill this direction. Detailed biology and broader production integration remain proposed. The current [API rendering boundary](../prototype/generator-workbench/README.md#render-a-pet-through-an-api) permits explicit operator-authorized provider requests with exact source/submitted-prompt provenance; it does not authorize automatic paid calls, new infrastructure or purchases.
 
-Recommended split: LLMs assist content authors by proposing loci, variants, family baselines, relationships and worked phenotype/research examples; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
+Selected automation direction: LLMs propose reusable loci, variants, family baselines, relationships and worked phenotype/research definitions without per-creature content authors; an explicit rule engine validates content and resolves genomes/phenotypes. Model-shaped data is not semantic proof. Published content uses approved rule operators and declared references; free-form generated explanations cannot define runtime inheritance or substitute for validation.
 
-The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Class baselines compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
+The locus library records identity/version, applicability, copy scheme, alleles, inheritance, expression contributors and dependencies, affected dimensions, research discoverability and worked cases. Source baselines and inherited developmental contributors compose compatible structural/physiological modules with declared invariants and allowed variation. They are not independently randomized values for every dimension or a generic preset copied into unrelated body plans.
+
+The considered [starter content proposal](../design/genome-starter-content.md)
+defines V1 breadth through genome-derived organization and ground/air/water
+capabilities. Its24candidate body/surface/walk-turn records are one local
+calibration case, not the whole V1 catalogue. New topology operators and the
+contrasting construction/motion proof remain proposed and unimplemented. Owner's CRISPR-CAS-like expedition-item
+idea is recorded there as future targeted engineering, distinct from expression
+sampling and epigenetic marks; edit policy, resources and inheritance remain open.
 
 Founder generation assembles candidates within these constraints; expression resolves them to a phenotype with an explanation trace. Breeding derives alleles from actual parents under explicit inheritance/viability rules rather than manufacturing a replacement valid child. Invalid combinations are rejected or handled by the chosen reproductive policy, not repaired by silently swapping genes. Content versions and saved genomes, expression and assets remain pinned.
 
-First proposed proof: encode Pip's applicable baseline, a small locus set and declared unmodeled boundaries; generate a varied batch, explain each phenotype's inherited causes, reject deliberately incompatible combinations and demonstrate one compatible cross. Review phenotype variety and research usefulness as well as validity. No whole-library editor, broad class catalogue, universal genetics solver or production service is needed for this proof. Later extension follows the existing extension policy and all five layers/eleven families.
+The [bounded engine contract](genetic-engine.md) uses Pip's applicable baseline, a small locus set and declared unmodeled boundaries. It covers a varied batch, inherited phenotype causes, incompatible-combination rejection and one compatible cross. This is not the automatic artwork/encyclopedia generator. No whole-library editor, broad class catalogue, universal solver or production service is required for that earlier genetic proof. Later authoring work follows the existing extension policy and all eleven genomic layers, keeping the five record stages distinct.
+
+Owner further requires configured incubation to trigger an algorithmic creature
+generator from the fully decoded genome and its expressed loci. It produces all
+creature art, sprites, animations and encyclopedia content without per-creature
+illustrators, editors or copywriters. General framework/style rules are designed
+and calibrated; automatic output validation enforces them. Configuration's exact
+effects remain open and cannot silently change the decoded genome. Training and
+learned history still do not rewrite inherited loci.
 
 The [architecture pipeline](architecture.md#creature-production-pipeline) owns remote generation, automated content tooling, appearance mapping and retained assets. Genetics supplies inspectable inherited information and resolved expression; art cannot choose genes. Preserve algorithm/input/rules versions and exact outcomes; neither a random seed nor a prompt is a sufficient record. Learned state remains separate.
 

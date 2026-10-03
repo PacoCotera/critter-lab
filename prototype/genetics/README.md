@@ -1,5 +1,9 @@
 # Pip genetics proof
 
+The separate [generator workbench](../generator-workbench/README.md) now consumes
+this unchanged engine through a local editor, causal projection and diagnostic
+schematic. The proof itself remains independent of game/device presentation.
+
 This is a separate host proof for the proposed Pip genetic-content contract. It is not connected to the live app or to the older `prototype/genetics.mjs` draft, which remains in use by that experiment. Nothing here creates an individual, assigns ownership, spends resources, draws screens, calls a model, or proves hardware behavior.
 
 The proof separates authored content in `content.mjs` from pure operations in `engine.mjs` and report generation in `report.mjs`. It covers the Pip class baseline, the fixed inherited baseline modules and appearance copies, and the five variable loci `C`, `R`, `P`, `M` and `E`. The 243 unordered combinations are a valid-genotype coverage space, not a sample's support list or a population distribution. `PIP_SAMPLE` separately lists two supported candidates.
