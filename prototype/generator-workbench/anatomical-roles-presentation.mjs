@@ -2,6 +2,7 @@ import { add, sub, mul, dot, cross, unit } from "./anatomical-source-constructio
 import { localPoint } from "./compositional-vocabulary-construction.mjs";
 import { realizeVocabularyMaterials } from "./compositional-vocabulary-presentation.mjs";
 import { ROLES_CONTENT } from "./anatomical-roles-package.mjs";
+import { COAT_CONTENT } from "./coherent-coat-package.mjs";
 
 function clipOwnerField(points, owner, threshold, below) {
   const coordinate = (point) => (localPoint(owner, point)[0] / owner.radii[0] + 1) / 2;
@@ -20,14 +21,9 @@ function clipOwnerField(points, owner, threshold, below) {
   return unique;
 }
 
-export function realizeAnatomicalRoleMaterials(scene, values, facts) {
-  // Reuse literal scale/base coverage and exact48 fur roots from material2.
-  // The new material replaces only its primary fibre depiction.
-  realizeVocabularyMaterials(scene, values, facts);
-  const oldRibbons = scene.covering.fur?.ribbons ?? [];
-  const clusters = [];
+export function bindAnatomicalRoleSurfaces(scene, materialProfile) {
   for (const owner of scene.nodes) {
-    owner.material.profileVersion = ROLES_CONTENT.materialProfile;
+    owner.material.profileVersion = materialProfile;
     if (["auricular-sheet", "axial-tail"].includes(owner.role)) {
       owner.material.kind = "smooth-skin";
       for (const fragment of owner.surfaceFragments) {
@@ -40,6 +36,17 @@ export function realizeAnatomicalRoleMaterials(scene, values, facts) {
         fragment.sources = [...owner.sources];
       }
     }
+  }
+}
+
+export function realizeAnatomicalRoleMaterials(scene, values, facts) {
+  // Reuse literal scale/base coverage and exact48 fur roots from material2.
+  // The new material replaces only its primary fibre depiction.
+  realizeVocabularyMaterials(scene, values, facts);
+  const oldRibbons = scene.covering.fur?.ribbons ?? [];
+  const clusters = [];
+  bindAnatomicalRoleSurfaces(scene, ROLES_CONTENT.materialProfile);
+  for (const owner of scene.nodes) {
     if (owner.role !== "primary-region" || !values["covering.furEnabled"]) continue;
     // Opaque owner skin remains complete underneath every cluster.
     owner.surfaceFragments = owner.surfaceFragments.filter((fragment) => fragment.material !== "fur");
@@ -106,9 +113,11 @@ function shade(hex, amount) {
   return `#${[1, 3, 5].map((index) => Math.round(parseInt(hex.slice(index, index + 2), 16) * amount).toString(16).padStart(2, "0")).join("")}`;
 }
 
-export function anatomicalRolesReference(scene) {
-  if (scene.status !== "constructed" || scene.profileVersion !== ROLES_CONTENT.constructionProfile ||
-      scene.covering.profileVersion !== ROLES_CONTENT.materialProfile) throw new Error("Unsupported anatomical role reference identity");
+export function anatomicalRolesReference(scene, profileVersion = ROLES_CONTENT.constructionProfile) {
+  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role reference profile");
+  const content = profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
+  if (scene.status !== "constructed" || scene.profileVersion !== content.constructionProfile ||
+      scene.covering.profileVersion !== content.materialProfile) throw new Error("Unsupported anatomical role reference identity");
   const polygons = [];
   for (const owner of scene.nodes) for (const fragment of owner.surfaceFragments) {
     const points = fragment.points, center = centroid(points);
@@ -135,11 +144,12 @@ export function anatomicalRolesReference(scene) {
   polygons.sort((first, second) => first.depth - second.depth);
   const shapes = polygons.map((polygon) => {
     const outlined = ["scales", "fur"].includes(polygon.material);
+    const mantle = polygon.material === "fur-mantle";
     const points = polygon.points.map(([x, y]) => `${(x * scale + offsetX).toFixed(3)},${(y * scale + offsetY).toFixed(3)}`).join(" ");
-    return `<polygon data-owner="${polygon.owner}" data-material="${polygon.material}" points="${points}" fill="${polygon.fill}" stroke="${outlined ? shade(polygon.fill, 0.8) : polygon.fill}" stroke-width="${outlined ? 0.7 : 0.4}" stroke-linejoin="round"/>`;
+    return `<polygon data-owner="${polygon.owner}" data-material="${polygon.material}" points="${points}" fill="${polygon.fill}" stroke="${mantle ? "none" : outlined ? shade(polygon.fill, 0.8) : polygon.fill}" stroke-width="${mantle ? 0 : outlined ? 0.7 : 0.4}" stroke-linejoin="round"/>`;
   }).join("");
   return {
-    status: "constructed", profileVersion: ROLES_CONTENT.referenceProfile,
+    status: "constructed", profileVersion: content.referenceProfile,
     camera: { right, up, towardViewer, framing: "own-source and visible material bounds; natural occlusion" },
     mapping: { scale, offsetX, offsetY },
     svg: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>Provisional anatomical role source</title><rect width="512" height="512" fill="#f7f3e8"/>${shapes}</svg>`

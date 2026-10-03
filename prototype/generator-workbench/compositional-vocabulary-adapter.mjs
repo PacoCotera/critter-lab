@@ -19,6 +19,8 @@ import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summ
 import { ROLES_CONTENT, ROLES_CATALOGUE, ROLES_FOUNDATION, anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
 import { constructAnatomicalRoles } from "./anatomical-roles-construction.mjs";
 import { realizeAnatomicalRoleMaterials, anatomicalRolesReference } from "./anatomical-roles-presentation.mjs";
+import { COAT_CONTENT, COAT_CATALOGUE, COAT_FOUNDATION, coherentCoatPackage } from "./coherent-coat-package.mjs";
+import { realizeCoherentCoatMaterials } from "./coherent-coat-material.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const plain = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -95,6 +97,13 @@ function consumerConfiguration(consumer) {
     package: compositionalVocabularyPackage, profile: FUR_DEPICTION_PROFILE,
     packetSchema: COMPOSITIONAL_PACKET_SCHEMA, authoredSchema: "compositional-authored-record/1"
   };
+  if (consumer === "coherent-coat") return {
+    catalogue: COAT_CATALOGUE, foundation: COAT_FOUNDATION,
+    content: { ...COMPOSITIONAL_CONTENT, baseline: COAT_CONTENT.baseline, materialProfile: COAT_CONTENT.materialProfile, ruleVersion: COAT_CONTENT.ruleVersion },
+    structural: new Set([...structuralIds, ...ROLES_CONTENT.loci.map((locus) => locus.id)]),
+    package: coherentCoatPackage, profile: COAT_CONTENT.constructionProfile,
+    packetSchema: "compositional-authoring-record/4", authoredSchema: "compositional-authored-record/3"
+  };
   if (consumer !== "anatomical-roles") throw new Error("Unsupported internal source consumer");
   return {
     catalogue: ROLES_CATALOGUE, foundation: ROLES_FOUNDATION,
@@ -113,10 +122,10 @@ function roleGuard(locusId, values) {
 function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null, consumer = "vocabulary") {
   try {
     const configuration = consumerConfiguration(consumer), content = configuration.content;
-    const roles = consumer === "anatomical-roles", activeStructuralIds = configuration.structural;
+    const roles = consumer !== "vocabulary", coat = consumer === "coherent-coat", activeStructuralIds = configuration.structural;
     if (!(roles ? [configuration.profile] : [VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE]).includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
-    if (roles && !authoredPackage && ![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error("Exact pinned catalogue3 foundation required");
+    if (roles && !authoredPackage && ![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error(`Exact pinned catalogue${configuration.catalogue.version} foundation required`);
     const catalogue = authoredPackage?.catalogue ?? (roles ? configuration.catalogue : exactCatalogue(input.catalogue)), genome = input.genome;
     if (authoredPackage && digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
     const modeled = catalogue.loci.filter((locus) => locus.status === "validated");
@@ -167,12 +176,12 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
         fact.reasons.push("In this profile, inherited lift seeds the head direction; actual parent/head facet extents determine final center separation.");
       }
     }
-    const scene = (roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
-      realizePigmentFields(roles ? constructAnatomicalRoles(values, facts) : constructCompositionalVocabulary(values, facts, profileVersion)),
+    const scene = (coat ? realizeCoherentCoatMaterials : roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
+      realizePigmentFields(roles ? constructAnatomicalRoles(values, facts, profileVersion) : constructCompositionalVocabulary(values, facts, profileVersion)),
       values,
       facts
     );
-    const reference = roles ? anatomicalRolesReference(scene) : profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
+    const reference = roles ? anatomicalRolesReference(scene, profileVersion) : profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
     for (const fact of facts.filter((entry) => activeStructuralIds.has(entry.locusId))) {
       fact.consumers = [
         ...scene.nodes.filter((node) => node.sources.includes(fact.locusId)).map((node) => node.id),
@@ -196,7 +205,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     const packet = {
       status: "resolved",
       schemaVersion: authoredPackage ? configuration.authoredSchema : configuration.packetSchema,
-      ruleVersion: roles ? ROLES_CONTENT.ruleVersion : COMPOSITIONAL_RULE,
+      ruleVersion: roles ? content.ruleVersion : COMPOSITIONAL_RULE,
       contentId: catalogue.id,
       contentVersion: catalogue.version,
       sceneProjectionVersion: profileVersion,
@@ -240,7 +249,7 @@ function generateCompositionalVocabulary(input, authoredPackage = null, consumer
     if (authoredPackage) {
       if (digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
     } else if (consumer === "vocabulary") exactCatalogue(input.catalogue);
-    else if (![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error("Exact pinned catalogue3 foundation required");
+    else if (![configuration.foundation, configuration.catalogue].some((reference) => digest(reference) === digest(input.catalogue))) throw new Error(`Exact pinned catalogue${configuration.catalogue.version} foundation required`);
     const modeled = (authoredPackage?.catalogue ?? configuration.catalogue).loci.filter((locus) => locus.status === "validated");
     if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 4294967295) throw new Error("Generation seed must be uint32");
     const attempts = input.maxAttempts ?? 1024;

@@ -1,6 +1,7 @@
 import { add, sub, mul, dot, cross, unit } from "./anatomical-source-construction.mjs";
 import { constructCompositionalVocabulary, localVector, meshEnvelope, worldPoint } from "./compositional-vocabulary-construction.mjs";
 import { ROLES_CONTENT } from "./anatomical-roles-package.mjs";
+import { COAT_CONTENT } from "./coherent-coat-package.mjs";
 
 function addFace(owner, points, coordinates, outward) {
   const normal = unit(cross(sub(points[1], points[0]), sub(points[2], points[0])));
@@ -42,16 +43,18 @@ function skinPrism(front, extrusion) {
   };
 }
 
-export function constructAnatomicalRoles(values, facts) {
+export function constructAnatomicalRoles(values, facts, profileVersion = ROLES_CONTENT.constructionProfile) {
+  if (![ROLES_CONTENT.constructionProfile, COAT_CONTENT.constructionProfile].includes(profileVersion)) throw new Error("Unsupported anatomical role construction profile");
+  const content = profileVersion === COAT_CONTENT.constructionProfile ? COAT_CONTENT : ROLES_CONTENT;
   // The old primary, head, chain and sheet mathematics remains literal. Only
   // the new source selects this wrapper and its additional role operators.
   const scene = constructCompositionalVocabulary(values, facts, "compositional-source/4");
-  scene.profileVersion = ROLES_CONTENT.constructionProfile;
-  scene.baseline = ROLES_CONTENT.baseline;
+  scene.profileVersion = content.constructionProfile;
+  scene.baseline = content.baseline;
   const sources = (...targets) => facts.filter((fact) => fact.state === "expressed" && targets.includes(fact.target)).map((fact) => fact.locusId);
   const head = scene.nodes.find((owner) => owner.role === "typed-head");
   if (values["ears.enabled"] && head) {
-    const convention = ROLES_CONTENT.conventions.ear;
+    const convention = content.conventions.ear;
     const length = values["ears.lengthOverHeadRz"] * head.radii[2];
     const width = convention.widthOverLength * length;
     const depth = convention.bowlDepthOverLength * length;
@@ -61,7 +64,14 @@ export function constructAnatomicalRoles(values, facts) {
       const hit = meshEnvelope(head).rayHit(head.center, direction);
       const penetration = convention.rootPenetrationOverLength * length;
       const root = sub(hit.position, mul(direction, penetration));
-      const widthAxis = head.frame[1], lengthAxis = head.frame[2], frontNormal = mul(head.frame[0], -1);
+      // Only source6 rotates the original plane: head-minus-X fronts turn
+      // toward each side's outward head-Y. Ports and penetration stay exact.
+      const yaw = -side * (convention.outwardFrontYawRadians ?? 0);
+      const widthAxis = convention.outwardFrontYawRadians
+        ? localVector(head.frame, [-Math.sin(yaw), Math.cos(yaw), 0]) : head.frame[1];
+      const lengthAxis = head.frame[2];
+      const frontNormal = convention.outwardFrontYawRadians
+        ? localVector(head.frame, [-Math.cos(yaw), -Math.sin(yaw), 0]) : mul(head.frame[0], -1);
       const trace = [...new Set([...head.sources, ...sources("ears.enabled", "ears.form", "ears.lengthOverHeadRz")])];
       const ear = {
         id: `ear-${side}`, role: "auricular-sheet", parent: head.id, palette: [...head.palette], sources: trace,
@@ -100,6 +110,10 @@ export function constructAnatomicalRoles(values, facts) {
       ear.attachment.witness = contactWitness(head, witnessCenter, head.frame, Math.min(penetration, thickness) * 0.002,
         skinPrism(basalFront, extrusion), { kind: "closed-basal-skin-prism", front: basalFront, extrusion, strictBarycentricInterior: true });
       ear.auricular = { profile: "concave-auricular-sheet/1", side, localBilateral: true, length, width, bowlDepth: depth, thickness, innerOuterNormals: "retained per face", paletteOwner: head.id };
+      if (convention.outwardFrontYawRadians) {
+        ear.auricular.profile = "concave-auricular-sheet/2";
+        ear.auricular.headLocalYawRadians = yaw;
+      }
       scene.nodes.push(ear);
       scene.edges.push({ from: head.id, to: ear.id, role: "true-facet-root" });
     }

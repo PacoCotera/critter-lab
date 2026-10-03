@@ -2,7 +2,7 @@
 // changes source anatomy or trusts a prompt embedded in an imported record.
 const SUMMARY_VERSION = "art-prompt-summary/1";
 const PET_INSTRUCTION = "Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.";
-const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4", "compositional-source/5"];
+const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6"];
 import { isCompositionalDraft } from "./compositional-draft-format.mjs";
 
 function counted(count, singular, plural = `${singular}s`) {
@@ -36,17 +36,18 @@ export function unavailableArtPromptSummary(packet, error) {
 export function artPromptSummary(packet) {
   const scene = packet?.scene;
   const catalogue = packet?.input?.catalogue;
-  const roles = packet?.sceneProjectionVersion === "compositional-source/5";
-  const catalogueVersion = roles ? 3 : 2;
+  const coat = packet?.sceneProjectionVersion === "compositional-source/6";
+  const roles = coat || packet?.sceneProjectionVersion === "compositional-source/5";
+  const catalogueVersion = coat ? 4 : roles ? 3 : 2;
   if (packet?.status !== "resolved" || packet.result?.status !== "resolved" ||
-      packet.ruleVersion !== `developmental-compositional-source/${roles ? 3 : 2}` ||
+      packet.ruleVersion !== `developmental-compositional-source/${catalogueVersion}` ||
       !CURRENT_PROFILES.includes(packet.sceneProjectionVersion) ||
       scene?.status !== "constructed" || scene.profileVersion !== packet.sceneProjectionVersion ||
-      scene.covering?.profileVersion !== `compositional-surface-fields/${roles ? 3 : 2}` ||
+      scene.covering?.profileVersion !== `compositional-surface-fields/${catalogueVersion}` ||
       !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === catalogueVersion) ||
         (isCompositionalDraft(catalogue) && catalogue.authoredRecipe.parent.version === catalogueVersion)) ||
       !catalogue.foundationPin || !packet.recordId || !packet.sceneDigest) {
-    throw new Error("A resolved source3/4/5 with its matching pinned foundation is required for the pet summary.");
+    throw new Error("A resolved source3/4/5/6 with its matching pinned foundation is required for the pet summary.");
   }
 
   const nodes = scene.nodes;

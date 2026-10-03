@@ -53,7 +53,7 @@ there is no minimum leg quota, automatic grounding of free chains or hidden four
 The retained ellipsoid, tapered-link and thin-surface operators describe the
 earlier bounded graph when parameters and local frames are driven by it.
 The visible ends, links and surface spans must remain distinct in silhouette.
-Current source5 adds the finite auricular bowl and continuous axial sweep below;
+Retained source5 adds the finite auricular bowl and continuous axial sweep below;
 no generic physics solver is supplied. Natural occlusion is permitted; a separate part/root trace can expose
 hidden attachments without making primary skin transparent.
 
@@ -117,7 +117,7 @@ saved recipes. Actual inspection of the bounded correction found visible
 scattered dashes rather than a coherent coat.
 Fur material craft remains HOLD; this is not finished pet-art approval.
 
-Source5/material3 now consumes the same48 actual primary facet roots with a
+Retained source5/material3 consumes the same48 actual primary facet roots with a
 cohesive overlapping three-piece tapered/fringed cluster per root, max1008
 material fragments. Its shared broad base/splayed fringe is a bounded depiction
 hypothesis; three parallel scratches would fail the intended coat read. Copied
@@ -128,8 +128,8 @@ smooth. [Actual source5 exports](../../prototype/generator-workbench/evidence/an
 give the continuous tail a narrow source-readability pass. Ear count/root are
 clear but blade-like sheets communicate weak bowl/fold depth, so auricular craft
 is provisional/HOLD. The clusters still read as isolated marks over smooth skin;
-coat craft remains HOLD. The next boundary is owner-scale coat continuity and
-auricular breadth/depth, not more contrast or copied dashes.
+coat craft remains HOLD. Source6 implements the considered owner-scale coat continuity and
+auricular breadth/depth hypothesis under a separate catalogue4/material4/reference6 binding. Its continuous actual-facet mantle uses shared pinned seams/caps, inherited length/flow and true displaced normals without panel outlines. Ear width .90L, recess .20L and mirrored15° local yaw retain exact copied length and roots. The [current contract](compositional-contract.md#continuous-coat-mantle-and-broad-ear-profile) owns its finite limits. Actual coat/ear craft remains pending; oldsource5 depiction stays literal.
 
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base
@@ -146,7 +146,7 @@ the connected outline, not only in colour, feature decoration or a different
 camera. Preserve old V1 inputs/outputs under their original version. No class
 selector, curated output replacement or resampling for attractive bodies.
 
-The current source5 and retained source3/4 creative instruction starts with:
+The current source6 and retained source3/4/5 creative instruction starts with:
 
 > Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.
 
@@ -154,7 +154,7 @@ Follow it with a short factual description from the actual source: counted body
 shape/organization, enabled head/eye/projection modules, attached chains and end
 forms, flat flaps, body-owned covering and named local pigment fields. The
 [semantic brief contract](compositional-contract.md#source-derived-pet-brief)
-owns exact aliases and witnesses. Source5 alone adds ears/tail from actual typed
+owns exact aliases and witnesses. Source5/6 add ears/tail from actual typed
 nodes; head projections and generic child regions do not become those roles.
 Two local colours are not rings. The factual furry-body cue
 does not reverse the source4 material-craft HOLD. Older unrelated source profiles

@@ -8,7 +8,7 @@ and this base instruction, followed by a short factual source description:
 The latest owner direction adds actual shape, extremity counts/forms,
 body-owned covering and named colours to the earlier
 [image-led example](evidence/owner-simple-pet/README.md). The pure
-`art-prompt-summary/1` consumer derives this brief for source3/4/5; its
+`art-prompt-summary/1` consumer derives this brief for source3/4/5/6; its
 [contract](../../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 defines supported meanings and clause witnesses. The description targets25–45
 words without hiding major expressed anatomy or material ownership. Detailed

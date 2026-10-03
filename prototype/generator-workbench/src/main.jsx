@@ -75,7 +75,9 @@ const storageKey = "critter-authoring-records-v1";
 const draftKey = "critter-authoring-draft-v1";
 const compositionalDraftKey = "critter-compositional-authoring-draft-v1";
 const anatomicalRolesDraftKey = "critter-compositional-authoring-draft-v2";
-const draftStorageKey = (catalogue) => catalogue?.ruleVersion === "developmental-compositional-source/3" ? anatomicalRolesDraftKey : compositionalDraftKey;
+const coherentCoatDraftKey = "critter-compositional-authoring-draft-v3";
+const draftStorageKey = (catalogue) => catalogue?.ruleVersion === "developmental-compositional-source/4"
+  ? coherentCoatDraftKey : catalogue?.ruleVersion === "developmental-compositional-source/3" ? anatomicalRolesDraftKey : compositionalDraftKey;
 
 async function request(path, input) {
   const payload = input === undefined ? undefined : authoringRequest(input);
@@ -514,7 +516,7 @@ function Workbench() {
     invalidate();
   }
   function draftRecipe(next) {
-    const parentVersion = next.authoredRecipe?.parent.version ?? (next.ruleVersion === "developmental-compositional-source/3" ? 3 : 2);
+    const parentVersion = next.authoredRecipe?.parent.version ?? Number(next.ruleVersion.split("/").at(-1));
     const parent = packages.find((item) => item.catalogue.id === "genomic-compositional-source-experiment" && item.catalogue.version === parentVersion)?.catalogue;
     if (!parent) throw new Error(`Published catalogue${parentVersion} must be available to author a compatible draft.`);
     return compositionalDraftRecipe(next, parent, JSON.parse(startingCopiesText), JSON.parse(baselineMetadataText));
@@ -561,7 +563,7 @@ function Workbench() {
       next.loci[index] = item;
       return saveCompositionalDraft(next);
     }
-    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion))
+    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
@@ -607,7 +609,7 @@ function Workbench() {
       setMessage("Authored definitions selected. Current copies retained; Resolve or Generate uses this exact draft. Starting copies load only by explicit action.");
       return;
     }
-    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion))
+    if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
     const revision = inputRevision.current;
@@ -629,7 +631,7 @@ function Workbench() {
     );
   }
   function saveRecord() {
-    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(packet.sceneProjectionVersion)
+    const retained = ["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6"].includes(packet.sceneProjectionVersion)
       ? { ...sceneReplayEnvelope(packet), recordId: packet.recordId, savedLabel: packet.result.classification.labels.join(" · ") }
       : clone(packet);
     const next = [
@@ -681,7 +683,7 @@ function Workbench() {
             resultDigest: imported.resultDigest,
           };
       const data = await request(
-        ["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5"].includes(imported.sceneProjectionVersion)
+        ["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6"].includes(imported.sceneProjectionVersion)
           ? "/api/compositional-source/replay"
           : imported.sceneProjectionVersion === "anatomical-source/1"
           ? "/api/anatomical-source/replay"
@@ -1136,7 +1138,7 @@ function Workbench() {
               <Paper withBorder p="md" className="structural-preview">
                 <Group justify="space-between">
                   <Title order={4}>Source illustration</Title>
-                  <Badge color="gray">{["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion) ? "Provisional anatomical source" : "Diagnostic geometry"}</Badge>
+                  <Badge color="gray">{["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion) ? "Provisional anatomical source" : "Diagnostic geometry"}</Badge>
                 </Group>
                 {packet && (
                   <Text size="xs" c="dimmed" mt="xs">
@@ -1173,7 +1175,7 @@ function Workbench() {
                   .{" "}
                   {isCompositionalRule(catalogue.ruleVersion)
                     ? "Connected regions and independent optional parts follow copied composition rules. All eleven genomic branches are retained; source consumers and missing physiology are explicit."
-                    : ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion)
+                    : ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion)
                     ? "Inherited head/core, jointed supports, optional modules and owned skin/scales fields; static source, not finished pet art."
                     : [
                     "developmental-covering/1",
@@ -1643,7 +1645,7 @@ function Workbench() {
                   <Group align="end">
                     <Select
                       label="Reference medium"
-                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion)}
+                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion)}
                       data={["ground", "air", "water"]}
                       value={context.medium}
                       onChange={(medium) => {
@@ -1671,7 +1673,7 @@ function Workbench() {
                     </Button>
                     <NumberInput
                       label="Expression seed"
-                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion)}
+                      disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion)}
                       value={expressionSeed}
                       min={0}
                       max={4294967295}
@@ -1681,7 +1683,7 @@ function Workbench() {
                       }}
                     />
                     <Button
-                      disabled={busy || !genome || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3"].includes(catalogue.ruleVersion)}
+                      disabled={busy || !genome || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2", "developmental-compositional-source/3", "developmental-compositional-source/4"].includes(catalogue.ruleVersion)}
                       variant="light"
                       onClick={() => run(() => resolve(Number(expressionSeed)))}
                     >

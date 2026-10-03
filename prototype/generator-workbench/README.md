@@ -13,11 +13,11 @@ accessories and proportions do not satisfy genome-derived organization.
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v3** package, then uses one action to sample a valid genome
+source experiment · v4** package, then uses one action to sample a valid genome
 and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
-not upload it. Current source5 and retained vocabulary source3/4 derive their pet instruction plus a
+not upload it. Current source6 and retained source3/4/5 derive their pet instruction plus a
 short shape, extremity, owner-material and named-colour description through
 `art-prompt-summary/1`. Clause witnesses and unsupported semantic labels stay
 in Advanced inspection. Older unrelated profiles retain their original short
@@ -39,10 +39,10 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ### Compositional Generate and all eleven genomic branches
 
-`genomic-compositional-source-experiment@3` uses separately pinned
-`developmental-compositional-source/3`, `compositional-source/5`,
-`compositional-surface-fields/3` and `compositional-reference/5` rules. Both
-retained version1/2 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+`genomic-compositional-source-experiment@4` uses separately pinned
+`developmental-compositional-source/4`, `compositional-source/6`,
+`compositional-surface-fields/4` and `compositional-reference/6` rules. All
+retained version1/2/3 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
 resolve serial or branched region graphs, depth, bilateral/radial frames,
@@ -77,7 +77,7 @@ Original `compositional-source/1` records also retain their exact builder and
 the visible retained mesh for narrow contacts; `/1` used analytic ellipsoid
 roots that could leave a visible gap. Version1 Generate and Resolve retain `/2` and
 `compositional-reference/2`. Retained version2 uses its104-pair foundation and
-`/4` construction/reference. Current version3 requires111 explicit pairs and
+`/4` construction/reference. Retained version3 requires111 explicit pairs and
 `/5` construction/reference; no old input acquires missing copies or changes its
 consumer. Reopening an old record never silently upgrades it.
 
@@ -102,6 +102,16 @@ and complete opaque skin. [Actual source5 evidence](evidence/anatomical-roles/RE
 gives the continuous tail a narrow readability pass; ears remain provisional and
 coat craft remains HOLD because the clusters still read as isolated marks.
 
+Current catalogue4 keeps those exact111 locus definitions and ordered values,
+with a new foundation/baseline and source6/material4/reference6 identity. It
+uses a continuous actual-facet mantle over complete opaque primary tissue,
+shared pinned pigment seams/caps and inherited fibre length/flow. Finite limits
+are672 refined triangles and1344 clipped polygons per owner,4704/9408 total.
+Broad ears use the same copied length/root with explicit .90L width, .20L
+recess and mirrored15° head-local yaw. The [current representation contract](../../design/anatomical-source-prototype/compositional-contract.md#continuous-coat-mantle-and-broad-ear-profile)
+owns the equations and limits. Actual source6 craft is pending; oldsource5
+records and authored-parent3 forks remain literal. Parent4 drafts have their own
+storage slot and compile/replay source6 without migrating parent2/3 inputs.
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared
 mixed-copy maps remain valid for editing and inheritance. Generate keeps the
@@ -425,7 +435,7 @@ baseline; inherited copies are the current genome; expression is the last
 resolved output. Keep their summaries and whole-map inspector readily accessible.
 Raw JSON, exact sequences and source records remain available in collapsed
 advanced inspection. The **Gemini prompt** appears beside the structural preview
-with one **Copy prompt** action. Current source5 and retained source3/4 use the base
+with one **Copy prompt** action. Current source6 and retained source3/4/5 use the base
 “Turn the attached critter into a cute pet, shown alone in rich high-bit pixel
 art.” followed by an actual-source description, targeting25–45 words without
 truncating major enabled counts or owner materials. The

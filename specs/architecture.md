@@ -142,7 +142,7 @@ remains available. Actual source3/4 fur material craft remains HOLD: the revised
 outlines read as scattered dashes rather than a coherent coat. Catalogue1 and exact source/reference1/2 paths remain
 available; dispatch never upgrades an old input or supplies missing alleles. Coarse low-poly depiction
 communicates volume and occlusion; it does not establish finished pet art,
-biology or motion. Current catalogue3/rule3/source5/material3/reference5 adds
+biology or motion. Retained catalogue3/rule3/source5/material3/reference5 adds
 seven explicit ear/tail contributors. A thin versioned wrapper reuses the old
 primary/head/chain/sheet mathematics, then appends head-facet-rooted concave ears
 and one six-station/eight-ring axial tail. SERIAL's terminal primary or FAN's root
@@ -156,15 +156,23 @@ authored-parent2 recipe paths remain literal; no missing alleles are supplied.
 Hoof/toe anatomy, partial coats, emission, hearing, broader organism range and
 automatic animation remain gaps; the content is not canonical anatomy.
 
+Current catalogue4/baseline4/rule4/source6/material4/reference6 retains the exact111
+locus definitions while replacing only the declared ear and primary-coat
+representation operators. A separate bounded mantle module consumes actual
+facets, original48 root witnesses and pinned local pigment masks; the oldsource5
+cluster renderer stays literal. Broad ear geometry recomputes its true-root
+basal witness. The [current representation contract](../design/anatomical-source-prototype/compositional-contract.md#continuous-coat-mantle-and-broad-ear-profile)
+owns equations/budgets; actual craft remains pending. Shared resolution and
+strict parent4 replay add no missing copies, palette, camera or lighting change.
 The current vocabulary's separate `art-prompt-summary/1` consumer reads actual
-source3/4/5 roles, expressed facts, material owners and pinned pigment names for
+source3/4/5/6 roles, expressed facts, material owners and pinned pigment names for
 the short image-led pet brief. Server and UI derive it independently from the
 verified source; imported wording is untrusted. Clause witnesses and source
 binding stay in Advanced inspection. The
 [brief contract](../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 owns aliases and limits; it changes no input/result/scene identity or anatomy.
 The existing compendium now compiles compatible compositional authoring deltas
-against exact catalogue2 or3, with unique fork/revision identity, new definition pins
+against exact catalogue2,3 or4, with unique fork/revision identity, new definition pins
 and truthful edited-record provenance. Shared resolution consumes the compiled
 definitions; published stock paths retain their exact meaning. Compact recipes
 support restart/import without a server-only registry or larger API body cap.

@@ -8,6 +8,8 @@ import { validateCompositionalDraft, resolveCompositionalDraft, generateComposit
 import { COMPOSITIONAL_DRAFT_SCHEMA } from "./compositional-draft-format.mjs";
 import { anatomicalRolesPackage } from "./anatomical-roles-package.mjs";
 import { resolveAnatomicalRoles, generateAnatomicalRoles, replayAnatomicalRoles } from "./anatomical-roles-adapter.mjs";
+import { coherentCoatPackage } from "./coherent-coat-package.mjs";
+import { resolveCoherentCoat, generateCoherentCoat, replayCoherentCoat } from "./coherent-coat-adapter.mjs";
 import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
@@ -40,6 +42,9 @@ function compositionOperations(input, replay = false) {
   const foundation = replay ? input?.input?.catalogue : input?.catalogue;
   if (foundation?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) {
     return { evaluate: resolveCompositionalDraft, generate: generateCompositionalDraft, replay: replayCompositionalDraft };
+  }
+  if (foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 4) {
+    return { evaluate: resolveCoherentCoat, generate: generateCoherentCoat, replay: replayCoherentCoat };
   }
   if (foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 3) {
     return { evaluate: resolveAnatomicalRoles, generate: generateAnatomicalRoles, replay: replayAnatomicalRoles };
@@ -74,7 +79,7 @@ export function makeServer() {
       if (request.method === "GET" && request.url === "/api/anatomical-source/catalogue")
         return json(200, anatomicalSourcePackage());
       if (request.method === "GET" && request.url === "/api/compositional-source/catalogue")
-        return json(200, { ...anatomicalRolesPackage(), retainedPackages: [compositionalVocabularyPackage(), compositionalSourcePackage()] });
+        return json(200, { ...coherentCoatPackage(), retainedPackages: [anatomicalRolesPackage(), compositionalVocabularyPackage(), compositionalSourcePackage()] });
       if (
         request.method === "GET" &&
         request.url === "/api/authoring/catalogue"
