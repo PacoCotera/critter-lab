@@ -23,6 +23,8 @@ import { COAT_CONTENT, COAT_CATALOGUE, COAT_FOUNDATION, coherentCoatPackage } fr
 import { realizeCoherentCoatMaterials } from "./coherent-coat-material.mjs";
 import { MARKING_CONTENT, MARKING_CATALOGUE, MARKING_FOUNDATION, MARKING_TARGETS, markingFieldPackage } from "./marking-field-package.mjs";
 import { realizeMarkingFieldMaterials } from "./marking-field-material.mjs";
+import { INNATE_CONTENT, INNATE_CATALOGUE, INNATE_FOUNDATION, INNATE_TARGETS, innateProfilePackage } from "./innate-profile-package.mjs";
+import { innateResponseProfile } from "./innate-profile.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
 const plain = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -93,6 +95,13 @@ function consumerGuard(locusId, values) {
 // Only declared internal consumers select a configuration. HTTP input cannot
 // supply operators/functions or change the old stock resolver's defaults.
 function consumerConfiguration(consumer) {
+  if (consumer === "innate-profile") return {
+    catalogue: INNATE_CATALOGUE, foundation: INNATE_FOUNDATION,
+    content: { ...COMPOSITIONAL_CONTENT, baseline: INNATE_CONTENT.baseline, materialProfile: INNATE_CONTENT.materialProfile, ruleVersion: INNATE_CONTENT.ruleVersion },
+    structural: new Set([...structuralIds, ...ROLES_CONTENT.loci.map((locus) => locus.id), ...Object.keys(MARKING_TARGETS)]),
+    package: innateProfilePackage, profile: INNATE_CONTENT.constructionProfile,
+    packetSchema: "compositional-authoring-record/6", authoredSchema: "compositional-authored-record/5"
+  };
   if (consumer === "marking-field") return {
     catalogue: MARKING_CATALOGUE, foundation: MARKING_FOUNDATION,
     content: { ...COMPOSITIONAL_CONTENT, baseline: MARKING_CONTENT.baseline, materialProfile: MARKING_CONTENT.materialProfile, ruleVersion: MARKING_CONTENT.ruleVersion },
@@ -131,7 +140,8 @@ function roleGuard(locusId, values) {
 function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null, consumer = "vocabulary") {
   try {
     const configuration = consumerConfiguration(consumer), content = configuration.content;
-    const marking = consumer === "marking-field";
+    const innate = consumer === "innate-profile";
+    const marking = consumer === "marking-field" || innate;
     const roles = consumer !== "vocabulary", coat = consumer === "coherent-coat", activeStructuralIds = configuration.structural;
     if (!(roles ? [configuration.profile] : [VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE]).includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
@@ -160,7 +170,8 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       let resolved;
       if (locus.operator === "copy-mean") {
         resolved = (contributions[0] + contributions[1]) / 2;
-        if (!activeStructuralIds.has(locus.id) || marking && Object.hasOwn(MARKING_TARGETS, locus.id)) resolved = Math.round(resolved * 1e6) / 1e6;
+        if ((!activeStructuralIds.has(locus.id) || marking && Object.hasOwn(MARKING_TARGETS, locus.id)) &&
+            !(innate && Object.hasOwn(INNATE_TARGETS, locus.id))) resolved = Math.round(resolved * 1e6) / 1e6;
       } else if (locus.operator === "dominant-enable") resolved = contributions.some(Boolean);
       else if (locus.operator === "recessive-enable") resolved = contributions.every(Boolean);
       else {
@@ -170,12 +181,13 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       }
       if (typeof resolved === "number" && !Number.isFinite(resolved)) throw new Error("Non-finite resolved contribution");
       const imported = ANATOMICAL_CONTENT.importedLoci.find((reference2) => reference2.id === locus.id);
-      const structural = activeStructuralIds.has(locus.id), target = marking && Object.hasOwn(MARKING_TARGETS, locus.id)
+      const dataConsumer = innate && Object.hasOwn(INNATE_TARGETS, locus.id);
+      const structural = activeStructuralIds.has(locus.id), target = dataConsumer ? INNATE_TARGETS[locus.id] : marking && Object.hasOwn(MARKING_TARGETS, locus.id)
         ? MARKING_TARGETS[locus.id] : structural ? imported?.target ?? locus.target : `broader.${locus.outputs[0]}`;
       values[target] = resolved;
       facts.push({ id: target, locusId: locus.id, recordVersion: locus.version, copies: [...copies], sources: [
         locus.id
-      ], operator: locus.operator, target, value: resolved, unit: locus.units ?? locus.bounds?.unit ?? "", copyResolution: "resolved", state: structural ? "expressed" : "unimplemented", prerequisites: locus.requires ?? [], sourceReferences, reasons: [`Exact retained ${locus.operator} copy contribution.`, ...!structural ? ["This old consumer's geometry, motion or physiology is not implemented by the compositional source; the value is retained, not asserted as a phenotype."] : []] });
+      ], operator: locus.operator, target, value: resolved, unit: locus.units ?? locus.bounds?.unit ?? "", copyResolution: "resolved", state: structural || dataConsumer ? "expressed" : "unimplemented", prerequisites: locus.requires ?? [], sourceReferences, reasons: [`Exact retained ${locus.operator} copy contribution.`, ...!structural && !dataConsumer ? ["This old consumer's geometry, motion or physiology is not implemented by the compositional source; the value is retained, not asserted as a phenotype."] : []] });
     }
     for (const fact of facts.filter((fact2) => activeStructuralIds.has(fact2.locusId))) {
       const [active, reason] = marking && Object.hasOwn(MARKING_TARGETS, fact.locusId)
@@ -189,10 +201,14 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
         fact.reasons.push("In this profile, inherited lift seeds the head direction; actual parent/head facet extents determine final center separation.");
       }
     }
+    // Keep the visual consumer's inputs literal: Cognition never enters its
+    // construction, material traces, camera or reference depiction.
+    const sourceFacts = innate ? facts.filter((fact) => !Object.hasOwn(INNATE_TARGETS, fact.locusId)) : facts;
+    const sourceValues = innate ? Object.fromEntries(Object.entries(values).filter(([target]) => !Object.values(INNATE_TARGETS).includes(target))) : values;
     const scene = (marking ? realizeMarkingFieldMaterials : coat ? realizeCoherentCoatMaterials : roles ? realizeAnatomicalRoleMaterials : realizeVocabularyMaterials)(
-      realizePigmentFields(roles ? constructAnatomicalRoles(values, facts, profileVersion) : constructCompositionalVocabulary(values, facts, profileVersion)),
-      values,
-      facts
+      realizePigmentFields(roles ? constructAnatomicalRoles(sourceValues, sourceFacts, profileVersion) : constructCompositionalVocabulary(sourceValues, sourceFacts, profileVersion)),
+      sourceValues,
+      sourceFacts
     );
     const reference = roles ? anatomicalRolesReference(scene, profileVersion) : profileVersion === FUR_DEPICTION_PROFILE ? vocabularyFurReference(scene) : vocabularySourceReference(scene);
     for (const fact of facts.filter((entry) => activeStructuralIds.has(entry.locusId))) {
@@ -204,12 +220,24 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
           ? scene.covering.markings.owners.map((owner) => `${owner.owner}:primary-marking-field`) : [])
       ];
     }
+    let innateProfile;
+    if (innate) {
+      for (const fact of facts.filter((entry) => Object.hasOwn(INNATE_TARGETS, entry.locusId))) {
+        const gate = fact.locusId === "cognition.innate-profile-presence";
+        if (!gate && !values["innate.enabled"]) {
+          fact.state = "inactive";
+          fact.reasons.push("Carried and resolved; inactive because the optional innate profile is OFF.");
+        }
+        fact.consumers = gate || values["innate.enabled"] ? ["innate-response-profile/1"] : [];
+      }
+      innateProfile = innateResponseProfile(values, facts);
+    }
     const coverage = catalogue.families.map((family) => {
       const loci = catalogue.loci.filter((locus) => canonicalFamily(locus.family) === family.id || (locus.affectedFamilies ?? []).map(canonicalFamily).includes(family.id));
       const selected = facts.filter((fact) => loci.some((locus) => locus.id === fact.locusId));
       return { id: family.id, locusIds: loci.map((locus) => locus.id), activeContributors: selected.filter((f) => f.state === "expressed").map((f) => f.locusId), inactiveContributors: selected.filter((f) => f.state === "inactive").map((f) => f.locusId), unimplementedContributors: selected.filter((f) => f.state === "unimplemented").map((f) => f.locusId), draftRecords: loci.filter((l) => l.status === "draft").map((l) => l.id), state: loci.length ? "indexed" : "unimplemented", gaps: family.gaps ?? "No complete physiology or lifetime model; only explicitly indexed compatible source consumers are active." };
     });
-    const result = { status: "resolved", profileVersion, values, facts, coverage, graph: { profileVersion, nodes: scene.nodes.map(({ mesh, surfaceFragments, ...node }) => node), edges: scene.edges, covering: scene.covering }, classification: {
+    const result = { status: "resolved", profileVersion, values, facts, coverage, ...(innate ? { innateProfile } : {}), graph: { profileVersion, nodes: scene.nodes.map(({ mesh, surfaceFragments, ...node }) => node), edges: scene.edges, covering: scene.covering, ...(innate ? { innateProfile } : {}) }, classification: {
       labels: ["provisional compositional source", scene.conventions.wholeAssemblySymmetry]
     }, motion: [] };
     const retainedInput = structuredClone({ catalogue, genome, context, expressionSeed: null }), inputDigest = digest(
@@ -238,7 +266,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
         foundation: { state: "present", reference: foundation },
         inherited: { state: "present", carriedPairs: modeled.length, draftDefinitions: catalogue.loci.length - modeled.length },
         expression: { state: "present", context },
-        phenotype: { state: "present", profileVersion, sourceDigest: sceneDigest },
+        phenotype: { state: "present", profileVersion, sourceDigest: sceneDigest, ...(innate ? { dataProfile: "innate-response-profile/1", wholeExpressionDigest: resultDigest } : {}) },
         lifetime: { state: "unmodeled", reason: "No lifetime, learning, history or regulation consumer is supplied." }
       },
       representations: { baseline: JSON.stringify({ baseline: catalogue.baseline, sourceDefinitions: catalogue.sourceDefinitions }, null, 2), inherited: JSON.stringify(modeled.map((locus) => ({ locusId: locus.id, recordVersion: locus.version, copies: genome.loci[locus.id] })), null, 2), expression: JSON.stringify(facts, null, 2) },

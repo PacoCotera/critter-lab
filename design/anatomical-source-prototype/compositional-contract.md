@@ -6,10 +6,12 @@ The retained coat/ear foundation uses `genomic-compositional-source-experiment@4
 
 ## Primary owner-local markings
 
-The current default is catalogue5/baseline5/rule5/source7/material5/reference7,
-with `compositional-authoring-record/5` and strict authored-parent5
-`compositional-authored-record/4`. It retains every111 definition and ordered
-copy from catalogue4, adding no locus, allele, anatomy or base pigment.
+The current default catalogue6 adds the [optional innate profile](#optional-innate-profile)
+while reusing this visual consumer unchanged. The retained marking foundation
+is catalogue5/baseline5/rule5/source7/material5/reference7,
+`compositional-authoring-record/5` and authored-parent5 `compositional-authored-record/4`.
+It retains every111 definition and ordered copy from catalogue4, adding no locus,
+allele, anatomy or base pigment.
 Baseline5 appends `primary-local-marking-field/1`. Catalogue4/source6 and all
 earlier saved recipes remain literal; new parent5 inputs are explicit and have
 a separate draft slot. This closes six carried Appearance consumers, not the
@@ -127,7 +129,7 @@ Every record has separate copy-resolution and consumer states. Its exact operato
 | Appearance | Actual pigments/local masks and skin/scales; older markings/optical contributions retain missing-consumer reasons. |
 | Mechanics and movement | Existing copies/raw contributions retained; new trajectory, collision and performance consumers unimplemented. |
 | Sensing and signaling | Optional exterior ocular geometry; sensory/signaling performance unimplemented. |
-| Cognition and innate tendencies | No supplied executable cognition locus contract; explicit gap rather than invented values. |
+| Cognition and innate tendencies | Three provisional copied rows supply an optional static inherited profile; learning, habits, memories, sensing and live behavior remain unmodeled. |
 | Energy and nutrition | Existing capacity/cost contributions retained; new-anatomy physiology unimplemented; recovery/uptake/rest drafts remain drafts. |
 | Maintenance and protection | No supplied executable locus contract; explicit unimplemented domain. |
 | Affinities and exposure response | No supplied executable locus contract; explicit unimplemented domain. |
@@ -157,20 +159,22 @@ The considered source-art contract accepts the six vocabulary operators above al
 
 The immediate deliverable is the usable Generate platform drawing actual revised graph organization, retaining complete copies and its strict replay versions while old inputs reopen through their original versions. Full audit remains outside the creative prompt. Actual source evidence must establish changed organization; a declared contract is not that evidence. This finite compositional slice does not establish complete loci for every branch, accepted pet art, animation, physics or biological performance. Compatible catalogue authoring below changes actual supported copy contributions; it does not add missing operators, consumer domains or physiology.
 
-## Next authoring block: proposed innate profile
+<a id="next-authoring-block-proposed-innate-profile"></a>
 
-This block is specified for the currently empty Cognition/innate-tendencies
-branch; it is **not implemented or approved canonical biology**. Exploration
+## Optional innate profile
+
+This provisional host block partially models the Cognition/innate-tendencies
+branch; it is **not approved canonical biology**. Exploration
 tendency and arousal threshold are candidate dimensions in the genomic
 framework. The following IDs, alleles and values are new provisional contracts.
 
-| Proposed locus → target | Two-copy rule | Guard and meaning |
+| Provisional locus → target | Two-copy rule | Guard and meaning |
 | --- | --- | --- |
 | cognition.innate-profile-presence → innate.enabled | off=false/on=true, dominant-enable | Optional data-profile gate, independent of head/eyes/body symmetry; false is not biological absence of cognition. |
 | cognition.exploration-tendency → innate.explorationClass | reserved/reserved=reserved; reserved/seeking=intermediate; seeking/seeking=seeking | Requires enabled profile; inherited tendency class, not a granted action or intelligence score. |
 | cognition.arousal-threshold → innate.arousalThreshold | low=.25/high=.75, copy-mean; bounds[.25,.75] | Requires enabled profile; dimensionless magnitude in fictional decoded-reference-cue/1, not physical stimulus units or a sensory grant. |
 
-The proposed pure innate-response-profile/1 consumer retains all three
+The pure innate-response-profile/1 consumer retains all three
 copy/fact witnesses and a static typed threshold boundary. OFF retains the
 other two resolved values inactive and supplies no response profile. An optional
 already-decoded reference cue is a nonheritable authoring observation: q below
@@ -178,23 +182,31 @@ the threshold is below-boundary, otherwise boundary-reached. Invalid observation
 data does not reject or repair a genome. This supplies no live behavior,
 learning, acquired state, physiology or visual personality.
 
-Implementation must add exactly these three rows under a new explicit pin
-(114 complete pairs), preserving all old111-pair inputs and replay paths. The
-source image and short art brief retain their current semantic content. The
-bounded delivery gate is an actual authored ON/profile edit/OFF/reopen journey
-with copies, profile fields and causes together. This would partially model one
-empty branch; the other four branches, broad body-plan range and other missing
-consumers remain unresolved.
+Catalogue6/baseline6/rule6 appends exactly these three rows under a new pin
+(114 complete pairs plus six drafts), preserving old111-pair inputs and replay
+paths. Full input/result digests include the static profile; sceneDigest remains
+source-only. Stock packet6 and authored-record5 reuse source7/material5/reference7
+literally, with no visual personality or changed short art semantics. A compact
+static panel and selected-locus data causes expose the profile; no cue observation
+control is supplied. The typed boundary applies to an already decoded q in[0,1]:
+q<threshold is below-boundary, otherwise boundary-reached. It is not a live
+response or a universal sensory scale.
+
+Starting copies are explicitly off/off, reserved/reserved and low/high. Generate
+uses the retained founder policy, not that starting template. The bounded
+acceptance gate remains actual ON/profile edit/OFF/save/reopen with copies and
+causes; source implementation does not establish that UI evidence. Four other
+branches, broad body-plan range and other missing consumers remain unresolved.
 
 ## Compatible authored foundations
 
-The compendium supports a separate `compositional-authoring-delta/1` fork against the exact published catalogue2,3,4 or5 pin. Parent2 reconstructs104 pairs; parent3/4/5 reconstruct111, all with six unsupported drafts and the eleven-family index. Its explicit fork identity and increasing local revision name a `genomic-compositional-source-draft-<forkId>` catalogue; a `compositional-authored-foundation/1` pin binds the compiled definition. Catalogue1/2/3 and source1–5 saved recipes remain exact; no stock recipe silently selects a draft and no fork silently changes parent.
+The compendium supports a separate `compositional-authoring-delta/1` fork against the exact published catalogue2,3,4,5 or6 pin. Parent2 reconstructs104 pairs; parent3/4/5 reconstruct111 and parent6 reconstructs114, all with six unsupported drafts and the eleven-family index. Its explicit fork identity and increasing local revision name a `genomic-compositional-source-draft-<forkId>` catalogue; a `compositional-authored-foundation/1` pin binds the compiled definition. Catalogue1/2/3 and source1–5 saved recipes remain exact; no stock recipe silently selects a draft and no fork silently changes parent.
 
 Edit record labels/aliases/purpose, supported numeric contributions and complete existing pair maps. IDs, allele IDs/order, copy count, target/operator/units, families, guards/applicability/dependencies/status and runtime budgets remain immutable. Numeric edits use the original record bounds, or original finite-allele minimum/maximum where no bounds are supplied; every homozygous and mixed outcome must remain valid. Cross exponents must be pair-closed in2/3/4, with no snapping. Categorical outputs stay within the original consumer enum and booleans remain booleans. Ten body/six secondary pigment values and partition maps remain exact; their metadata names can change. Six draft definitions cannot gain a copy/phenotype consumer by changing status. Edited records receive higher versions, exact definition digests and source-recipe provenance with their original references retained as ancestry.
 
-Baseline runtime operator references, geometry/material equations and budgets stay fixed to the exact parent. The editable baseline contains only label/description metadata and a complete parent-sized starting-copy dictionary. Validate/save keeps separate parent2/3/4/5 browser draft slots without changing the active experiment or replacing legacy catalogue storage. Use draft explicitly selects its compiled definitions while retaining current copies, updating their content/version references and clearing stale output. Load active draft starting copies is a separate deliberate action feeding Resolve. Generate samples the compiled edited alleles/maps under the unchanged founder policy and first-eligible ceiling; it never treats the starting genome as a fixed creature template or repairs invalid copies.
+Baseline runtime operator references, geometry/material equations and budgets stay fixed to the exact parent. The editable baseline contains only label/description metadata and a complete parent-sized starting-copy dictionary. Validate/save keeps separate parent2/3/4/5/6 browser draft slots without changing the active experiment or replacing legacy catalogue storage. Use draft explicitly selects its compiled definitions while retaining current copies, updating their content/version references and clearing stale output. Load active draft starting copies is a separate deliberate action feeding Resolve. Generate samples the compiled edited alleles/maps under the unchanged founder policy and first-eligible ceiling; it never treats the starting genome as a fixed creature template or repairs invalid copies.
 
-The compact recipe retains its exact parent, edited definitions, baseline metadata, starting copies and new pin. Compile/evaluate/generate/replay reconstruct it deterministically after restart; no ephemeral server registry is required. Authored parent2 uses exact `compositional-authored-record/1` source4/material2/reference4; parent3 uses `compositional-authored-record/2` source5/material3/reference5; parent4 uses `compositional-authored-record/3` source6/material4/reference6; parent5 uses `compositional-authored-record/4` source7/material5/reference7. Crossed parent/schema/profile combinations reject. The definition pin hashes the compiled catalogue before derived `foundationPin` and `authoredRecipe` are attached; the catalogue includes the exact recipe digest. Full retained-catalogue/tree hashes cover derived fields separately. API, export and replay keep64KiB, with explicit errors when recipe plus genome exceeds it. Imported outputs/prompts are recomputed. This finite editor is not unrestricted content authoring or full eleven-layer implementation.
+The compact recipe retains its exact parent, edited definitions, baseline metadata, starting copies and new pin. Compile/evaluate/generate/replay reconstruct it deterministically after restart; no ephemeral server registry is required. Authored parent2 uses exact `compositional-authored-record/1` source4/material2/reference4; parent3 uses `compositional-authored-record/2` source5/material3/reference5; parent4 uses `compositional-authored-record/3` source6/material4/reference6; parent5 uses `compositional-authored-record/4` source7/material5/reference7; parent6 uses `compositional-authored-record/5` with the same visual consumer plus innate-response-profile/1. Crossed parent/schema/profile combinations reject. The definition pin hashes the compiled catalogue before derived `foundationPin` and `authoredRecipe` are attached; the catalogue includes the exact recipe digest. Full retained-catalogue/tree hashes cover derived fields separately. API, export and replay keep64KiB, with explicit errors when recipe plus genome exceeds it. Imported outputs/prompts are recomputed. This finite editor is not unrestricted content authoring or full eleven-layer implementation.
 
 ## Source-derived pet brief
 

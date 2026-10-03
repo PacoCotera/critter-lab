@@ -13,7 +13,7 @@ accessories and proportions do not satisfy genome-derived organization.
 Three independently replayable packages remain available: the diagnostic catalogue has **48 records: 42 executable and six drafts**; the continuous-static catalogue has **58 records: 50 executable and eight drafts**; the pet-material catalogue has **62 records: 54 executable and eight drafts**. The pet profile adds leading-region and ocular proportions plus actual rooted fur/feather construction. Its growth/deformation records remain drafts. All eleven dimension families remain inspectable, with unmodeled families shown as gaps. `validated` denotes schema-executable content; every record remains `provisional-host-proof`, not approved creature biology.
 
 The initial **Generate creature** workspace uses the separate **Compositional
-source experiment · v5** package, then uses one action to sample a valid genome
+source experiment · v6** package, then uses one action to sample a valid genome
 and constructed source scene. Its retained source illustration and short
 copyable image-led Gemini instruction appear together before the initially
 collapsed genome editor. Attach the shown image separately; the workbench does
@@ -45,9 +45,29 @@ move to HTTPS: export/import exact source/draft recipes with the existing UI,
 and keep returned bitmap/linked metadata exports separately. No automatic pet
 image import or saved-world migration is supplied.
 
+### Optional innate profile
+
+The default catalogue6/baseline6/rule6 appends three provisional Cognition rows
+to the exact111-pair marking foundation: optional profile presence, exploration
+tendency and a reference cue threshold. Packet6/authored-record5 retain114 pairs
+and six drafts; source7/material5/reference7 geometry and the short art semantics
+are unchanged. Select the Cognition branch to edit definitions or ordered copies,
+then Resolve. A compact static panel shows the enabled class, exact threshold
+and typed `decoded-reference-cue/1` boundary. OFF retains the other two resolved
+facts inactive, not zero cognition or biological absence. No cue observation,
+intelligence, sensory grant, live behavior, learning or lifetime model is supplied.
+
+Parent6 authoring uses its own draft slot and the existing compatible compiler,
+compact64KiB request/export/replay and explicit starting-copy action. Generate
+samples the current definitions; it never adopts the starting template. The
+[innate contract](../../design/anatomical-source-prototype/compositional-contract.md#optional-innate-profile)
+defines the provisional classes/units and remaining four empty branches. Source
+readiness is separate from actual ON/edit/OFF/save/reopen acceptance. All old
+catalogues, copied inputs and original packet identities remain selectable.
+
 ### Primary markings
 
-The default catalogue5/source7/material5/reference7 consumes the six already
+Retained catalogue5/source7/material5/reference7 consumes the six already
 carried marking records on primary regions only. Author the recessive switch
 and exact bands/patches/mixed, count, scale, orientation and contrast copies;
 Generate/Resolve produces traced owner-local paint fields and a factual
@@ -87,10 +107,10 @@ inherited-fidelity claim, gene change, automatic provider call or animation.
 
 ### Compositional Generate and all eleven genomic branches
 
-`genomic-compositional-source-experiment@5` uses separately pinned
-`developmental-compositional-source/5`, `compositional-source/7`,
+`genomic-compositional-source-experiment@6` uses separately pinned
+`developmental-compositional-source/6`, `compositional-source/7`,
 `compositional-surface-fields/5` and `compositional-reference/7` rules. All
-retained version1/2/3/4 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
+retained version1/2/3/4/5 packages remain selectable with their original rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
 resolve serial or branched region graphs, depth, bilateral/radial frames,
@@ -98,7 +118,7 @@ unequal growth, bend, broad/narrow joins, optional head/face modules, distinct
 free/contact chains and independently rooted thin surfaces. Zero chains and
 headless bodies are legitimate. A class name never selects an assembly.
 
-The current foundation carries **111 ordered locus pairs**: the retained
+The current foundation carries **114 ordered locus pairs**: three provisional Cognition rows plus the retained
 98-pair union plus six region-shape/terminal/fur and seven ear/tail contributors. The
 original union combines the broader 50 and structural 50 records, sharing
 the two exact pigment definitions once. Six draft definitions remain visible
@@ -106,8 +126,8 @@ without invented allele copies. All eleven genomic branches appear in the
 current authoring record, including branches whose locus/capability contracts
 are still missing. Each record retains its exact source/version, contributions
 and expressed, inactive or unimplemented consumer status. Sixty-three potential construction
-contributors are not the whole project genome, and111 carried vectors do not
-mean111 implemented phenotype features. Unimplemented movement, physiology or
+contributors are not the whole project genome, and114 carried vectors do not
+mean114 implemented phenotype features. Unimplemented movement, physiology or
 other branches are not assigned zero capability or inferred from appearance.
 
 The separate five-stage record inspector preserves foundation, inherited,
@@ -523,7 +543,7 @@ The [actual authoring evidence](evidence/compositional-authoring/README.md)
 retains this definition edit, its changed source, one ordinary Generate draw,
 exact prompt and page-reload/import recovery.
 
-Baseline label/description metadata and the exact parent's104 or111 starting pairs can be
+Baseline label/description metadata and the exact parent's104,111 or114 starting pairs can be
 saved separately. **Load active draft starting copies** deliberately replaces
 the experiment's copies for Resolve; Generate never inherits that template.
 Runtime operator references, IDs/allele order, targets, families, guards,
@@ -532,10 +552,10 @@ Each mixed pair must remain inside the original domain; cross exponent values
 must be pair-closed in2/3/4. Unsupported records remain unsupported.
 
 Export/import/restore retains `compositional-authoring-delta/1` plus its compiled
-definition pin. The full parent-specific104 or111 pair union plus six drafts and edited-source provenance are rebuilt
+definition pin. The full parent-specific104,111 or114 pair union plus six drafts and edited-source provenance are rebuilt
 against the exact published parent, so a restart needs no temporary registry.
 Requests/replay use the compact recipe; recipe plus genome must fit64KiB or fail
-explicitly. Parent2/3 drafts use separate local-storage slots, preserving both
+explicitly. Parent2/3/4/5/6 drafts use separate local-storage slots, preserving both
 earlier compositional and saved legacy catalogue drafts. The eight creature-record
 slots are unchanged. Published catalogue1/2 and exact source1–4 recipes remain
 selectable/replayable; parent3 never supplies missing copies to those recipes.
@@ -626,6 +646,7 @@ The experiment inspector includes both a [coherent static family experiment](evi
 | `authoring-identity.mjs`                           | Separate inherited/expression full digests and short lookup references; not reversible genome payloads |
 | `art-prompt-summary.mjs`                           | Pure source3/4/5 pet wording from constructed roles, active facts and pinned pigment labels; separate clause/source audit |
 | `anatomical-roles-{package,construction,presentation,adapter}.mjs` | Separately pinned111-pair source5: finite concave ears, graph-owned tail and bounded primary coat; strict old-version preservation |
+| `innate-profile-{package,adapter}.mjs`, `innate-profile.mjs` | Separately pinned114-pair static Cognition consumer, stock/authored replay and retained OFF witnesses; source7 unchanged |
 | `genome-tree.mjs` / `genome-codec.mjs`              | Lossless layered packet mapping, exact ordered allele packing and bounded versioned string encode/decode |
 | `presentation.mjs`                                 | Diagnostic graph and fingerprint renderers; never reinterprets allele rules                                                              |
 | `geometry-reference.mjs`                           | Exact XY bounds/roots/masks for supported graphs; explicit static diagnostic profile                                                     |
