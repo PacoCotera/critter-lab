@@ -26,6 +26,14 @@ The images above were captured before the owner's latest concise semantic-descri
 
 > Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.
 
-The latest direction adds a short description derived from actual expressed shape, extremity count/form, owned skin/covering and pigment fields. The separate audit supplies clause witnesses; future generic projections/regions are not automatically ears/tails and palette halves are not ring markings. Current prompt-output evidence follows separately, without rewriting these original screenshots.
+The latest direction adds a short description derived from actual expressed shape, extremity count/form, owned skin/covering and pigment fields. Generic projections/regions are not automatically ears/tails and palette halves are not ring markings. The description change is implemented in `cef68b9e16fc740a8b52bfd6d8d081b408b1034b`, independently reviewed, normally built with the installed Vite runtime and activated after unchanged [CI37109792276](https://github.com/PacoCotera/critter-lab/actions/runs/37109792276) passed. Original screenshots remain literal.
+
+## Actual source-derived pet brief
+
+The current4 record was reopened through the UI with the exact same ID `compositional-4247afaaa32148297977`. The displayed SVG remained byte-for-byte unchanged. **Copy prompt** returned the exact visible text:
+
+> Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art. A headless creature with one softly squared, barrel-shaped body region and four jointed legs with wedge-shaped ends. Its body has russet-and-jade fur; its smooth appendages have slate-and-peach local colour fields.
+
+[Actual prompt](authored-current.prompt.txt), [source audit](authored-current.prompt-audit.json), [copy/source proof](authored-current.prompt-proof.json) and [actual workbench screenshot](authored-current-brief-workbench.png) retain this handoff. The audit binds `art-prompt-summary/1` to the same source ID/digest and records clause-to-node/locus/fact witnesses separately. It reads complete constructed chain roots rather than counting links as separate limbs. Body fur is expressed even though the source material craft remains HOLD. No new genome, shape, palette, material field or provider operation is introduced by this wording consumer; a brief failure cannot reject an otherwise valid source or alter Generate selection.
 
 No Gemini output is claimed for these inputs. Head shapes, limb subdivisions, paws/hoof clefts, partial coats, broader organism range, complete eleven-layer physiology, integrated whole-genome sharing and animation remain unfinished. This evidence does not establish bear/cat/cow/firefly coverage. The [current contract](../../../../design/anatomical-source-prototype/compositional-contract.md) owns the versioned construction rules.
