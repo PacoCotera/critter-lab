@@ -40,8 +40,41 @@ retained faceted mesh for narrow contact roots. The original `/1` roots used
 smooth ellipsoids, which could leave a gap to the inscribed visible mesh.
 The current constructor keeps the copies, context, body dimensions, centers,
 frames and throat ratio. Old `/1` replay remains exact; current Resolve uses
-the corrected version and computes a distinct scene identity. Actual corrected
-image evidence is the next acceptance gate.
+the corrected version and computes a distinct scene identity.
+
+Current source revision `767570bd450b3851c6e8dab28055248ab9fa209e` was clean,
+pushed and loaded after its normal production build and automatic CI run
+`37104400842` passed.
+
+| Actual /2 action | Retained scene | Input and source |
+| --- | --- | --- |
+| Reopen first /1 record, then Resolve its same inherited input with /2 | `compositional-36867d0448b75dbb3433` | [Recipe](generated-01.current.record.json), [SVG](generated-01.current.svg), [PNG](generated-01.current.png), [workbench](workbench-01.current.png) |
+| Reopen explicitly edited radial /1 record, then Resolve its same edited input with /2 | `compositional-eb67cfdbbcbfce990671` | [Recipe](edited-radial.current.record.json), [SVG](edited-radial.current.svg), [PNG](edited-radial.current.png), [workbench](workbench-radial.current.png) |
+| Ordinary Generate under current /2; seed 3777637263, attempt 1 | `compositional-2a19e52ff43c72664cf2` | [Recipe](generated-03.current.record.json), [SVG](generated-03.current.svg), [PNG](generated-03.current.png), [workbench](workbench-03.current.png) |
+
+Both same-input Resolve actions retained their respective original `inputDigest`
+while computing different source/result identities. The original first record
+reopened through `/1` with verified replay. The current ordinary draw was saved
+and reopened through `/2` with verified replay and the same scene identity;
+[actual reopened view](workbench-current-replayed.png). All eight current/older
+local records remained visible. The [full workbench view](workbench-eleven-branches.png)
+shows the eleven branches and short prompt together.
+
+The artist initially read the corrected thin join as still separated. Direct
+source/pixel inspection established positive-area polygon overlap and continuous
+pigment at both contacts, so that literal separation finding was withdrawn.
+For example, child-to-connector `(378,164)` through `(382,168)` is solid
+`#CF5282`, and root-to-connector `(374,179)` through `(376,181)` is `#BD4B77`.
+The corrected narrow contact is connected. Abrupt, pinched attachment depiction
+remains a source-quality limitation; there is no finished pet-art acceptance.
+
+The edited radial source has four primary regions and no typed head or limb
+chains. It demonstrates explicit authoring, not founder frequency. The current
+ordinary draw has a cobalt body, no typed head, and four two-link free chains
+without feet: `head-module=plain/plain`, `appendage-role=free/free`,
+`appendage-groups=two/two`, `free-link-count=two/two`. It does not have a required
+neck, tail or wings. These concrete differences do not establish the owner's
+bear/cat/cow/firefly range.
 
 ## Eleven genomic layers and remaining work
 
