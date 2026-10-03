@@ -3,6 +3,7 @@
 const SUMMARY_VERSION = "art-prompt-summary/1";
 const PET_INSTRUCTION = "Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.";
 const CURRENT_PROFILES = ["compositional-source/3", "compositional-source/4"];
+import { isCompositionalDraft } from "./compositional-draft-format.mjs";
 
 function counted(count, singular, plural = `${singular}s`) {
   const words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
@@ -40,7 +41,7 @@ export function artPromptSummary(packet) {
       !CURRENT_PROFILES.includes(packet.sceneProjectionVersion) ||
       scene?.status !== "constructed" || scene.profileVersion !== packet.sceneProjectionVersion ||
       scene.covering?.profileVersion !== "compositional-surface-fields/2" ||
-      catalogue?.id !== "genomic-compositional-source-experiment" || catalogue.version !== 2 ||
+      !((catalogue?.id === "genomic-compositional-source-experiment" && catalogue.version === 2) || isCompositionalDraft(catalogue)) ||
       !catalogue.foundationPin || !packet.recordId || !packet.sceneDigest) {
     throw new Error("A resolved vocabulary source3/4 with its pinned foundation is required for the pet summary.");
   }
@@ -63,7 +64,8 @@ export function artPromptSummary(packet) {
   function paletteNames(owner) {
     // The exact retained pigment records supply names for unlit owner fields.
     const definitions = catalogue.loci.filter((locus) =>
-      ["appearance.body-palette", "appearance.underside-palette"].includes(locus.id) && locus.version === 2);
+      ["appearance.body-palette", "appearance.underside-palette"].includes(locus.id) &&
+      (locus.version === 2 || (isCompositionalDraft(catalogue) && Number.isInteger(locus.version) && locus.version > 2)));
     return owner.palette.map((pigment) => {
       const matches = definitions.flatMap((locus) => locus.alleles.filter((allele) => allele.value === pigment)
         .map((allele) => ({ locusId: locus.id, alleleId: allele.id, label: allele.label, value: allele.value })));

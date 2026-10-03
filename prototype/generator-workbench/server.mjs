@@ -4,6 +4,8 @@ import { compositionalSourcePackage } from "./compositional-source-package.mjs";
 import { resolveCompositionalSource, generateCompositionalSource, replayCompositionalSource } from "./compositional-source-adapter.mjs";
 import { compositionalVocabularyPackage } from "./compositional-vocabulary-package.mjs";
 import { resolveCompositionalVocabulary, generateCompositionalVocabulary, replayCompositionalVocabulary } from "./compositional-vocabulary-adapter.mjs";
+import { validateCompositionalDraft, resolveCompositionalDraft, generateCompositionalDraft, replayCompositionalDraft } from "./compositional-draft-adapter.mjs";
+import { COMPOSITIONAL_DRAFT_SCHEMA } from "./compositional-draft-format.mjs";
 import { resolveAnatomicalSource, generateAnatomicalSource, replayAnatomicalSource } from "./anatomical-source-adapter.mjs";
 import { createServer } from "node:http";
 import { readFile, readdir } from "node:fs/promises";
@@ -34,6 +36,9 @@ const files = new Map([
 const maximumBodyBytes = 65536;
 function compositionOperations(input, replay = false) {
   const foundation = replay ? input?.input?.catalogue : input?.catalogue;
+  if (foundation?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) {
+    return { evaluate: resolveCompositionalDraft, generate: generateCompositionalDraft, replay: replayCompositionalDraft };
+  }
   const vocabulary = foundation?.id === "genomic-compositional-source-experiment" && foundation?.version === 2;
   return vocabulary
     ? { evaluate: resolveCompositionalVocabulary, generate: generateCompositionalVocabulary, replay: replayCompositionalVocabulary }
@@ -94,6 +99,7 @@ export function makeServer() {
         "/api/compositional-source/evaluate",
         "/api/compositional-source/generate",
         "/api/compositional-source/replay",
+        "/api/compositional-source/validate",
       ];
       if (request.method === "POST" && operations.includes(request.url)) {
         const chunks = [];
@@ -126,7 +132,10 @@ export function makeServer() {
           result = compositionOperations(input).evaluate(input);
         else if (request.url === "/api/compositional-source/generate")
           result = compositionOperations(input).generate(input);
-        else if (request.url === "/api/compositional-source/replay")
+        else if (request.url === "/api/compositional-source/validate") {
+          result = validateCompositionalDraft(input);
+          return json(result.valid ? 200 : 422, result);
+        } else if (request.url === "/api/compositional-source/replay")
           result = compositionOperations(input, true).replay(input);
         else if (request.url === "/api/anatomical-source/evaluate")
           result = resolveAnatomicalSource(input);

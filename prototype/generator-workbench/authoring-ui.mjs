@@ -1,4 +1,10 @@
 import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summary.mjs";
+import { isCompositionalDraft, COMPOSITIONAL_DRAFT_PACKET } from "./compositional-draft-format.mjs";
+
+export function supportsCompositionalAuthoring(catalogue) {
+  return catalogue?.ruleVersion === "developmental-compositional-source/2" &&
+    ((catalogue.id === "genomic-compositional-source-experiment" && catalogue.version === 2) || isCompositionalDraft(catalogue));
+}
 
 export function canonicalGenomicFamily(id) {
   return ({ Structure: "structure", Appearance: "appearance", "Sensing and signaling": "sensing-signaling" })[id] ?? id;
@@ -10,6 +16,7 @@ export function isCompositionalRule(ruleVersion) {
 // Only this new immutable registry uses a pinned foundation request. Older
 // catalogue payloads and replay records retain their original API semantics.
 export function authoringRequest(input) {
+  if (isCompositionalDraft(input.catalogue)) return { ...input, catalogue: input.catalogue.authoredRecipe };
   if (!isCompositionalRule(input.catalogue?.ruleVersion)) return input;
   return { ...input, catalogue: input.catalogue.foundationPin };
 }
@@ -33,6 +40,7 @@ export function initialAuthoringInputs(data) {
   };
 }
 export function authoringPackageLabel(catalogue) {
+  if (isCompositionalDraft(catalogue)) return "Authored composition · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/2")
     return "Region forms / terminals / coverings · eleven branches";
   if (catalogue.ruleVersion === "developmental-compositional-source/1")
@@ -53,6 +61,7 @@ export function authoringPackageLabel(catalogue) {
 }
 
 export function authoringPackageKey(catalogue) {
+  if (isCompositionalDraft(catalogue)) return `${catalogue.id}@${catalogue.version}:${catalogue.foundationPin.digest}`;
   return `${catalogue.id}@${catalogue.version}`;
 }
 
@@ -155,6 +164,7 @@ export function canPublishAuthoringResponse(
       )) &&
     packet.input?.catalogue?.id === catalogue.id &&
     packet.input?.catalogue?.version === catalogue.version &&
+    (!isCompositionalDraft(catalogue) || packet.input?.catalogue?.foundationPin?.digest === catalogue.foundationPin.digest) &&
     packet.input?.genome?.contentId === catalogue.id &&
     packet.input?.genome?.contentVersion === catalogue.version
   );
@@ -185,9 +195,10 @@ export function isResolvedAuthoringPacket(packet) {
     packet?.result?.status === "resolved" &&
     (!["compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion) || packet.ruleVersion === "developmental-compositional-source/2") &&
     (packet.ruleVersion !== "developmental-compositional-source/2" ||
-      (packet.schemaVersion === "compositional-authoring-record/2" &&
-        packet.input?.catalogue?.id === "genomic-compositional-source-experiment" &&
-        packet.input?.catalogue?.version === 2 &&
+      (((packet.schemaVersion === "compositional-authoring-record/2" &&
+        packet.input?.catalogue?.id === "genomic-compositional-source-experiment" && packet.input?.catalogue?.version === 2) ||
+        (packet.schemaVersion === COMPOSITIONAL_DRAFT_PACKET && isCompositionalDraft(packet.input?.catalogue) &&
+         packet.sceneProjectionVersion === "compositional-source/4")) &&
         ["compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion) &&
         packet.materialProfileVersion === "compositional-surface-fields/2" &&
         packet.scene?.status === "constructed" &&
@@ -278,8 +289,8 @@ export function authoringRoute(catalogue, operation) {
 }
 
 export function sceneReplayEnvelope(packet) {
-  if (["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion))
-    return {
+  if (["compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4"].includes(packet.sceneProjectionVersion)) {
+    const envelope = {
       schemaVersion: packet.schemaVersion,
       sceneProjectionVersion: packet.sceneProjectionVersion,
       materialProfileVersion: packet.materialProfileVersion,
@@ -289,6 +300,12 @@ export function sceneReplayEnvelope(packet) {
       resultDigest: packet.resultDigest,
       sceneDigest: packet.sceneDigest,
     };
+    if (envelope.input.catalogue?.schemaVersion === "compositional-authoring-delta/1" &&
+        new TextEncoder().encode(JSON.stringify(envelope)).length > 65536) {
+      throw new Error("Authored replay recipe plus genome exceeds64KiB. Reduce the edited-definition payload before retaining it.");
+    }
+    return envelope;
+  }
   if (packet.sceneProjectionVersion === "anatomical-source/1")
     return {
       schemaVersion: packet.schemaVersion,

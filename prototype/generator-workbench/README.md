@@ -430,9 +430,42 @@ while its valid source and verified image remain available for display/download.
 Wording failure never rejects a constructed source or changes candidate selection.
 This panel makes no provider call. Summary version, sourceRecordId, sceneDigest
 and clause witnesses are outside the copied text. The wording consumer changes
-no input, result, scene or replay identity. Whole-catalogue draft editing remains
-unsupported for compositional packages; individual allele edits are not complete
-content authoring.
+no input, result, scene or replay identity. Compatible compositional definition
+drafts are now supported as separate authored foundations; new loci, operators,
+arbitrary palettes and physiology remain outside this editor.
+
+### Author a compatible compositional draft
+
+Choose the current compositional package and open Locus compendium. Edit a
+record's metadata, bounded numeric allele contribution or complete existing
+pair map in the record JSON, then **Validate & save record to draft**. The editor
+bumps the record version and stores a separately pinned authored revision;
+the current experiment remains unchanged. **Use draft in experiment** explicitly
+selects those compiled definitions while keeping the current inherited copies.
+Resolve consumes the edited contributions; Generate samples the draft's allele
+definitions under the same founder policy. No stock catalogue is rewritten.
+
+For example, `growth.region-taper` gentle .85→.70 stays within its original
+[.45,.85] domain. At depthtwo its changed mean scales actual child geometry;
+strong/gentle resolves .575. At depthone the carried value remains inactive.
+These are contract examples; actual UI evidence is a separate integration gate.
+
+Baseline label/description metadata and all104 explicit starting pairs can be
+saved separately. **Load active draft starting copies** deliberately replaces
+the experiment's copies for Resolve; Generate never inherits that template.
+Runtime operator references, IDs/allele order, targets, families, guards,
+statuses, budgets and the existing10/6 pigment values/maps remain fixed.
+Each mixed pair must remain inside the original domain; cross exponent values
+must be pair-closed in2/3/4. Unsupported records remain unsupported.
+
+Export/import/restore retains `compositional-authoring-delta/1` plus its compiled
+definition pin. The full104+6 foundation and edited-source provenance are rebuilt
+against the exact published parent, so a restart needs no temporary registry.
+Requests/replay use the compact recipe; recipe plus genome must fit64KiB or fail
+explicitly. Compositional drafts use their own local-storage slot, preserving
+saved legacy catalogue drafts. The eight creature-record slots are unchanged.
+Published catalogue1/2 and exact source1–4 recipes remain selectable/replayable.
+See the [authoring contract](../../design/anatomical-source-prototype/compositional-contract.md#compatible-authored-foundations).
 Failed import or save also preserves the unchanged verified current result;
 unverified imported outputs never replace it. A changed input has no current
 result to restore.

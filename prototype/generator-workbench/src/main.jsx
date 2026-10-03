@@ -64,15 +64,24 @@ import {
   authoringRequest,
   canonicalGenomicFamily,
   isCompositionalRule,
+  supportsCompositionalAuthoring,
 } from "../authoring-ui.mjs";
+import { COMPOSITIONAL_DRAFT_SCHEMA, isCompositionalDraft, compositionalDraftRecipe } from "../compositional-draft-format.mjs";
 
 const clone = (value) => structuredClone(value);
 const pretty = (value) => JSON.stringify(value, null, 2);
 const familyLabel = (id) => id.replaceAll("-", " ");
 const storageKey = "critter-authoring-records-v1";
 const draftKey = "critter-authoring-draft-v1";
+const compositionalDraftKey = "critter-compositional-authoring-draft-v1";
 
 async function request(path, input) {
+  const payload = input === undefined ? undefined : authoringRequest(input);
+  const body = payload === undefined ? undefined : JSON.stringify(payload);
+  if (body && (payload.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload.input?.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) &&
+      new TextEncoder().encode(body).length > 65536) {
+    throw new Error("The authored request, including recipe and genome, exceeds64KiB. Reduce the edited-definition payload; the API limit remains unchanged.");
+  }
   const response = await fetch(
     path,
     input === undefined
@@ -80,7 +89,7 @@ async function request(path, input) {
       : {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(authoringRequest(input)),
+          body,
         },
   );
   const data = await response.json();
@@ -134,6 +143,8 @@ function Workbench() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("development.axial-repeat");
   const [edited, setEdited] = useState("");
+  const [startingCopiesText, setStartingCopiesText] = useState("{}");
+  const [baselineMetadataText, setBaselineMetadataText] = useState("{}");
   const [seed, setSeed] = useState(1);
   const [expressionSeed, setExpressionSeed] = useState(7);
   const [message, setMessage] = useState("Loading pinned content…");
@@ -159,6 +170,8 @@ function Workbench() {
         const initial = initialAuthoringInputs(data);
         setCatalogue(initial.catalogue);
         setDraft(clone(initial.catalogue));
+        setStartingCopiesText(pretty(initial.genome.loci));
+        setBaselineMetadataText("{}");
         setGenome(initial.genome);
         setContext(initial.context);
         setEdited(pretty(initial.catalogue.loci[0]));
@@ -295,6 +308,8 @@ function Workbench() {
     invalidate(false);
     setCatalogue(input.catalogue);
     setDraft(clone(input.catalogue));
+    setStartingCopiesText(pretty(input.catalogue.authoredRecipe?.startingCopies ?? input.genome.loci));
+    setBaselineMetadataText(pretty(input.catalogue.authoredRecipe?.baselineMetadata ?? {}));
     setGenome(input.genome);
     setContext(input.context);
     setExpressionSeed(input.expressionSeed ?? 7);
@@ -436,6 +451,18 @@ function Workbench() {
     );
   }
   function exportJson(kind, value) {
+    let exported;
+    try {
+      exported = copyableAuthoringExport(value);
+      if (exported.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA &&
+          new TextEncoder().encode(JSON.stringify(exported)).length > 65536) {
+        throw new Error("Authored draft export exceeds64KiB. Reduce the edited-definition payload.");
+      }
+    } catch (error) {
+      setFailed(true);
+      setMessage(error.message);
+      return;
+    }
     setJson(
       ["module-scene/1", "module-scene/2", "module-scene/3"].includes(
         value?.sceneProjectionVersion,
@@ -443,7 +470,7 @@ function Workbench() {
         ? `${kind} — compact scene replay`
         : kind,
     );
-    setJsonText(pretty(copyableAuthoringExport(value)));
+    setJsonText(pretty(exported));
   }
   async function downloadSourcePng() {
     const handoff = imageLedPetHandoff(packet);
@@ -484,7 +511,53 @@ function Workbench() {
     setGenome(next);
     invalidate();
   }
+  function draftRecipe(next) {
+    const parent = packages.find((item) => item.catalogue.id === "genomic-compositional-source-experiment" && item.catalogue.version === 2)?.catalogue;
+    if (!parent) throw new Error("Published catalogue2 must be available to author a compatible draft.");
+    return compositionalDraftRecipe(next, parent, JSON.parse(startingCopiesText), JSON.parse(baselineMetadataText));
+  }
+  function retainCompositionalDraft(descriptor) {
+    localStorage.setItem(compositionalDraftKey, pretty(descriptor.catalogue.authoredRecipe));
+    setDraft(clone(descriptor.catalogue));
+    setStartingCopiesText(pretty(descriptor.catalogue.authoredRecipe.startingCopies));
+    setBaselineMetadataText(pretty(descriptor.catalogue.authoredRecipe.baselineMetadata));
+    const locus = descriptor.catalogue.loci.find((item) => item.id === selected) ?? descriptor.catalogue.loci[0];
+    setSelected(locus.id);
+    setEdited(pretty(locus));
+  }
+  async function saveCompositionalDraft(next = draft) {
+    userIntent.current = true;
+    const revision = inputRevision.current;
+    const descriptor = await request("/api/compositional-source/validate", draftRecipe(next));
+    if (revision !== inputRevision.current) return;
+    retainCompositionalDraft(descriptor);
+    setMessage(`Saved compatible authored revision ${descriptor.catalogue.version}; current experiment unchanged. Use draft explicitly to consume edited definitions.`);
+  }
+  function loadAuthoredStartingCopies() {
+    if (!isCompositionalDraft(catalogue)) return;
+    const next = {
+      schemaVersion: "compositional-genome/1",
+      contentId: catalogue.id,
+      contentVersion: catalogue.version,
+      loci: clone(catalogue.authoredRecipe.startingCopies),
+      recordVersions: Object.fromEntries(catalogue.loci.filter((locus) => locus.status === "validated").map((locus) => [locus.id, locus.version])),
+      baselineReferences: clone(catalogue.baseline.references),
+      origin: { kind: "authored", baseline: catalogue.baseline.id, authoredFoundation: catalogue.foundationPin }
+    };
+    setGenome(next);
+    invalidate();
+    setMessage("Authored starting copies loaded explicitly. Resolve to construct this input.");
+  }
   async function saveDraftRecord() {
+    if (supportsCompositionalAuthoring(draft)) {
+      const next = clone(draft);
+      const item = JSON.parse(edited);
+      const index = next.loci.findIndex((locus) => locus.id === selected);
+      if (item.id !== selected) throw new Error("Compatible authoring retains the existing locus ID.");
+      item.version = next.loci[index].version + 1;
+      next.loci[index] = item;
+      return saveCompositionalDraft(next);
+    }
     if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
@@ -511,6 +584,26 @@ function Workbench() {
     );
   }
   async function useDraft() {
+    if (supportsCompositionalAuthoring(draft)) {
+      userIntent.current = true;
+      const revision = inputRevision.current;
+      const descriptor = await request("/api/compositional-source/validate", draft.authoredRecipe ?? draftRecipe(draft));
+      if (revision !== inputRevision.current) return;
+      const next = clone(genome);
+      next.contentId = descriptor.catalogue.id;
+      next.contentVersion = descriptor.catalogue.version;
+      next.recordVersions = clone(descriptor.defaultGeneration.genome.recordVersions);
+      next.baselineReferences = clone(descriptor.defaultGeneration.genome.baselineReferences);
+      setCatalogue(descriptor.catalogue);
+      setDraft(clone(descriptor.catalogue));
+      setGenome(next);
+      setContext(clone(descriptor.referenceContext));
+      setPackages((current) => mergeOptionalPackages(current, [descriptor]));
+      invalidate();
+      setView("experiment");
+      setMessage("Authored definitions selected. Current copies retained; Resolve or Generate uses this exact draft. Starting copies load only by explicit action.");
+      return;
+    }
     if (["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion))
       throw new Error("This provisional catalogue is read-only. Edit inherited allele copies in the experiment.");
     userIntent.current = true;
@@ -552,6 +645,13 @@ function Workbench() {
     if (jsonText.length > 1000000)
       throw new Error("Import exceeds the one-megabyte local record limit.");
     const imported = JSON.parse(jsonText);
+    if (imported.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || isCompositionalDraft(imported)) {
+      const descriptor = await request("/api/compositional-source/validate", imported.authoredRecipe ?? imported);
+      if (revision !== inputRevision.current) return;
+      retainCompositionalDraft(descriptor);
+      setMessage("Imported authored definitions as a separate draft; current experiment unchanged.");
+      return;
+    }
     if (imported.schemaVersion === "critter-catalogue/1") {
       await request("/api/authoring/validate", imported);
       if (revision !== inputRevision.current) return;
@@ -610,6 +710,8 @@ function Workbench() {
       );
       setCatalogue(data.input.catalogue);
       setDraft(clone(data.input.catalogue));
+      setStartingCopiesText(pretty(data.input.catalogue.authoredRecipe?.startingCopies ?? data.input.genome.loci));
+      setBaselineMetadataText(pretty(data.input.catalogue.authoredRecipe?.baselineMetadata ?? {}));
       setGenome(data.input.genome);
       setContext(data.input.context);
       setPacket(data);
@@ -662,6 +764,8 @@ function Workbench() {
   const cause = causalSummary(catalogue, packet?.result, selected);
   const sceneCause = sceneCausalSummary(packet?.scene, selected);
   const petHandoff = imageLedPetHandoff(packet);
+  const compositionalAuthoring = supportsCompositionalAuthoring(draft);
+  const readOnlyCatalogue = ["developmental-anatomical-source/1", "developmental-compositional-source/1"].includes(draft?.ruleVersion);
   const currentPrompt = petHandoff.text;
   const consumerNotice = unconsumedOutputNotice(catalogue, selected);
   const previewCamera = sharedPreviewCamera([packet?.result].filter(Boolean));
@@ -824,17 +928,30 @@ function Workbench() {
               <Group>
                 <Button
                   variant="light"
-                  onClick={() => exportJson("Catalogue draft", draft)}
+                  disabled={busy}
+                  onClick={() => run(async () => exportJson("Catalogue draft", compositionalAuthoring ? draft.authoredRecipe ?? draftRecipe(draft) : draft), { retentionKind: "save" })}
                 >
                   Export draft
                 </Button>
-                <Button disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)} onClick={() => run(useDraft)}>
+                <Button disabled={busy || readOnlyCatalogue} onClick={() => run(useDraft)}>
                   Use draft in experiment
                 </Button>
               </Group>
             </Group>
-            {["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion) && (
+            {readOnlyCatalogue && (
               <Text size="sm" c="dimmed" mb="md">This provisional catalogue is read-only. Change inherited allele copies in Inspect or edit genome, then Resolve.</Text>
+            )}
+            {compositionalAuthoring && (
+              <Paper withBorder p="md" mb="md">
+                <Title order={4}>Compatible authored baseline</Title>
+                <Text size="sm" c="dimmed">Edit labels, bounded numeric contributions and complete existing maps. IDs, families, operators, guards, pigment values and runtime budgets stay fixed. All104 starting pairs are explicit; Generate samples definitions independently.</Text>
+                <JsonInput mt="sm" label="Baseline metadata · label / description only" value={baselineMetadataText} onChange={setBaselineMetadataText} minRows={2} autosize validationError="Invalid JSON" />
+                <JsonInput mt="sm" label="Authored starting copies · complete104-pair dictionary" value={startingCopiesText} onChange={setStartingCopiesText} minRows={4} maxRows={12} autosize validationError="Invalid JSON" />
+                <Group mt="sm">
+                  <Button disabled={busy} onClick={() => run(() => saveCompositionalDraft(), { retentionKind: "save" })}>Validate & save baseline input</Button>
+                  <Button variant="light" disabled={busy || !isCompositionalDraft(catalogue)} onClick={loadAuthoredStartingCopies}>Load active draft starting copies</Button>
+                </Group>
+              </Paper>
             )}
             <div className="catalogue-layout">
               <Paper withBorder p="md">
@@ -918,15 +1035,17 @@ function Workbench() {
                       />
                       <Select
                         label="Primary family"
+                        disabled={compositionalAuthoring}
                         data={catalogue.families.map((item) => ({
                           value: item.id,
                           label: familyLabel(item.id),
                         }))}
-                        value={formRecord?.family}
+                        value={compositionalAuthoring ? canonicalGenomicFamily(formRecord?.family) : formRecord?.family}
                         onChange={(value) => setField("family", value)}
                       />
                       <Select
                         label="Draft / engine-validated"
+                        disabled={compositionalAuthoring}
                         data={["draft", "validated"]}
                         value={formRecord?.status}
                         onChange={(value) => setField("status", value)}
@@ -959,7 +1078,7 @@ function Workbench() {
                     />
                     <Group mt="md">
                       <Button
-                        disabled={busy || ["developmental-anatomical-source/1", "developmental-compositional-source/1", "developmental-compositional-source/2"].includes(catalogue.ruleVersion)}
+                        disabled={busy || readOnlyCatalogue}
                         onClick={() =>
                           run(saveDraftRecord, { retentionKind: "save" })
                         }
@@ -1928,9 +2047,17 @@ function Workbench() {
                 const revision = inputRevision.current;
                 return run(async () => {
                   const stored = JSON.parse(
-                    localStorage.getItem(draftKey) ?? "null",
+                    localStorage.getItem(compositionalAuthoring ? compositionalDraftKey : draftKey) ?? "null",
                   );
                   if (!stored) throw new Error("No saved draft.");
+                  if (stored.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || isCompositionalDraft(stored)) {
+                    const descriptor = await request("/api/compositional-source/validate", stored.authoredRecipe ?? stored);
+                    if (revision !== inputRevision.current) return;
+                    retainCompositionalDraft(descriptor);
+                    setView("compendium");
+                    setMessage("Restored separate authored draft; current experiment unchanged.");
+                    return;
+                  }
                   await request("/api/authoring/validate", stored);
                   if (revision !== inputRevision.current) return;
                   const nextSelected = scopedSelection(stored.loci, selected);
@@ -1950,7 +2077,7 @@ function Workbench() {
                 });
               }}
             >
-              Restore saved catalogue draft
+              {compositionalAuthoring ? "Restore saved compositional draft" : "Restore saved catalogue draft"}
             </Button>
           </Paper>
         )}

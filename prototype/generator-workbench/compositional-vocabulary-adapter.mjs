@@ -18,7 +18,6 @@ import { realizeVocabularyMaterials, vocabularySourceReference, vocabularyFurRef
 import { artPromptSummary, unavailableArtPromptSummary } from "./art-prompt-summary.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/2";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
-const modeled = COMPOSITIONAL_CATALOGUE.loci.filter((locus) => locus.status === "validated");
 const plain = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 function envelope(value, keys) {
   if (!plain(value) || Object.keys(value).some((key) => !keys.includes(key))) throw new Error("Unexpected compositional envelope fields");
@@ -84,11 +83,14 @@ function consumerGuard(locusId, values) {
   if (locusId.startsWith("growth.wing-")) return [values["modules.wingPair"], "independent thin-surface owner"];
   return guards[locusId] ?? [true, "compatible construction consumer"];
 }
-function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE) {
+function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PROFILE, authoredPackage = null) {
   try {
     if (![VOCABULARY_PROFILE, FUR_DEPICTION_PROFILE].includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
-    const catalogue = exactCatalogue(input.catalogue), genome = input.genome;
+    const catalogue = authoredPackage?.catalogue ?? exactCatalogue(input.catalogue), genome = input.genome;
+    if (authoredPackage && digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
+    const modeled = catalogue.loci.filter((locus) => locus.status === "validated");
+    const foundation = authoredPackage?.foundation ?? COMPOSITIONAL_FOUNDATION;
     envelope(genome, ["schemaVersion", "contentId", "contentVersion", "loci", "recordVersions", "baselineReferences", "origin"]);
     if (genome.schemaVersion !== "compositional-genome/1" || genome.contentId !== catalogue.id || genome.contentVersion !== catalogue.version) throw new Error("Wrong compositional genome/version");
     if (digest(genome.recordVersions) !== digest(Object.fromEntries(modeled.map((locus) => [locus.id, locus.version]))) || digest(genome.baselineReferences) !== digest(COMPOSITIONAL_CONTENT.baseline.references)) throw new Error("Required full locus versions/baseline differ");
@@ -163,7 +165,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     ).slice(0, 20)}`;
     const packet = {
       status: "resolved",
-      schemaVersion: COMPOSITIONAL_PACKET_SCHEMA,
+      schemaVersion: authoredPackage ? "compositional-authored-record/1" : COMPOSITIONAL_PACKET_SCHEMA,
       ruleVersion: COMPOSITIONAL_RULE,
       contentId: catalogue.id,
       contentVersion: catalogue.version,
@@ -179,7 +181,7 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
       scene,
       reference,
       informationStages: {
-        foundation: { state: "present", reference: COMPOSITIONAL_FOUNDATION },
+        foundation: { state: "present", reference: foundation },
         inherited: { state: "present", carriedPairs: modeled.length, draftDefinitions: catalogue.loci.length - modeled.length },
         expression: { state: "present", context },
         phenotype: { state: "present", profileVersion, sourceDigest: sceneDigest },
@@ -201,16 +203,19 @@ function resolveCompositionalVocabulary(input, profileVersion = FUR_DEPICTION_PR
     return rejected(error);
   }
 }
-function generateCompositionalVocabulary(input) {
+function generateCompositionalVocabulary(input, authoredPackage = null) {
   try {
     envelope(input, ["catalogue", "seed", "maxAttempts"]);
-    exactCatalogue(input.catalogue);
+    if (authoredPackage) {
+      if (digest(input.catalogue) !== digest(authoredPackage.foundation)) throw new Error("Exact compiled authored foundation required");
+    } else exactCatalogue(input.catalogue);
+    const modeled = (authoredPackage?.catalogue ?? COMPOSITIONAL_CATALOGUE).loci.filter((locus) => locus.status === "validated");
     if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 4294967295) throw new Error("Generation seed must be uint32");
     const attempts = input.maxAttempts ?? 1024;
     if (!Number.isInteger(attempts) || attempts < 1 || attempts > 1024) throw new Error("Candidate attempts must be 1 through 1024");
     const random = randomStream(input.seed), failures = {};
     for (let attempt = 1; attempt <= attempts; attempt++) {
-      const descriptor = compositionalVocabularyPackage(), genome = descriptor.defaultGeneration.genome;
+      const descriptor = authoredPackage ? structuredClone(authoredPackage) : compositionalVocabularyPackage(), genome = descriptor.defaultGeneration.genome;
       for (const locus of modeled) {
         const choose = () => locus.alleles[Math.floor(random() * locus.alleles.length)].id;
         if (locus.operator === "pair-map" || locus.operator.endsWith("enable")) {
@@ -219,7 +224,7 @@ function generateCompositionalVocabulary(input) {
         } else genome.loci[locus.id] = [choose(), choose()];
       }
       genome.origin = { kind: "experiment", seed: input.seed, attempt, algorithmVersion: "mulberry32/1", founderProfile: COMPOSITIONAL_CONTENT.founderSampling.id, baseline: COMPOSITIONAL_CONTENT.baseline.id };
-      const packet = resolveCompositionalVocabulary({ catalogue: COMPOSITIONAL_FOUNDATION, genome, context: descriptor.referenceContext, expressionSeed: null });
+      const packet = resolveCompositionalVocabulary({ catalogue: authoredPackage?.foundation ?? COMPOSITIONAL_FOUNDATION, genome, context: descriptor.referenceContext, expressionSeed: null }, FUR_DEPICTION_PROFILE, authoredPackage);
       if (packet.status === "resolved") return { ...packet, generation: { seed: input.seed, winningSeed: input.seed, attempts: attempt, algorithmVersion: "mulberry32/1", candidateSequenceVersion: COMPOSITIONAL_CONTENT.founderSampling.id, priorFailures: failures } };
       const reason = packet.errors[0].message;
       failures[reason] = (failures[reason] ?? 0) + 1;

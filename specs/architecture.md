@@ -152,8 +152,16 @@ verified source; imported wording is untrusted. Clause witnesses and source
 binding stay in Advanced inspection. The
 [brief contract](../design/anatomical-source-prototype/compositional-contract.md#source-derived-pet-brief)
 owns aliases and limits; it changes no input/result/scene identity or anatomy.
-Individual allele edits remain supported, but compositional catalogue-draft
-authoring and complete genomic content implementation remain unfinished.
+The existing compendium now compiles compatible compositional authoring deltas
+against exact catalogue2, with unique fork/revision identity, new definition pins
+and truthful edited-record provenance. Shared resolution consumes the compiled
+definitions; published stock paths retain their exact meaning. Compact recipes
+support restart/import without a server-only registry or larger API body cap.
+Starting copies load only through an explicit action, independently of Generate.
+The [authored-foundation contract](../design/anatomical-source-prototype/compositional-contract.md#compatible-authored-foundations)
+owns allowed edits and limits. New consumer domains, operator-baseline equations,
+unsupported draft promotion and complete genomic content implementation remain
+unfinished.
 
 Only after meaningful structure exists, compare a low-poly reference in a
 shallow three-quarter view with a flat reference of the same source. Volume,
