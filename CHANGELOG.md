@@ -2,6 +2,16 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [15:46] — Grounded Critter Lab screen concepts
+
+[PR101](https://github.com/PacoCotera/critter-lab/pull/101) · hosting source `37dc2ee` · native game remains `720c1e6`
+
+- The website uses eight new future screen moments and refreshed family/Companion renders, consistently branded Critter Lab and grounded in the connected sample-to-resident loop.
+- Partial findings, complete free reference comparison, explicit creation cost, the same saved Pip and cached Caddy status retain their distinct meaning. These are concepts for future implementation; the native interface remains unchanged.
+- Original references and software captures remain preserved and linked separately. [Concept packet](design/grounded-screen-concepts/README.md), [actual page captures and receipt](website/evidence/grounded-screen-concepts/README.md).
+
+Game-design/UX actual-export inspection and desktop/phone webpage inspection support delivery as concepts. Exact pushed-source normal VM build/activation passed, retaining native release and saves without reset. No new tests, discretionary CI, native build or physical approval.
+
 ## 2026-10-03 [15:10] — Programmatic pet-rendering API transport
 
 [PR100](https://github.com/PacoCotera/critter-lab/pull/100) · hosting source `57db139` · native game remains `720c1e6`
