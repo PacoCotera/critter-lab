@@ -59,6 +59,15 @@ creature coverage, a population distribution or full visual expression of every
 retained fact. Body-only construction does not depict the retained ocular and
 covering modules.
 
+![All eight retained winners in stored order](random-comparison.png)
+
+The [random-sheet manifest](random-comparison-manifest.json) retains each
+construction identity and the input/output hashes. One shared camera preserves
+relative size; neither the artist nor the compositor selects results. The
+actual sheet has seven three-region bodies, one single-region body and two
+appendage-free outcomes. Several remain thin axial forms. This is evidence of
+changed proportion fields, not acceptance of the wider creature-diversity brief.
+
 ## Reproduce and inspect
 
 Use the existing host Node runtime from the workbench directory:
@@ -67,6 +76,7 @@ Use the existing host Node runtime from the workbench directory:
 node --test body-organization.test.mjs
 node construct-body-organization-proof.mjs --out evidence/body-organization
 node evidence/body-organization/draw-comparison.mjs
+node evidence/body-organization/draw-random-comparison.mjs
 ```
 
 The compositor uses the existing installed Sharp library. It consumes the solved
@@ -74,13 +84,17 @@ source outlines directly, at one camera and scale; it does not redraw anatomy.
 [comparison-manifest.json](comparison-manifest.json) retains the input and output
 hashes. One final regeneration reproduced all ten JSON exports and the comparison
 SVG, PNG and manifest byte-for-byte.
+The added eight-source sheet also reproduced its SVG, PNG and manifest exactly
+in one regeneration, leaving the retained random inputs unchanged.
 
 Seven focused checks passed on the held source, including unequal length
 allocation, five-station interpolation, mixed inherited growth, join effects,
 inactive single-body controls, malformed source rejection and oversized fin
 rejection without repair. Literal historical result, construction and SVG
-hashes remain unchanged for graph-source/1. Independent review and exact pushed
-revision CI are recorded at the delivery boundary.
+hashes remain unchanged for graph-source/1. Independent review passed the held
+source and all retained identities/accounting. Node22 host-proof and the existing
+framework build passed in [CI37090499527](https://github.com/PacoCotera/critter-lab/actions/runs/37090499527)
+on clean pushed source revision `ceba203c8840e25f7fa86eba59e5507a32d37ac6`.
 
 The next use of an accepted source image keeps the same creative instruction:
 
