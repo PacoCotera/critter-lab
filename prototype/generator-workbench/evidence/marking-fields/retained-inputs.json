@@ -1,7 +1,7 @@
 {
   "constructionRevision": "52033784ef87ffacdd6a22b8d83ca848560d5b60",
   "initialRejectedRevision": "0cd05e0c6cd1dbd5869c4efbda9d260e15c3ab7f",
-  "locusPanelRevision": "pending-actual-panel-use",
+  "locusPanelRevision": "edbf843bdbb3c8b208348aa4c8da2078fd1befcb",
   "authoringPairCount": 111,
   "changedOrderedPairs": [
     {
@@ -114,6 +114,16 @@
   "disposition": "Narrow OFF/ON consumer proof supported; coherent paint, fur and ear craft HOLD. Patch count is constructed logical data, not two independently visible patch shapes.",
   "assets": [
     {
+      "name": "off-locus-panel.png",
+      "bytes": 140193,
+      "sha256": "582dc81658cf0cd8e32cbe99f249eb67ea9f78791f1d6b45d66e4bd00b3ba483"
+    },
+    {
+      "name": "off-locus-panel.txt",
+      "bytes": 1128,
+      "sha256": "9b40b55fa8f32117d956f8f49d237a4079c40ac01f50c348381c3c55e3b17977"
+    },
+    {
       "name": "off-replayed-state.txt",
       "bytes": 6551,
       "sha256": "aa50ae0aaa02390c118d4c0acaf42af3d52f8d485a1e67047752cf83b58417c4"
@@ -152,6 +162,16 @@
       "name": "on-first-resolve-error.txt",
       "bytes": 1,
       "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "name": "on-locus-panel.png",
+      "bytes": 143270,
+      "sha256": "b67f845db5f01f2a4343f90bd08891abef02f651d8ea3b596353c1cbe0c37dd1"
+    },
+    {
+      "name": "on-locus-panel.txt",
+      "bytes": 1214,
+      "sha256": "1b1d588f0d9f10f0f0187b3611946203337d15db9be139d7e6bf78bf9e0fabe1"
     },
     {
       "name": "on-reopened-state.txt",

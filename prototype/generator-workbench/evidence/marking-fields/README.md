@@ -26,6 +26,10 @@ same input then resolved. Fresh-page [OFF](off-replayed-state.txt) and
 [ON](on-reopened-state.txt) digest replay succeeded from retained inputs; the
 [reopened bench](on-reopened-workbench.png) shows the same ON identity and prompt.
 The actual [copied brief](on.copied-prompt.txt) matches the visible text.
+The corrected selected-locus panel shows actual [ON ownership](on-locus-panel.png)
+and [OFF state](off-locus-panel.png), with retained text alongside each image.
+It reports paint-field owners/logical masks/clipped polygons separately from
+anatomical nodes; the disabled gate retains copies without painting owners.
 
 Art/production disposition: the narrow OFF/ON marking difference is useful.
 Bands visibly follow the primary body without new solids or silhouette change.
