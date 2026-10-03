@@ -98,8 +98,9 @@ and tail are smooth body-pigment owners; they imply no hearing or motion. Fur's
 new material3 consumer replaces each of48 primary roots with one overlapping
 three-piece tapered/fringed cluster, at most1008 material fragments over seven
 owners. It preserves inherited potential length/flow, exact local pigment clips
-and complete opaque skin. The new coat depiction awaits actual-output craft
-review; neither a source build nor agreed geometry establishes a readable coat.
+and complete opaque skin. [Actual source5 evidence](evidence/anatomical-roles/README.md)
+gives the continuous tail a narrow readability pass; ears remain provisional and
+coat craft remains HOLD because the clusters still read as isolated marks.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared

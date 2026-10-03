@@ -149,8 +149,9 @@ and one six-station/eight-ring axial tail. SERIAL's terminal primary or FAN's ro
 owns that local+X sweep; roots and finite positive parent/child tissue witnesses
 remain recorded. Material3 reuses48 primary roots and copied fur length/flow,
 with three overlapping tapered/fringed pieces per root and1008 fragment limit.
-Opaque base, pigment clipping and bounded scale coverage remain. This coat is
-an actual-output review hypothesis, not a material pass. All old source1–4 and
+Opaque base, pigment clipping and bounded scale coverage remain. [Actual exports](../prototype/generator-workbench/evidence/anatomical-roles/README.md)
+support a narrow continuous-tail readability pass; ears remain provisional and
+coat craft remains HOLD because the clusters read as isolated marks. All old source1–4 and
 authored-parent2 recipe paths remain literal; no missing alleles are supplied.
 Hoof/toe anatomy, partial coats, emission, hearing, broader organism range and
 automatic animation remain gaps; the content is not canonical anatomy.

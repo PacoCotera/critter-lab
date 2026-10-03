@@ -124,8 +124,12 @@ hypothesis; three parallel scratches would fail the intended coat read. Copied
 potential length/flow, root pigment and exact tissue/pigment clipping stay
 retained, with complete opaque skin. No solid spikes, extra anatomy, random
 scatter or new colours. Head, ears, tail and other non-primary owners remain
-smooth. Actual revised output must establish attached ears, continuous tail and
-coherent coat before any narrow material acceptance; the old fur HOLD remains.
+smooth. [Actual source5 exports](../../prototype/generator-workbench/evidence/anatomical-roles/README.md)
+give the continuous tail a narrow source-readability pass. Ear count/root are
+clear but blade-like sheets communicate weak bowl/fold depth, so auricular craft
+is provisional/HOLD. The clusters still read as isolated marks over smooth skin;
+coat craft remains HOLD. The next boundary is owner-scale coat continuity and
+auricular breadth/depth, not more contrast or copied dashes.
 
 Each region/link/terminal/sheet retains its declared pigment owner and ordered
 local fields. Material shading can describe light without changing those base
