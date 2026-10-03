@@ -2,6 +2,16 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [15:10] — Programmatic pet-rendering API transport
+
+[PR100](https://github.com/PacoCotera/critter-lab/pull/100) · hosting source `57db139` · native game remains `720c1e6`
+
+- The workbench can submit its retained 512px source image and short brief to a selected image-provider API, keeping returned candidates linked to exact source, prompt and provider/job metadata.
+- Google is configured first. OpenAI has an adapter and remains unavailable until configured. Requests require an explicit Render action; provider polling and recovery do not generate again.
+- Durable server storage keeps completed results recoverable after browser loss. The original API presentation still needs the owner-requested editable prompt, creature gallery and guided authoring overhaul; this release establishes transport, not completed usability or accepted pet art.
+
+Independent genomic/pixel-source and technical inspection, unchanged automatic CI37153443058 and exact clean pushed-source VM builds passed. Existing website, simulator, native binary and saves retained; no reset, new tests or increased testing scope. No actual API-generated image had been requested at activation.
+
 ## 2026-10-03 [14:19] — Optional genome-derived innate profile
 
 [PR99](https://github.com/PacoCotera/critter-lab/pull/99) · hosting source `50d5a7a` · native game remains `720c1e6`
