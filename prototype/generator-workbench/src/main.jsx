@@ -28,6 +28,7 @@ import {
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "./workbench.css";
+import ReturnedPetPanel from "./ReturnedPetPanel.jsx";
 import {
   drawAuthoringCreature,
   drawGenomeField,
@@ -1275,6 +1276,7 @@ function Workbench() {
                 </Text>
               </Paper>
             </div>
+            <ReturnedPetPanel packet={packet} handoff={petHandoff} revision={inputRevision.current} sourceBusy={busy} />
             {isCompositionalRule(catalogue.ruleVersion) && (
               <GenomicBranches catalogue={catalogue} genome={genome} packet={packet} onSelect={selectLocus} />
             )}

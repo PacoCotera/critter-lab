@@ -93,6 +93,12 @@ only their permitted facts, not a hidden full genome with an instruction to igno
 
 ### Current authoring evidence and unsolved construction range
 
+The host workbench can manually retain returned pet bitmaps as source-bound
+proposals through a separate bounded browser-only IndexedDB store. No server
+image API, genome-storage change, automatic provider or accepted-pet lifecycle
+is supplied. The [retention contract](../prototype/generator-workbench/README.md#retain-a-manually-returned-pet-proposal)
+owns exact bindings, finite limits, cancellation and paired bitmap/metadata export.
+
 The [genome workbench](../prototype/generator-workbench/README.md) is a host
 authoring experiment with one-click valid-genome generation, optional editing,
 source inspection, retained versioned records and exact replay. Its separate

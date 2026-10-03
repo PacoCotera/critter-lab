@@ -37,6 +37,27 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Retain a manually returned pet proposal
+
+After resolving a current source and its short prompt, choose the returned
+PNG/JPEG/WebP in **Returned pet art**, enter a provider label and explicitly
+select **Retain pet proposal**. Reopening that exact source/prompt in the same
+browser shows its linked proposals. Editing, generating or changing the source
+clears the selected file and hides previous art; pending work is cancelled.
+Errors stay inside the panel and preserve the resolved source preview.
+
+The browser-only `retained-pet-proposal/1` record binds the exact source record,
+input/result/scene digests, consumer versions/foundation, prompt text and SHA256,
+unchanged bitmap bytes and SHA256, dimensions/MIME, provider label and compact
+source replay recipe. Download the native bitmap and linked JSON metadata as
+two files. This is export portability, without a new image-import service.
+The separate IndexedDB `proposalBlobs` store holds eight distinct proposals;
+a ninth rejects without eviction. Files are at most4MiB,4096px on the long side
+and16million decoded pixels. Existing localStorage genome slots are unchanged.
+Browser storage can be unavailable, full or cleared; keep exported files for
+durable retention. All returned art remains **proposal**, with no acceptance,
+inherited-fidelity claim, gene change, automatic provider call or animation.
+
 ### Compositional Generate and all eleven genomic branches
 
 `genomic-compositional-source-experiment@4` uses separately pinned

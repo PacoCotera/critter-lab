@@ -20,6 +20,12 @@ recognizable ancestry, proposed changes and unverified fidelity are recorded
 after output. Added anatomy is useful proposed design, not automatically a
 resolved inherited trait. This change supplies no new canonical anatomy.
 
+The workbench's [manual returned-pet panel](README.md#retain-a-manually-returned-pet-proposal)
+retains a supplied bitmap alongside its exact source/prompt binding in this
+browser. Its linked export includes the compact source recipe; the native image
+remains unchanged. Status is always proposal, never accepted phenotype or
+inherited fidelity. This supplies no provider integration or animation.
+
 The [versioned template](art-template.json) retains verified expression as a
 semantic audit/export brief. Historical prompt bytes and replay identities remain
 unchanged. The owner's [form and skin example](evidence/owner-semantic-surface/README.md)
