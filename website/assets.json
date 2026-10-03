@@ -1,95 +1,45 @@
 {
-  "boundary": "Actual host-native software captures and unchanged retained concept references. Per-asset labels distinguish provenance; no physical or human-playtest evidence.",
+  "boundary": "Current website images are new future concepts. Original references and native evidence remain unchanged in their authoritative sources.",
   "assets": [
     {
-      "asset": "dist/assets/native-home.png",
-      "source": "docs/evidence/polished-core-v1/A-back-after-accept.png",
-      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-      "sha256": "9a837d933a338e4f4a764d4d8eccc28f792ae16087016be04022e979d162edfe"
+      "asset": "dist/assets/family-concept-v2.png",
+      "source": "design/grounded-screen-concepts/family-render.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f1d081dab08968d779d3fe777b20ad19f94a489784ada89f12bd64ca9e347b25",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
     },
     {
-      "asset": "dist/assets/native-collection.png",
-      "source": "docs/evidence/polished-core-v1/A-collection.png",
-      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-      "sha256": "c811758522ce1ff1722ce00e8ad47b74f3636292e6ea66c624ee14f14f4f8c98"
+      "asset": "dist/assets/companion-concept-v2.png",
+      "source": "design/grounded-screen-concepts/companion-render.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f2b69b20713ca12652643efb993c6e118d518cdc46bece8dbbd0450fe7c26fde",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
     },
     {
-      "asset": "dist/assets/native-workbench.png",
-      "source": "docs/evidence/polished-core-v1/A-workbench.png",
-      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-      "sha256": "e38b65e5d6f335c33355462b6267a5bacb91cb3a14ae6793d00cfcd1720b06ef"
+      "asset": "dist/assets/lab-journey-concept.png",
+      "source": "design/grounded-screen-concepts/lab-journey.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "7aa077c2bfb94cc9bb7a59beb149e7aa1a6a678b0a04ac5ac5229600b8333bf6",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
     },
     {
-      "asset": "dist/assets/native-coat.png",
-      "source": "docs/evidence/polished-core-v1/research-illustrated/A-coat-finding.png",
-      "sourceRevision": "168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6",
-      "sha256": "370d1035a18a683a01d297a9cec1ee5509dd18c62e35fb3f258776686807d109"
+      "asset": "dist/assets/companion-journey-concept.png",
+      "source": "design/grounded-screen-concepts/companion-journey.png",
+      "width": 1882,
+      "height": 836,
+      "sha256": "ed64e2d2c8ca6b83070d36dffc8bd35fd6bbed9dbb7615494458ecad8a93806d",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
     },
     {
-      "asset": "dist/assets/native-forms.png",
-      "source": "docs/evidence/polished-core-v1/research-illustrated/A-supported-forms.png",
-      "sourceRevision": "168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6",
-      "sha256": "7ed036ab397d0a745a32c4b7cc545c951143165c373e6a427c323454946ac9ee"
-    },
-    {
-      "asset": "dist/assets/native-creation-review.png",
-      "source": "docs/evidence/polished-core-v1/A-creation-review.png",
-      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-      "sha256": "75be0baad638614819cdf83118bca5ddc49543ca21043cd61d313ac6d1f1fbdf"
-    },
-    {
-      "asset": "dist/assets/native-companion.png",
-      "source": "docs/evidence/polished-core-v1/companion-corrected/B-visit-saved.png",
-      "sourceRevision": "4475b913c8bab901d69b0bae64faae1d812c88c1",
-      "sha256": "8d9e7f7eeed865456e8e14298632bc968bca74a1dec274047462d81060b66259"
-    },
-    {
-      "asset": "dist/assets/native-dock-cache.png",
-      "source": "docs/evidence/polished-core-v1/A-dock-offline-restart.png",
-      "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-      "sha256": "bc6940a77855d265704273f1648bd29e91696ac616c86ec107658f4b5d651f8f"
-    },
-    {
-      "asset": "dist/assets/original-ecosystem.png",
-      "source": "design/references/ecosystem.png",
-      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
-      "sha256": "d54d9414c92f475a95bcf4ff0dca30b82faa013145e88465c0df7caf06cd94d3",
-      "boundary": "Retained original concept; separate Probe, phone-led layout and Lab printer are superseded."
-    },
-    {
-      "asset": "dist/assets/research-current.png",
-      "source": "docs/evidence/research-workpiece/complete-coat.png",
-      "sourceRevision": "ff5616bd3bbadc2ac167cc6a20a5acec75a2dd60",
-      "sha256": "754896f501659b717855194235ebdab81f1e4d360e49254837d8e61acf723cb9",
-      "boundary": "Actual LVGL host framebuffer from synthetic retained fixture. Historical Beecho Lab label preserved in original pixels."
-    },
-    {
-      "asset": "dist/assets/critter-lab-family.png",
-      "source": "design/lab-controls/combined-family-materials.png",
-      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
-      "sha256": "16c78c7301c120997d35bab734cd615fdcd1565905943b4dd46c60967fa69ca5",
-      "boundary": "Retained concept reference; not physical hardware or current native UI."
-    },
-    {
-      "asset": "dist/assets/companion-concept.png",
-      "source": "design/lab-controls/combined-companion.png",
-      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
-      "sha256": "50d0ca8e0ac73ef7a23514b3084bf4ae6f1954fecf0799c25e045b0fc8027a31",
-      "boundary": "Retained concept reference; not physical hardware or current native UI."
-    },
-    {
-      "asset": "dist/assets/concept-probe.png",
-      "source": "design/companion-connected-art/03-usage-preview-450x600.png",
-      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
-      "sha256": "64389732495f6a0205ea23c1e9ba3783a6920bbc51a58edeab1e85623b456c01",
-      "boundary": "Retained concept reference; not physical hardware or current native UI."
-    },
-    {
-      "asset": "dist/assets/concept-reception.png",
-      "source": "design/companion-connected-art/07-usage-preview-1024x600.png",
-      "sourceRevision": "ad192efb0e852488ece8f9651221afb870450f1a",
-      "sha256": "73ec9f833c9e28d4d9894929ed3834290a97b462fd7f57cea2f249df3f29c979",
-      "boundary": "Retained concept reference; not physical hardware or current native UI."
+      "asset": "dist/assets/caddy-summary-concept.png",
+      "source": "design/grounded-screen-concepts/caddy-summary.png",
+      "width": 2138,
+      "height": 735,
+      "sha256": "f11000b36ba60d2ec3ef62270e1dae671e12919590e80e0ba5fb851fad29a77f",
+      "boundary": "New future screen/product concept; not implemented native pixels or physical proof."
     }
   ]
 }
