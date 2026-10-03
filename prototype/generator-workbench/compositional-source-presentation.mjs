@@ -97,7 +97,7 @@ function shade(hex, amount) {
   return `#${[1, 3, 5].map((index) => Math.round(parseInt(hex.slice(index, index + 2), 16) * amount).toString(16).padStart(2, "0")).join("")}`;
 }
 function compositionalSourceReference(scene) {
-  if (scene.status !== "constructed" || scene.profileVersion !== "compositional-source/1") throw new Error("Unsupported compositional construction");
+  if (scene.status !== "constructed" || !["compositional-source/1", "compositional-source/2"].includes(scene.profileVersion)) throw new Error("Unsupported compositional construction");
   const polygons = [];
   for (const owner of scene.nodes) for (const fragment of owner.surfaceFragments) {
     const points = fragment.points, centroid = center(points);
@@ -124,7 +124,7 @@ function compositionalSourceReference(scene) {
   const scale = 456 / side, offsetX = 256 - (minimumX + maximumX) * scale / 2, offsetY = 256 - (minimumY + maximumY) * scale / 2;
   polygons.sort((a, b) => a.depth - b.depth);
   const shapes = polygons.map((p) => `<polygon data-owner="${p.owner}" points="${p.points.map(([x, y]) => `${(x * scale + offsetX).toFixed(3)},${(y * scale + offsetY).toFixed(3)}`).join(" ")}" fill="${p.fill}" stroke="${p.material === "scales" ? shade(p.fill, 0.8) : p.fill}" stroke-width="${p.material === "scales" ? 0.75 : 0.4}" stroke-linejoin="round"/>`).join("");
-  return { status: "constructed", profileVersion: "compositional-reference/1", camera: { right, up, towardViewer, framing: "own-source bounds" }, mapping: { scale, offsetX, offsetY }, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>Provisional compositional source</title><rect width="512" height="512" fill="#f7f3e8"/>${shapes}</svg>` };
+  return { status: "constructed", profileVersion: scene.profileVersion === "compositional-source/2" ? "compositional-reference/2" : "compositional-reference/1", camera: { right, up, towardViewer, framing: "own-source bounds" }, mapping: { scale, offsetX, offsetY }, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>Provisional compositional source</title><rect width="512" height="512" fill="#f7f3e8"/>${shapes}</svg>` };
 }
 export {
   compositionalSourceReference,

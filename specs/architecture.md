@@ -104,8 +104,8 @@ genome.
 Earlier construction combines generic volumes, regional proportions, rooted
 links/fins, optional eye glyphs, skin/scales and inherited pigment domains.
 The [regional scene](../prototype/generator-workbench/evidence/regional-scene-workbench/README.md)
-has actual browser evidence. The newer [radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
-is held source integration, not activated or accepted pet art. Neither proves
+has actual browser evidence. The [radial scene](../prototype/generator-workbench/evidence/radial-scene-workbench/README.md)
+is retained in the current authoring source under its own version, with earlier browser evidence; it is not accepted pet art. Neither proves
 the desired anatomical range. Missing typed head/muzzle/jaw/trunk relationships,
 exterior facial anchors, shoulder/hip attachment frames, shaped terminal limbs,
 tail and insect region/wing relationships leave the output generic. A resolved
@@ -121,18 +121,22 @@ organization is hardcoded. The owner rejects that result. It violates the existi
 genome-derived construction requirement; accessory variation is not structural
 range. Keep the exact V1 constructor/catalogue for old records. The replacement
 must resolve the connected organization and attachment roles from inherited
-contributors and expose all five information layers, the complete declared loci
-and each contributor's implemented, inactive or unimplemented status.
+contributors and expose all eleven genomic layers, the complete declared loci
+and each contributor's expressed, inactive or unimplemented status. The five
+separate record stages do not replace genomic coverage.
 
-The [anatomical Generate guide](../prototype/generator-workbench/README.md#anatomical-generate)
-owns current operation and its limits. Compact, lean and wing-bearing copy sets
-exercise common operators; generation samples contributors rather than selecting
-those examples. Pigment partitions and smooth/scales fields have explicit
-surface owners. Typed attachment conventions address source meaning, while
-coarse low-poly depiction communicates volume and occlusion. Neither layer
-establishes finished pet art, biology or motion. Tail, hoof/toe anatomy, fur,
-emission, broader body organizations and automatic animation remain gaps; the
-new content is not canonical anatomy.
+The [compositional Generate guide](../prototype/generator-workbench/README.md#compositional-generate-and-all-eleven-genomic-branches)
+owns current operation and its limits. Its [content contract](../design/anatomical-source-prototype/compositional-contract.md)
+derives serial/fan region graphs, bilateral/radial frames, optional heads, distinct
+free/contact chains and independent thin surfaces from retained copies. It
+retains 98 ordered pairs and six draft definitions with all eleven branches
+visible. That is the complete declared experimental union, not complete locus
+content or implemented physiology for every branch. Generation samples the
+contributors rather than selecting named examples. Pigment partitions and
+smooth/scales fields have explicit surface owners. Coarse low-poly depiction
+communicates volume and occlusion; it does not establish finished pet art,
+biology or motion. Tail, hoof/toe anatomy, fur, emission, broader organism range
+and automatic animation remain gaps; the content is not canonical anatomy.
 
 Only after meaningful structure exists, compare a low-poly reference in a
 shallow three-quarter view with a flat reference of the same source. Volume,

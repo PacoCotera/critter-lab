@@ -2,8 +2,8 @@
 import { digest } from "./authoring-adapter.mjs";
 import { randomStream } from "./model.mjs";
 import { ANATOMICAL_CATALOGUE, ANATOMICAL_CONTENT } from "./anatomical-source-package.mjs";
-import { COMPOSITIONAL_CONTENT, COMPOSITIONAL_CATALOGUE, COMPOSITIONAL_FOUNDATION, COMPOSITIONAL_RULE, COMPOSITIONAL_PROFILE, compositionalSourcePackage } from "./compositional-source-package.mjs";
-import { constructCompositionalSource } from "./compositional-source-construction.mjs";
+import { COMPOSITIONAL_CONTENT, COMPOSITIONAL_CATALOGUE, COMPOSITIONAL_FOUNDATION, COMPOSITIONAL_RULE, compositionalSourcePackage } from "./compositional-source-package.mjs";
+import { constructCompositionalSource, constructCompositionalSourceWithMeshContacts, LEGACY_COMPOSITIONAL_PROFILE, MESH_CONTACT_PROFILE } from "./compositional-source-construction.mjs";
 import { realizePigmentFields, realizeMaterialFields, compositionalSourceReference } from "./compositional-source-presentation.mjs";
 const COMPOSITIONAL_PACKET_SCHEMA = "compositional-authoring-record/1";
 const structuralIds = new Set([...ANATOMICAL_CATALOGUE.loci, ...COMPOSITIONAL_CONTENT.loci].map((locus) => locus.id));
@@ -59,8 +59,9 @@ function consumerGuard(locusId, values) {
   if (locusId.startsWith("growth.wing-")) return [values["modules.wingPair"], "independent thin-surface owner"];
   return guards[locusId] ?? [true, "compatible construction consumer"];
 }
-function resolveCompositionalSource(input) {
+function resolveCompositionalSource(input, profileVersion = MESH_CONTACT_PROFILE) {
   try {
+    if (![LEGACY_COMPOSITIONAL_PROFILE, MESH_CONTACT_PROFILE].includes(profileVersion)) throw new Error("Unsupported compositional construction profile");
     envelope(input, ["catalogue", "genome", "context", "expressionSeed"]);
     const catalogue = exactCatalogue(input.catalogue), genome = input.genome;
     envelope(genome, ["schemaVersion", "contentId", "contentVersion", "loci", "recordVersions", "baselineReferences", "origin"]);
@@ -104,7 +105,8 @@ function resolveCompositionalSource(input) {
         fact.reasons.push(`Carried and resolved; inactive because there is no ${reason}.`);
       }
     }
-    const scene = realizeMaterialFields(realizePigmentFields(constructCompositionalSource(values, facts)), values, facts, { profile: COMPOSITIONAL_CONTENT.materialProfile, startU: 0.2, maximumCells: COMPOSITIONAL_CONTENT.bounds.materialCells });
+    const construct = profileVersion === MESH_CONTACT_PROFILE ? constructCompositionalSourceWithMeshContacts : constructCompositionalSource;
+    const scene = realizeMaterialFields(realizePigmentFields(construct(values, facts)), values, facts, { profile: COMPOSITIONAL_CONTENT.materialProfile, startU: 0.2, maximumCells: COMPOSITIONAL_CONTENT.bounds.materialCells });
     const reference = compositionalSourceReference(scene);
     for (const fact of facts.filter((f) => structuralIds.has(f.locusId))) fact.consumers = [...scene.nodes.filter((node) => node.sources.includes(fact.locusId)).map((node) => node.id), ...scene.covering.sources.includes(fact.locusId) ? ["primary-material-field"] : []];
     const coverage = catalogue.families.map((family) => {
@@ -112,9 +114,9 @@ function resolveCompositionalSource(input) {
       const selected = facts.filter((fact) => loci.some((locus) => locus.id === fact.locusId));
       return { id: family.id, locusIds: loci.map((locus) => locus.id), activeContributors: selected.filter((f) => f.state === "expressed").map((f) => f.locusId), inactiveContributors: selected.filter((f) => f.state === "inactive").map((f) => f.locusId), unimplementedContributors: selected.filter((f) => f.state === "unimplemented").map((f) => f.locusId), draftRecords: loci.filter((l) => l.status === "draft").map((l) => l.id), state: loci.length ? "indexed" : "unimplemented", gaps: family.gaps ?? "No complete physiology or lifetime model; only explicitly indexed compatible source consumers are active." };
     });
-    const result = { status: "resolved", profileVersion: COMPOSITIONAL_PROFILE, values, facts, coverage, graph: { profileVersion: COMPOSITIONAL_PROFILE, nodes: scene.nodes.map(({ mesh, surfaceFragments, ...node }) => node), edges: scene.edges, covering: scene.covering }, classification: { labels: ["provisional compositional source", scene.conventions.wholeAssemblySymmetry] }, motion: [] };
+    const result = { status: "resolved", profileVersion, values, facts, coverage, graph: { profileVersion, nodes: scene.nodes.map(({ mesh, surfaceFragments, ...node }) => node), edges: scene.edges, covering: scene.covering }, classification: { labels: ["provisional compositional source", scene.conventions.wholeAssemblySymmetry] }, motion: [] };
     const retainedInput = structuredClone({ catalogue, genome, context, expressionSeed: null }), inputDigest = digest(retainedInput), resultDigest = digest(result), sceneDigest = digest(scene), recordId = `compositional-${digest({ inputDigest, resultDigest, sceneDigest }).slice(0, 20)}`;
-    return { status: "resolved", schemaVersion: COMPOSITIONAL_PACKET_SCHEMA, ruleVersion: COMPOSITIONAL_RULE, contentId: catalogue.id, contentVersion: catalogue.version, sceneProjectionVersion: COMPOSITIONAL_PROFILE, materialProfileVersion: COMPOSITIONAL_CONTENT.materialProfile, recordId, sceneRecordId: recordId, input: retainedInput, inputDigest, resultDigest, sceneDigest, result, scene, reference, informationStages: { foundation: { state: "present", reference: COMPOSITIONAL_FOUNDATION }, inherited: { state: "present", carriedPairs: modeled.length, draftDefinitions: catalogue.loci.length - modeled.length }, expression: { state: "present", context }, phenotype: { state: "present", profileVersion: COMPOSITIONAL_PROFILE, sourceDigest: sceneDigest }, lifetime: { state: "unmodeled", reason: "No lifetime, learning, history or regulation consumer is supplied." } }, representations: { baseline: JSON.stringify({ baseline: catalogue.baseline, sourceDefinitions: catalogue.sourceDefinitions }, null, 2), inherited: JSON.stringify(modeled.map((locus) => ({ locusId: locus.id, recordVersion: locus.version, copies: genome.loci[locus.id] })), null, 2), expression: JSON.stringify(facts, null, 2) }, description: `${scene.conventions.primaryCount} connected primary regions; ${scene.conventions.wholeAssemblySymmetry}. Optional parts follow their actual copied owner guards. Static source; physiology and motion remain unmodeled.`, prompt: { text: "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art." } };
+    return { status: "resolved", schemaVersion: COMPOSITIONAL_PACKET_SCHEMA, ruleVersion: COMPOSITIONAL_RULE, contentId: catalogue.id, contentVersion: catalogue.version, sceneProjectionVersion: profileVersion, materialProfileVersion: COMPOSITIONAL_CONTENT.materialProfile, recordId, sceneRecordId: recordId, input: retainedInput, inputDigest, resultDigest, sceneDigest, result, scene, reference, informationStages: { foundation: { state: "present", reference: COMPOSITIONAL_FOUNDATION }, inherited: { state: "present", carriedPairs: modeled.length, draftDefinitions: catalogue.loci.length - modeled.length }, expression: { state: "present", context }, phenotype: { state: "present", profileVersion, sourceDigest: sceneDigest }, lifetime: { state: "unmodeled", reason: "No lifetime, learning, history or regulation consumer is supplied." } }, representations: { baseline: JSON.stringify({ baseline: catalogue.baseline, sourceDefinitions: catalogue.sourceDefinitions }, null, 2), inherited: JSON.stringify(modeled.map((locus) => ({ locusId: locus.id, recordVersion: locus.version, copies: genome.loci[locus.id] })), null, 2), expression: JSON.stringify(facts, null, 2) }, description: `${scene.conventions.primaryCount} connected primary regions; ${scene.conventions.wholeAssemblySymmetry}. Optional parts follow their actual copied owner guards. Static source; physiology and motion remain unmodeled.`, prompt: { text: "Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art." } };
   } catch (error) {
     return rejected(error);
   }
@@ -150,11 +152,11 @@ function generateCompositionalSource(input) {
 function replayCompositionalSource(record) {
   try {
     envelope(record, ["schemaVersion", "sceneProjectionVersion", "materialProfileVersion", "sceneRecordId", "input", "inputDigest", "resultDigest", "sceneDigest"]);
-    if (record.schemaVersion !== COMPOSITIONAL_PACKET_SCHEMA || record.sceneProjectionVersion !== COMPOSITIONAL_PROFILE || record.materialProfileVersion !== COMPOSITIONAL_CONTENT.materialProfile) throw new Error("Unsupported compositional record/profile");
-    const packet = resolveCompositionalSource(record.input);
+    if (record.schemaVersion !== COMPOSITIONAL_PACKET_SCHEMA || ![LEGACY_COMPOSITIONAL_PROFILE, MESH_CONTACT_PROFILE].includes(record.sceneProjectionVersion) || record.materialProfileVersion !== COMPOSITIONAL_CONTENT.materialProfile) throw new Error("Unsupported compositional record/profile");
+    const packet = resolveCompositionalSource(record.input, record.sceneProjectionVersion);
     if (packet.status !== "resolved") return packet;
     if (["inputDigest", "resultDigest", "sceneDigest", "sceneRecordId"].some((key) => record[key] !== packet[key])) throw new Error("Retained compositional recipe or source digest differs");
-    return { ...packet, replay: { status: "verified", profileVersion: COMPOSITIONAL_PROFILE } };
+    return { ...packet, replay: { status: "verified", profileVersion: record.sceneProjectionVersion } };
   } catch (error) {
     return rejected(error, "compositional-replay");
   }

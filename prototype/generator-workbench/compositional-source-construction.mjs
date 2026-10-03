@@ -1,5 +1,5 @@
 
-import { COMPOSITIONAL_CONTENT, COMPOSITIONAL_PROFILE } from "./compositional-source-package.mjs";
+import { COMPOSITIONAL_CONTENT } from "./compositional-source-package.mjs";
 import { add, sub, mul, dot, cross, unit } from "./anatomical-source-construction.mjs";
 const identityFrame = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const localVector = (frame, vector) => vector.reduce((sum, coordinate, index) => add(sum, mul(frame[index], coordinate)), [0, 0, 0]);
@@ -13,7 +13,38 @@ function frameAlong(direction) {
 const rotateX = (point, angle) => [point[0], point[1] * Math.cos(angle) - point[2] * Math.sin(angle), point[1] * Math.sin(angle) + point[2] * Math.cos(angle)];
 const radialExtent = (owner, direction) => 1 / Math.sqrt(owner.frame.reduce((sum, axis, index) => sum + (dot(direction, axis) / owner.radii[index]) ** 2, 0));
 const inside = (owner, point) => localPoint(owner, point).reduce((sum, coordinate, index) => sum + (coordinate / owner.radii[index]) ** 2, 0) <= 1 + 1e-8;
-function constructCompositionalSource(values, facts) {
+const LEGACY_COMPOSITIONAL_PROFILE = "compositional-source/1";
+const MESH_CONTACT_PROFILE = "compositional-source/2";
+
+// The opaque mesh is inscribed within its mathematical ellipsoid. Contact must
+// use the actual facets; analytical membership alone can leave a visible gap.
+function meshContactGeometry(owner, direction) {
+  const planes = owner.mesh.faces.map((face) => {
+    const points = face.vertices.map((index) => owner.mesh.vertices[index]);
+    let normal = unit(cross(sub(points[1], points[0]), sub(points[2], points[0])));
+    if (dot(normal, sub(points[0], owner.center)) < 0) normal = mul(normal, -1);
+    const offset = dot(normal, sub(points[0], owner.center));
+    if (!Number.isFinite(offset) || offset <= 0 || points.some((point) => Math.abs(dot(normal, sub(point, owner.center)) - offset) > 1e-8)) {
+      throw new Error(`Invalid convex contact facet on ${owner.id}`);
+    }
+    if (owner.mesh.vertices.some((point) => dot(normal, sub(point, owner.center)) > offset + 1e-8)) {
+      throw new Error(`Inconsistent convex contact mesh on ${owner.id}`);
+    }
+    return { normal, offset };
+  });
+  const distances = planes
+    .filter((plane) => dot(plane.normal, direction) > 1e-10)
+    .map((plane) => plane.offset / dot(plane.normal, direction));
+  const distance = Math.min(...distances);
+  if (!Number.isFinite(distance) || distance <= 0) throw new Error(`No contact surface on ${owner.id}`);
+  return {
+    surfaceRoot: add(owner.center, mul(direction, distance)),
+    distance,
+    contains: (point) => planes.every((plane) => dot(plane.normal, sub(point, owner.center)) <= plane.offset + 1e-9),
+  };
+}
+
+function buildCompositionalSource(values, facts, profileVersion) {
   const nodes = [], edges = [];
   const value = (target) => values[target];
   const sources = (...targets) => facts.filter((fact) => fact.state === "expressed" && targets.includes(fact.target)).map((fact) => fact.locusId);
@@ -83,8 +114,35 @@ function constructCompositionalSource(values, facts) {
     const end = sub(child.center, mul(direction, radialExtent(child, direction) - penetration));
     if (!inside(parent, start) || !inside(child, end)) throw new Error("Disconnected narrow roots");
     const radius = value("region.connectorRadiusRatio") * Math.min(parent.radii[1], parent.radii[2], child.radii[1], child.radii[2]);
-    const connector = segment(`${child.id}-join`, "region-connector", parent.id, start, end, radius, radius, bodyPalette, [...trace, ...sources("region.connectorRadiusRatio")]);
-    connector.attachments = [{ owner: parent.id, position: start }, { owner: child.id, position: end }];
+    let realizedStart = start;
+    let realizedEnd = end;
+    let meshContact = null;
+    if (profileVersion === MESH_CONTACT_PROFILE) {
+      const parentContact = meshContactGeometry(parent, direction);
+      const childContact = meshContactGeometry(child, mul(direction, -1));
+      if (penetration >= Math.min(parentContact.distance, childContact.distance)) throw new Error("Narrow contact penetration exceeds owner interior");
+      realizedStart = sub(parentContact.surfaceRoot, mul(direction, penetration));
+      realizedEnd = add(childContact.surfaceRoot, mul(direction, penetration));
+      if (!parentContact.contains(realizedStart) || !childContact.contains(realizedEnd)) throw new Error("Connector cap center is outside actual owner mesh");
+      const witnessRadius = Math.min(radius, penetration) * 0.01;
+      const connectorFrame = frameAlong(direction);
+      const capInteriorWitnesses = [realizedStart, realizedEnd].map(center => ({
+        center,
+        radius: witnessRadius,
+        points: [center, ...connectorFrame.slice(1).flatMap(axis => [add(center, mul(axis, witnessRadius)), sub(center, mul(axis, witnessRadius))])],
+      }));
+      if (!capInteriorWitnesses[0].points.every(parentContact.contains) || !capInteriorWitnesses[1].points.every(childContact.contains)) throw new Error("Connector cap lacks a shared mesh interior");
+      meshContact = {
+        profileVersion: "faceted-volume-contact/1",
+        penetration,
+        mathematicalSurfaceRoots: [add(parent.center, mul(direction, radialExtent(parent, direction))), sub(child.center, mul(direction, radialExtent(child, direction)))],
+        meshSurfaceRoots: [parentContact.surfaceRoot, childContact.surfaceRoot],
+        capInteriorWitnesses,
+      };
+    }
+    const connector = segment(`${child.id}-join`, "region-connector", parent.id, realizedStart, realizedEnd, radius, radius, bodyPalette, [...trace, ...sources("region.connectorRadiusRatio")]);
+    connector.attachments = [{ owner: parent.id, position: realizedStart }, { owner: child.id, position: realizedEnd }];
+    if (meshContact) connector.meshContact = meshContact;
     edges.push({ from: connector.id, to: child.id, role: "true-surface-root" });
   }
   const anchor = ellipsoid("region-root", "primary-region", null, [0, 0, 0], radii, bodyPalette, primarySources);
@@ -208,10 +266,20 @@ function constructCompositionalSource(values, facts) {
   }
   const primaryCount = nodes.filter((node) => node.role === "primary-region").length;
   if (primaryCount > COMPOSITIONAL_CONTENT.bounds.primaryRegions || nodes.length > COMPOSITIONAL_CONTENT.bounds.graphNodes || edges.length > COMPOSITIONAL_CONTENT.bounds.graphEdges || nodes.reduce((sum, node) => sum + node.mesh.vertices.length, 0) > COMPOSITIONAL_CONTENT.bounds.meshVertices) throw new Error("Compositional graph/mesh bound exceeded");
-  return { status: "constructed", profileVersion: COMPOSITIONAL_PROFILE, baseline: COMPOSITIONAL_CONTENT.baseline, nodes, edges, conventions: { primaryCount, primarySymmetry: radial ? "radial" : "bilateral", wholeAssemblySymmetry: radial && value("modules.typedHead") ? "radial primary assembly with bilateral local head module" : radial ? "radial" : "bilateral", layout: value("organization.layout"), depth, groundPlane: "none; contact chains retain only their local contact convention" } };
+  return { status: "constructed", profileVersion, baseline: COMPOSITIONAL_CONTENT.baseline, nodes, edges, conventions: { primaryCount, primarySymmetry: radial ? "radial" : "bilateral", wholeAssemblySymmetry: radial && value("modules.typedHead") ? "radial primary assembly with bilateral local head module" : radial ? "radial" : "bilateral", layout: value("organization.layout"), depth, groundPlane: "none; contact chains retain only their local contact convention" } };
+}
+function constructCompositionalSource(values, facts) {
+  // This entry point permanently retains the original saved-record recipe.
+  return buildCompositionalSource(values, facts, LEGACY_COMPOSITIONAL_PROFILE);
+}
+function constructCompositionalSourceWithMeshContacts(values, facts) {
+  return buildCompositionalSource(values, facts, MESH_CONTACT_PROFILE);
 }
 export {
   constructCompositionalSource,
+  constructCompositionalSourceWithMeshContacts,
+  LEGACY_COMPOSITIONAL_PROFILE,
+  MESH_CONTACT_PROFILE,
   localPoint,
   localVector,
   worldPoint

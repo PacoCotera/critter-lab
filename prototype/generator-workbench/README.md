@@ -38,7 +38,7 @@ switching packages is deliberate and never migrates their genomes. See the
 ### Compositional Generate and all eleven genomic branches
 
 `genomic-compositional-source-experiment@1` uses separately pinned
-`developmental-compositional-source/1`, `compositional-source/1` and
+`developmental-compositional-source/1`, current `compositional-source/2` and
 `compositional-surface-fields/1` rules. The [content contract](../../design/anatomical-source-prototype/compositional-contract.md)
 and [source-art rules](../../design/anatomical-source-prototype/compositional-art-direction.md)
 replace the universal head/neck/torso/support rig. Ordered inherited contributors
@@ -67,6 +67,13 @@ recipes pin the exact registry definition before its derived top-level
 that metadata and is deliberately a different hash boundary. Recovery rejects a mismatched foundation or
 source digest rather than substituting another version. Anatomical V1 and all
 older packages remain available under their original rules.
+
+Original `compositional-source/1` records also retain their exact builder and
+`compositional-reference/1` output. The corrected `/2` constructor intersects
+the visible retained mesh for narrow contacts; `/1` used analytic ellipsoid
+roots that could leave a visible gap. New Generate and Resolve use `/2` and
+`compositional-reference/2` without changing the catalogue, ordered copies or
+context. Reopening an old record does not silently upgrade it.
 
 Founder generation samples categorical/presence states explicitly, avoiding the
 earlier 75% ON bias; numeric/pigment copies remain independent. All declared

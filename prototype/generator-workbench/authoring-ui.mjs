@@ -178,10 +178,14 @@ export function isResolvedAuthoringPacket(packet) {
     packet?.result?.status === "resolved" &&
     (packet.ruleVersion !== "developmental-compositional-source/1" ||
       (packet.schemaVersion === "compositional-authoring-record/1" &&
-        packet.sceneProjectionVersion === "compositional-source/1" &&
+        ["compositional-source/1", "compositional-source/2"].includes(packet.sceneProjectionVersion) &&
         packet.materialProfileVersion === "compositional-surface-fields/1" &&
         packet.scene?.status === "constructed" &&
-        packet.scene?.profileVersion === "compositional-source/1" &&
+        packet.scene?.profileVersion === packet.sceneProjectionVersion &&
+        packet.result.profileVersion === packet.sceneProjectionVersion &&
+        packet.result.graph?.profileVersion === packet.sceneProjectionVersion &&
+        packet.informationStages?.phenotype?.profileVersion === packet.sceneProjectionVersion &&
+        packet.reference?.profileVersion === (packet.sceneProjectionVersion === "compositional-source/2" ? "compositional-reference/2" : "compositional-reference/1") &&
         packet.reference?.status === "constructed")) &&
     (packet.ruleVersion !== "developmental-anatomical-source/1" ||
       (packet.schemaVersion === "anatomical-authoring-record/1" &&
@@ -241,7 +245,7 @@ export function authoringRoute(catalogue, operation) {
 }
 
 export function sceneReplayEnvelope(packet) {
-  if (packet.sceneProjectionVersion === "compositional-source/1")
+  if (["compositional-source/1", "compositional-source/2"].includes(packet.sceneProjectionVersion))
     return {
       schemaVersion: packet.schemaVersion,
       sceneProjectionVersion: packet.sceneProjectionVersion,
@@ -276,7 +280,7 @@ export function sceneReplayEnvelope(packet) {
 }
 
 export function copyableAuthoringExport(value) {
-  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1"].includes(
+  return ["module-scene/1", "module-scene/2", "module-scene/3", "anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(
     value?.sceneProjectionVersion,
   )
     ? sceneReplayEnvelope(value)
@@ -354,7 +358,7 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
-  if (["anatomical-source/1", "compositional-source/1"].includes(scene.profileVersion)) {
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(scene.profileVersion)) {
     const targets = scene.nodes.filter(node => node.sources.includes(locusId));
     return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
   }
@@ -436,7 +440,7 @@ export function causalSummary(catalogue, result, id) {
 export function geometryBounds(result) {
   // Anatomical source solids use their retained three-dimensional camera.
   // The older diagnostic node/dimensions camera cannot interpret that graph.
-  if (["anatomical-source/1", "compositional-source/1"].includes(result?.profileVersion)) return null;
+  if (["anatomical-source/1", "compositional-source/1", "compositional-source/2"].includes(result?.profileVersion)) return null;
   if (result?.status !== "resolved" || !result.graph?.nodes?.length)
     return null;
   const graph = result.graph;

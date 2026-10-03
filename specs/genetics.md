@@ -6,7 +6,7 @@ Status: accepted framework with eleven genomic layers (the domain families liste
 
 - Generate recognizable, extensively varied creatures entirely from their genomes and expressed contributors. Classes are emergent descriptions of results, not hardcoded inputs. V1 requires ground, flying and swimming coverage and widely different body organizations. Organism examples express desired range, not a mandatory biological taxonomy; traits need subdivisions.
 - Owner correction, 2 October: repeated chained bulb silhouettes do not satisfy this range. Prompt simplification and retained-locus audits do not fix body organization. The next generator experiment must change the forced geometry and demonstrate distinctly organized source creatures; limb roles, skin/material and expressed colours must be understandable in the reference. Art direction, pixel art and genomics own the considered handoff together. New construction controls remain provisional until steered as canonical content.
-- The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md) is a 34-pair bilateral subset. Its implementation inherits dimensions, pigments and accessory gates but hardcodes a head, neck, core and four/six supports. The owner rejects that fixed organization: it violates the existing genome-derived construction requirement and does not deliver the requested range. Preserve V1 for exact saved-record recovery, not as the broad generator's foundation. The correction must derive connected region organization and attachment roles from expressed contributors, retain the five-layer record and complete declared loci/coverage, and expose unimplemented fields honestly rather than counting them as working features.
+- The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md) is a 34-pair bilateral subset. Its implementation inherits dimensions, pigments and accessory gates but hardcodes a head, neck, core and four/six supports. The owner rejects that fixed organization: it violates the existing genome-derived construction requirement and does not deliver the requested range. Preserve V1 for exact saved-record recovery, not as the broad generator's foundation. The correction must derive connected region organization and attachment roles from expressed contributors, retain the five record stages and complete declared loci across all eleven genomic layers, and expose unimplemented fields honestly rather than counting them as working features.
 - Selective breeding is central: heritable variation can become a faster or more reliable lineage under comparable conditions. Inherited contributors and expression establish tendencies; a class label never assigns performance.
 - Affinities describe environments, elements and foods that support or hinder thriving. Skills/abilities need inherited structure; the exact tree or network remains open.
 - Jobs must not determine genomics. Future games interpret expressed properties for potentially many activities. Playful contests and a larger crowd of critters are future game direction, not genetic categories.
@@ -254,7 +254,7 @@ Reserve linkage/provenance now at the conceptual level; do not equate dimension 
 
 ## Genome baseline, collected sample and phenotype — accepted distinction
 
-A **genome baseline** records a source-supported genetic foundation: known/invariant contributors, required systems, applicable rule vocabulary and permitted variation within the existing five-layer framework. It is not a finished species body template, a complete individual allele assignment or a class average freshly imposed on offspring. Modeled topology decisions remain inspectable genomic inputs; expression constructs the body and any class description follows afterward.
+A **genome baseline** records a source-supported genetic foundation: known/invariant contributors, required systems, applicable rule vocabulary and permitted variation across the eleven genomic layers. The five record stages keep inherited, expressed and acquired information distinct. It is not a finished species body template, a complete individual allele assignment or a class average freshly imposed on offspring. Modeled topology decisions remain inspectable genomic inputs; expression constructs the body and any class description follows afterward.
 
 A **collected sample** is a particular stable discovery carrying genomic information and supported possibilities consistent with a valid foundation. Research can reveal that foundation and variants distinguishing this sample from others. The sample is not merely a visible-trait fragment. It need not be tissue from an existing individual: tissue is one possible fictional origin, not a universal assumption across all critter classes. Sample provenance does not automatically create a donor parent or ancestry relationship.
 
@@ -310,9 +310,9 @@ Unsupported dimensions are unmodeled, not zero biology. The fixture retains one 
 
 ## Worked bridge: traits, alleles, research and phenotype
 
-**Proposed teaching example, not canonical anatomy or balance.** This applies the existing five-layer/eleven-family framework. Crown, eye rings and pale markings reuse the bounded fixture's allele rules; the movement/energy extension below is a new proposal. A small example does not replace the complete framework or authorize production incubation with unmodeled required information.
+**Proposed teaching example, not canonical anatomy or balance.** This applies the eleven genomic layers with five separate record stages. Crown, eye rings and pale markings reuse the bounded fixture's allele rules; the movement/energy extension below is a new proposal. A small example does not replace the complete framework or authorize production incubation with unmodeled required information.
 
-### Vocabulary and the five layers in one individual
+### Vocabulary and the five record stages in one individual
 
 A **trait** is a describable property, such as crown presence or locomotion efficiency. A **locus** is a hereditary position; an **allele** is a variant at that position. The **genotype** records the allele copies. **Expression rules** resolve their interactions under a declared life stage/context into the **phenotype**. Current condition and learned behavior can change performance without changing the genotype. A trait need not have one locus, and one locus may influence several traits.
 
@@ -324,7 +324,7 @@ A **trait** is a describable property, such as crown presence or locomotion effi
 | 4 Resolved phenotype | Crown present, eye rings present, pale markings absent; p is carried but unexpressed | The portrait must agree with this result. A carried allele is known hereditary information, not a faint marking or an unknown region |
 | 5 Lifetime state/history | Same individual can later be tired, trained or injured | Current performance and acquired experience remain distinct from inherited potential and are not filled in by decoding a sample |
 
-Research knowledge is an overlay describing which facts the player has established about these layers; it is not a sixth genomic layer. Before creation the record describes a sample and its supported complete configurations. A chosen configuration becomes the individual genome only through the accepted creation boundary. Studying does not rewrite alleles to improve the result.
+Research knowledge is an overlay describing which facts the player has established about these record stages; it is not an additional genomic layer. Before creation the record describes a sample and its supported complete configurations. A chosen configuration becomes the individual genome only through the accepted creation boundary. Studying does not rewrite alleles to improve the result.
 
 ### Traceable trait cards
 
@@ -340,7 +340,7 @@ These are fictional qualitative rules for a worked proposal. IDs, inheritance sc
 
 ### Genome zones are views into this structure
 
-Proposed knowledge zones: **form** can link the crown locus and body-plan constraints; **markings** can link rings/markings loci; **movement** can link drive and efficiency, with an explicit relation to energy. These are information groupings, not chromosomes, the five layers, or proof that one study corresponds to one zone. A locus may contribute to several displayed traits without being duplicated in the genome.
+Proposed knowledge zones: **form** can link the crown locus and body-plan constraints; **markings** can link rings/markings loci; **movement** can link drive and efficiency, with an explicit relation to energy. These are information groupings, not chromosomes, record stages, or proof that one study corresponds to one zone. A locus may contribute to several displayed traits without being duplicated in the genome.
 
 For a markings example, the research sequence could be:
 
@@ -404,7 +404,7 @@ sampling and epigenetic marks; edit policy, resources and inheritance remain ope
 
 Founder generation assembles candidates within these constraints; expression resolves them to a phenotype with an explanation trace. Breeding derives alleles from actual parents under explicit inheritance/viability rules rather than manufacturing a replacement valid child. Invalid combinations are rejected or handled by the chosen reproductive policy, not repaired by silently swapping genes. Content versions and saved genomes, expression and assets remain pinned.
 
-The [bounded engine contract](genetic-engine.md) uses Pip's applicable baseline, a small locus set and declared unmodeled boundaries. It covers a varied batch, inherited phenotype causes, incompatible-combination rejection and one compatible cross. This is not the automatic artwork/encyclopedia generator. No whole-library editor, broad class catalogue, universal solver or production service is required for the genetic proof. Later extension follows the existing extension policy and all five layers/eleven families.
+The [bounded engine contract](genetic-engine.md) uses Pip's applicable baseline, a small locus set and declared unmodeled boundaries. It covers a varied batch, inherited phenotype causes, incompatible-combination rejection and one compatible cross. This is not the automatic artwork/encyclopedia generator. No whole-library editor, broad class catalogue, universal solver or production service is required for that earlier genetic proof. Later authoring work follows the existing extension policy and all eleven genomic layers, keeping the five record stages distinct.
 
 Owner further requires configured incubation to trigger an algorithmic creature
 generator from the fully decoded genome and its expressed loci. It produces all
