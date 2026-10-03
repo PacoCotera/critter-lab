@@ -21,6 +21,8 @@ The optional Cloud Pass supplies global trading and breeding, lineage, certifica
 
 The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The owner now explicitly directs a mobile fallback if the hardware-oriented software experience does not justify building the kit, and shared domain services should not force identical interactions across devices.
 
+Owner direction,3October2026: design and the connected whole-product journey lead development. Paco has the ultimate decision on changed architecture and game design. The requested overhaul remains open; specialist agreement, merged code and prototype delivery do not approve a new baseline. Existing approved behavior and explicitly bounded generator/workbench/API experiments remain evidence, with their limitations retained.
+
 ## Current development gate
 
 Define the [electronics-first reference](devices.md#electronics-first-v1-reference-specification), then prove firmware/game behavior in software before PCB/enclosure development. Mobile is an explicit fallback product, not merely a remote control for hardware. Share domain operations, state/identity and preserved content; retain device-specific presentation and input adapters. Simulated peripherals must remain labeled. Existing C/MCU builds do not establish functional device firmware.
@@ -653,3 +655,4 @@ down requests reassert painted readiness atomically before down under the same
 native pipe lock. Release remains a separate request after acknowledged down.
 This prevents another ready acknowledgement from interleaving that prefix/down;
 it does not establish independent clients' concurrent hold ownership.
+

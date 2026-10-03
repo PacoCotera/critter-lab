@@ -2,6 +2,23 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [16:45] — Google API images with literal prompt provenance
+
+[PR104](https://github.com/PacoCotera/critter-lab/pull/104) · hosting source `a78454e` · native game remains `720c1e6`
+
+Google rendering uses its fixed generateContent endpoint after two retained Interactions failures. Two subsequent deliberate requests completed with the same genome/source and separately retained exact prompts. The actual gallery shows both unchanged images; reload and switching creatures preserved them without another provider call. [Images, prompts, jobs and independent pixel assessment](prototype/generator-workbench/evidence/api-rendering/README.md), [guided authoring and visible layer evidence](prototype/generator-workbench/evidence/guided-authoring/README.md).
+
+Architect/coder/independent source review, unchanged automatic CI37159330235 and normal exact clean pushed-source builds passed. Native release and saves retained, no reset or new tests. Transport and retention are delivered; source-faithful art is HOLD, complete eleven-layer content/broad anatomy/animation remain open, and OpenAI remains unconfigured.
+## 2026-10-03 [16:28] — Reachable authoring controls and useful render failures
+
+[PR103](https://github.com/PacoCotera/critter-lab/pull/103) · hosting source `084732d` · native game remains `720c1e6`
+
+- Before generation the workspace says Not generated, without false previous-source or pending-locus claims. The source card scrolls normally so identity and Before/Current controls remain reachable.
+- All eleven genome layer headings and counts remain in the main workspace; detailed gaps expand with their nested attributes. Empty layers have a short implementation label.
+- Failed renders retain safe HTTP/status/reason diagnostics even when the provider omits a request ID. Original source, prompt and explicit-only submission remain unchanged; no raw provider error text or credentials are retained.
+
+Focused architect and independent genomic review, unchanged automatic CI37158420596 and exact clean pushed-source builds passed. Website concepts, native release, saved creatures and prior render jobs remain retained. Successful Google image delivery remains under actual-use investigation; no new tests, discretionary suites or increased testing scope.
+
 ## 2026-10-03 [15:59] — Guided genome authoring and render variants
 
 [PR102](https://github.com/PacoCotera/critter-lab/pull/102) · hosting source `cbcbfd7` · native game remains `720c1e6`
@@ -114,3 +131,4 @@ Research enjoyment and wider sample variety remain open gameplay work.
 - **Sandbox:** activation starts fresh Lab, Companion and Dock saves.
 
 **Still open:** the incubator canister is rejected artwork awaiting replacement. Final art quality, discovery depth and hardware behavior remain under development.
+
