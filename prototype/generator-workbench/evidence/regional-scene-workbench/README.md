@@ -75,3 +75,44 @@ recolouring. [The image manifest](image-manifest.json) records both source and
 PNG hashes. These sources remain axial: equivalent complete radial, membrane,
 deformation and marked-surface scenes are not supported here. Game/device
 implementation and hardware validation are unchanged.
+
+## Actual Generate and replay journey
+
+The local workbench was activated from clean pushed
+`2d54ff523c42cc60119f5cd7c1471eaa4ef7a5ea` after
+[CI37092938213](https://github.com/PacoCotera/critter-lab/actions/runs/37092938213)
+passed the host boundary checks and framework build. One legacy HTTP test was
+updated to separate the additive optional descriptor while keeping exact old
+package assertions; production geometry and sampling did not change.
+
+![First ordinary Generate result and exact short prompt](browser-first.png)
+
+![Second ordinary Generate result and exact short prompt](browser-second.png)
+
+Two fresh Generate clicks accepted different inputs. The first has one body,
+two fins, coral/gold fields and scales, after 471 unmodified draws at accepted
+seed 1383562816. The second has three unequal regions, no appendages and
+charcoal/cobalt fields with scales, after 75 draws at accepted seed 1708756719.
+Both inherit eyes off. These two observed results establish working publication
+and differing source organization; they do not establish a broad distribution.
+[The browser manifest](browser-manifest.json) records the exact identities and
+observations. Their complete packets, canonical SVGs, audit texts and compact
+replay inputs are retained as `browser-first.*` and `browser-second.*`.
+
+Actual clipboard text matched the 90-character image-led sentence above.
+Changing reference medium cleared the image and prompt and disabled Copy.
+Verified compact import restored the second source's exact input and scene
+identity. Importing the retained older record restored
+`experiment-3f2bd4868e6c5b9aa255` under its original `module-scene/1` rule:
+
+![Older record replays through its original source version](browser-old-replay.png)
+
+The two existing saved records remained present. The final view restores the
+new source rather than relabeling that older record:
+
+![New compact import restores the same scene](browser-final.png)
+
+Actual compact browser exports measure 60,991 and 60,981 bytes on the wire,
+within the unchanged 65,536-byte limit. Failure retention and bounded-search
+exhaustion remain covered by the unchanged recovery helpers and CI; this
+browser journey did not force exhaustion or simulate a hardware failure.

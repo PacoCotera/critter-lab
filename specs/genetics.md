@@ -124,6 +124,14 @@ The [active art handoff](../prototype/generator-workbench/art-template.md) and
 [owner example](../prototype/generator-workbench/evidence/owner-simple-pet/README.md)
 retain the actual instruction and evidence.
 
+Current provisional host evidence: the [regional scene workbench](../prototype/generator-workbench/evidence/regional-scene-workbench/README.md)
+uses inherited regional growth and join width instead of mandatory equal bulb
+regions, and publishes actual optional eyes and skin/scales with the same source.
+Two ordinary Generate results and exact new/older replay are retained. This
+is a measured partial construction result, not approval of its finite allele
+vocabulary, source envelopes or the broad creature range. Complete radial,
+membrane, deformation and marked-surface consumers remain unfinished.
+
 Owner explicitly requires future polygenic and cross-dimension traits: movement,
 energy physiology and environmental response can jointly shape locomotion,
 sensory performance or metabolism. Model several inherited contributions to a
