@@ -2,6 +2,16 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [15:59] — Guided genome authoring and render variants
+
+[PR102](https://github.com/PacoCotera/critter-lab/pull/102) · hosting source `cbcbfd7` · native game remains `720c1e6`
+
+- The default workbench follows random genome, inherited-attribute editing, explicit structure refresh, Before/Current inspection and editable render prompts. All eleven genome layers and their attributes remain visible in the main editor.
+- Saved creatures reopens exact retained source recipes. One gallery keeps results across prompt and structure revisions, with each image bound to its original genome/source and literal submitted prompt.
+- Render and Render another version are explicit provider actions. Editing, generation, refresh and retained-image recovery do not start a render. Newer website concept assets remain included.
+
+Architect and independent genomic source review, unchanged automatic CI37156708307 and exact clean pushed-source builds passed. Actual hosted use exposed first-use text and oversized source-card presentation defects, which are being corrected. The first explicit Google request retained a failed job; successful image delivery is still unresolved. This does not complete four missing genomic domains, broad body range or accepted pet art. No new tests or increased testing scope.
+
 ## 2026-10-03 [15:46] — Grounded Critter Lab screen concepts
 
 [PR101](https://github.com/PacoCotera/critter-lab/pull/101) · hosting source `37dc2ee` · native game remains `720c1e6`

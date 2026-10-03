@@ -17,7 +17,8 @@ experiment · v6**. Its connected journey is **New random genome → edit inheri
 traits → Refresh structure → compare Before/Current → edit render prompt →
 Render creature / Render another version → inspect retained renders**. All
 eleven genome layers stay visible in a persistent tree, with their attributes
-nested underneath. Every heading retains its full count and current gaps;
+nested underneath. Every heading retains its full count; detailed current gaps
+remain inspectable inside the opened layer, with a brief empty-layer label;
 search filters attributes without hiding layers. Selection expands the parent
 layer and edits the same ordered copies. Consumed traits appear first within
 each layer; inactive, unimplemented and draft badges remain on their attributes,
@@ -141,6 +142,15 @@ provider/model/request identity, exact prompt, source bindings and actual output
 hash/MIME/usage/revised prompt where returned. Restart marks pending/running jobs
 interrupted without resubmission. The provider deadline is180seconds; failure or
 interruption may have incurred a charge, and exactly-once execution is not claimed.
+Failed jobs retain a numeric `providerHttpStatus` independently of the optional
+request ID, so missing provider IDs cannot hide a controlled HTTP failure.
+Error bodies are parsed only within64KiB; diagnostic status/code/ErrorInfo reason
+values use finite allowlists (tokens at most80 characters, numeric codes bounded).
+Raw error messages/bodies, arbitrary metadata, credentials and headers are not
+retained as diagnostics. Controlled failure codes distinguish no-image,
+invalid/out-of-bounds bitmap, invalid JSON, response-read and byte-limit failures,
+including successful HTTP responses that did not produce a usable image.
+These diagnostics never change request payloads or initiate retries.
 Polling/recovery never invokes a provider. After token entry, the gallery reads
 the authenticated bounded job list and polls only retained pending/running jobs.
 Known-ID and **Find retained jobs for this creature** recovery remain under
@@ -189,7 +199,9 @@ inherited-fidelity claim, gene change, automatic provider call or animation.
 
 ### Working creature and pending edits
 
-Inherited-copy edits keep the last successful structure and values visible with
+Before the first resolved structure, the preview says **Not generated** and
+shows no previous-source or pending-locus claims; rendering is unavailable.
+Inherited-copy edits then keep the last successful structure and values visible with
 **Changes pending**. Only explicit **Refresh structure** applies them; rejection
 preserves edits and preview, and provider submission stays disabled. Successful
 refresh keeps the previous structure for comparison, uses compatible shared
@@ -572,7 +584,7 @@ Open **http://127.0.0.1:4381**. React/Mantine/Vite provide the developer interfa
 Connected authoring journey:
 
 1. Create a random valid genome without species presets or copy repair.
-2. Expand a layer in the eleven-layer genome tree and edit an attribute's inherited copies. Search retains every layer heading/count/gap. The last successful structure stays visible while changes are pending.
+2. Expand a layer in the eleven-layer genome tree and edit an attribute's inherited copies. Search retains every layer heading/count, and detailed gaps remain inspectable inside its panel. The last successful structure stays visible while changes are pending.
 3. Refresh explicitly and compare Before/Current. Invalid refresh preserves the working edits and earlier structure; it never silently repairs copies.
 4. Edit the render prompt, choose a configured provider and explicitly render. Refreshing or changing text never submits a paid request.
 5. Inspect the creature's retained image versions, original genomes and exact submitted prompts. Earlier jobs remain recoverable across refreshes/reload, with their own immutable source bindings.

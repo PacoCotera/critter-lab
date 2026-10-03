@@ -5,7 +5,7 @@ import { randomUUID, timingSafeEqual } from "node:crypto";
 import { digest } from "./authoring-adapter.mjs";
 import { imageLedPetHandoff, isResolvedAuthoringPacket, sceneReplayEnvelope } from "./authoring-ui.mjs";
 import { proposalSourceBinding } from "./retained-pet-proposals.mjs";
-import { imageBytes, providerSettings, renderProvider, sha256 } from "./render-provider.mjs";
+import { imageBytes, providerSettings, renderProvider, providerFailureMessages, sha256 } from "./render-provider.mjs";
 
 const jobIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const now = () => new Date().toISOString();
@@ -83,8 +83,16 @@ export function createRenderJobs(replay, environment = process.env) {
     } catch (error) {
       job.state = "failed";
       job.updatedAt = now();
-      job.error = error.providerRequestId
-        ? error.message : "Rendering failed or timed out; provider outcome may have incurred a charge. No automatic retry.";
+      const status = Number.isInteger(error.providerHttpStatus) && error.providerHttpStatus >= 100 && error.providerHttpStatus <= 599 ? error.providerHttpStatus : null;
+      const reason = Object.hasOwn(providerFailureMessages, error.providerFailureReason) ? error.providerFailureReason : null;
+      job.providerHttpStatus = status;
+      job.providerFailureReason = reason;
+      job.providerErrorStatus = error.providerErrorStatus ?? null;
+      job.providerErrorCode = error.providerErrorCode ?? null;
+      job.providerErrorReason = error.providerErrorReason ?? null;
+      job.error = reason === "HTTP_ERROR" && status ? `Provider returned HTTP${status}; no automatic retry. A charge may have occurred.` :
+        reason ? `${providerFailureMessages[reason]}${status ? ` (HTTP${status})` : ""}; no automatic retry. A charge may have occurred.` :
+        "Rendering failed or timed out; provider outcome may have incurred a charge. No automatic retry.";
       job.providerRequestId = error.providerRequestId ?? null;
       try { await persist(job); } catch { /* Durable running state becomes interrupted at next restart. */ }
     } finally { active = false; }
