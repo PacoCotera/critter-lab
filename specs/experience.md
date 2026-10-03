@@ -10,7 +10,7 @@ Accepted current architecture: the combined Companion, home Lab and Caddy make t
 | --- | --- |
 | Companion | Main everyday interaction device: Probe for expeditions/observations/encounters, Cargo for carried findings and temporary captures, Companions for bonding/training/development. Brief field checks coexist with responsive creature presence; mode changes do not silently cancel activity. Combined display and controls remain proposed. |
 | Lab | A customizable research workbench with room for many screens and game loops: investigation, crafting, creation, collections and knowledge. Expand its capabilities through a coherent interaction framework, not trait-specific navigation exceptions. |
-| Caddy | Charges Lab and Companion, prints, and presents the shared world's habitats, eggs, residents and environments. Cloud-backed memory and ambient presence, with offline/cache behavior open. Docking alone confers no transfer, ownership or reward. |
+| Caddy | Charges Lab and Companion, prints, and presents the shared world's habitats, eggs, residents and environments. It shows accepted local records or an explicitly dated cache; optional global services do not gate core play. Exact storage/authority placement remains open in [architecture](architecture.md). Docking alone confers no transfer, ownership or reward. |
 
 The complete game may first be designed and prototyped in software or an app. A future complete app edition is also allowed in principle; its scope is not committed. A software-first prototype must preserve the different device roles and transitions so it tests the intended experience. It does not validate tactile controls, e-ink refresh, handling, charging or real-world ergonomics.
 
