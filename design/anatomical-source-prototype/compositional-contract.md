@@ -157,6 +157,35 @@ The considered source-art contract accepts the six vocabulary operators above al
 
 The immediate deliverable is the usable Generate platform drawing actual revised graph organization, retaining complete copies and its strict replay versions while old inputs reopen through their original versions. Full audit remains outside the creative prompt. Actual source evidence must establish changed organization; a declared contract is not that evidence. This finite compositional slice does not establish complete loci for every branch, accepted pet art, animation, physics or biological performance. Compatible catalogue authoring below changes actual supported copy contributions; it does not add missing operators, consumer domains or physiology.
 
+## Next authoring block: proposed innate profile
+
+This block is specified for the currently empty Cognition/innate-tendencies
+branch; it is **not implemented or approved canonical biology**. Exploration
+tendency and arousal threshold are candidate dimensions in the genomic
+framework. The following IDs, alleles and values are new provisional contracts.
+
+| Proposed locus → target | Two-copy rule | Guard and meaning |
+| --- | --- | --- |
+| cognition.innate-profile-presence → innate.enabled | off=false/on=true, dominant-enable | Optional data-profile gate, independent of head/eyes/body symmetry; false is not biological absence of cognition. |
+| cognition.exploration-tendency → innate.explorationClass | reserved/reserved=reserved; reserved/seeking=intermediate; seeking/seeking=seeking | Requires enabled profile; inherited tendency class, not a granted action or intelligence score. |
+| cognition.arousal-threshold → innate.arousalThreshold | low=.25/high=.75, copy-mean; bounds[.25,.75] | Requires enabled profile; dimensionless magnitude in fictional decoded-reference-cue/1, not physical stimulus units or a sensory grant. |
+
+The proposed pure innate-response-profile/1 consumer retains all three
+copy/fact witnesses and a static typed threshold boundary. OFF retains the
+other two resolved values inactive and supplies no response profile. An optional
+already-decoded reference cue is a nonheritable authoring observation: q below
+the threshold is below-boundary, otherwise boundary-reached. Invalid observation
+data does not reject or repair a genome. This supplies no live behavior,
+learning, acquired state, physiology or visual personality.
+
+Implementation must add exactly these three rows under a new explicit pin
+(114 complete pairs), preserving all old111-pair inputs and replay paths. The
+source image and short art brief retain their current semantic content. The
+bounded delivery gate is an actual authored ON/profile edit/OFF/reopen journey
+with copies, profile fields and causes together. This would partially model one
+empty branch; the other four branches, broad body-plan range and other missing
+consumers remain unresolved.
+
 ## Compatible authored foundations
 
 The compendium supports a separate `compositional-authoring-delta/1` fork against the exact published catalogue2,3,4 or5 pin. Parent2 reconstructs104 pairs; parent3/4/5 reconstruct111, all with six unsupported drafts and the eleven-family index. Its explicit fork identity and increasing local revision name a `genomic-compositional-source-draft-<forkId>` catalogue; a `compositional-authored-foundation/1` pin binds the compiled definition. Catalogue1/2/3 and source1–5 saved recipes remain exact; no stock recipe silently selects a draft and no fork silently changes parent.
