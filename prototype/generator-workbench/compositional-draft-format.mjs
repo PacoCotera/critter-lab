@@ -3,13 +3,16 @@ export const COMPOSITIONAL_DRAFT_ID = "genomic-compositional-source-draft";
 export const COMPOSITIONAL_DRAFT_PACKET = "compositional-authored-record/1";
 
 export function isCompositionalDraft(catalogue) {
-  return catalogue?.id === `${COMPOSITIONAL_DRAFT_ID}-${catalogue.authoredRecipe?.forkId}` &&
-    catalogue.authoredRecipe?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA &&
-    catalogue.foundationPin?.profile === "compositional-authored-foundation/1" &&
-    catalogue.foundationPin.id === catalogue.id && catalogue.foundationPin.version === catalogue.version &&
-    catalogue.authoredRecipe.definitionPin?.profile === catalogue.foundationPin.profile &&
-    catalogue.authoredRecipe.definitionPin.id === catalogue.id && catalogue.authoredRecipe.definitionPin.version === catalogue.version &&
-    catalogue.foundationPin.digest === catalogue.authoredRecipe.definitionPin?.digest;
+  const recipe = catalogue?.authoredRecipe;
+  const pin = catalogue?.foundationPin;
+  const recipePin = recipe?.definitionPin;
+  if (!catalogue || !recipe || !pin || !recipePin) return false;
+  return Boolean(catalogue.id === `${COMPOSITIONAL_DRAFT_ID}-${recipe.forkId}` &&
+    recipe.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA &&
+    pin.profile === "compositional-authored-foundation/1" &&
+    pin.id === catalogue.id && pin.version === catalogue.version &&
+    recipePin.profile === pin.profile && recipePin.id === catalogue.id &&
+    recipePin.version === catalogue.version && recipePin.digest === pin.digest);
 }
 
 // Use the exact published parent supplied by the catalogue endpoint. Never

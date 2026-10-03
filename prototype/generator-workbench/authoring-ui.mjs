@@ -16,6 +16,7 @@ export function isCompositionalRule(ruleVersion) {
 // Only this new immutable registry uses a pinned foundation request. Older
 // catalogue payloads and replay records retain their original API semantics.
 export function authoringRequest(input) {
+  if (!input || typeof input !== "object") return input;
   if (isCompositionalDraft(input.catalogue)) return { ...input, catalogue: input.catalogue.authoredRecipe };
   if (!isCompositionalRule(input.catalogue?.ruleVersion)) return input;
   return { ...input, catalogue: input.catalogue.foundationPin };

@@ -78,7 +78,7 @@ const compositionalDraftKey = "critter-compositional-authoring-draft-v1";
 async function request(path, input) {
   const payload = input === undefined ? undefined : authoringRequest(input);
   const body = payload === undefined ? undefined : JSON.stringify(payload);
-  if (body && (payload.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload.input?.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) &&
+  if (body && (payload?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload?.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA || payload?.input?.catalogue?.schemaVersion === COMPOSITIONAL_DRAFT_SCHEMA) &&
       new TextEncoder().encode(body).length > 65536) {
     throw new Error("The authored request, including recipe and genome, exceeds64KiB. Reduce the edited-definition payload; the API limit remains unchanged.");
   }
