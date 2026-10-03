@@ -113,7 +113,9 @@ Google is selected first; missing provider keys disable that route. Eight durabl
 server jobs, one active provider request, explicit recovery and optional API
 provenance preserve each original source/prompt; restart never retries a provider.
 The guided workspace shows a persistent eleven-layer genome tree with attributes
-under each layer, visible counts/gaps and per-attribute consumer status. Search
+under each layer, visible counts and per-attribute consumer status. Detailed gaps
+remain inspectable in the expanded layer panel rather than repeated under closed
+headings; zero-attribute layers keep a brief empty label. Search
 never hides the layer headings; selecting an attribute expands its parent.
 It keeps the last structure while inherited edits are pending,
 requires explicit refresh before rendering, compares before/current sources and

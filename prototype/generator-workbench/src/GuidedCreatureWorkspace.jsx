@@ -65,7 +65,8 @@ export default function GuidedCreatureWorkspace({ catalogue, genome, resolved, b
       </Badge>
     </button>;
   }
-  const changes = catalogue.loci.filter((entry) => JSON.stringify(genome?.loci[entry.id]) !== JSON.stringify(resolved?.input.genome.loci[entry.id]));
+  const changes = resolved ? catalogue.loci.filter((entry) =>
+    JSON.stringify(genome?.loci[entry.id]) !== JSON.stringify(resolved.input.genome.loci[entry.id])) : [];
   const camera = before?.scene && resolved?.scene ? comparisonCamera(before, resolved) : null;
   const compatible = before && comparisonUsesSharedCamera(before, resolved, camera);
   const differences = before && resolved ? compareResults(before.result, resolved.result) : [];
@@ -96,10 +97,10 @@ export default function GuidedCreatureWorkspace({ catalogue, genome, resolved, b
       {persistenceNotice && <Alert mb="md" color="orange">{persistenceNotice}</Alert>}
       <div className="guided-workspace">
         <Paper withBorder p="md" className="guided-structure">
-          <Group justify="space-between"><Title order={3}>Current structure</Title><Badge color={dirty ? "orange" : "sage"}>{dirty ? "Changes pending" : resolved ? "Refreshed" : "Not generated"}</Badge></Group>
+          <Group justify="space-between"><Title order={3}>Current structure</Title><Badge color={!resolved ? "gray" : dirty ? "orange" : "sage"}>{!resolved ? "Not generated" : dirty ? "Changes pending" : "Refreshed"}</Badge></Group>
           <Text size="xs" c="dimmed" mt="xs">3D source preview</Text>
           <SourceView packet={resolved} />
-          {dirty && <Text size="sm" c="orange">The last successful structure stays visible. Refresh to apply your inherited-copy edits; rendering is unavailable until then.</Text>}
+          {resolved && dirty && <Text size="sm" c="orange">The last successful structure stays visible. Refresh to apply your inherited-copy edits; rendering is unavailable until then.</Text>}
           <Button mt="sm" disabled={busy || !genome} onClick={onRefresh}>{busy ? "Refreshing…" : "Refresh structure"}</Button>
           {group && <Group mt="xs" gap="xs"><Text size="xs" c="dimmed">Genome ID: {group.association.originalGenomeId.slice(0, 12)}…</Text>
             <CopyButton value={group.association.originalGenomeId}>{({ copied, copy }) => <Button size="compact-xs" variant="subtle" onClick={copy}>{copied ? "Copied" : "Copy full ID"}</Button>}</CopyButton>
@@ -133,10 +134,10 @@ export default function GuidedCreatureWorkspace({ catalogue, genome, resolved, b
                     return <Accordion.Item value={branch.id} key={branch.id}>
                       <Accordion.Control>
                         <Text size="sm" fw={600}>{branch.label || branch.id.replaceAll("-", " ")}</Text>
-                        <Text size="xs" c="dimmed">{attributes.length} attributes{search.trim() ? ` · ${matches.length} matching` : ""}</Text>
+                        <Text size="xs" c="dimmed">{attributes.length} attributes{!attributes.length ? " · No attributes implemented" : ""}{search.trim() ? ` · ${matches.length} matching` : ""}</Text>
                       </Accordion.Control>
-                      <Text size="xs" c="dimmed" className="guided-layer-gap">{branch.gaps || (attributes.length ? "See each attribute's current consumer status." : "No implemented attribute contract yet.")}</Text>
                       <Accordion.Panel>
+                        <Text size="xs" c="dimmed" className="guided-layer-gap">{branch.gaps || (attributes.length ? "See each attribute's current consumer status." : "No implemented attribute contract yet.")}</Text>
                         {ordered.length ? <ScrollArea h={Math.min(ordered.length * 78, 280)}><Stack gap={5}>{ordered.map(traitChoice)}</Stack></ScrollArea> :
                           <Text size="sm">{attributes.length ? "No matching attributes in this layer." : "No implemented attribute contract yet."}</Text>}
                       </Accordion.Panel>
@@ -155,9 +156,9 @@ export default function GuidedCreatureWorkspace({ catalogue, genome, resolved, b
                 <Text size="sm" fw={600} mt="md">Last refreshed value: {outputText(fact)}</Text>
                 <Text size="xs" c="dimmed">{fact?.state || "Not resolved"}{fact?.state === "unimplemented" ? " · No current consumer" : ""}</Text>
                 {!!locus.requires?.length && <Group gap={5} mt="sm">{locus.requires.map((id) => <Button size="compact-xs" variant="subtle" key={id} onClick={() => onSelect(id)}>Requires {catalogue.loci.find((entry) => entry.id === id)?.label || id}</Button>)}</Group>}
-              </> : <Text mt="md">Choose an attribute beneath a genome layer. Layer headings keep their current gaps visible even when a search has no matches.</Text>}</div>
+              </> : <Text mt="md">Choose an attribute beneath a genome layer. Expand a layer to inspect its attributes and current gaps.</Text>}</div>
             </div>
-            {dirty && <Alert color="orange" mt="sm">Pending: {changes.map((entry) => entry.label).join(", ") || "Input or package changes"}. The shown resolved values belong to the previous successful structure.</Alert>}
+            {resolved && dirty && <Alert color="orange" mt="sm">Pending: {changes.map((entry) => entry.label).join(", ") || "Input or package changes"}. The shown resolved values belong to the previous successful structure.</Alert>}
             <Button mt="sm" disabled={busy || !genome} onClick={onRefresh}>Refresh structure</Button>
             {resolved?.result.innateProfile && <Text size="xs" c="dimmed" mt="sm">Optional innate profile: {resolved.result.innateProfile.status}. Static inherited data only; no observed behavior.</Text>}
           </Paper>
@@ -178,7 +179,7 @@ export default function GuidedCreatureWorkspace({ catalogue, genome, resolved, b
           </Paper>
         </Stack>
       </div>
-      <ReturnedPetPanel packet={resolved} handoff={handoff} revision={revision} sourceBusy={busy || dirty}
+      <ReturnedPetPanel packet={resolved} handoff={handoff} revision={revision} sourceBusy={Boolean(resolved) && (busy || dirty)}
         workingCreature={group?.association} promptText={renderPrompt} onPrompt={onPrompt} guided />
     </>
   );
