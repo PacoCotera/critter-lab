@@ -129,7 +129,12 @@ uses inherited regional growth and join width instead of mandatory equal bulb
 regions, and publishes actual optional eyes and skin/scales with the same source.
 Two ordinary Generate results and exact new/older replay are retained. This
 is a measured partial construction result, not approval of its finite allele
-vocabulary, source envelopes or the broad creature range. Complete radial,
+vocabulary, source envelopes or the broad creature range. The separate
+[radial contact source proof](../prototype/generator-workbench/evidence/radial-source-proof/README.md)
+constructs one existing central volume and three inherited contact chains in a
+declared YZ view. Its height-only and latent-pigment controls are causal source
+evidence; eyes and coverings remain retained but not projected. It does not
+change Generate eligibility or add a species preset. Complete radial features,
 membrane, deformation and marked-surface consumers remain unfinished.
 
 Owner explicitly requires future polygenic and cross-dimension traits: movement,

@@ -38,7 +38,7 @@ jobs:
         run: npm exec --yes --package=pnpm@11.19.0 -- pnpm install --frozen-lockfile --ignore-scripts
       - name: Check host genetic and generator boundaries
         working-directory: prototype/generator-workbench
-        run: node --test regional-scene.test.mjs body-organization.test.mjs pigment-workbench-package.test.mjs pigment-proof.test.mjs genome-codec.test.mjs module-scene.test.mjs graph-covering.test.mjs graph-module.test.mjs graph-source.test.mjs art-brief.test.mjs authoring.test.mjs authoring-ui.test.mjs display-projection.test.mjs family.test.mjs pet.test.mjs ../tests/generator-workbench.test.mjs ../tests/pip-genetics.test.mjs
+        run: node --test graph-radial.test.mjs regional-scene.test.mjs body-organization.test.mjs pigment-workbench-package.test.mjs pigment-proof.test.mjs genome-codec.test.mjs module-scene.test.mjs graph-covering.test.mjs graph-module.test.mjs graph-source.test.mjs art-brief.test.mjs authoring.test.mjs authoring-ui.test.mjs display-projection.test.mjs family.test.mjs pet.test.mjs ../tests/generator-workbench.test.mjs ../tests/pip-genetics.test.mjs
       - name: Build the framework workbench
         working-directory: prototype/generator-workbench
         run: npm exec --yes --package=pnpm@11.19.0 -- pnpm run build

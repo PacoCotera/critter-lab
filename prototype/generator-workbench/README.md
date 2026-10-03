@@ -27,6 +27,22 @@ switching packages is deliberate and never migrates their genomes. See the
 
 ## Run and inspect
 
+### Central radial source proof
+
+The standalone [radial proof](evidence/radial-source-proof/README.md) adds
+`graph-radial/1` as a consumer of existing resolved anatomy. One central volume
+and three actual XYZ-rooted contact chains project along X into YZ. A height-only
+relative changes the central envelope; a secondary-pigment control remains
+visually identical because those copies are inactive. Complete source packets,
+new construction identities and common-scale references remain inspectable.
+
+Run `node --test graph-radial.test.mjs` and
+`node construct-radial-proof.mjs --out evidence/radial-source-proof` with the
+existing host runtime. This contacts-only proof retains eyes and covering facts
+as **not projected**. It does not change the catalogue, sampler, current Generate
+scene or saved records. Full radial features, physical depth and finished pet
+portrayal remain unfinished.
+
 ### Body organization experiment
 
 The separately versioned [source experiment](evidence/body-organization/README.md)
