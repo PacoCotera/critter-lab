@@ -47,7 +47,9 @@ summary2 clause. Its111 pairs/six drafts/all eleven branches remain unchanged.
 The [marking contract](../../design/anatomical-source-prototype/compositional-contract.md#primary-owner-local-markings)
 owns normalized atlas/mask semantics, fixed diagnostic ink, finite clipping and
 parent-group occlusion. No anatomy, base palette or coat/ear correction is
-included. Actual source-readability inspection is pending.
+included. The actual [OFF/ON pair](evidence/marking-fields/README.md) shows a
+visible field difference; triangular paint seams keep polished reference craft
+on HOLD, and both patches cannot be separately counted from this view.
 Catalogue1–4 and all prior stock/authored recipes remain selectable and literal;
 parent5 drafts use a separate slot. Returned pet proposals remain bound to their
 original source/prompt and do not follow a newly marked source.

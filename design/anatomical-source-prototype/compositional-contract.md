@@ -43,8 +43,12 @@ owner/141120 total and20 vertices per polygon. Bounds culling and empty or
 zero-area clipping are audited; overflow rejects without dropping masks or
 repairing copies. Logical IDs, kinds, centers, parameters, six causes, inherited
 values and actual clipped positions remain retained. Natural occlusion or weak
-contrast does not move or recolour a field. Actual readability remains a
-separate inspection gate.
+contrast does not move or recolour a field. The actual
+[OFF/ON evidence](../../prototype/generator-workbench/evidence/marking-fields/README.md)
+supports the narrow visible consumer difference. Triangular fragment seams keep
+coherent paint craft on HOLD; two patches cannot be separately counted in the
+shown view. Logical fields are distinct from projected fragments and isolated
+visible shapes.
 
 Source7 uses `art-prompt-summary/2`, adding only constructed primary-owner bands
 and patches/counts. Old summary1 bytes remain unchanged. Ordered pigment halves

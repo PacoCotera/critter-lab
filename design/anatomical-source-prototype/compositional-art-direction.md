@@ -92,6 +92,15 @@ not that craft pass.
 
 ## Material fields and pigments
 
+The source7 [actual marking pair](../../prototype/generator-workbench/evidence/marking-fields/README.md)
+shows visible primary-body paint controlled by the existing marking switch,
+with unchanged silhouette and other material owners. Three bands/two patches
+are constructed logical masks, not five independently visible shapes. Bands
+read, but both patches cannot be separately counted from this view. Triangular
+fragment seams keep coherent paint craft on HOLD. Fixed diagnostic ink is a
+provisional operator constant, separate from inherited base pigments. This
+pair does not approve fur/ear craft, a marked pet master or a canonical palette.
+
 Geometry supplies solid anatomy. Covering supplies a surface field with material
 kind, extent, scale and flow; it must not install another anatomy graph.
 

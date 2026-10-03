@@ -1547,11 +1547,30 @@ function Workbench() {
                                 <Text size="xs" fw={700} c="dimmed" mt="lg">
                                   DOWNSTREAM INVOLVEMENT
                                 </Text>
-                                <Text size="sm" mt="xs">
-                                  {cause?.targets.length ?? 0} body/feature
-                                  nodes include this locus in their trace.
-                                </Text>
-                                {cause?.coveringInvolvement && (
+                                {sceneCause?.marking ? (
+                                  <>
+                                    <Text size="sm" mt="xs">
+                                      {sceneCause.enabled
+                                        ? `Primary marking field enabled: ${sceneCause.owners.length} painted owner(s), ${sceneCause.logicalCount} logical masks and ${sceneCause.clippedPolygons} clipped polygons.`
+                                        : "Primary marking field disabled: no painted owners or masks."}
+                                    </Text>
+                                    {sceneCause.enabled && sceneCause.owners.map((owner) => (
+                                      <Text size="xs" c="dimmed" key={owner.id}>
+                                        {owner.id}: {owner.logicalCount} logical masks · {owner.clippedPolygons} clipped polygons
+                                      </Text>
+                                    ))}
+                                    <Text size="sm" mt="xs">
+                                      Copies retained; this contributor is {sceneCause.contributorState}.
+                                      Surface paint adds no anatomical nodes.
+                                    </Text>
+                                  </>
+                                ) : (
+                                  <Text size="sm" mt="xs">
+                                    {cause?.targets.length ?? 0} body/feature
+                                    nodes include this locus in their trace.
+                                  </Text>
+                                )}
+                                {!sceneCause?.marking && cause?.coveringInvolvement && (
                                   <Text size="sm" mt="xs">
                                     {cause.coveringContext
                                       ? "Covering uses this locus as an exclusion or geometry dependency."

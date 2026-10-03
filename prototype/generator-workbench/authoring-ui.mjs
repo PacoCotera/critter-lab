@@ -449,6 +449,27 @@ export function scenePreviewMarkup(packet, camera = null) {
 
 export function sceneCausalSummary(scene, locusId) {
   if (scene?.status !== "constructed") return null;
+  if (scene.profileVersion === "compositional-source/7") {
+    const field = scene.covering.markings;
+    const contributor = field?.contributors.find((entry) => entry.locusId === locusId);
+    if (contributor) return {
+      marking: true,
+      anatomy: false,
+      targets: [],
+      enabled: field.enabled,
+      contributorState: contributor.state,
+      copies: contributor.copies,
+      contributors: field.contributors,
+      owners: field.owners.map((owner) => ({
+        id: owner.owner,
+        logicalCount: owner.logical.length,
+        clippedPolygons: owner.emittedPolygons,
+      })),
+      logicalCount: field.logicalCount,
+      clippedPolygons: field.emittedPolygons,
+      fieldProfile: field.profile,
+    };
+  }
   if (["anatomical-source/1", "compositional-source/1", "compositional-source/2", "compositional-source/3", "compositional-source/4", "compositional-source/5", "compositional-source/6", "compositional-source/7"].includes(scene.profileVersion)) {
     const targets = scene.nodes.filter(node => node.sources.includes(locusId));
     return { anatomy: true, targets: targets.map(node => ({ id: node.id, role: node.role })), material: scene.covering.sources.includes(locusId), coveringKind: scene.covering.kind };
