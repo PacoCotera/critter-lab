@@ -156,6 +156,10 @@ QR sharing.
 Scene replay sends a compact retained-input and expected-identity envelope through
 the existing 64KiB loopback endpoint. It reconstructs all geometry and checks
 declared identities; embedded imported geometry is neither sent nor trusted.
+New scene briefs use module-scene-art/3 to name each surface's ordered local
+pigment fields. Known /2 compact imports retain their exact original prompt
+after strict independent reconstruction; resolving those same inputs afresh
+uses /3. Source geometry and inherited/expression identities stay unchanged.
 The complete artifact remains available for local inspection/export. Copy edits
 invalidate the current preview and prompt. This connection does not broaden the
 construction profile or deliver finished pet art, fur/feathers, motion or game UI.

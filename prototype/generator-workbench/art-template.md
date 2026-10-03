@@ -62,11 +62,18 @@ output bytes/hashes, observed provider state and the findings beside the result.
 
 ## Preserved factual authority and versions
 
-The current presentation versions are template4 and module-scene-art/2.
-They change renderer prose, not allele resolution, the diagnostic geometry or
+New scene briefs use template4 and module-scene-art/3. Each body region names
+its own ordered front/rear pigment fields; each appendage names its own root/tip
+fields. Uniform pigments remain uniform. For example: “Each body region has
+equal local front/rear pigment fields: front russet #ae674d, rear golden-yellow
+#e8b83f.” Equal local fields describe the source mapping, not equal physical area.
+This presentation update changes renderer prose, not allele resolution, diagnostic geometry or
 genome/expression identities. Historical stored prompts and artifacts remain
-unchanged. Replaying a source may produce the current presentation; it does not
-promise byte-identical historical prompt text or a reproduced image.
+unchanged. Known module-scene-art/2 compact imports independently reconstruct
+and verify every retained identity before returning their exact original prompt
+and presentation. Fresh resolution of those same inputs uses /3. Other historical
+projections retain their existing replay contracts; a replay does not reproduce
+a generated image.
 
 Complete named bindings remain in the exported packet: identity, context,
 anatomy, proportions, surfaces, movement, limitations and causal trace. Exact

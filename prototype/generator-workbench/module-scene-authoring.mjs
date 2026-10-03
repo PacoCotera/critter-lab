@@ -19,7 +19,9 @@ import {
   drawBodyCoveringComparison,
 } from "./graph-covering-presentation.mjs";
 
-export const SCENE_ART_VERSION = "module-scene-art/2";
+export const SCENE_ART_VERSION = "module-scene-art/3";
+const LEGACY_SCENE_ART_VERSION = "module-scene-art/2";
+const supportedArtVersions = [SCENE_ART_VERSION, LEGACY_SCENE_ART_VERSION];
 export const SCENE_SEARCH_VERSION = "sequential-candidate-seed/1";
 const template = JSON.parse(
   readFileSync(new URL("art-template.json", import.meta.url), "utf8"),
@@ -80,6 +82,10 @@ function sceneReference(scene) {
 
 // The renderer reads macro form; exact coordinates and height remain in the scene artifact.
 export function describeModuleScene(scene) {
+  return describeScenePresentation(scene, SCENE_ART_VERSION);
+}
+
+function describeScenePresentation(scene, artVersion) {
   const stations = scene.body.bodyExteriors[0].stations;
   const unit = stations[0].dimensions[1];
   const regionName = (id) => {
@@ -199,6 +205,25 @@ export function describeModuleScene(scene) {
             "contact-link": "contact tips",
             fin: "fins",
           }[role] ?? "appendages");
+    if (artVersion === SCENE_ART_VERSION) {
+      const owner = {
+        "body regions": "body region",
+        "jointed segments": "jointed segment",
+        "contact tips": "contact tip",
+        fins: "fin",
+        appendages: "appendage",
+      }[label];
+      const texture = surface.texture.replaceAll("-", " ");
+      const axes =
+        label === "body regions" ? ["front", "rear"] : ["root", "tip"];
+      const mapping =
+        surface.palette.length === 1
+          ? `Each ${owner} is uniformly ${pigmentName(surface.palette[0])}`
+          : `Each ${owner} has equal local ${axes.join("/")} pigment fields: ${axes[0]} ${pigmentName(surface.palette[0])}, ${axes[1]} ${pigmentName(surface.palette[1])}`;
+      fields.set(`${mapping}, with ${texture} texture`, true);
+      continue;
+    }
+    // This closed legacy recipe preserves exact delivered /2 prompt bytes.
     const colors = surface.palette.map(pigmentName).join(" then ");
     const mapping =
       surface.palette.length === 1
@@ -209,7 +234,9 @@ export function describeModuleScene(scene) {
       true,
     );
   }
-  phrases.push(`${[...fields.keys()].join("; ")}. Unmarked.`);
+  phrases.push(
+    `${[...fields.keys()].join(artVersion === SCENE_ART_VERSION ? ". " : "; ")}. Unmarked.`,
+  );
   const covering = scene.covering;
   const orientation = covering.plateProfile?.orientation;
   const flow =
@@ -276,6 +303,11 @@ function verifiedSource(packet) {
     packet.sceneProjectionVersion !== MODULE_SCENE_VERSION
   )
     throw new Error("A current resolved module scene packet is required.");
+  const artVersion = packet.sceneProjection?.artVersion;
+  if (!supportedArtVersions.includes(artVersion))
+    throw new Error(
+      "Only declared scene-art /2 and /3 projections are supported.",
+    );
   const source = resolveAuthoring(packet.input);
   if (
     source.status !== "resolved" ||
@@ -293,13 +325,12 @@ function verifiedSource(packet) {
   const scene = constructModuleScene(source.result, {
     profileVersion: MODULE_SCENE_VERSION,
   });
-  const projectionId = `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion: SCENE_ART_VERSION }).slice(0, 20)}`;
+  const projectionId = `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion }).slice(0, 20)}`;
   if (
     scene.status !== "constructed" ||
     digest(scene) !== digest(packet.scene) ||
     packet.sceneProjection?.recordId !== projectionId ||
-    packet.sceneProjection?.profileVersion !== MODULE_SCENE_VERSION ||
-    packet.sceneProjection?.artVersion !== SCENE_ART_VERSION
+    packet.sceneProjection?.profileVersion !== MODULE_SCENE_VERSION
   )
     throw new Error(
       "Scene artifact/profile must match independently reconstructed consumers.",
@@ -309,7 +340,8 @@ function verifiedSource(packet) {
 
 export function projectModuleScenePrompt(packet) {
   const scene = verifiedSource(packet);
-  const phenotypeDescription = describeModuleScene(scene);
+  const artVersion = packet.sceneProjection.artVersion;
+  const phenotypeDescription = describeScenePresentation(scene, artVersion);
   const bindings = {
     phenotypeDescription,
     resultIdentity: JSON.stringify({
@@ -330,7 +362,7 @@ export function projectModuleScenePrompt(packet) {
     }),
   };
   const subject = {
-    projectionVersion: SCENE_ART_VERSION,
+    projectionVersion: artVersion,
     context: packet.input.context,
     bindings,
   };
@@ -344,7 +376,7 @@ export function projectModuleScenePrompt(packet) {
   if (overflow) throw new Error(overflow);
   return {
     status: "source-derived concept brief; no provider called",
-    projectionVersion: SCENE_ART_VERSION,
+    projectionVersion: artVersion,
     templateId: template.id,
     templateVersion: template.version,
     bindings,
@@ -356,6 +388,12 @@ export function projectModuleScenePrompt(packet) {
 }
 
 export function resolveModuleSceneAuthoring(input) {
+  return resolveScenePresentation(input, SCENE_ART_VERSION);
+}
+
+// Only replay may reconstruct the exact known historical recipe. Public resolution
+// always emits the current version and has no caller-selected presentation flag.
+function resolveScenePresentation(input, artVersion) {
   const source = resolveAuthoring(input);
   if (source.status !== "resolved") return { ...source, stage: "genetic" };
   const scene = constructModuleScene(source.result, {
@@ -374,9 +412,9 @@ export function resolveModuleSceneAuthoring(input) {
     sceneProjectionVersion: MODULE_SCENE_VERSION,
     scene,
     sceneProjection: {
-      recordId: `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion: SCENE_ART_VERSION }).slice(0, 20)}`,
+      recordId: `scene-${digest({ inputDigest: source.inputDigest, resultDigest: source.resultDigest, sceneDigest: scene.sceneDigest, profileVersion: MODULE_SCENE_VERSION, artVersion }).slice(0, 20)}`,
       profileVersion: MODULE_SCENE_VERSION,
-      artVersion: SCENE_ART_VERSION,
+      artVersion,
     },
     presentation: {
       status: "constructed",
@@ -387,7 +425,7 @@ export function resolveModuleSceneAuthoring(input) {
   };
   packet.diagnostic = packet.reference.svg;
   packet.geometryReference = packet.reference;
-  packet.description = describeModuleScene(scene);
+  packet.description = describeScenePresentation(scene, artVersion);
   packet.identity = authoringIdentity(packet);
   try {
     packet.prompt = projectModuleScenePrompt(packet);
@@ -447,26 +485,27 @@ export function replayModuleSceneAuthoring(envelope) {
       "scene-replay-transport",
       "Compact scene replay exceeds the unchanged 64 KiB transport bound.",
     );
-  const packet = resolveModuleSceneAuthoring(envelope.input);
-  if (packet.status !== "resolved") return packet;
-  const actual = compactSceneReplayEnvelope(packet);
-  if (
-    allowed
+  for (const artVersion of supportedArtVersions) {
+    const packet = resolveScenePresentation(envelope.input, artVersion);
+    if (packet.status !== "resolved") return packet;
+    const actual = compactSceneReplayEnvelope(packet);
+    const matches = allowed
       .filter((key) => key !== "input")
-      .some((key) => actual[key] !== envelope[key])
-  )
-    return rejected(
-      "scene-replay-mismatch",
-      "Source/result/scene/prompt identity differs from independently reconstructed inputs.",
-    );
-  return {
-    ...packet,
-    replay: {
-      verified: true,
-      clientArtifactsTrusted: false,
-      artifactsReconstructed: true,
-    },
-  };
+      .every((key) => actual[key] === envelope[key]);
+    if (matches)
+      return {
+        ...packet,
+        replay: {
+          verified: true,
+          clientArtifactsTrusted: false,
+          artifactsReconstructed: true,
+        },
+      };
+  }
+  return rejected(
+    "scene-replay-mismatch",
+    "Source/result/scene/prompt identity differs from independently reconstructed inputs.",
+  );
 }
 
 export function generateModuleSceneAuthoring(catalogue, seed, options = {}) {

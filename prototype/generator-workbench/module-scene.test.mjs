@@ -37,6 +37,133 @@ const scenePacket = (name) =>
 const retained = (path) =>
   JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8"));
 
+test("current scene brief identifies every owning local pigment field in resolved order", () => {
+  const mixed = retained(
+    "evidence/inherited-pigment-experiment/mixed-fields.packet.json",
+  );
+  const reversed = retained(
+    "evidence/inherited-pigment-experiment/reversed-copies.packet.json",
+  );
+  const current = resolveModuleSceneAuthoring(mixed.input);
+  const reversedCurrent = resolveModuleSceneAuthoring(reversed.input);
+  assert.equal(current.prompt.projectionVersion, "module-scene-art/3");
+  const description = current.prompt.bindings.phenotypeDescription;
+  for (const surface of current.scene.body.surfaces) {
+    assert.equal(surface.atlas.maskAxis, "local-u");
+    assert.equal(surface.partition, "two declared equal local masks");
+    const body = surface.atlas.kind === "longitudinal-body-ownership";
+    const axes = body ? ["front", "rear"] : ["root", "tip"];
+    assert.ok(
+      description.includes(
+        `Each ${body ? "body region" : "fin"} has equal local ${axes.join("/")} pigment fields:`,
+      ),
+    );
+    const first = description.indexOf(surface.palette[0]);
+    assert.ok(first >= 0);
+    assert.ok(description.indexOf(surface.palette[1], first) > first);
+  }
+  assert.equal(
+    description,
+    reversedCurrent.prompt.bindings.phenotypeDescription,
+  );
+  assert.notEqual(
+    current.identity.inheritedDigest,
+    reversedCurrent.identity.inheritedDigest,
+  );
+  // The literal fixture is JSON: its stored coordinate zero cannot distinguish -0.
+  // Compare the exact exported representation, not an in-memory sign erased by JSON.
+  assert.equal(JSON.stringify(current.scene), JSON.stringify(mixed.scene));
+  assert.deepEqual(current.scene.covering.plates, mixed.scene.covering.plates);
+  assert.deepEqual(current.reference, mixed.reference);
+  assert.deepEqual(current.identity, mixed.identity);
+  assert.equal(current.recordId, mixed.recordId);
+  assert.equal(current.inputDigest, mixed.inputDigest);
+  assert.equal(current.resultDigest, mixed.resultDigest);
+  const uniform = retained(
+    "evidence/inherited-pigment-experiment/lagoon-cream.packet.json",
+  );
+  const uniformCurrent = resolveModuleSceneAuthoring(uniform.input);
+  assert.match(
+    uniformCurrent.description,
+    /Each body region is uniformly #269fa5/,
+  );
+  assert.match(
+    uniformCurrent.description,
+    /Each fin is uniformly cream #dfd2ae/,
+  );
+  assert.doesNotMatch(uniformCurrent.description, /equal local/);
+  const contact = scenePacket("single-scales");
+  assert.match(contact.description, /Each body region/);
+  assert.match(contact.description, /Each jointed segment/);
+  assert.match(contact.description, /Each contact tip/);
+  assert.doesNotMatch(contact.description, /Each fin/);
+});
+
+test("strict known /2 replay restores exact stored text while current /3 changes only presentation", () => {
+  const old = retained(
+    "evidence/inherited-pigment-experiment/mixed-fields.packet.json",
+  );
+  assert.equal(old.prompt.projectionVersion, "module-scene-art/2");
+  const current = resolveModuleSceneAuthoring(old.input);
+  const replay = replayModuleSceneAuthoring(compactSceneReplayEnvelope(old));
+  assert.equal(replay.status, "resolved");
+  assert.deepEqual(replay.prompt, old.prompt);
+  assert.equal(replay.description, old.description);
+  assert.deepEqual(replay.sceneProjection, old.sceneProjection);
+  assert.deepEqual(projectModuleScenePrompt(replay), old.prompt);
+  assert.equal(current.prompt.projectionVersion, "module-scene-art/3");
+  assert.notEqual(current.prompt.promptDigest, old.prompt.promptDigest);
+  assert.notEqual(
+    current.sceneProjection.recordId,
+    old.sceneProjection.recordId,
+  );
+  for (const key of [
+    "input",
+    "inputDigest",
+    "resultDigest",
+    "recordId",
+    "result",
+    "scene",
+    "reference",
+    "diagnostic",
+    "geometryReference",
+    "identity",
+  ]) {
+    assert.equal(JSON.stringify(replay[key]), JSON.stringify(old[key]), key);
+    assert.equal(JSON.stringify(current[key]), JSON.stringify(old[key]), key);
+  }
+  const currentReplay = replayModuleSceneAuthoring(
+    compactSceneReplayEnvelope(current),
+  );
+  assert.equal(currentReplay.prompt.text, current.prompt.text);
+  assert.equal(currentReplay.sceneProjection.artVersion, "module-scene-art/3");
+});
+
+test("legacy/current compact identities and unsupported presentation versions reject without hash waivers", () => {
+  const old = retained(
+    "evidence/inherited-pigment-experiment/mixed-fields.packet.json",
+  );
+  const current = resolveModuleSceneAuthoring(old.input);
+  for (const packet of [old, current]) {
+    for (const field of ["promptDigest", "sceneDigest", "sceneRecordId"]) {
+      const envelope = compactSceneReplayEnvelope(packet);
+      envelope[field] =
+        field === "sceneRecordId" ? "scene-unknown" : "0".repeat(64);
+      assert.equal(
+        replayModuleSceneAuthoring(envelope).status,
+        "rejected",
+        field,
+      );
+    }
+  }
+  const mismatch = compactSceneReplayEnvelope(old);
+  mismatch.promptDigest = current.prompt.promptDigest;
+  assert.equal(replayModuleSceneAuthoring(mismatch).status, "rejected");
+  const unknown = structuredClone(current);
+  unknown.sceneProjection.artVersion = "module-scene-art/999";
+  assert.throws(() => projectModuleScenePrompt(unknown), /Only declared/);
+});
+
 test("scene copy/export is a bounded importable replay envelope; old exports stay complete", () => {
   const packet = scenePacket("single-scales");
   const exported = copyableAuthoringExport(packet);
@@ -221,7 +348,7 @@ test("positive brief consumes continuous source roots, proportions, eyes and con
     /\d+ overlapping rounded plates|plate half-width/,
   );
   assert.equal(scales.prompt.templateVersion, 4);
-  assert.equal(scales.prompt.projectionVersion, "module-scene-art/2");
+  assert.equal(scales.prompt.projectionVersion, "module-scene-art/3");
   assert.notEqual(scales.prompt.text, changed.prompt.text);
   assert.notEqual(
     scales.prompt.bindings.phenotypeDescription,
