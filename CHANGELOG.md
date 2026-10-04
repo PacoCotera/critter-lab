@@ -2,6 +2,14 @@
 
 Major changes in the [playable sandbox](https://critterlab.basicberry.com/sandbox/). Times use CDMX. Entries record live deployments; source-only work belongs in its PR until activation.
 
+## 2026-10-03 [21:04] — CI artifact retention
+
+[PR116](https://github.com/PacoCotera/critter-lab/pull/116) · native revision `555fc41` · hosting remains `634a9f1`
+
+Routine passing checks now use Actions results and logs. The publication handoff retains only the staging bundle for one day; failure diagnostics expire after seven days, and MCU downloads require an explicit manual option. [CI retention policy](native/README.md#ubuntu-build-environment).
+
+The existing release pipeline activated this revision with a fresh sandbox game. This maintenance PR changes no gameplay behavior. [CI delivery](https://github.com/PacoCotera/critter-lab/actions/runs/37172696983) completed successfully.
+
 ## 2026-10-03 [16:45] — Google API images with literal prompt provenance
 
 [PR104](https://github.com/PacoCotera/critter-lab/pull/104) · hosting source `a78454e` · native game remains `720c1e6`

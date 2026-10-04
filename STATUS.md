@@ -29,8 +29,9 @@ unconfigured and has no actual image evidence.
 
 Website/workbench hosting and the native game have separate release identities.
 [Deployment notes](CHANGELOG.md) record both; `/api/platform-release` identifies
-hosting and `/api/release` the native game. Current authoring/website activations
-preserved native `720c1e6` and its saves, without resetting the game.
+hosting and `/api/release` the native game. Hosting remains `634a9f1`;
+native `555fc41` activated on 3 October at 21:04 CDMX through the existing release
+pipeline, with a fresh sandbox game. CI retention changed; gameplay behavior did not.
 
 ## Native software delivered
 
@@ -42,7 +43,7 @@ preserved native `720c1e6` and its saves, without resetting the game.
 
 ## Current native release and retained repairs
 
-The Research workpiece is live at `720c1e6`, activated 1 October 14:49. Existing sample and Library destinations now preview their exact records immediately. Inquiry, cost, Start, known findings and errors belong in the main area; navigation holds destinations only. Validated partial coat references stay separate from complete portrait permission, and movement/effort references preserve their linked meaning. [PR67](https://github.com/PacoCotera/critter-lab/pull/67) passed independent architecture/technical/disclosure/craft checks, exact clean pushed native controls/save/original-pixel/all-root checks and target CI. [Native proof](docs/evidence/research-workpiece/README.md) separates fixtures, host evidence and unverified physical hardware. This increment improves the workpiece; it does not establish discovery enjoyment or wider sample variety.
+The current release retains the Research workpiece first activated at `720c1e6` on 1 October at 14:49. Existing sample and Library destinations now preview their exact records immediately. Inquiry, cost, Start, known findings and errors belong in the main area; navigation holds destinations only. Validated partial coat references stay separate from complete portrait permission, and movement/effort references preserve their linked meaning. [PR67](https://github.com/PacoCotera/critter-lab/pull/67) passed independent architecture/technical/disclosure/craft checks, exact clean pushed native controls/save/original-pixel/all-root checks and target CI. [Native proof](docs/evidence/research-workpiece/README.md) separates fixtures, host evidence and unverified physical hardware. This increment improves the workpiece; it does not establish discovery enjoyment or wider sample variety.
 
 The current native release retains the Habitat population increment first activated at `5e16e75` on 1 October 13:50. Home's Habitat preview and the entered collection show every revealed resident in a four-by-two gallery. Highlighting updates saved identity, form and origin immediately; Confirm opens a separate resident activity without care. Only its named care action records a visit. [PR65](https://github.com/PacoCotera/critter-lab/pull/65) passed focused native checks, the actual saved game journey, independent technical/craft review and all target CI builds. [Population proof](docs/evidence/habitat-population/README.md) labels synthetic population fixtures separately from played creation. Main CI and the sandbox release metadata confirm activation.
 
