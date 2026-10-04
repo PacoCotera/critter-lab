@@ -344,18 +344,19 @@ visual gaps needed to inspect it. For the recommended discovery slice, stop at
 two rule-derived field states feeding one useful retained research relationship.
 Reference the existing downstream creation/identity/Caddy contracts without
 quietly implementing their missing breadth. Art and final interaction acceptance
-remain design review reviews; numeric balance remains proposed.
+remain subject to design review; numeric balance remains proposed.
 
 Genome-derived organizations, legal motion across ground/air/water and automatic
 retained art remain a separate horizon in the
 [diversity proposal](genome-starter-content.md#v1-diversity-and-genome-first-construction)
 and [creature-generation feature](https://github.com/PacoCotera/critter-lab/issues/60).
-Classes describe expressed results, never select body templates. General rules
+The baseline-group versus emergent-classification model remains open; neither
+approach selects finished body templates. General rules
 and configured incubation must produce individuals without per-creature manual
 authorship. Existing portraits do not prove this production pipeline.
 
 No game code, new generated assets, services, API calls, hardware or purchases in
-this design round. The architect checks target/framework/workload boundaries before
+this design round. Target, framework and workload boundaries require review before
 implementation. Keep original references and useful unfinished studies in
 [field design](probe-sampling.md), [exploration study](expedition-map-study/README.md)
 and [research/creation](research-and-creation.md); earlier scripted examples and
