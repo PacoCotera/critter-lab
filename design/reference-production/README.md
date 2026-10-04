@@ -1,11 +1,11 @@
 # Reference-to-production art workbench
 
-An isolated art-production exercise for the approved C18 Lab direction. This is
+An isolated art-production exercise for the C18 concept direction under refinement. This is
 part of the product repository; it does not replace the live renderer or create a
 second visual authority. Editable sources, deterministic exports and native-size
-proofs belong here. Role coordination and skills stay in the private repository.
+proofs belong here. The scope is editable product artwork, exports and visual proofs.
 
-Reference: [approved C18](../game-art-proposals/35-vault-composition/18-c-refined.png)
+Reference: [C18 concept](../game-art-proposals/35-vault-composition/18-c-refined.png)
 and its [clean inspection crop](../game-art-proposals/37-lab-extracted-kit/screen-reference.png).
 The [screen standard](../screen-design-standard.md) governs visual meaning.
 

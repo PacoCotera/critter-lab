@@ -1,6 +1,6 @@
 # Playful precision — refinement 02
 
-Owner selected Playful Pixel Lab as the foundation, asking for finer detail, a tighter type range, clearer color and interaction states, distinctive icons and less dominant illustration. This is the next proposal, not approved production UI.
+Design review selected Playful Pixel Lab as the foundation, asking for finer detail, a tighter type range, clearer color and interaction states, distinctive icons and less dominant illustration. This is the next proposal, not approved production UI.
 
 ![Refined visual vocabulary](styleboard.png)
 

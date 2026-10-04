@@ -20,7 +20,7 @@ The art director finds pet appeal still weak: the horizontal body and vertical e
 
 The director and genomics agreed one92word positive correction brief. The original source was attached first as form/material authority; the first returned raster was attached second for pixel craft. The request combined a whole-subject90° clockwise rotation, the original pointed fins and the actual body-local20–55% scale field. [Exact correction prompt](correction-prompt.txt) and [actual browser result](browser-correction.png) are retained.
 
-Both specialists inspected the actual second image and agreed:
+Both independent assessments examined the actual second image and agreed:
 
 - **Pointed fin signatures restored:** all six remain in their recognizable opposed root groups.
 - **Requested presentation missed:** the body remains horizontal and its eye pair vertical. This is a presentation failure, not a hereditary change.
@@ -41,4 +41,4 @@ The [clean SVG](upright-source.svg) preserves the exact inner content of the ori
 
 [Reference manifest](reference-manifest.json) records the original/derivative hashes, transform, retained world span and boundary coordinates. Original SVG bytes remain unchanged; each PNG was regenerated once with matching SHA256. Source geometry, roots, pigment fragments and17 plate records were preserved. This input preparation does not establish that a future image model will follow it. No further provider call was made; pixel-craft guidance must remain subordinate to this source rather than supply a competing full-body template.
 
-**Reference handoff PASS:** art direction inspected both actual768×512 exports and384×256 views. The top leading region, horizontal eye pair, three regions/two waists, six pointed fins and separate field guide are readable. Independent genomics checked exact inner-SVG preservation, hashes and the common rigid mapping. Body-local20–55% correctly becomes pageY111.5984–271.8956. The field denotes the allowed covering domain; it does not authorize adding plates everywhere inside it. Both specialists directly confirmed agreement. This passes construction/reference preparation only; the generated-pet HOLD remains.
+**Reference handoff PASS:** art direction inspected both actual768×512 exports and384×256 views. The top leading region, horizontal eye pair, three regions/two waists, six pointed fins and separate field guide are readable. Independent genomics checked exact inner-SVG preservation, hashes and the common rigid mapping. Body-local20–55% correctly becomes pageY111.5984–271.8956. The field denotes the allowed covering domain; it does not authorize adding plates everywhere inside it. The independent assessments agreed. This passes construction/reference preparation only; the generated-pet HOLD remains.

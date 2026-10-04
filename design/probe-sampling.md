@@ -1,6 +1,6 @@
 # Gathering and exploration: from field context to Lab discovery
 
-**Current gathering design, 30 September 2026.** Accepted foundations: Companion-selected expeditions and standalone field play; Lab knows only expedition records it actually receives; expeditions end when returned resources are accepted at Lab; optional encounters without missed-check-in punishment; whole typed resources and sealed capsules; no genetic disclosure on the Probe. The owner approved implementation of the [generated field loop](#generated-field-loop--owner-review-proposal) with local map movement and one active gathering source. Numerical pacing, source budgets/chances and the wider location/event catalogue remain provisional; approval does not select hardware or prove live behavior.
+**Current gathering design, 30 September 2026.** Accepted foundations: Companion-selected expeditions and standalone field play; Lab knows only expedition records it actually receives; expeditions end when returned resources are accepted at Lab; optional encounters without missed-check-in punishment; whole typed resources and sealed capsules; no genetic disclosure on the Probe. Design review approved implementation of the [generated field loop](#generated-field-loop--design-review-proposal) with local map movement and one active gathering source. Numerical pacing, source budgets/chances and the wider location/event catalogue remain provisional; approval does not select hardware or prove live behavior.
 
 The approved [Lab workbench](genome-workbench/README.md) gives gathering its purpose: replenish useful studies, choose among partial genomes and discover new ones. [Probe specification](../specs/probe.md) owns measured-evidence boundaries; [research and creation](research-and-creation.md) owns inventory and sample lifecycle. The [Pip proof](../prototype/genetics/report.md) supplies valid content, not the field-award algorithm.
 
@@ -8,7 +8,7 @@ The approved [Lab workbench](genome-workbench/README.md) gives gathering its pur
 
 The current review connects **choose an expedition on Companion → explore a generated map → investigate a location → work a useful supply opportunity or follow a capsule lead → deliberately collect → return and send → Lab accepts once → continue retained research**. The broader rare-reference/method progression below remains future design context, outside this map proof. Range and capacity improve expedition choice/convenience independently; all three stocks remain useful.
 
-Review the [three stock identities](#prepared-research-resources--concrete-proposal), [progression map](#connected-progression-proposal) and [V1 expedition and event framework](#v1-expeditions-events-and-risk). The owner decisions are grouped [at the end](#owner-review-boundary). Accepted foundations and proposals are explicitly separated; nothing here implements a new economy or changes the approved Lab screens.
+Review the [three stock identities](#prepared-research-resources--concrete-proposal), [progression map](#connected-progression-proposal) and [V1 expedition and event framework](#v1-expeditions-events-and-risk). The design decisions are grouped [at the end](#design-review-boundary). Accepted foundations and proposals are explicitly separated; nothing here implements a new economy or changes the approved Lab screens.
 ## One connected loop
 
 Choose a purpose in Companion's Probe mode → retain the generated expedition → steer to an interesting location → deliberately investigate and activate useful work → retain whole supplies and possibly a sealed capsule → review and send the actual expedition contents → Lab accepts and credits inventory once → prepare new capsules or continue an existing research record. Lab may provide known research needs already received by Companion; it does not select the field route or observe away progress.
@@ -27,15 +27,15 @@ Use the connected model's [shared vocabulary](research-and-creation.md#shared-vo
 
 Keep the initial item set small. A reference item can supply a comparison context, but the new sample still needs its own evidence and studies. Permanent equipment/chips and nourishment belong to existing progression/care design; do not invent a second equipment economy for this slice.
 
-## Three-resource foundation — owner scope accepted
+## Three-resource foundation — accepted scope
 
-The owner accepts three starting research resources, Data, Energy and Essence, serving an open-ended variety of critters across all genomic layers/dimension families. Mineral grains/Lumen/Catalyst are rejected names. Subsequent terrestrial/botanical naming proposals are withdrawn as too narrow. Old labels in retained examples are superseded vocabulary.
+Design review accepts three starting research resources, Data, Energy and Essence, serving an open-ended variety of critters across all genomic layers/dimension families. Mineral grains/Lumen/Catalyst are rejected names. Subsequent terrestrial/botanical naming proposals are withdrawn as too narrow. Old labels in retained examples are superseded vocabulary.
 
 Resources support the Lab's methods; samples supply the unknown genomic information. Supplies do not install alleles, confer abilities, replace evidence or erase retained knowledge when consumed. They remain distinct from capsules, collection points, field items and nutrition. No resource corresponds to a class of creature, genomic layer or rarity tier. Extensible fictional content does not imply unlimited hardware/software capability.
 
 ### Prepared research resources — concrete proposal
 
-**Data cards / Energy prisms / Essence** follow the owner's naming direction. Their purposes below are proposals for steering, superseding the earlier reference/distinction/relationship resource taxonomy. The Probe prepares fictional research stocks; these are not new physical consumables, chemical processors or hardware requirements.
+**Data cards / Energy prisms / Essence** follow the naming direction. Their purposes below are proposals for steering, superseding the earlier reference/distinction/relationship resource taxonomy. The Probe prepares fictional research stocks; these are not new physical consumables, chemical processors or hardware requirements.
 
 | Resource | What it is in the game | What the Lab uses it for | Why demand varies |
 | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ These costs are arithmetic fixtures, not selected balance. The plantlike and pha
 Starting with 2 discs / 1 prism / 1 Essence pack, the player could finish Pip's markings comparison (leaving 0/1/1), or perform its movement relationship study (leaving 1/0/1) and still afford the plantlike comparison (leaving 0/0/0). This makes the same inventory relevant across different subjects. A missing method still prevents the phase study even with ample resources. No study automatically demands all three stocks; lower-demand work remains useful later.
 ## Sensors connect ordinary surroundings to expedition mechanics
 
-Owner requires the Probe's hardware sensors to participate in the game loop. The existing [Probe evidence contract](../specs/probe.md) owns measured-input limits and the wider candidate sensor set. The small V1 experiment envelope is brightness, temperature/humidity and acceleration; it is a proposal, not selected hardware. Pressure, spectral channels, sound features and magnetic sensing remain candidates pending demonstrated gameplay value and bench constraints. No new component or purchase is selected here.
+Design review requires the Probe's hardware sensors to participate in the game loop. The existing [Probe evidence contract](../specs/probe.md) owns measured-input limits and the wider candidate sensor set. The small V1 experiment envelope is brightness, temperature/humidity and acceleration; it is a proposal, not selected hardware. Pressure, spectral channels, sound features and magnetic sensing remain candidates pending demonstrated gameplay value and bench constraints. No new component or purchase is selected here.
 
 ### Proposed V1 sensor-to-mechanics connection
 
@@ -89,7 +89,7 @@ Tier upgrades can unlock new interpretations, expeditions and event pools using 
 
 ### Observations and expedition log — requested destination
 
-Owner asks for a view conveying sensor accumulators or logs. Proposed V1 destination: **Observations**, separate from resource gathering. Current observations show broad light/climate/activity summaries, valid observed duration, and freshness or unavailable status. Its **Log** page lists recent measured changes and game events with distinct labels/symbols. The exact layout remains part of the complete UI revisit; this is an interaction/data proposal, not approved screen art.
+Design review asks for a view conveying sensor accumulators or logs. Proposed V1 destination: **Observations**, separate from resource gathering. Current observations show broad light/climate/activity summaries, valid observed duration, and freshness or unavailable status. Its **Log** page lists recent measured changes and game events with distinct labels/symbols. The exact layout remains part of the complete UI revisit; this is an interaction/data proposal, not approved screen art.
 
 Do not introduce a second resource economy: sensor accumulation means retained observation coverage and context, not three spendable sensor scores. Observed duration counts a valid time interval once across channels, not once per sensor. Observation coverage and credited resource-gathering work are distinct: the hold can be full while the instrument still observes; seeing more observed minutes must not imply that resource stock increased. Per-channel missing data remain visible even when the remaining valid channels support an observation.
 
@@ -117,7 +117,7 @@ The earlier simulated observation adapter (historical host experiment, not the c
 
 ## V1 expeditions, events and risk
 
-**Accepted direction:** all three resources have accessible baseline opportunities and per-type rates shared across expedition profiles; expedition-specific events can temporarily boost a resource and offer optional risk, including simulated damage requiring Lab return. The approved map implementation uses one active gathering focus. Delivered Core V1 uses the earlier simultaneous timed fixture until that implementation replaces it; its concurrency is not the new requirement. No filters, automatic discard or new hardware controls. **Broader future proposal below:** four expedition types, ten reusable event types, one shared interaction pattern and binary Probe condition. Names, exact event membership, boosts, odds and recovery action remain proposals for owner review, outside the five-place map proof.
+**Accepted direction:** all three resources have accessible baseline opportunities and per-type rates shared across expedition profiles; expedition-specific events can temporarily boost a resource and offer optional risk, including simulated damage requiring Lab return. The approved map implementation uses one active gathering focus. Delivered Core V1 uses the earlier simultaneous timed fixture until that implementation replaces it; its concurrency is not the new requirement. No filters, automatic discard or new hardware controls. **Broader future proposal below:** four expedition types, ten reusable event types, one shared interaction pattern and binary Probe condition. Names, exact event membership, boosts, odds and recovery action remain proposals for design review, outside the five-place map proof.
 
 Whole loop: choose an investigation on Companion → explore and activate useful gathering → inspect an optional event → choose whether to participate → retain supplies/finds or return with damage → offload and research at the Lab. Expedition choice changes discovery opportunities, not the ordinary per-type yield rates. Stable does not mean all three resources have identical rates; their separate baseline rates remain to balance. The risk/event catalogue remains broader future design context; the current five-location map study introduces no damage mechanic.
 
@@ -132,7 +132,7 @@ Whole loop: choose an investigation on Companion → explore and activate useful
 
 Events 8–10 are shared discovery templates using each profile's eligible content. General survey offers a calm starting route without risky events; risk is optional in the specialist expeditions. These are investigation themes, not guaranteed creature classes. All profiles offer access to all three baseline resource classes, and essential capsule/method routes remain accessible through current-capability Companion expeditions. Real sensor context may influence authored eligibility; it does not detect magical material, actual storms or genome types. No travel into hazardous weather or exposure to physical danger is required.
 
-### Probe-tier progression — owner direction
+### Probe-tier progression — design direction
 
 Probe tiers unlock expedition types, eligible event variants and item/drop pools. They are not merely capacity upgrades. Tier eligibility is checked before event weighting or drop rolls: a rare roll cannot bypass an unmet tier requirement. Combine tier, installed capability and retained progression requirements where relevant; Lab method ownership/equipping remains a separate research constraint, not a substitute for Probe eligibility.
 
@@ -179,11 +179,11 @@ At the Lab, offload first, then use a simple explicit service action to restore 
 
 Choose Weather research; ordinary disc/energy/Essence rates remain unchanged. A storm notice waits while gathering continues. Ignore it safely, or inspect: see an Energy boost, one bounded exposure and a disclosed shock chance. Accept once. Success retains extra Energy progress; then shelter automatically. Leave with the gain, or accept the stronger second interval. If shocked, stop the expedition's collection and show the retained cargo plus return requirement. Offload/service at the Lab; continue research with what was brought home. No supply is converted from a discarded type into Energy.
 
-Paper checks before implementation: ignored notice; accepted exposure while unattended; first success then withdrawal; second-stage damage; storage full mid-exposure; pause/resume without new risk draw; and return/service without event replay. Inspect quantity conservation and retained state. Rates, probabilities and whether returning feels costly enough need player testing; agent review is not playtest evidence. Current storyboard lacks these event/damage states and is not an implementation specification.
+Paper checks before implementation: ignored notice; accepted exposure while unattended; first success then withdrawal; second-stage damage; storage full mid-exposure; pause/resume without new risk draw; and return/service without event replay. Inspect quantity conservation and retained state. Rates, probabilities and whether returning feels costly enough need player testing; automated review is not playtest evidence. Current storyboard lacks these event/damage states and is not an implementation specification.
 
 ## Rare findings and research capability — approved direction
 
-Owner approved rare findings enabling retained research methods, with baseline supplies funding subsequent studies and capsules supplying unknown genomes. Progression branches into capabilities; major research routes should permit deliberate pursuit alongside surprise discoveries. The ethereal crystal and ghostlike critters remain illustrative, not approved item names, canonical classes, drop rates or exact gates.
+Design review approved rare findings enabling retained research methods, with baseline supplies funding subsequent studies and capsules supplying unknown genomes. Progression branches into capabilities; major research routes should permit deliberate pursuit alongside surprise discoveries. The ethereal crystal and ghostlike critters remain illustrative, not approved item names, canonical classes, drop rates or exact gates.
 
 Recommend three separate values: baseline Probe-prepared supplies fund individual studies; rare discoveries enable research methods; sample capsules add unknown genomic content. A rare finding could support a one-time investigation that establishes a retained method, with later studies using the ordinary supplies. This makes the find consequential without requiring repeated rare drops for every similar genome.
 
@@ -193,12 +193,12 @@ Illustrative sequence: obtain a capsule, research what current methods support, 
 
 An essential method can gate an entire genome family when its defining information needs that method; related methods may also benefit different classes. Prefer a branching capability progression over a universal stronger-tier ladder. A later fantastic critter is not automatically better than Pip. Complexity, applicable methods and desirable traits remain distinct.
 
-Allow rare surprises alongside attainable directed leads; do not make the only route to a major research branch indefinite random luck. Repeated finds need an authored use rather than becoming dead inventory; trading, crafting and alternate study uses are possible but not selected. Essential acquisition remains attainable through current-capability Companion play; console-only acquisition was removed by owner direction. Probe displays never reveal capsule genotype or infer species from a rare item.
+Allow rare surprises alongside attainable directed leads; do not make the only route to a major research branch indefinite random luck. Repeated finds need an authored use rather than becoming dead inventory; trading, crafting and alternate study uses are possible but not selected. Essential acquisition remains attainable through current-capability Companion play; console-only acquisition was removed by design direction. Probe displays never reveal capsule genotype or infer species from a rare item.
 
 Open choices: method/chip relationship; whether and when the original find is consumed; directed acquisition and duplicate uses; which genomic domains need which methods. No new resources, numerical tiers or implementation selected here.
 ## Progress-proportional discovery and Probe tiers
 
-Owner direction: findings should normally be proportional to player progress. Accidentally acquiring a much more complex genome should be unavailable or a low-probability exception, not ordinary early play. Owner requires Probe tiers to unlock expeditions, event variants and drop pools; range, capacity and detection remain relevant capabilities. Exact tier structure and upgrade rules remain to design.
+Design direction: findings should normally be proportional to player progress. Accidentally acquiring a much more complex genome should be unavailable or a low-probability exception, not ordinary early play. Design review requires Probe tiers to unlock expeditions, event variants and drop pools; range, capacity and detection remain relevant capabilities. Exact tier structure and upgrade rules remain to design.
 
 Separate field access from analysis: Probe capability governs eligible expedition opportunities and discoverable sample sources; Lab methods govern which acquired genomic information can be decoded. Eligibility for a content family precedes weighting by research complexity and current progress. A low-probability advanced find, if enabled, must remain within the acquisition rules of the current Probe/profile; randomness cannot silently bypass a capability explicitly defined as a hard requirement.
 
@@ -215,7 +215,7 @@ Prefer author-visible capability requirements plus a small player-facing progres
 
 Use the [accepted baseline/sample/phenotype distinction](../specs/genetics.md#genome-baseline-collected-sample-and-phenotype--accepted-distinction): particular samples reveal valid foundations and sample-specific variation. They are not universally donor tissue or fragments for an unselected genome-assembly mechanic.
 
-Recommend capsules as discovery rewards separate from routine supply milestones. A first guided expedition should provide an attainable first capsule; later exploration can mix random finds with visible progress toward a retained discovery lead, so bad luck cannot indefinitely block new research. Exact guarantees, cadence and lead costs require owner selection/balance work.
+Recommend capsules as discovery rewards separate from routine supply milestones. A first guided expedition should provide an attainable first capsule; later exploration can mix random finds with visible progress toward a retained discovery lead, so bad luck cannot indefinitely block new research. Exact guarantees, cadence and lead costs require design selection/balance work.
 
 When a capsule is acquired, preserve its source identity, expedition evidence and supported genomic possibilities. It is stable on reopening or retrying delivery. The Probe may show a neutral capsule identity, never species, traits, allele letters or predicted critter art. Lab preparation exposes the research object; research establishes hereditary information and any supported configuration choices. It does not redraw hidden content for a prettier result.
 
@@ -287,11 +287,11 @@ Ordinary results favor samples that can be researched with owned methods; a smal
 
 ## Expedition pacing and return — team proposal
 
-**For owner steering, not selected balance.** Gather under the selected profile until the player returns or eligible storage fills. Full storage pauses collection; it does not mean the expedition's scientific purpose is completed. Returning and accepting the unload ends the expedition; the next outing chooses a new expedition. Cargo inspection or cancelled review can return to gathering before Send. Keep expedition time, the next award attempt and whole-item storage distinct; avoid unnecessary duplicate meters.
+**For design direction, not selected balance.** Gather under the selected profile until the player returns or eligible storage fills. Full storage pauses collection; it does not mean the expedition's scientific purpose is completed. Returning and accepting the unload ends the expedition; the next outing chooses a new expedition. Cargo inspection or cancelled review can return to gathering before Send. Keep expedition time, the next award attempt and whole-item storage distinct; avoid unnecessary duplicate meters.
 
 ### Typed gathering, pack thresholds and manual discard
 
-Current owner direction: resources are fungible within their own class and indivisible. Cargo holds whole Data cards, Energy crystals and Essence drops. Gathering progress is time and chance based; it is activity toward another award attempt, never unfinished contents. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this rule and supersedes the earlier fractional reservoir example.
+Current design direction: resources are fungible within their own class and indivisible. Cargo holds whole Data cards, Energy crystals and Essence drops. Gathering progress is time and chance based; it is activity toward another award attempt, never unfinished contents. [Gameplay](../specs/gameplay.md#research-collection-and-gathering--accepted) owns this rule and supersedes the earlier fractional reservoir example.
 
 Each resource can retain its own preparation state. Completing an eligible attempt can award a whole item or award nothing. Preserve preparation and resolved outcomes across view changes and returns; checking the screen must not generate yield or reroll results. Exact rates, probabilities and event boosts remain balance work. The native connected fixture is a bounded simulation, not selected field pacing.
 
@@ -309,7 +309,7 @@ The [V1 framework](#v1-expeditions-events-and-risk) owns profile/event/risk rule
 
 ### Samples and rare finds have their own pace
 
-Provide an attainable guided first capsule through the [bounded location/lead sequence](#generated-field-loop--owner-review-proposal), not an elapsed-time award. Discovery remains independent of supplies produced or spent: a full resource hold does not block an inspectable lead when capsule storage remains free. Surprise opportunities can resolve the same stable pending lead rather than granting a second duplicate reward. Exact guarantees and cadence remain owner choices; neither waiting nor finishing a resource meter proves a sample was acquired.
+Provide an attainable guided first capsule through the [bounded location/lead sequence](#generated-field-loop--design-review-proposal), not an elapsed-time award. Discovery remains independent of supplies produced or spent: a full resource hold does not block an inspectable lead when capsule storage remains free. Surprise opportunities can resolve the same stable pending lead rather than granting a second duplicate reward. Exact guarantees and cadence remain design choices; neither waiting nor finishing a resource meter proves a sample was acquired.
 
 Rare method-enabling references should take a longer authored lead, potentially across several expeditions. Do not select another universal timer: its effort must match the actual branch it enables. Retain lead steps and optional encounters without decay. Essential progression has a bounded Companion route using current capabilities; random luck cannot be the only route. Neither kind of finding reveals a genotype on the Probe.
 
@@ -319,22 +319,22 @@ A player pursuing Essence can keep incidental discs and energy for another genom
 
 Whole-item storage accounting is accepted; unfinished gathering preparation is separate and occupies no cargo space. The [connected visual journey](probe-expedition/README.md) retains earlier gathering, discard, risk and Lab-return context; the generated-map proposal supersedes its passive field composition. Check conservation of retained/discarded whole quantities, meaningful storage release and no hidden overflow. Exact timing then needs human playtesting against research costs. A visual study is not functional UI or approval of balance.
 
-## Owner review boundary
+## Design review boundary
 
-The owner approved implementing the [generated field loop](#generated-field-loop--owner-review-proposal) and one-focus opportunity handling on 30 September 2026. Its actual native journey is the next acceptance evidence. The four themes, ten shared event types and binary damage/free-service model remain broader proposals, not dependencies. Whole-item capacity and explicit discard are accepted; preparation timing, event rates/odds and numerical economy remain open. This approval authorizes the bounded playable loop, not hardware changes or additional progression systems.
+Design review approved implementing the [generated field loop](#generated-field-loop--design-review-proposal) and one-focus opportunity handling on 30 September 2026. Its actual native journey is the next acceptance evidence. The four themes, ten shared event types and binary damage/free-service model remain broader proposals, not dependencies. Whole-item capacity and explicit discard are accepted; preparation timing, event rates/odds and numerical economy remain open. This approval authorizes the bounded playable loop, not hardware changes or additional progression systems.
 
 ## Executable slice and limits
 
 The earlier host experiment (historical fixture, not the installed map implementation) implements the accepted storage/discard/offload boundaries plus one authored storm and a paid existing Pip Crown study. Its rates boost only Energy while keeping the other baseline yields unchanged; these executable arithmetic fixtures differ from the earlier static-story quantities and do not select final balance. It omits capsule generation, second exposure, all other events, tier upgrades and visual UI. See its reproducible transcript for actual measured software behavior; the design catalogue is not an implementation-completeness claim.
 
-## Generated field loop — owner-review proposal
+## Generated field loop — design-review proposal
 
 This retained worked study is historical where it shows preparation or Send review.
 The current timer-free gathering and direct Cargo Send contract is in
 [gameplay](../specs/gameplay.md) and
 [experience](../specs/experience.md#playable-three-device-simulator-boundary).
 
-**Implementation approved by the owner on 30 September 2026.** The heading retains
+**Implementation approved in design review on 30 September 2026.** The heading retains
 the design packet's stable link. Local map movement, deliberate location actions,
 one active finite gathering source, retained preparation, independent trace/cache
 discovery and safe return are now implementation requirements. The delivered
@@ -511,7 +511,7 @@ Retained leads cannot be duplicated merely because a new seed places a cache;
 match their stable identity and resolved history. Resolved prior sources stay
 history; a new outing needs its own legitimate opportunities. Repeated-use value
 is different route/focus/acquisition choices and useful Lab work, not repeated
-redecorated timers. These are play hypotheses requiring owner steering and later
+redecorated timers. These are play hypotheses requiring design direction and later
 human observation, not proven fun or a new tier/method/capture/training system.
 
 ### Team agreement and review boundary
@@ -524,13 +524,13 @@ capacity and return/retry boundaries; received-only Lab knowledge. The native-si
 study shows those decisions together. Brief agreement was followed by game-design
 inspection of the actual nine exports and direct UX/production exchange. The
 current corrected packet is accepted for **game meaning and design readiness**.
-The subsequent owner approval authorizes implementation of this loop; it does not
+The subsequent design approval authorizes implementation of this loop; it does not
 approve its arithmetic fixtures or establish runtime behavior or human enjoyment.
 
 Actual review must additionally show the before/after connector and retained
 observation, finite source bounds, and a legible supply-versus-sample route choice.
 If the export offers only Start plus a preparation bar, it has not answered the
-owner's depth/accomplishment request even if its accounting and disclosure are
+depth/accomplishment request even if its accounting and disclosure are
 correct. No additional minigame or screen count is required to demonstrate this
 within the agreed sequence. Human enjoyment remains an untested hypothesis.
 
@@ -560,7 +560,7 @@ No game-meaning objection remains in these final exports. Two authored graph
 examples with deterministic terrain variation demonstrate the design contrast;
 they do not deliver a world generator or interactive expedition engine. Visual
 craft, input usability and integration retain their own review evidence. The
-owner still steers pacing and future content after the approved loop becomes
+design review still governs pacing and future content after the approved loop becomes
 playable. Actual inspection must test whether its choices remain legible and useful.
 
 ### Bounded playable implementation contract
@@ -610,7 +610,7 @@ screens and outcomes after implementation; static approval alone cannot pass the
 
 ### Next discovery trial
 
-Owner playtest requires procedural variation, visible map events, meaningful
+Formative playtest requires procedural variation, visible map events, meaningful
 acquisition and a readable player token; repetitive fixture routes and waiting
 through chance cycles do not meet that requirement. Legacy fieldversion1 has two authored topology families. Native fieldversion2
 generates role positions, corridors and terrain from a seed. It still uses fixed

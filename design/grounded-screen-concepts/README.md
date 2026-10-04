@@ -1,6 +1,6 @@
 # Critter Lab — grounded future screen concepts
 
-Owner-requested refresh, 3 October 2026: replace the older screen presentation and remaining Beecho Lab lettering with new **Critter Lab** concepts grounded in the connected game loop. These are future screen and product illustrations. Existing software implements parts of their meaning; it does not yet deliver this visual quality. The owner has not approved these new compositions as final UI, creatures or hardware.
+Design-led refresh, 3 October 2026: replace the older screen presentation and remaining Beecho Lab lettering with new **Critter Lab** concepts grounded in the connected game loop. These are future screen and product illustrations. Existing software implements parts of their meaning; it does not yet deliver this visual quality. Design review has not approved these new compositions as final UI, creatures or hardware.
 
 The selected [C18 baseline](../game-art-proposals/35-vault-composition/18-c-refined.png) remains the visual authority: graphite depth, electric-blue connected frames, saturated pixel subjects and restrained warm focus. The existing [material family](../lab-controls/combined-family-materials.png) remains the hardware appearance reference. Original references and native captures are preserved unchanged. This packet replaces their use as the website's current screen presentation, rather than repainting software evidence.
 
@@ -37,9 +37,9 @@ The built-in image-generation tool produced the bitmap concepts and edited the e
 
 ## Actual-art review and delivery boundary
 
-Game design and UI/UX discussed the sample, knowledge, spending, identity and freshness boundaries before production, then inspected all final exports. Both support these actual images for their meaning and static composition as future concepts. The coordinator inspected visual lineage, pixel subjects, typography, intact device family, controls and website application. No independent art-director review is claimed for this packet.
+Game design and UI/UX discussed the sample, knowledge, spending, identity and freshness boundaries before production, then inspected all final exports. Both support these actual images for their meaning and static composition as future concepts. Visual inspection covered visual lineage, pixel subjects, typography, intact device family, controls and website application. No independent art-director review is claimed for this packet.
 
-One targeted correction round added the full-reference context and explicit Cost label, replaced the ambiguous Energy-shaped field marker, and matched Cargo drawings to the quantities. Final game/UX inspection found no remaining correction for this bounded packet. This is not owner approval, human usability/fun evidence, native implementation acceptance or physical validation.
+One targeted correction round added the full-reference context and explicit Cost label, replaced the ambiguous Energy-shaped field marker, and matched Cargo drawings to the quantities. Final game/UX inspection found no remaining correction for this bounded packet. This is not design approval, human usability/fun evidence, native implementation acceptance or physical validation.
 
 The [website](../../website/README.md) uses the new concepts for its current presentation. [Current Research evidence](../../docs/evidence/research-workpiece/README.md) and [earlier native captures](../../docs/evidence/polished-core-v1/README.md) remain separate, unchanged evidence. No gameplay, workbench, native release or save behavior changes in this refresh. No new tests, test batteries, discretionary CI, native builds, providers, infrastructure or purchases are part of the task. Ordinary existing-host packaging/publication remains a separate delivery check.
 

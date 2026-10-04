@@ -1,6 +1,6 @@
 # Inherited body organization experiment
 
-The owner rejected the repeated chained bulb creatures. Equal station lengths,
+Design review rejected the repeated chained bulb creatures. Equal station lengths,
 symmetric width growth and a fixed .65 neck between every region were forcing
 that silhouette. Shorter prompts and different pigments did not correct it.
 

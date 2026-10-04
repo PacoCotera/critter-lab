@@ -1,12 +1,12 @@
 # Renderer brief correction
 
-Owner-supplied comparison inputs,2October2026. The four original PNGs and pasted
+Supplied comparison inputs,2October2026. The four original PNGs and pasted
 prompts are retained byte-for-byte in [the manifest](owner-inputs.json). These
 are supplied images paired with template-v1 text, not a locally reproduced
 provider run. Provider/model/session and source-genome replay for these particular
 pasted records have not been independently verified.
 
-The owner rejects the renderer prompt's emphasis on exclusions, operational
+Design review rejects the renderer prompt's emphasis on exclusions, operational
 disclaimers and raw audit specifications, and specifically rejects delegating
 conflict handling to the image renderer. The current
 [art contract](../../art-template.md) separates a positive renderer brief from

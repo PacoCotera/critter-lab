@@ -126,7 +126,7 @@ changing expedition or stock authority. Stored/ended Cargo removes the active
 meter. Dock categories project only cached counts, beside persistent timestamp
 and a separate result. Existing saved Pip originals remain the shared identity;
 the provisional retained136×144 incubator apparatus projects process without a
-hidden founder. Its appearance remains under owner review.
+hidden founder. Its appearance remains under design review.
 
 The former shoulder/bevel and dark amber scanline primitives in
 `source/native-composition.c` remain as authored historical source/reference.

@@ -1,6 +1,6 @@
 # Generator diversity diagnosis
 
-The five unaltered [owner screenshots](owner-results.json) show nearly the same
+The five unaltered [supplied screenshots](owner-results.json) show nearly the same
 upright, necked, fin-bearing organization. They contain no seeds or genomes;
 exact inherited causes cannot be inferred from their pixels. Source diagnosis:
 21852fbd69cd5b3ba781b90962b80b8cd6f8cc59.

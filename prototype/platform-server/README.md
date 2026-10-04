@@ -57,7 +57,7 @@ which currently have no image-import service. `/genome/` on the public origin
 uses that origin's browser storage; the gateway neither copies nor evicts it.
 Native saved worlds remain owned by the separately deployed presenter.
 
-Source integration is not live deployment evidence. Coordinator review,
+Source integration is not live deployment evidence. Integration review,
 exact-revision build/activation and actual public-origin use remain separate
 delivery gates. No additional tests or CI jobs are introduced; hosting uses
 the existing runtimes and host.

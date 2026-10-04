@@ -22,7 +22,7 @@ Research previews therefore show samples and discoveries, with no invented queue
 timer or background work. Incubation previews never expose an unrevealed individual.
 Resource fractions remain real data and must not be rounded away for appearance.
 
-## Section overview and item overview — owner-directed next hierarchy
+## Section overview and item overview — design-led next hierarchy
 
 Global Home summarizes the whole Lab. Each main section also has an **Overview**
 entry that summarizes that section's complete collection/activity, separate from

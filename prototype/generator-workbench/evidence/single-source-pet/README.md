@@ -24,4 +24,4 @@ Observable macro source fidelity improves: leading region/top eye pair, continuo
 
 Exact plate profile/count, ocular/pupil ratios and relative body registration remain unverified. This is a visual source-anchor finding, not a pixel-level pass for every resolved value or whole-genome certification. Genomics consumed the completed actual art review and agrees on these broad observations; runtime prevented a live reply, so a new direct three-role result agreement is not claimed. The proposed body-hierarchy route must record changed morphology separately and leave its resulting expression ID absent until a defined source can be resolved.
 
-The subsequent [owner form/skin example](../owner-semantic-surface/README.md) redirected the active work to semantic appendage/material/colour communication. The uncalled body-hierarchy generation is held; it is not the next provider request.
+The subsequent [form/skin example](../owner-semantic-surface/README.md) redirected the active work to semantic appendage/material/colour communication. The uncalled body-hierarchy generation is held; it is not the next provider request.

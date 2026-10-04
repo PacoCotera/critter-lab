@@ -32,7 +32,7 @@ Automatic sample/encounter completion acknowledgements must not repurpose a held
 
 ## What changes across the journey
 
-The owner accepted pack/unit/sample vocabulary and the direction of finer next-pack progress, separate from storage. See [shared vocabulary](../research-and-creation.md#shared-vocabulary-packs-units-and-samples). The original concept supplies the illustrated stores + ready quantity + bar composition; the container icons are provisional, not a change to the resource identities.
+Design review accepted pack/unit/sample vocabulary and the direction of finer next-pack progress, separate from storage. See [shared vocabulary](../research-and-creation.md#shared-vocabulary-packs-units-and-samples). The original concept supplies the illustrated stores + ready quantity + bar composition; the container icons are provisional, not a change to the resource identities.
 
 Illustrative arithmetic: one pack already earned; the next is 65% prepared. Qualified collection work adds 20 percentage points, reaching 85%; pausing holds it there. Resume and another 15 points completes one pack. The eligible profile rules select its resource type; no early guarantee is shown. Checking the screen does not advance work. This fixture ends with two packs, a capsule and a reference. It does not select a rate, survey duration or automatic ending rule. Preparation percentage is neither expedition completion nor storage fullness; a storage-full view must say why gathering paused instead of showing a false ongoing bar.
 
@@ -46,6 +46,6 @@ This is nine representative states, not a complete implementation specification.
 
 On transfer uncertainty, retain the collection and reconcile the same receipt. The depicted pending state has no player timeout/recovery action designed yet; it must not be implemented as an indefinite input lock. Reconnection or status checking cannot blindly resubmit new rewards. Transport, cloud reconciliation and actual e-ink refresh remain separate implementation/bench work. Docking alone does not imply transfer or resource credit.
 
-Owner review: refined information hierarchy on the narrow Probe, optional-encounter presentation, and whether the different kinds of find remain understandable through Next/Confirm. No final panel, font, icon art, cadence, economy or resource-name approval is implied. Preserve the approved Lab workbench; no new functional UI is part of this study.
+Design review: refined information hierarchy on the narrow Probe, optional-encounter presentation, and whether the different kinds of find remain understandable through Next/Confirm. No final panel, font, icon art, cadence, economy or resource-name approval is implied. Preserve the approved Lab workbench; no new functional UI is part of this study.
 
 `render.py` regenerates the native PNGs and board with Pillow and the local Windows Bahnschrift study font; the font is not bundled. The board uses nearest-neighbor enlargement so it does not imply more detail than the native frames contain.

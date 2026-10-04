@@ -2,7 +2,7 @@
 
 Actual native control proof for [PR55](https://github.com/PacoCotera/critter-lab/pull/55),
 production source `e89c2dbc139899aa3a561081916cbdaa6a9a00ec`.
-The coordinator operated the native device protocol with the depicted directions,
+The automated walkthrough exercised the native device protocol with the depicted directions,
 Confirm and Back. These are native450×600 exports, not concept art or browser cards.
 No developer grant, time warp, map rewrite or screen-click shortcut was used.
 [Capture hashes/revisions](manifest.json) distinguish the first pre-copy-correction
@@ -47,7 +47,7 @@ The architect checked version/save boundaries before coding; an independent
 technical/domain reviewer checked generation, legacy records and once-only
 transfer. Actual output review by UX/art caught a false fixed-east message;
 neutral feedback was corrected and re-exported before delivery. Final review
-results are recorded at the PR. These checks are agent-operated functional and
+results are recorded at the PR. These checks are automated functional and
 visual evidence, not human enjoyment or physical-display validation.
 
 This closes fixed-template geometry for new outings. Place roles, source chance

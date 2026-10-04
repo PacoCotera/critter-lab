@@ -10,7 +10,7 @@ Research incrementally decodes genome regions; a fully decoded genome is a prere
 
 Creation requires a **fully decoded, selected genome**. Research and resource expenditure resolve required genomic information; creation cannot secretly finish missing regions or substitute a random genome. Supported possibilities followed by guided synthesis remains the research direction. Exactly how research establishes those possibilities is still open.
 
-The core kit must perform this journey standalone from the box, including supported nearby-kit interaction. Local research and creation cannot require Cloud Pass acceptance or remote generation. The optional Cloud Pass adds global trading/breeding, lineage, certificates and minigames. Local authority placement, generation execution and local/global reconciliation remain OPEN. Routine core-kit play needs no phone; Companion gathering supplies the Lab. Console-only acquisition is removed by owner direction. Neither an attractive preview nor a completed animation proves a saved creation.
+The core kit must perform this journey standalone from the box, including supported nearby-kit interaction. Local research and creation cannot require Cloud Pass acceptance or remote generation. The optional Cloud Pass adds global trading/breeding, lineage, certificates and minigames. Local authority placement, generation execution and local/global reconciliation remain OPEN. Routine core-kit play needs no phone; Companion gathering supplies the Lab. Console-only acquisition is removed by design direction. Neither an attractive preview nor a completed animation proves a saved creation.
 
 ```mermaid
 flowchart TD

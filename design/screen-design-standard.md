@@ -1,14 +1,14 @@
 # Screen design standard
 
-## Approved Lab UI baseline
+## Concept direction and refinement boundary
 
-Paco approved [the refined palette C screen](game-art-proposals/35-vault-composition/18-c-refined.png) on28September2026 as the **baseline UI from which the rest of the Lab app is derived**. This exact image is the primary Lab visual reference. The scope of that approval is stated below. Earlier Vault boards, palettes and screen variants are supporting references, not competing visual authorities. Do not reopen palette or composition discovery for routine Lab screens.
+The 3 October 2026 design clarification establishes that [the palette C screen, called C18](game-art-proposals/35-vault-composition/18-c-refined.png), is **concept art that needs refinement**. Carry forward its useful identity and prior design work; its composition, borders, density, typography and illustration treatment are open to richer, more refined proposals from the UI designer and pixel artist. Earlier selected direction is a starting point, not final UI/art acceptance or a requirement to reproduce every element.
 
 The Lab is a playful genetics research device: graphite surfaces, defined electric-blue frames, saturated crisp pixel artwork and selective warm focus. Preserve biological curiosity and the original pixel personality; avoid cosmic/starfield imagery, purple-dominant surfaces, generic web cards and hardware depicted inside hardware.
 
 ### Visual roles
 
-| Element | Approved baseline / derivation rule |
+| Element | Retained starting direction / craft requirement |
 | --- | --- |
 | Base surfaces | Graphite/dark neutral depth; quieter than art and information |
 | Frames | Defined electric-blue leading edges, dark edge contrast and connected compact pixel chamfers; crisp rather than bloomy |
@@ -26,11 +26,20 @@ Home previews. The physical panel, visible focus and concise action names carry
 ordinary navigation. Keep actual costs, commitment terms, results and unusual
 errors visible; removing tutorials must not hide consequences or recovery state.
 
-Approval establishes visual direction, composition grammar and hierarchy. It does not establish exact sampled color tokens, font licensing, native sprite masters, motion, physical-display performance or implemented navigation. Author reusable assets and compact variants faithfully; verify them against this baseline rather than redesigning them independently per screen. Decorative biological imagery is not genomic data. Resource colors must not imply relationships to unrelated traits.
+Refine a coherent family rather than copying the concept literally or redesigning each screen independently. Design review asks for visually and interactively driven gameplay that makes complex genomics understandable, with text as support. Refinement must connect input, information hierarchy, state/feedback, illustration, material and typography into one understandable learning interaction. Changes in visible meaning must remain consistent with game and genomic rules. Final screens and assets require design acceptance. Exact tokens, licensing, native masters, motion and physical performance remain unproved. Decorative biological imagery is not genomic data; resource colors must not invent trait relationships.
+
+The next bounded refinement proposal should compare two treatments of the same
+research before/action/discovery sequence, at the same device profile and with
+the same facts and controls. Include a small free-inspection view connecting a
+finding to the resulting pet and later compatible breeding. Demonstrate richer
+visual explanation, readable focus and response, not just added frame ornament.
+Use existing retained assets as labeled placeholders where necessary. This is a
+proposal brief, not a completed image packet or permission to replace canonical
+art. Broader family refinement follows the whole-game system map and design review.
 
 ## Current grounded concept packet
 
-Owner requested new future screens and updated product renders on 3 October 2026, grounded in the connected game loop and consistently named Critter Lab. The [grounded screen packet](grounded-screen-concepts/README.md) carries the selected C18 direction into eight illustrative moments across Companion, Lab and Caddy, plus revised product renders. It replaces older images in the website presentation. Original references and actual native evidence remain preserved; these new concepts are not implemented screenshots or owner-approved final compositions. The packet owns the worked content, control transitions and actual-art review boundary.
+Design review requested new future screens and updated product renders on 3 October 2026, grounded in the connected game loop and consistently named Critter Lab. The [grounded screen packet](grounded-screen-concepts/README.md) carries the selected C18 direction into eight illustrative moments across Companion, Lab and Caddy, plus revised product renders. It replaces older images in the website presentation. Original references and actual native evidence remain preserved; these new concepts are not implemented screenshots or approved final compositions. The packet owns the worked content, control transitions and actual-art review boundary.
 
 ## Across the device family
 
@@ -44,13 +53,13 @@ The board's moth-like critter, sample data, counts, hypothetical controls and la
 
 ## Deriving the remaining Lab app
 
-Carry the approved baseline into the existing research journey: study preview, explicit commitment, research feedback and saved finding, then related Lab views. Reuse the header, frame vocabulary, resource family, typography hierarchy and focus treatment. Adapt information architecture to the player task; do not force every screen into the same two-column template. Preserve current game rules and physical console controls. New information structures and consequential visual departures still need owner review; baseline approval is not blanket approval of every future screen or mechanic.
+Carry the approved baseline into the existing research journey: study preview, explicit commitment, research feedback and saved finding, then related Lab views. Reuse the header, frame vocabulary, resource family, typography hierarchy and focus treatment. Adapt information architecture to the player task; do not force every screen into the same two-column template. Preserve current game rules and physical console controls. New information structures and consequential visual departures still need design review; baseline approval is not blanket approval of every future screen or mechanic.
 
 Preserve richness during local implementation. Match the actual baseline beside the rendered result: icon craft, spacing, frame detail, focus balance and useful visual information. Rejected local34 is not an implementation style reference. A matching palette alone does not establish fidelity.
 
 Home and feature landing derivations are specified in the [Home contract](home-landings/README.md). Compare actual native exports against C18; the earlier control-migration pass did not approve broad visual fidelity.
 
-Current owner playtest retains the Home information architecture but rejects its
+Current formative playtest retains the Home information architecture but rejects its
 visual fidelity as final. The next workbench follows the [connected correction](research-and-creation.md#current-correction-return-to-the-same-research-workpiece).
 Inspect the actual study/finding screen as well as Home previews: a functional
 landing pass does not approve a text-only finding page. Preserve illustrated
@@ -61,14 +70,14 @@ provides the approved visual references; the production crew reconstructs reusab
 masters and engineering preserves the resulting native
 asset scales, anchors and effects. No current native-art final approval is claimed.
 
-The owner explicitly rejected the native Overview styling after the input/resource
+Design review rejected the native Overview styling after the input/resource
 correction. Functional and readability passes do not approve its visual fidelity.
 The next art proof must faithfully translate the approved Gemini references and be
 compared with C18 at native size. Existing JPEG screenshot crops, flood-matted
 edges and procedural outline panels are not production masters or an acceptable
 substitute for that handoff. Preserve current useful information and physical
 controls while the director and production artist resolve the visual craft. The
-owner authorizes the [reference-production workbench](reference-production/README.md)
+design review authorizes the [reference-production workbench](reference-production/README.md)
 to develop the asset family separately before native integration.
 
 The first reference-production Overview was rejected for margins, relative icon
@@ -85,7 +94,7 @@ The Overview destination family is now supplied by the
 [Gemini preparation workbench](reference-production/gemini-overview-family/README.md).
 Its material language must agree with the [current hardware family](lab-controls/combined-family-materials.png):
 matte sage/stone shells, charcoal protection and restrained playful orange accents.
-The owner likes the destination silhouettes but rejects their initial brass finish
+Design review favors the destination silhouettes but rejects their initial brass finish
 as steampunk. Revise materials while preserving expressive saturated sprite detail;
 screen iconography, UI and hardware must convey one identity. Do not turn this into
 uniform grey icons or replace the approved electric-blue screen framing.
@@ -96,7 +105,7 @@ symbols across empty and populated states. The four prepared 136×144 files reta
 their opaque graphite backing and must be rendered 1:1 on the documented matching
 field, without the older corner-color matte. This is a bounded implementation
 candidate; it does not approve other screens or establish final pixel masters.
-The owner has since rejected the cyan/purple canister specifically: it does not
+Design review has since rejected the cyan/purple canister specifically: it does not
 convey incubation. Its original remains preserved. Replacement source art is a
 bounded Gemini study of one sheltered chamber in empty/developing/ready states,
 using the same hardware materials. Developing and ready stay opaque and closed;
@@ -116,7 +125,7 @@ Use coherent apparent pixel density and intentional detail hierarchy across reso
 The [exact baseline extraction kit](game-art-proposals/37-lab-extracted-kit/README.md) provides fixed source-pixel references, a manifest and comparison sheets. Use it to check fidelity. It is not a native sprite master set or finished resizable component library.
 
 
-Author the assets needed by the current screen as one family, then reuse those exact assets. Maintain recognizable silhouettes, optical weight, light direction, shading clusters and material identity. Data is a card; Energy reads as crystal; Essence is a rounded symmetric translucent drop or sphere. Original owner references remain preserved.
+Author the assets needed by the current screen as one family, then reuse those exact assets. Maintain recognizable silhouettes, optical weight, light direction, shading clusters and material identity. Data is a card; Energy reads as crystal; Essence is a rounded symmetric translucent drop or sphere. Original references remain preserved.
 
 Native masters need measured source dimensions, explicit display scale and deliberate compact variants. Show actual1× use and integer enlargements when claiming pixel work. Generated boards and browser previews are concept references, not native sprite masters. Inspect the whole resource family together, including stock and study sizes.
 
@@ -155,7 +164,7 @@ Inspect a composed native-size proof before promoting the new visual treatment. 
 
 ## Current shared frame correction
 
-Owner rejected the native border breaks as damaged-looking on30September2026.
+Design review rejected the native border breaks as damaged-looking on30September2026.
 Art direction and pixel production jointly diagnosed the16px-wide,8px-high
 reentrant shoulders and staggered layer transitions. The correction uses one
 connected6px chamfer in2px steps for every local inset layer, a2px blue perimeter,

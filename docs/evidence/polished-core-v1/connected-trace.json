@@ -1,6 +1,6 @@
 {
   "sourceRevision": "26eda6478af3b88a61f105775e6a5bbdbc3ca30d",
-  "save": "isolated native world; owner saves untouched",
+  "save": "isolated native world; existing saves untouched",
   "events": [
     {
       "capture": "initial-0.png",

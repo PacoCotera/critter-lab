@@ -1,8 +1,8 @@
 # Companion promise versus delivered screen craft
 
-Bounded supplemental game-art assessment, 30 September 2026. Outcome: identify the visible gap between the owner's field-partner concept and the actual connected Companion, then give the existing audit one concrete native-art proof target. Assessment only; no new artwork, code, mechanics, services, controls or design discovery. Stops at this report.
+Bounded supplemental game-art assessment, 30 September 2026. Outcome: identify the visible gap between the field-partner concept and the actual connected Companion, then give the existing audit one concrete native-art proof target. Assessment only; no new artwork, code, mechanics, services, controls or design discovery. Stops at this report.
 
-Inspected the four owner-supplied images below, retained Gemini03/04/07 display
+Inspected the four supplied images below, retained Gemini03/04/07 display
 previews and actual released-native Gathering, Cargo and delayed-acceptance frames.
 The screen studies visually match retained03/04/07. Native evidence isfd08ff1;
 no new runtime pass or artwork was produced by this comparison. Original reference
@@ -27,7 +27,7 @@ This promise is real direction; pictured Wild encounter, Wild capture and Train 
 
 The native gathering frame contains a compass, expedition labels, two progress bars, supplies and actions. Cargo is three small icons in a text ledger. Their useful live information does not produce a living illustrated place or individual. Repeated brand/title/rail layers and footer instructions consume the portrait canvas. Thin blue borders and matching resource colors establish only fragments of the promised craft.
 
-The delayed accepted Cargo frame makes the larger problem concrete: all quantities are zero and `Accepted in Lab - receipt pending` appears, but the focused action is `View expedition`. Art must clearly project an ended outing and stored result; it cannot fix the misleading action or receipt policy. Existing audit evidence also leaves the owner's original escape trap unresolved.
+The delayed accepted Cargo frame makes the larger problem concrete: all quantities are zero and `Accepted in Lab - receipt pending` appears, but the focused action is `View expedition`. Art must clearly project an ended outing and stored result; it cannot fix the misleading action or receipt policy. Existing audit evidence also leaves the original escape trap unresolved.
 
 ## What the later studies improve—and sacrifice
 
@@ -49,9 +49,9 @@ The current native release has not matched these useful craft references. Retain
 
 Continue the existing 450×600/D-pad/Back/Confirm contract. Use a slim persistent three-mode rail, one principal task subject and one warm focus. Probe's principal field should be an illustrated place with an intelligible fictional gathering activity; current outing, next try and whole earned supplies remain compact and clearly distinct. Cargo gives objects/counts/capacity precedence. A proposed resident screen gives the actual individual precedence. Do not force all modes into a single boxed-card template.
 
-Prefer Gemini-derived artwork from the retained references, with editable background/activity layers and owner-steered resident art. Compose from one shared Data-card/gold-crystal/rounded-Essence master family, one type hierarchy, reusable restrained frame/focus assets and explicit still feedback variants. Generated concepts and resized previews are visual references, not pixel masters. Counters, captions, focus and outcomes must be live native elements. No baked screenshot backgrounds, arbitrary sprite enlargement, inconsistent per-screen crops or a rendered device inside the display.
+Prefer Gemini-derived artwork from the retained references, with editable background/activity layers and design-led resident art. Compose from one shared Data-card/gold-crystal/rounded-Essence master family, one type hierarchy, reusable restrained frame/focus assets and explicit still feedback variants. Generated concepts and resized previews are visual references, not pixel masters. Counters, captions, focus and outcomes must be live native elements. No baked screenshot backgrounds, arbitrary sprite enlargement, inconsistent per-screen crops or a rendered device inside the display.
 
-Before the next owner iteration, inspect the actual composed 450×600 exports at 1:1, beside the marketing concept and retained03/04; inspect 1024×600 Lab reception beside07. Check native craft and actual state together. The existing cross-domain design review covers unchanged meaning; only changed meaning/interaction needs another focused review of the actual revision.
+Before the next design iteration, inspect the actual composed 450×600 exports at 1:1, beside the marketing concept and retained03/04; inspect 1024×600 Lab reception beside07. Check native craft and actual state together. The existing cross-domain design review covers unchanged meaning; only changed meaning/interaction needs another focused review of the actual revision.
 
 ## Exact proof states before showing the next iteration
 

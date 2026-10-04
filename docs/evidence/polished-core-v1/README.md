@@ -76,7 +76,7 @@ Movement inspection. All three native suites and
 [exact CI](https://github.com/PacoCotera/critter-lab/actions/runs/36762029145) passed.
 The art director, game designer and UX designer inspected these same actual outputs
 and exchanged constraints; each accepted its scoped composition, meaning or
-comprehension. Coordinator inspected the exports and unchanged asset provenance.
+comprehension. Visual inspection covered the exports and unchanged asset provenance.
 This closes the inspected findings' former presentation hold, not human enjoyment.
 
 | Revised discovery | Actual native frame |
@@ -124,7 +124,7 @@ default passed the Kit suite at1dfb19ee9a7fab481134e95026630fcb3f73d344.
 The historical post-accept Cargo trap remains unconfirmed. Fresh connected exits
 pass, and an isolated matching clone of the current sandbox world also loads and
 escapes through Home/Explore/Back. The historical failure was not reproduced;
-owner-state evidence stays private and the live world was not changed by checks.
+live-state evidence stays private and the live world was not changed by checks.
 
 No capture, training, needs, ecology, deployed cloud generation, actual radios,
 hardware refresh/power/thermal performance or human playtest is certified here.

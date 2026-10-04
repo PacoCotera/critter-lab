@@ -1,6 +1,6 @@
 # Proposed inherited pigment comparison
 
-2 October 2026. A bounded colour-content proposal for owner steering: two legacy controls and eight candidate comparison pairings. These are flat swatches, not finished game art, newly executable alleles, a resolved genome or approved canonical colours. Runtime catalogue, inheritance, source anatomy and renderer prompts are unchanged.
+2 October 2026. A bounded colour-content proposal for design direction: two legacy controls and eight candidate comparison pairings. These are flat swatches, not finished game art, newly executable alleles, a resolved genome or approved canonical colours. Runtime catalogue, inheritance, source anatomy and renderer prompts are unchanged.
 
 ![Proposed pigment comparison](comparison.png)
 
@@ -24,4 +24,4 @@ Production inspected the actual colour and grayscale exports for readable names/
 
 One deterministic regeneration of the five generated artifacts produced identical SHA256 values. The final colour PNG is `ea126b3fa4c67c9fd47e902de828401a64f90a163bcdd60d2b9dd4ce39d03d9f`; all generated hashes are in the metadata. This verifies export reproducibility for the retained recipe, not display calibration, human preference, physical-screen contrast or genetic replay of new pigments.
 
-The outcome stops at this comparable colour proposal. Owner steering precedes canonical palette integration. Separately versioned candidate-enabled host experiments can proceed within existing authorization; they do not canonize these hues. No provider call, owner-art recolouring, new anatomy/material, animation, game deployment or accepted pet master is included.
+The outcome stops at this comparable colour proposal. Design steering precedes canonical palette integration. Separately versioned candidate-enabled host experiments can proceed within existing authorization; they do not canonize these hues. No provider call, reference-art recolouring, new anatomy/material, animation, game deployment or accepted pet master is included.

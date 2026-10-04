@@ -57,7 +57,7 @@ actual browser activation are separate delivery gates, not established by this
 coder evidence. Independent technical review passed after a misleading
 mixed-projection comparison caption was corrected; the affected check and
 replacement isolated build passed. Final architecture, remote CI and browser
-activation remain open. The source is held and the owner rejects the current
+activation remain open. The source is held and design review rejects the current
 diagrams as illustration references; this is technical evidence only.
 
 Fin/membrane/branched or multiple-volume radial bodies remain unsupported.

@@ -1,6 +1,6 @@
 # Retained genome-field artwork
 
-Original visual references recovered for the owner-directed visual research-bench design. These files are preserved byte for byte from the earlier product checkout. They were absent from the current active review branch. Original source files remain intact.
+Original visual references recovered for the design-led visual research-bench design. These files are preserved byte for byte from the earlier product checkout. They were absent from the current active review branch. Original source files remain intact.
 
 | Original | SHA-256 | Relevant visual lineage |
 | --- | --- | --- |

@@ -18,6 +18,6 @@ Final source `dbfed3bc7f5528b0869ec60f9131407394b94ba5` was pushed, fetched thro
 
 ## Open limits
 
-The cyan/purple canister is owner-rejected provisional art. It is preserved here as an honest current render, not an approved incubator. A concealed empty/developing/ready chamber source study is pending actual Gemini output. Native framework acceptance does not approve final art, discovery enjoyment or canonical balance. Standalone legacy acquisition routes have separate retirement/migration review; connected acquisition remains Companion-owned.
+The cyan/purple canister is rejected provisional art. It is preserved here as an honest current render, not an approved incubator. A concealed empty/developing/ready chamber source study is pending actual Gemini output. Native framework acceptance does not approve final art, discovery enjoyment or canonical balance. Standalone legacy acquisition routes have separate retirement/migration review; connected acquisition remains Companion-owned.
 
 PNG files are format conversions of native BMP output, without painted overlays. [Frame hashes/provenance](frames.json). [Shared architecture](../../../specs/architecture.md#current-migration-coverage-and-target-evidence).

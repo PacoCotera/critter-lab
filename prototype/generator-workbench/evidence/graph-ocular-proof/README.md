@@ -60,7 +60,7 @@ complete cases. `rejected-maximum-size.json` separately retains the explicit
 0.24-radius-ratio input and root-overlap rejection; the accepted size comparison
 uses 0.18→0.21. This is selection of valid test inputs, not a solver repair.
 
-Art direction and coordinator inspected the actual1536×256 comparison and
+Art and integration assessments inspected the actual1536×256 comparison and
 relevant256px individuals. Both eye pairs remain distinct; the axial pair is
 smaller. Size and placement changes are visible; the absent-eye cases match.
 The XY view puts the features vertically on the page. It establishes local

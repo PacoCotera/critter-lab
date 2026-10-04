@@ -12,7 +12,7 @@ connected, fully defined content rather than thousands of gene names.
 
 ## V1 diversity and genome-first construction
 
-Owner renderer direction,2October: the image prompt leads with substantive positive
+Renderer direction,2October: the image prompt leads with substantive positive
 art direction and an understandable description of the resolved creature. The
 workbench handles replay, conflicts, limitations and source-trace inspection;
 these are separate from the renderer's drawing task. Composition, silhouette,
@@ -29,10 +29,9 @@ lists or a technical phenotype wall. The complete genome and construction data
 remain inspectable separately. These requirements apply to new scene briefs;
 historical submitted prompts retain their exact provenance.
 
-Owner's retained [Gemini pet transformations](../prototype/generator-workbench/evidence/owner-pet-transformations/README.md)
+retained [Gemini pet transformations](../prototype/generator-workbench/evidence/owner-pet-transformations/README.md)
 establish the depiction target: appealing digital pets that retain unfamiliar
-organization. The owner explicitly requests art director, pixel artist and
-genomics discussion, with outline → illustration → pet treatment → animation
+organization. The depiction proposal connects visual craft with genomic meaning, with outline → illustration → pet treatment → animation
 as a proposed sequence. Their [considered stage proposal](../prototype/generator-workbench/art-template.md#proposed-multi-pass-pet-production)
 distinguishes faithful portrayal from art-first redesign, permits visual
 exploration before coding, and keeps the outline/extra passes optional.
@@ -46,7 +45,7 @@ shown beside the legacy controls. Art direction and genomics considered the
 same candidate records; the comparison preserves existing two-copy partition
 expression and pigment ownership. Review pairings are examples, not inherited
 families, species selectors or permitted-combination bundles. Canonical colours
-remain owner-steered. The default executable catalogues and retained replays
+remain design-led. The default executable catalogues and retained replays
 are unchanged. The [candidate-enabled host experiment](../prototype/generator-workbench/evidence/inherited-pigment-experiment/README.md)
 retains a separate version2 foundation, old allele strings and pair maps, actual
 resolved colour-only variants and bounded random-generation results. It is
@@ -61,7 +60,7 @@ now retains inherited or complete supplied records; QR payloads and art remain
 future consumers. The [art contract](../prototype/generator-workbench/art-template.md)
 owns the current display-code boundary.
 
-Owner requires ground, flying and swimming creatures and a much broader range of
+Design review requires ground, flying and swimming creatures and a much broader range of
 body organizations. Fish, microbes, insects and land animals illustrate desired
 range; they are not a mandatory taxonomy. **Classes emerge from expressed genomes,
 not a hardcoded species/class selection.** The [genetics framework](../specs/genetics.md)
@@ -196,11 +195,11 @@ budget, retaining seeds and rejection stages. Failed geometry never becomes a
 repaired or substituted creature. Whole-copy edits invalidate the preview and
 renderer brief until resolution succeeds again. Source construction remains
 distinct from generated illustration and does not establish pet appeal or the
-owner's complete intended anatomical range.
+complete intended anatomical range.
 
 ## Coherent static family implementation proof
 
-Owner authorized one complete static genome-derived family and two traceable
+Design review authorized one complete static genome-derived family and two traceable
 variants. This is a reversible host authoring proof, not canonical biology,
 full organism diversity, game creation/breeding permission or physical motion.
 The earlier disconnected-volume package and its retained records stay exact.
@@ -223,7 +222,7 @@ oral module constructs one oval aperture. Their fixed primitive/material
 profile is explicit content, with dimensions derived from the local exterior.
 These visible structures establish neither vision nor feeding physiology.
 Their shape/module selection is a provisional implementation choice within the
-owner-authorized outcome, not owner approval of a canonical face or species.
+authorized outcome, not design approval of a canonical face or species.
 
 This slice does **not** model snouts, noses, jaws, teeth, gills, varied ocular
 construction or their functional physiology. Prioritized future extensions are:
@@ -297,7 +296,7 @@ The separate `genomic-pet-study@1` / `continuous-pet/1` package is a provisional
 
 **Repeated-generation diagnosis, 1 October:** the PET calibration gate excludes articulated limbs, membranes, radial symmetry and single dominant volumes. Fresh valid seeds therefore remain one body family. The existing broad graph package exposes other anatomy roles but lacks coherent tissue and PET face/covering modules. [Measured funnel and complete locus coverage](../prototype/generator-workbench/evidence/diversity-diagnosis/README.md) distinguish conditional expression, real drawing omissions and absent consumers. The next construction slice must reuse one graph-to-exterior/local-frame/rooted-module boundary, preserve legacy replay, and demonstrate distinct neutral silhouettes before pet illustration. This is a proposed bounded proof, not approved canonical anatomy or completed art.
 
-**Owner visual rejection, 1 October:** the face comparison is a diagram, not game art. Legal construction, retained counts and larger pupils do not establish a coherent pet. This profile remains diagnostic evidence; its bead-like exterior and symbolic coverings must not become a production art master. The next design review must resolve meaningful body organization and continuous tissue from genomic contributors, then specify which phenotype properties constrain illustration and which are depiction choices. Genomic authority over topology, proportions, appendage/feature roles, material fields, palette and eligible movement remains required. Construction stations and individual schematic strands are not automatically visible segmentation or a finished coat. A proposed realization contract needs a comparable silhouette/face/material proof before more implementation; no provider is permitted to invent unmodeled anatomy to repair a weak source.
+**Visual rejection, 1 October:** the face comparison is a diagram, not game art. Legal construction, retained counts and larger pupils do not establish a coherent pet. This profile remains diagnostic evidence; its bead-like exterior and symbolic coverings must not become a production art master. The next design review must resolve meaningful body organization and continuous tissue from genomic contributors, then specify which phenotype properties constrain illustration and which are depiction choices. Genomic authority over topology, proportions, appendage/feature roles, material fields, palette and eligible movement remains required. Construction stations and individual schematic strands are not automatically visible segmentation or a finished coat. A proposed realization contract needs a comparable silhouette/face/material proof before more implementation; no provider is permitted to invent unmodeled anatomy to repair a weak source.
 
 Four new copy-mean contributors are `structure.leading-width-ratio` (1.15/1.5 times neighboring station half-width), `structure.ocular-size` (0.18/0.24 times min(leading full width, station length)), `structure.ocular-separation` (0.5/0.65 times leading half-width), and `structure.pupil-ratio` (0.4/0.7 times ocular radius). The posterior simple oral ellipse, sampled leaf-fin sides and optional ocular reflection are declared finite profile geometry/material depiction. Containment/separation failures reject; no renderer moves or enlarges a feature. Ocular/ oral presence does not establish sensing, feeding or emotion.
 
@@ -449,7 +448,7 @@ unselected; this content discussion is not human playtest evidence.
 
 ## Future expedition engineering tools
 
-Owner proposes **CRISPR-CAS-like expedition items** for engineering well-known loci.
+A proposed mechanic uses **CRISPR-CAS-like expedition items** for engineering well-known loci.
 This is a fictional game proposal, not selected gameplay or a real editing protocol.
 
 First candidate operation: a researched, explicitly identified copy is replaced

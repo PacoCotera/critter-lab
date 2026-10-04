@@ -22,23 +22,23 @@ The [matched geometry-guided benchmark](geometry-calibration/README.md) adds an 
 Bounded developer scaffold,1October2026. The current source imports the existing
 Pip engine unchanged; no game/device source or saved state is altered.
 
-- **Architect:** reviewed actual module boundaries and final corrections,
+- **Architecture inspection:** covered actual module boundaries and final corrections,
   README, closed-value mapper and path-scoped host CI job. Ready for this host slice.
-- **Independent genomics/technical reviewer:** ran the initial five tests and
+- **Independent domain validation:** ran the initial five tests and
   enumerated243 existing valid genomes against the engine, including expression,
   marking construction and replay. Found malformed baseline references; final
   six-test rerun and actual HTTP422 regression passed after repair. Verified
   direct/indirect closure and construction rejection. No browser surface available
-  in that review session; no independent browser or visual pass is claimed.
-- **Coordinator/coder:** ran initial host and Pip suites (15tests), then the
+  for that assessment; no independent browser or visual pass is claimed.
+- **Implementation checks:** ran initial host and Pip suites (15tests), then the
   changed six-test workbench suite after review repairs. Actual in-app browser
   exercised Pp→pp, pin/diff, edit clearing/disabled export, unsupported juvenile
   rejection/reference recovery, and cc/mm with Ee. Export produced visible JSON;
   replacing its embedded SVG then importing regenerated the same input fingerprint
   and engine-derived schematic. The download-event approach was replaced by
   copyable JSON to avoid relying on browser download support.
-- **UX:** inspected actual coordinator-captured browser screenshots because its
-  own browser session was unavailable. Required indirect crown/signaling
+- **Screenshot-based UX assessment:** inspected captured browser screenshots.
+  Required indirect crown/signaling
   contributors rather than a misleading 'none' label. This is a mediated visual
   review, not independently repeated interaction or a final game-art approval.
 

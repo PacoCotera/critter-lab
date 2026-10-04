@@ -1,8 +1,9 @@
 # Connected discovery: Probe, genomic research and companionship
 
-**Owner review packet, 3 October 2026. Design preparation is complete; decisions
-remain open in [M0 / issue 105](https://github.com/PacoCotera/critter-lab/issues/105).
-Coding remains paused.**
+**Connected design baseline, 3 October 2026. The loop and governing tenets are
+confirmed. Broader subsystem design remains open in
+[M0 / issue 105](https://github.com/PacoCotera/critter-lab/issues/105).
+Dependent implementation remains paused.**
 Research is the visual/content backbone; worthwhile expeditions supply it, and
 its outcomes become companions the player wants to know and interact with.
 Companion is the ongoing bond, not merely a collection terminal. The child-facing
@@ -10,7 +11,8 @@ genome-map feeling is selected; procedural responsive encounters and automatic c
 Exact causal rules, economy, progression and final compositions remain proposals.
 
 The journey is **notice → interact/gather → return → open a genome → discover
-supported expressions → deliberately create → live with the same individual**.
+supported expressions → deliberately create → collect, nurture and observe →
+breed compatible critters → discover and develop new individuals**.
 Lab accepts actual cargo once; current outgoing quantities clear and received
 history remains. Away Companion does not know live Lab state. See [gameplay](../specs/gameplay.md),
 [genetics](../specs/genetics.md), [the genetic engine](../specs/genetic-engine.md)
@@ -20,10 +22,14 @@ and [creation/identity boundaries](../specs/sample-to-critter-contract.md).
 
 The outcome is a game about pursuing a curiosity, understanding a relationship,
 and meeting an individual whose appearance and capabilities follow from it.
-This packet carries forward the selected genome-field feeling, C18 visual grammar,
-responsive procedural encounters and automatic creature production. It does not
-restart those choices. Paco steers architecture, game rules, UI and all art;
-this comparison does not approve final screens or creature designs.
+The [game tenets](../specs/gameplay.md#governing-game-tenets) and
+[whole-game subsystem map](../specs/gameplay.md#whole-game-subsystem-map) govern
+the broader design. Research and compatible breeding are central; discovery,
+collectability, uniqueness and nurturing sustain engagement. C18 is concept art
+that needs richer, more refined treatment; the selected genome-field feeling and
+useful visual identity remain references. Visual interaction must explain the
+game before supporting text does. No final screens or creature designs are
+approved by this comparison.
 
 ### One sample, across the whole kit
 
@@ -35,6 +41,7 @@ this comparison does not approve final screens or creature designs.
 | Return later | A shortage preserves findings and stock. Another outing supplies the same ongoing research; it does not replace the sample or reset knowledge. |
 | Create | Complete required knowledge permits supported full comparisons. Selection is a reversible draft; separate Create spends the reviewed inputs and retains one individual. Incubation, Ready and deliberate Open are distinct. |
 | Live together | The same individual appears on Companion. Entry is safe; a deliberate interaction produces a response. Proposed Invite over varies with actual movement eligibility, condition and remembered familiarity. A portrait/visit count does not establish this behavior. |
+| Breed and develop a collection | Choose compatible similar-baseline parents, understand their relevant differences and follow a new viable individual's inherited variation. Retain parents, offspring identities and actual lineage. Pairing rules, category model, costs and nurturing effects require design; the current founder fixture does not implement this core mechanic. |
 | Glance and print | Caddy shows accepted records or a dated cache, and paper preserves the same identity and permitted facts. Neither browsing nor scanning grants ownership or breeding rights. |
 
 Lab uses directions, Home/Research/Library/Habitat keys, Back and Confirm;
@@ -96,8 +103,8 @@ output presentation remain later decisions before dependent creation work.
 | B. Authority delegated by operation | Companion can accept explicitly delegated field/resident activity while Lab owns home operations. | Enables richer independent away progress, but needs bounded handover, player switching, revocation and conflict rules. It does not mean unrestricted multi-device writes. |
 
 Recommend A as the design assumption for the first proof, with durable field
-records and an explicit unresolved boundary for away companionship. Paco may
-choose B if independent away development is essential at this stage. Neither
+records and an explicit unresolved boundary for away companionship. B merits
+selection if independent away development is essential at this stage. Neither
 choice selects hardware, transport, a cloud provider or a new service. Device-loss
 recovery, nearby-kit authorization and global reconciliation are not proved here.
 
@@ -129,13 +136,14 @@ show bounded implemented meaning, not final visual quality. Concept Library focu
 must not imply creation authority; final research/Library destination treatment
 needs steering.
 
-### Three decisions for Paco
+### Open design questions
 
 | Decision | Recommendation and meaningful alternative |
 | --- | --- |
-| First feature emphasis | Prove one responsive encounter → accepted haul → retained research relationship, with two contrasting causal states. Alternative: prioritize one reciprocal Companion interaction if forming the bond is the immediate uncertainty. Keep the whole journey as context either way. |
+| Whole-game coverage and first proof | Explain the full subsystem map and dependencies, including breeding, collection, environments, observability, inventory, social, printer and cloud mechanics. The earlier encounter-to-research slice is one candidate proof; select its scope after the connected design shows how it serves the broader game. |
+| Breeding baselines and variability | Compare defined baseline groups (32 is illustrative) with constrained generation followed by emergent classification. Use the same compatible parents and incompatible candidate; show inheritance, viable offspring, lineage and understandable player feedback. [Genetics](../specs/genetics.md#crossing-viability-and-classification) owns the comparison. |
 | Local authority | Use A for the first proof, keeping away activity durable and its shared effects bounded. Choose B now only if independently accepted away development is necessary for the desired play. Both preserve standalone core play. |
-| Research composition and art emphasis | Keep the woven field visible while a selected neighborhood unfolds inside C18; give the finding/local change the main visual emphasis. Alternative: a focused study workspace with a persistent miniature field and clear return. Both retain the selected genome-map feeling and current controls. Paco steers composition, ornament density, creature depiction and resulting actual assets before they become canonical. |
+| Research composition and art refinement | Compare a visible unfolding genome field with a focused study workspace retaining a miniature field. Refine the concept's hierarchy, pixel craft, richness and interactive feedback together; neither arrangement nor C18's exact borders are final. Connect the same discovery to pet creation and compatible breeding. [Screen standard](screen-design-standard.md#concept-direction-and-refinement-boundary) owns the bounded proposal brief. |
 
 The next visual proof must show A before/review/after/return and the B relationship,
 including Needs/Have, shortage, pending and receipt recovery. Incubation/Ready/Open,
@@ -160,7 +168,7 @@ proposals; they do not establish our game's enjoyment or authorize copied conten
 
 ## Probe: procedural responsive encounters — selected direction
 
-Owner selected responsive encounters and requires procedural/generative content,
+Design review selected responsive encounters and requires procedural/generative content,
 not scripted scenarios. LLMs should enable a large creative space. A thousand
 generated story records are still scripts; shuffling names, geometry and rewards
 does not establish variation in play.
@@ -241,14 +249,14 @@ complexity is insufficient.
 
 | Resource | Role | Requirement boundary |
 | --- | --- | --- |
-| **Data** | Research input needed to understand an unresolved question. Owner requires more for more complex investigation. | Exact prices remain open. Generic stock does not contain this capsule's alleles; the resulting knowledge is retained. No mandatory physical carrier fiction. |
+| **Data** | Research input needed to understand an unresolved question. Design review requires more for more complex investigation. | Exact prices remain open. Generic stock does not contain this capsule's alleles; the resulting knowledge is retained. No mandatory physical carrier fiction. |
 | **Energy** | Work/power for running the selected experiment. | Browsing is free; more Energy cannot improve genes. No battery/joule or wait-time claim. |
 | **Essence** | Contrast/readout material that makes a previously unresolved pattern or relationship readable. | It does not add traits. An expression already justified by known facts is free to inspect. |
 
 Proposed economy for comparison: accept the displayed whole-unit research budget
 once when a new operation runs; keep its findings permanently. Stock allocation,
 threshold-only requirements and exact consumption policy are not selected by the
-owner's Data clarification. A local dock shows Needs/Have and actual other inputs;
+Data requirement. A local dock shows Needs/Have and actual other inputs;
 shortages preserve all stock and findings. Not every procedure needs all three.
 More scope may need more Data, while useful overlap reuses established knowledge.
 No larger donation chooses a preferred genotype or rare result.
@@ -266,7 +274,7 @@ traceable lineage. The existing two-copy example allows carried variation to
 reappear in descendants; a research resource or booster cannot select a preferred
 allele. Children are new individuals, not replacements for the parents.
 
-Owner selects eventual virtual Probe/Lab tiers and boosters: start with simple
+Design review selects eventual virtual Probe/Lab tiers and boosters: start with simple
 genomes, reach more complex relationships and longer research. Proposed gates
 affect future discovery eligibility and analytical methods/scope; exact bonuses,
 timings and recipes remain open. Existing genomes never reroll on upgrade.
@@ -287,7 +295,7 @@ changes content immediately; Back returns to the same creature. Lineage uses act
 parents, or origin for a founder. Genome shows inherited information; attributes
 distinguish expressed capabilities, current conditions and learned history.
 Unknown is not zero, and training cannot silently add a hereditary ability.
-Breeding/design/training belong to the owner's broader direction; this round
+Breeding/design/training belong to the broader product direction; this round
 neither implements them nor freezes their reward, timing or inheritance rules.
 See [the Companion experience](companion-experience.md).
 
@@ -329,14 +337,14 @@ the default stays playful. Exact interaction/learning rates are still proposals.
 
 ## Next proof and stopping condition
 
-After Paco selects the emphasis, refine only that next feature under
+After the system design and next emphasis are selected, refine only that feature under
 [connected play](https://github.com/PacoCotera/critter-lab/issues/44): approved
 controls, one ordinary/interrupted journey, actual retained state and the named
 visual gaps needed to inspect it. For the recommended discovery slice, stop at
 two rule-derived field states feeding one useful retained research relationship.
 Reference the existing downstream creation/identity/Caddy contracts without
 quietly implementing their missing breadth. Art and final interaction acceptance
-remain owner reviews; numeric balance remains proposed.
+remain design review reviews; numeric balance remains proposed.
 
 Genome-derived organizations, legal motion across ground/air/water and automatic
 retained art remain a separate horizon in the
@@ -351,4 +359,4 @@ this design round. The architect checks target/framework/workload boundaries bef
 implementation. Keep original references and useful unfinished studies in
 [field design](probe-sampling.md), [exploration study](expedition-map-study/README.md)
 and [research/creation](research-and-creation.md); earlier scripted examples and
-manual per-creature assumptions do not override the current owner direction.
+manual per-creature assumptions do not override the current design direction.

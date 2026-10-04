@@ -19,9 +19,9 @@ The core kit works standalone from the box, including nearby-kit interaction. Co
 
 The optional Cloud Pass supplies global trading and breeding, lineage, certificates and minigames. It is not required to accept core research, creation or other local play. No price, provider or subscription enforcement design is selected. The Linux-class Lab may execute work locally; cloud generation is an optional capability, not a dependency that prevents core play when disconnected. Exact generation workloads and content delivery remain unselected. Routine play needs no phone or personal home server.
 
-The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The owner now explicitly directs a mobile fallback if the hardware-oriented software experience does not justify building the kit, and shared domain services should not force identical interactions across devices.
+The [physical-experience principle](experience.md#physical-experience-is-the-product) governs the device boundaries. A whole-game software/app prototype may model all roles before hardware exists; a future full app edition is possible. The product direction requires a mobile fallback if the hardware-oriented software experience does not justify building the kit, and shared domain services should not force identical interactions across devices.
 
-Owner direction,3October2026: design and the connected whole-product journey lead development. Paco has the ultimate decision on changed architecture and game design. The requested overhaul remains open; specialist agreement, merged code and prototype delivery do not approve a new baseline. Existing approved behavior and explicitly bounded generator/workbench/API experiments remain evidence, with their limitations retained.
+Design direction,3October2026: design and the connected whole-product journey lead development. Changed architecture and game design require explicit design acceptance. The requested overhaul remains open; technical review agreement, merged code and prototype delivery do not approve a new baseline. Existing approved behavior and explicitly bounded generator/workbench/API experiments remain evidence, with their limitations retained.
 
 ## Current development gate
 
@@ -31,7 +31,7 @@ The caddy is the tangible home of the collection, not an assumed mandatory gatew
 
 ## Creature production pipeline
 
-Owner direction,1October: **a fully decoded genome becomes the generative input
+Design direction,1October: **a fully decoded genome becomes the generative input
 for a critter generator triggered by configured incubation**. Algorithms create
 all creature art, sprites, animations and encyclopedia content from that genome
 and its expressed loci. There is no per-creature illustrator, editor, copywriter
@@ -41,7 +41,7 @@ This is the selected production direction, not an implemented generator.
 
 The existing [Pip engine proof](genetic-engine.md) establishes a bounded qualitative
 genetics fixture, not this complete production pipeline. General style and new
-genetic rules still need owner steering; ordinary outputs must not need individual
+genetic rules still need design direction; ordinary outputs must not need individual
 human authorship. Original Gemini/C18 art supplies direction and calibration,
 not a catalogue of prefinished creature portraits for the generator to select.
 
@@ -53,7 +53,7 @@ flowchart LR
   Express --> Body[Procedural body, features, palette and rig]
   Body --> Graphics[Generated sprites, animation and paper views]
   Express --> Facts[Resolved facts and expression reasons]
-  Facts --> Classify[Optional derived classification]
+  Facts --> Classify[Classification: model under design review]
   Facts --> Entry[Programmatic encyclopedia]
   Origin[Actual founder origin or parental traces] --> Entry
   State[Current condition and learned history] --> Behavior[Eligible behavior and motion]
@@ -80,10 +80,14 @@ them. Training history does not silently become an inherited capability.
 Rendering cannot choose genes to make a preferred picture. A reskinned fixed
 portrait does not establish this generator. The genome includes modeled
 organization/developmental contributors; reusable assembly operators resolve its
-body graph and applicable deformation/motion mechanisms. A class/species label
-is optional downstream classification, never a template selector or authority
-for compatibility. [Genetics](genetics.md#accepted-framework-layers-and-dimensions)
-owns that meaning; the [diversity proof](../design/genome-starter-content.md#v1-diversity-and-genome-first-construction)
+body graph and applicable deformation/motion mechanisms. Design review reopened
+defined baseline groups versus emergent classification on 3 October; the
+[genetics comparison](genetics.md#crossing-viability-and-classification) owns that
+decision and the viable-pet requirement. A fixed-group model would supply explicit
+baseline constraints; the emergent model classifies constrained generated results.
+Neither substitutes an arbitrary finished portrait for inherited construction or
+lets image similarity establish breeding compatibility. Saved records keep their
+actual versioned rules. The [diversity proof](../design/genome-starter-content.md#v1-diversity-and-genome-first-construction)
 compares materially different organizations and ground/air/water motion.
 
 Encyclopedia facts come from resolved genetic/expression reasons, actual origin
@@ -152,11 +156,11 @@ membrane with no usable consumer is also distinct from a missing inherited organ
 contract. Source validity, reference usefulness and pet-art quality are separate
 gates.
 
-Bear, cat, cow and firefly exemplify the owner's desired range; labels must not
+Bear, cat, cow and firefly exemplify the desired range; labels must not
 select complete body presets. The retained [anatomical V1 contract](../design/anatomical-source-prototype/genomic-contract.md)
 defines a separate 34-pair bilateral subset. Its dimensions, pigments and optional
 modules are inherited, but the implemented head/core/neck and four/six-support
-organization is hardcoded. The owner rejects that result. It violates the existing
+organization is hardcoded. Design review rejects that result. It violates the existing
 genome-derived construction requirement; accessory variation is not structural
 range. Keep the exact V1 constructor/catalogue for old records. The replacement
 must resolve the connected organization and attachment roles from inherited
@@ -250,7 +254,7 @@ their own biological meaning merely because an LLM produced valid syntax.
 
 ## Generation backend proposal — 30 September 2026
 
-The owner-authorized [generator workbench](../prototype/generator-workbench/README.md)
+The authorized [generator workbench](../prototype/generator-workbench/README.md)
 is the authoring and experiment surface for the game's generative engine. Its
 earlier host proof used a versioned 48-record catalogue and pure validation/expression/construction model. The current authoring default is a separate 114-pair partial catalogue; the retained 111-pair image recipe and five-locus Pip reference preserve their original identities. The [workbench](../prototype/generator-workbench/README.md) owns current executable coverage, missing contracts, replay and retained simulation evidence. Visible authoring layers do not establish complete genomic coverage. Its React/Mantine/Vite interface is not a device renderer; host JavaScript does not establish ESP32 feasibility. Constructed anatomy precedes derived classification and motion. Authoring packages are not automatically approved runtime content.
 
@@ -318,7 +322,7 @@ For optional global operations, the backend owns accepted service records, opera
 
 ## Native UI foundation
 
-Owner requires all device screens to use the established graphics/UI framework.
+Design review requires all device screens to use the established graphics/UI framework.
 Application code must not compose screens by writing pixels directly, or wrap a
 legacy manually rendered screen in an LVGL image and call that a migration.
 Display flush adapters may copy or convert library output into the target pixel
@@ -378,7 +382,7 @@ Rendering, cosmetic motion and sound cannot create inventory, alter research,
 advance hidden knowledge or bypass fresh-input guards. The UI context owns its
 display, widget tree, asset adapters and buffers; it holds copied facts rather
 than borrowed game-state pointers. Other screens migrate incrementally only after
-this real path passes independent native/control and art/UX review. Owner permits
+this real path passes independent native/control and art/UX review. Design review permits
 a complete re-layout, particularly of Companion; old page geometry is not a
 constraint. Game/UX/art must discuss player questions, visual hierarchy and actual
 control sequences before dependent compositions are treated as selected.

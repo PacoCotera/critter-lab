@@ -1,6 +1,6 @@
 {
-  "status": "Owner-supplied source/result and exact quoted prompt; semantic depiction direction evidence",
-  "provenance": "Owner reports Gemini experiment; files supplied by owner, not generated in this coordinator task",
+  "status": "Supplied source/result and exact quoted prompt; semantic depiction direction evidence",
+  "provenance": "Reported provenance describes Gemini experiment; supplied files; generation not performed in this recorded experiment",
   "sourceReference": "../faithful-pet/upright-source.png",
   "sourceMeaning": "Diagnostic source; matching genome lookup does not certify output trait fidelity",
   "files": [

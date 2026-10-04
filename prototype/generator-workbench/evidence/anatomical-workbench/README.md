@@ -1,6 +1,6 @@
 # Retained anatomical V1 — rejected fixed-family output
 
-These are actual local browser Generate results from fb355f8a63da9ce94ae3e958e5ba5c2ecfb86524, not authored design tuples. Their retained inputs are linked below. The owner rejects their repeated head/neck/core, four/six supports, optional posterior and wings. Dimensions, pigments and module switches derive from copies, but the main organization is hardcoded. These images establish the observed implementation failure, not broad variability, useful illustration quality or accepted pet art.
+These are actual local browser Generate results from fb355f8a63da9ce94ae3e958e5ba5c2ecfb86524, not authored design tuples. Their retained inputs are linked below. Design review rejects their repeated head/neck/core, four/six supports, optional posterior and wings. Dimensions, pigments and module switches derive from copies, but the main organization is hardcoded. These images establish the observed implementation failure, not broad variability, useful illustration quality or accepted pet art.
 
 | Actual generation | Retained compact input | Browser image |
 | --- | --- | --- |

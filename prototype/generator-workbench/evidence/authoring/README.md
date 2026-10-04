@@ -26,7 +26,7 @@ Exact [composition request](calibration-prompt.txt), three attached subject temp
 
 The inputs require: contact3volumes/3two-link limb chains/3membranes, allappendages rooted onvolume0; membrane3volumes/2membranes/2fins, allrooted onvolume0; axial5volumes/6fins, opposedpairs rooted onvolumes0/2/4. Allthreehavezeroexpressedmarkings. Contactsurfacesuseequalcharcoal/russet masks; membrane/axial appendagesuseequalcream/slate masks. The PNGs do not meet these facts. Bothareunedited1024×572clipboard exports, not provenfull-size downloads or production sprites.
 
-Independent art review and coordinator inspection agree: neither image passes subject fidelity, pigment fidelity, paired-pose identity or selected HiBit craft. No third call, provider migration or purchase was made. The proposed next experiment is a deterministic geometry/pigment reference followed by one still-image style test; it needs framing review before further generation. Action poses/rigs and broader pet design remain later gates.
+Independent art review and integration inspection agree: neither image passes subject fidelity, pigment fidelity, paired-pose identity or selected HiBit craft. No third call, provider migration or purchase was made. The proposed next experiment is a deterministic geometry/pigment reference followed by one still-image style test; it needs framing review before further generation. Action poses/rigs and broader pet design remain later gates.
 
 ## Limitations
 

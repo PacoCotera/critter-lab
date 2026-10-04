@@ -1,10 +1,10 @@
 # Workbench usability repair
 
-Owner rejected the authoring tool as confusing and the structural diagrams as repetitive and unappealing. The repair targets a usable complete-genome inspection journey, not a new creature constructor.
+Design review rejected the authoring tool as confusing and the structural diagrams as repetitive and unappealing. The repair targets a usable complete-genome inspection journey, not a new creature constructor.
 
 The [authoring inspection contract](../../README.md#authoring-inspection-contract) governs the layout: dimensions → searchable locus list → one selected-locus editor with visible allele choices → expressed output and structural preview. The whole genome, baseline, inherited copies and expression remain accessible. Locus definitions/drafts and raw records are separate optional tasks.
 
-The owner clarified the first action: generate a random creature with a valid genome, then optionally investigate or edit it. The tool must not require constructing a creature locus by locus. Generation uses the existing bounded valid-genome sampler; its seed remains in the resolved record for replay. Validity is measured against the current construction rules, not broad organism coverage or production-art quality.
+Design review clarified the first action: generate a random creature with a valid genome, then optionally investigate or edit it. The tool must not require constructing a creature locus by locus. Generation uses the existing bounded valid-genome sampler; its seed remains in the resolved record for replay. Validity is measured against the current construction rules, not broad organism coverage or production-art quality.
 
 Actual browser walkthrough verified dimension filtering, empty-dimension recovery through All, name search, one-action fur example loading/resolution, copy editing clearing the previous expression and preview, re-resolution to feathers, and a retained comparison showing the changed covering first. The baseline and complete inherited sequence remain separately reachable. [Selected covering](selected-covering.jpg), [1280-pixel layout](selected-covering-1280.jpg) and [retained comparison](covering-comparison-1280.jpg) record the composed interface before the final compact-choice/wording correction. Independent art/UX review requested that correction; independent architecture review found and cleared numeric-extreme camera rejection defects.
 
@@ -14,7 +14,7 @@ The [final compact editor at 1280 pixels](final-editor-1280.jpg) shows both copy
 
 ## Boundary
 
-Independent art/UX review passed the final composed screenshots and held source for this bounded repair: both copy rows/direct output fit together, dimension gaps are visible, and advanced details no longer dominate the default task. Independent architecture/genetics review passed the final state, sampler, camera and trace boundaries. The coordinator performed the actual browser interactions; the reviewers assessed source and captured browser artifacts. Neither approval is acceptance of the current creature artwork or broad morphological range.
+Independent art/UX review passed the final composed screenshots and held source for this bounded repair: both copy rows/direct output fit together, dimension gaps are visible, and advanced details no longer dominate the default task. Independent architecture/genetics review passed the final state, sampler, camera and trace boundaries. Automation performed the actual browser interactions; the reviewers assessed source and captured browser artifacts. Neither approval is acceptance of the current creature artwork or broad morphological range.
 
 Display fitting consumes retained geometry and uses one union camera for compatible comparisons. It does not change genomes, phenotype, canonical geometry exports or saved-record digests. A structural diagnostic is not finished pet art. The current continuous constructor requires bilateral repeated axial stations and fins, with articulated limbs and membranes unsupported; this explains much of the silhouette repetition. Broader genome-derived morphology and the liked [character/animation direction](../art-reset/README.md) remain separate development work.
 

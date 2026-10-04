@@ -1,10 +1,10 @@
 # Research and creation: the connected game model
 
-**Design proposal for owner review.** Accepted foundations come from [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [Probe](../specs/probe.md) and [creation terms](creation-terms.md). The recommended capsule preparation, field-point meaning, example resources/profiles and progression model below are proposals. No numerical economy, final screen, genome encoding or hardware design is approved by this document.
+**Design proposal for design review.** Accepted foundations come from [gameplay](../specs/gameplay.md), [genetics](../specs/genetics.md), [Probe](../specs/probe.md) and [creation terms](creation-terms.md). The recommended capsule preparation, field-point meaning, example resources/profiles and progression model below are proposals. No numerical economy, final screen, genome encoding or hardware design is approved by this document.
 
 ## Current design discussion
 
-Owner selected a very visual child-facing genome map: region selection,
+Design review selected a very visual child-facing genome map: region selection,
 resource-funded experiments, progressive opening and branching expressions.
 The [current Probe/bench brief](probe-bench-review.md#current-visual-research-brief)
 and [original artwork](references/genome-field/README.md) govern the design work.
@@ -16,8 +16,8 @@ not be treated as an instruction to resume paid-question coding.
 ## Retained discovery trial
 
 Joined game-design, genomics and UX proposal; methods, costs and pacing remain
-for owner steering. The current native loop now retains authored A/B findings,
-different useful investigation paths and supported forms. Owner playtest still
+for design direction. The current native loop now retains authored A/B findings,
+different useful investigation paths and supported forms. Formative playtest still
 finds samples too alike and research a checklist; this implementation is not an
 accepted discovery experience. The next interaction must make specimen-specific
 evidence the main workpiece, with active comparison and meaningful next questions.
@@ -173,7 +173,7 @@ Existing supported-form draft and explicit creation remain intact. Observe
 whether a person can explain the discovery, choose
 a useful next study, distinguish reference from sample, and describe carried
 versus expressed. Joy and progression are playtest hypotheses, not established
-by agent agreement. New art derives from the retained Gemini/C18 family and
+by automated review agreement. New art derives from the retained Gemini/C18 family and
 permitted knowledge; do not regenerate whole screens or disclose hidden anatomy.
 [Generation authority](../specs/architecture.md#generation-backend-proposal--30-september-2026)
 and [audit defects](three-device-playability-audit/README.md) constrain the next
@@ -183,10 +183,10 @@ implementation. No service, code, final art or canonical balance is delivered he
 
 ### Current correction: return to the same research workpiece
 
-The Home overview is retained. The owner requires two visible device roles,
+The Home overview is retained. Design review requires two visible device roles,
 integer supply counts, understandable expedition differences, a persistent
 sample workbench and reliable navigation. The interaction requirements live in
-[experience](../specs/experience.md#current-owner-playtest-requirements).
+[experience](../specs/experience.md#current-formative-playtest-requirements).
 The following is the bounded next prototype design, not implemented behavior
 or final content/balance approval.
 
@@ -195,7 +195,7 @@ Probe mode carries out that expedition → Companion retains cargo → Lab accep
 one receipt → saved Lab stock updates → the player resumes the same sample,
 chooses a study and keeps the finding → supported complete research permits
 separate creation/incubation. Selecting another screen or docking transfers nothing.
-The caddy remains part of the product; console-only acquisition is removed by owner direction; this
+The caddy remains part of the product; console-only acquisition is removed by design direction; this
 proof does not claim their implementation.
 
 | Surface | What must be visible and actionable |
@@ -391,7 +391,7 @@ Recommend progression by expanding what the player understands and can undertake
 
 Do not use unknown regions as level locks. Distinguish **knowledge** (what this record establishes), **means** (resources/capabilities to run a study), and **complexity** (the information/relationships to understand). Rarity, strength, cost and visual density are separate. Exact access gates, pacing, content ladder and equipment benefits remain open; no XP-level system is proposed here. A more complex genome must offer a meaningful discovery payoff, not merely more repetitions. Existing individuals never become incomplete when later content grows.
 
-Companion owns field acquisition in the current three-device loop. The Lab researches accepted samples and uses accepted whole resources; it does not duplicate expedition selection or field play. Earlier console-only acquisition proposals are superseded. The proposed [map exploration study](probe-sampling.md#generated-field-loop--owner-review-proposal) connects field choices to research needs without claiming a particular resource or sample is guaranteed.
+Companion owns field acquisition in the current three-device loop. The Lab researches accepted samples and uses accepted whole resources; it does not duplicate expedition selection or field play. Earlier console-only acquisition proposals are superseded. The proposed [map exploration study](probe-sampling.md#generated-field-loop--design-review-proposal) connects field choices to research needs without claiming a particular resource or sample is guaranteed.
 
 ## Workbench experience and hardware consequences
 
@@ -401,7 +401,7 @@ Companion owns field acquisition in the current three-device loop. The Lab resea
 | Inspect a zone | Show its partial structure/known relationships with unknown portions, plus relevant findings; no padlock or generic green completion grid | Rotate through meaningful targets, Confirm inspect; monochrome-safe known/unknown distinctions |
 | Run research | Bring the sample, chosen study and actual reagents into a cost review; pending work stays distinct from an accepted discovery | Existing Confirm commits, Back leaves a review; feedback must remain legible without animation or touch |
 | Plan gathering | Compare expedition opportunities against retained inventory gaps and collection interests | Companion selects and plays; locally available content supports play without a phone. Lab has received records only |
-| Gather and return | Typed awards, field preparation and capsule finds remain distinct; receipt changes Lab availability once | Existing Companion directions, Confirm and Back; persistent expedition state. Proposed map interactions require owner review before implementation |
+| Gather and return | Typed awards, field preparation and capsule finds remain distinct; receipt changes Lab availability once | Existing Companion directions, Confirm and Back; persistent expedition state. Proposed map interactions require design review before implementation |
 | Prepare incubation | Complete supported genome, source sample and required materials together | Lab explicit review/commit; physical placement/display/printing remain later engineering design |
 
 Concise candidate language: **Unknown**, **Partly decoded**, **Decoded**, **Data card packs 2 / Needs 3**, **Pale variant carried**, **Crown present**, **New capsule**, **Prepare**, **Compare**, **Incubate**. These label objects and discoveries backed by the worked genotype/phenotype rules. The visual work must supply the relationships instead of explaining the whole process in paragraphs on the device. Keep the small specimen identity, give the research object a meaningful workbench presence, and use selected refinement-02 vocabulary. Do not copy the previous bare grid/layout.
@@ -410,7 +410,7 @@ Genome zones need a dedicated visual example with an actual before/after discove
 
 ## Review and next artifact
 
-The proposed defaults to steer as one coherent model are: capsule preparation creates/reopens a persistent record without a V1 fee; field points explain gathering rather than becoming research currency; expedition profiles shape optional events while baseline resource yields stay stable. Physical capsule form, exact yield/balance and final terminology remain open. Owner need not specify all resource recipes or interface details.
+The proposed defaults to steer as one coherent model are: capsule preparation creates/reopens a persistent record without a V1 fee; field points explain gathering rather than becoming research currency; expedition profiles shape optional events while baseline resource yields stay stable. Physical capsule form, exact yield/balance and final terminology remain open. Detailed resource recipes and interfaces remain to be designed.
 
 Pip is the [accepted qualitative phenotype reference](../specs/genetics.md#pip-accepted-worked-phenotype-reference). The [completed bounded proof](../prototype/genetics/report.md) demonstrates its baseline, locus/allele definitions, expression and validation. These hereditary facts now support the [collection-to-discovery workbench study](genome-workbench/README.md). The locus library and LLM-assisted authoring direction are described in genetics; no complete tool suite or production service is implied.
 

@@ -39,43 +39,43 @@
     "path": "design/references/research-terminals/instrument-family.png",
     "sha256": "aa646fa1e96d1dc4979e568873b2d2b357114d73fa95f7da8996032765846569",
     "bytes": 828532,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/instrument-studies.png",
     "sha256": "5eeefde1761e4d13b067491c05cbb1ebe722be1262af5207439ce32a7396cd9a",
     "bytes": 852907,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/modular-bench.png",
     "sha256": "22ac8e6da3e7976710a3fb2561673256b60a2005863c22d67453df6a1896e434",
     "bytes": 880330,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/research-workbench.png",
     "sha256": "3ae53a2c52c359a6dc21eed3d9adb92e9e5cc26700b90d5e9162c1cabc69198a",
     "bytes": 866998,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/color-terminal.png",
     "sha256": "aa431da01153f7d3888072c5b4fcebf64acbbb4c224ca6b2c7b352e2cdcae1c3",
     "bytes": 917786,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/hexagonal-terminal.png",
     "sha256": "30f72a0a333a11c824729bf48a4aa71ca17d5008a0eac23ea12c59af9d8f3b90",
     "bytes": 928958,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/references/research-terminals/amber-terminal.png",
     "sha256": "ecc39aff4602b2b7dc9bdfb97a9e33d104c08066b7c2a4e881e1a17fb95f254b",
     "bytes": 1079345,
-    "status": "owner-supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
+    "status": "supplied visual exploration reference, 26 September 2026; not approved UI, mechanics or hardware"
   },
   {
     "path": "design/visual-language/a-color-instruments.png",

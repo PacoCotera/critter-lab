@@ -2,7 +2,7 @@
 
 Current implemented screen evidence is in the [native three-device gallery](native/README.md). The terminology, fractional cargo ledger and former controls below belong to this rejected historical study; current rules are in [gameplay](../../specs/gameplay.md) and [experience](../../specs/experience.md).
 
-**Visual treatment rejected.** The owner rejected these screens as a poor translation of the selected Playful Pixel Lab direction. This supersedes earlier assent. Retain the packet only as behavioral/state evidence; its layouts, typography and artwork are not approved implementation targets. No new UI should be built from these plates.
+**Visual treatment rejected.** Design review rejected these screens as a poor translation of the selected Playful Pixel Lab direction. This supersedes earlier assent. Retain the packet only as behavioral/state evidence; its layouts, typography and artwork are not approved implementation targets. No new UI should be built from these plates.
 
 ## Whole journey
 

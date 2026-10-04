@@ -1,6 +1,6 @@
 {
   "sourceRevision": "168edb3fcbbef61ded6d5f3fc1996f06dc8b1af6",
-  "save": "Isolated fresh world; real timers, depicted controls, no creation or owner-state changes.",
+  "save": "Isolated fresh world; real timers, depicted controls, no creation or shared save-state changes.",
   "events": [
     {
       "command": "device 1 confirm-up 2",

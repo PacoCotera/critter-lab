@@ -1,6 +1,6 @@
 # Native Habitat population proof
 
-The Lab Home Habitat landing and entered Population collection show every revealed saved member together, up to the current eight-resident capacity. Spatial directions update the selected identity, retained form, origin and visits immediately. Confirm opens a Resident activity without care; only fresh Confirm on Spend time together records care. Back restores the same collection member. See [interaction](../../../specs/experience.md#navigation-and-passive-previews--owner-direction).
+The Lab Home Habitat landing and entered Population collection show every revealed saved member together, up to the current eight-resident capacity. Spatial directions update the selected identity, retained form, origin and visits immediately. Confirm opens a Resident activity without care; only fresh Confirm on Spend time together records care. Back restores the same collection member. See [interaction](../../../specs/experience.md#navigation-and-passive-previews--design-direction).
 
 ## Actual rendered evidence
 

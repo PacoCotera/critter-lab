@@ -11,7 +11,7 @@ the exact clean pushed Git revision. [Native validation](native-validation.txt)
 records four affected suites, bounded partial drawing and warm memory. [Manifest](manifest.json)
 distinguishes19 actual physical-control captures from24 synthetic native state
 fixtures. [Controls](controls.json) retains178 commands from two isolated worlds;
-the owner sandbox was not deployed or reset.
+the live sandbox was not deployed or reset.
 
 ## Actual controls and ownership
 

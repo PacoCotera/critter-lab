@@ -15,7 +15,7 @@ CI 36810823393 passed. Prior source d3e536c also passed the existing seven prese
 bridge checks and real HTTP/native handoff/link/endpoint checks; final correction
 changes only retained frame composition and representative exports.
 
-The coordinator walked the fresh isolated native journey with existing depicted
+The automated walkthrough covered the fresh isolated native journey with existing depicted
 controls. Final acceptance delivered 3 Data and one sample, then current Companion
 supplies/capsules became zero and Back returned to mode selection. Frame/fixture
 exports in [manifest.json](manifest.json) have exact hashes and evidence labels.
@@ -23,7 +23,7 @@ Opaque sprite pixels were compared at their four actual native origins: zero RGB
 mismatches. Independent technical review passed the final delta, lifecycle/pool
 and exact runtime results. Independent art/UX output review passed this bounded
 Cargo composition: connected stepped frames, safe focus/footer gap, current-zero
-capsule visibility and full/error text fit. Coordinator inspected the same frames.
+capsule visibility and full/error text fit. Visual inspection covered the same frames.
 This is not approval of whole-game art or enjoyment.
 
 Measured final ELF: text 3,976,705, data 6,208, bss 263,520; total 4,246,433 bytes.
@@ -59,7 +59,7 @@ Arbitrary internal LVGL allocation failure is not a validated recovery path.
 This is a framework and bounded Cargo craft proof, not final HiBit game art,
 whole-family migration or human enjoyment/comprehension acceptance.
 
-Owner permits complete re-layout. The considered [Companion direction](../../../specs/experience.md#framework-led-companion-layout)
+Design review permits complete re-layout. The considered [Companion direction](../../../specs/experience.md#framework-led-companion-layout)
 uses shared orientation with distinct workpieces, not one mandatory dashboard.
 Next composition should reclaim useful subject space and test physical return
 paths; importing a framework does not create richer terrain, discovery or creatures.

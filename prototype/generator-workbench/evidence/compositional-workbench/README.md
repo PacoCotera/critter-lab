@@ -73,7 +73,7 @@ chains. It demonstrates explicit authoring, not founder frequency. The current
 ordinary draw has a cobalt body, no typed head, and four two-link free chains
 without feet: `head-module=plain/plain`, `appendage-role=free/free`,
 `appendage-groups=two/two`, `free-link-count=two/two`. It does not have a required
-neck, tail or wings. These concrete differences do not establish the owner's
+neck, tail or wings. These concrete differences do not establish the user's
 bear/cat/cow/firefly range.
 
 ## Eleven genomic layers and remaining work

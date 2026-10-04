@@ -68,7 +68,7 @@ Independent technical and focused interaction review passed this exact source
 and actual native output. A separate native craft review passed portrait
 preservation, rail/entry hierarchy, margins, text fit and recovery presentation.
 The lower hint/footer clearance is compact but intact. These are bounded passes
-for this preview, not broader owner design or human-fun approval.
+for this preview, not broader product design or human-fun approval.
 Projection checks reject missing selected IDs, unrevealed records, invalid counts
 and unterminated strings before existing provenance helpers run. UI checks
 overwrite the source view before refresh, exercise100 warm updates without pool

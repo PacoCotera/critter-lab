@@ -4,7 +4,7 @@ Status: **provisional host authoring proof**, separate from the game and device 
 
 Start with the [production pipeline and current gaps](../../specs/architecture.md#current-authoring-evidence-and-unsolved-construction-range)
 and [image-led art handoff](art-template.md). The current diagrams and finite
-construction grammar do not satisfy the owner's reference-quality or
+construction grammar do not satisfy the reference-quality or
 bear/cat/cow/firefly anatomical-range brief. Valid records, replay and source
 geometry are delivered parts; a useful general creature and pet generator is
 still unfinished. The fixed anatomical V1 baseline was also rejected: inherited
@@ -354,7 +354,7 @@ file; individual copy editing does not rewrite the content library. The
 framework's broader eleven branches are visible alongside the construction
 subset in the newer compositional package.
 
-This retained V1 hardcodes a head, neck, core and four/six supports. The owner
+This retained V1 hardcodes a head, neck, core and four/six supports. Design review
 rejects that fixed organization; it is kept for exact older-record recovery.
 It does not yet provide tails,
 hoof/toe details, fur, antennae, emission, motion, swimming, biomechanical
@@ -608,7 +608,7 @@ UX inspection at800px and1280px; source diagnostics remain separate from pet art
 
 Actual revised captures passed the bounded layout/hierarchy review, including
 the selected editor at1280px and two different random results. This is mediated
-visual review plus source inspection; coordinator-operated browser actions and
+visual review plus source inspection; automated browser actions and
 technical validation are separate evidence. The primary
 task is **Generate creature**: one fresh random valid genome and its structural
 result, then whole-genome orientation → dimension → locus → copies and resolved
@@ -717,7 +717,7 @@ The opt-in continuous constructor requires bilateral organization, at least
 three axial stations and fins, without articulated limbs or membranes. That
 restricted construction explains much of the repeating silhouette. This UI
 repair makes its facts easier to inspect; it does not implement the liked
-novel pet's body/limb grammar or the owner's intended broad organism variety.
+novel pet's body/limb grammar or the intended broad organism variety.
 
 The [liked pet concept](evidence/art-reset/README.md) is separate proposed art
 direction, unbound to the selected genome. Do not present it as a resolved engine
@@ -779,7 +779,7 @@ The experiment inspector includes both a [coherent static family experiment](evi
 
 Run `pnpm test` for changed authoring behavior and preserved legacy/Pip boundaries, and `pnpm run build` for the framework bundle. `pnpm run simulate -- --out evidence/authoring` retains comparison inputs/results; the evidence manifest identifies exact examples and limits. [Evidence](evidence/README.md) distinguishes host validation, browser inspection and actual generated art from missing game/hardware proof.
 
-The body graph is a finite connected-volume grammar with rooted articulated links, membranes and fins. It permits meaningful organization/attachment variation but does not yet span the owner's full microbial/animal breadth. Motion is a provisional analytic support rule, not aerodynamic/hydrodynamic validation or a working animation rig. The original diagnostic profile has no face contributors. The new continuous profile constructs explicit eye-pair presence/placement and an oral aperture; those shapes confer no sensing or feeding capability. It does not yet construct snouts, noses, jaws, teeth or gills. Static morphology and generated illustration do not establish pet interaction or human attachment.
+The body graph is a finite connected-volume grammar with rooted articulated links, membranes and fins. It permits meaningful organization/attachment variation but does not yet span the full microbial/animal breadth. Motion is a provisional analytic support rule, not aerodynamic/hydrodynamic validation or a working animation rig. The original diagnostic profile has no face contributors. The new continuous profile constructs explicit eye-pair presence/placement and an oral aperture; those shapes confer no sensing or feeding capability. It does not yet construct snouts, noses, jaws, teeth or gills. Static morphology and generated illustration do not establish pet interaction or human attachment.
 
 Configured incubation, general polygenic/epigenetic mechanics, large variable-copy reproduction, production sprite/animation generation, automatic encyclopedia writing and device integration remain future work. No generated output becomes an owned game individual through this tool.
 
@@ -816,12 +816,12 @@ CLI emits retained records, source SVGs, trace manifests, descriptions, genome f
 
 ## Authoring engine: next design
 
-Owner direction: this workbench is the authoring and experiment surface for the
+Design direction: this workbench is the authoring and experiment surface for the
 game's generative engine. It must manage the locus compendium, naming and taxonomy;
 inspect the entire baseline, inherited genome and resolved expression; display
 structured genome fingerprint art; sample permitted expressions; and derive a
 visual-generation prompt. The dimension count remains **eleven**, as corrected by
-the owner. The five-locus screen above does not fulfill that direction.
+design review. The five-locus screen above does not fulfill that direction.
 
 The following defines the broader authoring direction. The first bounded implementation above covers only its stated cluster; the remaining breadth and biological/game decisions are proposals. Game development remains a separate consumer.
 
@@ -918,7 +918,7 @@ work, not a sum of independent dimension scores or a new gene for every combinat
 
 ### Workbench views and framework
 
-| View                | What the owner can inspect or do                                                                                                                                          |
+| View                | What the authoring interface provides                                                                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Compendium          | Browse/search all eleven families; manage names, taxonomy, loci, alleles and rules; see where-used references and draft/validated/deprecated state                        |
 | Foundation/baseline | Inspect source-supported fixed/variable contributors, developmental vocabulary, exclusions and complete baseline sequence/art; derived classes describe results afterward |

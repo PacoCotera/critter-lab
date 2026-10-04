@@ -3,7 +3,7 @@
 Current hardware reference: combined Companion, home Lab and shared caddy. The caddy uses the proposed-for-bench [5.79-inch monochrome module](../../specs/devices.md#electronics-first-v1-reference-specification), 792×272; older separate-Probe and 3.7-inch depictions are historical. Original art and earlier build evidence are preserved, not physical validation.
 
 
-The owner has authorized a small playable scaffold on the preliminary native targets. This increment ends at **one saved research finding**. It does not create a critter or represent a finished hardware simulator. The [first expedition](../../design/first-expedition.md) supplies the illustrative player journey; [native setup](../../native/README.md) supplies build and run instructions.
+Design review has authorized a small playable scaffold on the preliminary native targets. This increment ends at **one saved research finding**. It does not create a critter or represent a finished hardware simulator. The [first expedition](../../design/first-expedition.md) supplies the illustrative player journey; [native setup](../../native/README.md) supplies build and run instructions.
 
 ## What this increment implements
 

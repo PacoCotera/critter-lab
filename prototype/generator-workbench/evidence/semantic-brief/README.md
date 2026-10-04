@@ -1,7 +1,7 @@
 # Semantic renderer brief examples
 
 These are actual host-emitted template4 prompts, not returned image-model
-artwork. The [owner form/skin example](../owner-semantic-surface/README.md)
+artwork. The [form/skin example](../owner-semantic-surface/README.md)
 and considered art/pixel/genomic handoff motivate the presentation repair.
 
 | Current emitted brief | Meaning retained | Length |
@@ -27,4 +27,4 @@ prompt files are not overwritten. A new presentation has a new prompt identity.
 and source packets linked in the manifest make these examples reviewable.
 Source fidelity checks and framework compilation do not certify illustration
 quality, pet appeal, animation or physical capabilities. No provider request
-was made after the owner's semantic form/skin steering.
+was made after the semantic form/skin steering.
