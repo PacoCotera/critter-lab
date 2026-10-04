@@ -83,7 +83,29 @@ single-Lab regression fixture. The deployed current presenter uses kit mode.
 
 ## Ubuntu build environment
 
-Use Ubuntu 24.04 x86-64 with Python 3.12. SDK sources and release versions are recorded in [toolchains.env](toolchains.env). The workflow uses the same commands and uploads compiled binaries, linker maps and size reports. Ubuntu packages and transitive Python dependencies are not fully locked, so this is a repeatable release-pinned setup, not a byte-identical toolchain archive. CI retains the resolved Python package lists.
+Use Ubuntu 24.04 x86-64 with Python 3.12. SDK sources and release versions are recorded in [toolchains.env](toolchains.env). The workflow uses the same build commands and prints toolchain and size information in its console output. Ubuntu packages and transitive Python dependencies are not fully locked, so this is a repeatable release-pinned setup, not a byte-identical toolchain archive.
+
+For a normal passing check, record the source revision, CI run link and a concise
+result when needed. The Actions console log contains routine test results;
+generated frames and build scratch stay on the disposable runner. Successful
+PR and push builds do not retain separate test reports, screenshots, maps,
+package lists or MCU binaries by default. Original references, fixtures and
+deliberately retained art or acceptance evidence remain separate.
+
+CI retains artifacts only for these purposes:
+
+- A push to `main` retains only the staging tarball in `native-lab-COMMIT` for
+  one day, so the publication job can retrieve it after all target checks pass.
+  Published releases retain the bundle and delivery provenance described in
+  [the CI release guide](UPDATER.md). A delayed publication retry after artifact
+  expiry requires rerunning the build jobs to recreate the handoff.
+- A failed job retains available CMake, CTest or ESP-IDF diagnostic logs for
+  seven days. Missing diagnostic files are ignored; the Actions console log
+  remains available for failures before those files are created.
+- An explicitly dispatched run with `retain_firmware` enabled retains successful
+  Probe ELF/bin and Companion/Caddy ELF/bin, bootloader, partition table and
+  flash arguments for seven days. These are compiled exports for inspection or
+  board experiments; they do not establish physical boot or runtime performance.
 
 From the repository root, use Bash. Keep the SDK workspace outside the repository. Run Probe and Companion setup in separate shells to avoid mixing their Python environments.
 
