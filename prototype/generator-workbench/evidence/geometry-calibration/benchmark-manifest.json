@@ -47,7 +47,7 @@
     "height": 576,
     "completionObservedUpperBoundMilliseconds": 76010,
     "extraction": "Visible Copy image control supplied unedited PNG; Download full size image yielded no download artifact within 10 seconds",
-    "review": "art director and coordinator broad-fidelity pass; missing six fin-root stubs; exact geometry and finished creature art not accepted"
+    "review": "art and integration assessments broad-fidelity pass; missing six fin-root stubs; exact geometry and finished creature art not accepted"
   },
   "builtin": {
     "metadata": "builtin-geometry-01.json",
@@ -56,10 +56,10 @@
     "width": 1639,
     "height": 960,
     "toolElapsedMilliseconds": 21289,
-    "review": "independent genetics and coordinator broad-fidelity pass; exact geometry and finished creature art not accepted"
+    "review": "independent genomic and integration assessments broad-fidelity pass; exact geometry and finished creature art not accepted"
   },
   "comparison": {
-    "craft": "coordinator and art director favor built-in contour/light craft in this pair only",
+    "craft": "art and integration assessments favor built-in contour/light craft in this pair only",
     "exactGeometry": "Not established: missing/simplified connectors, stylized contours, no registered position/extent/mask-ratio measurements",
     "cost": "Not exposed; not measured",
     "performance": "Different timing measures and one case; no model ranking",

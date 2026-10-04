@@ -1,6 +1,6 @@
 # Genome workbench: one discovery in a collection
 
-**Owner-approved Lab workbench study, 27 September 2026.** Approval covers the presented composition and paired-copy discovery direction; this remains a static design, not implemented UI or final balance. This continues the selected [refinement-02 vocabulary](../visual-language/refinement-02/README.md) at the Lab's 1024 × 600 profile. It is not implemented UI or a complete screen catalogue. The [connected product plan](../../docs/README.md) and [research game model](../research-and-creation.md) supply the journey; the [Pip proof](../../prototype/genetics/report.md) supplies the hereditary facts.
+**Approved Lab workbench study, 27 September 2026.** Approval covers the presented composition and paired-copy discovery direction; this remains a static design, not implemented UI or final balance. This continues the selected [refinement-02 vocabulary](../visual-language/refinement-02/README.md) at the Lab's 1024 × 600 profile. It is not implemented UI or a complete screen catalogue. The [connected product plan](../../docs/README.md) and [research game model](../research-and-creation.md) supply the journey; the [Pip proof](../../prototype/genetics/report.md) supplies the hereditary facts.
 
 ## Whole journey and this slice
 
@@ -41,6 +41,6 @@ Probe context for that next trip: choose an expedition profile for the needed re
 
 Insufficient supplies: C opens normally; the study shows the Catalyst shortfall and cannot submit, while Back remains available. Returning from pending preserves the operation. An uncertain result shows a check/recovery path for that same operation, not a fresh paid study. Definitive failure shows retained knowledge and authoritative inventory; no refund is assumed. These states require later frames and interaction validation before implementation.
 
-The owner approved the paired-copy representation, broad workbench composition and presented discovery direction. That approval is not evidence of wider player comprehension. It does not claim complete flow coverage, physical readability, final art, or complete journey coverage. Implementation may follow the approved slice; unpictured flows require their own design before expansion. Resource labels visible in the approved images are rejected placeholders; see the current gathering design for naming status.
+Design review approved the paired-copy representation, broad workbench composition and presented discovery direction. That approval is not evidence of wider player comprehension. It does not claim complete flow coverage, physical readability, final art, or complete journey coverage. Implementation may follow the approved slice; unpictured flows require their own design before expansion. Resource labels visible in the approved images are rejected placeholders; see the current gathering design for naming status.
 
 Render with Python/Pillow using `render.py`; its study font is the existing Windows Bahnschrift installation and is not bundled. Original references remain untouched. Individual full-resolution frames are retained beside the board for inspection.

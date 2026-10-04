@@ -2,15 +2,15 @@
 
 ![Connected paper storyboard](storyboard.png)
 
-**Purpose:** let Paco inspect whether an ordinary expedition produces a useful, understandable investigation across the kit. This is one proposed paper scenario, stopping at a saved finding; the ghosted creation/Companion continuation explains its purpose without expanding the slice. It is not approved screen design, functional software, a hardware study or human playtest evidence.
+**Purpose:** assess whether an ordinary expedition produces a useful, understandable investigation across the kit. This is one proposed paper scenario, stopping at a saved finding; the ghosted creation/Companion continuation explains its purpose without expanding the slice. It is not approved screen design, functional software, a hardware study or human playtest evidence.
 
 The Lab selects and prepares **Material trail**, the Probe collects with brief optional checks, and the Lab receives a stable sample plus separate Lab supplies. A study exposes its question and actual cost before **Start study**. Its result explains the newly known alternatives and remaining required regions. Return later resumes that same investigation. These working names and fictional content are proposed existing examples; no numerical economy or anatomy is selected.
 
 The optional encounter records only that a fragment was encountered. It does not predict the sample's structure, genetics or critter. Interpretation happens at the Lab, following the boundary in [Probe](../../specs/probe.md). Collected points are required by the accepted experience direction; this paper field is a placeholder with no chosen quantity, meaning or economy; progress represents actual domain collection state, not a cosmetic animation. Loading, pending receipt, accepted receipt and retained research are intended states; this artifact does not establish working transfer, identity persistence, offline storage or cloud behavior. The intended expedition does not require a phone or live server. Cloud authority and actual offline joins remain a separate implementation question.
 
-## Owner decision — 27 September 2026
+## Design decision — 27 September 2026
 
-The owner approved the connected flow and all three recommendations below. The governing rules are now in [gameplay](../../specs/gameplay.md#expedition-continuity-and-return--accepted). The alternatives remain comparison history, not active choices. This approval does not finalize screen layout, artwork, numerical content or technical implementation.
+Design review approved the connected flow and all three recommendations below. The governing rules are now in [gameplay](../../specs/gameplay.md#expedition-continuity-and-return--accepted). The alternatives remain comparison history, not active choices. This approval does not finalize screen layout, artwork, numerical content or technical implementation.
 
 **Release follow-up:** material studies are a V1 placeholder. A broader, meaningful study set is required for final release; see the [study-variety requirement](../../specs/gameplay.md#study-variety--release-requirement).
 

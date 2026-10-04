@@ -22,7 +22,7 @@ Each `.record.json` retains the complete copied genome, exact foundation pin, co
 
 The source artist accepts the changed barrel/cross-section and terminal distinction within this finite reference scope. Original and corrected fur depiction remain HOLD. Source4 changes only fur outlines to .80 times already-lit fill at .70px. Same exact input and inputDigest `6de4fb40129871a0916a62aca0d8ec3789b269ef20ffa6720457dd9a8a276826` are retained; scene/result identities change with the declared profile. Actual corrected pixels show short dashes rather than a coherent coat. No further optical tweak was requested. Source3 was reopened with its exact original ID before current Resolve. `authored-current.*` retains the corrected artifact and record, without replacing `authored.*`.
 
-The images above were captured before the owner's latest concise semantic-description increment. At capture, the workbench displayed:
+The images above were captured before the latest concise semantic-description increment. At capture, the workbench displayed:
 
 > Turn the attached critter into a cute digital pet, shown alone in rich high-bit pixel art.
 

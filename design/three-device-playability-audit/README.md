@@ -31,7 +31,7 @@ eight Data and two Essence without a sample. Interaction play exercised retained
 movement/work after cancelled return and Dock controls. Art/UI assessed actual
 outputs against original references; it did not perform its own browser play.
 
-These are agent-operated sessions with prior product knowledge. They do not
+These are automated sessions with prior product knowledge. They do not
 establish first-time human comprehension, enjoyment, physical thumb comfort,
 real radio, panel refresh or printer operation. Tool inspection time allowed
 gathering to continue; the haul is not a human pacing measure. Creation, reveal
@@ -71,7 +71,7 @@ or RPi hardware measurement. No freeze was observed; rapid-press loss stays open
 - **Expeditions:** Sources share the same work/chance model; fixed trace-to-cache
   becomes predictable. More route labels alone do not create different adventures.
   Depletion detours currently add access friction more reliably than choices.
-- **Owner play:** Expeditions and samples feel alike; chance acquisition is painfully
+- **Formative play:** Expeditions and samples feel alike; chance acquisition is painfully
   boring, events absent and sample collection dull. Research feels like a checklist.
   This direct player evidence supersedes earlier enjoyment hypotheses.
 - **Research:** Known/unknown and retained findings work. Instruments often provide
@@ -139,7 +139,7 @@ The earlier playtest captures remain baseline defect evidence, not current claim
 - Home is first in the physical row. Empty Library/incomplete-form navigation uses
   real return actions. Findings, status and failure feedback stay in the main
   workpiece; two complete coat alternatives remain visible without label overlap.
-- Coordinator checked Home→Research→sample→retained coat finding in the actual
+- Browser inspection covered Home→Research→sample→retained coat finding in the actual
   browser presenter. The prior16/7/10 earned haul funded these studies; after4Data,
   4Energy and4Essence total study spend, Lab/Dock agree12/3/6. Reinspection is free.
 

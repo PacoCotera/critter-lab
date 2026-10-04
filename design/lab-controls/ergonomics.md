@@ -37,7 +37,7 @@ Hardware inspected the actual PNG for scale, spacing, symbols and captions. Expe
 
 ## Selected A — printer and tap packaging discovery
 
-28 September 2026. Owner accepted **A, slim right-front workspace keys**, in [screen-first-v2](screen-first-v2.png). Preserve the single integrated body, left printer bay, prominent selected 7-inch H display, cross, Cancel-left/Confirm-right and orange Zoom; no Inspect. The earlier whole-face/grid geometry above is historical reference, not dimensions for this case. This section is one packaging proposal for a cutaway, not a part selection, final fit, antenna design or purchase.
+28 September 2026. Design review accepted **A, slim right-front workspace keys**, in [screen-first-v2](screen-first-v2.png). Preserve the single integrated body, left printer bay, prominent selected 7-inch H display, cross, Cancel-left/Confirm-right and orange Zoom; no Inspect. The earlier whole-face/grid geometry above is historical reference, not dimensions for this case. This section is one packaging proposal for a cutaway, not a part selection, final fit, antenna design or purchase.
 
 ### One sourced mechanism example
 
@@ -55,7 +55,7 @@ Use a **rear roll hatch** for loading, independent of the fixed front TAP pad an
 
 Width reality: this candidate's **83.1 mm mechanism** is already wider than its **58 mm paper**. Adjacent to the H module's **164.9 mm maximum width**, those two hardware widths alone sum to **248.0 mm**, before mounting, walls, separation and right-front keys. This is a conditional dimensional sum for this arrangement, not a minimum for every possible printer or a final overall width. Preserve display scale; use actual bay reserve rather than shrinking printer hardware in art.
 
-### Front-left TAP and rear loading — latest owner direction
+### Front-left TAP and rear loading — latest design direction
 
 The preferred placement is now a **fixed front-left pad above the paper outlet**, using a muted surface and modest recognizable Probe and Companion silhouettes, optionally with small device names. This supersedes top-right-first exploration. The pad is not the roll hatch, a print button, latch, charger or proof of transfer. Do not draw a decorative orange latch/service seam on it. The rear hatch is the preferred roll access. Top/right alternatives are held only for an evidence-backed packaging blocker, not competing default designs.
 
@@ -69,7 +69,7 @@ For reload, finish/remove output, open the **rear hatch**, load the roll and lea
 
 ### Rejected cutaway and required mechanical proof
 
-Owner rejected [the generated packaging image](printer-tap-packaging.png). Hardware and UX acceptance is withdrawn. The bold TAP/payment-style treatment is also rejected. Front presentation above the outlet and rear roll access remain working directions; the illustrated internals are not a valid design basis.
+Design review rejected [the generated packaging image](printer-tap-packaging.png). Hardware and UX acceptance is withdrawn. The bold TAP/payment-style treatment is also rejected. Front presentation above the outlet and rear roll access remain working directions; the illustrated internals are not a valid design basis.
 
 The drawing did not derive its mechanism orientation, inlet, head/platen/cutter geometry or service release from a manufacturer mechanical reference. Its views were not constructed from one dimensioned model. A continuous illustrated strip and corrected arrows do not establish a usable loading path. Labeling these omissions schematic did not make the packaging coherent.
 

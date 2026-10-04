@@ -1,6 +1,6 @@
 # Pet face and covering experiment
 
-**Game-art outcome: rejected by the owner.** The face comparison is a diagram, not desirable pet art. Bigger pupils, valid construction and matching component counts are insufficient. This proof retains useful authoring diagnostics and failed art calibration; it is not a production asset library or a game release. The [content contract](../../../../design/genome-starter-content.md) and [art realization proposal](../../art-template.md#renderer-and-workbench-responsibilities) record the next design boundary.
+**Game-art outcome: rejected in design review.** The face comparison is a diagram, not desirable pet art. Bigger pupils, valid construction and matching component counts are insufficient. This proof retains useful authoring diagnostics and failed art calibration; it is not a production asset library or a game release. The [content contract](../../../../design/genome-starter-content.md) and [art realization proposal](../../art-template.md#renderer-and-workbench-responsibilities) record the next design boundary.
 
 ## Source and actual authoring UI
 
@@ -37,6 +37,6 @@ The Gemini PNG above is a host rasterization of the returned SVG for inspection,
 
 Art and genetics agree that both morphology and depiction need redesign. Resolve a meaningful leading/support/posterior mass hierarchy, connective tissue, face surface and covering fields from contributors. Developmental stations need not become visible bead-shaped segments. Preserve genomic authority over topology, expressed exterior, proportions, roles/counts, attachment domains, palette, coverage/flow/exclusions and supported movement. Explicit realization rules may govern pixel clusters, light and deterministic micro detail; they may not invent organs, erase expressed structure or replace sparse tufts with a full coat.
 
-The next owner review should compare one cohesive game-art silhouette/face/material realization and two traceable variants before another coding or provider round. C18 supplies pixel craft but lacks a complete pet-character reference. A reviewed calibration master should define reusable generative operators, not become hand-authored content for each genome. These are proposals, not approved anatomy or a species selector.
+The next design review should compare one cohesive game-art silhouette/face/material realization and two traceable variants before another coding or provider round. C18 supplies pixel craft but lacks a complete pet-character reference. A reviewed calibration master should define reusable generative operators, not become hand-authored content for each genome. These are proposals, not approved anatomy or a species selector.
 
 No game/native deployment, save reset, animation, broad anatomy expansion, provider migration, purchase or new infrastructure occurred. [Artifact hashes](artifact-hashes.json) retain the evidence identity.

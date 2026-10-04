@@ -1,14 +1,14 @@
-# Owner image-led pet example
+# Image-led pet example
 
-The owner supplied this source, returned pet image and exact submitted text on
+The reference submission includes this source, returned pet image and exact submitted text on
 2 October 2026. These are retained original attachment bytes, not a new provider
 call or a controlled comparison performed by the workbench.
 
-| Input reference | Owner-returned result |
+| Input reference | Supplied result |
 | --- | --- |
 | ![Source](source.png) | ![Pet](result.png) |
 
-Exact [owner submission](owner-prompt.txt):
+Exact [reference submission](owner-prompt.txt):
 
 > Turn the attached critter into an cute digital pet, shown alone in rich high-bit pixel art.
 

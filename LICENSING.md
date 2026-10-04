@@ -18,13 +18,13 @@ The root [LICENSE](LICENSE) contains AGPL version 3 for software discovery. The 
 
 ## Attribution and sharing changes
 
-Preserve required copyright and license notices and identify changes as the applicable license requires. Suggested project credit is **“Critter Lab by Paco Cotera / Dirty Pawz Press and contributors”**, linked to [the source repository](https://github.com/PacoCotera/critter-lab). This suggestion is not an additional advertising condition.
+Preserve required copyright and license notices and identify changes as the applicable license requires. Suggested project credit is **“Critter Lab / Dirty Pawz Press and contributors”**, linked to [the source repository](https://github.com/PacoCotera/critter-lab). This suggestion is not an additional advertising condition.
 
 Upstream contributions are encouraged through [CONTRIBUTING.md](CONTRIBUTING.md). These licenses require sharing under specified conditions; they do not require submitting a pull request, acceptance upstream, or publication of every private experiment.
 
 Software distributors must meet AGPL corresponding-source obligations, including installation information where applicable. Modified network software must provide interacting users the source opportunity required by AGPL section 13. Provide source matching the version people receive or use. Hardware distributions must meet CERN-OHL-S complete-source and source-location requirements, subject to its stated exceptions. Shared adaptations of documentation and eligible artwork follow CC BY-SA attribution and ShareAlike terms.
 
-Product build and installation tools belong with public product source. Independent private agent orchestration is not relicensed by this repository; keeping it private cannot substitute for supplying required corresponding source. Credentials and player data are not product source.
+Product build and installation tools belong with public product source. Separate internal project-management records are outside this repository's scope; that separation cannot substitute for supplying required corresponding source. Credentials and player data are not product source.
 
 ## Artwork and branding
 

@@ -1,6 +1,14 @@
 # Interaction and visual experience
 
-Accepted direction: retro pixel-based device screens, recognizable critters and tactile operation. Responsive specimen presence is required as an experience goal; screen art, palette and motion remain under owner review; selected simulator display profiles are listed below. Desktop composition studies are not firmware or hardware evidence.
+Accepted direction: retro pixel-based device screens, recognizable critters and tactile operation. Responsive specimen presence is required as an experience goal; screen art, palette and motion remain under design review; selected simulator display profiles are listed below. Desktop composition studies are not firmware or hardware evidence.
+
+The [governing game tenets](gameplay.md#governing-game-tenets) require visual and
+interactive explanation of complex genomics, with short text in support. Show
+what changed, what the player can do and why a discovery matters through the
+workpiece, pet, comparison and feedback. C18 remains concept art for refinement;
+the [screen standard](../design/screen-design-standard.md#concept-direction-and-refinement-boundary)
+defines the joint UI/pixel-art proposal and design review boundary. Richness must
+serve understandable play and exploit measured device capabilities.
 
 ## Physical experience is the product
 
@@ -22,9 +30,9 @@ player-directed. The [reviewed map study](../design/expedition-map-study/README.
 guides the accepted local map loop; rates, budgets and physical performance
 remain unvalidated.
 
-## Navigation and passive previews — owner direction
+## Navigation and passive previews — design direction
 
-The owner requires navigation-only sidebars. Directions select a destination or
+Design review requires navigation-only sidebars. Directions select a destination or
 inspectable target and update its read-only preview immediately, without spending,
 accepting, starting work or visiting. Confirm enters the selected task or performs
 its explicit action; Back restores its caller. Collection browsing should expose
@@ -76,7 +84,7 @@ fit are acceptance gates, not approved art inferred from this specification.
 
 ## Framework-led Companion layout
 
-Owner permits a complete game re-layout, particularly Companion, to use the
+Design review permits a complete game re-layout, particularly Companion, to use the
 selected displays and LVGL. Existing page geometry is not a design requirement.
 Approved Gemini/C18 identity and the physical controls remain requirements.
 
@@ -124,11 +132,11 @@ remain the composition gate; environmental depth, entry craft and human enjoymen
 are not established by geometry or source checks.
 ## Operate the object
 
-### Current owner playtest requirements
+### Current formative playtest requirements
 
-Owner playtest, 30 September 2026: one existing Lab color shortcut must become
+Formative playtest, 30 September 2026: one existing Lab color shortcut must become
 **Home**, returning to the global **Overview · Lab** without spending, sending,
-revealing or ending an ongoing activity. The owner selected the yellow Critters key as Home, preserving the full resident
+revealing or ending an ongoing activity. Design review selected the yellow Critters key as Home, preserving the full resident
 list under Habitat. No extra hardware button is added. Every
 Companion mode, including Cargo after accepted unloading, must retain a visible,
 usable route back to its mode selector and another task. The reported post-haul
@@ -169,7 +177,7 @@ Use contextual titles **Overview — Lab**, **Overview — Explore**,
 **Overview — Research**, **Overview — Incubator** and **Overview — Habitat**.
 The short menu entry may say Overview where its function context is visible.
 Back remains the separate return-to-previous-context action; an overview label
-must not imply that it is a Back button. The owner selected Overview as the name
+must not imply that it is a Back button. Design review selected Overview as the name
 after requesting explicit home/function context.
 
 Current art remains provisional and below the approved C18 reference. Match the
@@ -246,7 +254,7 @@ One focus marker identifies an action or navigable target. Feature illustrations
 
 ### Visual-system direction
 
-The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The owner now favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#proposed-feature-facing-visual-contract) for current research boundaries. Rejected concept plates do not define the UI.
+The UI is a screen inside a physical game device, not a scene depicting another device or laboratory bench. The design favors exploring recognizable features and discoveries, with genomic loci abstracted beneath the player view. Preserve structure, known inheritance, reference expression and undiscovered information through the feature-led journey above; a locus map is not required navigation. Vintage paper/illustration may suit library content or a possible color Probe; neither placement nor display technology is selected. See [screen design standard](../design/screen-design-standard.md#proposed-feature-facing-visual-contract) for current research boundaries. Rejected concept plates do not define the UI.
 
 ### Home and feature landings
 
@@ -260,7 +268,7 @@ research resolves on commitment and has no background research queue.
 
 ### Simulated console controls — accepted
 
-The simulator's depicted device controls are the player input surface. Owner-authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Home/Research/Library/Habitat workspace keys in the middle (yellow Home first, orange Research second), Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Home opens Overview · Lab; Habitat includes the full revealed-resident list; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
+The simulator's depicted device controls are the player input surface. Authorized Lab migration (29 September 2026) follows the Raspberry Pi4 family concept: directional cross at left, Home/Research/Library/Habitat workspace keys in the middle (yellow Home first, orange Research second), Back then Confirm at right, no knob. Up/Down move one list focus per fresh press/release. Left follows Back; Right opens explicitly safe read-only details where available and never commits research, discard, offload, incubation, reveal or care. Confirm activates the selected action, preserving commitment reviews. Workspace keys navigate without spending, revealing an incubating resident or stopping active gathering/incubation; preserve selected sample/topic/resident context. Home opens Overview · Lab; Habitat includes the full revealed-resident list; V1 Library shows sample-specific recorded findings only, not a complete encyclopedia. Empty destinations remain honest and navigable. Every button obeys the same fresh-gesture, cancellation and visible-ready-frame boundary. Screen pixels remain non-clickable. Portable legacy inputs remain unchanged by this Lab migration; no physical GPIO behavior is claimed. Developer controls stay outside device shells.
 
 Continue the selected visual foundation and existing screen work. Selection of a styleboard does not approve a complete screen composition, and compatible control mappings do not approve styling. Rejected layouts are not a basis for incremental polish.
 
@@ -310,7 +318,7 @@ Player language explains actions without requiring chemistry knowledge. The prot
 
 Hardware-shaped presenter housings follow the original references but remain provisional appearance studies. Actual screen profiles are enforced; housing dimensions, controls, sensor behavior and physical refresh are not validated by a browser. Engineering time controls and release information stay outside the device face. Release identity uses the first seven commit SHA characters as plain text and fixed deployment timestamp displayed in Mexico City time.
 
-The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab expedition; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action. Every newly deployed sandbox version starts a fresh shared game across Lab, Companion and Dock; saved progress, transfer state and device caches are cleared together. Checks of the unchanged running version preserve play. This is the owner-approved sandbox policy, not a production save policy.
+The shared prototype exposes Reset sandbox outside the device controls. Confirmation clears demo progress for everyone and returns to the initial Lab expedition; Cancel leaves state unchanged. Reset is a simulator operation, not a device gameplay action. Every newly deployed sandbox version starts a fresh shared game across Lab, Companion and Dock; saved progress, transfer state and device caches are cleared together. Checks of the unchanged running version preserve play. This is the approved sandbox policy, not a production save policy.
 
 
 ### Physical navigation design
@@ -321,7 +329,7 @@ Preserve fresh-gesture, frame-readiness and cancellation rules above. Engineerin
 
 ## Current prototype acceptance gate
 
-Before expanding into additional game phases, the existing slice must establish a coherent experience accepted by the owner: layout, color, interaction, pixel art and concise player-facing copy. Review these together through a representative playable sequence. Successful command execution, readable text or static screen approval alone does not establish experience acceptance. Design refinements and implementation needed to meet this gate remain in scope.
+Before expanding into additional game phases, the existing slice must establish a coherent experience accepted in design review: layout, color, interaction, pixel art and concise player-facing copy. Review these together through a representative playable sequence. Successful command execution, readable text or static screen approval alone does not establish experience acceptance. Design refinements and implementation needed to meet this gate remain in scope.
 
 The current phase is design iteration. Compare and review visual directions, then connected physical-control sequences, before resuming screen implementation. Rejected proposals are not a basis for incremental styling patches.
 
@@ -373,11 +381,11 @@ C18/hardware references while preserving the real gathering/whole-item/reception
 journey above.
 
 The [Companion experience proposal](../design/companion-experience.md) records
-the owner-requested tactile full-device overhaul: immediate mode overviews,
+the requested tactile full-device overhaul: immediate mode overviews,
 clear Home/Back orientation, game language and visible results. Its detailed
 interaction map and resident extension are proposals, not released behavior.
 
-### Expedition ownership and exploration revision — owner direction
+### Expedition ownership and exploration revision — design direction
 
 Companion owns expedition selection and field play. Lab's field view shows received
 expedition records and accepted outcomes; it does not mirror the away Companion's

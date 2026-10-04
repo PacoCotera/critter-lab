@@ -2,7 +2,7 @@
 
 ## Current review — refinement 02
 
-The owner selected Playful Pixel Lab as the foundation for refinement; the final visual language and UI are not approved. The current review packet is [Playful precision — refinement 02](refinement-02/README.md), including its two review images:
+Design review selected Playful Pixel Lab as the foundation for refinement; the final visual language and UI are not approved. The current review packet is [Playful precision — refinement 02](refinement-02/README.md), including its two review images:
 
 - [Refined visual vocabulary](refinement-02/styleboard.png)
 - [Measured type and interaction study](refinement-02/component-study.png)

@@ -9,9 +9,8 @@ one shared world across the **combined Companion**, **home Lab** and **Caddy**.
 ## Design before the next implementation
 
 The connected player journey leads the current architecture and game-design
-overhaul. The project owner has final say on changed game rules, architecture,
-UI/UX and all art direction and acceptance before dependent implementation.
-Involve the owner during direction selection and review actual resulting screens
+overhaul. Changed game rules, architecture, UI/UX and art require a documented
+design decision before dependent implementation. Review actual resulting screens
 and assets at their intended sizes. Existing approved
 direction remains reusable; prototypes, reviewed concepts, merged source and
 passing checks are evidence with stated limits, not approval of a new baseline.
@@ -72,7 +71,7 @@ shows exact whole-item decisions, safe Keep/Back, empty outing completion and
 separate native maximum/recovery fixtures, with independent craft review.
 The [Cargo mode-preview proof](docs/evidence/native-companion-cargo-preview/README.md)
 shows read-only browsing, remembered action entry and separate accepted receipts.
-Owner permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
+Design review permits complete re-layout under the [Companion direction](specs/experience.md#framework-led-companion-layout).
 
 Follow the [Pip play guide](native/selected-lab/V1.md) and inspect the
 [actual native screen gallery](design/connected-device-review/native/README.md).

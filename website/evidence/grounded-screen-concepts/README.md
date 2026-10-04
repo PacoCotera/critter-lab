@@ -2,7 +2,7 @@
 
 The website now presents the [new future concept packet](../../../design/grounded-screen-concepts/README.md) throughout its current images. All depicted screen and product branding is Critter Lab. Earlier native captures and concepts remain unchanged at their original product paths and separate evidence links; their unused website copies were removed.
 
-The packet contains eight selected screen moments and two revised product renders. Game design and UI/UX discussed the actual content together and inspected the final exports. Both support the game meaning and static composition as future concepts. The coordinator inspected selected-reference continuity and the actual website application. No owner final-design approval, independent art-director review, native implementation or hardware proof is claimed.
+The packet contains eight selected screen moments and two revised product renders. Game design and UI/UX discussed the actual content together and inspected the final exports. Both support the game meaning and static composition as future concepts. Visual inspection covered selected-reference continuity and the actual website application. No final design approval, independent art-director review, native implementation or hardware proof is claimed.
 
 Actual local webpage captures:
 

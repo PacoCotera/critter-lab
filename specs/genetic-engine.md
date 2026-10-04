@@ -1,6 +1,6 @@
 # Pip genetic-content and engine proof
 
-Status: owner-approved bounded contract for a reversible host proof. The [executable proof and generated report](../prototype/genetics/README.md) implement one pinned qualitative Pip fixture; detailed content remains provisional. Pip is the accepted qualitative worked reference in [genetics](genetics.md#pip-accepted-worked-phenotype-reference). The five information layers and eleven dimension families remain authoritative. This contract neither selects final species art/balance nor represents a complete production game engine.
+Status: approved bounded contract for a reversible host proof. The [executable proof and generated report](../prototype/genetics/README.md) implement one pinned qualitative Pip fixture; detailed content remains provisional. Pip is the accepted qualitative worked reference in [genetics](genetics.md#pip-accepted-worked-phenotype-reference). The five information layers and eleven dimension families remain authoritative. This contract neither selects final species art/balance nor represents a complete production game engine.
 
 ## Outcome and boundary
 
@@ -105,4 +105,4 @@ With equal transmission of either parental copy, this fixture predicts 50/50 cro
 | Preservation | Same pinned inputs/context resolve the same phenotype; changed content is a new version, never silent alteration of an old result |
 | Game relevance | Report contrasts a few individuals and explains a useful appearance, capability or carried-variant difference. Technical validity alone does not establish fun/balance |
 
-Implementation should be one small coherent proof: content fixture, domain module, focused acceptance tests and a readable report. One architecture boundary check, implementation and independent technical/genetics review suffice unless a concrete defect needs correction. Inspect relevant invariants and the bounded genotype space; do not add a broad stress/performance suite or service infrastructure. Stop when the report makes the genotype/phenotype and research links reviewable. Owner decisions concern meaningful content/experience changes, not routine test plumbing.
+Implementation should be one small coherent proof: content fixture, domain module, focused acceptance tests and a readable report. One architecture boundary check, implementation and independent technical/genetics review suffice unless a concrete defect needs correction. Inspect relevant invariants and the bounded genotype space; do not add a broad stress/performance suite or service infrastructure. Stop when the report makes the genotype/phenotype and research links reviewable. Content and experience changes require explicit design review.

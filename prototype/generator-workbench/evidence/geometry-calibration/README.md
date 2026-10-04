@@ -23,7 +23,7 @@ explicit diagnostic conventions; neutral edges are not modeled tissue.
 | Retained output | [1024×576 PNG](gemini-geometry-01.png) | [1639×960 PNG](builtin-geometry-01.png) |
 | Timing evidence | Completion observed within 76.010 seconds | Tool call elapsed 21.289 seconds |
 
-The coordinator agrees with the art director that the built-in output provides
+The recorded art and integration assessments agree that the built-in output provides
 the more useful style direction **in this pair**. Its coarse apparent pixels and
 strong highlights still need calibration. Neither result is finished creature art.
 No registered comparison measured centers, extents, mask ratios or exact contours.
@@ -43,7 +43,7 @@ for exact input/output hashes, provider observations and measured limits.
 The independent architect/genetics review checked actual graph parity, unchanged
 genetic digests, projection isolation, masks and malformed rejection. The art
 director inspected the actual raster before either call and independently assessed
-Gemini. Genetics and the coordinator assessed the built-in result; its producer
+Gemini. Genetics and integration review assessed the built-in result; its producer
 did not self-approve it. Actual browser integration exposed a sibling SVG clip-ID
 collision; the geometry preview now uses its own IDs. The focused regression and
 framework build accompany that repair. The [browser proof](workbench-geometry.jpg)

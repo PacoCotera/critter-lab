@@ -1,6 +1,6 @@
 # Expedition map study
 
-**Current review:** coding is paused for the owner's joined [Probe gathering and
+**Current review:** coding is paused for the joined [Probe gathering and
 genomic research discussion](../probe-bench-review.md). Its three alternatives
 supersede implementation readiness of the field-only recommendation below.
 Existing studies and useful unfinished source remain preserved; neither the
@@ -9,14 +9,14 @@ Stone/two-seed candidate nor a new bench mechanic is selected.
 ## Gathering review: exploration and source decisions
 
 Issue [60](https://github.com/PacoCotera/critter-lab/issues/60), following actual
-owner play of the [native Probe release](../../docs/evidence/native-companion-probe/README.md).
+playtest of the [native Probe release](../../docs/evidence/native-companion-probe/README.md).
 **Design proposal, not deployed behavior or approved balance.** The larger map
-was delivered; gathering rules were not overhauled. The owner rejects passive
+was delivered; gathering rules were not overhauled. Design review rejects passive
 chance watching, road-only movement and repeated instructions. The earlier
 supplies-versus-shortcut packet below remains preserved trial material, but is
 not the recommended answer to this feedback.
 
-**Owner pacing correction, 1 October:** preparation waiting during exploration
+**Pacing correction, 1 October:** preparation waiting during exploration
 is artificial friction. The joined game/UX/art recommendation now removes that
 clock, rather than demoting its bar. Meaningful field effort is finding,
 observing, choosing and collecting; an animation communicates a committed result,
@@ -120,10 +120,10 @@ later connected proof, not a dependency for testing this preparation decision.
 Record attempted/applied arrows and input-to-paint using the existing hook; inspect
 release, blocked ground, changed context, capacity rejection and cancelled return.
 Actual exports must be reviewed at 1× against Gemini/C18 before a quality claim.
-An owner playtest must show understandable route choices and useful consequences,
+An formative playtest must show understandable route choices and useful consequences,
 without a preparation wait. This can still fail if the entire field becomes
 commute/press/item with no discovery. No code, build or deployment changed
-for this discussion; agent agreement does not establish enjoyment.
+for this discussion; internal review does not establish enjoyment.
 
 ### Background Lab pacing
 
@@ -183,7 +183,7 @@ fresh Inspect trace records the observation and opens the route; a separate Star
 Essence changes the active source; elapsed time/chance work then earns one whole
 Essence. The Essence award does not reveal the path. The packet does not claim interruption/retry,
 offline receipt, capacity-full or exhausted-source screen coverage. These remain
-implementation acceptance work after owner direction.
+implementation acceptance work after design direction.
 
 ## Useful divergence, not a visit-all checklist
 
@@ -264,14 +264,14 @@ Game and UX agreed the proposed state/control/knowledge contract before producti
 The first actual inspection identified weak location illustrations and excessive
 Lab protocol prose. The revised batch uses same-map local observations and the
 received route as the visual subjects. Game design, experience/visual review and
-the coordinator inspected the corrected actual native-size exports and passed
+visual inspection covered the corrected actual native-size exports and passed
 this bounded proposal on 30 September 2026. The resolved objections were trace
 versus gathering causality, truthful received-map scope, the travelling-position
 caption, visible preparation and safe action/footer spacing.
 
 One unchanged regeneration comparison is recorded in `validation.json`. This
-does not claim owner acceptance, playable fun, selected yields or complete
-procedural-map/runtime behavior. Owner steering is required before dependent
+does not claim design acceptance, playable fun, selected yields or complete
+procedural-map/runtime behavior. Design steering is required before dependent
 mechanics are implemented.
 
 
@@ -279,7 +279,7 @@ mechanics are implemented.
 
 **Executable geometry spike and reviewed paper interaction, not native gameplay.**
 The live version still has two authored maps and no interactive field event.
-The owner requested real variation and active discovery; these examples answer
+Design review requested real variation and active discovery; these examples answer
 whether a small seeded generator can produce connected choices, then connect one
 finite event to the existing neutral-capsule/retained-research loop. They do not
 select final balance, terrain art, a new species or a research minigame.

@@ -2,7 +2,7 @@
   "nativeRevision": "fd08ff1f3cdd88c9a03bcc388c1326546b5dba38",
   "file": "browser-exits.png",
   "sha256": "1f3772eef071b218d82f63e81b579ce53a7c441b32be7b3fd644c633ccad4bae",
-  "kind": "Isolated installed released frontend and kernel, existing VM; depicted controls only; owner live world untouched",
+  "kind": "Isolated installed released frontend and kernel, existing VM; depicted controls only; shared live world untouched",
   "result": "Lab Accept then Back returned to Overview; Companion Cargo then Back returned to modes after receipt",
-  "limitations": "Presenter safety timeout required reconnect before acceptance; not original owner save/browser/input state"
+  "limitations": "Presenter safety timeout required reconnect before acceptance; not original reported save/browser/input state"
 }

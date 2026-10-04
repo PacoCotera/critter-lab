@@ -14,7 +14,7 @@ Live `/api/platform-release` reports the hosting source and activation time `202
 
 ## Actual public-origin use
 
-- [Website screenshot](website.png) shows the public root and destinations. It captures the then-current Beecho Lab copy. Owner subsequently restored **Critter Lab** and assigned a separate website refresh/concept-alignment task; this hosting artifact does not claim that content update is complete.
+- [Website screenshot](website.png) shows the public root and destinations. It captures the then-current Beecho Lab copy. Design review subsequently restored **Critter Lab** and assigned a separate website refresh/concept-alignment task; this hosting artifact does not claim that content update is complete.
 - [Workbench screenshot](genome.png) and [unobstructed replay screenshot](replayed-genome.png) show the public workbench source and visible prompt. One ordinary unmodified draw accepted seed599576096, record `compositional-0a5db4f730d7674dea32`, source7/material5/current catalogue5. This is a hosting use example, not a new art/diversity campaign.
 - [Retained record](retained-record.json) contains the exact111 copied pairs and catalogue pin. [Source SVG](source.svg) is the actual displayed structural source. [Copied prompt](copied-prompt.txt) was read from the UI clipboard after Copy prompt.
 - The same exported record was replayed through the public engine, explicitly saved, then reopened under the HTTPS origin. [Reopened record list](reopened-records.png), [list state](reopened-records.txt), [saved state](genome-saved-state.txt) and [replay state](replayed-state.txt) retain the visible result. Replay confirmed original input/result/scene digests; embedded output, image and prompt were not trusted.

@@ -5,7 +5,7 @@ and this base instruction, followed by a short factual source description:
 
 > Turn the attached critter into a cute pet, shown alone in rich high-bit pixel art.
 
-The latest owner direction adds actual shape, extremity counts/forms,
+The latest design direction adds actual shape, extremity counts/forms,
 body-owned covering and named colours to the earlier
 [image-led example](evidence/owner-simple-pet/README.md). The pure
 `art-prompt-summary/1` consumer derives this brief for source3/4/5/6; source7
@@ -41,7 +41,7 @@ art lifecycle is supplied.
 
 The [versioned template](art-template.json) retains verified expression as a
 semantic audit/export brief. Historical prompt bytes and replay identities remain
-unchanged. The owner's [form and skin example](evidence/owner-semantic-surface/README.md)
+unchanged. the [form and skin example](evidence/owner-semantic-surface/README.md)
 establishes the active correction: diagnostic envelopes and covering glyphs
 communicate construction and material meaning; they do not prescribe every
 finished contour or turn skin texture into attached objects.
@@ -88,7 +88,7 @@ domains remain recognizable through material light and shade.
 
 The [C18 reference](../../design/game-art-proposals/35-vault-composition/18-c-refined.png)
 supplies interface/contour craft and optical density; it does not supply a pet's
-skeleton or establish a complete character style. The owner-liked
+skeleton or establish a complete character style. The preferred
 [pet family](evidence/art-reset/README.md) and
 [Gemini transformations](evidence/owner-pet-transformations/README.md) provide
 character direction. A reference is a provider input only when actually attached.
@@ -156,13 +156,13 @@ relationships, characteristic proportions, features, pigment and material fields
 **Art-first redesign** may explore changed anatomy, proportions, colours or
 markings before coding. Retain ancestry and a short changed-trait list; leave a
 resulting expression identity absent until those changes have a resolved source.
-The owner's red pet is useful direction for this second route.
+the red pet is useful direction for this second route.
 
 One focused correction may address an actual image defect. After two failed
 rounds, diagnose framing before a third request. The prior two-pass experiment
 is stopped. The subsequent single-source result improves observable orientation
 and material fidelity but remains below pet-master acceptance. The planned
-body-hierarchy generation was held after the latest owner feedback. A subsequent
+body-hierarchy generation was held after the latest design feedback. A subsequent
 [semantic candidate calibration](evidence/semantic-candidate-pet/README.md)
 uses the repaired handoff and explicit per-region pigment ownership. It retains
 recognizable source meaning but remains below pet-master acceptance: repeated
@@ -179,16 +179,16 @@ integration remain dependent on a selected master and their own acceptance gates
 
 | Evidence | What it establishes |
 | --- | --- |
-| [Owner image-led pet](evidence/owner-simple-pet/README.md) | Exact short submission, original source/output, stronger pet presence and proposed anatomy; audit separate from drawing text |
+| [Image-led pet](evidence/owner-simple-pet/README.md) | Exact short submission, original source/output, stronger pet presence and proposed anatomy; audit separate from drawing text |
 | [Random diversity diagnosis](evidence/random-diversity/README.md) | All16 retained winners, exact inputs, measured rejection causes and source vocabulary; no new sampling policy |
 | [Controlled lighting](evidence/lighting-study/README.md) | Same source with two lighting treatments; useful learning, still weak pet presence |
 | [Semantic candidate calibration](evidence/semantic-candidate-pet/README.md) | Actual candidate source, concise clarified stage brief and returned PNG; repeated local colours recognizable, pet-master HOLD |
 | [Emitted semantic briefs](evidence/semantic-brief/README.md) | Actual template4 axial/contact/PET prose, lengths and preserved source identities; no new image |
-| [Owner form/skin example](evidence/owner-semantic-surface/README.md) | Better integrated volume/material; new anatomy/pigment are proposed, smooth finish is not pixel craft |
+| [Form/skin example](evidence/owner-semantic-surface/README.md) | Better integrated volume/material; new anatomy/pigment are proposed, smooth finish is not pixel craft |
 | [Single-source experiment](evidence/single-source-pet/README.md) | Actual returned PNG, observable macro fidelity improved; pet master HOLD, exact profile fidelity unverified |
 | [Two-pass experiment](evidence/faithful-pet/README.md) | Actual provider outputs HOLD; exact rotated source/material references pass their narrower handoff checks |
-| [Owner pet transformations](evidence/owner-pet-transformations/README.md) | Actual owner images/prompts motivating optional stages and explicit redesign |
-| [Art reset](evidence/art-reset/README.md) | Owner-liked family direction; remaining pigment/foot-detail fidelity defects |
+| [Pet transformations](evidence/owner-pet-transformations/README.md) | Supplied images/prompts motivating optional stages and explicit redesign |
+| [Art reset](evidence/art-reset/README.md) | Preferred family direction; remaining pigment/foot-detail fidelity defects |
 | [Module-scene workbench](evidence/module-scene-workbench/README.md) | Verified broad body/eyes/skin-scales authoring and actual browser export/replay evidence |
 | [Renderer brief](evidence/renderer-brief/README.md) | Earlier prompt failures and separation of renderer/upstream responsibilities |
 | [Geometry calibration](evidence/geometry-calibration/README.md) | Historical finite profile/diagnostic calibration, not universal final-art shape authority |

@@ -43,6 +43,6 @@ Its boundary probe confirmed rejection of a fin chord outside its owning station
 intersecting appendages, marked input and an unknown source rule. Final CI
 disposition is recorded in the pull request. PNG previews are direct
 rasterizations of the exported SVGs using the bundled Sharp runtime; they add
-no anatomy or illustration. The coordinator inspected the actual 768×256
+no anatomy or illustration. Visual inspection covered the actual 768×256
 comparison. No existing evaluator, renderer prompt or default workbench UI path
 was changed.

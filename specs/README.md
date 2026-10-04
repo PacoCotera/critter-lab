@@ -2,9 +2,9 @@
 
 These documents describe Critter Lab's product rules and engineering boundaries. They are the authoritative product specification; experiments are evidence for a limited implementation, not substitutes for the design.
 
-Changed architecture and game-design direction requires the owner's decision
-before dependent implementation; UI and creature-art direction also retain owner
-steering. The [current design decision boundary](../README.md#design-before-the-next-implementation)
+Changes to architecture, game design, UI and creature-art direction require an
+explicit design decision before dependent implementation. The
+[current design decision boundary](../README.md#design-before-the-next-implementation)
 distinguishes that open review from existing accepted requirements and bounded
 prototype evidence.
 

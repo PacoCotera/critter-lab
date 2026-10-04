@@ -8,11 +8,11 @@ The site presents the intended journey: Companion gathering and return → expli
 
 The [grounded future screen packet](../design/grounded-screen-concepts/README.md) supplies eight selected moments and two refreshed product renders. It applies the approved C18 visual grammar to the current game meaning: neutral sample collection, Cargo Send, separate Lab receipt, partial finding, free complete reference comparison, explicit creation review, the same saved Pip and cached world summary. The worked ledger, omitted study/resupply/incubation/Open transitions and physical input are explained alongside the artwork.
 
-These are newly drawn future concepts, not screenshots of the running game, native asset masters or final owner-approved designs. The original Pip references remain provisional. Rendered shells and paper do not establish manufactured hardware, electronics, display behavior, charging or printing.
+These are newly drawn future concepts, not screenshots of the running game, native asset masters or final approved designs. The original Pip references remain provisional. Rendered shells and paper do not establish manufactured hardware, electronics, display behavior, charging or printing.
 
 The [asset manifest](assets.json) records source paths, dimensions, SHA-256 and concept boundaries for every current image copy. Earlier reference and native images have been removed from the current website image presentation; their originals remain preserved in public design/evidence sources. [Research evidence](../docs/evidence/research-workpiece/README.md), [earlier software captures](../docs/evidence/polished-core-v1/README.md) and [the prior vision assessment](evidence/vision-refresh/README.md) retain their original context and lettering. They are linked separately instead of being repainted as current software.
 
-Game design and UI/UX inspected the actual final concept exports and resolved their information, identity, focus and consequence concerns. The coordinator inspected art direction and the actual webpage application. No independent art-director verdict or human usability/fun approval is claimed.
+Game design and UI/UX inspected the actual final concept exports and resolved their information, identity, focus and consequence concerns. Visual inspection covered art direction and the actual webpage application. No independent art-director verdict or human usability/fun approval is claimed.
 
 ## Software destinations and boundaries
 

@@ -1,6 +1,6 @@
 {
   "nativeRevision": "fd08ff1f3cdd88c9a03bcc388c1326546b5dba38",
-  "kind": "Unmodified native frames from isolated saved worlds; no owner sandbox mutation",
+  "kind": "Unmodified native frames from isolated saved worlds; no shared sandbox mutation",
   "captures": [
     {
       "file": "connected-initial-0.png",

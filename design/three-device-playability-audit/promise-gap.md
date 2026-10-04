@@ -58,7 +58,7 @@ detail. Completed surveys can return a supported sample; the audited early
 
 Nine additional unmodified native frames exercise accepted World → offline
 World/Supplies/Connections → Feed → Print preview/cancel → reconnect, in an
-isolated saved world. The owner’s sandbox was untouched. Stock remains0/1/1;
+isolated saved world. The live sandbox was untouched. Stock remains0/1/1;
 the raw protocol retains its100-per-item compatibility encoding.
 
 ![Offline Dock snapshot](dock-offline-world.png)
@@ -105,7 +105,7 @@ transitions with depicted controls. A person must be able to identify subject,
 state, consequence, what changed and how to return; human comprehension/fun and
 physical display/ergonomic behavior need their own evidence.
 
-The original owner Cargo trap remains open despite successful isolated native
+The original reported Cargo trap remains open despite successful isolated native
 and browser exits. Home is required on an existing color key; yellow Critters→Home
 is a conditional recommendation preserving named resident access, not an approved
 or implemented remap. This packet closes the audit/reconciliation task, not the

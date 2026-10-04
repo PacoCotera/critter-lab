@@ -1,6 +1,6 @@
 {
   "schemaVersion": "art-first-calibration-run/1",
-  "status": "owner visual review; brief fidelity HOLD",
+  "status": "visual design review; brief fidelity HOLD",
   "workflow": "Authenticated Gemini web Images mode, Pro shown",
   "conversation": "https://gemini.google.com/app/8f95901d2886bd7f",
   "requests": 2,

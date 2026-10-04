@@ -24,7 +24,6 @@ to zero. Keep changed no inventory. An empty Finish review preserved the outing
 on Keep, then ended it on deliberate confirmation. Lab stock and samples stayed
 zero; the player returned to the Probe entry for a new expedition.
 
-The complete private validation trace contains199 commands and20 native captures.
 The selected product images below are450×600 native output, never browser-drawn
 game screens. Their exact source and hashes are in [frames.json](frames.json).
 

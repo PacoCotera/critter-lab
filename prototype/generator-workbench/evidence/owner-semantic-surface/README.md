@@ -1,15 +1,15 @@
-# Owner example: finish form and communicate skin
+# Reference example: finish form and communicate skin
 
-The owner supplied this diagram, the exact [Gemini prompt](owner-prompt.txt),
+The reference submission includes this diagram, the exact [Gemini prompt](owner-prompt.txt),
 and the returned illustration on 2 October 2026. These original files are
 retained unchanged; the [manifest](manifest.json) records their hashes and
-owner-reported provenance. The coordinator did not generate this result.
+reported provenance. This result was supplied separately from the recorded experiment.
 
-| Diagnostic source | Owner's returned illustration |
+| Diagnostic source | returned illustration |
 | --- | --- |
 | ![Diagnostic body, triangle fins and scale sampling outlines](source.png) | ![Rounded coral pet with integrated surface pattern](owner-result.png) |
 
-The owner identifies three required improvements: describe appendages more
+The design identifies three required improvements: describe appendages more
 clearly, distinguish material indications from surface objects, and communicate
 expressed colours and textures explicitly. Art direction, pixel art and
 genomics inspected these actual images and considered the same requirements.

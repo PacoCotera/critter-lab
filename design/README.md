@@ -1,6 +1,6 @@
 # Design reference and review guide
 
-Beecho Lab connects one combined Companion, one home Lab and a shared Caddy.
+Critter Lab connects one combined Companion, one home Lab and a shared Caddy.
 The same journey runs from field gathering and a deliberate return through Lab
 research, creation and life with an individual. [Experience](../specs/experience.md)
 owns device input and screen response; [gameplay](../specs/gameplay.md) owns the
@@ -21,11 +21,14 @@ Probe is a Companion mode; Lab shows research and visual habitats; Caddy gives
 quiet accepted-world summaries. Earlier separate-Probe and printer-in-Lab cases
 are retained exploration, not a second current architecture.
 
-The approved Lab UI baseline is [C18](game-art-proposals/35-vault-composition/18-c-refined.png):
+The retained Lab concept direction is [C18](game-art-proposals/35-vault-composition/18-c-refined.png):
 Playful Pixel Lab with graphite depth, defined electric-blue frames, saturated
 pixel subjects and restrained warm focus. The [screen design standard](screen-design-standard.md)
-is authoritative for derivation. Earlier Bioluminescent Vault boards remain
-lineage; they do not supersede C18 or reopen selected direction.
+owns its refinement boundary. The current design clarification establishes that this is concept art needing
+richer, more refined UI and pixel-art proposals; it is not a locked composition
+or final asset standard. Carry forward the useful identity and original references.
+The [game tenets and subsystem map](../specs/gameplay.md#governing-game-tenets)
+connect visual craft to discovery, research, viable pets, breeding and nurturing.
 
 ## Connected screen evidence
 
@@ -39,7 +42,7 @@ are the current review packet. They do not implement or approve repairs.
 | [Actual native three-device gallery](connected-device-review/native/README.md) | Current functional frames and native player journey; connected UI remains art scaffolding |
 | [Gemini Probe03 / Cargo04 / reception07](companion-connected-art/README.md) | Reviewed connected screen concepts, with original sources and display-size previews; not implemented native assets |
 | [C18 and production rules](screen-design-standard.md) | Selected Lab visual baseline and shared family requirements; not a completed screen set |
-| [Home landings](home-landings/README.md) | Retained Home/feature information hierarchy; owner rejected current native art fidelity as final |
+| [Home landings](home-landings/README.md) | Retained Home/feature information hierarchy; design review rejected current native art fidelity as final |
 | [Reference-production workbench](reference-production/README.md) | Useful unfinished shared-asset studies; no implicit production or native approval |
 
 The functional journey uses actual whole supplies, separate gathering activity,

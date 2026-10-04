@@ -95,7 +95,7 @@
       "original generated file",
       "generation outcome and defects"
     ],
-    "repairPolicy": "One focused correction addresses concrete defects. A second failed round requires diagnosing framing with the coordinator before another generation or broader work."
+    "repairPolicy": "One focused correction addresses concrete defects. A second failed round requires reassessing the framing before another generation or broader work."
   },
   "semanticPresentationVersion": "semantic-renderer/1"
 }

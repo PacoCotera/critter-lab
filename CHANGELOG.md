@@ -45,7 +45,7 @@ Game-design/UX actual-export inspection and desktop/phone webpage inspection sup
 
 - The workbench can submit its retained 512px source image and short brief to a selected image-provider API, keeping returned candidates linked to exact source, prompt and provider/job metadata.
 - Google is configured first. OpenAI has an adapter and remains unavailable until configured. Requests require an explicit Render action; provider polling and recovery do not generate again.
-- Durable server storage keeps completed results recoverable after browser loss. The original API presentation still needs the owner-requested editable prompt, creature gallery and guided authoring overhaul; this release establishes transport, not completed usability or accepted pet art.
+- Durable server storage keeps completed results recoverable after browser loss. The original API presentation still needs the requested editable prompt, creature gallery and guided authoring overhaul; this release establishes transport, not completed usability or accepted pet art.
 
 Independent genomic/pixel-source and technical inspection, unchanged automatic CI37153443058 and exact clean pushed-source VM builds passed. Existing website, simulator, native binary and saves retained; no reset, new tests or increased testing scope. No actual API-generated image had been requested at activation.
 
@@ -76,7 +76,7 @@ Independent source/domain review, unchanged automatic CI and normal exact clean 
 - **Genome workbench:** [the hosted bench](https://critterlab.basicberry.com/genome/) exposes current authoring, genome-derived source, exact short Gemini prompt, browser retention and replay. It remains an incomplete eleven-layer developer prototype.
 - **Simulator:** the existing Lab, Companion and Dock moved to `/sandbox/`. Native binary, release and save configuration are unchanged; no reset was invoked. Hosting revision metadata is separate from native release metadata.
 
-[Actual public-origin evidence](docs/evidence/hosted-platform/README.md) retains screenshots, source, prompt and reopened record. Localhost browser records require explicit export/import to the HTTPS origin. The owner restored the name Critter Lab and assigned the website content/concept refresh separately after this hosting activation.
+[Actual public-origin evidence](docs/evidence/hosted-platform/README.md) retains screenshots, source, prompt and reopened record. Localhost browser records require explicit export/import to the HTTPS origin. The name Critter Lab was restored; a separate website concept refresh followed this hosting activation.
 
 ## 2026-10-01 [14:49] — Research inquiry and retained findings
 

@@ -2,7 +2,7 @@
 
 Four persistent destination symbols for the existing native Lab Overview. Gemini
 authored the family together, then corrected structural materials against the
-owner-selected hardware reference. Preparation preserves that artwork. The active
+selected hardware reference. Preparation preserves that artwork. The active
 source is `gemini-family-hardware-materials.png`, paired with
 `hardware-materials-prompt.txt`; both are retained unchanged. These metaphors identify destinations;
 nearby game text supplies current activity, sample and resident facts.
@@ -10,7 +10,7 @@ nearby game text supplies current activity, sample and resident facts.
 ## Native handoff
 
 Use the prepared Explore, Research and Habitat exports. The current incubator
-export remains implemented but was rejected by the owner for unclear incubation
+export remains implemented but was rejected in design review for unclear incubation
 meaning and appearance. Its original is preserved; the replacement Gemini state
 study must pass native-size review before use. Developing and ready remain
 concealed until deliberate Open.

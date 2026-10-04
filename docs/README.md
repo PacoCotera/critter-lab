@@ -1,23 +1,27 @@
 # Critter Lab documentation
 
-The whole journey is **explore → gather → return → investigate → decode → create
-→ live with your Beecho and discover more**. One combined Companion, home Lab
+The whole journey is **explore → gather → return → research/unlock genomes → create
+→ collect, nurture and observe → breed compatible critters → discover more**. One combined Companion, home Lab
 and shared Caddy serve the same world. [The player introduction](players/README.md)
 explains those roles; [gameplay](../specs/gameplay.md) owns their game rules.
+Start with the [game tenets](../specs/gameplay.md#governing-game-tenets) and
+[whole-game subsystem map](../specs/gameplay.md#whole-game-subsystem-map), including
+environment, inventory, social play, printer and cloud mechanics. These are
+design coverage commitments; the current prototype is a narrower implemented proof.
 
 ## Current design decision
 
-The [owner decision boundary](../README.md#design-before-the-next-implementation)
+The [design decision boundary](../README.md#design-before-the-next-implementation)
 puts the connected player journey and architecture/game-design review before
-dependent implementation. UI direction and creature appearance retain owner
+dependent implementation. UI direction and creature appearance retain design
 steering. Current software and concepts are evidence with explicit limits, not
 approval of the changed baseline.
 
-Start with the [connected owner review packet](../design/probe-bench-review.md#read-this-checkpoint-first):
+Start with the [connected design review packet](../design/probe-bench-review.md#read-this-checkpoint-first):
 one sample across the kit, interrupted return, two local-authority alternatives,
 retained concepts beside native screens, and three concrete choices for the next
-feature and research composition. Preparation is complete; owner direction remains
-open in [issue 105](https://github.com/PacoCotera/critter-lab/issues/105).
+feature and research composition. The loop and game tenets are confirmed; system design continues in [issue 105](https://github.com/PacoCotera/critter-lab/issues/105).
+Breeding categories, authority placement and refined UI/art remain open.
 
 ## Current reality and next outcome
 

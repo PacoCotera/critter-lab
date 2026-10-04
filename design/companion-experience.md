@@ -1,10 +1,10 @@
 # Companion experience overhaul
 
-Owner-review design proposal, 30 September 2026. Requested by Paco: overhaul the full Companion using the tactile handheld thinking established for Probe. This is a coherent design contract and repair map, not an implemented redesign or approved new game mechanics. Authoritative public entry points remain `specs/experience.md`, `specs/devices.md`, `specs/gameplay.md` and `design/screen-design-standard.md`.
+Design proposal, 30 September 2026: overhaul the full Companion using the tactile handheld thinking established for Probe. This is a coherent design contract and repair map, not an implemented redesign or approved new game mechanics. Authoritative public entry points remain `specs/experience.md`, `specs/devices.md`, `specs/gameplay.md` and `design/screen-design-standard.md`.
 
 ## Player outcome
 
-Owner direction,1October: Companion is the ongoing interaction and emotional bond
+Design direction,1October: Companion is the ongoing interaction and emotional bond
 with creatures the player creates, breeds and trains. Creature presence and varied
 visual interaction lead; optional detailed inspection includes lineage, genome
 and attributes. This is broader product direction, not a claim these activities
@@ -14,7 +14,7 @@ Founders have origin records; they must not acquire fabricated parents. The
 [connected design review](probe-bench-review.md) links expeditions and rich visual
 Lab investigation to this ongoing relationship.
 
-Owner further defines this as a deep digital pet: recurring visual interaction,
+The design further defines this as a deep digital pet: recurring visual interaction,
 individual responses, growth, training and intimate inspection of lineage, genome
 and attributes. It is not an inventory terminal with a visit counter. Research
 representative physical-care, training, responsive-pet, artificial-life and
@@ -83,7 +83,7 @@ Consume held inputs across changed availability, wake and screen readiness; requ
 | Companions; no residents | No critters at the Lab yet. Explain how creation at the Lab begins the collection. | No fake traveller or inaccessible training action. Modes remain usable. |
 | Companions; current feature missing | Choosing travellers isn't part of this demo yet. Distinguish this from an empty collection. | Truthful interim state, not the completed overhaul outcome. |
 | Proposed resident view | Individual art dominates; small identity and known-trait inspection support recognition. Previous/next selection is deliberate and retained. | This uses existing saved residents; it does not assign a party, transfer ownership or give care authority. Architecture must resolve projection/commands/offline behavior before coding. |
-| Proposed visit / response | Bring the existing simple Spend time together action to the same individual. Show its actual saved visit result and a bounded expressive response with a still fallback. | No invented hunger, neglect, friendship XP, training, capture or ability gain. Offline read-only cached state must be labelled; no fabricated completed visit. Behavior/art choices require owner steering. |
+| Proposed visit / response | Bring the existing simple Spend time together action to the same individual. Show its actual saved visit result and a bounded expressive response with a still fallback. | No invented hunger, neglect, friendship XP, training, capture or ability gain. Offline read-only cached state must be labelled; no fabricated completed visit. Behavior/art choices require design direction. |
 | Wake / return | Restore current mode/object and actual running/pending state; show content before enabling commitment. | Waking never starts/sends/reveals. No unattended cosmetic animation is a claim of ongoing real sensor activity. |
 
 ## Visual grammar and explanations
@@ -98,7 +98,7 @@ Feedback is a sequence: **focused target → received press → operation pendin
 
 ## Delivery and polish gates
 
-1. Repair the known lifecycle/orientation issues and obsolete whole-item terminology in a bounded engineering slice with architect/coder/independent review. Reproduce the owner's original Cargo state when available; two fresh-world paths did not establish a universal trap.
+1. Repair the known lifecycle/orientation issues and obsolete whole-item terminology in a bounded engineering slice with architect/coder/independent review. Reproduce the original Cargo state when available; two fresh-world paths did not establish a universal trap.
 2. Produce native-size authored state proofs using one asset/type family: Ready, Gathering, near-capacity pause, Cargo, cancelled Send, sealed return, accepted delayed confirmation, receipt complete, unavailable feature and a clearly proposed resident view. Include long real labels and meaningful zero/maximum counts. Original references remain unchanged; screenshot overlays and compressed crop masters are not final assets.
 3. UX/copy/game/art inspect the same actual exports only for their affected risks. Then connect the intended physical controls and walk the target transitions, including interrupted/restarted operation and retained focus. Static frame approval cannot substitute for this.
 4. Observe human comprehension: identify current mode/activity, explain carried stock versus the next try, predict Send/Accept consequences, get out of empty accepted Cargo, and recognize the same resident. Observe reach/occlusion/readability on the later physical build. No invented timing, comfort, brightness or battery promise.
@@ -112,7 +112,7 @@ outdoor readability, cap force, battery, brightness and heat remain unmeasured.
 Use the current device/BSP and asset budgets for implementation; do not infer
 dimensions or comfort from simulator CSS or concept renders. The recommended
 rail/navigation is a proposal; extending Companions to actual saved-resident
-inspection/visits needs its own architecture and owner-steered behavior/art proof.
+inspection/visits needs its own architecture and design-led behavior/art proof.
 
 ## Final review record
 

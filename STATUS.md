@@ -5,7 +5,7 @@ Core V1 is a playable prototype under repair. The journey is Companion gathering
 ## Current design decision
 
 Architecture and game design require a connected whole-product review before
-dependent implementation. The [owner decision boundary](README.md#design-before-the-next-implementation)
+dependent implementation. The [design decision boundary](README.md#design-before-the-next-implementation)
 also applies to UI direction and creature appearance. Existing approved behaviour
 remains reusable; provisional implementations and concepts do not approve the
 overhaul. Gameplay coding remains paused for the

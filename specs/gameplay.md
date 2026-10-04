@@ -2,9 +2,75 @@
 
 Status: accepted directions with proposed mechanics identified below. Production balance, recipes, timers and complete progression are not implemented.
 
+## Governing game tenets
+
+Design direction, 3 October 2026: the connected loop is correct. Critter Lab is a
+highly polished combination of art, science toy and game. These tenets govern
+feature selection and design; the existing narrow prototype does not define the
+complete game's scope.
+
+- **Exploration earns curiosity.** Gathering must be engaging through discovery,
+  interesting choices and understandable consequences. Resource delivery alone
+  is insufficient; exploration mechanics and minigames need their own design.
+- **Research is central, and breeding is core.** Gathered resources support
+  research that discovers and decodes genomic information, enabling creation of critters and subsequent
+  compatible breeding. Reproduction and family development extend the central
+  loop, rather than being optional polish after a one-off creation journey.
+- **Show and let the player act.** Visual relationships, motion, comparison,
+  feedback and direct interaction make complex genomics understandable. Short
+  text supports those experiences; explanations must not carry the gameplay.
+- **Generate variety within pet viability and appeal.** Procedural variability is
+  essential. Every delivered critter must be a coherent, appealing, viable pet;
+  malformed outcomes and highly repetitive specimens do not meet the goal.
+  Genome validity, usable behavior, visual coherence, distinctiveness and pet
+  appeal are different questions. Unusual forms remain welcome when they work
+  as pets; viability does not reduce the range to one familiar body template.
+- **Keep and develop individuals.** Collectability, uniqueness and nurturing
+  through interaction are complementary motivations. A saved critter has an
+  ongoing life and recognizable identity. Exact growth, health, evolution,
+  care/absence and learning rules remain open.
+- **Craft for the actual devices.** Rich, refined pixel art and responsive UI are
+  central product quality. Exploit the chosen hardware's useful capabilities
+  through measured design, without assuming unproved display, motion, memory,
+  power or input performance. The Lab, Companion and Caddy each support distinct
+  parts of the same game.
+
+The expanded loop is **explore/gather → research/decode genomes → create →
+collect/nurture/observe → breed compatible critters → discover and develop new
+individuals and lineages**, returning to exploration and research. Environment,
+inventory, social play, printing and optional cloud capabilities connect these
+activities. Their exact unlock conditions and progression are still design work.
+
+## Whole-game subsystem map
+
+This is the design coverage map, not authorization to implement every row at
+once. The loop and tenets are agreed; detailed rules and device interactions
+need connected worked examples. Each row reuses an existing domain home.
+
+| Subsystem | Player purpose and device contribution | Existing home / next design question |
+| --- | --- | --- |
+| Exploration and gathering | Companion offers curiosity, discoveries, useful decisions and resources for research. | [Probe](probe.md), [connected discovery](../design/probe-bench-review.md): contrasting responsive situations, mechanics/minigames, pacing and return choices. |
+| Research and creation | Lab turns gathered resources into understandable genomic discoveries and deliberately created founders. | [Research/creation](../design/research-and-creation.md), [creation contract](sample-to-critter-contract.md): visual learning, resource combinations, knowledge and creation eligibility. |
+| Breeding framework | Compatible parents produce new individuals and multi-generation discovery; Lab/home management and social permissions connect. | [Genetics](genetics.md#crossing-viability-and-classification): similar-baseline compatibility, fixed groups versus emergent classification, inheritance and viable pet outcomes. |
+| Collection | Recognize, compare and organize individuals without flattening uniqueness into a rarity score; Lab collection, Companion residents and Caddy summaries share identities. | [Experience](experience.md), [social/identity](players-social.md): capacity, browsing, organization and meaningful collection goals. |
+| Environment dynamics | Habitats and field conditions provide context for traits, behavior and intervention. | [Habitats](#self-contained-habitats), [genetics](genetics.md): dynamic state, visible effects, active/frozen behavior and environmental resources. |
+| Critter observability and development | Companion interactions and Lab inspection make capabilities, current condition, growth/health and change understandable. | [Companion experience](../design/companion-experience.md), [genetics](genetics.md#transformation-mutation-and-health): what is visible, how it changes and how nurturing matters. |
+| Genome framework and production | Eleven layers/domains, their loci, baselines, genetic generators/resolvers and critter renderers cooperate to produce varied pets. | [Genetics](genetics.md), [engine](genetic-engine.md), [architecture](architecture.md#creature-production-pipeline): separate generation, inheritance, expression, classification, behavior and rendering; expose missing coverage. |
+| Inventory management | Companion cargo and Lab supplies support meaningful collection, spending and resupply decisions; Caddy reports accepted stock. | [Research inventory](#research-and-creation), [experience](experience.md): capacity, categories, costs, transfers and shortages without knowledge loss. |
+| Social play | Share discoveries and interact with nearby or remote players; permission and ownership remain explicit. | [Players/social](players-social.md): shared equipment, consent, trading/breeding and what each participant learns. |
+| Printer mechanics | Caddy brings critters and discoveries into physical play. | [Devices](devices.md), [experience](experience.md), [identity](players-social.md): player value, printable content, scanning and physical interactions; printing is more than an export checkbox. |
+| Cloud mechanics | Optional global interactions and supporting records extend standalone kit play. | [Cloud/local records](cloud-sync.md), [architecture](architecture.md): player-facing activities, offline behavior and local/global rights, without treating backend infrastructure as the game mechanic. |
+
+The list is intentionally open to further subsystems discovered through play
+design. M0 must explain their dependencies and device contributions before a
+small implementation slice is mistaken for the whole plan. Breeding category
+count/model, local authority placement, exact economy and final art/UI remain
+design choices. The [design checkpoint](../design/probe-bench-review.md#read-this-checkpoint-first)
+provides current examples and the next comparison, not approval of those choices.
+
 ## Combined portable and wild capture
 
-The owner accepted consolidation of Probe and Companion into one everyday portable with **Probe**, **Cargo** and **Companions** modes. Probe supports field investigation, gathering and wild encounters; Cargo contains carried resources/findings and separately identified temporary captures; Companions concerns established travelling critters and their interaction/training/development. Mode switching is a change of view, not implicit expedition cancellation, spending or loss of cargo. Lab genome research remains distinct from field investigation. Device responsibilities are in [devices](devices.md#current-consolidated-product-architecture).
+Design review accepted consolidation of Probe and Companion into one everyday portable with **Probe**, **Cargo** and **Companions** modes. Probe supports field investigation, gathering and wild encounters; Cargo contains carried resources/findings and separately identified temporary captures; Companions concerns established travelling critters and their interaction/training/development. Mode switching is a change of view, not implicit expedition cancellation, spending or loss of cargo. Lab genome research remains distinct from field investigation. Device responsibilities are in [devices](devices.md#current-consolidated-product-architecture).
 
 Wild critters can be captured during expeditions. Capture has difficulty, and a newly captured specimen can escape before the player brings it back to the Lab. Temporary containment and bonded companionship are distinct states: this escape concept does not make established travelling companions run away. A captured individual has observable appearance/behaviour but is not automatically a decoded genome. Its research/discovery and introduction into the home collection must respect existing knowledge boundaries.
 
@@ -14,9 +80,9 @@ The connected journey is: choose travelling companions, explore/gather or captur
 
 ## Self-contained habitats
 
-Owner direction: each habitat is a self-contained environment with its own critter populations, environmental resources and interactions. A tank, island or glacier is a simulation space, not merely a collection background. The container analogy describes bounded state and lifecycle; it does not select Docker, a process per habitat or cloud infrastructure. Habitat count and concurrent active limits remain open.
+Design direction: each habitat is a self-contained environment with its own critter populations, environmental resources and interactions. A tank, island or glacier is a simulation space, not merely a collection background. The container analogy describes bounded state and lifecycle; it does not select Docker, a process per habitat or cloud infrastructure. Habitat count and concurrent active limits remain open.
 
-Desired capability: freeze a habitat and restore it from the cloud. Proposed meaning of freeze is an explicit pause of its simulation, preserving residents, their identity and state, environmental conditions, local resources and pending processes as one coherent saved habitat. Restoration would resume that habitat rather than create duplicate residents/resources. No elapsed-time catch-up, unattended penalty, rewind economy or freely cloneable populations is implied. These pause/restore semantics require owner confirmation before implementation; local durability, optional cloud synchronization, snapshot compatibility and transfer consistency need a bounded system-design step.
+Desired capability: freeze a habitat and restore it from the cloud. Proposed meaning of freeze is an explicit pause of its simulation, preserving residents, their identity and state, environmental conditions, local resources and pending processes as one coherent saved habitat. Restoration would resume that habitat rather than create duplicate residents/resources. No elapsed-time catch-up, unattended penalty, rewind economy or freely cloneable populations is implied. These pause/restore semantics require design confirmation before implementation; local durability, optional cloud synchronization, snapshot compatibility and transfer consistency need a bounded system-design step.
 
 The proposed player distinction is active versus frozen habitats; merely closing a view or undocking a device must not implicitly freeze a habitat. Lab provides the visual environment and management view; the caddy summarizes habitat/storage state; Companion provides access to the same world and the chosen travelling residents. Taking a resident out must not leave a second active copy inside a frozen snapshot. Exact transfer rules, environment dynamics, resource replenishment and population consequences remain open. Device display responsibilities remain in [devices](devices.md#coordinated-docked-defaults).
 
@@ -38,7 +104,7 @@ The devices provide distinct physical experiences; see the [experience principle
 
 The Companion’s **Probe mode** offers real-world sampling, fictional encounters, collection progress and resources without requiring a phone. Samples carry research evidence; resources are consumable inventory quantities. Evidence points do not automatically become food or materials. [Probe evidence](probe.md) defines sensed versus generated inputs, proposed scoring and measurement limits.
 
-Owner correction,30September2026: the Companion selects and executes expeditions.
+Design correction,30September2026: the Companion selects and executes expeditions.
 The Lab does not choose a field expedition or assume live knowledge of an away
 Companion. Its field-related view is a log of expedition records actually received,
 linked to accepted resources, samples and subsequent research. Any status must state
@@ -48,7 +114,7 @@ define the boundary. The installed map loop permits movement, source choice,
 trace discovery and explicit sample collection. Current fieldcontent3 outings reuse fieldcontent2 geometry to
 generate saved source positions, connected corridors and terrain; legacy
 fieldcontent1 records keep their exact authored geometry. The [native proof](../docs/evidence/procedural-expeditions/README.md)
-covers route variation and retained saves. No interactive map event is implemented. Owner playtest rejects repetitive routes and chance-waiting
+covers route variation and retained saves. No interactive map event is implemented. Formative playtest rejects repetitive routes and chance-waiting
 as the central activity: the next field experience must generate genuinely varied,
 saved, reachable maps and expose events with meaningful decisions and consequences.
 Distinct sample acquisition and useful research follow-through must supply the
@@ -60,11 +126,11 @@ The **Lab** is an ongoing exploratory workbench. Returning can reveal findings, 
 
 The **Companion** centers training, evolution and bonding. One versus several carried individuals, and a larger habitat with a carried subset, remain open. The **caddy** charges the Lab and Companion, prints and summarizes habitats/inventory/status; seating adds no gameplay progress or implicit transfer.
 
-The owner removed console-only acquisition from the product roadmap on 30 September 2026. The Companion conducts gathering; the Lab investigates accepted samples and resources. Local core-kit play remains independent of Cloud Pass and routine phone use. Research discoveries persist; current native studies resolve immediately, with no unattended research queue or missed-check-in penalty.
+Design review removed console-only acquisition from the product roadmap on 30 September 2026. The Companion conducts gathering; the Lab investigates accepted samples and resources. Local core-kit play remains independent of Cloud Pass and routine phone use. Research discoveries persist; current native studies resolve immediately, with no unattended research queue or missed-check-in penalty.
 
 ## Expedition continuity and return — accepted
 
-### Field pacing — owner correction, 1 October 2026
+### Field pacing — design correction, 1 October 2026
 
 Preparation waiting during interactive exploration is rejected as artificial
 friction. The next gathering design must separate meaningful player effort and
@@ -93,11 +159,11 @@ Early return is an end, not completion of every timed discovery threshold. It ca
 Supplies are fungible within their own class and indivisible. A Data card can
 substitute for another Data card, but not for an Energy crystal or Essence drop.
 
-Owner requires each class to have an understandable experimental/genomic job,
+Design review requires each class to have an understandable experimental/genomic job,
 not serve as an arbitrary colored payment. The [current design discussion](../design/probe-bench-review.md#resource-meaning--accepted-broad-roles-open-economy)
 keeps exact resource fiction and new recipes provisional; current fixture prices
 do not establish those meanings. Retained knowledge is not a consumable supply.
-Owner clarification,1October: an investigation requires an amount of Data related
+Design clarification,1October: an investigation requires an amount of Data related
 to its complexity; more complex research needs more Data. This does not select
 numerical costs or erase previously learned information. Research is the rich
 visual/content backbone linking expedition outcomes to player-created companions.
@@ -114,7 +180,7 @@ The Probe gathers resources of different types for Lab research and can also gat
 
 ### Local field loop — accepted direction
 
-Owner approved the reviewed map loop on 30 September. Companion movement follows
+Design review approved the reviewed map loop on 30 September. Companion movement follows
 visible legal paths; arriving or previewing a place awards nothing. Fresh Confirm
 takes a single visible whole offer directly. Multiple actual alternatives open a
 chooser: directions preview, Back preserves cargo and sources, and fresh Confirm
@@ -144,7 +210,7 @@ A sample is a cache containing surprises that the player discovers through resea
 
 Completing research requires gathering across several Probe expeditions. The player returns to the same research, retaining discoveries while obtaining what further studies need. A completed expedition is not completed research. The Probe shows actual gathering progress toward the current research needs; the Lab shows the research process, discoveries so far, remaining work and gathering needs. Keep gathering, inventory and research completion distinct. The Probe does not reveal undiscovered sample contents.
 
-Exact expedition count, yields, study requirements, timing and progress presentation remain open. Several expeditions do not imply several new samples or a mandatory attendance schedule. Console-only acquisition is removed by owner direction; this loop uses the Companion for gathering. This direction changes the connected walkthrough: demonstrate an initial return, research progress, further gathering and continuation of the same sample.
+Exact expedition count, yields, study requirements, timing and progress presentation remain open. Several expeditions do not imply several new samples or a mandatory attendance schedule. Console-only acquisition is removed by design direction; this loop uses the Companion for gathering. This direction changes the connected walkthrough: demonstrate an initial return, research progress, further gathering and continuation of the same sample.
 
 Accepted research direction: supported possibilities followed by guided synthesis. Research supplies knowledge, not an automatic creature. Creation requires every required genomic region decoded through research and resource expenditure; incomplete research is not an optional gamble. Research groups are navigation, not replacements for the five genetic layers.
 
@@ -156,7 +222,7 @@ The V1 design direction requires complete supported configurations and selection
 
 ### Study variety — release requirement
 
-Owner direction, 27 September 2026: material studies are an acceptable V1 placeholder, not a sufficient final-release study set. Design a broader range of meaningful study types and discoveries before release. The study types, content mappings and interactions remain open; this requirement does not select a taxonomy or authorize speculative mechanics. Keep V1 placeholder content explicitly labeled and do not mistake implementing it for completing research design.
+Design direction, 27 September 2026: material studies are an acceptable V1 placeholder, not a sufficient final-release study set. Design a broader range of meaningful study types and discoveries before release. The study types, content mappings and interactions remain open; this requirement does not select a taxonomy or authorize speculative mechanics. Keep V1 placeholder content explicitly labeled and do not mistake implementing it for completing research design.
 
 ## Creation inputs and retained discoveries
 
@@ -189,7 +255,7 @@ A recipe tree and a supporting app view are proposed presentations; Lab access m
 
 ## Procedural encounters and automatic creature production
 
-Owner selected responsive encounters with procedural/generative content. Generate
+Design review selected responsive encounters with procedural/generative content. Generate
 entities/states/relations and derive useful actions from their rules; a shuffled
 library of whole scripted scenarios is insufficient. LLMs expand reusable ideas
 and definitions under validated game/genetic constraints. The [connected design](../design/probe-bench-review.md)
@@ -204,7 +270,7 @@ Existing portrait fixtures are not proof this generator is implemented.
 
 ## Equipment and progression
 
-Owner direction,1October: complexity is gated through eventual virtual Probe and
+Design direction,1October: complexity is gated through eventual virtual Probe and
 Lab tiers plus boosters. Early play begins with simple genomes; later play reaches
 much more complex genomes requiring longer research. Progression must unlock
 meaningful analytical relationships and field opportunities, not merely larger

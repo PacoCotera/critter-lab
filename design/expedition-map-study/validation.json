@@ -11,5 +11,5 @@
   "proofSheets": 3,
   "method": "SHA256 of all exported PNGs, editable screen SVGs and manifest before/after running unchanged build source",
   "fontCacheWarning": "Existing font cache directory unavailable; rendering and glyph measurements completed",
-  "review": "Corrected actual exports passed bounded game/experience/coordinator inspection; no owner mechanics or runtime acceptance implied"
+  "review": "Corrected actual exports passed bounded game/experience/integration inspection; no mechanics or runtime acceptance implied"
 }

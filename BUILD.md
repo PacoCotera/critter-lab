@@ -28,7 +28,7 @@ use LVGL; [architecture coverage](specs/architecture.md#current-migration-covera
 records completed current host coverage and unverified physical target paths. Native host checks establish software behavior, not flashed-device or
 physical-display performance.
 
-The [owner design decision boundary](README.md#design-before-the-next-implementation)
+The [design decision boundary](README.md#design-before-the-next-implementation)
 precedes dependent architecture/game/UI/art changes. Buildable prototypes remain
 evidence, not approval of those designs. [Guided authoring evidence](prototype/generator-workbench/evidence/guided-authoring/README.md)
 and [actual API images](prototype/generator-workbench/evidence/api-rendering/README.md)
